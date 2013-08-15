@@ -1,0 +1,5 @@
+{
+    "name": "uac-api",
+    "main": "uac-api.js",
+    "description": "UAC service API module."
+}

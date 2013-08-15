@@ -1,0 +1,5 @@
+{
+    "name": "uac-routes",
+    "main": "uac-routes.js",
+    "description": "UAC Routes Module"
+}

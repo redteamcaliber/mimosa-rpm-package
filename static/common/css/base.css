@@ -1,0 +1,96 @@
+/**
+ * DataTables Style Fixes
+ */
+
+.dataTables_wrapper {
+    overflow: auto
+}
+
+/* Bootstrap Settings */
+
+html, body {
+    height: 100%;
+}
+
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -40px;
+}
+
+#push,
+#footer {
+    height: 40px;
+}
+
+#footer {
+    background-color: #f5f5f5;
+}
+
+@media (max-width: 1200px) {
+    #footer {
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+#wrap > .container-fluid {
+    padding-top: 60px;
+}
+
+.container .credit {
+    margin: 10px 0;
+}
+
+.nav-font {
+    font-size: 14px;
+}
+
+/* Override the max height of the modal dialog. */
+.modal-body {
+    max-height: 800px;
+}
+
+/* UAC Styles */
+
+.uac-header {
+    font-size: 19.5px;
+    /*color: #006dcc;*/
+    color: #000000;
+}
+
+.uac-sub-header {
+    font-weight: bold;
+    color: #000000;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.uac-opaque {
+    opacity: .3
+}
+
+.uac-tabledata {
+    font-size: 14px;
+}
+
+/**
+ * Select2 search component styling.
+ */
+.uac-bigdrop.select2-container .select2-results {
+    max-height: 600px;
+}
+
+.uac-bigdrop .select2-results {
+    max-height: 600px;
+}
+
+.select2-highlighted {
+    color: #333333 !important;
+    background-color: #d9edf7 !important;
+}

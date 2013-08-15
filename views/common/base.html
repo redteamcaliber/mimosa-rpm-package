@@ -1,0 +1,147 @@
+{% extends "/bootstrap/base.html" %}
+
+{% block title %}Mandiant{% endblock %}
+
+{% block head %}
+{{ super() }}
+
+<link href="/static/common/css/base.css" rel="stylesheet"/>
+<link href="/static/datatables/css/jquery.dataTables.css" rel="stylesheet"/>
+<link href="/static/datatables/css/DT_bootstrap.css" rel="stylesheet"/>
+<link href="/static/css/select2.css" rel="stylesheet"/>
+<link href="/static/css/jquery.iocViewer.alt.css" rel="stylesheet"/>
+<link href="/static/css/bootstrapSwitch.css" rel="stylesheet"/>
+
+<!-- log4javascript configuration -->
+<script src="/static/js/log4javascript.js"></script>
+<script type="text/javascript">
+    var log = log4javascript.getLogger();
+    var console_appender = new log4javascript.BrowserConsoleAppender();
+    console_appender.setLayout(new log4javascript.SimpleLayout());
+    log.addAppender(console_appender);
+    log.setLevel(log4javascript.Level.DEBUG);
+</script>
+
+<!-- Backbone Support -->
+<script src="/static/js/underscore-min.js"></script>
+<script src="/static/js/backbone-min.js"></script>
+
+<!-- Underscore String support -->
+<script src="/static/js/underscore.string.min.js"></script>
+<script type="text/javascript">
+    _.mixin(_.str.exports());
+</script>
+
+<script src="/static/js/jquery.bootstrap-growl.min.js"></script>
+
+<!-- Datatables Support -->
+<script src="/static/datatables/js/jquery.dataTables.min.js"></script>
+<script src="/static/datatables/js/DT_bootstrap.js"></script>
+
+<!-- Select2 -->
+<script src="/static/js/select2.min.js"></script>
+
+<script src="/static/js/bootstrapSwitch.js"></script>
+
+<script src="/static/js/jquery.blockUI.js"></script>
+
+<script src="/static/js/jQuery.highlighter.js"></script>
+
+<script src="/static/js/jquery.iocViewer.js"></script>
+
+<style type="text/css">
+    .mandiant-logo {
+        background-image: url('/static/img/mandiant-trans.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+{{ super() }}
+
+<div id="wrap">
+    {% block nav %}
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner nav-font">
+            <div class="container-fluid">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="/">
+                    <img style="width: auto; height: 17px; vertical-align: top;"
+                         src="/static/img/mandiant-bw.ico">
+                    UAC
+                </a>
+
+                <div class="nav-collapse">
+                    <ul class="nav">
+                        {% block nav_menu %}
+                        {% endblock %}
+                    </ul>
+
+                    {% if req.attributes.uid %}
+                    <div class="nav-collapse collapse">
+                        <div class="btn-group pull-right">
+                            <a class="btn btn-info" href="#">
+                                <i class="icon-user icon-white"></i> {{ req.attributes.uid }}
+                            </a>
+                            <a class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                               href="#">
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{ settings.sso.login_url }}" target="_blank">
+                                        <i class="icon-fixed-width icon-cogs"></i> Settings
+                                    </a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a href="/logout/">
+                                        <i class="icon-signout"></i> Sign Out
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    {% else %}
+                    <ul class="nav pull-right">
+                        {#
+                        <li><a href="{{ sso_url }}">Login</a></li>
+                        #}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    <div class="container-fluid">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+
+    <div id="push"></div>
+
+    {% block tail %}
+
+    {% endblock %}
+</div>
+
+<div id="footer">
+    {% block footer %}
+    <div class="container">
+        <p class="muted credit">
+            &copy; 2013 Mandiant Corporation. All rights reserved.
+        </p>
+    </div>
+    {% endblock %}
+</div>
+{% endblock %}

@@ -1,0 +1,5 @@
+{
+    "name": "sf-routes",
+    "main": "sf-routes.js",
+    "description": "UAC StrikeFinder Routes Module"
+}

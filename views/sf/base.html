@@ -1,0 +1,46 @@
+{% extends "common/base.html" %}
+
+{% block title %}StrikeFinder - {{ super() }}{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+    <script lang="text/javascript" src="/static/sf/js/sf-utils.js"></script>
+    <script lang="text/javascript" src="/static/sf/js/sf-models.js"></script>
+    <script lang="text/javascript" src="/static/sf/js/sf-views.js"></script>
+{% endblock %}
+
+{% block nav_menu %}
+    <li><a href="/sf/shopping/"><i class="icon-shopping-cart"></i> Shopping</a></li>
+    <li><a href="/sf/hits/"><i class="icon-list"></i> Hit Review</a></li>
+    <li><a href="/sf/suppressions/"><i class="icon-level-down"></i> Suppressions</a></li>
+    <li><a href="/sf/hits_by_tag/"><i class="icon-tags"></i> Hits by Tag</a></li>
+    <li>
+        <a href="javascript: alert('Not Implemented: /sf/acquisitions/')">
+            <i class="icon-cloud-download"></i> Acquisitions
+        </a>
+    </li>
+    <li>
+        <div style="margin-top: 5px;">
+            <div id="host-select" class="pull-right" style="width: 200px"></div>
+        </div>
+    </li>
+{% endblock %}
+
+{% block tail %}
+    <div id="context-menu-div" style="display: none">
+    </div>
+
+    <div id="dialog-div">
+    </div>
+
+    <script type="text/javascript">
+        // Initialize the host search component.
+        var host_search_view = new StrikeFinder.SelectHostSearchView({
+            el: '#host-select'
+        });
+        host_search_view.listenTo(host_search_view, 'change', function (am_cert_hash) {
+            window.location = _.sprintf('/sf/host/#hash/%s/', am_cert_hash);
+        });
+    </script>
+{% endblock %}

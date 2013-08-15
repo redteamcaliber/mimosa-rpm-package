@@ -1,0 +1,5 @@
+{
+    "name": "m-request",
+    "main": "m-request.js",
+    "description": "UAC HTTP Requests Module"
+}

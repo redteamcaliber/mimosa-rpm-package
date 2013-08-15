@@ -1,0 +1,5 @@
+{
+    "name": "sso",
+    "main": "sso.js",
+    "description": "UAC SSO Module"
+}

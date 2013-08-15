@@ -1,0 +1,5 @@
+{
+    "name": "log",
+    "main": "log.js",
+    "description": "UAC Logging Module"
+}
