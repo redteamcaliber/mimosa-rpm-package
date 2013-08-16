@@ -8,7 +8,6 @@ Group:      Applications/Internet
 URL:        http://www.mandiant.com
 Source:     %{name}-%{version}.tgz
 AutoReqProv: no
-Requires:
 
 %description
 Mandiant Unified Analyst Console (UAC) web application.
