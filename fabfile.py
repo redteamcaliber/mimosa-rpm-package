@@ -10,12 +10,21 @@ env.user = 'root'
 # The password of the user the build will run as.
 env.password = 'devnet'
 # The hosts the build will run on.
-env.hosts = ['vm.mandiant.com']
+env.hosts = ['uac.dev.mandiant.com']
 # The directory to run the build in.
 env.build_dir = '/root/build'
 # The git branch to build off of.
 env.build_branch = 'master'
 
+
+@task(default=True)
+def build_dev():
+    # Build the RPM.
+    local('./bin/build_rpm')
+    # Transfer the RPM to the dev machine.
+    put(local_path=env.build.dir, remote_path=',')
+    # Install the RPM.
+    #remote('rpm -i
 
 @task(default=True)
 def rpm():
