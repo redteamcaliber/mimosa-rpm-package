@@ -35,25 +35,23 @@ INFO='Finished processing sources...'
 %install
 INFO='install phase...'
 # Add the application files to the package.
-rm -rf %{buildroot}/opt/venvs/uac
+rm -rf %{buildroot}/opt/web/apps/uac
 
-mkdir -p %{buildroot}/opt/venvs/uac
-cp -r %_builddir/%{name}-%{version}/* %{buildroot}/opt/venvs/uac
+mkdir -p %{buildroot}/opt/web/apps/uac
+cp -r %_builddir/%{name}-%{version}/* %{buildroot}/opt/web/apps/uac
 
 # Add the Apache conf template file to the package.  This file must be edited and renamed to .conf by an admin.
 rm -rf %{buildroot}/etc
-mkdir -p %{buildroot}/etc/httpd/conf.d
-cp %_builddir/%{name}-%{version}/site/conf/%{name}.template %{buildroot}/etc/httpd/conf.d/uac.template
+mkdir -p %{buildroot}/etc/nginx/conf.d
+cp %_builddir/%{name}-%{version}/conf/%{name}.template %{buildroot}/etc/nginx/conf.d/uac.template
 
 ls -l %{buildroot}
 
 %files
 %defattr(-,root,root,-)
-/opt/venvs/uac
-/etc/httpd/conf.d/uac.template
+/opt/web/apps/uac
+/etc/nginx/conf.d/uac.template
 
 %post
-/opt/venvs/uac/bin/python /opt/venvs/uac/site/manage.py collectstatic -v0 --noinput
-/opt/venvs/uac/bin/python /opt/venvs/uac/site/manage.py compress
 
 

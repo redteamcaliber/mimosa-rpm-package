@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Version settings.
-Name:       {{NAME}}
-Version:    {{VERSION}}
-Release:    {{RELEASE}}
+NAME="Mandiant-uac-ws"
+VERSION="0.2"
+RELEASE="1"
 
 # The git branch to build.
 BRANCH=master
@@ -12,16 +12,26 @@ REPO=git@github.mandiant.com:amilano/uac-node.git
 
 # The build directory.
 BUILD_DIR=/root/build
+
 # The source project directory.
-PROJECT_DIR=$BUILD_DIR/opt/web/apps/uac
+PROJECT_DIR=$BUILD_DIR/uac
 
 # The RPM build output directory.
-RPMBUILD_DIR=$PROJECT_DIR/rpmbuild
+RPMBUILD_DIR=$BUILD_DIR/rpmbuild
+
+# The format of the rpm file.
 RPM_FILE=$NAME-$VERSION.tgz
+
+# The tar file.
 TAR_FILE=$RPMBUILD_DIR/SOURCES/$RPM_FILE
 
 
 echo
+echo "Building $NAME..."
+echo "Version: $VERSION"
+echo "Release: $RELEASE"
+echo "Build Directory: $BUILD_DIR"
+echo "Project Directory: $PROJECT_DIR"
 
 if [ -z "$BRANCH" ]; then
     echo "BRANCH is not set."
@@ -33,13 +43,13 @@ if [ -z "$BUILD_DIR" ]; then
     exit 1
 fi
 
-if [ -e "$SPEC_FILE" ]; then
-    echo "$SPEC_FILE does not exist."
+if [ -z "$PROJECT_DIR" ]; then
+    echo "PROJECT_DIR is not set."
     exit 1
 fi
 
 # Remove any existing aritfacts.
-read -p "Delete build directory: $BUILD_DIR? (y/n)# " -n 1
+read -p "Delete build directory: $BUILD_DIR? (y/n): " -n 1
 if [ "x$REPLY" = "xy" ]; then
     rm -rf $BUILD_DIR
 else
@@ -50,10 +60,10 @@ fi
 mkdir -p $BUILD_DIR
 
 # Pull the code into the build directory.
+echo
 git clone -b $BRANCH $REPO $PROJECT_DIR
 
 echo 'Creating the build area...'
-cd $PROJECT_DIR
 mkdir $RPMBUILD_DIR
 mkdir $RPMBUILD_DIR/BUILD
 mkdir $RPMBUILD_DIR/RPMS
@@ -69,7 +79,7 @@ echo 'Generating the spec file...'
 sed -e s,{{NAME}},$NAME,g \
     -e s,{{VERSION}},$VERSION,g \
     -e s,{{RELEASE}},$RELEASE,g \
-    $PROJECT_DIR/conf/$NAME.spec > $RPMBUILD_DIR/SPECS/$NAME.spec
+    ${PROJECT_DIR}/conf/${NAME}.spec > ${RPMBUILD_DIR}/SPECS/${NAME}.spec
 if [ $? -gt 0 ]; then
     # Error
     echo 'Error creating spec file.'
@@ -77,14 +87,14 @@ if [ $? -gt 0 ]; then
 fi
 echo 'OK'
 
-# Make the bin directory writable.
+# Import the node dependencies.
+cd $PROJECT_DIR
 chmod +x ./bin/*
-
-# Download the node dependencies.
 ./bin/install_libs.sh
 
 # Create the rpm tar.
-tar -czf $TARFILE --exclude=./rpmbuild --exclude=conf/settings_local.json --exclude=./logs --exclude=./sql ./*
+echo "Creating the source tar file: $TAR_FILE from source: $PROJECT_DIR/*"
+tar -czf ${TAR_FILE} --exclude=conf/settings_local.json --exclude=logs --exclude=sql *
 if [ $? -gt 0 ]; then
     # Error
     echo 'Error creating tar file.'
@@ -94,6 +104,7 @@ echo 'OK'
 
 # Create the rpm.
 echo 'Building the RPM...'
+cd $BUILD_DIR
 rpmbuild --define "_topdir $RPMBUILD_DIR" -bb rpmbuild/SPECS/$NAME.spec
 if [ $? -gt 0 ]; then
     # Error
