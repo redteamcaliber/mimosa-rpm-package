@@ -2289,15 +2289,15 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
             // Criteria has been supplied to the view.
             if (iocnamehash) {
                 view.criteria = new StrikeFinder.UserCriteriaModel({
-                    services: services,
-                    clusters: clusters,
+                    "services": services,
+                    "clusters": clusters,
                     iocnamehash: iocnamehash
                 });
             }
             else if (exp_key) {
                 view.criteria = new StrikeFinder.UserCriteriaModel({
-                    services: services,
-                    clusters: clusters,
+                    "services": services,
+                    "clusters": clusters,
                     exp_key: exp_key
                 });
             }

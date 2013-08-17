@@ -1,0 +1,31 @@
+{
+    "server": {
+        "port": 8000,
+        "ssl": false
+    },
+    "uac": {
+        "db_name": "uac",
+        "db_host": "localhost",
+        "db_port": "5432",
+        "db_user": "uac_user",
+        "db_pass": "<REPLACE>",
+
+        "verify_ssl": false,
+
+        "sf_api_url": "https://proxy.mcirt.mandiant.com/SFPY/",
+        "ss_api_url": "https://proxy.mcirt.mandiant.com/SEASICK/",
+
+        "log_level": "warn",
+        "log_file": "./logs/uac.log"
+    },
+    "sso": {
+        "auth_user": "app.uac",
+        "auth_pass": "<REPLACE>",
+        "auth_url": "https://login.mandiant.com/api/auth",
+        "auth_cookie": "m_login",
+        "login_url": "https://login.mandiant.com",
+        "refresh_url": "https://login.mandiant.com/refresh",
+        "logout_url": "https://login.mandiant.com/logout",
+        "pubkey": "./conf/sso-production-pubkey-2012-02-10.pem"
+    }
+}

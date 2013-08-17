@@ -50,10 +50,6 @@ Install the nginx Web Server
 
 #### /etc/nginx/conf.d/server_ssl.conf
 
-    # #################################################################################
-    # SSL configuration parameters for proxy service.
-    # #################################################################################
-
         ssl                  on;
         ssl_certificate      /etc/pki/tls/certs/localhost.crt;
         ssl_certificate_key  /etc/pki/tls/private/localhost.key;

@@ -43,14 +43,16 @@ cp -r %_builddir/%{name}-%{version}/* %{buildroot}/opt/web/apps/uac
 # Add the Apache conf template file to the package.  This file must be edited and renamed to .conf by an admin.
 rm -rf %{buildroot}/etc
 mkdir -p %{buildroot}/etc/nginx/conf.d
-cp %_builddir/%{name}-%{version}/conf/%{name}.template %{buildroot}/etc/nginx/conf.d/uac.template
+cp %_builddir/%{name}-%{version}/conf/%{name}.template %{buildroot}/etc/nginx/conf.d/.
+cp %_builddir/%{name}-%{version}/conf/%{name}-ssl.template %{buildroot}/etc/nginx/conf.d/.
 
 ls -l %{buildroot}
 
 %files
 %defattr(-,root,root,-)
 /opt/web/apps/uac
-/etc/nginx/conf.d/uac.template
+/etc/nginx/conf.d/Mandiant-uac-ws.template
+/etc/nginx/conf.d/Mandiant-uac-ws-ssl.template
 
 %post
 

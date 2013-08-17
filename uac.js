@@ -10,6 +10,7 @@ var async = require('async');
 var settings = require('settings');
 var log = require('log');
 var sso = require('sso');
+var route_utils = require('route-utils');
 var uac_routes = require('uac-routes');
 var sf_routes = require('sf-routes');
 
@@ -29,26 +30,37 @@ app.use(app.router);
 app.use(uac_routes);
 app.use('/sf', sf_routes);
 
-//
-// Add error handlers.
-//
-if ('development' == app.get('env')) {
-    // Use the development error handler.
-    app.use(express.errorHandler({showStack: true, dumpExceptions: true}));
-}
-else {
-    // Use the production error handler.
-    app.use(function errorHandler(err, req, res, next) {
-        if (req.xhr) {
-            // Ajax request error.
-            res.send(500, { error: 'Error while rendering url: ' + req.route});
-        }
-        else {
-            // General error.
-            res.render('/uac/500.html');
-        }
-    });
-}
+route_utils.load_views(app);
+
+// Add a 404 handler.
+app.use(function(req, res, next) {
+    try {
+        log.error(_.sprintf('Requested page: %s was not found.', req.originalUrl));
+        res.render('/uac/404.html');
+    }
+    catch (e) {
+        // Error.
+        log.error('Error rendering 404 page.');
+        next(e);
+    }
+});
+
+// Add a general error handler.
+app.use(function errorHandler(err, req, res, next) {
+    log.error(_.sprintf('Error handler caught exception (code: %s) while rendering url: %s - %s',
+        res.statusCode,
+        req.originalUrl,
+        err));
+
+    if (req.xhr) {
+        // Send a 500 response to AJAX clients.
+        res.send(500, {error: req.originalUrl + ' is not available.'})
+    }
+    else {
+        // Display the formatted error page.
+        res.render('/uac/500.html');
+    }
+});
 
 /**
  * Start the UAC application server.

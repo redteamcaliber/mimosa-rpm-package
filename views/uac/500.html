@@ -1,11 +1,13 @@
-{% extends "uac/uac.html" %}
+{% extends "uac/base.html" %}
 
 {% block title %}500 - {{ super() }}{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <h4>Page unavailable</h4>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <h4>Page Not Available</h4>
 
-        <p>Sorry, but the requested page is unavailable due to a server problem.</p>
+            <p>Sorry, but the requested page is unavailable due to a server problem.</p>
+        </div>
     </div>
 {% endblock %}

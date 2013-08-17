@@ -1,28 +1,6 @@
 UAC Web Application Production Installation
 ===========================================
 
-Install the nginx Web Server
-----------------------------
-
-### Add a nginx yum repository.  Edit the following file: /etc/yum.repos.d/nginx.repo
-
-    [nginx]
-    name=nginx repo
-    baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
-    gpgcheck=0
-    enabled=1
-
-### Install the NGINX server:
-
-    $ yum install nginx.x86_64
-    $ chkconfig nginx on
-    $ chkconfig nginx start
-
-Install Node.js
----------------
-
-Install UAC
------------
 
 Configure the Database
 -------------------
@@ -39,13 +17,59 @@ Configure the Database
 
     psql -U uac_user -d uac < create_uac_data.sql
 
-Configure NGINX
+
+Install the NGINX Web Server
+----------------------------
+
+### Install the NGINX server:
+
+    $ yum install nginx.x86_64
+    $ chkconfig nginx on
+    $ service nginx start
+
+Install Node.js
 ---------------
 
-### Rename and update the UAC NGINX configuration.
+### Install the Mandiant MCIRT Node.js package.
+
+    rpm -i Mandiant-node-0.10-15.x86_64.rpm
+
+
+Install UAC
+-----------
+
+### Install the Mandiant UAC Web Application.
+
+    rpm -i Mandiant-uac-ws-0.2-1.x86_64.rpm
+
+### Configure UAC
+
+#### Rename and update the UAC local applications settings template.
+
+    $ mv /opt/web/apps/uac/conf/settings_local.template /opt/web/apps/uac/conf/settings_local.json
+
+### Configure NGINX
+
+#### Rename and update the UAC NGINX SSL configuration.
+
+    $ mv /etc/nginx/conf.d/ssl.template /etc/nginx/conf.d/Mandiant-uac-ws-ssl.conf
+
+#### Rename and update the UAC NGINX configuration.
 
     $ mv /etc/nginx/conf.d/Mandiant-uac-ws.template /etc/nginx/conf.d/Mandiant-uac-ws.conf
 
-### Restart NGINX
+
+#### Restart NGINX
 
     $ service nginx restart
+
+
+Test the Application
+--------------------
+
+UAC should be accessed via the MPLEX proxy, uac.mplex.mandiant.com should be pointed to the proxy server.
+
+    https://uac.mplex.mandiant.com/
+
+
+
