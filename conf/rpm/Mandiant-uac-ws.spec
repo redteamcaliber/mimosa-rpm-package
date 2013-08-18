@@ -58,6 +58,7 @@ ls -l %{buildroot}
 /opt/web/apps/uac
 /etc/nginx/conf.d/Mandiant-uac-ws.template
 /etc/nginx/conf.d/Mandiant-uac-ws-ssl.template
+/etc/init/uac.conf
 
 %post
 
