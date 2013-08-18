@@ -1,6 +1,8 @@
 UAC ToDo
 ========
 
+### Question: Who should we run the UAC web application process as?
+
 ### Look into a production upstart configuration for ensure the process is always running.
     -Update the rpm build script as necessary.
     -Update the required production documentation.
@@ -20,6 +22,9 @@ UAC ToDo
 ### Uglify the UAC JS source code.
 
 ### Format JS dates on the client.
+
+### Implement a select2.query to catch errors when Seasick is down.
+    -http://ivaynberg.github.io/select2/
 
 ### Implement the acquisitions list page.
 

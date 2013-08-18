@@ -100,7 +100,8 @@ function shutdown() {
 process.on('SIGINT', shutdown);
 process.on('SIGTERM', shutdown);
 process.on('uncaughtException', function (err) {
-    log.error('Encountered an unhandled server exception.');
+    // Log any error that crashes the server with the keyword = FATAL.
+    log.error('FATAL: Encountered an unhandled server exception.');
     log.error(err.stack);
 
     // Shut down the server.

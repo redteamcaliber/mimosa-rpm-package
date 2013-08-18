@@ -79,7 +79,7 @@ echo 'Generating the spec file...'
 sed -e s,{{NAME}},$NAME,g \
     -e s,{{VERSION}},$VERSION,g \
     -e s,{{RELEASE}},$RELEASE,g \
-    ${PROJECT_DIR}/conf/${NAME}.spec > ${RPMBUILD_DIR}/SPECS/${NAME}.spec
+    ${PROJECT_DIR}/conf/rpm/${NAME}.spec > ${RPMBUILD_DIR}/SPECS/${NAME}.spec
 if [ $? -gt 0 ]; then
     # Error
     echo 'Error creating spec file.'

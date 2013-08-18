@@ -43,8 +43,13 @@ cp -r %_builddir/%{name}-%{version}/* %{buildroot}/opt/web/apps/uac
 # Add the Apache conf template file to the package.  This file must be edited and renamed to .conf by an admin.
 rm -rf %{buildroot}/etc
 mkdir -p %{buildroot}/etc/nginx/conf.d
-cp %_builddir/%{name}-%{version}/conf/%{name}.template %{buildroot}/etc/nginx/conf.d/.
-cp %_builddir/%{name}-%{version}/conf/%{name}-ssl.template %{buildroot}/etc/nginx/conf.d/.
+
+# Copy the UAC NGINX and SSL conf templates.
+cp %_builddir/%{name}-%{version}/conf/nginx/%{name}.template %{buildroot}/etc/nginx/conf.d/.
+cp %_builddir/%{name}-%{version}/conf/nginx/%{name}-ssl.template %{buildroot}/etc/nginx/conf.d/.
+
+# Copy the UAC upstart conf file.
+cp %_builddir/%{name}-%{version}/conf/upstart/uac.conf %{buildroot}/etc/init/.
 
 ls -l %{buildroot}
 

@@ -36,3 +36,16 @@ host ips
 hosts and ips
 
 34.225.104.4, 134.132.192.163, MWKS309467
+
+
+# Upstart configuration
+
+start on started network
+stop on stopped network
+
+respawn
+chdir /opt/web/apps/uac
+
+script
+    exec  ./bin/start.sh
+end script

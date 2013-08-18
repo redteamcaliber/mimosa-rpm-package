@@ -58,6 +58,13 @@ env.json file is NOT overwritten during package upgrades.
 
     $ cp /opt/web/apps/uac/conf/prod_env.json /opt/web/apps/uac/conf/env.json
 
+#### Start the UAC Web Application Server
+
+The UAC RPM package installs an upstart configuration file to the /etc/init directory.  Start the server before
+continuing by issuing the following command.
+
+    $ start uac
+
 ### Configure the UAC NGINX Server
 
 #### Rename and update the UAC NGINX SSL configuration.

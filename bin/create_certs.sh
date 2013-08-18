@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Create uac_ws self signed certifcates for use with HTTPS.
+# Create uac_ws self signed certificates for use with HTTPS.
 
 openssl genrsa -des3 -out uac_ws.key 1024
 openssl req -new -key uac_ws.key -out uac_ws.csr

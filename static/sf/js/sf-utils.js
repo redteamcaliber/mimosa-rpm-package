@@ -154,9 +154,9 @@ $(document).ajaxError(function (collection, response, options) {
         log.warning("Error during processing, response is invalid");
     }
 });
-$.ajaxSetup({
-    timeout: 180000
-});
+//$.ajaxSetup({
+//    timeout: 180000
+//});
 
 /**
  * Tokenize a string based on whitespace and commas.

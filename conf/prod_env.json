@@ -16,7 +16,9 @@
         "ss_api_url": "https://proxy.mcirt.mandiant.com/SEASICK/",
 
         "log_level": "warn",
-        "log_file": "./logs/uac.log"
+        "log_file": "./logs/uac.log",
+        "log_maxsize": "1048576",
+        "log_maxfiles": 10
     },
     "sso": {
         "auth_user": "app.uac",
@@ -26,6 +28,6 @@
         "login_url": "https://login.mandiant.com",
         "refresh_url": "https://login.mandiant.com/refresh",
         "logout_url": "https://login.mandiant.com/logout",
-        "pubkey": "./conf/sso-production-pubkey-2012-02-10.pem"
+        "pubkey": "./conf/certs/sso-production-pubkey-2012-02-10.pem"
     }
 }

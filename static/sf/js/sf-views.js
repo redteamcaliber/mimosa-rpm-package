@@ -1031,12 +1031,21 @@ StrikeFinder.AgentHostView = StrikeFinder.View.extend({
 
         return view;
     },
+    render_service_down: function() {
+        var view = this;
+        view.$el.html(_.template($("#agent-host-error-template").html(), {am_cert_hash: view.model.id}));
+    },
     fetch: function (am_cert_hash) {
-        this.model.clear();
+        var view = this;
+        view.model.clear();
         if (am_cert_hash) {
-            this.model.id = am_cert_hash;
+            view.model.id = am_cert_hash;
         }
-        this.model.fetch();
+        view.model.fetch({
+            error: function(model, response, options) {
+                view.render_service_down();
+            }
+        });
     },
     attributes: function () {
         return this.model ? this.model.attributes : null;
