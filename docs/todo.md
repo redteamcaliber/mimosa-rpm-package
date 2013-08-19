@@ -3,12 +3,10 @@ UAC ToDo
 
 ### Question: Who should we run the UAC web application process as?
 
-### Look into a production upstart configuration for ensure the process is always running.
-    -Update the rpm build script as necessary.
-    -Update the required production documentation.
-    -Test the configuration ensure the server restarts properly.
+### Hits view does not refresh properly after suppressing all hits.
 
 ### Look into adding csrf support into the application - http://expressjs.com/api.html
+    -Need to undo or update this: https://gist.github.com/gcollazo/1240683
 
 ### Apply an allowed hosts setting so that users cannot accidentally hit UAC direct.
 
@@ -22,6 +20,8 @@ UAC ToDo
 ### Uglify the UAC JS source code.
 
 ### Format JS dates on the client.
+
+### Add counts to the rollups, especially the hits rollup.
 
 ### Implement a select2.query to catch errors when Seasick is down.
     -http://ivaynberg.github.io/select2/

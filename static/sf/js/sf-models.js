@@ -28,7 +28,7 @@ StrikeFinder.ServiceModel = StrikeFinder.ListItemModel.extend({
  */
 StrikeFinder.ServicesCollection = Backbone.Collection.extend({
     model: StrikeFinder.ServiceModel,
-    url: '/sf-api/services'
+    url: '/sf/api/services'
 });
 
 /**
@@ -49,7 +49,7 @@ StrikeFinder.ClusterModel = StrikeFinder.ListItemModel.extend({
  */
 StrikeFinder.ClustersCollection = Backbone.Collection.extend({
     model: StrikeFinder.ClusterModel,
-    url: '/sf-api/clusters'
+    url: '/sf/api/clusters'
 });
 
 StrikeFinder.IOCSummaryModel = Backbone.Model.extend({
@@ -64,7 +64,7 @@ StrikeFinder.IOCSummaryModel = Backbone.Model.extend({
     }
 });
 StrikeFinder.IOCSummaryCollection = Backbone.Collection.extend({
-    url: '/sf-api/ioc-summary',
+    url: '/sf/api/ioc-summary',
     model: StrikeFinder.IOCSummaryModel
 });
 
@@ -78,7 +78,7 @@ StrikeFinder.IOCDetailsModel = Backbone.Model.extend({
     }
 });
 StrikeFinder.IOCDetailsCollection = Backbone.Collection.extend({
-    url: '/sf-api/ioc-summary',
+    url: '/sf/api/ioc-summary',
     model: StrikeFinder.IOCDetailsModel,
     parse: function(response, options) {
         if (response && response.length > 0) {
@@ -383,7 +383,7 @@ StrikeFinder.SuppressionModel = Backbone.Model.extend({
         comment: ''
     },
     idAttribute: 'suppression_id',
-    url: "/sf-api/suppressions",
+    url: "/sf/api/suppressions",
     as_string: function () {
         return StrikeFinder.format_suppression(this.attributes);
     },

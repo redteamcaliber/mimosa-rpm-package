@@ -21,10 +21,16 @@ var sf_routes = require('sf-routes');
 var app = express();
 app.use(express.compress());
 app.use(express.favicon(__dirname + '/static/img/mandiant.ico'));
-app.use(express.query());
-app.use(express.cookieParser());
 app.use('/static', express.static('static'));
+app.use(express.query());
 app.use(express.bodyParser());
+app.use(express.cookieParser());
+//app.use(express.cookieSession({
+//    key: 'uac.session',
+//    secret: '62d0f193-a1e3-45f9-bb41-7b22310309aa',
+//    cookie: { path: '/', httpOnly: true, maxAge: null },
+//}));
+//app.use(express.csrf());
 app.use(sso.require_authentication(settings.get('sso')));
 app.use(app.router);
 app.use(uac_routes);
@@ -33,10 +39,16 @@ app.use('/sf', sf_routes);
 route_utils.load_views(app);
 
 // Add a 404 handler.
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     try {
         log.error(_.sprintf('Requested page: %s was not found.', req.originalUrl));
-        res.render('/uac/404.html');
+        if (req.xhr) {
+            // Send a 404 response to AJAX clients.
+            res.send(404, {error: req.originalUrl + ' is not available.'})
+        }
+        else {
+            res.render('/uac/404.html');
+        }
     }
     catch (e) {
         // Error.
@@ -47,10 +59,9 @@ app.use(function(req, res, next) {
 
 // Add a general error handler.
 app.use(function errorHandler(err, req, res, next) {
-    log.error(_.sprintf('Error handler caught exception (code: %s) while rendering url: %s - %s',
-        res.statusCode,
-        req.originalUrl,
-        err));
+    log.error(_.sprintf('Error handler caught exception (code: %s) while rendering url: %s', res.statusCode,
+        req.originalUrl));
+    err.stack ? log.error(err.stack) : log.error(err);
 
     if (req.xhr) {
         // Send a 500 response to AJAX clients.
@@ -61,6 +72,7 @@ app.use(function errorHandler(err, req, res, next) {
         res.render('/uac/500.html');
     }
 });
+
 
 /**
  * Start the UAC application server.
