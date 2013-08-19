@@ -926,17 +926,10 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
             collapsed: true
         });
 
-        view.options.sAjaxSource = '/sf-api/hits';
+        view.options.sAjaxSource = '/sf/api/hits';
         view.options.sAjaxDataProp = 'results';
         view.options.bServerSide = true;
-        view.options.fnServerData = function (sSource, aoData, fnCallback) {
-            $.getJSON(sSource, aoData, function (json) {
-                json.iTotalDisplayRecords = json.count;
-                json.iTotalRecords = json.count;
-                json.iDisplayStart = json.offset;
-                fnCallback(json)
-            });
-        };
+
         view.options.aoColumns = [
             {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
@@ -966,7 +959,7 @@ StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
             title_class: 'uac-header'
         });
 
-        view.options['sAjaxSource'] = '/sf-api/hits';
+        view.options['sAjaxSource'] = '/sf/api/hits';
         view.options.sAjaxDataProp = 'results';
         view.options['bServerSide'] = true;
 
@@ -978,15 +971,6 @@ StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
             {sTitle: "Summary", mData: "summary1", bSortable: false},
             {sTitle: "Summary2", mData: "summary2", bSortable: false}
         ];
-
-        view.options.fnServerData = function (sSource, aoData, fnCallback) {
-            $.getJSON(sSource, aoData, function (json) {
-                json.iTotalDisplayRecords = json.count;
-                json.iTotalRecords = json.count;
-                json.iDisplayStart = json.offset;
-                fnCallback(json)
-            });
-        };
 
         view.options['sDom'] = 'Rltip';
         view.listenTo(view, 'load', function () {
