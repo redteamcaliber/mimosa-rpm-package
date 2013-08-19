@@ -123,7 +123,7 @@ StrikeFinder.UserCriteriaModel = Backbone.Model.extend({
         exp_key: [],
         usertoken: ''
     },
-    urlRoot: '/sf-api/usersettings',
+    urlRoot: '/sf/api/usersettings',
     parse: function (response, options) {
         // Ensure that services and clusters are always array values.
         if (response['services'] && !_.isArray(response['services'])) {
@@ -185,18 +185,18 @@ StrikeFinder.HitsCollection = Backbone.Collection.extend({
     },
     model: StrikeFinder.HitsModel,
     url: function () {
-        var url = '/sf-api/hits';
+        var url = '/sf/api/hits';
         if (this.tagname) {
-            url = '/sf/api/hits/tagname/' + this.tagname;
+            url += '?tagname=' + this.tagname;
         }
         else if (this.usertoken) {
-            url += '?limit=0&usertoken=' + this.usertoken;
+            url += '?usertoken=' + this.usertoken;
         }
         else if (this.suppression_id) {
-            url += '?limit=0&suppression_id=' + this.suppression_id;
+            url += '?suppression_id=' + this.suppression_id;
         }
         else if (this.am_cert_hash) {
-            url += '?limit=0&am_cert_hash=' + this.am_cert_hash;
+            url += '?am_cert_hash=' + this.am_cert_hash;
         }
         return url;
     },
@@ -225,7 +225,7 @@ StrikeFinder.IOCCollection = Backbone.Collection.extend({
         this.rowitem_uuid = options["rowitem_uuid"];
     },
     url: function () {
-        return _.sprintf('/sf-api/hits/%s/iocs', this.rowitem_uuid);
+        return _.sprintf('/sf/api/hits/%s/iocs', this.rowitem_uuid);
     },
     model: StrikeFinder.IOCModel
 });
@@ -238,7 +238,7 @@ StrikeFinder.FileInfoModel = Backbone.Model.extend({
         html: ""
     },
     url: function () {
-        return _.sprintf('/sf-api/hits/%s/html', this.id);
+        return _.sprintf('/sf/api/hits/%s/html', this.id);
     }
 });
 
@@ -295,7 +295,7 @@ StrikeFinder.SuppressionListItem = Backbone.Model.extend({
         iocnamehash: ''
     },
     idAttribute: 'suppression_id',
-    urlRoot: '/sf-api/suppressions'
+    urlRoot: '/sf/api/suppressions'
 });
 StrikeFinder.SuppressionListItemCollection = Backbone.Collection.extend({
     model: StrikeFinder.SuppressionListItem,
@@ -309,10 +309,10 @@ StrikeFinder.SuppressionListItemCollection = Backbone.Collection.extend({
     },
     url: function () {
         if (this.exp_key) {
-            return _.sprintf('/sf-api/suppressions?exp_key=%s', this.exp_key);
+            return _.sprintf('/sf/api/suppressions?exp_key=%s', this.exp_key);
         }
         else {
-            return '/sf-api/suppressions';
+            return '/sf/api/suppressions';
         }
     },
     parse: function(response, options) {
@@ -428,7 +428,7 @@ StrikeFinder.MassTagModel = Backbone.Model.extend({
         perform_updates: false,
         comment: ''
     },
-    url: "/sf-api/hits/masstag",
+    url: "/sf/api/hits/masstag",
     validate: function (attr, options) {
         var results = [];
         if (_.isEmpty(attr.tagname)) {
@@ -472,7 +472,7 @@ StrikeFinder.CommentsModel = Backbone.Model.extend({
         type: ""
     },
     url: function () {
-        return _.sprintf('/sf-api/hits/%s/addcomment', this.get('rowitem_uuid'));
+        return _.sprintf('/sf/api/hits/%s/addcomment', this.get('rowitem_uuid'));
     }
 });
 StrikeFinder.CommentsCollection = Backbone.Collection.extend({
@@ -481,7 +481,7 @@ StrikeFinder.CommentsCollection = Backbone.Collection.extend({
         this.rowitem_uuid = options["rowitem_uuid"];
     },
     url: function () {
-        return _.sprintf('/sf-api/hits/%s/comments', this.rowitem_uuid);
+        return _.sprintf('/sf/api/hits/%s/comments', this.rowitem_uuid);
     }
 });
 
@@ -501,7 +501,7 @@ StrikeFinder.TagCollection = Backbone.Collection.extend({
         }
     },
     model: StrikeFinder.TagModel,
-    url: '/sf-api/tags',
+    url: '/sf/api/tags',
     parse: function(response, options) {
         if (this.searchable) {
             var results = [];
@@ -524,7 +524,7 @@ StrikeFinder.SetTagModel = Backbone.Model.extend({
         tagname: ''
     },
     url: function () {
-        return _.sprintf('/sf-api/hits/%s/settag', this.get('rowitem_uuid'));
+        return _.sprintf('/sf/api/hits/%s/settag', this.get('rowitem_uuid'));
     }
 });
 
@@ -619,6 +619,6 @@ StrikeFinder.ClientModel = Backbone.Model.extend({
     }
 });
 StrikeFinder.ClientCollection = Backbone.Collection.extend({
-    url: '/sf-api/clients',
+    url: '/sf/api/clients',
     model: StrikeFinder.ClientModel
 });

@@ -1,28 +1,28 @@
 {
-  "name": "uac-ws",
-  "author": "Mandiant",
-  "description": "Unified Analyst Console",
-  "version": "0.0.1",
-  "contributors": [
-    {
-      "name": "Anthony Milano",
-      "email": "Anthony.Milano@Mandiant.com"
-    }
-  ],
-  "private": true,
-  "scripts": {},
-  "dependencies": {
-    "config": "~0.4.27",
-    "underscore.string": "~2.3.3",
-    "winston": "~0.7.2",
-    "pg": "~2.2.0",
-    "nconf": "~0.6.7",
-    "async": "~0.2.9",
-    "request": "~2.25.0",
-    "nunjucks": "~0.1.9",
-    "express": "~3.3.4",
-    "node-validation": "~0.1.0",
-    "moment": "2.1.0"
-  },
-  "license": "Commercial"
+    "name": "uac-ws",
+    "author": "Mandiant",
+    "description": "Unified Analyst Console",
+    "version": "0.0.1",
+    "contributors": [
+        {
+            "name": "Anthony Milano",
+            "email": "Anthony.Milano@Mandiant.com"
+        }
+    ],
+    "private": true,
+    "scripts": {},
+    "dependencies": {
+        "config": "~0.4.27",
+        "underscore.string": "~2.3.3",
+        "winston": "~0.7.2",
+        "pg": "~2.2.0",
+        "nconf": "~0.6.7",
+        "async": "~0.2.9",
+        "request": "~2.25.0",
+        "nunjucks": "~0.1.9",
+        "express": "~3.3.4",
+        "node-validation": "~0.1.0",
+        "moment": "2.1.0"
+    },
+    "license": "Commercial"
 }

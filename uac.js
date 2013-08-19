@@ -25,12 +25,12 @@ app.use('/static', express.static('static'));
 app.use(express.query());
 app.use(express.bodyParser());
 app.use(express.cookieParser());
-//app.use(express.cookieSession({
-//    key: 'uac.session',
-//    secret: '62d0f193-a1e3-45f9-bb41-7b22310309aa',
-//    cookie: { path: '/', httpOnly: true, maxAge: null },
-//}));
-//app.use(express.csrf());
+app.use(express.cookieSession({
+    key: 'uac.session',
+    secret: '62d0f193-a1e3-45f9-bb41-7b22310309aa',
+    cookie: { path: '/', httpOnly: true, maxAge: null }
+}));
+app.use(express.csrf());
 app.use(sso.require_authentication(settings.get('sso')));
 app.use(app.router);
 app.use(uac_routes);
