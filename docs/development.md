@@ -1,4 +1,4 @@
-UAC Web Application Installation Documentation
+UAC Web Application Development Installation Documentation
 ==============================================
 
 Install the nginx Web Server
@@ -20,35 +20,7 @@ Install the nginx Web Server
 
 ### Configure the server:
 
-#### /etc/nginx/conf.d/server.conf
-
-    #
-    # This server makes it so that anyone trying to get to the proxy without a Host:
-    # header will get back a 444 error.
-    #
-    server {
-        listen      443;
-        server_name "";
-        include /etc/nginx/conf.d/server_ssl.conf;
-        return      444;
-    }
-
-    #
-    # This is the main server, it will listen for Host: proxy.mcirt.mandiant.com, and
-    # farm out requests based on the files in locations/*.conf
-    #
-    server {
-        listen       443;
-        server_name  vm.mandiant.com 192.168.148.200;
-
-        include /etc/nginx/conf.d/server_ssl.conf;
-
-        # The configuration for each location will go in an independent file
-        # in this directory.
-        include /etc/nginx/conf.d/locations/proxy_*.conf;
-    }
-
-#### /etc/nginx/conf.d/server_ssl.conf
+#### /etc/nginx/conf.d/server_ssl.conf -> https://github.mandiant.com/amilano/uac-node/blob/master/conf/nginx/Mandiant-uac-ws-ssl.template
 
         ssl                  on;
         ssl_certificate      /etc/pki/tls/certs/localhost.crt;
@@ -58,39 +30,16 @@ Install the nginx Web Server
         ssl_prefer_server_ciphers   on;
 
 
-    /etc/nginx/conf.d/uac.conf
+#### /etc/nginx/conf.d/uac.conf -> https://github.mandiant.com/amilano/uac-node/blob/master/conf/nginx/Mandiant-uac-ws.template
 
-    upstream uac.vm.mandiant.com {
+    # UAC NGINX Settings
+
+    upstream uac.dev.mandiant.com {
         server 127.0.0.1:8000;
     }
     server {
         listen 443;
-        server_name localhost uac.vm.mandiant.com;
-        access_log /var/log/nginx/uac.log;
-        location ~ /static/ {
-            root /opt/web/apps/uac/;
-            if (!-f $request_filename) {
-                return 404;
-            }
-        }
-        location / {
-            proxy_pass https://uac.vm.mandiant.com;
-            proxy_redirect off;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header Host $http_host;
-            proxy_set_header X-NginX-Proxy true;
-        }
-    }
-
-#### /etc/nginx/conf.d/uac.conf
-
-    upstream uac.vm.mandiant.com {
-        server 127.0.0.1:8000;
-    }
-    server {
-        listen 443;
-        server_name localhost uac.vm.mandiant.com;
+        server_name localhost uac.dev.mandiant.com;
         underscores_in_headers on;
         access_log /var/log/nginx/uac.log;
         location /static/ {
@@ -100,34 +49,12 @@ Install the nginx Web Server
             }
         }
         location / {
-            proxy_pass https://uac.vm.mandiant.com;
+            proxy_pass http://uac.dev.mandiant.com;
             proxy_redirect off;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header Host $http_host;
             proxy_set_header X-NginX-Proxy true;
-        }
-        #
-        # Proxy mapping for the strikefinder python REST API.
-        #
-        location /sf-api {
-    	rewrite /sf-api/(.*) /SFPY/$1 break;
-    	proxy_set_header   X-Real-IP        $remote_addr;
-    	proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
-    	proxy_set_header Host $host;
-    	proxy_pass https://10.19.0.70;
-    	proxy_redirect https://10.19.0.70 /sf-api;
-        }
-        #
-        # Proxy mapping for the seasick REST API.
-        #
-        location /ss-api {
-    	rewrite /ss-api/(.*) /$1 break;
-    	proxy_set_header   X-Real-IP        $remote_addr;
-    	proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
-    	proxy_set_header Host $host;
-    	proxy_pass https://10.19.0.17;
-    	proxy_redirect https://10.19.0.17 /ss-api;
         }
     }
 
@@ -150,15 +77,21 @@ in order to install the compiler.
 Install Node.js
 ---------------
 
-### Download the Node archive.
+### Install the Mandiant Node RPM.
+
+    rpm -i Mandiant-node-0.10-15.x86_64.rpm
+
+### Or Download the and Extract Node archive.
 
     http://nodejs.org/dist/v0.10.15/node-v0.10.15-linux-x64.tar.gz
-
-### Extract the archive to the following directory:
 
     cd /opt/node
 
     tar -zxf node-v0.10.15-linux-x64.tar.gz
+
+### Install Global Node Development Tools
+
+
 
 
 Install the Application Code

@@ -92,6 +92,9 @@ cd $PROJECT_DIR
 chmod +x ./bin/*
 ./bin/install_libs.sh
 
+# Uglify the js files.
+./bin/uglify.sh 'TRUE'
+
 # Create the rpm tar.
 echo "Creating the source tar file: $TAR_FILE from source: $PROJECT_DIR/*"
 tar -czf ${TAR_FILE} --exclude=conf/env.json --exclude=sql --exclude=docs --exclude=logs/* *
