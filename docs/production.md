@@ -121,28 +121,6 @@ Note: This guide assumes that an ssl.conf has been applied to the nginx server.
             proxy_set_header Host $http_host;
             proxy_set_header X-NginX-Proxy true;
         }
-        #
-        # Proxy mapping for the strikefinder python REST API.
-        #
-        location /sf-api {
-        rewrite /sf-api/(.*) /SFPY/$1 break;
-        proxy_set_header   X-Real-IP        $remote_addr;
-        proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
-        proxy_set_header Host $host;
-        proxy_pass https://172.19.0.70;
-        proxy_redirect https://172.19.0.70 /sf-api;
-        }
-        #
-        # Proxy mapping for the seasick REST API.
-        #
-        location /ss-api {
-        rewrite /ss-api/(.*) /$1 break;
-        proxy_set_header   X-Real-IP        $remote_addr;
-        proxy_set_header   X-Forwarded-For  $proxy_add_x_forwarded_for;
-        proxy_set_header Host $host;
-        proxy_pass https://172.19.0.17;
-        proxy_redirect https://172.19.0.17 /ss-api;
-        }
     }
 
 
