@@ -11,11 +11,11 @@ Configure the Database
 
 ### Create the UAC Tables:
 
-    psql -U uac_user -d uac < create_uac_tables.sql
+    psql -U uac_user -d uac < create_tables.sql
 
 ### Populate the UAC Data:
 
-    psql -U uac_user -d uac < create_uac_data.sql
+    psql -U uac_user -d uac < create_data.sql
 
 
 Install the UAC NGINX Web Server
