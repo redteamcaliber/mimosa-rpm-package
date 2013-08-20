@@ -1,25 +1,10 @@
 UAC ToDo
 ========
 
-### Creating a suppression for the params below gives back bad hit count.
-    "services":["Standard"],
-    "clusters":["9402af9a-f99b-45c3-8f86-651aa1d87f75"],
-    "exp_key":["76b4d1fec5c1d6d5c9f7c92b2f34f869"],
-    "usertoken":"eed8dcd2b82a7f43ff15c84f456bcbd8",
-    "lastaction":"2013-08-17 02:32:52+00"}
-
-### Need to update the expression key that is inside the HitsDetailsView whenever a new expression has been selected.
-
 ### Write up the user stories from last week before the meeting.
-
-### Uglify the UAC JS source code.
-
-### Format JS dates on the client.
 
 ### Gracefully handle when the users session has timed out and making an AJAX call.
     -http://msdn.microsoft.com/en-us/magazine/cc507641.aspx
-
-### Rebuild the local UAC database using the update scripts.
 
 ### Disable the hits link when there is not a usertoken.
 
@@ -27,9 +12,9 @@ UAC ToDo
 
 ### Question: Who should we run the UAC web application process as?
 
-### Look through the source and ensure that the limit is being applied to queries properly.
-
 ### Add counts to the rollups, especially the hits rollup.
+
+### Uglify CSS support.
 
 ### Implement a select2.query to catch errors when Seasick is down.
     -http://ivaynberg.github.io/select2/

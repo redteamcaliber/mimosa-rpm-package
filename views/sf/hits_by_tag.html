@@ -37,6 +37,15 @@
                 {sTitle: "Owner", mData: "username", sWidth: '10%'}
             ];
 
+            view.options['aoColumnDefs'] = [
+                {
+                    mRender: function (data, type, row) {
+                        return format_date(data);
+                    },
+                    aTargets: [1]
+                }
+            ];
+
             view.options['aaSorting'] = [];
 
             view.options['sDom'] = "Rlftip";

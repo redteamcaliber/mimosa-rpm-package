@@ -294,10 +294,10 @@ StrikeFinder.SuppressionListItemCollection = Backbone.Collection.extend({
     },
     url: function () {
         if (this.exp_key) {
-            return _.sprintf('/sf/api/suppressions?exp_key=%s', this.exp_key);
+            return _.sprintf('/sf/api/suppressions?limit=0&exp_key=%s', this.exp_key);
         }
         else {
-            return '/sf/api/suppressions';
+            return '/sf/api/suppressions?limit=0';
         }
     },
     parse: function(response, options) {

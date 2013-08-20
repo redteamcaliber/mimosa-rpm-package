@@ -870,6 +870,12 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                         }
                     },
                     aTargets: [6]
+                },
+                {
+                    mRender: function (data, type, row) {
+                        return format_date(data);
+                    },
+                    aTargets: [8]
                 }
             ];
 
@@ -1853,6 +1859,14 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
                 ],
                 aaSorting: [
                     [ 0, "desc" ]
+                ],
+                aoColumnDefs: [
+                    {
+                        mRender: function (data, type, row) {
+                            return format_date(data);
+                        },
+                        aTargets: [0]
+                    }
                 ]
             });
             view.comments_table.render();
@@ -2146,10 +2160,10 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             }
         });
     },
-    render_hits: function(params) {
+    render_hits: function (params) {
         var view = this;
 
-        StrikeFinder.run(function() {
+        StrikeFinder.run(function () {
             if (!view.hits_view) {
                 view.hits_view = new StrikeFinder.HitsView({
                     el: '#hits-view-div'
@@ -2232,7 +2246,7 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
 
             var loaded_criteria = new StrikeFinder.UserCriteriaModel();
             loaded_criteria.fetch({
-                success: function(model, response, options) {
+                success: function (model, response, options) {
                     log.debug('Loaded user settings from the server: ' + JSON.stringify(loaded_criteria.attributes));
 
                     // Ensure there are enough parameters to continue.

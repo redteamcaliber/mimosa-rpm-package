@@ -20,7 +20,7 @@ Install the nginx Web Server
 
 ### Configure the server:
 
-#### /etc/nginx/conf.d/server_ssl.conf -> https://github.mandiant.com/amilano/uac-node/blob/master/conf/nginx/Mandiant-uac-ws-ssl.template
+#### [/etc/nginx/conf.d/server_ssl.conf](https://github.mandiant.com/amilano/uac-node/blob/master/conf/nginx/Mandiant-uac-ws-ssl.template)
 
         ssl                  on;
         ssl_certificate      /etc/pki/tls/certs/localhost.crt;
@@ -30,7 +30,7 @@ Install the nginx Web Server
         ssl_prefer_server_ciphers   on;
 
 
-#### /etc/nginx/conf.d/uac.conf -> https://github.mandiant.com/amilano/uac-node/blob/master/conf/nginx/Mandiant-uac-ws.template
+#### [/etc/nginx/conf.d/uac.conf](https://github.mandiant.com/amilano/uac-node/blob/master/conf/nginx/Mandiant-uac-ws.template)
 
     # UAC NGINX Settings
 
@@ -83,7 +83,7 @@ Install Node.js
 
 ### Or Download the and Extract Node archive.
 
-    http://nodejs.org/dist/v0.10.15/node-v0.10.15-linux-x64.tar.gz
+    <http://nodejs.org/dist/v0.10.15/node-v0.10.15-linux-x64.tar.gz>
 
     cd /opt/node
 
@@ -91,7 +91,10 @@ Install Node.js
 
 ### Install Global Node Development Tools
 
+The following script installs node-supervisor, uglifyjs, etc to the node development instance.  The libraries are
+installed globally for use in scripts.
 
+    ./bin/install_global_libs.sh
 
 
 Install the Application Code

@@ -3,7 +3,9 @@ UAC Web Application Production Installation
 
 
 Configure the Database
--------------------
+----------------------
+
+Run the following database scripts.  They are located in [github](https://github.mandiant.com/amilano/uac-node/tree/master/sql)
 
 ### Create the UAC database:
 
@@ -64,6 +66,10 @@ The UAC RPM package installs an upstart configuration file to the /etc/init dire
 continuing by issuing the following command.
 
     $ start uac
+
+If deploying a patch restart the UAC application.
+
+    $ restart uac
 
 ### Configure the UAC NGINX Server
 

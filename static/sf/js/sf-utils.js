@@ -173,3 +173,7 @@ function parse_search_string(s) {
     });
     return valid_tokens;
 }
+
+function format_date(s) {
+    return s ? moment(s, 'YYYY-MM-DDTHH:mm:ss.SSS').format('YYYY-MM-DD HH:mm:ss') : '';
+}
