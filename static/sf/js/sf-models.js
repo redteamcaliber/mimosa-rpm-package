@@ -146,21 +146,6 @@ StrikeFinder.UserCriteriaModel = Backbone.Model.extend({
         var selected_services = this.get("services");
         var selected_clusters = this.get("clusters");
         return selected_services && selected_services.length > 0 && selected_clusters && selected_clusters.length > 0;
-    },
-    get_params: function () {
-        // Retrieve the parameters flattening all array values to comma delimited strings.
-        var that = this;
-        var results = {};
-        _.each(_.keys(this.attributes), function (key) {
-            var value = that.get(key);
-            if (_.isArray(value)) {
-                results[key] = value.join();
-            }
-            else {
-                results[key] = value;
-            }
-        });
-        return results;
     }
 });
 

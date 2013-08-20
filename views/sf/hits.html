@@ -32,7 +32,7 @@
                 var router = this;
                 StrikeFinder.run(function () {
                     router.hits_view = new StrikeFinder.HitsView();
-                    router.hits_view.render({
+                    router.hits_view.fetch({
                         checkout: false
                     });
                 });
@@ -42,7 +42,7 @@
                 var router = this;
                 StrikeFinder.run(function () {
                     router.hits_view = new StrikeFinder.HitsView();
-                    router.hits_view.render({
+                    router.hits_view.fetch({
                         services: services,
                         clusters: clusters,
                         expkey: expkey,
@@ -54,7 +54,7 @@
                 var router = this;
                 StrikeFinder.run(function () {
                     router.hits_view = new StrikeFinder.HitsView();
-                    router.hits_view.render({
+                    router.hits_view.fetch({
                         services: services,
                         clusters: clusters,
                         iocnamehash: iocnamehash,

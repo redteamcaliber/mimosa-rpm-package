@@ -689,7 +689,7 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
         view.table_views = [];
 
         var on_ioc_click = function (ev) {
-            view.trigger('click:iocnamehash');
+            view.trigger('click:iocnamehash', view.params.iocnamehash);
         };
 
         // Remove any listeners bound to the IOC name.
@@ -742,6 +742,7 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
         return view;
     },
     fetch: function (params) {
+        this.params = params;
         this.collection.fetch({data: params});
     }
 });
@@ -1015,7 +1016,7 @@ StrikeFinder.AgentHostView = StrikeFinder.View.extend({
 
         return view;
     },
-    render_service_down: function() {
+    render_service_down: function () {
         var view = this;
         view.$el.html(_.template($("#agent-host-error-template").html(), {am_cert_hash: view.model.id}));
     },
@@ -1026,7 +1027,7 @@ StrikeFinder.AgentHostView = StrikeFinder.View.extend({
             view.model.id = am_cert_hash;
         }
         view.model.fetch({
-            error: function(model, response, options) {
+            error: function (model, response, options) {
                 view.render_service_down();
             }
         });
@@ -1540,6 +1541,7 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
         var exp_key = params.exp_key;
         var cluster_uuid = params.cluster_uuid;
 
+        log.debug('Creating suppression for exp_key: ' + exp_key);
         if (!params) {
             // Error, params are required.
             throw new Error('"params" is undefined.');
@@ -1980,20 +1982,12 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
         // ShoppingView reference.
         var view = this;
 
-        // Determine the mode.
-        if ('standalone' in view.options && !view.options['standalone']) {
-            view.standalone = false;
-
-            // Add a collapsable around the shopping view.
-            view.shopping_collapsable = new StrikeFinder.CollapsableContentView({
-                el: '#' + view.el.id,
-                title: '<i class="icon-search"></i> IOC Shopping Criteria',
-                title_class: 'uac-header'
-            });
-        }
-        else {
-            view.standalone = true;
-        }
+        // Add a collapsable around the shopping view.
+        view.shopping_collapsable = new StrikeFinder.CollapsableContentView({
+            el: '#' + view.el.id,
+            title: '<i class="icon-search"></i> IOC Shopping Criteria',
+            title_class: 'uac-header'
+        });
 
         // Load the model with the users default search criteria.
         view.model = new StrikeFinder.UserCriteriaModel(StrikeFinder.usersettings);
@@ -2073,87 +2067,33 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             el: "#ioc-details-div"
         });
         view.listenTo(view.ioc_details_view, "click:exp_key", function (exp_key) {
-            StrikeFinder.run(function () {
-                // User chosen to view hits for an expression.
-                log.debug("Selected exp_key: " + exp_key);
+            log.debug('User selected exp_key: ' + exp_key);
 
-                view.model.set("exp_key", exp_key);
+            // User has selected an expression.
+            view.model.set("exp_key", exp_key);
 
-                if (view.standalone) {
-                    // Running in stand-alone mode, navigate to the hits page.
-                    var url = "/sf/hits" +
-                        "#services/" + view.model.get("services") +
-                        "/clusters/" + view.model.get("clusters") +
-                        "/exp_key/" + view.model.get("exp_key");
-                    if (view.model.get("checkout")) {
-                        // Check out the expression and obtain the user token.
-                        url += '/checkout/true';
-                    }
-                    window.location = url;
-                }
-                else {
-                    // Render the hits view in-line within the current page.
-                    if (!view.hits_view) {
-                        view.hits_view = new StrikeFinder.HitsView({
-                            el: '#hits-view-div'
-                        });
-                    }
+            var params = {
+                services: view.model.get('services'),
+                clusters: view.model.get('clusters'),
+                exp_key: view.model.get('exp_key'),
+                checkout: view.model.get('checkout')
+            };
 
-                    var params = {
-                        services: view.model.get('services'),
-                        clusters: view.model.get('clusters'),
-                        exp_key: view.model.get('exp_key'),
-                        checkout: view.model.get('checkout')
-                    };
-                    view.hits_view.render(params);
-
-                    if (view.shopping_collapsable) {
-                        view.shopping_collapsable.toggle();
-                    }
-
-                    view.hits_view.show();
-                }
-            });
+            view.render_hits(params);
         });
-        view.listenTo(view.ioc_details_view, "click:iocnamehash", function () {
-            StrikeFinder.run(function () {
-                // User has chosen to view hits for the entire IOC.
-                log.debug(_.sprintf('Viewing hits for iocnamehash: %s', view.model.get('iocnamehash')));
+        view.listenTo(view.ioc_details_view, "click:iocnamehash", function (iocnamehash) {
+            log.debug('User has selected iocnamehash: ' + iocnamehash)
+            // User has selected an iocnamehash.
+            view.model.set('iocnamehash', iocnamehash);
 
-                if (view.standalone) {
-                    // Running in stand-alone mode, navigate to the hits page.
-                    var url = "/sf/hits" +
-                        "#services/" + view.model.get("services") +
-                        "/clusters/" + view.model.get("clusters") +
-                        "/iocnamehash/" + view.model.get("iocnamehash");
-                    if (view.model.get("checkout")) {
-                        // Check out the expression and obtain the user token.
-                        url += '/checkout/true';
-                    }
-                    window.location = url;
-                }
-                else {
-                    // Render the hits view in-line within the current page.
-                    if (!view.hits_view) {
-                        view.hits_view = new StrikeFinder.HitsView({
-                            el: '#hits-view-div'
-                        });
-                    }
-                    var params = {
-                        services: view.model.get('services'),
-                        clusters: view.model.get('clusters'),
-                        exp_key: view.model.get('exp_key')[0],
-                        checkout: view.model.get('checkout')
-                    };
-                    view.hits_view.render(params);
+            var params = {
+                services: view.model.get('services'),
+                clusters: view.model.get('clusters'),
+                iocnamehash: view.model.get('iocnamehash'),
+                checkout: view.model.get('checkout')
+            };
 
-                    if (view.shopping_collapsable) {
-                        view.shopping_collapsable.toggle();
-                    }
-
-                    view.hits_view.show();
-                }
-            });
+            view.render_hits(params);
         });
 
         // Listen for search model criteria changes.
@@ -2205,6 +2145,25 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
                 window.location = '#top';
             }
         });
+    },
+    render_hits: function(params) {
+        var view = this;
+
+        StrikeFinder.run(function() {
+            if (!view.hits_view) {
+                view.hits_view = new StrikeFinder.HitsView({
+                    el: '#hits-view-div'
+                });
+            }
+
+            view.hits_view.fetch(params);
+
+            if (view.shopping_collapsable) {
+                view.shopping_collapsable.toggle();
+            }
+
+            view.hits_view.show();
+        });
     }
 });
 
@@ -2212,129 +2171,149 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
  * View for the hits screen.
  */
 StrikeFinder.HitsView = StrikeFinder.View.extend({
-    render: function (options) {
+    initialize: function (options) {
         var view = this;
 
-        log.debug(_.sprintf('Rendering hits view with params: %s', JSON.stringify(options)));
+        view.params = {};
 
-        var services = options.services;
-        var clusters = options.clusters;
-        var iocnamehash = options.iocnamehash;
-        var exp_key = options.exp_key;
-        var checkout = options.checkout;
+        // Suppressions.
+        view.suppressions_table = new StrikeFinder.SuppressionsTableView({
+            el: '#suppressions-table',
+            condensed: true
+        });
+        view.listenTo(view.suppressions_table, 'delete', view.fetch);
 
-        view.init_criteria(services, clusters, iocnamehash, exp_key, checkout, function () {
-            // TODO: Remove the dependency on the criteria object.
+        // Hits.
+        view.hits_table_view = new StrikeFinder.HitsTableView({
+            el: '#hits-table'
+        });
 
-            view.run_once('init_views', function () {
-                // Suppressions.
-                view.suppressions_table = new StrikeFinder.SuppressionsTableView({
-                    el: '#suppressions-table',
-                    condensed: true
-                });
-                view.listenTo(view.suppressions_table, 'delete', view.fetch);
-
-                // Hits.
-                view.hits_table_view = new StrikeFinder.HitsTableView({
-                    el: '#hits-table'
-                });
-
-                // Initialize the hits details view.
-                view.hits_details_view = new StrikeFinder.HitsDetailsView({
-                    hits_table_view: view.hits_table_view,
-                    exp_key: view.criteria.get('exp_key')[0]
-                });
-                view.listenTo(view.hits_details_view, 'create:tag', function (row, tagname) {
-                    // A new tag has been created, loop through the table nodes and manually update the tagname
-                    // for the relevant row.  This is a shortcut rather than re-loading the entire table.
-                    view.hits_table_view.update_row('uuid', row.uuid, 'tagname', tagname, 0);
-                    // Refresh the comments.
-                    view.hits_details_view.fetch();
-                });
-                view.listenTo(view.hits_details_view, 'create:acquire', function (row, model) {
-                    // An aquisition has been created, update the row's tag value.
-                    view.hits_table_view.update_row('uuid', row.uuid, 'tagname', 'investigating', 0);
-                    // Refresh the comments.
-                    view.hits_details_view.fetch();
-                });
-                view.listenTo(view.hits_details_view, 'create:suppression', function () {
-                    view.fetch();
-                });
-                view.listenTo(view.hits_details_view, 'create:masstag', function () {
-                    view.fetch();
-                });
-            });
-
+        // Initialize the hits details view.
+        view.hits_details_view = new StrikeFinder.HitsDetailsView({
+            hits_table_view: view.hits_table_view
+        });
+        view.listenTo(view.hits_details_view, 'create:tag', function (row, tagname) {
+            // A new tag has been created, loop through the table nodes and manually update the tagname
+            // for the relevant row.  This is a shortcut rather than re-loading the entire table.
+            view.hits_table_view.update_row('uuid', row.uuid, 'tagname', tagname, 0);
+            // Refresh the comments.
+            view.hits_details_view.fetch();
+        });
+        view.listenTo(view.hits_details_view, 'create:acquire', function (row, model) {
+            // An aquisition has been created, update the row's tag value.
+            view.hits_table_view.update_row('uuid', row.uuid, 'tagname', 'investigating', 0);
+            // Refresh the comments.
+            view.hits_details_view.fetch();
+        });
+        view.listenTo(view.hits_details_view, 'create:suppression', function () {
+            view.fetch();
+        });
+        view.listenTo(view.hits_details_view, 'create:masstag', function () {
             view.fetch();
         });
     },
-    fetch: function () {
+    fetch: function (params) {
         var view = this;
-        StrikeFinder.run(function () {
-            // Refresh the hits view.
-            view.suppressions_table.fetch(view.criteria.get('exp_key')[0]);
-            view.hits_table_view.fetch(view.criteria.get_params());
-        })
-    },
-    init_criteria: function (services, clusters, iocnamehash, exp_key, checkout, callback) {
-        var view = this;
-        if (services && clusters) {
-            // Criteria has been supplied to the view.
-            if (iocnamehash) {
-                view.criteria = new StrikeFinder.UserCriteriaModel({
-                    "services": services,
-                    "clusters": clusters,
-                    iocnamehash: iocnamehash
-                });
-            }
-            else if (exp_key) {
-                view.criteria = new StrikeFinder.UserCriteriaModel({
-                    "services": services,
-                    "clusters": clusters,
-                    exp_key: exp_key
-                });
-            }
-            else {
-                // Error
-                StrikeFinder.display_error('Expecting an IOC name hash or expression key.');
-            }
 
-            if (checkout) {
-                // Option was specified to check out the hits, create a user token.
-                log.debug('Checking out hits with data: ' + JSON.stringify(view.criteria.attributes));
-                view.criteria.save({}, {
-                    async: false,
-                    success: function (model, response, options) {
-                        log.debug('Created user token: ' + response['usertoken']);
-                        callback();
-                    },
-                    error: function (model, xhr, options) {
-                        StrikeFinder.display_error("Exception while processing checkout of hits.");
-                        console.dir(model);
+        if (params) {
+            view.params = params;
+        }
+
+        log.debug(_.sprintf('Rendering hits view with params: %s', JSON.stringify(view.params)));
+
+        // Check whether enough parameters have been passed to render the hits view.
+        var is_exp_key_defined = view.params.services && view.params.services.length > 0 && view.params.clusters &&
+            view.params.clusters.length > 0 && view.params.exp_key;
+
+        if (!is_exp_key_defined) {
+            // Not enough parameters have been supplied, try loading from the server.
+
+            log.debug('Parameters not satisified, attempting to load from the server.');
+
+            var loaded_criteria = new StrikeFinder.UserCriteriaModel();
+            loaded_criteria.fetch({
+                success: function(model, response, options) {
+                    log.debug('Loaded user settings from the server: ' + JSON.stringify(loaded_criteria.attributes));
+
+                    // Ensure there are enough parameters to continue.
+                    if (loaded_criteria.get('usertoken') && loaded_criteria.get('exp_key')) {
+                        // Enough data was found from a previous checkout to display the view.
+
+                        if (loaded_criteria.get('exp_key').length != 1) {
+                            // Error
+                            log.error('Found more than one expression key: ' + JSON.stringify(loaded_criteria.attributes));
+                        }
+
+                        view.params = {
+                            services: loaded_criteria.get('services'),
+                            clusters: loaded_criteria.get('clusters'),
+                            exp_key: loaded_criteria.get('exp_key')[0],
+                            usertoken: loaded_criteria.get('usertoken')
+                        };
+                        view.fetch_callback();
                     }
-                });
-            }
+                    else {
+                        // Not enough data to render the hits view, navigate to the shopping view.
+                        // TODO: Disable the hits link for this case instead.
+                        alert('You must select shopping criteria before viewing hits.');
+                        window.location = '/sf/';
+                    }
+                }
+            });
+        }
+        else if (view.params.checkout) {
+            // Valid params have been supplied to the view and checkout is enabled.
+
+            log.debug('Checking out hits...');
+
+            var checkout_criteria = new StrikeFinder.UserCriteriaModel(view.params);
+            checkout_criteria.save({}, {
+                success: function (model, response, options) {
+                    log.debug('Created user token: ' + response.usertoken);
+                    view.params.usertoken = response.usertoken;
+                    view.fetch_callback();
+                },
+                error: function (model, xhr, options) {
+                    // Error.
+                    StrikeFinder.display_error("Exception while processing checkout of hits.");
+                    console.dir(model);
+                }
+            });
         }
         else {
-            // No parameters sent, try and lookup existing user token data.
-            log.debug('No parameters sent, attempting to load user token data...');
-            view.criteria = new StrikeFinder.UserCriteriaModel();
-            view.criteria.fetch({async: false});
+            // Display by the parameters without checkout.
 
-            log.debug('Loaded user criteria: ' + JSON.stringify(this.criteria.attributes));
+            log.debug('Rendering without checking out...');
 
-            if (view.criteria.get('usertoken') ||
-                (view.criteria.get('services') && view.criteria.get('clusters') && view.criteria.get('exp_key')) ||
-                (view.criteria.get('services') && view.criteria.get('clusters') && view.criteria.get('namehash'))) {
-                // Call the handler.
-                callback();
+            view.fetch_callback();
+        }
+    },
+    fetch_callback: function () {
+        var view = this;
+        StrikeFinder.run(function () {
+            // Update the hits details view with the current selected expression.
+            view.hits_details_view.exp_key = view.params.exp_key;
+
+            if (view.params.usertoken) {
+                var usertoken_params = {
+                    usertoken: view.params.usertoken
+                };
+                log.debug('Fetching hits with params: ' + JSON.stringify(usertoken_params));
+                view.hits_table_view.fetch(usertoken_params);
             }
             else {
-                // Error, unable to load view.  Navigate to the default page.
-                window.location = '/sf/';
-                return false;
+                var exp_key_params = {
+                    services: view.params.services,
+                    clusters: view.params.clusters,
+                    exp_key: view.params.exp_key
+                };
+                log.debug('Fetching hits with params: ' + JSON.stringify(exp_key_params));
+                view.hits_table_view.fetch(exp_key_params);
             }
-        }
+
+            // Refresh the hits view based on the current expression.
+            view.suppressions_table.fetch(view.params.exp_key);
+        });
     }
 });
 
@@ -2400,6 +2379,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
 
         // Initialize the hits table.
         view.hits_table_view = options.hits_table_view;
+
         // Render the details when a hit is selected.
         view.listenTo(view.hits_table_view, 'click', view.render_details);
 
@@ -2493,7 +2473,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                     view.suppression_form_view.render({
                         item_value: selection,
                         rowitem_type: view.row.rowitem_type,
-                        exp_key: view.options.exp_key,
+                        exp_key: view.exp_key,
                         cluster_uuid: view.row.cluster_uuid
                     });
                 });
@@ -2522,7 +2502,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                     var agent_host_data = view.agenthost_view.attributes();
                     view.mass_tag_form.render({
                         item_value: selection,
-                        exp_key: view.options.exp_key,
+                        exp_key: view.exp_key,
                         am_cert_hash: view.row.am_cert_hash,
                         cluster_uuid: view.row.cluster_uuid,
                         rowitem_uuid: view.row.rowitem_uuid,
