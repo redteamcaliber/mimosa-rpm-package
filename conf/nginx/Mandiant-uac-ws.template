@@ -1,11 +1,11 @@
 # UAC NGINX Settings
 
-upstream uac.dev.mandiant.com {
-    server 127.0.0.1:8000;
+upstream uac.dev.mandiant.com { # The local server name.
+    server 127.0.0.1:8000; # The localhost and port that UAC node is running on.  Should not need to change.
 }
 server {
     listen 443;
-    server_name localhost uac.dev.mandiant.com;
+    server_name localhost uac.dev.mandiant.com; # The local server name.
     underscores_in_headers on;
     access_log /var/log/nginx/uac.log;
     location /static/ {
@@ -15,7 +15,7 @@ server {
         }
     }
     location / {
-        proxy_pass http://uac.dev.mandiant.com;
+        proxy_pass http://uac.dev.mandiant.com; # The local server name.
         proxy_redirect off;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;

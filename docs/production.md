@@ -110,17 +110,17 @@ Note: This guide assumes that an ssl.conf has been applied to the nginx server.
 
     /etc/nginx/conf.d/uac.conf
 
-    upstream uac.mplex.mandiant.com {
-        server 172.30.8.33:443;
+    upstream uac.mplex.mandiant.com {   # The host that uac will be accessed by via the proxy.
+        server 172.30.8.33:443;         # This is the address of the UAC box.
     }
     server {
         listen 443;
-        server_name localhost uac.mplex.mandiant.com;
+        server_name localhost uac.mplex.mandiant.com; # The host that uac will be accessed by via the proxy.
         underscores_in_headers on;
         access_log /var/log/nginx/uac.log;
 
         location / {
-            proxy_pass https://uac.mplex.mandiant.com;
+            proxy_pass https://uac.mplex.mandiant.com; # The host that uac will be accessed by via the proxy.
             proxy_redirect off;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
