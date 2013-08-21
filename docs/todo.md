@@ -20,6 +20,7 @@ UAC ToDo
     -http://ivaynberg.github.io/select2/
 
 ### Implement the acquisitions list page.
+    -https://sick.mandiant.com/api/v1/acquisition/?cluster_uuid__in=9402af9a-f99b-45c3-8f86-651aa1d87f7&cluster_uuid__in=SOME-OTHER-UUID
 
 ### Refactorings:
     -Break up the client js files using require.js
