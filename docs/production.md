@@ -137,5 +137,12 @@ UAC should be accessed via the MPLEX proxy, uac.mplex.mandiant.com should be poi
 
     https://uac.mplex.mandiant.com/
 
+You can monitor the UAC application logs at the location below.  A future release will place this output to syslog.
+
+    /opt/web/apps/uac/logs/uac.log
+
+You can monitor the NGINx logs at the following location:
+
+    /var/log/nginx/*
 
 
