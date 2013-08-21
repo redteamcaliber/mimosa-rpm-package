@@ -715,6 +715,12 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
                     {sTitle: "Closed", mData: "closed", sWidth: '10%'}
                 ],
                 aoColumnDefs: [
+//                    {
+//                        mRender: function (data, type, row) {
+//                            return format_expression(data);
+//                        },
+//                        aTargets: [1]
+//                    },
                     {
                         mRender: function (data, type, row) {
                             if (row["checkedoutexpressions"] > 0) {
@@ -724,7 +730,7 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
                                 return "No";
                             }
                         },
-                        "aTargets": [3]
+                        aTargets: [3]
                     }
                 ],
                 oLanguage: {
@@ -2132,8 +2138,8 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             if (view.model.is_required_params_set()) {
                 $('#ioc-summary-div').fadeIn().show();
                 var params = {
-                    services: view.model.get('services'),
-                    clusters: view.model.get('clusters')
+                    services: view.model.get('services').join(','),
+                    clusters: view.model.get('clusters').join(',')
                 };
                 view.ioc_summaries_view.fetch({
                     data: params
@@ -2151,8 +2157,8 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
                 view.ioc_details_view.show();
                 view.ioc_details_view.options['legend'] = view.model.get('iocname');
                 var params = {
-                    services: view.model.get('services'),
-                    clusters: view.model.get('clusters'),
+                    services: view.model.get('services').join(','),
+                    clusters: view.model.get('clusters').join(','),
                     iocnamehash: view.model.get('iocnamehash')
                 };
                 view.ioc_details_view.fetch(params);
@@ -2243,44 +2249,33 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
             // Not enough parameters have been supplied, try loading from the server.
 
             log.debug('Parameters not satisified, attempting to load from the server.');
+            view.params = StrikeFinder.usersettings;
 
-            var loaded_criteria = new StrikeFinder.UserCriteriaModel();
-            loaded_criteria.fetch({
-                success: function (model, response, options) {
-                    log.debug('Loaded user settings from the server: ' + JSON.stringify(loaded_criteria.attributes));
+            log.debug('Loaded user settings: ' + JSON.stringify(view.params));
 
-                    // Ensure there are enough parameters to continue.
-                    if (loaded_criteria.get('usertoken') && loaded_criteria.get('exp_key')) {
-                        // Enough data was found from a previous checkout to display the view.
+            if (view.params.services && view.params.services.length > 0 && view.params.clusters &&
+                view.params.clusters.length > 0 && (view.params.exp_key || view.params.usertoken)) {
 
-                        if (loaded_criteria.get('exp_key').length != 1) {
-                            // Error
-                            log.error('Found more than one expression key: ' + JSON.stringify(loaded_criteria.attributes));
-                        }
-
-                        view.params = {
-                            services: loaded_criteria.get('services'),
-                            clusters: loaded_criteria.get('clusters'),
-                            exp_key: loaded_criteria.get('exp_key')[0],
-                            usertoken: loaded_criteria.get('usertoken')
-                        };
-                        view.fetch_callback();
-                    }
-                    else {
-                        // Not enough data to render the hits view, navigate to the shopping view.
-                        // TODO: Disable the hits link for this case instead.
-                        alert('You must select shopping criteria before viewing hits.');
-                        window.location = '/sf/';
-                    }
-                }
-            });
+                // Enough data was found from a previous checkout to display the view.
+                view.fetch_callback();
+            }
+            else {
+                // Not enough data to render the hits view, navigate to the shopping view.
+                // TODO: Disable the hits link for this case instead.
+                alert('You must select shopping criteria before viewing hits.');
+                window.location = '/sf/';
+            }
         }
         else if (view.params.checkout) {
             // Valid params have been supplied to the view and checkout is enabled.
 
             log.debug('Checking out hits...');
 
-            var checkout_criteria = new StrikeFinder.UserCriteriaModel(view.params);
+            var checkout_criteria = new StrikeFinder.UserCriteriaModel({
+                services: view.params.services.join(','),
+                clusters: view.params.clusters.join(','),
+                exp_key: view.params.exp_key
+            });
             checkout_criteria.save({}, {
                 success: function (model, response, options) {
                     log.debug('Created user token: ' + response.usertoken);

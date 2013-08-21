@@ -1,5 +1,9 @@
 var StrikeFinder = StrikeFinder || {};
 
+//
+// StrikeFinder Utility Methods.
+//
+
 StrikeFinder.get_blockui_message = function (message) {
     return _.sprintf("<span class=''><h4>" +
         "<i class='icon-spinner icon-spin icon-3x' style='vertical-align: middle'></i> " +
@@ -115,6 +119,11 @@ StrikeFinder.display_error = function (message) {
     });
 };
 
+
+//
+// Override Backbone default settings.
+//
+
 /**
  * Override the default backbone POST behavior to send the Django CSRF token.
  */
@@ -127,7 +136,16 @@ Backbone.sync = function (method, model, options) {
     return _sync(method, model, options);
 };
 
-// Specify the jQuery defaults.
+
+//
+// Override jQuery defaults.
+//
+
+/**
+ * Required to make jQuery drop the subscripts off of array parameters.
+ */
+jQuery.ajaxSettings.traditional = true;
+
 $(document).ajaxError(function (collection, response, options) {
 
     //console.dir(collection);
@@ -176,4 +194,18 @@ function parse_search_string(s) {
 
 function format_date(s) {
     return s ? moment(s, 'YYYY-MM-DDTHH:mm:ss.SSS').format('YYYY-MM-DD HH:mm:ss') : '';
+}
+
+function format_expression(s) {
+    console.log(s);
+    s = s.trim();
+    var starts_with_parend = _.startsWith(s, '(');
+    var ends_with_parend = _.endsWith(s, ')');
+    if (starts_with_parend && ends_with_parend) {
+        console.log(s.substring(1, s.length - 1));
+        return format_expression(s.substring(1, s.length - 1));
+    }
+    else {
+        return s;
+    }
 }

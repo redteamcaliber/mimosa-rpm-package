@@ -59,8 +59,8 @@ app.use(function (req, res, next) {
 
 // Add a general error handler.
 app.use(function errorHandler(err, req, res, next) {
-    log.error(_.sprintf('Error handler caught exception (code: %s) while rendering url: %s', res.statusCode,
-        req.originalUrl));
+    log.error(_.sprintf('Error handler caught exception (code: %s) while rendering %s url: %s', res.statusCode,
+        req.method, req.originalUrl));
     err.stack ? log.error(err.stack) : log.error(err);
 
     if (req.xhr) {
