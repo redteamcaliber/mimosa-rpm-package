@@ -29,6 +29,11 @@ UAC ToDo
          errored
          cancelled
          unknown
+    create_datetime, update_datetime, user, method
+    could probably ignore comment (I think)
+
+    ordering is done by a param 'order_by' on the GET and defaults to ascending order (similiar to django querysets)
+    so for descending agent hostnames' i think youd want to do soemthing like order_by=-agent__hostname
 
 ### Refactorings:
     -Break up the client js files using require.js

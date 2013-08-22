@@ -2630,7 +2630,10 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
             {sTitle: "Agent", mData: "agent.hostname", bSortable: false},
             {sTitle: "File Path", mData: "file_path", bSortable: false},
             {sTitle: "File Name", mData: "file_name", bSortable: false},
-            {sTitle: "Comment", mData: "comment", bSortable: false},
+            {sTitle: "Created", mData: "create_datetime", bSortable: false},
+            {sTitle: "Updated", mData: "update_datetime", bSortable: false},
+            {sTitle: "User", mData: "user", bSortable: false},
+            {sTitle: "Method", mData: "method", bSortable: false},
             {sTitle: "State", mData: "state", bSortable: false},
             {sTitle: "Error Message", mData: "error_message", bVisible: false, bSortable: false},
             {sTitle: "Link", mData: "acquired_file", bVisible: false, bSortable: false}
@@ -2650,9 +2653,42 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
             },
             {
                 mRender: function (data, type, row) {
-                    return _.sprintf('<span class="error_message">%s</span>', data);
+                    return format_date(data);
+                },
+                aTargets: [5]
+            },
+            {
+                mRender: function (data, type, row) {
+                    return format_date(data);
                 },
                 aTargets: [6]
+            },
+            {
+                mRender: function (data, type, row) {
+                    if (data) {
+                        var label_class = '';
+                        if (data == 'errored') {
+                            label_class = 'label-important';
+                        }
+                        else if (data == 'cancelled') {
+                            label_class = 'label-default';
+                        }
+                        else if (data == 'started' || data == 'created') {
+                            label_class = 'label-info';
+                        }
+                        else if (data == 'completed') {
+                            label_class = 'label-success';
+                        }
+                        else if (data == 'unknown') {
+                            label_class = 'label-warning';
+                        }
+                        return _.sprintf('<span class="label %s error_message">%s</span>', label_class, data);
+                    }
+                    else {
+                        return '';
+                    }
+                },
+                aTargets: [9]
             }
         ];
 
@@ -2701,7 +2737,7 @@ StrikeFinder.AcquisitionsView = StrikeFinder.View.extend({
             id_field: "cluster_uuid",
             value_field: "cluster_name",
             selected: StrikeFinder.usersettings.clusters,
-            width: "33%",
+            width: "100%",
             placeholder: 'Select Clusters'
         });
         view.clusters_view.on('change', function (clusters) {
