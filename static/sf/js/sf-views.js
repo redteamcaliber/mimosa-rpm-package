@@ -2576,15 +2576,17 @@ StrikeFinder.HostView = StrikeFinder.View.extend({
     initialize: function (options) {
         var view = this;
 
-        var am_cert_hash = options['am_cert_hash'];
         if (!view.model) {
-            var attr = {};
-            if (options && options.am_cert_hash) {
-                attr.id = options.am_cert_hash;
+            var am_cert_hash = options['am_cert_hash'];
+            if (!view.model) {
+                var attr = {};
+                if (options && options.am_cert_hash) {
+                    attr.id = options.am_cert_hash;
+                }
+                view.model = new StrikeFinder.AgentHostModel(attr);
             }
-            view.model = new StrikeFinder.AgentHostModel(attr);
+            view.listenTo(this.model, 'sync', this.render);
         }
-        view.listenTo(this.model, 'sync', this.render);
 
         view.collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
