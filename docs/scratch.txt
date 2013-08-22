@@ -93,3 +93,843 @@ NOT FileItem/FileName contains 'cmd.ex'
         )
     )
  )
+
+
+{
+    "results": [
+        {
+            "acquired_file": null,
+            "agent": {
+                "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICpjCCAY4CCQCSBFylnaqrlDANBgkqhkiG9w0BAQUFADAVMRMwEQYDVQQDEwpO\nVEJLMTk4Mjc5MB4XDTcwMDEwMTEyMDAwMFoXDTIyMDgwNTE5MzAyNlowFTETMBEG\nA1UEAxMKTlRCSzE5ODI3OTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB\nAMfmh7faINtlNqqIYCxH+6NdTxPlkSdBN2ukgMwv/iEhbMMYA5f36X2n34wwA0rp\ngdWOpquqpNAbKdM6p6PkKXBkhCUvDoiRA9ms+YSPsEcvg6xneafXoGKPczR//fuO\nKh/rbPHWNZioDMHx+MBFLG/27ndlxT0Ol7EN5355QYOfh101bXdE1eyxGvJciV4h\nh0ZvJ/wU+Ejj83QnG0DusOhxe7BCStdLsSmVOI68rOwWJLUmKd3Ha6M10Y+H1rAf\nE+OFMSXREzG472cjxsZ3QbQBnFIPLZ0xZcI/GL5lbmiqFQGZlKj7/Z7IIPCUHpnc\nItGZ4Ql2dNGMLwbt9s09OrcCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEAl059qq2m\nJHkDd3WMQL29/PBfRR9al47qxKwL1w+16mNglGvS2Yzkgn1jITzFtrwEf+iHeyzc\n06NEm/2tOSU7wrZiXHCjpjEtKI7qKDsIOLu6SoUWpWEAn/kdCgp/pvmUTG/eyTOC\nO/R1VkgTUnbs7r+bsW5hdUGa/Wy/ZHAAyht0g+YTIXo+GaICvg0Q2UXDQZgzDW5+\nqteY0a2n0u3aHKi5FD8dbE3uwcwTfLUe4XAlQUkxLMhSP0oEAIl4Bt+Vo/uVo2GV\n3hia3ToA3KtbRSoEcYTuU4GduiFrUbCju/MVYdX/FTtX4fWBDBCyFRc+lfyY6XIt\nA0WWPllIBJJFfw==\n-----END CERTIFICATE-----\n",
+                "cluster": {
+                    "engagement": {
+                        "client": {
+                            "last_updated": "2013-06-11T20:33:40",
+                            "name": "Haliburton",
+                            "resource_uri": "",
+                            "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                        },
+                        "number": "MCIRT12-022",
+                        "resource_uri": "",
+                        "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                    },
+                    "name": "SCHUPPELTD001",
+                    "node_band": 100000,
+                    "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                    "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+                },
+                "domain": "HALAMERICA",
+                "drives": "c:,d:,s:",
+                "gmt_offset": "PT1H",
+                "hash": "c6d83957e66d1e1c0e59806377634108daaf762494cecd0952c2aec95d053efe",
+                "hostname": "NTBK198279",
+                "ip": "34.34.17.99",
+                "logged_on_user": "HALAMERICA\\hrrz361,HALAMERICA\\NTBK198279$",
+                "mac_address": "00ffb03bb407",
+                "machine": "NTBK198279",
+                "os_bitness": "64-bit",
+                "os_buildnumber": "7600",
+                "os_patch_level": "",
+                "port": 22201,
+                "proc_type": "Multiprocessor Free",
+                "processor": "Intel(R) Core(TM) i7 CPU L 640 @ 2.13GHz",
+                "product_name": "Windows 7 Enterprise",
+                "resource_uri": "/api/v1/agent/c6d83957e66d1e1c0e59806377634108daaf762494cecd0952c2aec95d053efe/",
+                "revision": "310360a4-1884-11e2-ba9a-525400a828bb",
+                "time_logged": "2012-12-12T04:38:50.946012",
+                "time_zone_dst": "W. Central Africa Daylight Time",
+                "time_zone_standard": "W. Central Africa Standard Time",
+                "total_physical_ram": "4076208128",
+                "uuid": "31035c80-1884-11e2-ba9a-525400a828bb",
+                "version": "2.2.1500"
+            },
+            "cluster": {
+                "engagement": {
+                    "client": {
+                        "last_updated": "2013-06-11T20:33:40",
+                        "name": "Haliburton",
+                        "resource_uri": "",
+                        "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                    },
+                    "number": "MCIRT12-022",
+                    "resource_uri": "",
+                    "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                },
+                "name": "SCHUPPELTD001",
+                "node_band": 100000,
+                "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+            },
+            "comment": "",
+            "create_datetime": "2013-07-09T20:58:47.488811",
+            "error_message": "HTTPSConnectionPool(host='58.246.5.50', port=443): Max retries exceeded with url: /apps/webclient/index.php (Caused by <class 'socket.error'>: [Errno 110] Connection timed out)",
+            "file_name": "SCHEDLGU(34).TXT",
+            "file_path": "C:\\Windows\\Tasks",
+            "mcic_create_dt": null,
+            "mcic_id": null,
+            "mcic_state": null,
+            "mcic_status": null,
+            "mcic_update_dt": null,
+            "method": "api",
+            "mir_acquired_uri": null,
+            "mir_detail_uri": null,
+            "mir_job_uri": null,
+            "resource_uri": "/api/v1/acquisition/b0198406-f2d0-4fce-952d-854a1641f2b9/",
+            "state": "errored",
+            "update_datetime": "2013-07-09T20:58:47.488855",
+            "user": "sdfs",
+            "uuid": "b0198406-f2d0-4fce-952d-854a1641f2b9"
+        },
+        {
+            "acquired_file": null,
+            "agent": {
+                "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICrDCCAZQCCQDrwRYGJlD+oDANBgkqhkiG9w0BAQUFADAYMRYwFAYDVQQDEw1F\nTkFVUzAwMDcwMDYxMB4XDTcwMDEwMTEyMDAwMFoXDTIzMDEyMDIxNDYyNVowGDEW\nMBQGA1UEAxMNRU5BVVMwMDA3MDA2MTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC\nAQoCggEBAL06A5k+lX6WSHQ/G6Tv7SJDo2dgc4MkgAq4uYewz5r+3VXp3QQxBEBw\na/0pMPul/aaEK9E9Im0B6vVq0fwsGMQN097NwZixoXZaqIhFE/s23+KtNkmZWfzw\nYCncRQOMdEBsSe3dCr3bl/R+1MFsD+Dqr2DnGfr0Uzcg1d68GLeN1pHRbTwAP2z8\nnBpg+fYi0JEJhjKRlIZc6Lfu3r8ZS8OIqwVes9vwpL1V7r6UvdCD5baa4gYktM6k\nkWcgHfj0r/w48IK9jklBFfgVekZTev2o/rVepiMS3lmj/JXXtYw9fnoTcBWIK+uJ\nZlPgUAibUmOBy+8t5e05DN6POcHeIbsCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEA\nE9pz6H55OQ1DBLrMXol/37e9pmeZVRb3oTr9XKsYh5pbhQATrB+7w0AWAQAgKuGM\nd2Dp5WWQsxxwhQf3JQVBac5vyDMgNfg5tIcEK9lY4/SNGN3ikLZkieiAbDO6X/Gg\naiH8sn5mJQABpcNop/yI/9amUdE49z7Z+l6ddcPZdzqnQpxFMIRZkzZ4ITvixI9f\n4ASFtKeco50guzXCvcV3p1R7D7vbXcLLZro6qu03LdzdB3lDl+t5lJL4ZzHDNpuZ\nCwZPSchhkhqQDcGaQ24UaY8GCf3uORMZHujcFlrMP5WA/Bncw5IGEdZOVkD+xziH\n69xR0O/sFkJcQQOK455D0w==\n-----END CERTIFICATE-----\n",
+                "cluster": {
+                    "engagement": {
+                        "client": {
+                            "last_updated": "2013-06-11T20:33:40",
+                            "name": "Haliburton",
+                            "resource_uri": "",
+                            "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                        },
+                        "number": "MCIRT12-022",
+                        "resource_uri": "",
+                        "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                    },
+                    "name": "SCHUPPELTD001",
+                    "node_band": 100000,
+                    "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                    "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+                },
+                "domain": "HALAMERICA",
+                "drives": "c:,d:",
+                "gmt_offset": "-PT6H",
+                "hash": "ab1cc55b82ddbcf7eb8157dd9906897f5d1091f659b13366753be28eb288e9dc",
+                "hostname": "ENAUS00070061",
+                "ip": "34.154.25.143",
+                "logged_on_user": "HALAMERICA\\ENAUS00070061$,HALAMERICA\\HBAG167",
+                "mac_address": "00ff984c1488",
+                "machine": "ENAUS00070061",
+                "os_bitness": "32-bit",
+                "os_buildnumber": "2600",
+                "os_patch_level": "Service Pack 3",
+                "port": 22201,
+                "proc_type": "Multiprocessor Free",
+                "processor": "Intel(R) Core(TM) i5 CPU M 520 @ 2.40GHz",
+                "product_name": "Microsoft Windows XP",
+                "resource_uri": "/api/v1/agent/ab1cc55b82ddbcf7eb8157dd9906897f5d1091f659b13366753be28eb288e9dc/",
+                "revision": "25269b12-64e6-11e2-9ad4-525400a828bb",
+                "time_logged": "2013-01-30T18:53:19.490829",
+                "time_zone_dst": "Central Daylight Time",
+                "time_zone_standard": "Central Standard Time",
+                "total_physical_ram": "2062868480",
+                "uuid": "25269ae0-64e6-11e2-9ad4-525400a828bb",
+                "version": "2.2.1500"
+            },
+            "cluster": {
+                "engagement": {
+                    "client": {
+                        "last_updated": "2013-06-11T20:33:40",
+                        "name": "Haliburton",
+                        "resource_uri": "",
+                        "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                    },
+                    "number": "MCIRT12-022",
+                    "resource_uri": "",
+                    "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                },
+                "name": "SCHUPPELTD001",
+                "node_band": 100000,
+                "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+            },
+            "comment": "lol",
+            "create_datetime": "2013-07-09T21:05:30.316463",
+            "error_message": "HTTPSConnectionPool(host='58.246.5.50', port=443): Max retries exceeded with url: /apps/webclient/index.php (Caused by <class 'socket.error'>: [Errno 110] Connection timed out)",
+            "file_name": "At5.job",
+            "file_path": "C:\\WINNT\\Tasks",
+            "mcic_create_dt": null,
+            "mcic_id": null,
+            "mcic_state": null,
+            "mcic_status": null,
+            "mcic_update_dt": null,
+            "method": "api",
+            "mir_acquired_uri": null,
+            "mir_detail_uri": null,
+            "mir_job_uri": null,
+            "resource_uri": "/api/v1/acquisition/9b810d22-d15f-4427-99f7-24f70668d996/",
+            "state": "errored",
+            "update_datetime": "2013-07-09T21:05:30.316532",
+            "user": "test",
+            "uuid": "9b810d22-d15f-4427-99f7-24f70668d996"
+        },
+        {
+            "acquired_file": null,
+            "agent": {
+                "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICrDCCAZQCCQDrwRYGJlD+oDANBgkqhkiG9w0BAQUFADAYMRYwFAYDVQQDEw1F\nTkFVUzAwMDcwMDYxMB4XDTcwMDEwMTEyMDAwMFoXDTIzMDEyMDIxNDYyNVowGDEW\nMBQGA1UEAxMNRU5BVVMwMDA3MDA2MTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC\nAQoCggEBAL06A5k+lX6WSHQ/G6Tv7SJDo2dgc4MkgAq4uYewz5r+3VXp3QQxBEBw\na/0pMPul/aaEK9E9Im0B6vVq0fwsGMQN097NwZixoXZaqIhFE/s23+KtNkmZWfzw\nYCncRQOMdEBsSe3dCr3bl/R+1MFsD+Dqr2DnGfr0Uzcg1d68GLeN1pHRbTwAP2z8\nnBpg+fYi0JEJhjKRlIZc6Lfu3r8ZS8OIqwVes9vwpL1V7r6UvdCD5baa4gYktM6k\nkWcgHfj0r/w48IK9jklBFfgVekZTev2o/rVepiMS3lmj/JXXtYw9fnoTcBWIK+uJ\nZlPgUAibUmOBy+8t5e05DN6POcHeIbsCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEA\nE9pz6H55OQ1DBLrMXol/37e9pmeZVRb3oTr9XKsYh5pbhQATrB+7w0AWAQAgKuGM\nd2Dp5WWQsxxwhQf3JQVBac5vyDMgNfg5tIcEK9lY4/SNGN3ikLZkieiAbDO6X/Gg\naiH8sn5mJQABpcNop/yI/9amUdE49z7Z+l6ddcPZdzqnQpxFMIRZkzZ4ITvixI9f\n4ASFtKeco50guzXCvcV3p1R7D7vbXcLLZro6qu03LdzdB3lDl+t5lJL4ZzHDNpuZ\nCwZPSchhkhqQDcGaQ24UaY8GCf3uORMZHujcFlrMP5WA/Bncw5IGEdZOVkD+xziH\n69xR0O/sFkJcQQOK455D0w==\n-----END CERTIFICATE-----\n",
+                "cluster": {
+                    "engagement": {
+                        "client": {
+                            "last_updated": "2013-06-11T20:33:40",
+                            "name": "Haliburton",
+                            "resource_uri": "",
+                            "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                        },
+                        "number": "MCIRT12-022",
+                        "resource_uri": "",
+                        "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                    },
+                    "name": "SCHUPPELTD001",
+                    "node_band": 100000,
+                    "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                    "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+                },
+                "domain": "HALAMERICA",
+                "drives": "c:,d:",
+                "gmt_offset": "-PT6H",
+                "hash": "ab1cc55b82ddbcf7eb8157dd9906897f5d1091f659b13366753be28eb288e9dc",
+                "hostname": "ENAUS00070061",
+                "ip": "34.154.25.143",
+                "logged_on_user": "HALAMERICA\\ENAUS00070061$,HALAMERICA\\HBAG167",
+                "mac_address": "00ff984c1488",
+                "machine": "ENAUS00070061",
+                "os_bitness": "32-bit",
+                "os_buildnumber": "2600",
+                "os_patch_level": "Service Pack 3",
+                "port": 22201,
+                "proc_type": "Multiprocessor Free",
+                "processor": "Intel(R) Core(TM) i5 CPU M 520 @ 2.40GHz",
+                "product_name": "Microsoft Windows XP",
+                "resource_uri": "/api/v1/agent/ab1cc55b82ddbcf7eb8157dd9906897f5d1091f659b13366753be28eb288e9dc/",
+                "revision": "25269b12-64e6-11e2-9ad4-525400a828bb",
+                "time_logged": "2013-01-30T18:53:19.490829",
+                "time_zone_dst": "Central Daylight Time",
+                "time_zone_standard": "Central Standard Time",
+                "total_physical_ram": "2062868480",
+                "uuid": "25269ae0-64e6-11e2-9ad4-525400a828bb",
+                "version": "2.2.1500"
+            },
+            "cluster": {
+                "engagement": {
+                    "client": {
+                        "last_updated": "2013-06-11T20:33:40",
+                        "name": "Haliburton",
+                        "resource_uri": "",
+                        "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                    },
+                    "number": "MCIRT12-022",
+                    "resource_uri": "",
+                    "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                },
+                "name": "SCHUPPELTD001",
+                "node_band": 100000,
+                "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+            },
+            "comment": "asdf",
+            "create_datetime": "2013-07-09T21:13:14.393774",
+            "error_message": "HTTPSConnectionPool(host='58.246.5.50', port=443): Max retries exceeded with url: /apps/webclient/index.php (Caused by <class 'socket.error'>: [Errno 110] Connection timed out)",
+            "file_name": "At5.job",
+            "file_path": "C:\\WINNT\\Tasks",
+            "mcic_create_dt": null,
+            "mcic_id": null,
+            "mcic_state": null,
+            "mcic_status": null,
+            "mcic_update_dt": null,
+            "method": "api",
+            "mir_acquired_uri": null,
+            "mir_detail_uri": null,
+            "mir_job_uri": null,
+            "resource_uri": "/api/v1/acquisition/0236581d-8339-4d20-85ee-0396863350f6/",
+            "state": "errored",
+            "update_datetime": "2013-07-09T21:13:14.393861",
+            "user": "fdsas",
+            "uuid": "0236581d-8339-4d20-85ee-0396863350f6"
+        },
+        {
+            "acquired_file": null,
+            "agent": {
+                "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICrDCCAZQCCQDrwRYGJlD+oDANBgkqhkiG9w0BAQUFADAYMRYwFAYDVQQDEw1F\nTkFVUzAwMDcwMDYxMB4XDTcwMDEwMTEyMDAwMFoXDTIzMDEyMDIxNDYyNVowGDEW\nMBQGA1UEAxMNRU5BVVMwMDA3MDA2MTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC\nAQoCggEBAL06A5k+lX6WSHQ/G6Tv7SJDo2dgc4MkgAq4uYewz5r+3VXp3QQxBEBw\na/0pMPul/aaEK9E9Im0B6vVq0fwsGMQN097NwZixoXZaqIhFE/s23+KtNkmZWfzw\nYCncRQOMdEBsSe3dCr3bl/R+1MFsD+Dqr2DnGfr0Uzcg1d68GLeN1pHRbTwAP2z8\nnBpg+fYi0JEJhjKRlIZc6Lfu3r8ZS8OIqwVes9vwpL1V7r6UvdCD5baa4gYktM6k\nkWcgHfj0r/w48IK9jklBFfgVekZTev2o/rVepiMS3lmj/JXXtYw9fnoTcBWIK+uJ\nZlPgUAibUmOBy+8t5e05DN6POcHeIbsCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEA\nE9pz6H55OQ1DBLrMXol/37e9pmeZVRb3oTr9XKsYh5pbhQATrB+7w0AWAQAgKuGM\nd2Dp5WWQsxxwhQf3JQVBac5vyDMgNfg5tIcEK9lY4/SNGN3ikLZkieiAbDO6X/Gg\naiH8sn5mJQABpcNop/yI/9amUdE49z7Z+l6ddcPZdzqnQpxFMIRZkzZ4ITvixI9f\n4ASFtKeco50guzXCvcV3p1R7D7vbXcLLZro6qu03LdzdB3lDl+t5lJL4ZzHDNpuZ\nCwZPSchhkhqQDcGaQ24UaY8GCf3uORMZHujcFlrMP5WA/Bncw5IGEdZOVkD+xziH\n69xR0O/sFkJcQQOK455D0w==\n-----END CERTIFICATE-----\n",
+                "cluster": {
+                    "engagement": {
+                        "client": {
+                            "last_updated": "2013-06-11T20:33:40",
+                            "name": "Haliburton",
+                            "resource_uri": "",
+                            "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                        },
+                        "number": "MCIRT12-022",
+                        "resource_uri": "",
+                        "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                    },
+                    "name": "SCHUPPELTD001",
+                    "node_band": 100000,
+                    "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                    "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+                },
+                "domain": "HALAMERICA",
+                "drives": "c:,d:",
+                "gmt_offset": "-PT6H",
+                "hash": "ab1cc55b82ddbcf7eb8157dd9906897f5d1091f659b13366753be28eb288e9dc",
+                "hostname": "ENAUS00070061",
+                "ip": "34.154.25.143",
+                "logged_on_user": "HALAMERICA\\ENAUS00070061$,HALAMERICA\\HBAG167",
+                "mac_address": "00ff984c1488",
+                "machine": "ENAUS00070061",
+                "os_bitness": "32-bit",
+                "os_buildnumber": "2600",
+                "os_patch_level": "Service Pack 3",
+                "port": 22201,
+                "proc_type": "Multiprocessor Free",
+                "processor": "Intel(R) Core(TM) i5 CPU M 520 @ 2.40GHz",
+                "product_name": "Microsoft Windows XP",
+                "resource_uri": "/api/v1/agent/ab1cc55b82ddbcf7eb8157dd9906897f5d1091f659b13366753be28eb288e9dc/",
+                "revision": "25269b12-64e6-11e2-9ad4-525400a828bb",
+                "time_logged": "2013-01-30T18:53:19.490829",
+                "time_zone_dst": "Central Daylight Time",
+                "time_zone_standard": "Central Standard Time",
+                "total_physical_ram": "2062868480",
+                "uuid": "25269ae0-64e6-11e2-9ad4-525400a828bb",
+                "version": "2.2.1500"
+            },
+            "cluster": {
+                "engagement": {
+                    "client": {
+                        "last_updated": "2013-06-11T20:33:40",
+                        "name": "Haliburton",
+                        "resource_uri": "",
+                        "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                    },
+                    "number": "MCIRT12-022",
+                    "resource_uri": "",
+                    "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                },
+                "name": "SCHUPPELTD001",
+                "node_band": 100000,
+                "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+            },
+            "comment": "asdf",
+            "create_datetime": "2013-07-09T21:13:46.940879",
+            "error_message": "HTTPSConnectionPool(host='58.246.5.50', port=443): Max retries exceeded with url: /apps/webclient/index.php (Caused by <class 'socket.error'>: [Errno 110] Connection timed out)",
+            "file_name": "At5.job",
+            "file_path": "C:\\WINNT\\Tasks",
+            "mcic_create_dt": null,
+            "mcic_id": null,
+            "mcic_state": null,
+            "mcic_status": null,
+            "mcic_update_dt": null,
+            "method": "api",
+            "mir_acquired_uri": null,
+            "mir_detail_uri": null,
+            "mir_job_uri": null,
+            "resource_uri": "/api/v1/acquisition/1f1050c4-fa55-4de9-be4e-33f1bb9b76c2/",
+            "state": "errored",
+            "update_datetime": "2013-07-09T21:13:46.940941",
+            "user": "test",
+            "uuid": "1f1050c4-fa55-4de9-be4e-33f1bb9b76c2"
+        },
+        {
+            "acquired_file": null,
+            "agent": {
+                "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICrDCCAZQCCQDrwRYGJlD+oDANBgkqhkiG9w0BAQUFADAYMRYwFAYDVQQDEw1F\nTkFVUzAwMDcwMDYxMB4XDTcwMDEwMTEyMDAwMFoXDTIzMDEyMDIxNDYyNVowGDEW\nMBQGA1UEAxMNRU5BVVMwMDA3MDA2MTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC\nAQoCggEBAL06A5k+lX6WSHQ/G6Tv7SJDo2dgc4MkgAq4uYewz5r+3VXp3QQxBEBw\na/0pMPul/aaEK9E9Im0B6vVq0fwsGMQN097NwZixoXZaqIhFE/s23+KtNkmZWfzw\nYCncRQOMdEBsSe3dCr3bl/R+1MFsD+Dqr2DnGfr0Uzcg1d68GLeN1pHRbTwAP2z8\nnBpg+fYi0JEJhjKRlIZc6Lfu3r8ZS8OIqwVes9vwpL1V7r6UvdCD5baa4gYktM6k\nkWcgHfj0r/w48IK9jklBFfgVekZTev2o/rVepiMS3lmj/JXXtYw9fnoTcBWIK+uJ\nZlPgUAibUmOBy+8t5e05DN6POcHeIbsCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEA\nE9pz6H55OQ1DBLrMXol/37e9pmeZVRb3oTr9XKsYh5pbhQATrB+7w0AWAQAgKuGM\nd2Dp5WWQsxxwhQf3JQVBac5vyDMgNfg5tIcEK9lY4/SNGN3ikLZkieiAbDO6X/Gg\naiH8sn5mJQABpcNop/yI/9amUdE49z7Z+l6ddcPZdzqnQpxFMIRZkzZ4ITvixI9f\n4ASFtKeco50guzXCvcV3p1R7D7vbXcLLZro6qu03LdzdB3lDl+t5lJL4ZzHDNpuZ\nCwZPSchhkhqQDcGaQ24UaY8GCf3uORMZHujcFlrMP5WA/Bncw5IGEdZOVkD+xziH\n69xR0O/sFkJcQQOK455D0w==\n-----END CERTIFICATE-----\n",
+                "cluster": {
+                    "engagement": {
+                        "client": {
+                            "last_updated": "2013-06-11T20:33:40",
+                            "name": "Haliburton",
+                            "resource_uri": "",
+                            "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                        },
+                        "number": "MCIRT12-022",
+                        "resource_uri": "",
+                        "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                    },
+                    "name": "SCHUPPELTD001",
+                    "node_band": 100000,
+                    "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                    "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+                },
+                "domain": "HALAMERICA",
+                "drives": "c:,d:",
+                "gmt_offset": "-PT6H",
+                "hash": "ab1cc55b82ddbcf7eb8157dd9906897f5d1091f659b13366753be28eb288e9dc",
+                "hostname": "ENAUS00070061",
+                "ip": "34.154.25.143",
+                "logged_on_user": "HALAMERICA\\ENAUS00070061$,HALAMERICA\\HBAG167",
+                "mac_address": "00ff984c1488",
+                "machine": "ENAUS00070061",
+                "os_bitness": "32-bit",
+                "os_buildnumber": "2600",
+                "os_patch_level": "Service Pack 3",
+                "port": 22201,
+                "proc_type": "Multiprocessor Free",
+                "processor": "Intel(R) Core(TM) i5 CPU M 520 @ 2.40GHz",
+                "product_name": "Microsoft Windows XP",
+                "resource_uri": "/api/v1/agent/ab1cc55b82ddbcf7eb8157dd9906897f5d1091f659b13366753be28eb288e9dc/",
+                "revision": "25269b12-64e6-11e2-9ad4-525400a828bb",
+                "time_logged": "2013-01-30T18:53:19.490829",
+                "time_zone_dst": "Central Daylight Time",
+                "time_zone_standard": "Central Standard Time",
+                "total_physical_ram": "2062868480",
+                "uuid": "25269ae0-64e6-11e2-9ad4-525400a828bb",
+                "version": "2.2.1500"
+            },
+            "cluster": {
+                "engagement": {
+                    "client": {
+                        "last_updated": "2013-06-11T20:33:40",
+                        "name": "Haliburton",
+                        "resource_uri": "",
+                        "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                    },
+                    "number": "MCIRT12-022",
+                    "resource_uri": "",
+                    "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                },
+                "name": "SCHUPPELTD001",
+                "node_band": 100000,
+                "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+            },
+            "comment": "test",
+            "create_datetime": "2013-07-09T21:19:43.483233",
+            "error_message": "HTTPSConnectionPool(host='58.246.5.50', port=443): Max retries exceeded with url: /apps/webclient/index.php (Caused by <class 'socket.error'>: [Errno 110] Connection timed out)",
+            "file_name": "Tasks",
+            "file_path": "%systemroot%\\system32",
+            "mcic_create_dt": null,
+            "mcic_id": null,
+            "mcic_state": null,
+            "mcic_status": null,
+            "mcic_update_dt": null,
+            "method": "api",
+            "mir_acquired_uri": null,
+            "mir_detail_uri": null,
+            "mir_job_uri": null,
+            "resource_uri": "/api/v1/acquisition/0078a82e-6e8f-479d-b3f0-a165be0268cd/",
+            "state": "errored",
+            "update_datetime": "2013-07-09T21:19:43.483284",
+            "user": "test",
+            "uuid": "0078a82e-6e8f-479d-b3f0-a165be0268cd"
+        },
+        {
+            "acquired_file": null,
+            "agent": {
+                "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICrDCCAZQCCQDrwRYGJlD+oDANBgkqhkiG9w0BAQUFADAYMRYwFAYDVQQDEw1F\nTkFVUzAwMDcwMDYxMB4XDTcwMDEwMTEyMDAwMFoXDTIzMDEyMDIxNDYyNVowGDEW\nMBQGA1UEAxMNRU5BVVMwMDA3MDA2MTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC\nAQoCggEBAL06A5k+lX6WSHQ/G6Tv7SJDo2dgc4MkgAq4uYewz5r+3VXp3QQxBEBw\na/0pMPul/aaEK9E9Im0B6vVq0fwsGMQN097NwZixoXZaqIhFE/s23+KtNkmZWfzw\nYCncRQOMdEBsSe3dCr3bl/R+1MFsD+Dqr2DnGfr0Uzcg1d68GLeN1pHRbTwAP2z8\nnBpg+fYi0JEJhjKRlIZc6Lfu3r8ZS8OIqwVes9vwpL1V7r6UvdCD5baa4gYktM6k\nkWcgHfj0r/w48IK9jklBFfgVekZTev2o/rVepiMS3lmj/JXXtYw9fnoTcBWIK+uJ\nZlPgUAibUmOBy+8t5e05DN6POcHeIbsCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEA\nE9pz6H55OQ1DBLrMXol/37e9pmeZVRb3oTr9XKsYh5pbhQATrB+7w0AWAQAgKuGM\nd2Dp5WWQsxxwhQf3JQVBac5vyDMgNfg5tIcEK9lY4/SNGN3ikLZkieiAbDO6X/Gg\naiH8sn5mJQABpcNop/yI/9amUdE49z7Z+l6ddcPZdzqnQpxFMIRZkzZ4ITvixI9f\n4ASFtKeco50guzXCvcV3p1R7D7vbXcLLZro6qu03LdzdB3lDl+t5lJL4ZzHDNpuZ\nCwZPSchhkhqQDcGaQ24UaY8GCf3uORMZHujcFlrMP5WA/Bncw5IGEdZOVkD+xziH\n69xR0O/sFkJcQQOK455D0w==\n-----END CERTIFICATE-----\n",
+                "cluster": {
+                    "engagement": {
+                        "client": {
+                            "last_updated": "2013-06-11T20:33:40",
+                            "name": "Haliburton",
+                            "resource_uri": "",
+                            "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                        },
+                        "number": "MCIRT12-022",
+                        "resource_uri": "",
+                        "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                    },
+                    "name": "SCHUPPELTD001",
+                    "node_band": 100000,
+                    "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                    "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+                },
+                "domain": "HALAMERICA",
+                "drives": "c:,d:",
+                "gmt_offset": "-PT6H",
+                "hash": "ab1cc55b82ddbcf7eb8157dd9906897f5d1091f659b13366753be28eb288e9dc",
+                "hostname": "ENAUS00070061",
+                "ip": "34.154.25.143",
+                "logged_on_user": "HALAMERICA\\ENAUS00070061$,HALAMERICA\\HBAG167",
+                "mac_address": "00ff984c1488",
+                "machine": "ENAUS00070061",
+                "os_bitness": "32-bit",
+                "os_buildnumber": "2600",
+                "os_patch_level": "Service Pack 3",
+                "port": 22201,
+                "proc_type": "Multiprocessor Free",
+                "processor": "Intel(R) Core(TM) i5 CPU M 520 @ 2.40GHz",
+                "product_name": "Microsoft Windows XP",
+                "resource_uri": "/api/v1/agent/ab1cc55b82ddbcf7eb8157dd9906897f5d1091f659b13366753be28eb288e9dc/",
+                "revision": "25269b12-64e6-11e2-9ad4-525400a828bb",
+                "time_logged": "2013-01-30T18:53:19.490829",
+                "time_zone_dst": "Central Daylight Time",
+                "time_zone_standard": "Central Standard Time",
+                "total_physical_ram": "2062868480",
+                "uuid": "25269ae0-64e6-11e2-9ad4-525400a828bb",
+                "version": "2.2.1500"
+            },
+            "cluster": {
+                "engagement": {
+                    "client": {
+                        "last_updated": "2013-06-11T20:33:40",
+                        "name": "Haliburton",
+                        "resource_uri": "",
+                        "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                    },
+                    "number": "MCIRT12-022",
+                    "resource_uri": "",
+                    "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                },
+                "name": "SCHUPPELTD001",
+                "node_band": 100000,
+                "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+            },
+            "comment": "test",
+            "create_datetime": "2013-07-09T21:20:18.523277",
+            "error_message": "HTTPSConnectionPool(host='58.246.5.50', port=443): Max retries exceeded with url: /apps/webclient/index.php (Caused by <class 'socket.error'>: [Errno 110] Connection timed out)",
+            "file_name": "Tasks",
+            "file_path": "%systemroot%\\system32",
+            "mcic_create_dt": null,
+            "mcic_id": null,
+            "mcic_state": null,
+            "mcic_status": null,
+            "mcic_update_dt": null,
+            "method": "api",
+            "mir_acquired_uri": null,
+            "mir_detail_uri": null,
+            "mir_job_uri": null,
+            "resource_uri": "/api/v1/acquisition/2b13c34d-cb1a-4808-8ef7-272945176065/",
+            "state": "errored",
+            "update_datetime": "2013-07-09T21:20:18.523329",
+            "user": "test",
+            "uuid": "2b13c34d-cb1a-4808-8ef7-272945176065"
+        },
+        {
+            "acquired_file": null,
+            "agent": {
+                "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICpjCCAY4CCQCSBFylnaqrlDANBgkqhkiG9w0BAQUFADAVMRMwEQYDVQQDEwpO\nVEJLMTk4Mjc5MB4XDTcwMDEwMTEyMDAwMFoXDTIyMDgwNTE5MzAyNlowFTETMBEG\nA1UEAxMKTlRCSzE5ODI3OTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB\nAMfmh7faINtlNqqIYCxH+6NdTxPlkSdBN2ukgMwv/iEhbMMYA5f36X2n34wwA0rp\ngdWOpquqpNAbKdM6p6PkKXBkhCUvDoiRA9ms+YSPsEcvg6xneafXoGKPczR//fuO\nKh/rbPHWNZioDMHx+MBFLG/27ndlxT0Ol7EN5355QYOfh101bXdE1eyxGvJciV4h\nh0ZvJ/wU+Ejj83QnG0DusOhxe7BCStdLsSmVOI68rOwWJLUmKd3Ha6M10Y+H1rAf\nE+OFMSXREzG472cjxsZ3QbQBnFIPLZ0xZcI/GL5lbmiqFQGZlKj7/Z7IIPCUHpnc\nItGZ4Ql2dNGMLwbt9s09OrcCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEAl059qq2m\nJHkDd3WMQL29/PBfRR9al47qxKwL1w+16mNglGvS2Yzkgn1jITzFtrwEf+iHeyzc\n06NEm/2tOSU7wrZiXHCjpjEtKI7qKDsIOLu6SoUWpWEAn/kdCgp/pvmUTG/eyTOC\nO/R1VkgTUnbs7r+bsW5hdUGa/Wy/ZHAAyht0g+YTIXo+GaICvg0Q2UXDQZgzDW5+\nqteY0a2n0u3aHKi5FD8dbE3uwcwTfLUe4XAlQUkxLMhSP0oEAIl4Bt+Vo/uVo2GV\n3hia3ToA3KtbRSoEcYTuU4GduiFrUbCju/MVYdX/FTtX4fWBDBCyFRc+lfyY6XIt\nA0WWPllIBJJFfw==\n-----END CERTIFICATE-----\n",
+                "cluster": {
+                    "engagement": {
+                        "client": {
+                            "last_updated": "2013-06-11T20:33:40",
+                            "name": "Haliburton",
+                            "resource_uri": "",
+                            "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                        },
+                        "number": "MCIRT12-022",
+                        "resource_uri": "",
+                        "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                    },
+                    "name": "SCHUPPELTD001",
+                    "node_band": 100000,
+                    "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                    "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+                },
+                "domain": "HALAMERICA",
+                "drives": "c:,d:,s:",
+                "gmt_offset": "PT1H",
+                "hash": "c6d83957e66d1e1c0e59806377634108daaf762494cecd0952c2aec95d053efe",
+                "hostname": "NTBK198279",
+                "ip": "34.34.17.99",
+                "logged_on_user": "HALAMERICA\\hrrz361,HALAMERICA\\NTBK198279$",
+                "mac_address": "00ffb03bb407",
+                "machine": "NTBK198279",
+                "os_bitness": "64-bit",
+                "os_buildnumber": "7600",
+                "os_patch_level": "",
+                "port": 22201,
+                "proc_type": "Multiprocessor Free",
+                "processor": "Intel(R) Core(TM) i7 CPU L 640 @ 2.13GHz",
+                "product_name": "Windows 7 Enterprise",
+                "resource_uri": "/api/v1/agent/c6d83957e66d1e1c0e59806377634108daaf762494cecd0952c2aec95d053efe/",
+                "revision": "310360a4-1884-11e2-ba9a-525400a828bb",
+                "time_logged": "2012-12-12T04:38:50.946012",
+                "time_zone_dst": "W. Central Africa Daylight Time",
+                "time_zone_standard": "W. Central Africa Standard Time",
+                "total_physical_ram": "4076208128",
+                "uuid": "31035c80-1884-11e2-ba9a-525400a828bb",
+                "version": "2.2.1500"
+            },
+            "cluster": {
+                "engagement": {
+                    "client": {
+                        "last_updated": "2013-06-11T20:33:40",
+                        "name": "Haliburton",
+                        "resource_uri": "",
+                        "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                    },
+                    "number": "MCIRT12-022",
+                    "resource_uri": "",
+                    "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                },
+                "name": "SCHUPPELTD001",
+                "node_band": 100000,
+                "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+            },
+            "comment": "sdfsdf",
+            "create_datetime": "2013-07-09T21:23:11.829990",
+            "error_message": "HTTPSConnectionPool(host='58.246.5.50', port=443): Max retries exceeded with url: /apps/webclient/index.php (Caused by <class 'socket.error'>: [Errno 110] Connection timed out)",
+            "file_name": "SCHEDLGU(34).TXT",
+            "file_path": "C:\\Windows\\Tasks",
+            "mcic_create_dt": null,
+            "mcic_id": null,
+            "mcic_state": null,
+            "mcic_status": null,
+            "mcic_update_dt": null,
+            "method": "api",
+            "mir_acquired_uri": null,
+            "mir_detail_uri": null,
+            "mir_job_uri": null,
+            "resource_uri": "/api/v1/acquisition/c3a93df1-dd82-4b3a-b8e9-0b2bb563612f/",
+            "state": "errored",
+            "update_datetime": "2013-07-09T21:23:11.830053",
+            "user": "sdfsd",
+            "uuid": "c3a93df1-dd82-4b3a-b8e9-0b2bb563612f"
+        },
+        {
+            "acquired_file": null,
+            "agent": {
+                "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICpjCCAY4CCQCSBFylnaqrlDANBgkqhkiG9w0BAQUFADAVMRMwEQYDVQQDEwpO\nVEJLMTk4Mjc5MB4XDTcwMDEwMTEyMDAwMFoXDTIyMDgwNTE5MzAyNlowFTETMBEG\nA1UEAxMKTlRCSzE5ODI3OTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB\nAMfmh7faINtlNqqIYCxH+6NdTxPlkSdBN2ukgMwv/iEhbMMYA5f36X2n34wwA0rp\ngdWOpquqpNAbKdM6p6PkKXBkhCUvDoiRA9ms+YSPsEcvg6xneafXoGKPczR//fuO\nKh/rbPHWNZioDMHx+MBFLG/27ndlxT0Ol7EN5355QYOfh101bXdE1eyxGvJciV4h\nh0ZvJ/wU+Ejj83QnG0DusOhxe7BCStdLsSmVOI68rOwWJLUmKd3Ha6M10Y+H1rAf\nE+OFMSXREzG472cjxsZ3QbQBnFIPLZ0xZcI/GL5lbmiqFQGZlKj7/Z7IIPCUHpnc\nItGZ4Ql2dNGMLwbt9s09OrcCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEAl059qq2m\nJHkDd3WMQL29/PBfRR9al47qxKwL1w+16mNglGvS2Yzkgn1jITzFtrwEf+iHeyzc\n06NEm/2tOSU7wrZiXHCjpjEtKI7qKDsIOLu6SoUWpWEAn/kdCgp/pvmUTG/eyTOC\nO/R1VkgTUnbs7r+bsW5hdUGa/Wy/ZHAAyht0g+YTIXo+GaICvg0Q2UXDQZgzDW5+\nqteY0a2n0u3aHKi5FD8dbE3uwcwTfLUe4XAlQUkxLMhSP0oEAIl4Bt+Vo/uVo2GV\n3hia3ToA3KtbRSoEcYTuU4GduiFrUbCju/MVYdX/FTtX4fWBDBCyFRc+lfyY6XIt\nA0WWPllIBJJFfw==\n-----END CERTIFICATE-----\n",
+                "cluster": {
+                    "engagement": {
+                        "client": {
+                            "last_updated": "2013-06-11T20:33:40",
+                            "name": "Haliburton",
+                            "resource_uri": "",
+                            "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                        },
+                        "number": "MCIRT12-022",
+                        "resource_uri": "",
+                        "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                    },
+                    "name": "SCHUPPELTD001",
+                    "node_band": 100000,
+                    "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                    "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+                },
+                "domain": "HALAMERICA",
+                "drives": "c:,d:,s:",
+                "gmt_offset": "PT1H",
+                "hash": "c6d83957e66d1e1c0e59806377634108daaf762494cecd0952c2aec95d053efe",
+                "hostname": "NTBK198279",
+                "ip": "34.34.17.99",
+                "logged_on_user": "HALAMERICA\\hrrz361,HALAMERICA\\NTBK198279$",
+                "mac_address": "00ffb03bb407",
+                "machine": "NTBK198279",
+                "os_bitness": "64-bit",
+                "os_buildnumber": "7600",
+                "os_patch_level": "",
+                "port": 22201,
+                "proc_type": "Multiprocessor Free",
+                "processor": "Intel(R) Core(TM) i7 CPU L 640 @ 2.13GHz",
+                "product_name": "Windows 7 Enterprise",
+                "resource_uri": "/api/v1/agent/c6d83957e66d1e1c0e59806377634108daaf762494cecd0952c2aec95d053efe/",
+                "revision": "310360a4-1884-11e2-ba9a-525400a828bb",
+                "time_logged": "2012-12-12T04:38:50.946012",
+                "time_zone_dst": "W. Central Africa Daylight Time",
+                "time_zone_standard": "W. Central Africa Standard Time",
+                "total_physical_ram": "4076208128",
+                "uuid": "31035c80-1884-11e2-ba9a-525400a828bb",
+                "version": "2.2.1500"
+            },
+            "cluster": {
+                "engagement": {
+                    "client": {
+                        "last_updated": "2013-06-11T20:33:40",
+                        "name": "Haliburton",
+                        "resource_uri": "",
+                        "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                    },
+                    "number": "MCIRT12-022",
+                    "resource_uri": "",
+                    "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                },
+                "name": "SCHUPPELTD001",
+                "node_band": 100000,
+                "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+            },
+            "comment": "",
+            "create_datetime": "2013-07-09T21:38:56.555823",
+            "error_message": "HTTPSConnectionPool(host='58.246.5.50', port=443): Max retries exceeded with url: /apps/webclient/index.php (Caused by <class 'socket.error'>: [Errno 110] Connection timed out)",
+            "file_name": "SCHEDLGU(34).TXT",
+            "file_path": "C:\\Windows\\Tasks",
+            "mcic_create_dt": null,
+            "mcic_id": null,
+            "mcic_state": null,
+            "mcic_status": null,
+            "mcic_update_dt": null,
+            "method": "api",
+            "mir_acquired_uri": null,
+            "mir_detail_uri": null,
+            "mir_job_uri": null,
+            "resource_uri": "/api/v1/acquisition/4d465b77-8a12-46c0-b155-5e9099aa962b/",
+            "state": "errored",
+            "update_datetime": "2013-07-09T21:38:56.555894",
+            "user": "dsf",
+            "uuid": "4d465b77-8a12-46c0-b155-5e9099aa962b"
+        },
+        {
+            "acquired_file": null,
+            "agent": {
+                "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICpjCCAY4CCQCSBFylnaqrlDANBgkqhkiG9w0BAQUFADAVMRMwEQYDVQQDEwpO\nVEJLMTk4Mjc5MB4XDTcwMDEwMTEyMDAwMFoXDTIyMDgwNTE5MzAyNlowFTETMBEG\nA1UEAxMKTlRCSzE5ODI3OTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB\nAMfmh7faINtlNqqIYCxH+6NdTxPlkSdBN2ukgMwv/iEhbMMYA5f36X2n34wwA0rp\ngdWOpquqpNAbKdM6p6PkKXBkhCUvDoiRA9ms+YSPsEcvg6xneafXoGKPczR//fuO\nKh/rbPHWNZioDMHx+MBFLG/27ndlxT0Ol7EN5355QYOfh101bXdE1eyxGvJciV4h\nh0ZvJ/wU+Ejj83QnG0DusOhxe7BCStdLsSmVOI68rOwWJLUmKd3Ha6M10Y+H1rAf\nE+OFMSXREzG472cjxsZ3QbQBnFIPLZ0xZcI/GL5lbmiqFQGZlKj7/Z7IIPCUHpnc\nItGZ4Ql2dNGMLwbt9s09OrcCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEAl059qq2m\nJHkDd3WMQL29/PBfRR9al47qxKwL1w+16mNglGvS2Yzkgn1jITzFtrwEf+iHeyzc\n06NEm/2tOSU7wrZiXHCjpjEtKI7qKDsIOLu6SoUWpWEAn/kdCgp/pvmUTG/eyTOC\nO/R1VkgTUnbs7r+bsW5hdUGa/Wy/ZHAAyht0g+YTIXo+GaICvg0Q2UXDQZgzDW5+\nqteY0a2n0u3aHKi5FD8dbE3uwcwTfLUe4XAlQUkxLMhSP0oEAIl4Bt+Vo/uVo2GV\n3hia3ToA3KtbRSoEcYTuU4GduiFrUbCju/MVYdX/FTtX4fWBDBCyFRc+lfyY6XIt\nA0WWPllIBJJFfw==\n-----END CERTIFICATE-----\n",
+                "cluster": {
+                    "engagement": {
+                        "client": {
+                            "last_updated": "2013-06-11T20:33:40",
+                            "name": "Haliburton",
+                            "resource_uri": "",
+                            "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                        },
+                        "number": "MCIRT12-022",
+                        "resource_uri": "",
+                        "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                    },
+                    "name": "SCHUPPELTD001",
+                    "node_band": 100000,
+                    "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                    "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+                },
+                "domain": "HALAMERICA",
+                "drives": "c:,d:,s:",
+                "gmt_offset": "PT1H",
+                "hash": "c6d83957e66d1e1c0e59806377634108daaf762494cecd0952c2aec95d053efe",
+                "hostname": "NTBK198279",
+                "ip": "34.34.17.99",
+                "logged_on_user": "HALAMERICA\\hrrz361,HALAMERICA\\NTBK198279$",
+                "mac_address": "00ffb03bb407",
+                "machine": "NTBK198279",
+                "os_bitness": "64-bit",
+                "os_buildnumber": "7600",
+                "os_patch_level": "",
+                "port": 22201,
+                "proc_type": "Multiprocessor Free",
+                "processor": "Intel(R) Core(TM) i7 CPU L 640 @ 2.13GHz",
+                "product_name": "Windows 7 Enterprise",
+                "resource_uri": "/api/v1/agent/c6d83957e66d1e1c0e59806377634108daaf762494cecd0952c2aec95d053efe/",
+                "revision": "310360a4-1884-11e2-ba9a-525400a828bb",
+                "time_logged": "2012-12-12T04:38:50.946012",
+                "time_zone_dst": "W. Central Africa Daylight Time",
+                "time_zone_standard": "W. Central Africa Standard Time",
+                "total_physical_ram": "4076208128",
+                "uuid": "31035c80-1884-11e2-ba9a-525400a828bb",
+                "version": "2.2.1500"
+            },
+            "cluster": {
+                "engagement": {
+                    "client": {
+                        "last_updated": "2013-06-11T20:33:40",
+                        "name": "Haliburton",
+                        "resource_uri": "",
+                        "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                    },
+                    "number": "MCIRT12-022",
+                    "resource_uri": "",
+                    "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                },
+                "name": "SCHUPPELTD001",
+                "node_band": 100000,
+                "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+            },
+            "comment": "",
+            "create_datetime": "2013-07-09T21:39:56.826580",
+            "error_message": "HTTPSConnectionPool(host='58.246.5.50', port=443): Max retries exceeded with url: /apps/webclient/index.php (Caused by <class 'socket.error'>: [Errno 110] Connection timed out)",
+            "file_name": "SCHEDLGU(34).TXT",
+            "file_path": "C:\\Windows\\Tasks",
+            "mcic_create_dt": null,
+            "mcic_id": null,
+            "mcic_state": null,
+            "mcic_status": null,
+            "mcic_update_dt": null,
+            "method": "api",
+            "mir_acquired_uri": null,
+            "mir_detail_uri": null,
+            "mir_job_uri": null,
+            "resource_uri": "/api/v1/acquisition/f4d04b38-9e89-42b2-be98-0ab00d0918bb/",
+            "state": "errored",
+            "update_datetime": "2013-07-09T21:39:56.826623",
+            "user": "dsf",
+            "uuid": "f4d04b38-9e89-42b2-be98-0ab00d0918bb"
+        },
+        {
+            "acquired_file": null,
+            "agent": {
+                "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICpjCCAY4CCQCSBFylnaqrlDANBgkqhkiG9w0BAQUFADAVMRMwEQYDVQQDEwpO\nVEJLMTk4Mjc5MB4XDTcwMDEwMTEyMDAwMFoXDTIyMDgwNTE5MzAyNlowFTETMBEG\nA1UEAxMKTlRCSzE5ODI3OTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB\nAMfmh7faINtlNqqIYCxH+6NdTxPlkSdBN2ukgMwv/iEhbMMYA5f36X2n34wwA0rp\ngdWOpquqpNAbKdM6p6PkKXBkhCUvDoiRA9ms+YSPsEcvg6xneafXoGKPczR//fuO\nKh/rbPHWNZioDMHx+MBFLG/27ndlxT0Ol7EN5355QYOfh101bXdE1eyxGvJciV4h\nh0ZvJ/wU+Ejj83QnG0DusOhxe7BCStdLsSmVOI68rOwWJLUmKd3Ha6M10Y+H1rAf\nE+OFMSXREzG472cjxsZ3QbQBnFIPLZ0xZcI/GL5lbmiqFQGZlKj7/Z7IIPCUHpnc\nItGZ4Ql2dNGMLwbt9s09OrcCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEAl059qq2m\nJHkDd3WMQL29/PBfRR9al47qxKwL1w+16mNglGvS2Yzkgn1jITzFtrwEf+iHeyzc\n06NEm/2tOSU7wrZiXHCjpjEtKI7qKDsIOLu6SoUWpWEAn/kdCgp/pvmUTG/eyTOC\nO/R1VkgTUnbs7r+bsW5hdUGa/Wy/ZHAAyht0g+YTIXo+GaICvg0Q2UXDQZgzDW5+\nqteY0a2n0u3aHKi5FD8dbE3uwcwTfLUe4XAlQUkxLMhSP0oEAIl4Bt+Vo/uVo2GV\n3hia3ToA3KtbRSoEcYTuU4GduiFrUbCju/MVYdX/FTtX4fWBDBCyFRc+lfyY6XIt\nA0WWPllIBJJFfw==\n-----END CERTIFICATE-----\n",
+                "cluster": {
+                    "engagement": {
+                        "client": {
+                            "last_updated": "2013-06-11T20:33:40",
+                            "name": "Haliburton",
+                            "resource_uri": "",
+                            "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                        },
+                        "number": "MCIRT12-022",
+                        "resource_uri": "",
+                        "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                    },
+                    "name": "SCHUPPELTD001",
+                    "node_band": 100000,
+                    "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                    "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+                },
+                "domain": "HALAMERICA",
+                "drives": "c:,d:,s:",
+                "gmt_offset": "PT1H",
+                "hash": "c6d83957e66d1e1c0e59806377634108daaf762494cecd0952c2aec95d053efe",
+                "hostname": "NTBK198279",
+                "ip": "34.34.17.99",
+                "logged_on_user": "HALAMERICA\\hrrz361,HALAMERICA\\NTBK198279$",
+                "mac_address": "00ffb03bb407",
+                "machine": "NTBK198279",
+                "os_bitness": "64-bit",
+                "os_buildnumber": "7600",
+                "os_patch_level": "",
+                "port": 22201,
+                "proc_type": "Multiprocessor Free",
+                "processor": "Intel(R) Core(TM) i7 CPU L 640 @ 2.13GHz",
+                "product_name": "Windows 7 Enterprise",
+                "resource_uri": "/api/v1/agent/c6d83957e66d1e1c0e59806377634108daaf762494cecd0952c2aec95d053efe/",
+                "revision": "310360a4-1884-11e2-ba9a-525400a828bb",
+                "time_logged": "2012-12-12T04:38:50.946012",
+                "time_zone_dst": "W. Central Africa Daylight Time",
+                "time_zone_standard": "W. Central Africa Standard Time",
+                "total_physical_ram": "4076208128",
+                "uuid": "31035c80-1884-11e2-ba9a-525400a828bb",
+                "version": "2.2.1500"
+            },
+            "cluster": {
+                "engagement": {
+                    "client": {
+                        "last_updated": "2013-06-11T20:33:40",
+                        "name": "Haliburton",
+                        "resource_uri": "",
+                        "uuid": "184bc182-c850-4aae-9ac0-ec3c74ec2e2e"
+                    },
+                    "number": "MCIRT12-022",
+                    "resource_uri": "",
+                    "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+                },
+                "name": "SCHUPPELTD001",
+                "node_band": 100000,
+                "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+                "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+            },
+            "comment": "",
+            "create_datetime": "2013-07-09T21:44:21.911814",
+            "error_message": "HTTPSConnectionPool(host='58.246.5.50', port=443): Max retries exceeded with url: /apps/webclient/index.php (Caused by <class 'socket.error'>: [Errno 110] Connection timed out)",
+            "file_name": "SCHEDLGU(34).TXT",
+            "file_path": "C:\\Windows\\Tasks",
+            "mcic_create_dt": null,
+            "mcic_id": null,
+            "mcic_state": null,
+            "mcic_status": null,
+            "mcic_update_dt": null,
+            "method": "api",
+            "mir_acquired_uri": null,
+            "mir_detail_uri": null,
+            "mir_job_uri": null,
+            "resource_uri": "/api/v1/acquisition/1768e3d8-1dcf-4b77-b035-38387c9a30d8/",
+            "state": "errored",
+            "update_datetime": "2013-07-09T21:44:21.911854",
+            "user": "sdf",
+            "uuid": "1768e3d8-1dcf-4b77-b035-38387c9a30d8"
+        }
+    ],
+    "iTotalDisplayRecords": 63,
+    "iTotalRecords": 63,
+    "iDisplayStart": 0,
+    "sEcho": "1"
+}

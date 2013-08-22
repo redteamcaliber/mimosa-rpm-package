@@ -399,6 +399,15 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             log.debug(_.sprintf('Element with id: %s is not of type DataTable, skipping...', id));
         }
     },
+    /**
+     * Render the table.  If you are obtaining data from a collection then don't invoke this method, call fetch()
+     * instead.  If obtaining data via server side ajax then this method can be called with server side parameters.
+     *
+     *     table.render({server_params: {suppression_id: suppression_id}});
+     *
+     * @param params - the server side ajax parameters.  A map keyed by the name server_params.
+     * @returns {*}
+     */
     render: function (params) {
         if (!this.el) {
             // Error
@@ -2602,3 +2611,159 @@ StrikeFinder.HostView = StrikeFinder.View.extend({
     }
 });
 
+StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
+    initialize: function () {
+        var view = this;
+        view.acquisitions_collapsable = new StrikeFinder.CollapsableContentView({
+            el: view.el,
+            title: '<i class="icon-cloud-download"></i> Acquisitions',
+            title_class: 'uac-header'
+        });
+
+        view.options['sAjaxSource'] = '/sf/api/acquisitions';
+        view.options.sAjaxDataProp = 'results';
+        view.options['bServerSide'] = true;
+
+        view.options['aoColumns'] = [
+            {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
+            {sTitle: "Cluster", mData: "cluster.name", bSortable: false},
+            {sTitle: "Agent", mData: "agent.hostname", bSortable: false},
+            {sTitle: "File Path", mData: "file_path", bSortable: false},
+            {sTitle: "File Name", mData: "file_name", bSortable: false},
+            {sTitle: "Comment", mData: "comment", bSortable: false},
+            {sTitle: "State", mData: "state", bSortable: false},
+            {sTitle: "Error Message", mData: "error_message", bVisible: false, bSortable: false},
+            {sTitle: "Link", mData: "acquired_file", bVisible: false, bSortable: false}
+        ];
+
+        view.options['aoColumnDefs'] = [
+            {
+                mRender: function (data, type, row) {
+                    if (row.link) {
+                        return _.sprintf('<a href="%s">%s</a>', row.link, data);
+                    }
+                    else {
+                        return data
+                    }
+                },
+                aTargets: [4]
+            },
+            {
+                mRender: function (data, type, row) {
+                    return _.sprintf('<span class="error_message">%s</span>', data);
+                },
+                aTargets: [6]
+            }
+        ];
+
+        view.options['sDom'] = 'Rltip';
+
+        view.listenTo(view, 'row:created', view.on_create_row);
+        view.listenTo(view, 'row:click', view.on_row_click);
+    },
+    on_create_row: function(row, data, index) {
+        // Display a toolip if there is an error message.
+        if (data.error_message) {
+            $(row).find('.error_message').tooltip({
+                title: data.error_message,
+                trigger: 'hover',
+                placement: 'left'
+            });
+        }
+    },
+    fetch: function (clusters) {
+        var view = this;
+        if (clusters) {
+            view.clusters = clusters;
+        }
+        StrikeFinder.run(function() {
+            view.render({server_params: {suppression_id: suppression_id}});
+        });
+    }
+});
+
+StrikeFinder.AcquisitionsView = StrikeFinder.View.extend({
+    initialize: function () {
+        var view = this;
+
+        view.criteria_collapsable = new StrikeFinder.CollapsableContentView({
+            el: '#criteria-div',
+            title: '<i class="icon-search"></i> Acquisitions Search Criteria',
+            title_class: 'uac-header'
+        });
+
+        // Clusters options.
+        // TODO: Pre select the users clusters selection.
+        view.clusters = new StrikeFinder.ClustersCollection();
+        view.clusters_view = new StrikeFinder.SelectView({
+            el: '#clusters-select',
+            collection: view.clusters,
+            id_field: "cluster_uuid",
+            value_field: "cluster_name",
+            selected: StrikeFinder.usersettings.clusters,
+            width: "33%",
+            placeholder: 'Select Clusters'
+        });
+        view.clusters_view.on('change', function (clusters) {
+            // Update the model criteria when values change.
+            view.clusters = clusters;
+            if (view.clusters && view.clusters.length > 0) {
+                StrikeFinder.blockui_ajax();
+                view.acquisitions_table.render({server_params: {clusters: view.clusters}});
+                $('#results-div').fadeIn().show();
+            }
+            else {
+                $('#results-div').fadeOut().hide();
+            }
+        });
+
+        view.acquisitions_table = new StrikeFinder.AcquisitionsTableView({
+            el: '#acquisitions-table'
+        });
+
+        view.clusters.reset(StrikeFinder.clusters);
+
+
+        //view.listenTo(view.suppressions_table, 'click', view.render_hits);
+        //view.listenTo(view.suppressions_table, 'delete', view.fetch);
+        //view.listenTo(view.suppressions_table, 'empty', function () {
+        //    $('.hits-view').fadeOut().hide();
+        //    $('.details-view').fadeOut().hide();
+        //});
+    },
+    do_render_hits: function (data) {
+        var view = this;
+
+        log.debug('Row selected: ' + JSON.stringify(data));
+
+        var suppression_id = data['suppression_id'];
+
+        view.run_once('init_hits', function () {
+            view.hits_table_view = new StrikeFinder.HitsSuppressionTableView({
+                el: '#hits-table'
+            });
+
+            view.hits_details_view = new StrikeFinder.HitsDetailsView({
+                el: '#hits-details-view',
+                hits_table_view: view.hits_table_view,
+                tag: false,
+                suppress: false,
+                masstag: false
+            });
+        });
+
+        view.hits_table_view.fetch(suppression_id);
+
+        $('.hits-view').fadeIn().show();
+    },
+    render_hits: function (data) {
+        var view = this;
+        StrikeFinder.blockui_ajax();
+        view.do_render_hits(data);
+    },
+    fetch: function () {
+        var view = this;
+        StrikeFinder.run(function () {
+        });
+    }
+});

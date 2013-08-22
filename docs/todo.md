@@ -21,6 +21,14 @@ UAC ToDo
 
 ### Implement the acquisitions list page.
     -https://sick.mandiant.com/api/v1/acquisition/?cluster_uuid__in=9402af9a-f99b-45c3-8f86-651aa1d87f7&cluster_uuid__in=SOME-OTHER-UUID
+    -controller, agent, file_path + file_name, state with error_message (if applicable), and then the acquired_file link, comment
+    -these are the valid acquisition states for "state"
+         created
+         started
+         completed
+         errored
+         cancelled
+         unknown
 
 ### Refactorings:
     -Break up the client js files using require.js
