@@ -16,6 +16,7 @@
     </style>
 
     <script type="text/javascript">
+        StrikeFinder.host = {{ host }};
         StrikeFinder.tags = {{ tags }};
 
         $(document).ready(function () {
@@ -26,10 +27,14 @@
                     initialize: function(options) {
                         var view = this;
 
+                        view.model = new StrikeFinder.AgentHostModel(StrikeFinder.host);
+
                         // The hosts view.
                         view.hosts_view = new StrikeFinder.HostView({
-                            el: '#host-div'
+                            el: '#host-div',
+                            model: view.model
                         });
+                        view.hosts_view.render();
 
                         // The hits view.
                         view.hits_table_view = new StrikeFinder.HostHitsTableView({
@@ -51,10 +56,11 @@
                             view.hits_table_view.update_row('uuid', row.uuid, 'tagname', tagname, 0);
                             view.hits_details_view.fetch();
                         });
+
+                        view.fetch(view.model.get('hash'));
                     },
                     fetch: function(am_cert_hash) {
                         var view = this;
-                        view.hosts_view.fetch(am_cert_hash);
                         view.hits_table_view.fetch(am_cert_hash);
                     }
                 });
