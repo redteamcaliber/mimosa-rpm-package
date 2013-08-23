@@ -1,8 +1,6 @@
 UAC ToDo
 ========
 
-### Write up the user stories from last week before the meeting.
-
 ### Gracefully handle when the users session has timed out and making an AJAX call.
     -http://msdn.microsoft.com/en-us/magazine/cc507641.aspx
 
