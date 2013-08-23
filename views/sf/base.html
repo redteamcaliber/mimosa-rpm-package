@@ -38,7 +38,7 @@
         el: '#host-select'
     });
     host_search_view.listenTo(host_search_view, 'change', function (am_cert_hash) {
-        window.location = _.sprintf('/sf/host/#hash/%s/', am_cert_hash);
+        window.location = _.sprintf('/sf/host/%s/', am_cert_hash);
     });
 </script>
 {% endblock %}
