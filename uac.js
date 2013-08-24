@@ -5,14 +5,33 @@ var https = require('https');
 var http = require('http');
 var express = require('express');
 var async = require('async');
+var log = require('winston');
 
 // UAC requirements.
 var settings = require('settings');
-var log = require('log');
 var sso = require('sso');
 var route_utils = require('route-utils');
 var uac_routes = require('uac-routes');
 var sf_routes = require('sf-routes');
+
+
+//
+// Setup default Winston logging.
+//
+log.remove(log.transports.Console);
+log.add(log.transports.Console, {
+    level: settings.get('uac:log_level'),
+    colorize: true
+});
+log.add(log.transports.File, {
+    level: settings.get('uac:log_level'),
+    colorize: true,
+    filename: settings.get('uac:log_file'),
+    json: false,
+    timestamp: true,
+    maxsize: settings.get('uac: log_maxsize'),
+    maxfiles: settings.get('uac: log_maxfiles')
+});
 
 
 //
@@ -26,8 +45,8 @@ app.use(express.query());
 app.use(express.bodyParser());
 app.use(express.cookieParser());
 app.use(express.cookieSession({
-    key: 'uac.session',
-    secret: '62d0f193-a1e3-45f9-bb41-7b22310309aa',
+    key: settings.get('server:session_key'),
+    secret: settings.get('server:session_secret'),
     cookie: { path: '/', httpOnly: true, maxAge: null }
 }));
 app.use(express.csrf());
@@ -79,23 +98,26 @@ app.use(function errorHandler(err, req, res, next) {
  */
 function startup() {
     log.info('');
-    log.info('');
-    log.info('');
+    log.info('--------------------------');
     log.info('Starting the UAC server...');
+    log.info('--------------------------');
+
+    log.info('server:port=%s', settings.get('server:port'));
+    log.info('server:ssl=%s', settings.get('server:ssl'));
 
     if (settings.get('server:ssl') === true) {
-        log.info('SSL is ENABLED...');
         https.createServer({
             key: fs.readFileSync(settings.get('server:ssl_key')),
             cert: fs.readFileSync(settings.get('server:ssl_cert'))
         }, app).listen(settings.get('server:port'));
     }
     else {
-        log.info('SSL is DISABLED...');
         http.createServer(app).listen(settings.get('server:port'));
     }
 
-    log.info('UAC server running on port: ' + settings.get('server:port') + '...');
+    log.info('---------------------')
+    log.info('UAC server running...');
+    log.info('---------------------')
 }
 
 /**
@@ -103,9 +125,9 @@ function startup() {
  */
 function shutdown() {
     log.info('');
-    log.info('');
-    log.info('');
+    log.info('-------------------------------');
     log.info('Shutting down the UAC server...');
+    log.info('-------------------------------');
     process.exit();
 }
 

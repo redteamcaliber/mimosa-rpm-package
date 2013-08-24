@@ -53,6 +53,9 @@ cp %_builddir/%{name}-%{version}/conf/upstart/uac.conf %{buildroot}/etc/init/.
 
 ls -l %{buildroot}
 
+# Ensure there is a logs directory.
+mkdir -p %{buildroot}/opt/web/apps/uac/logs
+
 %files
 %defattr(-,root,root,-)
 /opt/web/apps/uac
@@ -61,5 +64,4 @@ ls -l %{buildroot}
 /etc/init/uac.conf
 
 %post
-
 

@@ -1,6 +1,10 @@
 UAC ToDo
 ========
 
+### Re-factor the env.json.
+    -Move the log settings to server.
+    -Split the sso into request/sso.
+
 ### Gracefully handle when the users session has timed out and making an AJAX call.
     -http://msdn.microsoft.com/en-us/magazine/cc507641.aspx
 
@@ -38,6 +42,8 @@ UAC ToDo
         -http://backbonetutorials.com/organizing-backbone-using-modules/
 
     -Find a way to break up the templates so they all don't have to be included in every page.
+
+    -Add RFC1918 checks to the SSO middleware.
 
 ### Write a fabric script for configuration a local UAC vm instance?
 

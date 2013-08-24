@@ -16,7 +16,5 @@ EXTENSIONS=js,html,json
 DIRECTORIES=.,conf,lib,static,views
 
 
-echo "Starting server $SERVER in debug mode..."
-# supervisor -e $EXTENSIONS -w $DIRECTORIES -- --debug=5858 uac.js
 supervisor -e $EXTENSIONS -w $DIRECTORIES uac.js
 

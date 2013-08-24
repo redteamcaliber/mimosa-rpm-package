@@ -1,7 +1,9 @@
 {
     "server": {
         "port": 8000,
-        "ssl": false
+        "ssl": false,
+        "session_cookie": "uac.session",
+        "session_secret": "62d0f193-a1e3-45f9-bb41-7b22310309aa"
     },
     "uac": {
         "db_name": "uac",
