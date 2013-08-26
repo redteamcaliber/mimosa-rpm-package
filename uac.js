@@ -29,8 +29,8 @@ log.add(log.transports.File, {
     filename: settings.get('uac:log_file'),
     json: false,
     timestamp: true,
-    maxsize: settings.get('uac: log_maxsize'),
-    maxfiles: settings.get('uac: log_maxfiles')
+    maxsize: settings.get('uac:log_maxsize'),
+    maxfiles: settings.get('uac:log_maxfiles')
 });
 
 
