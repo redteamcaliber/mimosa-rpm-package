@@ -115,9 +115,9 @@ function startup() {
         http.createServer(app).listen(settings.get('server:port'));
     }
 
-    log.info('---------------------')
+    log.info('---------------------');
     log.info('UAC server running...');
-    log.info('---------------------')
+    log.info('---------------------');
 }
 
 /**

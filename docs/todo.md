@@ -1,6 +1,12 @@
 UAC ToDo
 ========
 
+### Look into why add comment is a get and not a post???
+
+### Tagging
+    -Replace the tagging component with something that is stateful.
+    -Refresh the host view whenever an item is tagged because the counts need to be updated.
+
 ### Re-factor the env.json.
     -Move the log settings to server.
     -Split the sso into request/sso.

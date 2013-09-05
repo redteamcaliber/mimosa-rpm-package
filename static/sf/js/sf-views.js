@@ -1122,7 +1122,8 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
             // Find the root IOC definition.
             var ioc_definition_list = ioc_tab_element.find('.ioc-definition');
             if (ioc_definition_list.length != 1) {
-                log.error('Unable to find IOC definition.');
+                log.error('Unable to find IOC definition: ' + ioc_definition_list.length);
+                console.dir(ioc_definition_list);
             }
             var ioc_definition_element = ioc_definition_list;
             ioc_definition_element.addClass('highlighted');
