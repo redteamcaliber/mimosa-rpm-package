@@ -1286,7 +1286,7 @@ StrikeFinder.FileInfoView = StrikeFinder.View.extend({
         this.$("#file-info-content div .xslt-contents-header").css('font-weight', 'bold');
 
         // Style the embedded tables.
-        this.$("#file-info-content table").addClass("table table-striped table-bordered table-hover table-condensed");
+        this.$("#file-info-content table").addClass("table table-striped table-bordered table-condensed");
         // Style the embedded text areas.
         this.$("#file-info-content textarea").css("width", "95%").css("min-height", "100px");
         //this.$("#file-info-content ul").css("display", "none");
@@ -2668,7 +2668,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
                         else if (data == 'unknown') {
                             label_class = 'label-warning';
                         }
-                        return _.sprintf('<span class="label %s error_message">%s</span>', label_class, data);
+                        return _.sprintf('<span class="label %s error_message" style="text-align: center; width: 100%%">%s</span>', label_class, data);
                     }
                     else {
                         return '';

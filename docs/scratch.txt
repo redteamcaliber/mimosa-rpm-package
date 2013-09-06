@@ -1,4 +1,104 @@
 
+// If there are results and the user has chosen to view hits by tagname.  Merge in Seasick hostname data.
+            if (body.results && body.results.length > 0 && params.tagname) {
+
+                // Create a map of distinct hashes that are in the hits result.
+                var hash_map = {};
+                body.results.forEach(function (row) {
+                    hash_map[row.am_cert_hash] = undefined;
+                });
+
+                // Break up the hash keys into chunks.
+                var hash_lists = [[]];
+                var index = 0;
+                _.each(hash_map, function(value, key, list) {
+                    if (hash_lists[index].length >= 30) {
+                        index = index + 1;
+                        hash_lists[index] = [];
+                    }
+                    hash_lists[index].push(key);
+                });
+
+                // Retrieve the hosts.
+                async.each(
+                    hash_lists,
+                    function(hash_list, callback) {
+                        // Retrieve a chunk of hosts.
+                        get_hosts_by_hash_list(req, hash_list, callback);
+                    },
+                    function(err) {
+                        if (err) {
+                            // Error, unable to obtain the related host data from seasick.  Return the results anyway
+                            // indicating that there was an error.
+                            log.error('Unable to retrieve hosts from seasick - ' + err);
+                            body.results.forEach(function (row) {
+                                row.hostname = '[Error]';
+                            });
+                        }
+                        else {
+
+                        }
+                    }
+                );
+
+
+                body.results.forEach(function (row) {
+                    if (hash_lists[index].length >= 30) {
+                        index = index + 1;
+                        hash_lists[index] = [];
+                    }
+
+                    hash_lists[index].push(row.am_cert_hash);
+                });
+
+                var functions = [];
+                for (var fn_index = 0; fn_index < hash_lists.length; fn_index++) {
+                    var fn = function(callback) {
+                        get_hosts_by_hash_list(req, hash_lists[fn_index], callback);
+                    };
+                    functions.push(fn);
+                }
+
+                async.parallel(
+                    functions,
+                    function (err, results) {
+                        results.forEach(function(result) {
+
+                        });
+                    }
+                );
+
+                get_hosts_by_hash_list(req, hash_list, function (err, hosts) {
+                    if (err) {
+                        // Error, unable to obtain the related host data from seasick.  Return the results anyway
+                        // indicating that there was an error.
+                        log.error('Unable to retrieve hosts from seasick - ' + err);
+                        body.results.forEach(function (row) {
+                            row.hostname = '[Error]';
+                        });
+                    }
+                    else {
+                        // Add the host to each of the hits.
+                        var host_map = {};
+                        hosts.forEach(function (host) {
+                            host_map[host.hash] = host;
+                        });
+
+                        body.results.forEach(function (row) {
+                            row.hostname = row.am_cert_hash in host_map ?
+                                host_map[row.am_cert_hash].hostname : '';
+                        });
+                    }
+
+                    // Return the merged results.
+                    callback(null, body);
+                });
+            }
+            else {
+                callback(null, body);
+            }
+
+
 upstream uac.vm.mandiant.com {
     server 127.0.0.1:8000;
 }
