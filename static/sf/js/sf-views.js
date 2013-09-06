@@ -2612,17 +2612,21 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
 
         view.options['aoColumns'] = [
             {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
-            {sTitle: "Cluster", mData: "cluster.name", bSortable: false},
-            {sTitle: "Agent", mData: "agent.hostname", bSortable: false},
-            {sTitle: "File Path", mData: "file_path", bSortable: false},
-            {sTitle: "File Name", mData: "file_name", bSortable: false},
-            {sTitle: "Created", mData: "create_datetime", bSortable: false},
-            {sTitle: "Updated", mData: "update_datetime", bSortable: false},
-            {sTitle: "User", mData: "user", bSortable: false},
-            {sTitle: "Method", mData: "method", bSortable: false},
-            {sTitle: "State", mData: "state", bSortable: false},
+            {sTitle: "Cluster", mData: "cluster.name", bSortable: true},
+            {sTitle: "Agent", mData: "agent.hostname", bSortable: true},
+            {sTitle: "File Path", mData: "file_path", bSortable: true},
+            {sTitle: "File Name", mData: "file_name", bSortable: true},
+            {sTitle: "Created", mData: "create_datetime", bSortable: true},
+            {sTitle: "Updated", mData: "update_datetime", bSortable: true},
+            {sTitle: "User", mData: "user", bSortable: true},
+            {sTitle: "Method", mData: "method", bSortable: true},
+            {sTitle: "State", mData: "state", bSortable: true},
             {sTitle: "Error Message", mData: "error_message", bVisible: false, bSortable: false},
             {sTitle: "Link", mData: "acquired_file", bVisible: false, bSortable: false}
+        ];
+
+        view.options.aaSorting = [
+            [ 5, "desc" ]
         ];
 
         view.options['aoColumnDefs'] = [

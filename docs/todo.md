@@ -1,7 +1,11 @@
 UAC ToDo
 ========
 
-### Make the bulk seasick host lookup a post.
+### Automatically update the version number???
+
+### Add ordering and sorting to the acquisitions list.
+
+### Look into map files.
 
 ### Improve the 500 error reporting in UAC.
 
@@ -47,6 +51,8 @@ UAC ToDo
     ordering is done by a param 'order_by' on the GET and defaults to ascending order (similiar to django querysets)
     so for descending agent hostnames' i think youd want to do soemthing like order_by=-agent__hostname
 
+    ['agent', 'cluster', 'state', 'create_datetime', 'user', 'mcic_state', 'file_path', 'file_name', 'method']
+
 ### Refactorings:
     -Break up the client js files using require.js
         -http://backbonetutorials.com/organizing-backbone-using-modules/
@@ -73,3 +79,4 @@ Completed
 
 ### IOC Viewer
     -Adjust the highlighting based on the new viewer.
+### Make the bulk seasick host lookup a post.
