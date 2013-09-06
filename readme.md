@@ -1,8 +1,8 @@
 Unified Analyst Console Web Application
 =======================================
 
-[Development Installation Procedures](./docs/development.md)
-----------------------------------------------------------
+- [Release Notes](./docs/release-notes.md) - Running list of release notes by version.
 
-[Production Installation Procedures](./docs/production.md)
-----------------------------------------------------------
+- [Development Installation Procedures](./docs/development.md) - Instructions for setting up UAC development environment.
+
+- [Production Installation Procedures](./docs/production.md) - Instructions for installing UAC in production via RPM.
