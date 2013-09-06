@@ -1,6 +1,10 @@
 UAC ToDo
 ========
 
+### Make the bulk seasick host lookup a post.
+
+### Improve the 500 error reporting in UAC.
+
 ### Look into why add comment is a get and not a post???
 
 ### Tagging
@@ -64,18 +68,8 @@ UAC ToDo
     -Potentially create a helper method to grab this value.
 
 
-UAC Status
-----------
+Completed
+---------
 
-### Code updated to convert over to the SF Python API.
-    -New documentation has been updated, will review this with Duane.
-    -Implemented some low hanging performance optimizations.
-### Currently still proxying all SF and SS requests through the UAC server.
-    -Found a better way of doing it using Node.
-    -Maintain CSRF checking.
-    -Ease of development.
-    -Can easily migrate to NGINX in the future if we think it's necessary.
-    -Still can hit the UAC server directly though we can implement the proxy restriction anyway.
-### Ross, Cheryl, and I met last week regarding SF requirements.
-    -Sent out an email with all the outstanding user stories.
-    -User stories probably should be prioritized.
+### IOC Viewer
+    -Adjust the highlighting based on the new viewer.

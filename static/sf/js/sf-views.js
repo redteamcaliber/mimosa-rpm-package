@@ -1129,7 +1129,8 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
             ioc_definition_element.addClass('highlighted');
 
             // Hide the root IOC definitions children.
-            ioc_definition_element.children().hide();
+            console.log('Hiding the ioc definitions children...');
+            ioc_definition_element.find('ul, li').hide();
 
             // Get the highlighted items from the IOC's model.
             var selected_id_string = model.get('details');
@@ -1141,8 +1142,6 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
                 selected_ids = [selected_id_string];
             }
 
-            var items_to_hide = [];
-
             // Iterate over the IOC's selected items.
             _.each(selected_ids, function (selected_id) {
                 var selected_id_selector = '.ioc-guid-' + selected_id;
@@ -1151,30 +1150,17 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
                     log.error('Unable to find selected element for selector: ' + selected_id_selector);
                 }
 
+                // Retrieve the full path of the element to the root.
                 var selected_element_path = view.get_path(selected_element.get(0), ioc_definition_element.get(0));
                 _.each(selected_element_path, function (selected_path_item) {
                     // Display the selected item.
                     view.$(selected_path_item).show();
                     // Mark the item as highlighted so it's not hidden.
                     view.$(selected_path_item).addClass('highlighted');
-
-                    items_to_hide = jQuery.merge(items_to_hide, view.$(selected_path_item).siblings('ul li').not('.highlighted'));
-                    items_to_hide = jQuery.merge(items_to_hide, view.$(selected_path_item).find('ul li').not('.highlighted'));
                 });
 
                 // Highlight the item.
                 selected_element.find('> span.ioc-rule').css({'background': 'yellow', 'font-weight': 'bold'});
-
-                // Debug, highlight the selected element's green.
-                //$(selected_path_item).css('background', 'green');
-            });
-
-            // Hide any items not marked as highlighted.
-            _.each(items_to_hide, function (i) {
-                if (!view.$(i).hasClass('highlighted')) {
-                    //view.$(i).css({'opacity': 0.3 });
-                    view.$(i).addClass('uac-opaque');
-                }
             });
         });
     },
@@ -1190,17 +1176,14 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
             log.debug('ioc_tab_selection: ' + ioc_tab_selector);
             var ioc_tab_element = view.$(ioc_tab_selector);
 
-            // Show the metadata.
-            //ioc_tab_element.find('.ioc-metadata').show();
-
             // Find the root IOC definition.
             var ioc_definition_list = ioc_tab_element.find('.ioc-definition');
             if (ioc_definition_list.length != 1) {
                 log.error('Unable to find IOC definition.');
             }
             // Display the children and remove any previous formatting.
-            ioc_definition_list.children().show();
-            ioc_definition_list.find('*').removeClass('uac-opaque').removeClass('highlighted');
+            ioc_definition_list.find('*').show();
+            //ioc_definition_list.find('*').removeClass('uac-opaque').removeClass('highlighted');
         });
     },
     on_click: function () {

@@ -12,6 +12,7 @@
         return this.each(function() {
             var $this=$(this), iocObject, errBase='ioc-parse-error'
                 , errLabel='IOC Parse Error:', errMsg;
+
             // Render the IOC HTML.
             try {
                 iocObject = plugin.parse($.trim($this.text()));
@@ -268,7 +269,8 @@
         // Convert the header metadata items.
         var $viewer, $metadata, $content, i;
         $viewer = $('<div>').addClass('ioc').addClass('ioc-guid-' + iocObject.id)
-            .append($metadata=$('<div>').addClass('ioc-metadata'));
+            .append($metadata=$('<div>').addClass('ioc-metadata'))
+            .append($criteria=$('<div>').addClass('ioc-definition'));
         if (iocObject.name) {
             $metadata.append($('<div>').addClass('ioc-name').html(iocObject.name));
         }
@@ -312,7 +314,7 @@
                         .click( function() { $( '#linktype_'+ this.id ).toggle('slow'); } )
                         .addClass('ioc-link-label')
                     );
-                var LI = $('<DIV id="linktype_' +rel +'" >').addClass('hidden');
+                var LI = $('<DIV id="linktype_' +rel +'" >').addClass('ioc_hidden');
 
                 for (i=0; i<links[rel].length; i++) {
                     LI.append(($li=$('<li>')
@@ -326,11 +328,13 @@
 
         if (links['link']){
             var linksUL = $('<DIV>').append($('<span>')
-                .html('LINKs:')
+                .html('LINK(s):')
                 .addClass('ioc-link-label')
+                .css('text-decoration', 'underline')
                 .click( function() {  $( '#linktype_link' ).toggle('slow'); } )
             );
-            var LI = $('<div id="linktype_link">').addClass('hidden');
+            var LI = $('<div id="linktype_link">').addClass('ioc_hidden');
+            LI.css('margin-left', '10px');
             for (i=0; i<links['link'].length; i++) {
                 var str = links['link'][i].href;
                 if ( !links['link'][i].href ) {
@@ -348,12 +352,12 @@
         $metadata.append($('<div>').addClass('ioc-description').html(iocObject.description));
 
         // Convert the logic tree.
-        renderIndicator($viewer, iocObject.definition[0], 0);
+        renderIndicator($criteria, iocObject.definition[0], 0);
         function renderIndicator(parentNode, indicator, depth) {
             var $ul=$('<ul>'), $li, $rule, nodes, node, content, labelText
                 , isFirst, isLast
                 , op=(indicator.operator && indicator.operator.toLowerCase());
-            $ul.addClass('ioc-definition');
+            $ul.addClass('ioc-indicator');
             $ul.addClass('ioc-guid-' + indicator.id);
             $ul.append($('<span>').addClass('operator').text(op.toUpperCase()));
 //      $ul.text( indicator.operator.toUpperCase());
@@ -361,16 +365,6 @@
             nodes = indicator.children;
             for (var i=0; i<nodes.length; i++) {
                 node = nodes[i];
-                // Determine the node classes and label content.
-                isFirst = (i === 0);
-                isLast = (i === (nodes.length - 1));
-                if (depth === 0) {
-                    labelText = 'Hit&nbsp;if';
-                } else if (op === 'and') {
-                    labelText = (isFirst) ? '' : '&';
-                } else { // op === 'or'
-                    labelText = (isFirst) ? 'This' : 'Or';
-                }
                 // Create and append the indicator nodes.
                 if (node.term) {
                     var negate='';
@@ -385,7 +379,6 @@
 
 
                     $ul.append(($li=$('<li>')
-                        .append($('<span>').addClass('ioc-label').html(""))
                         .append($rule=$('<span>').addClass('ioc-rule')
                             .append($('<span>').addClass('ioc-negate').text(negate))
                             .append($('<span>').addClass('ioc-term').text(prepTerm(node.term)))
@@ -397,12 +390,9 @@
                         $rule.addClass('ioc-commented-rule');
                     }
                 } else {
-                    $ul.append($li=$('<li>')
-                        .append($('<span>').addClass('ioc-label').html("")));
+                    $ul.append( $li=$('<li>') );
                     renderIndicator($li, node, depth + 1);
                 }
-                if (isFirst) { $li.addClass('ioc-indicator-first'); }
-                if (isLast) { $li.addClass('ioc-indicator-last'); }
             }
             parentNode.append($ul);
         }

@@ -75,7 +75,7 @@ div.ioc-description {
 /* Common Styles
 ---------------------------------------- */
 
-ul.ioc-definition {
+ul.ioc-indicator {
     border: 2px solid #ddd;
     margin: 0px 0 0 0px;
     padding: 0px;
@@ -83,7 +83,7 @@ ul.ioc-definition {
     overflow: auto;
 }
 
-ul.ioc-definition li {
+ul.ioc-indicator li {
     position: relative;
     display: block;
     padding: 2px 20px;
@@ -91,7 +91,7 @@ ul.ioc-definition li {
 }
 
 
-ul.ioc-definition li > span.ioc-label {
+ul.ioc-indicator li > span.ioc-label {
     display: none;
     position: absolute;
     left: 0;
@@ -128,7 +128,7 @@ ul.ioc-definition li > span.ioc-label {
 
 }
 
-ul.ioc-definition li > span.ioc-rule {
+ul.ioc-indicator li > span.ioc-rule {
     padding: 2px;
     background: #eee;
     border: 1px solid #8C92A2;
@@ -175,7 +175,7 @@ span.ioc-value {
     font-weight: bold;
 }
 
-.hidden {
+.ioc_hidden {
     display: none;
 }
 span.ioc-case {
