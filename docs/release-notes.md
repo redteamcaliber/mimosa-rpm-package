@@ -10,6 +10,10 @@ Mandiant-uac-ws-0.2-5 - September 9th, 2013
 - Default sort order of the acquisitions table is created desc.
 - Enabled table column sorting on fields that Seasick supports.
 
+### Suppressions (removed, see request)
+
+- Updated the Prefetch File Executed to Prefetch Application File Name - #22929.
+
 
 Mandiant-uac-ws-0.2-4 - September 6th, 2013
 -------------------------------------------
@@ -21,7 +25,7 @@ Mandiant-uac-ws-0.2-4 - September 6th, 2013
 
 ### IOCs
 
-- New Ross-ified version of the IOC viewer.
+- New Ross-ified version of the IOC viewer that resolves issues causing XML to be displayed - #22795.
 - Updated highlighting and filtering to account for the new viewer.
 - Items no longer wrap.
 

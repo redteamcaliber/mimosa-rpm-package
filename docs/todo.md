@@ -1,9 +1,9 @@
 UAC ToDo
 ========
 
-### Automatically update the version number???
+### Look into sorting issues with the previous next control.
 
-### Add ordering and sorting to the acquisitions list.
+### Automatically update the version number???
 
 ### Look into map files.
 
