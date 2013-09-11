@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsl:stylesheet version="1.0"
+                xmlns:atom="http://www.w3.org/2005/Atom"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+                xmlns:user="urn:userscripts"
+                xmlns:mir="urn:mandiant-intelligent-response"
+        >
+
+<xsl:output method="html" />
+
+<xsl:template match="/FileItem">
+
+<div class="xslt-contents" xslt-title="File Item Info">
+    <table width="100%"  class="table table-condensed table-hover">
+        <tr>
+            <th colspan="2" rowspan="1">Full Path</th>
+            <th colspan="1" rowspan="1">Device Path</th>
+            <th colspan="1" rowspan="1">File Attributes</th>
+        </tr>
+        <tr>
+            <td colspan="2" rowspan="1"><span class="ioc-term" ioc-term="FileItem/FullPath"><xsl:value-of select="FullPath" /></span></td>
+            <td colspan="1" rowspan="1"><span class="ioc-term" ioc-term="FileItem/DevicePath"><xsl:value-of select="DevicePath" /></span></td>
+            <td colspan="1" rowspan="1"><span class="ioc-term" ioc-term="FileItem/FileAttributes"><xsl:value-of select="FileAttributes" /></span></td>
+        </tr>
+        <tr>
+            <th>Size</th>
+            <th colspan="2" rowspan="1">MD5</th>
+            <th>Owner</th>
+        </tr>
+        <tr>
+            <td><span class="ioc-term" ioc-term="FileItem/SizeInBytes"><xsl:value-of select="SizeInBytes"/></span></td>
+            <td colspan="2" rowspan="1"><span class="ioc-term" ioc-term="FileItem/Md5sum"><xsl:value-of select="Md5sum" /></span></td>
+            <td><span class="ioc-term" ioc-term="FileItem/Username"><xsl:value-of select="Username" /></span></td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <th>Accessed</th>
+            <th>Modified</th>
+            <th>Changed</th>
+        </tr>
+        <tr>
+            <td><span class="ioc-term" ioc-term="FileItem/Created"><xsl:value-of select="translate(Created, 'T', ' ')"/></span></td>
+            <td><span class="ioc-term" ioc-term="FileItem/Accessed"><xsl:value-of select="translate(Accessed, 'T', ' ')"/></span></td>
+            <td><span class="ioc-term" ioc-term="FileItem/Modified"><xsl:value-of select="translate(Modified, 'T', ' ')"/></span></td>
+            <td><span class="ioc-term" ioc-term="FileItem/Changed"><xsl:value-of select="translate(Changed, 'T', ' ')"/></span></td>
+        </tr>
+        <xsl:if test="FilenameCreated">
+            <tr>
+                <th>Filename Created</th>
+                <th>Filename Accessed</th>
+                <th>Filename Modified</th>
+                <th>Filename Changed</th>
+            </tr>
+            <tr>
+                <td><span class="ioc-term" ioc-term="FileItem/FilenameCreated" ><xsl:value-of select="translate(FilenameCreated, 'T', ' ')"/></span></td>
+                <td><span class="ioc-term" ioc-term="FileItem/FilenameAccessed" ><xsl:value-of select="translate(FilenameAccessed, 'T', ' ')"/></span></td>
+                <td><span class="ioc-term" ioc-term="FileItem/FilenameModified" ><xsl:value-of select="translate(FilenameModified, 'T', ' ')"/></span></td>
+                <td><span class="ioc-term" ioc-term="FileItem/FilenameChanged" ><xsl:value-of select="translate(FilenameChanged, 'T', ' ')"/></span></td>
+            </tr>
+        </xsl:if>
+    </table>
+</div>
+
+<xsl:if test="PEInfo">
+    <div class="xslt-contents" xslt-title="PE Header Information">
+        <table class="table table-condensed table-hover" width="100%">
+            <tr>
+                <th>PE Type</th>
+                <th>Compile Time</th>
+                <th>Subsystem</th>
+                <th>Base Address</th>
+            </tr>
+            <tr>
+                <td><span class="ioc-term" ioc-term="FileItem/PEInfo/Type"><xsl:value-of select="PEInfo/Type"/></span></td>
+                <td><span class="ioc-term" ioc-term="FileItem/PEInfo/PETimeStamp"><xsl:value-of select="translate(PEInfo/PETimeStamp, 'T', ' ')"/></span></td>
+                <td><span class="ioc-term" ioc-term="FileItem/PEInfo/Subsystem"><xsl:value-of select="PEInfo/Subsystem"/></span></td>
+                <td><span class="ioc-term" ioc-term="FileItem/PEInfo/BaseAddress"><xsl:value-of select="PEInfo/BaseAddress"/></span></td>
+            </tr>
+        </table>
+        <table class="table table-condensed table-hover" width="100%"  >
+            <tr>
+                <th>Checksum Raw</th>
+                <th>Checksum API</th>
+                <th>Checksum Computed</th>
+            </tr>
+            <tr>
+                <td><span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEFileRaw"><xsl:value-of select="PEInfo/PEChecksum/PEFileRaw"/></span></td>
+                <td><span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEFileAPI"><xsl:value-of  select="PEInfo/PEChecksum/PEFileAPI"/></span></td>
+                <td><span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEComputedAPI"><xsl:value-of  select="PEInfo/PEChecksum/PEComputedAPI"/></span></td>
+            </tr>
+        </table>
+        <table  class="table table-condensed table-hover" width="100%"   >
+            <tr>
+                <th>Signature Exists</th>
+                <th>Signature Verified</th>
+                <th>Signature Description</th>
+            </tr>
+            <tr>
+                <td><span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/SignatureExists"><xsl:value-of  select="PEInfo/DigitalSignature/SignatureExists"/></span></td>
+                <td><span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/SignatureVerified"><xsl:value-of  select="PEInfo/DigitalSignature/SignatureVerified"/></span></td>
+                <td><span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/Description"><xsl:value-of  select="PEInfo/DigitalSignature/Description"/></span></td>
+            </tr>
+        </table>
+        <table width="100%"   class="table table-condensed table-hover"  >
+            <tr>
+                <th>Certificate Issuer</th>
+                <th>Certificate Subject</th>
+            </tr>
+            <tr>
+                <td><span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/CertificateIssuer"><xsl:value-of  select="PEInfo/DigitalSignature/CertificateIssuer"/></span></td>
+                <td><span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/CertificateSubject"><xsl:value-of  select="PEInfo/DigitalSignature/CertificateSubject"/></span></td>
+            </tr>
+        </table>
+        <table width="100%"  class="table table-condensed table-hover"  >
+            <tr>
+                <th>Entry Point Signature</th>
+                <th>Anomalies</th>
+            </tr>
+            <tr>
+                <td>
+                    Name: <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedEntryPointSignature/Name"><xsl:value-of select="PEInfo/DetectedEntryPointSignature/Name"/></span>
+                    <br/>
+                    Type: <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedEntryPointSignature/Type"><xsl:value-of select="PEInfo/DetectedEntryPointSignature/Type"/></span>
+                </td>
+                <td>
+                    <xsl:for-each select="PEInfo/DetectedAnomalies/string">
+                        <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedAnomalies/string"><xsl:value-of select="."/></span><br/>
+                    </xsl:for-each>
+                </td>
+            </tr>
+            <tr>
+                <th>Peak Entropy</th>
+                <th>Peak Code Entropy</th>
+            </tr>
+            <tr>
+                <td><span class="ioc-term" ioc-term="FileItem/PeakEntropy"><xsl:value-of  select="PEInfo/PeakEntropy"/></span></td>
+                <td><span class="ioc-term" ioc-term="FileItem/PEInfo/PeakCodeEntropy"><xsl:value-of  select="PEInfo/PeakCodeEntropy"/></span></td>
+            </tr>
+        </table>
+        <table  class="table table-condensed table-hover" width="100%"  >
+            <tr>
+                <th>Section Name</th>
+                <th>Section Type</th>
+                <th>Size</th>
+                <th>Characteristics</th>
+                <th>Entropy</th>
+            </tr>
+            <xsl:for-each select="PEInfo/Sections/Section">
+                <tr>
+                    <td><span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Name"><xsl:value-of  select="Name"/></span></td>
+                    <td><span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Type"><xsl:value-of  select="Type"/></span></td>
+                    <td><span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/SizeInBytes"><xsl:value-of  select="SizeInBytes"/></span></td>
+                    <td><span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/DetectedCharacteristics"><xsl:value-of  select="DetectedCharacteristics"/></span></td>
+                    <td><span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Entropy/@AverageValue"><xsl:value-of  select="Entropy/@AverageValue"/></span></td>
+                </tr>
+            </xsl:for-each>
+        </table>
+
+        <div class="xslt-contents-field" xslt-title="Exported Functions">
+            <xsl:for-each select="PEInfo/Exports/ExportedFunctions/string">
+                <li >
+                    <span class="ioc-term" ioc-term="FileItem/PEInfo/Exports/ExportedFunctions/string"><xsl:value-of select="."/></span><br/>
+                </li>
+            </xsl:for-each>
+        </div>
+
+
+        <div class="xslt-contents-field" xslt-title="Imported Functions">
+            <xsl:for-each select="PEInfo/ImportedModules/Module">
+                <li>
+                    <span class="ioc-term" ioc-term="FileItem/PEInfo/ImportedModules/Name"><xsl:value-of select="Name"/></span>
+                    <div class="outline" >
+                        <xsl:for-each select="ImportedFunctions/string">
+                            <span class="ioc-term" ioc-term="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string" ><xsl:value-of select="."/></span><br/>
+                        </xsl:for-each>
+                    </div>
+                </li>
+            </xsl:for-each>
+        </div>
+
+        <xsl:if test="PEInfo/VersionInfoList/VersionInfoItem">
+            <br />
+            <table class="table table-condensed table-hover" >
+                <tr>
+                    <th>Language</th>
+                    <td><span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/Language"><xsl:value-of  select="PEInfo/VersionInfoList/VersionInfoItem/Language"/></span></td>
+                </tr>
+                <tr>
+                    <th>Product Name</th>
+                    <td><span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/ProductName"><xsl:value-of  select="PEInfo/VersionInfoList/VersionInfoItem/ProductName"/></span></td>
+                </tr>
+                <tr>
+                    <th>Product Version</th>
+                    <td><span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/ProductVersion"><xsl:value-of  select="PEInfo/VersionInfoList/VersionInfoItem/ProductVersion"/></span></td>
+                </tr>
+                <tr>
+                    <th>Comments</th>
+                    <td><span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/Comments"><xsl:value-of  select="PEInfo/VersionInfoList/VersionInfoItem/Comments"/></span></td>
+                </tr>
+                <tr>
+                    <th>Company Name</th>
+                    <td><span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/CompanyName"><xsl:value-of  select="PEInfo/VersionInfoList/VersionInfoItem/CompanyName"/></span></td>
+                </tr>
+                <tr>
+                    <th>File Description</th>
+                    <td><span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileDescription"><xsl:value-of  select="PEInfo/VersionInfoList/VersionInfoItem/FileDescription"/></span></td>
+                </tr>
+                <tr>
+                    <th>File Version</th>
+                    <td><span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileVersion"><xsl:value-of  select="PEInfo/VersionInfoList/VersionInfoItem/FileVersion"/></span></td>
+                </tr>
+                <tr>
+                    <th>Internal Name</th>
+                    <td><span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/InternalName"><xsl:value-of  select="PEInfo/VersionInfoList/VersionInfoItem/InternalName"/></span></td>
+                </tr>
+                <tr>
+                    <th>Legal Copyright</th>
+                    <td><span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/LegalCopyright"><xsl:value-of  select="PEInfo/VersionInfoList/VersionInfoItem/LegalCopyright"/></span></td>
+                </tr>
+                <tr>
+                    <th>Original Filename</th>
+                    <td><span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/OriginalFilename"><xsl:value-of  select="PEInfo/VersionInfoList/VersionInfoItem/OriginalFilename"/></span></td>
+                </tr>
+            </table>
+        </xsl:if>
+    </div>
+</xsl:if>
+
+<xsl:if test="StringList/string">
+    <div class="xslt-contents" xslt-title="Strings">
+        <ul>
+            <li >
+                <div class="outline" >
+                    <xsl:for-each select="StringList/string">
+                        <span class="ioc-term" ioc-term="FileItem/StringList/string"><xsl:value-of select="."/></span><br/>
+                    </xsl:for-each>
+                </div>
+            </li>
+        </ul>
+    </div>
+</xsl:if>
+
+<xsl:if test="StreamList/Stream">
+    <div class="xslt-contents" xslt-title="Streams">
+        <ul>
+            <li >
+                <table width="100%"  class="table table-condensed table-hover"  >
+                    <tr>
+                        <th>Name</th>
+                        <th>Size</th>
+                        <th>MD5</th>
+                    </tr>
+                    <xsl:for-each select="StreamList/Stream">
+                        <tr>
+                            <td><span class="ioc-term" ioc-term="FileItem/StreamList/Stream/Name"><xsl:value-of  select="Name"/></span></td>
+                            <td><span class="ioc-term" ioc-term="FileItem/StreamList/Stream/SizeInBytes"><xsl:value-of  select="SizeInBytes"/></span></td>
+                            <td><span class="ioc-term" ioc-term="FileItem/StreamList/Stream/Md5sum"><xsl:value-of  select="Md5sum"/></span></td>
+                        </tr>
+                    </xsl:for-each>
+                </table>
+                <br/>
+            </li>
+        </ul>
+    </div>
+</xsl:if>
+
+<div class="xslt-contents" xslt-title="Portal Formatted Data">
+    <textarea title="Click to Highlight"  cols="80"  rows="10" onclick="this.select();">
+        File Name:       <xsl:value-of select="FileName"/>
+        MD5 Hash:        <xsl:value-of select="Md5sum"/>
+        File Created:    <xsl:value-of select="translate(Created, 'T', ' ')"/>
+        Last Accessed:   <xsl:value-of select="translate(Accessed, 'T', ' ')"/>
+        Last Modified:   <xsl:value-of select="translate(Modified, 'T', ' ')"/>
+        Entry Modified:  <xsl:value-of select="translate(Changed, 'T', ' ')"/>
+        File Size:       <xsl:value-of select="SizeInBytes"/>
+        File Path:       <xsl:if test="Drive"><xsl:value-of select="Drive"/>:\</xsl:if> <xsl:value-of select="FilePath"/>
+        File Owner:      <xsl:value-of select="Username"/>
+    </textarea>
+</div>
+
+</xsl:template>
+</xsl:stylesheet>
