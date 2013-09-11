@@ -1,11 +1,11 @@
 UAC ToDo
 ========
 
+### Add an auto suppress capability.
+
 ### Look into sorting issues with the previous next control.
 
 ### Automatically update the version number???
-
-### Look into map files.
 
 ### Improve the 500 error reporting in UAC.
 
@@ -21,6 +21,8 @@ UAC ToDo
 
 ### Gracefully handle when the users session has timed out and making an AJAX call.
     -http://msdn.microsoft.com/en-us/magazine/cc507641.aspx
+
+### Look into canvas IOC viewer.
 
 ### Disable the hits link when there is not a usertoken.
 

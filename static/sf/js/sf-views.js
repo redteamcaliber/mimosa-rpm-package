@@ -2696,15 +2696,6 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
                 placement: 'left'
             });
         }
-    },
-    fetch: function (clusters) {
-        var view = this;
-        if (clusters) {
-            view.clusters = clusters;
-        }
-        StrikeFinder.run(function() {
-            view.render({server_params: {suppression_id: suppression_id}});
-        });
     }
 });
 
@@ -2786,10 +2777,5 @@ StrikeFinder.AcquisitionsView = StrikeFinder.View.extend({
         var view = this;
         StrikeFinder.blockui_ajax();
         view.do_render_hits(data);
-    },
-    fetch: function () {
-        var view = this;
-        StrikeFinder.run(function () {
-        });
     }
 });
