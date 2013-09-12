@@ -35,18 +35,24 @@ StrikeFinder.View = Backbone.View.extend({
  */
 StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
     initialize: function (options) {
-        this.name = options['name'];
-        if (!this.name) {
-            if (this.el && this.el.id) {
-                this.name = this.el.id;
-            }
-            else {
-                log.error('"name" or "el.id" is undefined.');
-                return;
-            }
+        var view = this;
+        if (options.name) {
+            view.name = options.name;
         }
-        this.collapsed = options['collapsed'];
-        this.title = options['title'];
+        else if (view.el && view.el.id) {
+            view.name = view.el.id;
+        }
+        else {
+            log.error('"name" or "el.id" is required for collapsable.');
+        }
+        view.collapsed = options['collapsed'] || $(view.el).hasClass('collapsed');
+        if (options.title) {
+            view.title = options['title'];
+        }
+        else if (view.el.title) {
+            view.title = view.el.title;
+        }
+
         this.title_class = options['title_class'];
 
         this.render();

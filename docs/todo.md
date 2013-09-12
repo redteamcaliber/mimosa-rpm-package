@@ -2,6 +2,11 @@ UAC ToDo
 ========
 
 ### Add an auto suppress capability.
+    - Look into replacing the XSLT capability with a template instead.
+
+### Add counts to the rollups, especially the hits rollup.
+
+### Display the current shopping criteria on the criteria rollup.
 
 ### Look into sorting issues with the previous next control.
 
@@ -29,8 +34,6 @@ UAC ToDo
 ### Apply an allowed hosts setting so that users cannot accidentally hit UAC direct.
 
 ### Question: Who should we run the UAC web application process as?
-
-### Add counts to the rollups, especially the hits rollup.
 
 ### Uglify CSS support.
 
