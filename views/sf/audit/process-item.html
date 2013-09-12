@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsl:stylesheet version="1.0"
+                xmlns:atom="http://www.w3.org/2005/Atom"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+                xmlns:user="urn:userscripts"
+                xmlns:mir="urn:mandiant-intelligent-response"
+        >
+    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
+    <xsl:output method="html" />
+
+
+    <xsl:variable name="uniqueHandles" select="//Handle[not(Type=preceding-sibling::Handle/Type)]/Type" />
+
+    <xsl:key name="HandleTypes" match="/ProcessItem/HandleList/Handle" use="Type" />
+    <xsl:key name="HandleNames" match="/ProcessItem/HandleList/Handle" use="Name" />
+
+    <!-- ############################################################### -->
+    <xsl:template match="/ProcessItem">
+
+        <div class="xslt-contents" xslt-title="Process Info">
+            <table     width="95%">
+                <tr>
+                    <td width="100"><b>PID</b></td>
+                    <td><span class="ioc-term" ioc-term="ProcessItem/pid"><xsl:value-of select="pid"/></span></td>
+                </tr>
+                <tr>
+                    <td><b>Parent PID</b></td>
+                    <td><span class="ioc-term" ioc-term="ProcessItem/prentpit"><xsl:value-of select="parentpid"/></span></td>
+                </tr>
+                <tr>
+                    <td><b>Path</b></td>
+                    <td><span class="ioc-term" ioc-term="ProcessItem/path"><xsl:value-of select="path"/></span></td>
+                </tr>
+                <tr>
+                    <td><b>Name</b></td>
+                    <td><span class="ioc-term" ioc-term="ProcessItem/name"><xsl:value-of select="name"/></span></td>
+                </tr>
+                <tr>
+                    <td valign="top"><b>Arguments</b></td>
+                    <td><span class="ioc-term" ioc-term="ProcessItem/arguments"><xsl:value-of select="arguments"/></span></td>
+                </tr>
+                <tr>
+                    <td><b>Username</b></td>
+                    <td><span class="ioc-term" ioc-term="ProcessItem/Username"><xsl:value-of select="Username"/></span></td>
+                </tr>
+                <tr>
+                    <td><b>Security ID</b></td>
+                    <td><span class="ioc-term" ioc-term="ProcessItem/SecurityID"><xsl:value-of select="SecurityID"/></span></td>
+                </tr>
+                <tr>
+                    <td><b>Security Type</b></td>
+                    <td><span class="ioc-term" ioc-term="ProcessItem/SecurityType"><xsl:value-of select="SecurityType"/></span></td>
+                </tr>
+                <tr>
+                    <td><b>Start Time</b></td>
+                    <td><span class="ioc-term" ioc-term="ProcessItem/startTime"><xsl:value-of select="startTime"/></span></td>
+                </tr>
+                <tr>
+                    <td><b>Kernel Time</b></td>
+                    <td><span class="ioc-term" ioc-term="ProcessItem/kernelTime"><xsl:value-of select="kernelTime"/></span></td>
+                </tr>
+                <tr>
+                    <td><b>User Time</b></td>
+                    <td><span class="ioc-term" ioc-term="ProcessItem/userTime"><xsl:value-of select="userTime"/></span></td>
+                </tr>
+            </table>
+        </div>
+
+        <xsl:if test="HandleList">
+            <div class="xslt-contents" xslt-title="Handle Types">
+                <xsl:for-each select="/ProcessItem/HandleList/Handle[generate-id() = generate-id(key('HandleTypes',Type)[1])]">
+                    <xsl:sort select="Type" />
+                    <xsl:call-template name="GetHandleByType">
+                        <xsl:with-param name="HandleType" select="Type" />
+                    </xsl:call-template >
+                </xsl:for-each>
+            </div>
+        </xsl:if>
+
+        <xsl:if test="StringList/string">
+            <div class="xslt-contents" xslt-title="Strings">
+                <div class="outline" >
+                    <xsl:for-each select="StringList/string">
+                        <xsl:value-of select="."/>
+                    </xsl:for-each>
+                </div>
+            </div>
+        </xsl:if>
+
+        <xsl:if test="SectionList">
+            <div class="xslt-contents" xslt-title="Sections">
+                <table     width="95%">
+                    <tr>
+                        <th>Name</th>
+                    </tr>
+                    <xsl:for-each select="SectionList/MemorySection">
+                        <xsl:if test="Name != ''">
+                            <tr>
+                                <td><span class="ioc-term" ioc-term="ProcessItem/SectionList/MemorySection/Name"><xsl:value-of select="Name"/></span></td>
+                            </tr>
+                        </xsl:if>
+                    </xsl:for-each>
+                </table>
+            </div>
+        </xsl:if>
+
+        <xsl:if test="PortList">
+            <div class="xslt-contents" xslt-title="Ports">
+                <table     width="95%">
+                    <tr>
+                        <th>PID</th>
+                        <th>Protocol</th>
+                        <th>Local Port</th>
+                        <th>Local IP</th>
+                        <th>Remote Port</th>
+                        <th>Remote IP</th>
+                        <th>State</th>
+                        <th>Creation Time</th>
+                    </tr>
+                    <xsl:for-each select ="PortList/PortItem">
+                        <tr>
+                            <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/pid"><xsl:value-of select="pid"/></span></td>
+                            <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/protocol"><xsl:value-of select="protocol"/></span></td>
+                            <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/localPort"><xsl:value-of select="localPort"/></span></td>
+                            <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/localIP"><xsl:value-of select="localIP"/></span></td>
+                            <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/remotePort"><xsl:value-of select="remotePort"/></span></td>
+                            <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/remoteIP"><xsl:value-of select="remoteIP"/></span></td>
+                            <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/state"><xsl:value-of select="state"/></span></td>
+                            <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/CreationTime"><xsl:value-of select="translate(CreationTime, 'T', ' ')"/></span></td>
+                        </tr>
+                    </xsl:for-each>
+                </table>
+            </div>
+        </xsl:if>
+
+
+
+        <div class="xslt-contents" xslt-title="Portal Formatted Data">
+            <textarea title="Click to Highlight" style="width:90%; height:70px;" onclick="this.select();">
+                Process Name:    <xsl:value-of select="name"/>
+                Process ID:      <xsl:value-of select="pid"/>
+                Process Start:   <xsl:value-of select="startTime"/>
+                Process Path:    <xsl:value-of select="path"/>
+            </textarea>
+        </div>
+
+    </xsl:template>
+
+    <xsl:template name="GetHandleByType" >
+        <xsl:param name="HandleType" />
+        <xsl:value-of select="$HandleType" />
+        <table     width="95%">
+            <tr>
+                <th>Name</th>
+                <th>Index</th>
+                <th>Access Mask</th>
+                <th>Object Addr</th>
+                <th>Handle Count</th>
+                <th>Ptr Count</th>
+            </tr>
+            <xsl:for-each select="/ProcessItem/HandleList/Handle[(generate-id() = generate-id(key('HandleNames',Name)[1])) and (Type=$HandleType)]">
+                <xsl:sort select="Name" />
+                <xsl:call-template name="PrintHandle" >
+                    <xsl:with-param name="HandleType" select="Type" />
+                    <xsl:with-param name="HandleName" select="Name" />
+                </xsl:call-template>
+            </xsl:for-each>
+        </table>
+    </xsl:template>
+
+
+
+    <xsl:template name="PrintHandle" >
+        <xsl:param name="HandleType" />
+        <xsl:param name="HandleName" />
+        <xsl:for-each select="/ProcessItem/HandleList/Handle[Type=$HandleType and Name=$HandleName]" >
+            <tr>
+                <td><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/Name"><xsl:value-of select="Name"/></span></td>
+                <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/Index"><xsl:value-of select="Index"/></span></td>
+                <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/AccessMask"><xsl:value-of select="AccessMask"/></span></td>
+                <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/ObjectAddress"><xsl:value-of select="ObjectAddress"/></span></td>
+                <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/HandleCount"><xsl:value-of select="HandleCount"/></span></td>
+                <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/PointerCount"><xsl:value-of select="PointerCount"/></span></td>
+            </tr>
+        </xsl:for-each>
+    </xsl:template>
+
+</xsl:stylesheet>
