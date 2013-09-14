@@ -122,7 +122,7 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
 
             // Create the accordion heading div.
             var heading_div = $(document.createElement('div'));
-            heading_div.addClass('accordion-heading').css({'background-color': '#fbfbfb'});
+            heading_div.addClass('accordion-heading');
             heading_div.append(anchor);
 
             accordion_group.prepend(heading_div);

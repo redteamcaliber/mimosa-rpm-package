@@ -94,3 +94,7 @@ html, body {
     color: #333333 !important;
     background-color: #d9edf7 !important;
 }
+
+.accordion {
+    background-color: #fbfbfb;
+}
