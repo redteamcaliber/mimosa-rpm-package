@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsl:stylesheet version="1.0"
+                xmlns:atom="http://www.w3.org/2005/Atom"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+                xmlns:user="urn:userscripts"
+                xmlns:mir="urn:mandiant-intelligent-response"
+        >
+    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
+    <xsl:output method="html" />
+    <xsl:template match="/DiskItem">
+
+        <div class="xslt-contents" xslt-title="Disk Info">
+            <table width="95%">
+                <tr>
+                    <th>Name</th>
+                    <td><span class="ioc-term" ioc-term="DiskItem/DiskName"><xsl:value-of select="DiskName"/></span></td>
+                </tr>
+                <tr>
+                    <th>Size</th>
+                    <td><span class="ioc-term" ioc-term="DiskItem/DiskSize"><xsl:value-of select="DiskSize"/></span></td>
+                </tr>
+            </table>
+            <br/>
+
+            <xsl:for-each select="PartitionList/Partition">
+                <div class="xslt-contents-header">Partition <span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionNumber"><xsl:value-of select="PartitionNumber"/></span></div>
+                <table width="95%">
+                    <tr>
+                        <th>Offset</th>
+                        <td><span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionOffset"><xsl:value-of select="PartitionOffset"/></span></td>
+                    </tr>
+                    <tr>
+                        <th>Lenth</th>
+                        <td><span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionLength"><xsl:value-of select="PartitionLength"/></span></td>
+                    </tr>
+                    <tr>
+                        <th>Type</th>
+                        <td><span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionType"><xsl:value-of select="PartitionType"/></span></td>
+                    </tr>
+                </table>
+                <br/>
+            </xsl:for-each>
+        </div>
+    </xsl:template>
+
+</xsl:stylesheet>
