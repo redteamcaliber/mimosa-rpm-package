@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsl:stylesheet version="1.0"
+                xmlns:atom="http://www.w3.org/2005/Atom"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+                xmlns:user="urn:userscripts"
+                xmlns:mir="urn:mandiant-intelligent-response"
+        >
+    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
+    <xsl:output method="html" />
+
+
+
+    <!-- ############################################################### -->
+    <xsl:template match="/ArpEntryItem">
+
+        <div class="xslt-contents" xslt-title="ARP Information">
+            <table     width="95%">
+                <tr>
+                    <th>Interface</th>
+                    <td><span class="ioc-term" ioc-term="ArpEntryItem/Interface"><xsl:value-of select="Interface"/></span></td>
+                </tr>
+                <tr>
+                    <th>Physical Address</th>
+                    <td><span class="ioc-term" ioc-term="ArpEntryItem/PhysicalAddress"><xsl:value-of select="PhysicalAddress"/></span></td>
+                </tr>
+                <tr>
+                    <th>IPv6 Address</th>
+                    <td><span class="ioc-term" ioc-term="ArpEntryItem/IPv6Address"><xsl:value-of select="IPv6Address"/></span></td>
+                </tr>
+                <tr>
+                    <th>IPv4 Address</th>
+                    <td><span class="ioc-term" ioc-term="ArpEntryItem/IPv4Address"><xsl:value-of select="IPv4Address"/></span></td>
+                </tr>
+                <tr>
+                    <th>Cache Type</th>
+                    <td><span class="ioc-term" ioc-term="ArpEntryItem/CacheType"><xsl:value-of select="CacheType"/></span></td>
+                </tr>
+                <tr>
+                    <th>Interface Type</th>
+                    <td><span class="ioc-term" ioc-term="ArpEntryItem/InterfaceType"><xsl:value-of select="InterfaceType"/></span></td>
+                </tr>
+                <tr>
+                    <th>State</th>
+                    <td><span class="ioc-term" ioc-term="ArpEntryItem/State"><xsl:value-of select="State"/></span></td>
+                </tr>
+                <tr>
+                    <th>Is Router</th>
+                    <td><span class="ioc-term" ioc-term="ArpEntryItem/IsRouter"><xsl:value-of select="IsRouter"/></span></td>
+                </tr>
+                <tr>
+                    <th>Last Reachable</th>
+                    <td><span class="ioc-term" ioc-term="ArpEntryItem/LastReachable"><xsl:value-of select="LastReachable"/></span></td>
+                </tr>
+                <tr>
+                    <th>Last Unreachable</th>
+                    <td><span class="ioc-term" ioc-term="ArpEntryItem/LastUnreachable"><xsl:value-of select="LastUnreachable"/></span></td>
+                </tr>
+            </table>
+        </div>
+    </xsl:template>
+
+</xsl:stylesheet>
