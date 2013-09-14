@@ -306,11 +306,9 @@
     <table style="width: 100%">
         <tr>
             <td style="width: 80%">
-                <a href="/sf/host/<%= hash %>/">
-                    <span style="font-weight: bold">
-                        <%= cluster.engagement.client.name %>: <%= domain %> / <%= hostname %>
-                    </span>
-                </a>
+                <span class="uac-header">
+                    <a href="/sf/host/<%= hash %>/"><%= cluster.engagement.client.name %>: <%= domain %> / <%= hostname %></a>
+                </span>
             </td>
             <td>
                 <%= ip %>

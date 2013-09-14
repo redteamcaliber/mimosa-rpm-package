@@ -1,148 +1,145 @@
 {% set fileitem = content.fileitem %}
 <div id="file-item" class="collapsable-header" title="<i class='icon-file'></i> File/Item">
 
-<div class="xslt-contents" xslt-title="File Item Info">
-    <h4>File Item Info</h4>
-    <table width="100%" class="table table-condensed table-bordered">
-        <tr>
-            <th colspan="2" rowspan="1">Full Path</th>
-            <th colspan="1" rowspan="1">Device Path</th>
-            <th colspan="1" rowspan="1">File Attributes</th>
-        </tr>
-        <tr>
-            <td colspan="2" rowspan="1">
-                <span class="ioc-term" ioc-term="FileItem/FullPath">
-                    {{ fileitem.fullpath }}
-                </span>
-            </td>
-            <td colspan="1" rowspan="1">
-                <span class="ioc-term" ioc-term="FileItem/DevicePath">
-                    {{ fileitem.devicepath }}
-                </span>
-            </td>
-            <td colspan="1" rowspan="1">
-                <span class="ioc-term" ioc-term="FileItem/FileAttributes">
-                    {{ fileitem.fileattributes }}
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <th>Size</th>
-            <th colspan="2" rowspan="1">MD5</th>
-            <th>Owner</th>
-        </tr>
-        <tr>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/SizeInBytes">
-                    {{ fileitem.sizeinbytes }}
-                </span>
-            </td>
-            <td colspan="2" rowspan="1">
-                <span class="ioc-term" ioc-term="FileItem/Md5sum">
-                    {{ fileitem.md5sum }}
-                </span>
-            </td>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/Username">
-                    {{ fileitem.username }}
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <th>Created</th>
-            <th>Accessed</th>
-            <th>Modified</th>
-            <th>Changed</th>
-        </tr>
-        <tr>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/Created">
-                    {{ fileitem.created }}
-                </span>
-            </td>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/Accessed">
-                    {{ fileitem.accessed }}
-                </span>
-            </td>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/Modified">
-                    {{ fileitem.modified }}
-                </span>
-            </td>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/Changed">
-                    {{ fileitem.changed }}
-                </span>
-            </td>
-        </tr>
-        {% if fileitem.filenamecreated %}
-        <tr>
-            <th>Filename Created</th>
-            <th>Filename Accessed</th>
-            <th>Filename Modified</th>
-            <th>Filename Changed</th>
-        </tr>
-        <tr>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/FilenameCreated">
-                    {{ fileitem.filenamecreated }}
-                </span>
-            </td>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/FilenameAccessed">
-                    {{ fileitem.filename.accessed }}
-                </span>
-            </td>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/FilenameModified">
-                    {{ fileitem.filenamemodified }}
-                </span>
-            </td>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/FilenameChanged">
-                    {{ fileitem.filenamechanged }}
-                </span>
-            </td>
-        </tr>
-        {% endif %}
-    </table>
-</div>
+<h4>File Item Info</h4>
+<table width="100%" class="table table-condensed table-bordered">
+    <tr>
+        <th colspan="2" rowspan="1">Full Path</th>
+        <th colspan="1" rowspan="1">Device Path</th>
+        <th colspan="1" rowspan="1">File Attributes</th>
+    </tr>
+    <tr>
+        <td colspan="2" rowspan="1">
+            <span class="ioc-term" ioc-term="FileItem/FullPath">
+                {{ fileitem.fullpath }}
+            </span>
+        </td>
+        <td colspan="1" rowspan="1">
+            <span class="ioc-term" ioc-term="FileItem/DevicePath">
+                {{ fileitem.devicepath }}
+            </span>
+        </td>
+        <td colspan="1" rowspan="1">
+            <span class="ioc-term" ioc-term="FileItem/FileAttributes">
+                {{ fileitem.fileattributes }}
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <th>Size</th>
+        <th colspan="2" rowspan="1">MD5</th>
+        <th>Owner</th>
+    </tr>
+    <tr>
+        <td>
+            <span class="ioc-term" ioc-term="FileItem/SizeInBytes">
+                {{ fileitem.sizeinbytes }}
+            </span>
+        </td>
+        <td colspan="2" rowspan="1">
+            <span class="ioc-term" ioc-term="FileItem/Md5sum">
+                {{ fileitem.md5sum }}
+            </span>
+        </td>
+        <td>
+            <span class="ioc-term" ioc-term="FileItem/Username">
+                {{ fileitem.username }}
+            </span>
+        </td>
+    </tr>
+    <tr>
+        <th>Created</th>
+        <th>Accessed</th>
+        <th>Modified</th>
+        <th>Changed</th>
+    </tr>
+    <tr>
+        <td>
+            <span class="ioc-term" ioc-term="FileItem/Created">
+                {{ fileitem.created }}
+            </span>
+        </td>
+        <td>
+            <span class="ioc-term" ioc-term="FileItem/Accessed">
+                {{ fileitem.accessed }}
+            </span>
+        </td>
+        <td>
+            <span class="ioc-term" ioc-term="FileItem/Modified">
+                {{ fileitem.modified }}
+            </span>
+        </td>
+        <td>
+            <span class="ioc-term" ioc-term="FileItem/Changed">
+                {{ fileitem.changed }}
+            </span>
+        </td>
+    </tr>
+    {% if fileitem.filenamecreated %}
+    <tr>
+        <th>Filename Created</th>
+        <th>Filename Accessed</th>
+        <th>Filename Modified</th>
+        <th>Filename Changed</th>
+    </tr>
+    <tr>
+        <td>
+            <span class="ioc-term" ioc-term="FileItem/FilenameCreated">
+                {{ fileitem.filenamecreated }}
+            </span>
+        </td>
+        <td>
+            <span class="ioc-term" ioc-term="FileItem/FilenameAccessed">
+                {{ fileitem.filename.accessed }}
+            </span>
+        </td>
+        <td>
+            <span class="ioc-term" ioc-term="FileItem/FilenameModified">
+                {{ fileitem.filenamemodified }}
+            </span>
+        </td>
+        <td>
+            <span class="ioc-term" ioc-term="FileItem/FilenameChanged">
+                {{ fileitem.filenamechanged }}
+            </span>
+        </td>
+    </tr>
+    {% endif %}
+</table>
 
 {% if fileitem.peinfo %}
     {% set peinfo = fileitem.peinfo %}
-<div class="xslt-contents" xslt-title="PE Header Information">
-<h4>PE Header Information</h4>
-<table class="table table-condensed table-bordered" width="100%">
-    <tr>
-        <th>PE Type</th>
-        <th>Compile Time</th>
-        <th>Subsystem</th>
-        <th>Base Address</th>
-    </tr>
-    <tr>
-        <td>
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/Type">
-                {{ peinfo.type }}
-            </span>
-        </td>
-        <td>
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/PETimeStamp">
-                {{ peinfo.petimestamp }}
-            </span>
-        </td>
-        <td>
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/Subsystem">
-                {{ peinfo.subsystem }}
-            </span>
-        </td>
-        <td>
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/BaseAddress">
-                {{ peinfo.baseaddress }}
-            </span>
-        </td>
-    </tr>
-</table>
+    <h4>PE Header Information</h4>
+    <table class="table table-condensed table-bordered" width="100%">
+        <tr>
+            <th>PE Type</th>
+            <th>Compile Time</th>
+            <th>Subsystem</th>
+            <th>Base Address</th>
+        </tr>
+        <tr>
+            <td>
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/Type">
+                    {{ peinfo.type }}
+                </span>
+            </td>
+            <td>
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/PETimeStamp">
+                    {{ peinfo.petimestamp }}
+                </span>
+            </td>
+            <td>
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/Subsystem">
+                    {{ peinfo.subsystem }}
+                </span>
+            </td>
+            <td>
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/BaseAddress">
+                    {{ peinfo.baseaddress }}
+                </span>
+            </td>
+        </tr>
+    </table>
 <table class="table table-condensed table-bordered" width="100%">
     <tr>
         <th>Checksum Raw</th>
@@ -290,45 +287,11 @@
         </tr>
     {% endfor %}
 </table>
-<br/>
-
-<div id="exported-functions-div" class="collapsable collapsed" title="Exported Functions">
-    <ul>
-        {% for s in get_list(peinfo.exports.exportedfunctions.string) %}
-            <li>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/Exports/ExportedFunctions/string">{{ s }}</span>
-            </li>
-        {% endfor %}
-    </ul>
-</div>
-
-
-<div id="imported-functions-div" class="collapsable collapsed" title="Imported Functions">
-    {% for module in peinfo.importedmodules.module %}
-        <li>
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/ImportedModules/Name">
-                {{ module.name }}
-            </span>
-
-            {% if module.importedfunctions.string %}
-                <ul>
-                    {% for s in get_list(module.importedfunctions.string) %}
-                    <li>
-                        <span class="ioc-term" ioc-term="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string">
-                            {{ s }}
-                        </span>
-                    </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        </li>
-    {% endfor %}
-</div>
 
 {% if peinfo.versioninfolist.versioninfoitem %}
     {% set versioninfoitem = peinfo.versioninfolist.versioninfoitem %}
-    <br/>
-    <table class="table table-condensed table-bordered">
+    <h4>Version Info</h4>
+    <table class="table table-condensed">
         <tr>
             <th>Language</th>
             <td>
@@ -414,11 +377,45 @@
         </tr>
     </table>
 {% endif %}
+
+<br/>
+
+<div id="exported-functions-div" class="collapsable collapsed" title="Exported Functions">
+    <ul>
+        {% for s in get_list(peinfo.exports.exportedfunctions.string) %}
+        <li>
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/Exports/ExportedFunctions/string">{{ s }}</span>
+        </li>
+        {% endfor %}
+    </ul>
 </div>
+
+<div id="imported-functions-div" class="collapsable collapsed" title="Imported Functions">
+    {% for module in peinfo.importedmodules.module %}
+    <li>
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/ImportedModules/Name">
+                {{ module.name }}
+            </span>
+
+        {% if module.importedfunctions.string %}
+        <ul>
+            {% for s in get_list(module.importedfunctions.string) %}
+            <li>
+                        <span class="ioc-term" ioc-term="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string">
+                            {{ s }}
+                        </span>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </li>
+    {% endfor %}
+</div>
+
 {% endif %}<!-- end fileitem.peinfo -->
 
 {% if fileitem.stringlist.string %}
-    <div class="xslt-contents" xslt-title="Strings">
+    <div class="collapsable collapsed" title="Strings">
         <ul>
             <li>
                 <div class="outline">
@@ -435,7 +432,7 @@
 {% endif %}
 
 {% if fileitem.streamlist.stream %}
-    <div class="xslt-contents" xslt-title="Streams">
+    <div class="collapsable collapsed" title="Streams">
         <ul>
             <li>
                 <table width="100%" class="table table-condensed table-bordered">
