@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsl:stylesheet version="1.0"
+                xmlns:atom="http://www.w3.org/2005/Atom"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+                xmlns:user="urn:userscripts"
+                xmlns:mir="urn:mandiant-intelligent-response"
+        >
+    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
+    <xsl:output method="html" />
+
+
+
+
+    <!-- ############################################################### -->
+    <xsl:template match="/FormHistoryItem">
+
+        <div class="xslt-contents" xslt-title="Form History Info">
+            <table     width="95%">
+                <tr>
+                    <th>Browser Name</th>
+                    <td><xsl:value-of select="BrowserName"/></td>
+                </tr>
+                <tr>
+                    <th>Browser Version</th>
+                    <td><xsl:value-of select="BrowserVersion"/></td>
+                </tr>
+                <tr>
+                    <th>User Name</th>
+                    <td><xsl:value-of select="Username"/></td>
+                </tr>
+                <tr>
+                    <th>Profile</th>
+                    <td><xsl:value-of select="Profile"/></td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td><xsl:value-of select="FormType"/></td>
+                </tr>
+                <tr>
+                    <th>Field Name</th>
+                    <td><xsl:value-of select="FormFieldName"/></td>
+                </tr>
+                <tr>
+                    <th>Field Value</th>
+                    <td><xsl:value-of select="FormFieldValue"/></td>
+                </tr>
+                <tr>
+                    <th>Username Field Name</th>
+                    <td><xsl:value-of select="UsernameFieldName"/></td>
+                </tr>
+                <tr>
+                    <th>Password Field Name</th>
+                    <td><xsl:value-of select="PasswordFieldName"/></td>
+                </tr>
+                <tr>
+                    <th>Host Name</th>
+                    <td><xsl:value-of select="HostName"/></td>
+                </tr>
+                <tr>
+                    <th>HTTPS Realm</th>
+                    <td><xsl:value-of select="HttpRealm"/></td>
+                </tr>
+                <tr>
+                    <th>Submit URL</th>
+                    <td><xsl:value-of select="FormSubmitURL"/></td>
+                </tr>
+                <tr>
+                    <th>Username Field Value</th>
+                    <td><xsl:value-of select="UsernameFieldValue"/></td>
+                </tr>
+                <tr>
+                    <th>Password Field Value</th>
+                    <td><xsl:value-of select="EncryptedPassword"/></td>
+                </tr>
+                <tr>
+                    <th>Encryption Type</th>
+                    <td><xsl:value-of select="EncryptionType"/></td>
+                </tr>
+                <tr>
+                    <th>First Used</th>
+                    <td><xsl:value-of select="FirstUsedDate"/></td>
+                </tr>
+                <tr>
+                    <th>Last USed</th>
+                    <td><xsl:value-of select="LastUsedDate"/></td>
+                </tr>
+                <tr>
+                    <th>Creation Date</th>
+                    <td><xsl:value-of select="CreationDate"/></td>
+                </tr>
+                <tr>
+                    <th>Number of Times Used</th>
+                    <td><xsl:value-of select="TimesUsed"/></td>
+                </tr>
+                <tr>
+                    <th>Encryption Application</th>
+                    <td><xsl:value-of select="Profile"/></td>
+                </tr>
+                <tr>
+                    <th>Encryption Application GUID</th>
+                    <td><xsl:value-of select="Guid"/></td>
+                </tr>
+
+            </table>
+        </div>
+    </xsl:template>
+
+</xsl:stylesheet>
