@@ -31,36 +31,30 @@
                 log.debug('Initializing hits view with defaults');
                 // The default route.
                 var router = this;
-                StrikeFinder.run(function () {
-                    router.hits_view = new StrikeFinder.HitsView();
-                    router.hits_view.fetch({
-                        checkout: false
-                    });
+                router.hits_view = new StrikeFinder.HitsView();
+                router.hits_view.fetch({
+                    checkout: false
                 });
             },
             init_by_expkey: function (services, clusters, expkey, checkout) {
                 log.debug(_.sprintf('Initializing hits view with expkey: %s', expkey));
                 var router = this;
-                StrikeFinder.run(function () {
-                    router.hits_view = new StrikeFinder.HitsView();
-                    router.hits_view.fetch({
-                        services: services,
-                        clusters: clusters,
-                        expkey: expkey,
-                        checkout: checkout});
-                });
+                router.hits_view = new StrikeFinder.HitsView();
+                router.hits_view.fetch({
+                    services: services,
+                    clusters: clusters,
+                    expkey: expkey,
+                    checkout: checkout});
             },
             init_by_iocnamehash: function (services, clusters, iocnamehash, checkout) {
                 log.debug(_.sprintf('Initializing hits view with iocnamehash: %s', iocnamehash));
                 var router = this;
-                StrikeFinder.run(function () {
-                    router.hits_view = new StrikeFinder.HitsView();
-                    router.hits_view.fetch({
-                        services: services,
-                        clusters: clusters,
-                        iocnamehash: iocnamehash,
-                        checkout: checkout});
-                });
+                router.hits_view = new StrikeFinder.HitsView();
+                router.hits_view.fetch({
+                    services: services,
+                    clusters: clusters,
+                    iocnamehash: iocnamehash,
+                    checkout: checkout});
             }
         });
         // Create the main router instance.

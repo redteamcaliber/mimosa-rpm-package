@@ -22,9 +22,7 @@ StrikeFinder.View = Backbone.View.extend({
         var view = this;
         var args = arguments;
         if (this.do_render !== undefined) {
-            StrikeFinder.run(function () {
-                view.do_render.apply(view, args);
-            });
+            view.do_render.apply(view, args);
         }
         return view;
     }
@@ -781,16 +779,14 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
     },
     on_delete: function (ev) {
         var view = this;
-        StrikeFinder.run(function () {
-            var message = _.sprintf('Delete suppression: %s', view.model.as_string());
-            if (confirm(message)) {
-                view.model.destroy({
-                    success: function () {
-                        view.trigger('delete', view.model);
-                    }
-                });
-            }
-        });
+        var message = _.sprintf('Delete suppression: %s', view.model.as_string());
+        if (confirm(message)) {
+            view.model.destroy({
+                success: function () {
+                    view.trigger('delete', view.model);
+                }
+            });
+        }
     },
     close: function () {
         log.debug('Closing row view...');
@@ -1072,7 +1068,6 @@ StrikeFinder.AgentHostView = StrikeFinder.View.extend({
         if (am_cert_hash) {
             view.model.id = am_cert_hash;
         }
-        StrikeFinder.blockpanel_ajax(this.$el);
         view.model.fetch({
             error: function (model, response, options) {
                 view.render_service_down();
@@ -1247,7 +1242,6 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
         if (rowitem_uuid) {
             this.collection.rowitem_uuid = rowitem_uuid;
         }
-        StrikeFinder.blockpanel_ajax(this.$el);
         this.collection.fetch();
     }
 });
@@ -1299,11 +1293,12 @@ StrikeFinder.AuditView = StrikeFinder.View.extend({
         return this;
     },
     fetch: function (rowitem_uuid) {
+        var view = this;
         if (rowitem_uuid) {
-            this.model.id = rowitem_uuid;
+            view.model.id = rowitem_uuid;
         }
-        StrikeFinder.blockpanel_ajax(this.$el);
-        this.model.fetch();
+
+        view.model.fetch();
     }
 });
 
@@ -1449,7 +1444,7 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
 
         try {
             // Immediately block to prevent multiple submissions.
-            StrikeFinder.block(form);
+            StrikeFinder.blockui_element(form);
 
             // Update the model with the form data.
             view.model.set('tagname', view.$("#tagname").val());
@@ -1486,43 +1481,44 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
                 });
                 return; // **EXIT**
             }
-
-            view.model.save({}, {
-                success: function (model, response, options) {
-                    // Get the tag count.
-                    var count = response.count;
-                    log.debug(JSON.stringify(view.model.attributes));
-
-                    if (count <= 0) {
-                        // Nothing to tag.
-                        alert('Your request didn\'t match any hits, try again.');
-                        return // **EXIT**
-                    }
-
-                    if (window.confirm(_.sprintf('Mass tag %d items?', count))) {
-                        // Tag the rows.
-                        var newModel = new StrikeFinder.MassTagModel(view.model.attributes);
-                        newModel.set('perform_updates', true);
-                        newModel.save({}, {
-                            success: function (model, response) {
-                                // OK.
-                                count = response.count;
-
-                                view.$("#mass-tag-form").modal("hide");
-
-                                // Notify that a tags were created.
-                                view.trigger('create', newModel);
-
-                                StrikeFinder.display_success(_.sprintf('Successfully tagged %d items.', count));
-                            }
-                        })
-                    }
-                }
-            });
         }
         finally {
-            StrikeFinder.unblock(form);
+            StrikeFinder.unblockui(form);
         }
+
+        view.model.save({}, {
+            success: function (model, response, options) {
+                // Get the tag count.
+                var count = response.count;
+                log.debug(JSON.stringify(view.model.attributes));
+
+                if (count <= 0) {
+                    // Nothing to tag.
+                    alert('Your request didn\'t match any hits, try again.');
+                    return // **EXIT**
+                }
+
+                if (window.confirm(_.sprintf('Mass tag %d items?', count))) {
+                    // Tag the rows.
+                    var newModel = new StrikeFinder.MassTagModel(view.model.attributes);
+                    newModel.set('perform_updates', true);
+                    newModel.save({}, {
+                        success: function (model, response) {
+                            // OK.
+                            count = response.count;
+
+                            view.$("#mass-tag-form").modal("hide");
+
+                            // Notify that a tags were created.
+                            view.trigger('create', newModel);
+
+                            StrikeFinder.display_success(_.sprintf('Successfully tagged %d items.', count));
+                        }
+                    })
+                }
+            }
+        });
+
     },
     cancel: function () {
         this.$("#mass-tag-form").modal("hide");
@@ -1608,7 +1604,10 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
     },
     suppress: function () {
         var view = this;
-        StrikeFinder.run(function () {
+        var form = $('#suppression-form');
+        try {
+            StrikeFinder.blockui_element(form);
+
             // Update the model.
             view.model.set('comment', view.$("#comment").val());
             view.model.set('condition', view.$("#condition").val());
@@ -1634,21 +1633,24 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
             }
 
             view.$("#suppression-form").modal("hide");
+        }
+        finally {
+            StrikeFinder.unblockui(form);
+        }
 
-            view.model.save({}, {
-                success: function (model, response, options) {
-                    // Get te suppression count.
-                    var count = response['count'];
+        view.model.save({}, {
+            success: function (model, response, options) {
+                // Get te suppression count.
+                var count = response['count'];
 
-                    log.debug(JSON.stringify(view.model.attributes));
+                log.debug(JSON.stringify(view.model.attributes));
 
-                    var msg = _.sprintf('Successfully suppressed %d items for %s', count, view.model.as_string());
-                    StrikeFinder.display_success(msg);
+                var msg = _.sprintf('Successfully suppressed %d items for %s', count, view.model.as_string());
+                StrikeFinder.display_success(msg);
 
-                    // Notify that a suppression was created.
-                    view.trigger('create', view.model);
-                }
-            });
+                // Notify that a suppression was created.
+                view.trigger('create', view.model);
+            }
         });
     },
     cancel: function () {
@@ -1736,7 +1738,7 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
 
         try {
             // Immediately block to prevent multiple submissions.
-            StrikeFinder.block(acquire_form);
+            StrikeFinder.blockui_element(acquire_form);
 
             view.model.set('file_path', view.$('#file_path').val());
             view.model.set('file_name', view.$('#file_name').val());
@@ -1757,29 +1759,11 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
         }
         finally {
             // Unblock before starting the AJAX call.
-            StrikeFinder.unblock(acquire_form);
+            StrikeFinder.unblockui(acquire_form);
         }
-
-        // Block the dialog during the AJAX call.
-        var unblock = function () {
-            StrikeFinder.unblock(acquire_form);
-        };
-        StrikeFinder.block_ajax(acquire_form, unblock, 'Processing...');
 
         view.model.save({}, {
             success: function (model, response, options) {
-
-                // Sample response.
-                //{"uuid": "...",
-                // "file_name": "rasauto.dll",
-                // "controller": "...",
-                // "agent": hash?,
-                // "file_path": "C:\\Windows\\System32",
-                // "cluster": "...",
-                // "state": "submitted",
-                // "ref": "/api/v1/acquisitio...",
-                // "method": "api"}
-
                 if (!response) {
                     StrikeFinder.error('Invalid response from server while submitting acquisition.');
                     return; // **EXIT**
@@ -1875,11 +1859,13 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
         return this;
     },
     fetch: function (rowitem_uuid) {
+        var view = this;
+
         if (rowitem_uuid) {
-            this.collection.rowitem_uuid = rowitem_uuid;
+            view.collection.rowitem_uuid = rowitem_uuid;
         }
-        StrikeFinder.blockpanel_ajax(this.$el);
-        this.collection.fetch();
+
+        view.collection.fetch();
     },
     hide: function () {
         // Hide the collapsable decorator.
@@ -1891,30 +1877,28 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
     },
     add_comment: function () {
         var view = this;
-        StrikeFinder.run(function () {
-            var comment = view.$("#comment").val();
-            if (!comment || comment.trim() == "") {
-                log.warn('No comment value found.');
-                return;
+        var comment = view.$("#comment").val();
+        if (!comment || comment.trim() == "") {
+            log.warn('No comment value found.');
+            return;
+        }
+
+        var rowitem_uuid = view.collection.rowitem_uuid;
+        log.debug("Creating comment for rowitem_uuid: " + rowitem_uuid);
+
+        var new_comment = new StrikeFinder.CommentsModel({
+            comment: comment,
+            rowitem_uuid: rowitem_uuid
+        });
+
+        log.debug('Comment rowitem_uuid: ' + new_comment.get('rowitem_uuid'))
+
+        new_comment.save([], {
+            async: false,
+            success: function (model, response, options) {
+                $("#comment").val("");
+                view.collection.fetch();
             }
-
-            var rowitem_uuid = view.collection.rowitem_uuid;
-            log.debug("Creating comment for rowitem_uuid: " + rowitem_uuid);
-
-            var new_comment = new StrikeFinder.CommentsModel({
-                comment: comment,
-                rowitem_uuid: rowitem_uuid
-            });
-
-            log.debug('Comment rowitem_uuid: ' + new_comment.get('rowitem_uuid'))
-
-            new_comment.save([], {
-                async: false,
-                success: function (model, response, options) {
-                    $("#comment").val("");
-                    view.collection.fetch();
-                }
-            });
         });
     },
     on_keyup: function (ev) {
@@ -1961,24 +1945,22 @@ StrikeFinder.TagView = StrikeFinder.View.extend({
     },
     on_click: function (ev) {
         var view = this;
-        StrikeFinder.run(function () {
-            var tagname = $(ev.currentTarget).attr('name');
+        var tagname = $(ev.currentTarget).attr('name');
 
-            log.debug(_.sprintf('Setting tag: %s on rowitem_uuid: %s', tagname, view.rowitem_uuid));
+        log.debug(_.sprintf('Setting tag: %s on rowitem_uuid: %s', tagname, view.rowitem_uuid));
 
-            var tag_model = new StrikeFinder.SetTagModel({
-                rowitem_uuid: view.rowitem_uuid,
-                tagname: tagname
-            });
-            tag_model.save({}, {
-                async: false,
-                success: function () {
-                    log.debug(_.sprintf('Applied tag: %s to rowitem_uuid: %s', tagname, view.rowitem_uuid));
+        var tag_model = new StrikeFinder.SetTagModel({
+            rowitem_uuid: view.rowitem_uuid,
+            tagname: tagname
+        });
+        tag_model.save({}, {
+            async: false,
+            success: function () {
+                log.debug(_.sprintf('Applied tag: %s to rowitem_uuid: %s', tagname, view.rowitem_uuid));
 
-                    StrikeFinder.display_success('Successfully applied tag: ' + tagname);
-                    view.trigger('create', view.rowitem_uuid, tagname);
-                }
-            });
+                StrikeFinder.display_success('Successfully applied tag: ' + tagname);
+                view.trigger('create', view.rowitem_uuid, tagname);
+            }
         });
     },
     fetch: function (rowitem_uuid) {
@@ -2128,57 +2110,51 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
     },
     render_summaries: function () {
         var view = this;
-        StrikeFinder.run(function () {
-            view.ioc_details_view.hide();
-            if (view.model.is_required_params_set()) {
-                $('#ioc-summary-div').fadeIn().show();
-                var params = {
-                    services: view.model.get('services').join(','),
-                    clusters: view.model.get('clusters').join(',')
-                };
-                view.ioc_summaries_view.fetch({
-                    data: params
-                });
-            }
-            else {
-                $("#ioc-summary-div").fadeOut().hide();
-            }
-        });
+        view.ioc_details_view.hide();
+        if (view.model.is_required_params_set()) {
+            $('#ioc-summary-div').fadeIn().show();
+            var params = {
+                services: view.model.get('services').join(','),
+                clusters: view.model.get('clusters').join(',')
+            };
+            view.ioc_summaries_view.fetch({
+                data: params
+            });
+        }
+        else {
+            $("#ioc-summary-div").fadeOut().hide();
+        }
     },
     render_details: function () {
         var view = this;
-        StrikeFinder.run(function () {
-            if (view.model.is_required_params_set()) {
-                view.ioc_details_view.show();
-                view.ioc_details_view.options['legend'] = view.model.get('iocname');
-                var params = {
-                    services: view.model.get('services').join(','),
-                    clusters: view.model.get('clusters').join(','),
-                    iocnamehash: view.model.get('iocnamehash')
-                };
-                view.ioc_details_view.fetch(params);
-                window.location = '#top';
-            }
-        });
+        if (view.model.is_required_params_set()) {
+            view.ioc_details_view.show();
+            view.ioc_details_view.options['legend'] = view.model.get('iocname');
+            var params = {
+                services: view.model.get('services').join(','),
+                clusters: view.model.get('clusters').join(','),
+                iocnamehash: view.model.get('iocnamehash')
+            };
+            view.ioc_details_view.fetch(params);
+            window.location = '#top';
+        }
     },
     render_hits: function (params) {
         var view = this;
 
-        StrikeFinder.run(function () {
-            if (!view.hits_view) {
-                view.hits_view = new StrikeFinder.HitsView({
-                    el: '#hits-view-div'
-                });
-            }
+        if (!view.hits_view) {
+            view.hits_view = new StrikeFinder.HitsView({
+                el: '#hits-view-div'
+            });
+        }
 
-            view.hits_view.fetch(params);
+        view.hits_view.fetch(params);
 
-            if (view.shopping_collapsable) {
-                view.shopping_collapsable.toggle();
-            }
+        if (view.shopping_collapsable) {
+            view.shopping_collapsable.toggle();
+        }
 
-            view.hits_view.show();
-        });
+        view.hits_view.show();
     }
 });
 
@@ -2294,30 +2270,28 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
     },
     fetch_callback: function () {
         var view = this;
-        StrikeFinder.run(function () {
-            // Update the hits details view with the current selected expression.
-            view.hits_details_view.exp_key = view.params.exp_key;
+        // Update the hits details view with the current selected expression.
+        view.hits_details_view.exp_key = view.params.exp_key;
 
-            if (view.params.usertoken) {
-                var usertoken_params = {
-                    usertoken: view.params.usertoken
-                };
-                log.debug('Fetching hits with params: ' + JSON.stringify(usertoken_params));
-                view.hits_table_view.fetch(usertoken_params);
-            }
-            else {
-                var exp_key_params = {
-                    services: view.params.services,
-                    clusters: view.params.clusters,
-                    exp_key: view.params.exp_key
-                };
-                log.debug('Fetching hits with params: ' + JSON.stringify(exp_key_params));
-                view.hits_table_view.fetch(exp_key_params);
-            }
+        if (view.params.usertoken) {
+            var usertoken_params = {
+                usertoken: view.params.usertoken
+            };
+            log.debug('Fetching hits with params: ' + JSON.stringify(usertoken_params));
+            view.hits_table_view.fetch(usertoken_params);
+        }
+        else {
+            var exp_key_params = {
+                services: view.params.services,
+                clusters: view.params.clusters,
+                exp_key: view.params.exp_key
+            };
+            log.debug('Fetching hits with params: ' + JSON.stringify(exp_key_params));
+            view.hits_table_view.fetch(exp_key_params);
+        }
 
-            // Refresh the hits view based on the current expression.
-            view.suppressions_table.fetch(view.params.exp_key);
-        });
+        // Refresh the hits view based on the current expression.
+        view.suppressions_table.fetch(view.params.exp_key);
     }
 });
 
@@ -2356,7 +2330,6 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
     },
     fetch: function (am_cert_hash) {
         this.collection.am_cert_hash = am_cert_hash;
-        StrikeFinder.blockui_ajax();
         this.collection.fetch();
     }
 });
@@ -2402,140 +2375,138 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
         // Capture the current row on the view instance.
         view.row = data;
 
-        StrikeFinder.run(function () {
-            log.debug('Hits row selected: ' + JSON.stringify(data));
+        log.debug('Hits row selected: ' + JSON.stringify(data));
 
-            view.run_once('init_details', function () {
-                if (view.el.id) { // TODO: This shouldn't need to check the id, check the el instead.
-                    // If an element is defined then write out the default details template.
-                    view.$el.html(_.template($('#hits-details-template').html()));
-                }
+        view.run_once('init_details', function () {
+            if (view.el.id) { // TODO: This shouldn't need to check the id, check the el instead.
+                // If an element is defined then write out the default details template.
+                view.$el.html(_.template($('#hits-details-template').html()));
+            }
 
-                //
-                // Initialize the details components.
+            //
+            // Initialize the details components.
 
-                // Prev/next controls.
-                view.prev_next_view = new StrikeFinder.TableViewControls({
-                    el: '#prev-next-div',
-                    table: view.hits_table_view
-                });
-                view.prev_next_view.render();
+            // Prev/next controls.
+            view.prev_next_view = new StrikeFinder.TableViewControls({
+                el: '#prev-next-div',
+                table: view.hits_table_view
+            });
+            view.prev_next_view.render();
 
-                // Agent host view.
-                view.agenthost_view = new StrikeFinder.AgentHostView({
-                    el: '#agent-host-div'
-                });
-
-                // IOC tabs view.
-                view.ioc_tabs_view = new StrikeFinder.IOCTabsView({
-                    el: '#iocs-div'
-                });
-
-                // File info view.
-                view.file_info_view = new StrikeFinder.AuditView({
-                    el: $("#audit-div")
-                });
-
-                // Suppression form.
-                view.suppression_form_view = new StrikeFinder.SuppressionFormView({
-                    el: $("#dialog-div")
-                });
-                view.listenTo(view.suppression_form_view, 'create', function (model) {
-                    view.trigger('create:suppression', view.row, model);
-                });
-
-                // Acquire form.
-                view.acquire_form_view = new StrikeFinder.AcquireFormView({
-                    el: '#dialog-div'
-                });
-                view.listenTo(view.acquire_form_view, 'create', function (model) {
-                    // After an acquisition the row tag should be investigating.
-                    view.trigger('create:acquire', view.row, model);
-                });
-
-                // Mass tag form.
-                view.mass_tag_form = new StrikeFinder.MassTagFormView({
-                    el: '#dialog-div'
-                });
-                view.listenTo(view.mass_tag_form, 'create', function (model) {
-                    view.trigger('create:masstag', view.row, model);
-                });
-
-                // Context menu.
-                view.context_menu = new StrikeFinder.AuditContextMenuView({
-                    el: $("#context-menu-div"),
-                    source: "#audit-div",
-                    suppress: view.options.suppress,
-                    acquire: view.options.acquire,
-                    masstag: view.options.masstag
-                });
-                view.listenTo(view.context_menu, 'suppress', function (selection) {
-                    log.debug(_.sprintf('Creating suppression for text: %s and rowitem_type: %s',
-                        selection, data.rowitem_type));
-
-                    // Display the suppression form.
-                    view.suppression_form_view.render({
-                        item_value: selection,
-                        rowitem_type: view.row.rowitem_type,
-                        exp_key: view.exp_key,
-                        cluster_uuid: view.row.cluster_uuid
-                    });
-                });
-                view.listenTo(view.context_menu, 'acquire', function (selection) {
-                    var agent_host_data = view.agenthost_view.attributes();
-                    var ss_cluster_uuid = null;
-                    if (agent_host_data && agent_host_data.cluster && agent_host_data.cluster.uuid) {
-                        ss_cluster_uuid = agent_host_data.cluster.uuid;
-                    }
-
-                    if (ss_cluster_uuid) {
-                        view.acquire_form_view.render({
-                            selection: selection,
-                            am_cert_hash: view.row.am_cert_hash,
-                            cluster_uuid: ss_cluster_uuid,
-                            cluster_name: view.row.cluster_name,
-                            rowitem_uuid: view.row.uuid
-                        });
-                    }
-                    else {
-                        // Error
-                        StrikeFinder.display_error('Unable to submit acquisition, check Seasick status.');
-                    }
-                });
-                view.listenTo(view.context_menu, 'tag', function (selection) {
-                    var agent_host_data = view.agenthost_view.attributes();
-                    view.mass_tag_form.render({
-                        item_value: selection,
-                        exp_key: view.exp_key,
-                        am_cert_hash: view.row.am_cert_hash,
-                        cluster_uuid: view.row.cluster_uuid,
-                        rowitem_uuid: view.row.rowitem_uuid,
-                        rowitem_type: view.row.rowitem_type
-                    });
-                });
-
-                // Comments view.
-                view.comments_view = new StrikeFinder.CommentsView({
-                    el: '#comments-div'
-                });
-
-                if (!'tag' in view.options || view.options.tag !== false) {
-                    // Display the tags view unless explicitly disabled.
-                    view.tags = new StrikeFinder.TagCollection();
-                    view.tags_view = new StrikeFinder.TagView({
-                        el: '#tags-div',
-                        collection: view.tags
-                    });
-                    view.tags.reset(StrikeFinder.tags);
-                    view.listenTo(view.tags_view, 'create', function (rowitem_uuid, tagname) {
-                        // Trigger an event when a new tag has been created.
-                        view.trigger('create:tag', view.row, tagname);
-                    });
-                }
+            // Agent host view.
+            view.agenthost_view = new StrikeFinder.AgentHostView({
+                el: '#agent-host-div'
             });
 
-            view.fetch();
+            // IOC tabs view.
+            view.ioc_tabs_view = new StrikeFinder.IOCTabsView({
+                el: '#iocs-div'
+            });
+
+            // File info view.
+            view.file_info_view = new StrikeFinder.AuditView({
+                el: $("#audit-div")
+            });
+
+            // Suppression form.
+            view.suppression_form_view = new StrikeFinder.SuppressionFormView({
+                el: $("#dialog-div")
+            });
+            view.listenTo(view.suppression_form_view, 'create', function (model) {
+                view.trigger('create:suppression', view.row, model);
+            });
+
+            // Acquire form.
+            view.acquire_form_view = new StrikeFinder.AcquireFormView({
+                el: '#dialog-div'
+            });
+            view.listenTo(view.acquire_form_view, 'create', function (model) {
+                // After an acquisition the row tag should be investigating.
+                view.trigger('create:acquire', view.row, model);
+            });
+
+            // Mass tag form.
+            view.mass_tag_form = new StrikeFinder.MassTagFormView({
+                el: '#dialog-div'
+            });
+            view.listenTo(view.mass_tag_form, 'create', function (model) {
+                view.trigger('create:masstag', view.row, model);
+            });
+
+            // Context menu.
+            view.context_menu = new StrikeFinder.AuditContextMenuView({
+                el: $("#context-menu-div"),
+                source: "#audit-div",
+                suppress: view.options.suppress,
+                acquire: view.options.acquire,
+                masstag: view.options.masstag
+            });
+            view.listenTo(view.context_menu, 'suppress', function (selection) {
+                log.debug(_.sprintf('Creating suppression for text: %s and rowitem_type: %s',
+                    selection, data.rowitem_type));
+
+                // Display the suppression form.
+                view.suppression_form_view.render({
+                    item_value: selection,
+                    rowitem_type: view.row.rowitem_type,
+                    exp_key: view.exp_key,
+                    cluster_uuid: view.row.cluster_uuid
+                });
+            });
+            view.listenTo(view.context_menu, 'acquire', function (selection) {
+                var agent_host_data = view.agenthost_view.attributes();
+                var ss_cluster_uuid = null;
+                if (agent_host_data && agent_host_data.cluster && agent_host_data.cluster.uuid) {
+                    ss_cluster_uuid = agent_host_data.cluster.uuid;
+                }
+
+                if (ss_cluster_uuid) {
+                    view.acquire_form_view.render({
+                        selection: selection,
+                        am_cert_hash: view.row.am_cert_hash,
+                        cluster_uuid: ss_cluster_uuid,
+                        cluster_name: view.row.cluster_name,
+                        rowitem_uuid: view.row.uuid
+                    });
+                }
+                else {
+                    // Error
+                    StrikeFinder.display_error('Unable to submit acquisition, check Seasick status.');
+                }
+            });
+            view.listenTo(view.context_menu, 'tag', function (selection) {
+                var agent_host_data = view.agenthost_view.attributes();
+                view.mass_tag_form.render({
+                    item_value: selection,
+                    exp_key: view.exp_key,
+                    am_cert_hash: view.row.am_cert_hash,
+                    cluster_uuid: view.row.cluster_uuid,
+                    rowitem_uuid: view.row.rowitem_uuid,
+                    rowitem_type: view.row.rowitem_type
+                });
+            });
+
+            // Comments view.
+            view.comments_view = new StrikeFinder.CommentsView({
+                el: '#comments-div'
+            });
+
+            if (!'tag' in view.options || view.options.tag !== false) {
+                // Display the tags view unless explicitly disabled.
+                view.tags = new StrikeFinder.TagCollection();
+                view.tags_view = new StrikeFinder.TagView({
+                    el: '#tags-div',
+                    collection: view.tags
+                });
+                view.tags.reset(StrikeFinder.tags);
+                view.listenTo(view.tags_view, 'create', function (rowitem_uuid, tagname) {
+                    // Trigger an event when a new tag has been created.
+                    view.trigger('create:tag', view.row, tagname);
+                });
+            }
         });
+
+        view.fetch();
     },
     fetch: function () {
         var view = this;
@@ -2727,7 +2698,6 @@ StrikeFinder.AcquisitionsView = StrikeFinder.View.extend({
             // Update the model criteria when values change.
             view.clusters = clusters;
             if (view.clusters && view.clusters.length > 0) {
-                StrikeFinder.blockui_ajax();
                 view.acquisitions_table.render({server_params: {clusters: view.clusters}});
                 $('#results-div').fadeIn().show();
             }
@@ -2777,7 +2747,6 @@ StrikeFinder.AcquisitionsView = StrikeFinder.View.extend({
     },
     render_hits: function (data) {
         var view = this;
-        StrikeFinder.blockui_ajax();
         view.do_render_hits(data);
     }
 });

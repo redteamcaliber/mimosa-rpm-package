@@ -115,16 +115,13 @@
         fetch: function() {
             var view = this;
             view.hits_collapsable.set('title', view.tagname);
-            StrikeFinder.blockui_ajax();
             view.hits_table_view.fetch(view.tagname);
         }
     });
 
     $(document).ready(function () {
         (function () {
-            StrikeFinder.run(function () {
-                new StrikeFinder.HitsByTagView();
-            });
+            new StrikeFinder.HitsByTagView();
         })();
     });
 </script>

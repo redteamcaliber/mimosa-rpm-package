@@ -64,16 +64,12 @@
             },
             render_hits: function (data) {
                 var view = this;
-                StrikeFinder.run(function () {
-                    view.do_render_hits(data);
-                });
+                view.do_render_hits(data);
             }
         });
 
         (function () {
-            StrikeFinder.run(function () {
-                new StrikeFinder.SuppressionsAppView();
-            });
+            new StrikeFinder.SuppressionsAppView();
         })();
     });
 </script>

@@ -36,55 +36,33 @@ StrikeFinder.get_blockui_options = function (message) {
             border: "1px solid #822433",
             padding: '15px',
             color: "#822433",
-            opacity: .8,
+            opacity: .9,
             backgroundColor: "#ffffff"
         },
         overlayCSS: {
-            backgroundColor: "#ffffff",
-            opacity: .8
-        }
+            backgroundColor: '#ffffff',
+            opacity: .6
+        },
+        baseZ: 5000
     }
 };
 
-StrikeFinder.blockui = function (message) {
-    $.blockUI(StrikeFinder.get_blockui_options(message));
+StrikeFinder.blockui = function (ev) {
+    $.blockUI(StrikeFinder.get_blockui_options('Loading...'));
+    $('.blockOverlay').attr('title','Double click the overlay to unblock').dblclick($.unblockUI);
 };
 
-StrikeFinder.blockui_ajax = function (message) {
-    StrikeFinder.blockui(message);
-    $(document).ajaxStop($.unblockUI);
+StrikeFinder.blockui_element = function(el) {
+    el.block(StrikeFinder.get_blockui_options(null));
 };
 
-StrikeFinder.unblockui = function () {
-    $.unblockUI();
-};
-
-StrikeFinder.block = function (el, message) {
-    el.block(StrikeFinder.get_blockui_options(message));
-};
-
-/**
- * Display a panel overlay with no message.
- * @param el - the element to block.
- * @param unblock_function - function callback after unblock.
- */
-StrikeFinder.blockpanel_ajax = function(el, unblock_function) {
-    StrikeFinder.block_ajax(el, unblock_function, null);
-};
-
-/**
- * Block a specific element.
- * @param el - the element to block.
- * @param unblock_function - the function to call when unblocked.
- * @param message - optional message.
- */
-StrikeFinder.block_ajax = function (el, unblock_function, message) {
-    StrikeFinder.block(el, message);
-    $(document).ajaxStop(unblock_function);
-};
-
-StrikeFinder.unblock = function (el) {
-    el.unblock();
+StrikeFinder.unblockui = function(el) {
+    if (el) {
+        el.unblock();
+    }
+    else {
+        $.unblockUI();
+    }
 };
 
 StrikeFinder.run = function (fn) {
@@ -170,6 +148,8 @@ Backbone.sync = function (method, model, options) {
  * Required to make jQuery drop the subscripts off of array parameters.
  */
 jQuery.ajaxSettings.traditional = true;
+
+$(document).ajaxStart(StrikeFinder.blockui).ajaxStop($.unblockUI);
 
 $(document).ajaxError(function (collection, response, options) {
 
