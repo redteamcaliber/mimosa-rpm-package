@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsl:stylesheet version="1.0"
+                xmlns:atom="http://www.w3.org/2005/Atom"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+                xmlns:user="urn:userscripts"
+                xmlns:mir="urn:mandiant-intelligent-response"
+        >
+<!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
+<xsl:output method="html" />
+<xsl:template match="/DnsEntryItem">
+<div class="xslt-contents" xslt-title="DNS Information">
+    <table     width="95%">
+        <tr>
+            <th>Host</th>
+            <td><xsl:value-of select="Host"/></td>
+        </tr>
+        <tr>
+            <th>Record Name</th>
+            <td><xsl:value-of select="RecordName"/></td>
+        </tr>
+        <tr>
+            <th>Record Type</th>
+            <td><xsl:value-of select="RecordType"/></td>
+        </tr>
+        <tr>
+            <th>Time to Live</th>
+            <td><xsl:value-of select="TimeToLive"/></td>
+        </tr>
+        <tr>
+            <th>Flags</th>
+            <td><xsl:value-of select="Flags"/></td>
+        </tr>
+        <tr>
+            <th>Data Length</th>
+            <td><xsl:value-of select="DataLength"/></td>
+        </tr>
+    </table>
+</div>
+<div class="xslt-contents" xslt-title="Record Data">
+<table     width="95%">
+<xsl:if test="RecordData/Host">
+    <tr>
+        <th>Host</th>
+        <td ><xsl:value-of select="RecordData/Host"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/IPv4Address">
+    <tr>
+        <th>IPv4 Address</th>
+        <td ><xsl:value-of select="RecordData/IPv4Address"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/PrimaryServerName">
+    <tr>
+        <th>Primary Server Name</th>
+        <td ><xsl:value-of select="RecordData/PrimaryServerName"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/foo">
+    <tr>
+        <th>foo</th>
+        <td ><xsl:value-of select="RecordData/AdministratorName"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/AdministratorName">
+    <tr>
+        <th>Administrator Name</th>
+        <td ><xsl:value-of select="RecordData/SerialNumber"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Refresh">
+    <tr>
+        <th>Refresh</th>
+        <td ><xsl:value-of select="RecordData/Refresh"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Retry">
+    <tr>
+        <th>Retry</th>
+        <td ><xsl:value-of select="RecordData/Retry"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Expire">
+    <tr>
+        <th>Expire</th>
+        <td ><xsl:value-of select="RecordData/Expire"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/DefaultTimeToLive">
+    <tr>
+        <th>Default Time To Live</th>
+        <td ><xsl:value-of select="RecordData/DefaultTimeToLive"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/MailboxName">
+    <tr>
+        <th>Mailbox Name</th>
+        <td ><xsl:value-of select="RecordData/MailboxName"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/MailboxErrorsName">
+    <tr>
+        <th>Mailbox Errors Name</th>
+        <td ><xsl:value-of select="RecordData/MailboxErrorsName"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/MxHost">
+    <tr>
+        <th>Mx Host</th>
+        <td ><xsl:value-of select="RecordData/MxHost"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Preference">
+    <tr>
+        <th>Preference</th>
+        <td ><xsl:value-of select="RecordData/Preference"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/String">
+    <tr>
+        <th>String</th>
+        <td ><xsl:value-of select="RecordData/String"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Blob">
+    <tr>
+        <th>Blob</th>
+        <td ><xsl:value-of select="RecordData/Blob"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Bitmask">
+    <tr>
+        <th>Bitmask</th>
+        <td ><xsl:value-of select="RecordData/Bitmask"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/IPv6Address">
+    <tr>
+        <th>IPv6 Address</th>
+        <td ><xsl:value-of select="RecordData/IPv6Address"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Algorithm">
+    <tr>
+        <th>Algorithm</th>
+        <td ><xsl:value-of select="RecordData/Algorithm"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Protocol">
+    <tr>
+        <th>Protocol</th>
+        <td ><xsl:value-of select="RecordData/Protocol"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/KeyFlags">
+    <tr>
+        <th>Key Flags</th>
+        <td ><xsl:value-of select="RecordData/KeyFlags"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Signer">
+    <tr>
+        <th>Signer</th>
+        <td ><xsl:value-of select="RecordData/Signer"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/TypeCovered">
+    <tr>
+        <th>Type Covered</th>
+        <td ><xsl:value-of select="RecordData/TypeCovered"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/LabelCount">
+    <tr>
+        <th>Label Count</th>
+        <td ><xsl:value-of select="RecordData/LabelCount"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/OriginalTimeToLive">
+    <tr>
+        <th>Original Time To Live</th>
+        <td ><xsl:value-of select="RecordData/OriginalTimeToLive"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/ExpirationDate">
+    <tr>
+        <th>ExpirationDate</th>
+        <td ><xsl:value-of select="RecordData/ExpirationDate"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/DateSigned">
+    <tr>
+        <th>Date Signed</th>
+        <td ><xsl:value-of select="RecordData/DateSigned"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/KeyTag">
+    <tr>
+        <th>Key Tag</th>
+        <td ><xsl:value-of select="RecordData/KeyTag"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/AddressType">
+    <tr>
+        <th>Address Type</th>
+        <td ><xsl:value-of select="RecordData/AddressType"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/ATMAddress">
+    <tr>
+        <th>ATM Address</th>
+        <td ><xsl:value-of select="RecordData/ATMAddress"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/NextHost">
+    <tr>
+        <th>Next Host</th>
+        <td ><xsl:value-of select="RecordData/NextHost"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Type">
+    <tr>
+        <th>Type</th>
+        <td ><xsl:value-of select="RecordData/Type"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/TargetHost">
+    <tr>
+        <th>Target Host</th>
+        <td ><xsl:value-of select="RecordData/TargetHost"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Priority">
+    <tr>
+        <th>Priority</th>
+        <td ><xsl:value-of select="RecordData/Priority"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Weight">
+    <tr>
+        <th>Weight</th>
+        <td ><xsl:value-of select="RecordData/Weight"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Port">
+    <tr>
+        <th>Port</th>
+        <td ><xsl:value-of select="RecordData/Port"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Order">
+    <tr>
+        <th>Order</th>
+        <td ><xsl:value-of select="RecordData/Order"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Services">
+    <tr>
+        <th>Services</th>
+        <td ><xsl:value-of select="RecordData/Services"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/RegularExpression">
+    <tr>
+        <th>Regular Expression</th>
+        <td ><xsl:value-of select="RecordData/RegularExpression"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Replacement">
+    <tr>
+        <th>Replacement</th>
+        <td ><xsl:value-of select="RecordData/Replacement"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/DigestType">
+    <tr>
+        <th>Digest Type</th>
+        <td ><xsl:value-of select="RecordData/DigestType"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/DigestLength">
+    <tr>
+        <th>Digest Length</th>
+        <td ><xsl:value-of select="RecordData/DigestLength"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Digest">
+    <tr>
+        <th>Digest</th>
+        <td ><xsl:value-of select="RecordData/Digest"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/KeyLength">
+    <tr>
+        <th>Key Length</th>
+        <td ><xsl:value-of select="RecordData/KeyLength"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/PublicKey">
+    <tr>
+        <th>Public Key</th>
+        <td ><xsl:value-of select="RecordData/PublicKey"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/KeyName">
+    <tr>
+        <th>Key Name</th>
+        <td ><xsl:value-of select="RecordData/KeyName"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Key">
+    <tr>
+        <th>Key</th>
+        <td ><xsl:value-of select="RecordData/Key"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/CreationDate">
+    <tr>
+        <th>Creation Date</th>
+        <td ><xsl:value-of select="RecordData/CreationDate"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Error">
+    <tr>
+        <th>Error</th>
+        <td ><xsl:value-of select="RecordData/Error"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Mode">
+    <tr>
+        <th>Mode</th>
+        <td ><xsl:value-of select="RecordData/Mode"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/SignatureLength">
+    <tr>
+        <th>Signature Length</th>
+        <td ><xsl:value-of select="RecordData/SignatureLength"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/Signature">
+    <tr>
+        <th>Signature</th>
+        <td ><xsl:value-of select="RecordData/Signature"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/FudgeTime">
+    <tr>
+        <th>Fudge Time</th>
+        <td ><xsl:value-of select="RecordData/FudgeTime"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/OriginalXid">
+    <tr>
+        <th>Original Xid</th>
+        <td ><xsl:value-of select="RecordData/OriginalXid"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/MappingFlag">
+    <tr>
+        <th>Mapping Flag</th>
+        <td ><xsl:value-of select="RecordData/MappingFlag"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/WinsServerIPv4Address">
+    <tr>
+        <th>Wins Server IPv4 Address</th>
+        <td ><xsl:value-of select="RecordData/WinsServerIPv4Address"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/LookupTimeout">
+    <tr>
+        <th>Lookup Timeout</th>
+        <td ><xsl:value-of select="RecordData/LookupTimeout"/></td>
+    </tr>
+</xsl:if>
+<xsl:if test="RecordData/CacheTimeout">
+    <tr>
+        <th>Cache Timeout</th>
+        <td ><xsl:value-of select="RecordData/CacheTimeout"/></td>
+    </tr>
+</xsl:if>
+
+</table>
+</div>
+</xsl:template>
+
+</xsl:stylesheet>
+
