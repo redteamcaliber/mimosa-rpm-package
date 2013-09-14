@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsl:stylesheet version="1.0"
+                xmlns:atom="http://www.w3.org/2005/Atom"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+                xmlns:user="urn:userscripts"
+                xmlns:mir="urn:mandiant-intelligent-response"
+        >
+    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
+    <xsl:output method="html" />
+
+
+
+
+    <!-- ############################################################### -->
+    <xsl:template match="/HookItem">
+
+        <div class="xslt-contents" xslt-title="Hook Information">
+            <table     width="95%">
+                <tr>
+                    <th>Description</th>
+                    <td ><xsl:value-of select="HookDescription"/></td>
+                </tr>
+                <tr>
+                    <th>Hooked Function</th>
+                    <td ><xsl:value-of select="HookedFunction"/></td>
+                </tr>
+                <tr>
+                    <th>Hooked Module</th>
+                    <td ><xsl:value-of select="HookedModule"/></td>
+                </tr>
+                <tr>
+                    <th>Hooking Module</th>
+                    <td ><xsl:value-of select="HookingModule"/></td>
+                </tr>
+                <tr>
+                    <th>Hooking Address</th>
+                    <td ><xsl:value-of select="HookingAddress"/></td>
+                </tr>
+            </table>
+        </div>
+        <xsl:if test="DigitalSignatureHooking/SignatureExists or DigitalSignatureHooking/SignatureVerified or DigitalSignatureHooking/Description or DigitalSignatureHooking/CertificateSubject or DigitalSignatureHooking/CertificateIssuer">
+            <div class="xslt-contents" xslt-title="Hooking Digital Signature">
+                <table     width="95%">
+                    <xsl:if test="DigitalSignatureHooking/SignatureExists">
+                        <tr>
+                            <th>Signature Exists</th>
+                            <td ><xsl:value-of select="DigitalSignatureHooking/SignatureExists"/></td>
+                        </tr>
+                    </xsl:if>
+                    <xsl:if test="DigitalSignatureHooking/SignatureVerified">
+                        <tr>
+                            <th>Signature Verified</th>
+                            <td ><xsl:value-of select="DigitalSignatureHooking/SignatureVerified"/></td>
+                        </tr>
+                    </xsl:if>
+                    <xsl:if test="DigitalSignatureHooking/SignatureDescription">
+                        <tr>
+                            <th>Signature Description</th>
+                            <td ><xsl:value-of select="DigitalSignatureHooking/SignatureDescription"/></td>
+                        </tr>
+                    </xsl:if>
+                    <xsl:if test="DigitalSignatureHooking/CertificateSubject">
+                        <tr>
+                            <th>Certificate Subject</th>
+                            <td ><xsl:value-of select="DigitalSignatureHooking/CertificateSubject"/></td>
+                        </tr>
+                    </xsl:if>
+                    <xsl:if test="DigitalSignatureHooking/CertificateIssuer">
+                        <tr>
+                            <th>Certificate Issuer</th>
+                            <td ><xsl:value-of select="DigitalSignatureHooking/CertificateIssuer"/></td>
+                        </tr>
+                    </xsl:if>
+                </table>
+            </div>
+        </xsl:if>
+
+        <xsl:if test="DigitalSignatureHooked/SignatureExists or DigitalSignatureHooked/SignatureVerified or DigitalSignatureHooked/Description or DigitalSignatureHooked/CertificateSubject or DigitalSignatureHooked/CertificateIssuer">
+            <div class="xslt-contents" xslt-title="Hooked Digital Signature">
+                <table     width="95%">
+                    <xsl:if test="DigitalSignatureHooked/SignatureExists">
+                        <tr>
+                            <th>Signature Exists</th>
+                            <td ><xsl:value-of select="DigitalSignatureHooked/SignatureExists"/></td>
+                        </tr>
+                    </xsl:if>
+                    <xsl:if test="DigitalSignatureHooked/SignatureVerified">
+                        <tr>
+                            <th>Signature Verified</th>
+                            <td ><xsl:value-of select="DigitalSignatureHooked/SignatureVerified"/></td>
+                        </tr>
+                    </xsl:if>
+                    <xsl:if test="DigitalSignatureHooked/SignatureDescription">
+                        <tr>
+                            <th>Signature Description</th>
+                            <td ><xsl:value-of select="DigitalSignatureHooked/SignatureDescription"/></td>
+                        </tr>
+                    </xsl:if>
+                    <xsl:if test="DigitalSignatureHooked/CertificateSubject">
+                        <tr>
+                            <th>Certificate Subject</th>
+                            <td ><xsl:value-of select="DigitalSignatureHooked/CertificateSubject"/></td>
+                        </tr>
+                    </xsl:if>
+                    <xsl:if test="DigitalSignatureHooked/CertificateIssuer">
+                        <tr>
+                            <th>Certificate Issuer</th>
+                            <td ><xsl:value-of select="DigitalSignatureHooked/CertificateIssuer"/></td>
+                        </tr>
+                    </xsl:if>
+                </table>
+            </div>
+        </xsl:if>
+
+    </xsl:template>
+</xsl:stylesheet>
