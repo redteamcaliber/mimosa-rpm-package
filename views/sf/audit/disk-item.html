@@ -1,48 +1,37 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet version="1.0"
-                xmlns:atom="http://www.w3.org/2005/Atom"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-                xmlns:user="urn:userscripts"
-                xmlns:mir="urn:mandiant-intelligent-response"
-        >
-    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
-    <xsl:output method="html" />
-    <xsl:template match="/DiskItem">
+{% set di = content.diskitem %}
 
-        <div class="xslt-contents" xslt-title="Disk Info">
-            <table width="95%">
-                <tr>
-                    <th>Name</th>
-                    <td><span class="ioc-term" ioc-term="DiskItem/DiskName"><xsl:value-of select="DiskName"/></span></td>
-                </tr>
-                <tr>
-                    <th>Size</th>
-                    <td><span class="ioc-term" ioc-term="DiskItem/DiskSize"><xsl:value-of select="DiskSize"/></span></td>
-                </tr>
-            </table>
-            <br/>
+<div id="disk-item-div" class="collapsable-header" title="<i class='icon-file'></i> Disk/Item">
+    <h4>Disk Info</h4>
 
-            <xsl:for-each select="PartitionList/Partition">
-                <div class="xslt-contents-header">Partition <span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionNumber"><xsl:value-of select="PartitionNumber"/></span></div>
-                <table width="95%">
-                    <tr>
-                        <th>Offset</th>
-                        <td><span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionOffset"><xsl:value-of select="PartitionOffset"/></span></td>
-                    </tr>
-                    <tr>
-                        <th>Lenth</th>
-                        <td><span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionLength"><xsl:value-of select="PartitionLength"/></span></td>
-                    </tr>
-                    <tr>
-                        <th>Type</th>
-                        <td><span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionType"><xsl:value-of select="PartitionType"/></span></td>
-                    </tr>
-                </table>
-                <br/>
-            </xsl:for-each>
-        </div>
-    </xsl:template>
+    <table class="table table-condensed">
+        <tr>
+            <th>Name</th>
+            <td><span class="ioc-term" ioc-term="DiskItem/DiskName">{{ di.diskname }}</span></td>
+        </tr>
+        <tr>
+            <th>Size</th>
+            <td><span class="ioc-term" ioc-term="DiskItem/DiskSize">{{ di.disksize }}</span></td>
+        </tr>
+    </table>
 
-</xsl:stylesheet>
+    <br/>
+
+    {% for p in get_list(di.partitionlist.partition) %}
+        <div class="xslt-contents-header">Partition <span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionNumber">{{ p.partitionnumber }}</span></div>
+        <table class="table table-condensed table-bordered">
+            <tr>
+                <th>Offset</th>
+                <td><span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionOffset">{{ p.partitionoffset }}</span></td>
+            </tr>
+            <tr>
+                <th>Length</th>
+                <td><span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionLength">{{ p.partitionlength }}</span></td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td><span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionType">{{ p.partitiontype }}</span></td>
+            </tr>
+        </table>
+        <br/>
+    {% endfor %}
+</div>
