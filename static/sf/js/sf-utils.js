@@ -4,32 +4,44 @@ var StrikeFinder = StrikeFinder || {};
 // StrikeFinder Utility Methods.
 //
 
-StrikeFinder.format_suppression = function(s) {
+StrikeFinder.format_suppression = function (s) {
     return _.sprintf('%s \'%s\' \'%s\' (preservecase=%s)', s.itemkey, s.itemvalue, s.condition, s.preservecase);
 };
 
+/**
+ * Retrieve a formatted blocking message.
+ * @param message - the message to display.
+ * @returns {*} - the formatted message.
+ */
 StrikeFinder.get_blockui_message = function (message) {
     return _.sprintf("<span class=''><h4>" +
         "<i class='icon-spinner icon-spin icon-3x' style='vertical-align: middle'></i> " +
         "%s" +
         "</h4></span>", message);
-}
+};
 
+/**
+ * Retrieve the default block ui options.
+ * @param message - the message to display.
+ * @returns - the default options.
+ */
 StrikeFinder.get_blockui_options = function (message) {
-    if (!message) {
+    if (message === undefined) {
         message = 'Loading...';
     }
+
     return {
-        message: StrikeFinder.get_blockui_message(message),
+        message: message ? StrikeFinder.get_blockui_message(message) : message,
         css: {
             border: "1px solid #822433",
             padding: '15px',
             color: "#822433",
-            opacity: .80,
+            opacity: .8,
             backgroundColor: "#ffffff"
         },
         overlayCSS: {
-            backgroundColor: "#ffffff"
+            backgroundColor: "#ffffff",
+            opacity: .8
         }
     }
 };
@@ -49,6 +61,15 @@ StrikeFinder.unblockui = function () {
 
 StrikeFinder.block = function (el, message) {
     el.block(StrikeFinder.get_blockui_options(message));
+};
+
+/**
+ * Display a panel overlay with no message.
+ * @param el - the element to block.
+ * @param unblock_function - function callback after unblock.
+ */
+StrikeFinder.blockpanel_ajax = function(el, unblock_function) {
+    StrikeFinder.block_ajax(el, unblock_function, null);
 };
 
 /**

@@ -1072,6 +1072,7 @@ StrikeFinder.AgentHostView = StrikeFinder.View.extend({
         if (am_cert_hash) {
             view.model.id = am_cert_hash;
         }
+        StrikeFinder.blockpanel_ajax(this.$el);
         view.model.fetch({
             error: function (model, response, options) {
                 view.render_service_down();
@@ -1246,6 +1247,7 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
         if (rowitem_uuid) {
             this.collection.rowitem_uuid = rowitem_uuid;
         }
+        StrikeFinder.blockpanel_ajax(this.$el);
         this.collection.fetch();
     }
 });
@@ -1300,6 +1302,7 @@ StrikeFinder.AuditView = StrikeFinder.View.extend({
         if (rowitem_uuid) {
             this.model.id = rowitem_uuid;
         }
+        StrikeFinder.blockpanel_ajax(this.$el);
         this.model.fetch();
     }
 });
@@ -1875,6 +1878,7 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
         if (rowitem_uuid) {
             this.collection.rowitem_uuid = rowitem_uuid;
         }
+        StrikeFinder.blockpanel_ajax(this.$el);
         this.collection.fetch();
     },
     hide: function () {
