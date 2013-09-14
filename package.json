@@ -23,7 +23,6 @@
         "request": "~2.25.0",
         "nunjucks": "~0.1.9",
         "express": "~3.3.4",
-        "node-validation": "~0.1.0",
         "moment": "~2.1.0",
         "xml2js": "~0.2.8"
     },
