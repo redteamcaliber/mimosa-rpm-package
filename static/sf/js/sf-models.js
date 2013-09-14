@@ -216,14 +216,14 @@ StrikeFinder.IOCCollection = Backbone.Collection.extend({
 });
 
 /**
- * File/Info Details Model.
+ * Audit Details Model.
  */
-StrikeFinder.FileInfoModel = Backbone.Model.extend({
+StrikeFinder.AuditModel = Backbone.Model.extend({
     defaults: {
         html: ""
     },
     url: function () {
-        return _.sprintf('/sf/api/hits/%s/html', this.id);
+        return _.sprintf('/sf/api/audit/%s', this.id);
     }
 });
 
@@ -249,10 +249,6 @@ StrikeFinder.IOCTermsCollection = Backbone.Collection.extend({
         return _.sprintf("/api/iocterms/%s", this.rowitem_type);
     }
 });
-
-StrikeFinder.format_suppression = function(s) {
-    return _.sprintf('%s \'%s\' \'%s\' (preservecase=%s)', s.itemkey, s.itemvalue, s.condition, s.preservecase);
-};
 
 /**
  * Model representing a suppression list item.  Currently the suppression list API returns different results than the
@@ -280,7 +276,10 @@ StrikeFinder.SuppressionListItem = Backbone.Model.extend({
         iocnamehash: ''
     },
     idAttribute: 'suppression_id',
-    urlRoot: '/sf/api/suppressions'
+    urlRoot: '/sf/api/suppressions',
+    as_string: function () {
+        return StrikeFinder.format_suppression(this.attributes);
+    }
 });
 StrikeFinder.SuppressionListItemCollection = Backbone.Collection.extend({
     model: StrikeFinder.SuppressionListItem,
@@ -299,12 +298,6 @@ StrikeFinder.SuppressionListItemCollection = Backbone.Collection.extend({
         else {
             return '/sf/api/suppressions?limit=0';
         }
-    },
-    parse: function(response, options) {
-        _.each(response, function(item) {
-            item.formatted = StrikeFinder.format_suppression(item);
-        });
-        return response;
     }
 });
 

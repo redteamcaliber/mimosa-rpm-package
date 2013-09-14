@@ -1,75 +1,69 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet version="1.0"
-                xmlns:atom="http://www.w3.org/2005/Atom"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-                xmlns:user="urn:userscripts"
-                xmlns:mir="urn:mandiant-intelligent-response"
-        >
-    <xsl:output method="html" />
+{% set registryitem = content.registryitem %}
 
+<div id="registry-item-div" class="collapsable-header" title="<i class='icon-file'></i> Registry/Item">
 
+    <h4>Registry Item Info</h4>
 
-    <!-- ############################################################### -->
-    <xsl:template match="/RegistryItem">
+    <table class="table table-condensed">
+        <tr>
+            <td>Modified Time</td>
+            <td><span class="ioc-term" ioc-term="RegistryItem/Modified">{{ registryitem.modified }}</span></td>
+        </tr>
+        <tr>
+            <td>Hive</td>
+            <td><span class="ioc-term" ioc-term="RegistryItem/Hive">{{ registryitem.hive }}</span></td>
+        </tr>
+        <tr>
+            <td>Path to Key</td>
+            <td><span class="ioc-term" ioc-term="RegistryItem/KeyPath">{{ registryitem.keypath }}</span></td>
+        </tr>
+        <tr>
+            <td>Full Path</td>
+            <td><span class="ioc-term" ioc-term="RegistryItem/Path">{{ registryitem.path }}</span></td>
+        </tr>
+        <tr>
+            <td>Value Name</td>
+            <td><span class="ioc-term" ioc-term="RegistryItem/ValueName">{{ registryitem.valuename }}</span></td>
+        </tr>
+        <tr>
+            <td>Value Type</td>
+            <td><span class="ioc-term" ioc-term="RegistryItem/Type">{{ registryitem.type }}</span></td>
+        </tr>
+        <tr>
+            <td>Size in Bytes</td>
+            <td><span class="ioc-term" ioc-term="RegistryItem/ReportedLengthInBytes">{{ registryitem.reportedlengthinbytes }}</span></td>
+        </tr>
 
-        <div class="xslt-contents" xslt-title="Registry Item Info">
-            <table   class="table table-condensed table-hover"  >
-                <tr>
-                    <td><b>Modified Time</b></td>
-                    <td><span class="ioc-term" ioc-term="RegistryItem/Modified"><xsl:value-of select="Modified"/></span></td>
-                </tr>
-                <tr>
-                    <td><b>Hive</b></td>
-                    <td><span class="ioc-term" ioc-term="RegistryItem/Hive"><xsl:value-of select="Hive"/></span></td>
-                </tr>
-                <tr>
-                    <td><b>Path to Key</b></td>
-                    <td><span class="ioc-term" ioc-term="RegistryItem/KeyPath"><xsl:value-of select="KeyPath"/></span></td>
-                </tr>
-                <tr>
-                    <td><b>Full Path</b></td>
-                    <td><span class="ioc-term" ioc-term="RegistryItem/Path"><xsl:value-of select="Path"/></span></td>
-                </tr>
-                <tr>
-                    <td><b>Value Name</b></td>
-                    <td><span class="ioc-term" ioc-term="RegistryItem/ValueName"><xsl:value-of select="ValueName"/></span></td>
-                </tr>
-                <tr>
-                    <td><b>Value Type</b></td>
-                    <td><span class="ioc-term" ioc-term="RegistryItem/Type"><xsl:value-of select="Type"/></span></td>
-                </tr>
-                <tr>
-                    <td><b>Size in Bytes</b></td>
-                    <td><span class="ioc-term" ioc-term="RegistryItem/ReportedLengthInBytes"><xsl:value-of select="ReportedLengthInBytes"/></span></td>
-                </tr>
-                <xsl:for-each select="Text">
-                    <tr>
-                        <td><b>Text</b></td>
-                        <td><span class="ioc-term" ioc-term="RegistryItem/Text"><xsl:value-of select="."/></span></td>
-                    </tr>
-                </xsl:for-each>
-                <tr>
-                    <td><b>Base 64 Encoded Data</b></td>
-                    <td><span class="ioc-term" ioc-term="RegistryItem/Value"><xsl:value-of select="Value"/></span></td>
-                </tr>
-                <tr>
-                    <td><b>Security ID</b></td>
-                    <td><span class="ioc-term" ioc-term="RegistryItem/SecurityID"><xsl:value-of select="SecurityID"/></span></td>
-                </tr>
-            </table>
-        </div>
+        {% for text in get_list(registryitem.text) %}
+        <tr>
+            <td>Text</td>
+            <td><span class="ioc-term" ioc-term="RegistryItem/Text">{{ text }}</span></td>
+        </tr>
+        {% endfor %}
 
-        <div class="xslt-contents" xslt-title="Portal Formatted Data">
-            <textarea title="Click to Highlight" style="width:90%; height:70px;" onclick="this.select();">
-                Registry Path:   <xsl:value-of select="KeyPath"/>
-                Registry Key:    <xsl:value-of select="ValueName"/>
-                Registry Text:   <xsl:choose><xsl:when test="Value"><xsl:value-of select="Value"/></xsl:when><xsl:otherwise><xsl:value-of select="Text"/></xsl:otherwise></xsl:choose>
-                Last Modified:   <xsl:value-of select="Modified"/>
-            </textarea>
-        </div>
+        <tr>
+            <td>Base 64 Encoded Data</td>
+            <td><span class="ioc-term" ioc-term="RegistryItem/Value">{{ registryitem.value }}</span></td>
+        </tr>
+        <tr>
+            <td>Security ID</td>
+            <td><span class="ioc-term" ioc-term="RegistryItem/SecurityID">{{ registryitem.securityid }}</span></td>
+        </tr>
+    </table>
 
-    </xsl:template>
+    <br/>
 
-</xsl:stylesheet>
+    <div id="portal-formatted-data-div" class="collapsable collapsed" title="Portal Formatted Data">
+{% if registryitem.value %}
+    {% set registrytext = registryitem.value %}
+{% else %}
+    {% set registrytext = registryitem.text %}
+{% endif %}
+<textarea title="Click to Highlight" style="width:95%; height:70px;" onclick="this.select();">
+Registry Path:   {{ registryitem.keypath }}
+Registry Key:    {{ registryitem.valuename }}
+Registry Text:   {{ registrytext }}
+Last Modified:   {{ registryitem.modified }}</textarea>
+    </div>
+
+</div>

@@ -4,6 +4,10 @@ var StrikeFinder = StrikeFinder || {};
 // StrikeFinder Utility Methods.
 //
 
+StrikeFinder.format_suppression = function(s) {
+    return _.sprintf('%s \'%s\' \'%s\' (preservecase=%s)', s.itemkey, s.itemvalue, s.condition, s.preservecase);
+};
+
 StrikeFinder.get_blockui_message = function (message) {
     return _.sprintf("<span class=''><h4>" +
         "<i class='icon-spinner icon-spin icon-3x' style='vertical-align: middle'></i> " +

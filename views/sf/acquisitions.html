@@ -11,9 +11,7 @@
             StrikeFinder.usersettings = {{ usersettings }};
             StrikeFinder.clusters = {{ clusters }};
 
-            StrikeFinder.run(function () {
-                new StrikeFinder.AcquisitionsView().fetch();
-            });
+            new StrikeFinder.AcquisitionsView();
         })();
     });
 </script>

@@ -54,15 +54,15 @@
     </div>
 </script>
 
-<script type="text/template" id="file-info-template">
+<script type="text/template" id="audit-template">
     <div class="row-fluid">
-        <div id="file-info-content">
+        <div id="audit-info-content">
             <%= html %>
         </div>
     </div>
 </script>
 
-<script type="text/template" id="file-info-context-menu-template">
+<script type="text/template" id="audit-context-menu-template">
     <ul class="dropdown-menu" role="menu" style="display: block">
         <% if (is_suppress) { %>
         <li>
@@ -508,7 +508,7 @@
                 </table>
             </div>
             <div class='row-fluid'>
-                <div id="file-info-div"></div>
+                <div id="audit-div"></div>
             </div>
             <div class='row-fluid'>
                 <div id='comments-collapsable-div'>

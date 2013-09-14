@@ -1,25 +1,9 @@
-{% extends "/sf/base.html" %}
-
-{% block content %}
-
-<script type="text/javascript">
-    $(document).ready(function() {
-        var collapsables = $('.collapsable');
-        _.each(collapsables, function(collapsable) {
-            var view = new StrikeFinder.CollapsableContentView({
-                el: '#' + collapsable.id,
-                title: $(collapsable).attr('title'),
-                title_class: 'uac-header'
-            });
-        });
-    });
-</script>
-
-<div id="file-item" class="collapsable" title="Row Item Audit Detail">
+{% set fileitem = content.fileitem %}
+<div id="file-item" class="collapsable-header" title="<i class='icon-file'></i> File/Item">
 
 <div class="xslt-contents" xslt-title="File Item Info">
     <h4>File Item Info</h4>
-    <table width="100%" class="table table-condensed">
+    <table width="100%" class="table table-condensed table-bordered">
         <tr>
             <th colspan="2" rowspan="1">Full Path</th>
             <th colspan="1" rowspan="1">Device Path</th>
@@ -129,7 +113,7 @@
     {% set peinfo = fileitem.peinfo %}
 <div class="xslt-contents" xslt-title="PE Header Information">
 <h4>PE Header Information</h4>
-<table class="table table-condensed" width="100%">
+<table class="table table-condensed table-bordered" width="100%">
     <tr>
         <th>PE Type</th>
         <th>Compile Time</th>
@@ -159,7 +143,7 @@
         </td>
     </tr>
 </table>
-<table class="table table-condensed" width="100%">
+<table class="table table-condensed table-bordered" width="100%">
     <tr>
         <th>Checksum Raw</th>
         <th>Checksum API</th>
@@ -168,22 +152,22 @@
     <tr>
         <td>
             <span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEFileRaw">
-                {{ fileitem.pechecksum.pefileraw }}
+                {{ fileitem.pechecksum.pefileraw }}&nbsp;
             </span>
         </td>
         <td>
             <span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEFileAPI">
-                {{ peinfo.pechecksum.pefileapi }}
+                {{ peinfo.pechecksum.pefileapi }}&nbsp;
             </span>
         </td>
         <td>
             <span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEComputedAPI">
-                {{ peinfo.pechecksum.pecomputedapi }}
+                {{ peinfo.pechecksum.pecomputedapi }}&nbsp;
             </span>
         </td>
     </tr>
 </table>
-<table class="table table-condensed" width="100%">
+<table class="table table-condensed table-bordered" width="100%">
     <tr>
         <th>Signature Exists</th>
         <th>Signature Verified</th>
@@ -192,22 +176,22 @@
     <tr>
         <td>
             <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/SignatureExists">
-                {{ peinfo.digitalsignature.signatureexists }}
+                {{ peinfo.digitalsignature.signatureexists }}&nbsp;
             </span>
         </td>
         <td>
             <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/SignatureVerified">
-                {{ peinfo.digatalsignature.signatureverified }}
+                {{ peinfo.digatalsignature.signatureverified }}&nbsp;
             </span>
         </td>
         <td>
             <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/Description">
-                {{ peinfo.digatalsignature.description }}
+                {{ peinfo.digatalsignature.description }}&nbsp;
             </span>
         </td>
     </tr>
 </table>
-<table width="100%" class="table table-condensed">
+<table width="100%" class="table table-condensed table-bordered">
     <tr>
         <th>Certificate Issuer</th>
         <th>Certificate Subject</th>
@@ -215,17 +199,17 @@
     <tr>
         <td>
             <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/CertificateIssuer">
-                {{ peinfo.digitalsignature.certificateissuer }}
+                {{ peinfo.digitalsignature.certificateissuer }}&nbsp;
             </span>
         </td>
         <td>
             <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/CertificateSubject">
-                {{ peinfo.digitalsignature.certificatesubject }}
+                {{ peinfo.digitalsignature.certificatesubject }}&nbsp;
             </span>
         </td>
     </tr>
 </table>
-<table width="100%" class="table table-condensed">
+<table width="100%" class="table table-condensed table-bordered">
     <tr>
         <th>Entry Point Signature</th>
         <th>Anomalies</th>
@@ -234,16 +218,16 @@
         <td>
             Name:
             <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedEntryPointSignature/Name">
-                {{ peinfo.detectedentrypointsignature.name }}
+                {{ peinfo.detectedentrypointsignature.name }}&nbsp;
             </span>
             <br/>
             Type:
             <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedEntryPointSignature/Type">
-                {{ peinfo.detectedentrypointsignature.type }}
+                {{ peinfo.detectedentrypointsignature.type }}&nbsp;
             </span>
         </td>
         <td>
-            {% for s in get_array(peinfo.detectedanomalies.string) %}
+            {% for s in get_list(peinfo.detectedanomalies.string) %}
                 <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedAnomalies/string">
                     {{ s }}
                 </span><br/>
@@ -257,18 +241,18 @@
     <tr>
         <td>
             <span class="ioc-term" ioc-term="FileItem/PeakEntropy">
-                {{ peinfo.peakentropy }}
+                {{ peinfo.peakentropy }}&nbsp;
             </span>
         </td>
         <td>
             <span class="ioc-term" ioc-term="FileItem/PEInfo/PeakCodeEntropy">
-                {{ peinfo.peakcodentropy }}
+                {{ peinfo.peakcodentropy }}&nbsp;
             </span>
         </td>
     </tr>
 </table>
 
-<table class="table table-condensed">
+<table class="table table-condensed table-bordered">
     <tr>
         <th>Section Name</th>
         <th>Section Type</th>
@@ -280,27 +264,27 @@
         <tr>
             <td>
                 <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Name">
-                    {{ section.name }}
+                    {{ section.name }}&nbsp;
                 </span>
             </td>
             <td>
                 <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Type">
-                    {{ section.type }}
+                    {{ section.type }}&nbsp;
                 </span>
             </td>
             <td>
                 <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/SizeInBytes">
-                    {{ section.sizeinbytes }}
+                    {{ section.sizeinbytes }}&nbsp;
                 </span>
             </td>
             <td>
                 <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/DetectedCharacteristics">
-                    {{ section.detectedcharacteristics }}
+                    {{ section.detectedcharacteristics }}&nbsp;
                 </span>
             </td>
             <td>
                 <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Entropy/@AverageValue">
-                    {{ section.entropy.$.AverageValue }}
+                    {{ section.entropy.$.AverageValue }}&nbsp;
                 </span>
             </td>
         </tr>
@@ -310,7 +294,7 @@
 
 <div id="exported-functions-div" class="collapsable collapsed" title="Exported Functions">
     <ul>
-        {% for s in get_array(peinfo.exports.exportedfunctions.string) %}
+        {% for s in get_list(peinfo.exports.exportedfunctions.string) %}
             <li>
                 <span class="ioc-term" ioc-term="FileItem/PEInfo/Exports/ExportedFunctions/string">{{ s }}</span>
             </li>
@@ -328,7 +312,7 @@
 
             {% if module.importedfunctions.string %}
                 <ul>
-                    {% for s in get_array(module.importedfunctions.string) %}
+                    {% for s in get_list(module.importedfunctions.string) %}
                     <li>
                         <span class="ioc-term" ioc-term="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string">
                             {{ s }}
@@ -344,7 +328,7 @@
 {% if peinfo.versioninfolist.versioninfoitem %}
     {% set versioninfoitem = peinfo.versioninfolist.versioninfoitem %}
     <br/>
-    <table class="table table-condensed">
+    <table class="table table-condensed table-bordered">
         <tr>
             <th>Language</th>
             <td>
@@ -438,7 +422,7 @@
         <ul>
             <li>
                 <div class="outline">
-                    {% for s in get_array(fileitem.stringlist.string) %}
+                    {% for s in get_list(fileitem.stringlist.string) %}
                         <span class="ioc-term" ioc-term="FileItem/StringList/string">
                             {{ s }}
                         </span>
@@ -454,7 +438,7 @@
     <div class="xslt-contents" xslt-title="Streams">
         <ul>
             <li>
-                <table width="100%" class="table table-condensed">
+                <table width="100%" class="table table-condensed table-bordered">
                     <tr>
                         <th>Name</th>
                         <th>Size</th>
@@ -486,7 +470,6 @@
     </div>
 {% endif %}
 
-<br/>
 <div id="portal-formated-data-div" class="collapsable collapsed" title="Portal Formatted Data">
 <textarea title="Click to Highlight"
               cols="80"
@@ -501,10 +484,7 @@ Last Modified: {{ fileitem.modified }}
 Entry Modified:{{ fileitem.changed }}
 File Size: {{ fileitem.sizeinbytes }}
 File Path: {% if fileitem.drive %}{{ fileitem.drive }}:\{{ fileitem.filepath }}{% endif %}
-File Owner: {{ fileitem.username }}
-</textarea>
+File Owner: {{ fileitem.username }}</textarea>
 </div>
 
 </div>
-
-{% endblock %}

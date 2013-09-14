@@ -1,6 +1,14 @@
 UAC ToDo
 ========
 
+### Add copy to the context menu.
+
+### Add a app token check to the SSO ware.
+
+### Look into making API level unit tests possible.
+
+### Make suppressions linkable from the hits view.
+
 ### Add an auto suppress capability.
     - Look into replacing the XSLT capability with a template instead.
 

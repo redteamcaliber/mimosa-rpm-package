@@ -1,183 +1,182 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet version="1.0"
-                xmlns:atom="http://www.w3.org/2005/Atom"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-                xmlns:user="urn:userscripts"
-                xmlns:mir="urn:mandiant-intelligent-response"
-        >
-    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
-    <xsl:output method="html" />
+{% set si = content.serviceitem %}
 
+<div id="service-item-div" class="collapsable-header" title="<i class='icon-file'></i> Service/Item">
+    
+    <h4>Service Info</h4>
 
-    <!-- ############################################################### -->
-    <xsl:template match="/ServiceItem">
+    <table class="table table-condensed">
+        <tr>
+            <td>Name</td>
+            <td>{{ si.name }}</td>
+        </tr>
+        <tr>
+            <td>Descriptive Name</td>
+            <td>{{ si.descriptivename }}</td>
+        </tr>
+        <tr>
+            <td>Description</td>
+            <td>{{ si.description }}</td>
+        </tr>
+        <tr>
+            <td>Mode</td>
+            <td>{{ si.mode }}</td>
+        </tr>
+        <tr>
+            <td>Started As</td>
+            <td>{{ si.startedas }}</td>
+        </tr>
+        <tr>
+            <td>Path</td>
+            <td>{{ si.path }}</td>
+        </tr>
+        <tr>
+            <td>Status</td>
+            <td>{{ si.status }}</td>
+        </tr>
+        <tr>
+            <td>Service DLL</td>
+            <td>{{ si.servicedll }}</td>
+        </tr>
+        <tr>
+            <td>PID</td>
+            <td>{{ si.pid }}</td>
+        </tr>
+        <tr>
+            <td>Type</td>
+            <td>{{ si.type }}</td>
+        </tr>
+    </table>
 
-        <div class="xslt-contents" xslt-title="Service Info">
-            <table     width="95%">
-                <tr>
-                    <td ><b>Name</b></td>
-                    <td ><xsl:value-of select="name"/></td>
-                </tr>
-                <tr>
-                    <td ><b>Descriptive Name</b></td>
-                    <td ><xsl:value-of select="descriptiveName"/></td>
-                </tr>
-                <tr>
-                    <td ><b>Description</b></td>
-                    <td ><xsl:value-of select="description"/></td>
-                </tr>
-                <tr>
-                    <td ><b>Mode</b></td>
-                    <td ><xsl:value-of select="mode"/></td>
-                </tr>
-                <tr>
-                    <td ><b>Started As</b></td>
-                    <td ><xsl:value-of select="startedAs"/></td>
-                </tr>
-                <tr>
-                    <td ><b>Path</b></td>
-                    <td ><xsl:value-of select="path"/></td>
-                </tr>
-                <tr>
-                    <td ><b>Status</b></td>
-                    <td ><xsl:value-of select="status"/></td>
-                </tr>
-                <tr>
-                    <td ><b>Service DLL</b></td>
-                    <td ><xsl:value-of select="serviceDLL"/></td>
-                </tr>
-                <tr>
-                    <td ><b>PID</b></td>
-                    <td ><xsl:value-of select="pid"/></td>
-                </tr>
-                <tr>
-                    <td ><b>Type</b></td>
-                    <td ><xsl:value-of select="type"/></td>
-                </tr>
-            </table>
+    {% if si.pathsignatureexists or si.pathsignatureverified or pathsignaturedescription or si.pathcertificatesubject or si.pathcertificateissuer or si.pathmd5sum or si.pathsha1sum or si.pathsha256sum %}
+        <h4>Path Details</h4>
+        <table class="table table-condensed">
+            {% if si.pathsignatureexists %}
+            <tr>
+                <td>Signature Exists</td>
+                <td>{{ si.pathsignatureexists }}</td>
+            </tr>
+            {% endif %}
 
-            <xsl:if test="pathSignatureExists or pathSignatureVerified or pathSignatureDescription or pathCertificateSubject or pathCertificateIssuer or pathmd5sum or pathsha1sum or pathsha256sum">
-                <div class="xslt-contents-field" xslt-title="Path Details">
-                    <table     width="95%">
-                        <xsl:if test="pathSignatureExists">
-                            <tr>
-                                <td ><b>Signature Exists</b></td>
-                                <td ><xsl:value-of select="pathSignatureExists"/></td>
-                            </tr>
-                        </xsl:if>
-                        <xsl:if test="pathSignatureVerified">
-                            <tr>
-                                <td ><b>Signature Verified</b></td>
-                                <td ><xsl:value-of select="pathSignatureVerified"/></td>
-                            </tr>
-                        </xsl:if>
-                        <xsl:if test="pathSignatureDescription">
-                            <tr>
-                                <td ><b>Signature Description</b></td>
-                                <td ><xsl:value-of select="pathSignatureDescription"/></td>
-                            </tr>
-                        </xsl:if>
-                        <xsl:if test="pathCertificateSubject">
-                            <tr>
-                                <td ><b>Certificate Subject</b></td>
-                                <td ><xsl:value-of select="pathCertificateSubject"/></td>
-                            </tr>
-                        </xsl:if>
-                        <xsl:if test="pathCertificateIssuer">
-                            <tr>
-                                <td ><b>Certificate Issuer</b></td>
-                                <td ><xsl:value-of select="pathCertificateIssuer"/></td>
-                            </tr>
-                        </xsl:if>
-                        <xsl:if test="pathmd5sum">
-                            <tr>
-                                <td ><b>MD5 Sum</b></td>
-                                <td ><xsl:value-of select="pathmd5sum"/></td>
-                            </tr>
-                        </xsl:if>
-                        <xsl:if test="pathsha1sum">
-                            <tr>
-                                <td ><b>SHA1 Sum</b></td>
-                                <td ><xsl:value-of select="pathsha1sum"/></td>
-                            </tr>
-                        </xsl:if>
-                        <xsl:if test="pathsha256sum">
-                            <tr>
-                                <td ><b>SHA256 Sum</b></td>
-                                <td ><xsl:value-of select="pathsha256sum"/></td>
-                            </tr>
-                        </xsl:if>
-                    </table>
-                </div>
-            </xsl:if>
+            {% if si.pathsignatureverified %}
+            <tr>
+                <td>Signature Verified</td>
+                <td>{{ si.pathsignatureverified }}</td>
+            </tr>
+            {% endif %}
 
-            <xsl:if test="serviceDLLSignatureExists or serviceDLLSignatureVerified or serviceDLLSignatureDescription or serviceDLLCertificateSubject or serviceDLLCertificateIssuer or serviceDLLmd5sum or serviceDLLsha1sum or serviceDLLsha256sum">
-                <div class="xslt-contents-field" xslt-title="Service DLL Details">
-                    <table     width="95%">
-                        <xsl:if test="serviceDLLSignatureExists">
-                            <tr>
-                                <td ><b>Signature Exists</b></td>
-                                <td ><xsl:value-of select="serviceDLLSignatureExists"/></td>
-                            </tr>
-                        </xsl:if>
-                        <xsl:if test="serviceDLLSignatureVerified">
-                            <tr>
-                                <td ><b>Signature Verified</b></td>
-                                <td ><xsl:value-of select="serviceDLLSignatureVerified"/></td>
-                            </tr>
-                        </xsl:if>
-                        <xsl:if test="serviceDLLSignatureDescription">
-                            <tr>
-                                <td ><b>Signature Description</b></td>
-                                <td ><xsl:value-of select="serviceDLLSignatureDescription"/></td>
-                            </tr>
-                        </xsl:if>
-                        <xsl:if test="serviceDLLCertificateSubject">
-                            <tr>
-                                <td ><b>Certificate Subject</b></td>
-                                <td ><xsl:value-of select="serviceDLLCertificateSubject"/></td>
-                            </tr>
-                        </xsl:if>
-                        <xsl:if test="serviceDLLCertificateIssuer">
-                            <tr>
-                                <td ><b>Certificate Issuer</b></td>
-                                <td ><xsl:value-of select="serviceDLLCertificateIssuer"/></td>
-                            </tr>
-                        </xsl:if>
-                        <xsl:if test="serviceDLLmd5sum">
-                            <tr>
-                                <td ><b>MD5 Sum</b></td>
-                                <td ><xsl:value-of select="serviceDLLmd5sum"/></td>
-                            </tr>
-                        </xsl:if>
-                        <xsl:if test="serviceDLLsha1sum">
-                            <tr>
-                                <td ><b>SHA1 Sum</b></td>
-                                <td ><xsl:value-of select="serviceDLLsha1sum"/></td>
-                            </tr>
-                        </xsl:if>
-                        <xsl:if test="serviceDLLsha256sum">
-                            <tr>
-                                <td ><b>SHA256 Sum</b></td>
-                                <td ><xsl:value-of select="serviceDLLsha256sum"/></td>
-                            </tr>
-                        </xsl:if>
-                    </table>
-                </div>
-            </xsl:if>
+            {% if si.pathsignaturedescription %}
+            <tr>
+                <td>Signature Description</td>
+                <td>{{ si.pathsignaturedescription }}</td>
+            </tr>
+            {% endif %}
 
-            <div class="xslt-contents-field" xslt-title="Portal Formatted Data">
-                <textarea title="Click to Highlight" style="width:90%; height:70px;" onclick="this.select();">
-                    Service Name:    <xsl:value-of select="name"/>
-                    Service DLL:     <xsl:value-of select="serviceDLL"/>
-                    Process ID:      <xsl:value-of select="pid"/>
-                    Status:          <xsl:value-of select="status"/>
-                </textarea>
-            </div>
+            {% if si.pathcertificatesubject %}
+            <tr>
+                <td>Certificate Subject</td>
+                <td>{{ si.pathcertificatesubject }}</td>
+            </tr>
+            {% endif %}
 
-        </div>
-    </xsl:template>
+            {% if si.pathcerificateissuer %}
+            <tr>
+                <td>Certificate Issuer</td>
+                <td>{{ si.pathcerificateissuer }}</td>
+            </tr>
+            {% endif %}
 
-</xsl:stylesheet>
+            {% if si.pathmd5sum %}
+                <tr>
+                    <td>MD5 Sum</td>
+                    <td>{{ si.pathmd5sum }}</td>
+                </tr>
+            {% endif %}
+
+            {% if si.pathsha1sum %}
+                <tr>
+                    <td>SHA1 Sum</td>
+                    <td>{{ si.pathsha1sum }}</td>
+                </tr>
+            {% endif %}
+
+            {% if si.pathsha256sum %}
+                <tr>
+                    <td>SHA256 Sum</td>
+                    <td>{{ si.pathsha256sum }}</td>
+                </tr>
+            {% endif %}
+        </table>
+    {% endif %}
+
+    {% if si.servicedllsignatureexists or si.servicedllsignatureverified or servicedllsignaturedescription or servicedllcertificatesubject or servicedllcertificateissuer or servicedllmd5sum or servicedllsha1sum or servicedllsha256sum %}
+        <h4>Service DLL Details</h4>
+        <table class="table table-condensed">
+            {% if si.servicedllsignatureexists %}
+            <tr>
+                <td>Signature Exists</td>
+                <td>{{ si.servicedllsignatureexists }}</td>
+            </tr>
+            {% endif %}
+
+            {% if si.servicedllsignatureverified %}
+            <tr>
+                <td>Signature Verified</td>
+                <td>{{ si.servicedllsignatureverified }}</td>
+            </tr>
+            {% endif %}
+
+            {% if si.servicedllsignaturedescription %}
+            <tr>
+                <td>Signature Description</td>
+                <td>{{ si.servicedllsignaturedescription }}</td>
+            </tr>
+            {% endif %}
+
+            {% if si.servicedllcertificatesubject %}
+            <tr>
+                <td>Certificate Subject</td>
+                <td>{{ si.servicedllcertificatesubject }}</td>
+            </tr>
+            {% endif %}
+
+            {% if si.servicedllcertificateissuer %}
+                <tr>
+                    <td>Certificate Issuer</td>
+                    <td>{{ si.servicedllcertificateissuer }}</td>
+                </tr>
+            {% endif %}
+
+            {% if si.servicedllmd5sum %}
+            <tr>
+                <td>MD5 Sum</td>
+                <td>{{ si.servicedllmd5sum }}</td>
+            </tr>
+            {% endif %}
+
+            {% if si.serviceDLLsha1sum %}
+            <tr>
+                <td>SHA1 Sum</td>
+                <td>{{ si.serviceDLLsha1sum }}</td>
+            </tr>
+            {% endif %}
+
+            {% if si.servicedllsha256sum %}
+            <tr>
+                <td>SHA256 Sum</td>
+                <td>si.servicedllsha256sum</td>
+            </tr>
+            {% endif %}
+        </table>
+    {% endif %}
+
+    <br/>
+
+    <div id="portal-formatted-data-div" class="collapsable collapsed" title="Portal Formatted Data">
+<textarea title="Click to Highlight" style="width:95%; height:70px;" onclick="this.select();">
+Service Name:    {{ si.name }}
+Service DLL:     {{ si.servicedll }}
+Process ID:      {{ si.pid }}
+Status:          {{ si.status }}</textarea>
+    </div>
+
+</div>

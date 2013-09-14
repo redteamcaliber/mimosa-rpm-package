@@ -55,6 +55,8 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
 
         this.title_class = options['title_class'];
 
+        this.display_toggle = options.display_toggle !== false;
+
         this.render();
     },
     render: function () {
@@ -100,11 +102,13 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
                 title_span.html(view.title);
             }
 
-            // Create the icon.
-            var icon = $(document.createElement('i'));
-            icon.addClass('icon-chevron-sign-down');
-            icon.addClass('icon-large');
-            icon.addClass('pull-right');
+            if (view.display_toggle) {
+                // Create the icon.
+                var icon = $(document.createElement('i'));
+                icon.addClass('icon-chevron-sign-down');
+                icon.addClass('icon-large');
+                icon.addClass('pull-right');
+            }
 
             // Create the accordion anchor.
             var anchor = $(document.createElement('a'));
@@ -118,7 +122,7 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
 
             // Create the accordion heading div.
             var heading_div = $(document.createElement('div'));
-            heading_div.addClass('accordion-heading');
+            heading_div.addClass('accordion-heading').css({'background-color': '#fbfbfb'});
             heading_div.append(anchor);
 
             accordion_group.prepend(heading_div);
@@ -778,7 +782,7 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
     on_delete: function (ev) {
         var view = this;
         StrikeFinder.run(function () {
-            var message = _.sprintf('Delete suppression: %s', view.model.get('formatted'));
+            var message = _.sprintf('Delete suppression: %s', view.model.as_string());
             if (confirm(message)) {
                 view.model.destroy({
                     success: function () {
@@ -802,6 +806,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
             view.collection = new StrikeFinder.SuppressionListItemCollection();
         }
         view.listenTo(view.collection, 'sync', view.render);
+        view.listenTo(view.collection, 'reset', view.render);
 
         var condensed = view.options['condensed'];
 
@@ -812,11 +817,14 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
             title_class: 'uac-header',
             collapsed: condensed
         });
-        view.collection.listenTo(view.collection, 'sync', function () {
+
+        var update_title = function () {
             // Update the suppressions collapsable count whenever the data has changed.
             var title_template = '<i class="icon-level-down"></i> Active Suppressions (%d)';
             view.suppressions_collapsable.set('title', _.sprintf(title_template, view.collection.length));
-        });
+        };
+        view.collection.listenTo(view.collection, 'sync', update_title);
+        view.collection.listenTo(view.collection, 'reset', update_title);
 
         if (condensed) {
             this.options['iDisplayLength'] = -1;
@@ -825,7 +833,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
 
             view.options['aoColumns'] = [
                 {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false, bSortable: true},
-                {sTitle: "Suppression", mData: 'formatted', bVisible: true, bSortable: true},
+                {sTitle: "Suppression", mData: 'comment', bVisible: true, bSortable: true},
                 {sTitle: "Global", mData: 'cluster_name', bVisible: true, bSortable: true},
                 {sTitle: "Hits", mData: 'suppressed', bVisible: true, bSortable: true}
             ];
@@ -836,8 +844,9 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                     // defaults to the column being worked with, in this case is the first
                     // Using `row[0]` is equivalent.
                     mRender: function (data, type, row) {
+                        var formatted = StrikeFinder.format_suppression(row);
                         return '<a class="btn btn-link destroy" data-toggle="tooltip" ' +
-                            'title="Delete Suppression" style="padding: 0px 0px"><i class="icon-remove-sign"></i></a> ' + data;
+                            'title="Delete Suppression" style="padding: 0px 0px"><i class="icon-remove-sign"></i></a> ' + formatted;
                     },
                     aTargets: [1]
                 },
@@ -867,7 +876,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                 {sTitle: "IOC", mData: 'iocname', bSortable: true},
                 {sTitle: "IOC UID", mData: 'ioc_uid', bSortable: true},
                 {sTitle: "Hits", mData: 'suppressed', bSortable: true},
-                {sTitle: "Rule", mData: 'formatted', bSortable: true},
+                {sTitle: "Rule", mData: 'comment', bSortable: true},
                 {sTitle: "Global", mData: 'cluster_name', bVisible: true, bSortable: true},
                 {sTitle: "Author", mData: 'user_uuid', bSortable: true},
                 {sTitle: "Created", mData: 'created', bSortable: true}
@@ -875,6 +884,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
 
             view.options['aoColumnDefs'] = [
                 {
+                    // Add an option to the display name to delete the row.
                     mRender: function (data, type, row) {
                         return '<a class="btn btn-link destroy" data-toggle="tooltip" ' +
                             'title="Delete Suppression" style="padding: 0px 0px"><i class="icon-remove-sign"></i></a> ' + data;
@@ -882,6 +892,14 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                     aTargets: [1]
                 },
                 {
+                    // Format the suppression in the rule format.
+                    mRender: function (data, type, row) {
+                        return StrikeFinder.format_suppression(row);
+                    },
+                    aTargets: [5]
+                },
+                {
+                    // Render global or not.
                     mRender: function (data, type, row) {
                         if (!data) {
                             return 'Global';
@@ -893,6 +911,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                     aTargets: [6]
                 },
                 {
+                    // Format the created date.
                     mRender: function (data, type, row) {
                         return format_date(data);
                     },
@@ -913,7 +932,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                 model: view.collection.at(iDataIndex)
             });
             suppression_row.listenTo(suppression_row, 'delete', function () {
-                var msg = _.sprintf('Successfully deleted suppression: %s', suppression_row.model.get('formatted'));
+                var msg = _.sprintf('Successfully deleted suppression: %s', suppression_row.model.as_string());
                 StrikeFinder.display_success(msg);
                 view.trigger('delete');
             });
@@ -1166,7 +1185,7 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
                 });
 
                 // Highlight the item.
-                selected_element.find('> span.ioc-rule').css({'background': 'yellow', 'font-weight': 'bold'});
+                selected_element.find('> span.ioc-rule').css({'background': '#FFF79A', 'font-weight': 'bold'});
             });
         });
     },
@@ -1234,7 +1253,7 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
 /**
  * File/Info details view.
  */
-StrikeFinder.FileInfoView = StrikeFinder.View.extend({
+StrikeFinder.AuditView = StrikeFinder.View.extend({
     initialize: function (options) {
         var view = this;
 
@@ -1243,64 +1262,37 @@ StrikeFinder.FileInfoView = StrikeFinder.View.extend({
         }
 
         if (!view.model) {
-            this.model = new StrikeFinder.FileInfoModel({
+            this.model = new StrikeFinder.AuditModel({
                 id: view.rowitem_uuid
             });
         }
         this.listenTo(this.model, 'sync', this.render);
     },
     render: function () {
+        var view = this;
+
         var data = {
-            html: _.unescape(this.model.get('content'))
+            html: _.unescape(view.model.get('content'))
         };
 
-        var html = _.template($("#file-info-template").html(), data);
-        this.$el.html(html);
+        var html = _.template($("#audit-template").html(), data);
+        view.$el.html(html);
 
-        var that = this;
-
-        var div_index = 1;
-
-        var parent_sections = this.$('#file-info-content').children('div .xslt-contents');
-        _.each(parent_sections, function (section) {
-            that.$(section).attr('id', 'file-info-div' + div_index++);
-
-            var title = that.$(section).attr('xslt-title');
-            var collapsed = title && title == 'Portal Formatted Data';
-            var collapse = new StrikeFinder.CollapsableContentView({
-                el: that.$(section),
-                title: title,
-                title_class: 'uac-sub-header',
-                collapsed: collapsed
+        _.each(view.$('.collapsable-header'), function(collapsable) {
+            var v = new StrikeFinder.CollapsableContentView({
+                el: '#' + collapsable.id,
+                title: view.$(collapsable).attr('title'),
+                title_class: 'uac-header'
             });
         });
-
-        var child_sections = this.$('#file-info-content').find('div .xslt-contents-field');
-        _.each(child_sections, function (section) {
-            that.$(section).attr('id', 'file-info-div' + div_index++);
-            var collapse = new StrikeFinder.CollapsableContentView({
-                el: that.$(section),
-                title: that.$(section).attr('xslt-title'),
+        _.each(view.$('.collapsable'), function(collapsable) {
+            var v = new StrikeFinder.CollapsableContentView({
+                el: '#' + collapsable.id,
+                title: view.$(collapsable).attr('title'),
                 title_class: 'uac-sub-header',
-                collapsed: true
+                display_toggle: false
             });
         });
-
-        this.$(".collapsable-title").css('font-size', '13px');
-
-        // Bold embedded header data.
-        this.$("#file-info-content div .xslt-contents-header").css('font-weight', 'bold');
-
-        // Style the embedded tables.
-        this.$("#file-info-content table").addClass("table table-striped table-bordered table-condensed");
-        // Style the embedded text areas.
-        this.$("#file-info-content textarea").css("width", "95%").css("min-height", "100px");
-        //this.$("#file-info-content ul").css("display", "none");
-
-        // Style embedded list items to make them easier to read.
-        this.$("#file-info-content li").css("font-weight", "bold").css("background-color", "#F8F8F8");
-        this.$("#file-info-content li div").css("font-weight", "normal").css("font-size", "95%").css("padding-left", "25px");
-        this.$("#file-info-content li .outline").css("background-color", "#FFFFFF");
 
         return this;
     },
@@ -1315,7 +1307,7 @@ StrikeFinder.FileInfoView = StrikeFinder.View.extend({
 /**
  * View for displaying context menu in the File/Info view.
  */
-StrikeFinder.FileInfoContextMenuView = StrikeFinder.View.extend({
+StrikeFinder.AuditContextMenuView = StrikeFinder.View.extend({
     initialize: function () {
         this.render();
     },
@@ -1357,7 +1349,7 @@ StrikeFinder.FileInfoContextMenuView = StrikeFinder.View.extend({
             is_masstag: is_masstag
         };
 
-        var template = _.template($("#file-info-context-menu-template").html(), data);
+        var template = _.template($("#audit-context-menu-template").html(), data);
         view.$el.html(template);
     },
     suppress: function (ev) {
@@ -2436,8 +2428,8 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 });
 
                 // File info view.
-                view.file_info_view = new StrikeFinder.FileInfoView({
-                    el: $("#file-info-div")
+                view.file_info_view = new StrikeFinder.AuditView({
+                    el: $("#audit-div")
                 });
 
                 // Suppression form.
@@ -2466,9 +2458,9 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 });
 
                 // Context menu.
-                view.context_menu = new StrikeFinder.FileInfoContextMenuView({
+                view.context_menu = new StrikeFinder.AuditContextMenuView({
                     el: $("#context-menu-div"),
-                    source: "#file-info-div",
+                    source: "#audit-div",
                     suppress: view.options.suppress,
                     acquire: view.options.acquire,
                     masstag: view.options.masstag
