@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsl:stylesheet version="1.0"
+                xmlns:atom="http://www.w3.org/2005/Atom"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+                xmlns:user="urn:userscripts"
+                xmlns:mir="urn:mandiant-intelligent-response"
+        >
+    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
+    <xsl:output method="html" />
+    <xsl:template match="/EventLogItem">
+
+        <div class="xslt-contents" xslt-title="Event Log Item Info">
+            <table     width="95%">
+                <tr>
+                    <th>Log</th>
+                    <td><xsl:value-of select="log"/></td>
+                </tr>
+                <tr>
+                    <th>Index</th>
+                    <td><xsl:value-of select="index"/></td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td><xsl:value-of select="type"/></td>
+                </tr>
+                <tr>
+                    <th>categoryNum</th>
+                    <td><xsl:value-of select="categoryNum"/></td>
+                </tr>
+                <tr>
+                    <th>Generated Time</th>
+                    <td><xsl:value-of select="genTime"/></td>
+                </tr>
+                <tr>
+                    <th>Written Time</th>
+                    <td><xsl:value-of select="writeTime"/></td>
+                </tr>
+                <tr>
+                    <th>Reserved</th>
+                    <td><xsl:value-of select="reserved"/></td>
+                </tr>
+                <tr>
+                    <th>Source</th>
+                    <td><xsl:value-of select="source"/></td>
+                </tr>
+                <tr>
+                    <th>Machine</th>
+                    <td><xsl:value-of select="machine"/></td>
+                </tr>
+                <tr>
+                    <th>Category</th>
+                    <td><xsl:value-of select="category"/></td>
+                </tr>
+                <tr>
+                    <th>Unformatted Message</th>
+                    <td><xsl:value-of select="unformattedMessage"/></td>
+                </tr>
+                <tr>
+                    <th>Message</th>
+                    <td><xsl:value-of select="message"/></td>
+                </tr>
+                <tr>
+                    <th>Blob</th>
+                    <td><xsl:value-of select="blob"/></td>
+                </tr>
+            </table>
+        </div>
+    </xsl:template>
+
+</xsl:stylesheet>
