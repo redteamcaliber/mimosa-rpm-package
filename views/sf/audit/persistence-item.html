@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsl:stylesheet version="1.0"
+                xmlns:atom="http://www.w3.org/2005/Atom"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+                xmlns:user="urn:userscripts"
+                xmlns:mir="urn:mandiant-intelligent-response"
+        >
+<!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
+<xsl:output method="html" />
+
+<xsl:template match="/PersistenceItem">
+
+<div class="xslt-contents" xslt-title="Persistence Item">
+    <table     width="95%">
+        <tr>
+            <th>Link File Path</th>
+            <td ><xsl:value-of select="LinkFilePath"/></td>
+        </tr>
+        <tr>
+            <th>Persistence Type</th>
+            <td ><xsl:value-of select="PersistenceType"/></td>
+        </tr>
+    </table>
+</div>
+
+<xsl:if test="PersistenceItem/FileItem">
+<xsl:for-each select="PersistenceItem/FileItem">
+    <div class="xslt-contents" xslt-title="Persistence File Info">
+        <table  border="1"   width="95%">
+            <tr>
+                <th colspan="2" rowspan="1">Full Path</th>
+                <th colspan="2" rowspan="1">Device Path</th>
+            </tr>
+            <tr>
+                <td colspan="2" rowspan="1"><xsl:value-of select="FullPath" /></td>
+                <td colspan="2" rowspan="1"><xsl:value-of select="DevicePath" /></td>
+            </tr>
+            <tr>
+                <th>Size</th>
+                <th colspan="2" rowspan="1">MD5</th>
+                <th>Owner</th>
+            </tr>
+            <tr>
+                <td><xsl:value-of select="SizeInBytes"/></td>
+                <td colspan="2" rowspan="1"><xsl:value-of select="Md5sum" /></td>
+                <td><xsl:value-of select="Username" /></td>
+            </tr>
+            <tr>
+                <th>Created</th>
+                <th>Accessed</th>
+                <th>Modified</th>
+                <th>Changed</th>
+            </tr>
+            <tr>
+                <td><xsl:value-of select="translate(Created, 'T', ' ')"/></td>
+                <td><xsl:value-of select="translate(Accessed, 'T', ' ')"/></td>
+                <td><xsl:value-of select="translate(Modified, 'T', ' ')"/></td>
+                <td><xsl:value-of select="translate(Changed, 'T', ' ')"/></td>
+            </tr>
+        </table>
+
+        <xsl:if test="PEInfo">
+            <!--<h3 class="details">PE Info</h3>-->
+            <div class="xslt-contents-field" xslt-title="PE Info">
+                <table  border="1"   width="95%">
+                    <tr>
+                        <th>PE Type</th>
+                        <th>Compile Time</th>
+                        <th>Subsystem</th>
+                        <th>Base Address</th>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="PEInfo/Type"/></td>
+                        <td><xsl:value-of select="translate(PEInfo/PETimeStamp, 'T', ' ')"/></td>
+                        <td><xsl:value-of select="PEInfo/Subsystem"/></td>
+                        <td><xsl:value-of select="PEInfo/BaseAddress"/></td>
+                    </tr>
+                </table>
+                <table  border="1"   width="95%">
+                    <tr>
+                        <th>Checksum Raw</th>
+                        <th>Checksum API</th>
+                        <th>Checksum Computed</th>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="PEInfo/PEChecksum/PEFileRaw"/></td>
+                        <td><xsl:value-of select="PEInfo/PEChecksum/PEFileAPI"/></td>
+                        <td><xsl:value-of select="PEInfo/PEChecksum/PEComputedAPI"/></td>
+                    </tr>
+                </table>
+                <table  border="1"   width="95%">
+                    <tr>
+                        <th>Signature Exists</th>
+                        <th>Signature Verified</th>
+                        <th>Signature Description</th>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="PEInfo/DigitalSignature/SignatureExists"/></td>
+                        <td><xsl:value-of select="PEInfo/DigitalSignature/SignatureVerified"/></td>
+                        <td><xsl:value-of select="PEInfo/DigitalSignature/Description"/></td>
+                    </tr>
+                </table>
+                <table  border="1"   width="95%">
+                    <tr>
+                        <th>Certificate Issuer</th>
+                        <th>Certificate Subject</th>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="PEInfo/DigitalSignature/CertificateIssuer"/></td>
+                        <td><xsl:value-of select="PEInfo/DigitalSignature/CertificateSubject"/></td>
+                    </tr>
+                </table>
+                <table  border="1"   width="95%">
+                    <tr>
+                        <th>Entry Point Signature</th>
+                        <th>Anomalies</th>
+                    </tr>
+                    <tr>
+                        <td>Name: <xsl:value-of select="PEInfo/DetectedEntryPointSignature/Name"/>
+                            Type: <xsl:value-of select="PEInfo/DetectedEntryPointSignature/Type"/></td>
+                        <td>
+                            <xsl:for-each select="PEInfo/DetectedAnomalies/string">
+                                <xsl:value-of select="."/>
+                            </xsl:for-each>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Peak Entropy</th>
+                        <th>Peak Code Entropy</th>
+                    </tr>
+                    <tr>
+                        <td><xsl:value-of select="PeakEntropy"/></td>
+                        <td><xsl:value-of select="PeakCodeEntropy"/></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="xslt-contents-field" xslt-title="Section Info">
+                <table  border="1"   width="95%">
+                    <tr>
+                        <th>Section Name</th>
+                        <th>Section Type</th>
+                        <th>Size</th>
+                        <th>Characteristics</th>
+                        <th>Entropy</th>
+                    </tr>
+                    <xsl:for-each select="PEInfo/Sections/Section">
+                        <tr>
+                            <td><xsl:value-of select="Name"/></td>
+                            <td><xsl:value-of select="Type"/></td>
+                            <td><xsl:value-of select="SizeInBytes"/></td>
+                            <td><xsl:value-of select="DetectedCharacteristics"/></td>
+                            <td><xsl:value-of select="Entropy/@AverageValue"/></td>
+                        </tr>
+                    </xsl:for-each>
+                </table>
+            </div>
+
+            <div class="xslt-contents-field" xslt-title="Other Info">
+                <div class="xslt-contents-header">Exported Functions</div>
+
+                <UL>
+                    <xsl:for-each select="PEInfo/Exports/ExportedFunctions/string">
+                        <li>
+                        <span>
+                            <xsl:value-of select="."/>
+                        </span>
+                        </li>
+                    </xsl:for-each>
+                </UL>
+
+                <div class="xslt-contents-header">Imports</div>
+                <div id="dspcont" class="dspcont" >
+                    <div class="outline" >
+                        <UL style="padding: 0px; margin: 3px;">
+                            <xsl:for-each select="PEInfo/ImportedModules/Module">
+                                <li>
+                            <span>
+                            <a href="javascript:void(0)" class="dsphead" onclick="dsp(this)">
+                                <xsl:value-of select="Name"/><span class="dspchar">+</span></a></span>
+                                    <div id="dspcont" class="dspcont" >
+                                        <div class="outline" >
+
+                                            <xsl:for-each select="ImportedFunctions/string">
+                                                <xsl:value-of select="."/>
+                                            </xsl:for-each>
+                                        </div>
+                                    </div>
+                                </li>
+                            </xsl:for-each>
+                        </UL>
+
+                    </div>
+                </div>
+            </div>
+        </xsl:if>
+
+        <xsl:if test="StringList/string">
+            <div class="xslt-contents-field" xslt-title="Strings">
+                <div class="outline" >
+                    <xsl:for-each select="StringList/string">
+                        <xsl:value-of select="."/>
+                    </xsl:for-each>
+                </div>
+            </div>
+        </xsl:if>
+
+        <xsl:if test="StreamList/Stream">
+            <div class="xslt-contents-field" xslt-title="Streams">
+                <table  border="1"   width="95%">
+                    <tr>
+                        <th>Name</th>
+                        <th>Size</th>
+                        <th>MD5</th>
+                    </tr>
+                    <xsl:for-each select="StreamList/Stream">
+                        <tr>
+                            <td><xsl:value-of select="Name"/></td>
+                            <td><xsl:value-of select="SizeInBytes"/></td>
+                            <td><xsl:value-of select="Md5sum"/></td>
+                        </tr>
+                    </xsl:for-each>
+                </table>
+            </div>
+        </xsl:if>
+
+</xsl:for-each>
+</xsl:if>
+
+<xsl:if test="PersistenceItem/RegistryItem">
+    <xsl:for-each select="PersistenceItem/RegistryItem">
+        <div class="xslt-contents" xslt-title="Persistence Registry Info">
+            <table  border="1"   width="95%">
+                <tr>
+                    <th>Modified Time</th>
+                    <td><xsl:value-of select="Modified"/></td>
+                </tr>
+                <tr>
+                    <th>Hive</th>
+                    <td><xsl:value-of select="Hive"/></td>
+                </tr>
+                <tr>
+                    <th>Path to Key</th>
+                    <td><xsl:value-of select="KeyPath"/></td>
+                </tr>
+                <tr>
+                    <th>Full Path</th>
+                    <td><xsl:value-of select="Path"/></td>
+                </tr>
+                <tr>
+                    <th>Security ID</th>
+                    <td><xsl:value-of select="SecurityID"/></td>
+                </tr>
+                <tr>
+                    <th>Value Name</th>
+                    <td><xsl:value-of select="ValueName"/></td>
+                </tr>
+                <tr>
+                    <th>Value Type</th>
+                    <td><xsl:value-of select="Type"/></td>
+                </tr>
+                <tr>
+                    <th>Size in Bytes</th>
+                    <td><xsl:value-of select="ReportedLengthInBytes"/></td>
+                </tr>
+                <tr>
+                    <th>Text</th>
+                    <td><xsl:value-of select="Text"/></td>
+                </tr>
+                <tr>
+                    <th>Base 64 Encoded Data</th>
+                    <td><xsl:value-of select="Value"/></td>
+                </tr>
+            </table>
+        </div>
+    </xsl:for-each>
+</xsl:if>
+
+<xsl:if test="PersistenceItem/ServiceItem">
+    <xsl:for-each select="PersistenceItem/ServiceItem">
+        <div class="xslt-contents" xslt-title="Service Info">
+            <table  border="1"   width="95%">
+                <tr>
+                    <th>Name</th>
+                    <td ><xsl:value-of select="name"/></td>
+                </tr>
+                <tr>
+                    <th>Descriptive Name</th>
+                    <td ><xsl:value-of select="descriptiveName"/></td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td ><xsl:value-of select="description"/></td>
+                </tr>
+                <tr>
+                    <th>Mode</th>
+                    <td ><xsl:value-of select="mode"/></td>
+                </tr>
+                <tr>
+                    <th>Started As</th>
+                    <td ><xsl:value-of select="startedAs"/></td>
+                </tr>
+                <tr>
+                    <th>Path</th>
+                    <td ><xsl:value-of select="path"/></td>
+                </tr>
+                <tr>
+                    <th>Status</th>
+                    <td ><xsl:value-of select="status"/></td>
+                </tr>
+                <tr>
+                    <th>Service DLL</th>
+                    <td ><xsl:value-of select="serviceDLL"/></td>
+                </tr>
+                <tr>
+                    <th>PID</th>
+                    <td ><xsl:value-of select="pid"/></td>
+                </tr>
+                <tr>
+                    <th>Type</th>
+                    <td ><xsl:value-of select="type"/></td>
+                </tr>
+            </table>
+
+            <xsl:if test="pathSignatureExists or pathSignatureVerified or pathSignatureDescription or pathCertificateSubject or pathCertificateIssuer or pathmd5sum or pathsha1sum or pathsha256sum">
+                <div class="xslt-contents-field" xslt-title="Path Details">
+                    <table  border="1"   width="95%">
+                        <xsl:if test="pathSignatureExists">
+                            <tr>
+                                <th>Signature Exists</th>
+                                <td ><xsl:value-of select="pathSignatureExists"/></td>
+                            </tr>
+                        </xsl:if>
+                        <xsl:if test="pathSignatureVerified">
+                            <tr>
+                                <th>Signature Verified</th>
+                                <td ><xsl:value-of select="pathSignatureVerified"/></td>
+                            </tr>
+                        </xsl:if>
+                        <xsl:if test="pathSignatureDescription">
+                            <tr>
+                                <th>Signature Description</th>
+                                <td ><xsl:value-of select="pathSignatureDescription"/></td>
+                            </tr>
+                        </xsl:if>
+                        <xsl:if test="pathCertificateSubject">
+                            <tr>
+                                <th>Certificate Subject</th>
+                                <td ><xsl:value-of select="pathCertificateSubject"/></td>
+                            </tr>
+                        </xsl:if>
+                        <xsl:if test="pathCertificateIssuer">
+                            <tr>
+                                <th>Certificate Issuer</th>
+                                <td ><xsl:value-of select="pathCertificateIssuer"/></td>
+                            </tr>
+                        </xsl:if>
+                        <xsl:if test="pathmd5sum">
+                            <tr>
+                                <th>MD5 Sum</th>
+                                <td ><xsl:value-of select="pathmd5sum"/></td>
+                            </tr>
+                        </xsl:if>
+                        <xsl:if test="pathsha1sum">
+                            <tr>
+                                <th>SHA1 Sum</th>
+                                <td ><xsl:value-of select="pathsha1sum"/></td>
+                            </tr>
+                        </xsl:if>
+                        <xsl:if test="pathsha256sum">
+                            <tr>
+                                <th>SHA256 Sum</th>
+                                <td ><xsl:value-of select="pathsha256sum"/></td>
+                            </tr>
+                        </xsl:if>
+                    </table>
+                </div>
+            </xsl:if>
+
+            <xsl:if test="serviceDLLSignatureExists or serviceDLLSignatureVerified or serviceDLLSignatureDescription or serviceDLLCertificateSubject or serviceDLLCertificateIssuer or serviceDLLmd5sum or serviceDLLsha1sum or serviceDLLsha256sum">
+                <div class="xslt-contents-field" xslt-title="Service DLL Details">
+                    <table  border="1"   width="95%">
+                        <xsl:if test="serviceDLLSignatureExists">
+                            <tr>
+                                <th>Signature Exists</th>
+                                <td ><xsl:value-of select="serviceDLLSignatureExists"/></td>
+                            </tr>
+                        </xsl:if>
+                        <xsl:if test="serviceDLLSignatureVerified">
+                            <tr>
+                                <th>Signature Verified</th>
+                                <td ><xsl:value-of select="serviceDLLSignatureVerified"/></td>
+                            </tr>
+                        </xsl:if>
+                        <xsl:if test="serviceDLLSignatureDescription">
+                            <tr>
+                                <th>Signature Description</th>
+                                <td ><xsl:value-of select="serviceDLLSignatureDescription"/></td>
+                            </tr>
+                        </xsl:if>
+                        <xsl:if test="serviceDLLCertificateSubject">
+                            <tr>
+                                <th>Certificate Subject</th>
+                                <td ><xsl:value-of select="serviceDLLCertificateSubject"/></td>
+                            </tr>
+                        </xsl:if>
+                        <xsl:if test="serviceDLLCertificateIssuer">
+                            <tr>
+                                <th>Certificate Issuer</th>
+                                <td ><xsl:value-of select="serviceDLLCertificateIssuer"/></td>
+                            </tr>
+                        </xsl:if>
+                        <xsl:if test="serviceDLLmd5sum">
+                            <tr>
+                                <th>MD5 Sum</th>
+                                <td ><xsl:value-of select="serviceDLLmd5sum"/></td>
+                            </tr>
+                        </xsl:if>
+                        <xsl:if test="serviceDLLsha1sum">
+                            <tr>
+                                <th>SHA1 Sum</th>
+                                <td ><xsl:value-of select="serviceDLLsha1sum"/></td>
+                            </tr>
+                        </xsl:if>
+                        <xsl:if test="serviceDLLsha256sum">
+                            <tr>
+                                <th>SHA256 Sum</th>
+                                <td ><xsl:value-of select="serviceDLLsha256sum"/></td>
+                            </tr>
+                        </xsl:if>
+                    </table>
+                </div>
+            </xsl:if>
+
+        </div>
+    </xsl:for-each>
+
+</xsl:if>
+
+</xsl:template>
+</xsl:stylesheet>
