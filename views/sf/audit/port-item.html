@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsl:stylesheet version="1.0"
+                xmlns:atom="http://www.w3.org/2005/Atom"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+                xmlns:user="urn:userscripts"
+                xmlns:mir="urn:mandiant-intelligent-response"
+        >
+    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
+    <xsl:output method="html" />
+
+
+    <!-- ############################################################### -->
+    <xsl:template match="/PortItem">
+
+        <div class="xslt-contents" xslt-title="Port Info">
+            <table     width="95%">
+                <tr>
+                    <td class="leftHeader"><b>Protocol</b></td>
+                    <td><xsl:value-of select="protocol"/></td>
+                </tr>
+                <tr>
+                    <td><b>State</b></td>
+                    <td><xsl:value-of select="state"/></td>
+                </tr>
+                <tr>
+                    <td><b>Local IP</b></td>
+                    <td><xsl:value-of select="localIP"/></td>
+                </tr>
+                <tr>
+                    <td><b>Local Port</b></td>
+                    <td><xsl:value-of select="localPort"/></td>
+                </tr>
+                <tr>
+                    <td><b>Remote IP</b></td>
+                    <td><xsl:value-of select="remoteIP"/></td>
+                </tr>
+                <tr>
+                    <td><b>Remote Port</b></td>
+                    <td><xsl:value-of select="remotePort"/></td>
+                </tr>
+                <tr>
+                    <td><b>PID</b></td>
+                    <td><xsl:value-of select="pid"/></td>
+                </tr>
+                <tr>
+                    <td><b>Process</b></td>
+                    <td><xsl:value-of select="process"/></td>
+                </tr>
+                <tr>
+                    <td><b>Path</b></td>
+                    <td><xsl:value-of select="path"/></td>
+                </tr>
+                <xsl:if test="CreationTime">
+                    <tr>
+                        <td><b>Creation Time</b></td>
+                        <td><xsl:value-of select="CreationTime"/></td>
+                    </tr>
+                </xsl:if>
+            </table>
+        </div>
+
+        <div class="xslt-contents" xslt-title="Portal Formatted Data">
+            <textarea title="Click to Highlight" style="width:90%; height:102px;" onclick="this.select();">
+                Protocol:        <xsl:value-of select="protocol"/>
+                State:           <xsl:value-of select="state"/>
+                Local IP:        <xsl:value-of select="localIP"/>
+                Remote IP:       <xsl:value-of select="remoteIP"/>
+                Process ID:      <xsl:value-of select="pid"/>
+                Process Name:    <xsl:value-of select="process"/>
+            </textarea>
+        </div>
+    </xsl:template>
+
+</xsl:stylesheet>
