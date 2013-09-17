@@ -1,5 +1,4 @@
 {% set fileitem = content.fileitem %}
-<div id="file-item" class="collapsable-header" title="<i class='icon-file'></i> File/Item">
 
 <h4>File Item Info</h4>
 <table width="100%" class="table table-condensed table-bordered">
@@ -385,7 +384,7 @@
     <br/>
 
     {% if peinfo.exports.exportedfunctions %}
-        <div id="exported-functions-div" class="collapsable collapsed" title="Exported Functions">
+        <div id="exported-functions-div" class="collapsable collapsed" collapsable-title="Exported Functions">
             <span style="font-weight: bold">{{ peinfo.exports.dllname }}</span>
 
             <table class="table table-condensed">
@@ -401,7 +400,7 @@
     {% endif %}
 
     {% if peinfo.importedmodules.module %}
-        <div id="imported-functions-div" class="collapsable collapsed" title="Imported Functions">
+        <div id="imported-functions-div" class="collapsable collapsed" collapsable-title="Imported Functions">
             {% for module in peinfo.importedmodules.module %}
                 <span class="ioc-term" ioc-term="FileItem/PEInfo/ImportedModules/Name" style="font-weight: bold">
                     {{ module.name }}
@@ -428,7 +427,7 @@
 
 
 {% if fileitem.stringlist.string %}
-    <div class="collapsable collapsed" title="Strings">
+    <div class="collapsable collapsed" collapsable-title="Strings">
         <ul>
             <li>
                 <div class="outline">
@@ -445,7 +444,7 @@
 {% endif %}
 
 {% if fileitem.streamlist.stream %}
-    <div class="collapsable collapsed" title="Streams">
+    <div class="collapsable collapsed" collapsable-title="Streams">
         <ul>
             <li>
                 <table width="100%" class="table table-condensed table-bordered">
@@ -480,21 +479,20 @@
     </div>
 {% endif %}
 
-<div id="portal-formated-data-div" class="collapsable collapsed" title="Portal Formatted Data">
-<textarea title="Click to Highlight"
-              cols="80"
-              rows="10"
-              style="width: 95%;"
-              onclick="this.select();">
-File Name: {{ fileitem.filename }}
-MD5 Hash: {{ fileitem.md5sum }}
-File Created: {{ fileitem.created }}
-Last Accessed: {{ fileitem.accessed }}
-Last Modified: {{ fileitem.modified }}
-Entry Modified:{{ fileitem.changed }}
-File Size: {{ fileitem.sizeinbytes }}
-File Path: {% if fileitem.drive %}{{ fileitem.drive }}:\{{ fileitem.filepath }}{% endif %}
-File Owner: {{ fileitem.username }}</textarea>
-</div>
-
+<div id="portal-formated-data-div" class="collapsable collapsed" collapsable-title="Portal Formatted Data">
+    <textarea title="Click to Highlight"
+                  cols="80"
+                  rows="10"
+                  style="width: 95%;"
+                  onclick="this.select();">
+        File Name: {{ fileitem.filename }}
+        MD5 Hash: {{ fileitem.md5sum }}
+        File Created: {{ fileitem.created }}
+        Last Accessed: {{ fileitem.accessed }}
+        Last Modified: {{ fileitem.modified }}
+        Entry Modified:{{ fileitem.changed }}
+        File Size: {{ fileitem.sizeinbytes }}
+        File Path: {% if fileitem.drive %}{{ fileitem.drive }}:\{{ fileitem.filepath }}{% endif %}
+        File Owner: {{ fileitem.username }}
+    </textarea>
 </div>

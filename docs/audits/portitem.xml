@@ -1,0 +1,10 @@
+<PortItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" uid="F5DF5E56-8886-42CB-AEF5-C6C242B5E1F7" created="2013-02-05T05:18:00Z"><pid>636</pid>
+    <process>svchost.exe</process>
+    <path>C:\Windows\system32\svchost.exe</path>
+    <state>LISTENING</state>
+    <localIP>0.0.0.0</localIP>
+    <remoteIP>0.0.0.0</remoteIP>
+    <localPort>135</localPort>
+    <remotePort>0</remotePort>
+    <protocol>TCP</protocol>
+</PortItem>

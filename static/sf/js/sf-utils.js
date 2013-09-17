@@ -24,14 +24,14 @@ StrikeFinder.collapse = function(el) {
     _.each($(el).find('.collapsable-header'), function(collapsable) {
         var v = new StrikeFinder.CollapsableContentView({
             el: '#' + collapsable.id,
-            title: $(collapsable).attr('title'),
+            title: $(collapsable).attr('collapsable-title'),
             title_class: 'uac-header'
         });
     });
     _.each($(el).find('.collapsable'), function(collapsable) {
         var v = new StrikeFinder.CollapsableContentView({
             el: '#' + collapsable.id,
-            title: $(collapsable).attr('title'),
+            title: $(collapsable).attr('collapsable-title'),
             title_class: 'uac-sub-header',
             display_toggle: false
         });

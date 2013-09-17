@@ -1,45 +1,43 @@
 {% set ac = content.appcompatitem %}
 
-<div id="app-compat-item-div" class="collapsable-header" title="<i class='icon-file'></i> AppCompatItem/Item">
-    <h4>AppCompat Detail</h4>
-    <table class="table table-condensed">
-        <tr>
-            <th>File Name</th>
-            <td><span class="ioc-term" ioc-term="AppCompatItem/FileName">{{ ac.filename }}</span></td>
-        </tr>
-        <tr>
-            <th>Full Path</th>
-            <td><span class="ioc-term" ioc-term="AppCompatItem/FullPath">{{ ac.fullpath }}</span></td>
-        </tr>
-        <tr>
-            <th>File Path</th>
-            <td><span class="ioc-term" ioc-term="AppCompatItem/FilePath">{{ ac.filepath }}</span></td>
-        </tr>
-        <tr>
-            <th>Size in Bytes</th>
-            <td><span class="ioc-term" ioc-term="AppCompatItem/SizeInBytes">{{ ac.sizeinbytes }}</span></td>
-        </tr>
-        <tr>
-            <th>Execution</th>
-            <td><span class="ioc-term" ioc-term="AppCompatItem/DidExectute">{{ ac.didexectute }}</span></td>
-        </tr>
-        <tr>
-            <th>Executed</th>
-            <td><span class="ioc-term" ioc-term="AppCompatItem/Executed">{{ ac.executed }}</span></td>
-        </tr>
-        <tr>
-            <th>Modified</th>
-            <td><span class="ioc-term" ioc-term="AppCompatItem/Modified">{{ ac.modified }}</span></td>
-        </tr>
-        <tr>
-            <th>Source Key</th>
-            <td><span class="ioc-term" ioc-term="AppCompatItem/SourceKey">{{ ac.sourcekey }}</span></td>
-        </tr>
-        <tr>
-            <th>Generator</th>
-            <td>
-                {{ ac.generator }} v{{ ac.generatorversion }}
-            </td>
-        </tr>
-    </table>
-</div>
+<h4>AppCompat Detail</h4>
+<table class="table table-condensed">
+    <tr>
+        <th>File Name</th>
+        <td><span class="ioc-term" ioc-term="AppCompatItem/FileName">{{ ac.filename }}</span></td>
+    </tr>
+    <tr>
+        <th>Full Path</th>
+        <td><span class="ioc-term" ioc-term="AppCompatItem/FullPath">{{ ac.fullpath }}</span></td>
+    </tr>
+    <tr>
+        <th>File Path</th>
+        <td><span class="ioc-term" ioc-term="AppCompatItem/FilePath">{{ ac.filepath }}</span></td>
+    </tr>
+    <tr>
+        <th>Size in Bytes</th>
+        <td><span class="ioc-term" ioc-term="AppCompatItem/SizeInBytes">{{ ac.sizeinbytes }}</span></td>
+    </tr>
+    <tr>
+        <th>Execution</th>
+        <td><span class="ioc-term" ioc-term="AppCompatItem/DidExectute">{{ ac.didexectute }}</span></td>
+    </tr>
+    <tr>
+        <th>Executed</th>
+        <td><span class="ioc-term" ioc-term="AppCompatItem/Executed">{{ ac.executed }}</span></td>
+    </tr>
+    <tr>
+        <th>Modified</th>
+        <td><span class="ioc-term" ioc-term="AppCompatItem/Modified">{{ ac.modified }}</span></td>
+    </tr>
+    <tr>
+        <th>Source Key</th>
+        <td><span class="ioc-term" ioc-term="AppCompatItem/SourceKey">{{ ac.sourcekey }}</span></td>
+    </tr>
+    <tr>
+        <th>Generator</th>
+        <td>
+            {{ ac.generator }} v{{ ac.generatorversion }}
+        </td>
+    </tr>
+</table>

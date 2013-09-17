@@ -1,48 +1,46 @@
 {% set i = content.arpentryitem %}
 
-<div id="arp-entry-item-div" class="collapsable-header" title="<i class='icon-file'></i> ARPEntry/Item">
-    <h4>ARP Information</h4>
+<h4>ARP Information</h4>
 
-    <table class="table table-condensed">
-        <tr>
-            <th>Interface</th>
-            <td><span class="ioc-term" ioc-term="ArpEntryItem/Interface">{{ i.interface }}</span></td>
-        </tr>
-        <tr>
-            <th>Physical Address</th>
-            <td><span class="ioc-term" ioc-term="ArpEntryItem/PhysicalAddress">{{ i.physicaladdress }}</span></td>
-        </tr>
-        <tr>
-            <th>IPv6 Address</th>
-            <td><span class="ioc-term" ioc-term="ArpEntryItem/IPv6Address">{{ i.ipv6address }}</span></td>
-        </tr>
-        <tr>
-            <th>IPv4 Address</th>
-            <td><span class="ioc-term" ioc-term="ArpEntryItem/IPv4Address">{{ i.ipv4address }}</span></td>
-        </tr>
-        <tr>
-            <th>Cache Type</th>
-            <td><span class="ioc-term" ioc-term="ArpEntryItem/CacheType">{{ i.cachetype }}</span></td>
-        </tr>
-        <tr>
-            <th>Interface Type</th>
-            <td><span class="ioc-term" ioc-term="ArpEntryItem/InterfaceType">{{ i.interfacetype }}</span></td>
-        </tr>
-        <tr>
-            <th>State</th>
-            <td><span class="ioc-term" ioc-term="ArpEntryItem/State">{{ i.state }}</span></td>
-        </tr>
-        <tr>
-            <th>Is Router</th>
-            <td><span class="ioc-term" ioc-term="ArpEntryItem/IsRouter">{{ i.isrouter }}</span></td>
-        </tr>
-        <tr>
-            <th>Last Reachable</th>
-            <td><span class="ioc-term" ioc-term="ArpEntryItem/LastReachable">{{ i.lastreachable }}</span></td>
-        </tr>
-        <tr>
-            <th>Last Unreachable</th>
-            <td><span class="ioc-term" ioc-term="ArpEntryItem/LastUnreachable">{{ i.lastunreachable }}</span></td>
-        </tr>
-    </table>
-</div>
+<table class="table table-condensed">
+    <tr>
+        <th>Interface</th>
+        <td><span class="ioc-term" ioc-term="ArpEntryItem/Interface">{{ i.interface }}</span></td>
+    </tr>
+    <tr>
+        <th>Physical Address</th>
+        <td><span class="ioc-term" ioc-term="ArpEntryItem/PhysicalAddress">{{ i.physicaladdress }}</span></td>
+    </tr>
+    <tr>
+        <th>IPv6 Address</th>
+        <td><span class="ioc-term" ioc-term="ArpEntryItem/IPv6Address">{{ i.ipv6address }}</span></td>
+    </tr>
+    <tr>
+        <th>IPv4 Address</th>
+        <td><span class="ioc-term" ioc-term="ArpEntryItem/IPv4Address">{{ i.ipv4address }}</span></td>
+    </tr>
+    <tr>
+        <th>Cache Type</th>
+        <td><span class="ioc-term" ioc-term="ArpEntryItem/CacheType">{{ i.cachetype }}</span></td>
+    </tr>
+    <tr>
+        <th>Interface Type</th>
+        <td><span class="ioc-term" ioc-term="ArpEntryItem/InterfaceType">{{ i.interfacetype }}</span></td>
+    </tr>
+    <tr>
+        <th>State</th>
+        <td><span class="ioc-term" ioc-term="ArpEntryItem/State">{{ i.state }}</span></td>
+    </tr>
+    <tr>
+        <th>Is Router</th>
+        <td><span class="ioc-term" ioc-term="ArpEntryItem/IsRouter">{{ i.isrouter }}</span></td>
+    </tr>
+    <tr>
+        <th>Last Reachable</th>
+        <td><span class="ioc-term" ioc-term="ArpEntryItem/LastReachable">{{ i.lastreachable }}</span></td>
+    </tr>
+    <tr>
+        <th>Last Unreachable</th>
+        <td><span class="ioc-term" ioc-term="ArpEntryItem/LastUnreachable">{{ i.lastunreachable }}</span></td>
+    </tr>
+</table>

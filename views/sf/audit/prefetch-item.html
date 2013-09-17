@@ -1,6 +1,6 @@
 {% set pi = content.prefetchitem %}
 
-<div id="prefetch-item-div" class="collapsable-header" title="<i class='icon-file'></i> Prefetch/Item">
+<div id="prefetch-item-div" class="collapsable-header" collapsable-title="<i class='icon-file'></i> Prefetch/Item">
 
     <h4>Prefetch</h4>
     <table class="table table-condensed">
@@ -44,7 +44,7 @@
 
     {% if pi.accessedfilelist.accessedfile %}
         <br/>
-        <div id="accessed-file-list-div" class="collapsable collapsed" title="Accessed File List">
+        <div id="accessed-file-list-div" class="collapsable collapsed" collapsable-title="Accessed File List">
             <table class="table table-condensed">
                 {% for file in get_list(pi.accessedfilelist.accessedfile) %}
                     <tr>
@@ -56,7 +56,7 @@
     {% endif %}
 
     {% if pi.volumelist.volumeitem %}
-        <div id="volume-list-div" class="collapsable" title="Volume List">
+        <div id="volume-list-div" class="collapsable" collapsable-title="Volume List">
             {% for item in get_list(pi.volumelist.volumeitem) %}
                 <h5>{{ item.$.uid }}</h5>
                 <table class="table table-condensed table-bordered">

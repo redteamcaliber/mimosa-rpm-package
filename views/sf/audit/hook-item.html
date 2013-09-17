@@ -1,102 +1,100 @@
 {% set i = content.hookitem %}
 
-<div id="hook-item-div" class="collapsable-header" title="<i class='icon-file'></i> Hook/Item">
-    <h4>Hook Info</h4>
+<h4>Hook Info</h4>
 
-    <table class="table table-condensed">
-        <tr>
-            <th style='width: 150px'>Description</th>
-            <td >{{ i.hookdescription }}</td>
-        </tr>
-        <tr>
-            <th>Hooked Function</th>
-            <td >{{ i.hookedfunction }}</td>
-        </tr>
-        <tr>
-            <th>Hooked Module</th>
-            <td >{{ i.hookedmodule }}</td>
-        </tr>
-        <tr>
-            <th>Hooking Module</th>
-            <td >{{ i.hookingmodule }}</td>
-        </tr>
-        <tr>
-            <th>Hooking Address</th>
-            <td >{{ i.hookingaddress }}</td>
-        </tr>
-    </table>
+<table class="table table-condensed">
+    <tr>
+        <th style='width: 150px'>Description</th>
+        <td >{{ i.hookdescription }}</td>
+    </tr>
+    <tr>
+        <th>Hooked Function</th>
+        <td >{{ i.hookedfunction }}</td>
+    </tr>
+    <tr>
+        <th>Hooked Module</th>
+        <td >{{ i.hookedmodule }}</td>
+    </tr>
+    <tr>
+        <th>Hooking Module</th>
+        <td >{{ i.hookingmodule }}</td>
+    </tr>
+    <tr>
+        <th>Hooking Address</th>
+        <td >{{ i.hookingaddress }}</td>
+    </tr>
+</table>
 
-    {% if i.digitalsignaturehooking.signatureexists or i.digitalsignaturehooking.signatureverified or i.digitalsignaturehooking.description or i.digitalsignaturehooking.certificatesubject or i.digitalsignaturehooking.certificateissuer %}
-    <h4>Hooking Digital Signature</h4>
-    <table class="table table-condensed">
-        {% if i.digitalsignaturehooking.signatureexists %}
-        <tr>
-            <th style='width: 150px'>Signature Exists</th>
-            <td >{{ i.digitalsignaturehooking.signatureexists }}</td>
-        </tr>
-        {% endif %}
-        {% if i.digitalsignaturehooking.signatureverified %}
-        <tr>
-            <th>Signature Verified</th>
-            <td >{{ i.digitalsignaturehooking.signatureverified }}</td>
-        </tr>
-        {% endif %}
-        {% if i.digitalsignaturehooking.description %}
-        <tr>
-            <th>Signature Description</th>
-            <td >{{ i.digitalsignaturehooking.description }}</td>
-        </tr>
-        {% endif %}
-        {% if i.digitalsignaturehooking.certificatesubject %}
-        <tr>
-            <th>Certificate Subject</th>
-            <td >{{ i.digitalsignaturehooking.certificatesubject }}</td>
-        </tr>
-        {% endif %}
-        {% if i.digitalsignaturehooking/certificateissuer %}
-        <tr>
-            <th>Certificate Issuer</th>
-            <td >{{ i.digitalsignaturehooking.certificateissuer }}</td>
-        </tr>
-        {% endif %}
-    </table>
+{% if i.digitalsignaturehooking.signatureexists or i.digitalsignaturehooking.signatureverified or i.digitalsignaturehooking.description or i.digitalsignaturehooking.certificatesubject or i.digitalsignaturehooking.certificateissuer %}
+<h4>Hooking Digital Signature</h4>
+<table class="table table-condensed">
+    {% if i.digitalsignaturehooking.signatureexists %}
+    <tr>
+        <th style='width: 150px'>Signature Exists</th>
+        <td >{{ i.digitalsignaturehooking.signatureexists }}</td>
+    </tr>
     {% endif %}
-
-    {% if i.digitalsignaturehooked.signatureexists or i.digitalsignaturehooked.signatureverified or i.digitalsignaturehooked.description or i.digitalsignaturehooked.certificatesubject or i.digitalsignaturehooked.certificateissuer %}
-    <h4>Hooked Digital Signature</h4>
-    <table class="table table-condensed">
-        {% if i.digitalsignaturehooked.signatureexists %}
-        <tr>
-            <th style='width: 150px'>Signature Exists</th>
-            <td >{{ i.digitalsignaturehooked.signatureexists }}</td>
-        </tr>
-        {% endif %}
-        {% if i.digitalsignaturehooked.signatureverified %}
-        <tr>
-            <th>Signature Verified</th>
-            <td >{{ i.digitalsignaturehooked.signatureverified }}</td>
-        </tr>
-        {% endif %}
-        {% if i.digitalsignaturehooked.signaturedescription %}
-        <tr>
-            <th>Signature Description</th>
-            <td >{{ i.digitalsignaturehooked.signaturedescription }}</td>
-        </tr>
-        {% endif %}
-        {% if i.digitalsignaturehooked.certificatesubject %}
-        <tr>
-            <th>Certificate Subject</th>
-            <td >{{ i.digitalsignaturehooked.certificatesubject }}</td>
-        </tr>
-        {% endif %}
-        {% if i.digitalsignaturehooked.certificateissuer %}
-        <tr>
-            <th>Certificate Issuer</th>
-            <td >{{ i.digitalsignaturehooked.certificateissuer }}</td>
-        </tr>
-        {% endif %}
-    </table>
+    {% if i.digitalsignaturehooking.signatureverified %}
+    <tr>
+        <th>Signature Verified</th>
+        <td >{{ i.digitalsignaturehooking.signatureverified }}</td>
+    </tr>
     {% endif %}
-</div>
+    {% if i.digitalsignaturehooking.description %}
+    <tr>
+        <th>Signature Description</th>
+        <td >{{ i.digitalsignaturehooking.description }}</td>
+    </tr>
+    {% endif %}
+    {% if i.digitalsignaturehooking.certificatesubject %}
+    <tr>
+        <th>Certificate Subject</th>
+        <td >{{ i.digitalsignaturehooking.certificatesubject }}</td>
+    </tr>
+    {% endif %}
+    {% if i.digitalsignaturehooking/certificateissuer %}
+    <tr>
+        <th>Certificate Issuer</th>
+        <td >{{ i.digitalsignaturehooking.certificateissuer }}</td>
+    </tr>
+    {% endif %}
+</table>
+{% endif %}
+
+{% if i.digitalsignaturehooked.signatureexists or i.digitalsignaturehooked.signatureverified or i.digitalsignaturehooked.description or i.digitalsignaturehooked.certificatesubject or i.digitalsignaturehooked.certificateissuer %}
+<h4>Hooked Digital Signature</h4>
+<table class="table table-condensed">
+    {% if i.digitalsignaturehooked.signatureexists %}
+    <tr>
+        <th style='width: 150px'>Signature Exists</th>
+        <td >{{ i.digitalsignaturehooked.signatureexists }}</td>
+    </tr>
+    {% endif %}
+    {% if i.digitalsignaturehooked.signatureverified %}
+    <tr>
+        <th>Signature Verified</th>
+        <td >{{ i.digitalsignaturehooked.signatureverified }}</td>
+    </tr>
+    {% endif %}
+    {% if i.digitalsignaturehooked.signaturedescription %}
+    <tr>
+        <th>Signature Description</th>
+        <td >{{ i.digitalsignaturehooked.signaturedescription }}</td>
+    </tr>
+    {% endif %}
+    {% if i.digitalsignaturehooked.certificatesubject %}
+    <tr>
+        <th>Certificate Subject</th>
+        <td >{{ i.digitalsignaturehooked.certificatesubject }}</td>
+    </tr>
+    {% endif %}
+    {% if i.digitalsignaturehooked.certificateissuer %}
+    <tr>
+        <th>Certificate Issuer</th>
+        <td >{{ i.digitalsignaturehooked.certificateissuer }}</td>
+    </tr>
+    {% endif %}
+</table>
+{% endif %}
 
 

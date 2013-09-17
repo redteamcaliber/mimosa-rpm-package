@@ -1,59 +1,57 @@
 {% set i = content.eventlogitem %}
 
-<div id="event-log-item-div" class="collapsable-header" title="<i class='icon-file'></i> EventLog/item">
-    <h4>Event Log Item Info</h4>
-    <table class="table table-condensed">
-        <tr>
-            <th style="min-width: 150px">Log</th>
-            <td>{{ i.log }}</td>
-        </tr>
-        <tr>
-            <th>Index</th>
-            <td>{{ i.index }}</td>
-        </tr>
-        <tr>
-            <th>Type</th>
-            <td>{{ i.type }}</td>
-        </tr>
-        <tr>
-            <th>categoryNum</th>
-            <td>{{ i.categorynum }}</td>
-        </tr>
-        <tr>
-            <th>Generated Time</th>
-            <td>{{ i.gentime }}</td>
-        </tr>
-        <tr>
-            <th>Written Time</th>
-            <td>{{ i.writetime }}</td>
-        </tr>
-        <tr>
-            <th>Reserved</th>
-            <td>{{ i.reserved }}</td>
-        </tr>
-        <tr>
-            <th>Source</th>
-            <td>{{ i.source }}</td>
-        </tr>
-        <tr>
-            <th>Machine</th>
-            <td>{{ i.machine }}</td>
-        </tr>
-        <tr>
-            <th>Category</th>
-            <td>{{ i.category }}</td>
-        </tr>
-        <tr>
-            <th>Unformatted Message</th>
-            <td>{{ i.unformattedmessage }}</td>
-        </tr>
-        <tr>
-            <th>Message</th>
-            <td>{{ i.message }}</td>
-        </tr>
-        <tr>
-            <th>Blob</th>
-            <td>{{ i.blob }}</td>
-        </tr>
-    </table>
-</div>
+<h4>Event Log Item Info</h4>
+<table class="table table-condensed">
+    <tr>
+        <th style="min-width: 150px">Log</th>
+        <td>{{ i.log }}</td>
+    </tr>
+    <tr>
+        <th>Index</th>
+        <td>{{ i.index }}</td>
+    </tr>
+    <tr>
+        <th>Type</th>
+        <td>{{ i.type }}</td>
+    </tr>
+    <tr>
+        <th>categoryNum</th>
+        <td>{{ i.categorynum }}</td>
+    </tr>
+    <tr>
+        <th>Generated Time</th>
+        <td>{{ i.gentime }}</td>
+    </tr>
+    <tr>
+        <th>Written Time</th>
+        <td>{{ i.writetime }}</td>
+    </tr>
+    <tr>
+        <th>Reserved</th>
+        <td>{{ i.reserved }}</td>
+    </tr>
+    <tr>
+        <th>Source</th>
+        <td>{{ i.source }}</td>
+    </tr>
+    <tr>
+        <th>Machine</th>
+        <td>{{ i.machine }}</td>
+    </tr>
+    <tr>
+        <th>Category</th>
+        <td>{{ i.category }}</td>
+    </tr>
+    <tr>
+        <th>Unformatted Message</th>
+        <td>{{ i.unformattedmessage }}</td>
+    </tr>
+    <tr>
+        <th>Message</th>
+        <td>{{ i.message }}</td>
+    </tr>
+    <tr>
+        <th>Blob</th>
+        <td>{{ i.blob }}</td>
+    </tr>
+</table>

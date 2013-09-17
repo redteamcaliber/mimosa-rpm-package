@@ -1,38 +1,36 @@
 {% set i = content.diskitem %}
 
-<div id="disk-item-div" class="collapsable-header" title="<i class='icon-file'></i> Disk/Item">
-    <h4>Disk Info</h4>
+<h4>Disk Info</h4>
 
-    <table class="table table-condensed">
+<table class="table table-condensed">
+    <tr>
+        <th>Name</th>
+        <td><span class="ioc-term" ioc-term="DiskItem/DiskName">{{ i.diskname }}</span></td>
+    </tr>
+    <tr>
+        <th>Size</th>
+        <td><span class="ioc-term" ioc-term="DiskItem/DiskSize">{{ i.disksize }}</span></td>
+    </tr>
+</table>
+
+{% for p in get_list(i.partitionlist.partition) %}
+    <h4>
+        <div class="xslt-contents-header">Partition <span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionNumber">{{ p.partitionnumber }}</span></div>
+    </h4>
+
+    <table class="table table-condensed table-bordered">
         <tr>
-            <th>Name</th>
-            <td><span class="ioc-term" ioc-term="DiskItem/DiskName">{{ i.diskname }}</span></td>
+            <th>Offset</th>
+            <td><span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionOffset">{{ p.partitionoffset }}</span></td>
         </tr>
         <tr>
-            <th>Size</th>
-            <td><span class="ioc-term" ioc-term="DiskItem/DiskSize">{{ i.disksize }}</span></td>
+            <th>Length</th>
+            <td><span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionLength">{{ p.partitionlength }}</span></td>
+        </tr>
+        <tr>
+            <th>Type</th>
+            <td><span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionType">{{ p.partitiontype }}</span></td>
         </tr>
     </table>
-
-    {% for p in get_list(i.partitionlist.partition) %}
-        <h4>
-            <div class="xslt-contents-header">Partition <span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionNumber">{{ p.partitionnumber }}</span></div>
-        </h4>
-
-        <table class="table table-condensed table-bordered">
-            <tr>
-                <th>Offset</th>
-                <td><span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionOffset">{{ p.partitionoffset }}</span></td>
-            </tr>
-            <tr>
-                <th>Length</th>
-                <td><span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionLength">{{ p.partitionlength }}</span></td>
-            </tr>
-            <tr>
-                <th>Type</th>
-                <td><span class="ioc-term" ioc-term="DiskItem/PartitionList/Partition/PartitionType">{{ p.partitiontype }}</span></td>
-            </tr>
-        </table>
-        <br/>
-    {% endfor %}
-</div>
+    <br/>
+{% endfor %}

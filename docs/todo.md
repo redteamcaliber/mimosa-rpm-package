@@ -1,6 +1,12 @@
 UAC ToDo
 ========
 
+### Look into being able to select columns in datatables.
+
+### Clear the old data when rendering the views.
+
+### Change the title to some other attribute in collapsables.
+
 ### Look into code submitting an array of expression keys when creating a suppression.
 
 ### Add scrolling support to the audit div.
@@ -18,6 +24,7 @@ UAC ToDo
 
 ### Add an auto suppress capability.
     - Look into replacing the XSLT capability with a template instead.
+    - Should always be "is".
 
 ### Add counts to the rollups, especially the hits rollup.
 

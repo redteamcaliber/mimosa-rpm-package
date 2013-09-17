@@ -26,6 +26,7 @@ Mandiant-uac-ws-0.2-6 - September ?th, 2013
 - Converted the XSLT templates to server side templates in the web tier to improve performance.  This should resolve
   bug [#23204](https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#bug/23204).
 - Improved the rendering of many of the audit types.
+- Added a page to be able to view audit HTML output for an audit XML file.
 
 
 Mandiant-uac-ws-0.2-5 - September 9th, 2013

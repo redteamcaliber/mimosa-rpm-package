@@ -1,72 +1,69 @@
 {% set ci = content.cookiehistoryitem %}
 
-<div id="cookie-item-div" class="collapsable-header" title="<i class='icon-file'></i> CookieHistory/Item">
-
-    <h4>Cookie Item Info</h4>
-    <table class="table table-condensed">
-        <tr>
-            <th>Creation Date</th>
-            <td><span class="ioc-term" ioc-term="CookieHistoryItem/CreationDate">{{ ci.creationdate }}</span></td>
-        </tr>
-        <tr>
-            <th>Last Accessed Date</th>
-            <td><span class="ioc-term" ioc-term="CookieHistoryItem/LastAccessedDate">{{ ci.lastaccesseddate }}</span></td>
-        </tr>
-        <tr>
-            <th>Last Modified Date</th>
-            <td><span class="ioc-term" ioc-term="CookieHistoryItem/LastModifiedDate">{{ ci.lastmodifieddate }}</span></td>
-        </tr>
-        <tr>
-            <th>Expiration Date</th>
-            <td><span class="ioc-term" ioc-term="CookieHistoryItem/ExpirationDate">{{ ci.expirationdate }}</span></td>
-        </tr>
-        <tr>
-            <th>Browser Name</th>
-            <td><span class="ioc-term" ioc-term="CookieHistoryItem/BrowserName">{{ ci.browsername }}</span></td>
-        </tr>
-        <tr>
-            <th>Browser Version</th>
-            <td><span class="ioc-term" ioc-term="CookieHistoryItem/BrowserVersion">{{ ci.browserversion }}</span></td>
-        </tr>
-        <tr>
-            <th>Secured</th>
-            <td><span class="ioc-term" ioc-term="CookieHistoryItem/IsSecure">{{ ci.issecure }}</span></td>
-        </tr>
-        <tr>
-            <th>HTTP Only</th>
-            <td><span class="ioc-term" ioc-term="CookieHistoryItem/IsHttpOnly">{{ ci.ishttponly }}</span></td>
-        </tr>
-        <tr>
-            <th>Profile</th>
-            <td><span class="ioc-term" ioc-term="CookieHistoryItem/Profile">{{ ci.profile }}</span></td>
-        </tr>
-        <tr>
-            <th>User Name</th>
-            <td><span class="ioc-term" ioc-term="CookieHistoryItem/Username">{{ ci.username }}</span></td>
-        </tr>
-        <tr>
-            <th>File Name</th>
-            <td><span class="ioc-term" ioc-term="CookieHistoryItem/FileName">{{ ci.filename }}</span></td>
-        </tr>
-        <tr>
-            <th>File Path</th>
-            <td><span class="ioc-term" ioc-term="CookieHistoryItem/FilePath">{{ ci.filepath }}</span></td>
-        </tr>
-        <tr>
-            <th>Host Name</th>
-            <td><span class="ioc-term" ioc-term="CookieHistoryItem/HostName">{{ ci.hostname }}</span></td>
-        </tr>
-        <tr>
-            <th>Cookie Name</th>
-            <td><span class="ioc-term" ioc-term="CookieHistoryItem/CookieName">{{ ci.cookiename }}</span></td>
-        </tr>
-        <tr>
-            <th>Cookie Path</th>
-            <td><span class="ioc-term" ioc-term="CookieHistoryItem/CookiePath">{{ ci.cookiepath }}</span></td>
-        </tr>
-        <tr>
-            <th>Cookie Value</th>
-            <td><span class="ioc-term" ioc-term="CookieHistoryItem/CookieValue">{{ ci.cookievalue }}</span></td>
-        </tr>
-    </table>
- </div>
+<h4>Cookie Item Info</h4>
+<table class="table table-condensed">
+    <tr>
+        <th>Creation Date</th>
+        <td><span class="ioc-term" ioc-term="CookieHistoryItem/CreationDate">{{ ci.creationdate }}</span></td>
+    </tr>
+    <tr>
+        <th>Last Accessed Date</th>
+        <td><span class="ioc-term" ioc-term="CookieHistoryItem/LastAccessedDate">{{ ci.lastaccesseddate }}</span></td>
+    </tr>
+    <tr>
+        <th>Last Modified Date</th>
+        <td><span class="ioc-term" ioc-term="CookieHistoryItem/LastModifiedDate">{{ ci.lastmodifieddate }}</span></td>
+    </tr>
+    <tr>
+        <th>Expiration Date</th>
+        <td><span class="ioc-term" ioc-term="CookieHistoryItem/ExpirationDate">{{ ci.expirationdate }}</span></td>
+    </tr>
+    <tr>
+        <th>Browser Name</th>
+        <td><span class="ioc-term" ioc-term="CookieHistoryItem/BrowserName">{{ ci.browsername }}</span></td>
+    </tr>
+    <tr>
+        <th>Browser Version</th>
+        <td><span class="ioc-term" ioc-term="CookieHistoryItem/BrowserVersion">{{ ci.browserversion }}</span></td>
+    </tr>
+    <tr>
+        <th>Secured</th>
+        <td><span class="ioc-term" ioc-term="CookieHistoryItem/IsSecure">{{ ci.issecure }}</span></td>
+    </tr>
+    <tr>
+        <th>HTTP Only</th>
+        <td><span class="ioc-term" ioc-term="CookieHistoryItem/IsHttpOnly">{{ ci.ishttponly }}</span></td>
+    </tr>
+    <tr>
+        <th>Profile</th>
+        <td><span class="ioc-term" ioc-term="CookieHistoryItem/Profile">{{ ci.profile }}</span></td>
+    </tr>
+    <tr>
+        <th>User Name</th>
+        <td><span class="ioc-term" ioc-term="CookieHistoryItem/Username">{{ ci.username }}</span></td>
+    </tr>
+    <tr>
+        <th>File Name</th>
+        <td><span class="ioc-term" ioc-term="CookieHistoryItem/FileName">{{ ci.filename }}</span></td>
+    </tr>
+    <tr>
+        <th>File Path</th>
+        <td><span class="ioc-term" ioc-term="CookieHistoryItem/FilePath">{{ ci.filepath }}</span></td>
+    </tr>
+    <tr>
+        <th>Host Name</th>
+        <td><span class="ioc-term" ioc-term="CookieHistoryItem/HostName">{{ ci.hostname }}</span></td>
+    </tr>
+    <tr>
+        <th>Cookie Name</th>
+        <td><span class="ioc-term" ioc-term="CookieHistoryItem/CookieName">{{ ci.cookiename }}</span></td>
+    </tr>
+    <tr>
+        <th>Cookie Path</th>
+        <td><span class="ioc-term" ioc-term="CookieHistoryItem/CookiePath">{{ ci.cookiepath }}</span></td>
+    </tr>
+    <tr>
+        <th>Cookie Value</th>
+        <td><span class="ioc-term" ioc-term="CookieHistoryItem/CookieValue">{{ ci.cookievalue }}</span></td>
+    </tr>
+</table>

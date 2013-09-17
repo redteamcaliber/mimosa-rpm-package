@@ -1,421 +1,418 @@
 {% set i = content.persistenceitem %}
 
-<div id="persistence-item-div" class="collapsable" title="<i class='icon-file'></i> Persistence/Item">
 
-    <h4>Persistence Item</h4>
+<h4>Persistence Item</h4>
+
+<table class="table table-condensed table-bordered">
+    <tr>
+        <th style="width: 150px">Link File Path</th>
+        <td>{{ i.linkfilepath }}</td>
+    </tr>
+    <tr>
+        <th>Persistence Type</th>
+        <td>{{ i.persistencetype }}</td>
+    </tr>
+</table>
+
+
+{% for fi in get_list(i.fileitem) %}
+    <h4>Peristence File Info</h4>
 
     <table class="table table-condensed table-bordered">
         <tr>
-            <th style="width: 150px">Link File Path</th>
-            <td>{{ i.linkfilepath }}</td>
+            <th colspan="2" rowspan="1">Full Path</th>
+            <th colspan="2" rowspan="1">Device Path</th>
         </tr>
         <tr>
-            <th>Persistence Type</th>
-            <td>{{ i.persistencetype }}</td>
+            <td colspan="2" rowspan="1">{{ fi.fullpath }}</td>
+            <td colspan="2" rowspan="1">{{ fi.devicepath }}</td>
+        </tr>
+        <tr>
+            <th>Size</th>
+            <th colspan="2" rowspan="1">MD5</th>
+            <th>Owner</th>
+        </tr>
+        <tr>
+            <td>{{ fi.sizeinbytes }}</td>
+            <td colspan="2" rowspan="1">{{ fi.md5sum }}</td>
+            <td>{{ fi.username }}</td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <th>Accessed</th>
+            <th>Modified</th>
+            <th>Changed</th>
+        </tr>
+        <tr>
+            <td>{{ fi.created }}</td>
+            <td>{{ fi.accessed }}</td>
+            <td>{{ fi.modified }}</td>
+            <td>{{ fi.changed }}</td>
         </tr>
     </table>
 
+    {% if fi.peinfo %}
 
-    {% for fi in get_list(i.fileitem) %}
-        <h4>Peristence File Info</h4>
+        {% set peinfo = fi.peinfo %}
+
+        <h4>PE Info</h4>
 
         <table class="table table-condensed table-bordered">
             <tr>
-                <th colspan="2" rowspan="1">Full Path</th>
-                <th colspan="2" rowspan="1">Device Path</th>
+                <th>PE Type</th>
+                <th>Compile Time</th>
+                <th>Subsystem</th>
+                <th>Base Address</th>
             </tr>
             <tr>
-                <td colspan="2" rowspan="1">{{ fi.fullpath }}</td>
-                <td colspan="2" rowspan="1">{{ fi.devicepath }}</td>
-            </tr>
-            <tr>
-                <th>Size</th>
-                <th colspan="2" rowspan="1">MD5</th>
-                <th>Owner</th>
-            </tr>
-            <tr>
-                <td>{{ fi.sizeinbytes }}</td>
-                <td colspan="2" rowspan="1">{{ fi.md5sum }}</td>
-                <td>{{ fi.username }}</td>
-            </tr>
-            <tr>
-                <th>Created</th>
-                <th>Accessed</th>
-                <th>Modified</th>
-                <th>Changed</th>
-            </tr>
-            <tr>
-                <td>{{ fi.created }}</td>
-                <td>{{ fi.accessed }}</td>
-                <td>{{ fi.modified }}</td>
-                <td>{{ fi.changed }}</td>
+                <td>{{ peinfo.type }}</td>
+                <td>{{ petimestamp }}</td>
+                <td>{{ subsystem }}</td>
+                <td>{{ baseaddress }}</td>
             </tr>
         </table>
 
-        {% if fi.peinfo %}
+        <table class="table table-condensed table-bordered">
+            <tr>
+                <th>Checksum Raw</th>
+                <th>Checksum API</th>
+                <th>Checksum Computed</th>
+            </tr>
+            <tr>
+                <td>{{ peinfo.pechecksum.pefileraw }}</td>
+                <td>{{ peinfo.pechecksum.pefileapi }}</td>
+                <td>{{ peinfo.pechecksum.pecomputedapi }}</td>
+            </tr>
+        </table>
 
-            {% set peinfo = fi.peinfo %}
+        <table class="table table-condensed table-bordered">
+            <tr>
+                <th>Signature Exists</th>
+                <th>Signature Verified</th>
+                <th>Signature Description</th>
+            </tr>
+            <tr>
+                <td>{{ peinfo.digitalsignature.signatureexists }}</td>
+                <td>{{ peinfo.digitalsignature.signatureverified }}</td>
+                <td>{{ peinfo.digitalsignature.description }}</td>
+            </tr>
+        </table>
 
-            <h4>PE Info</h4>
+        <table class="table table-condensed table-bordered">
+            <tr>
+                <th>Certificate Issuer</th>
+                <th>Certificate Subject</th>
+            </tr>
+            <tr>
+                <td>{{ peinfo.digitalsignature.certificateissuer }}</td>
+                <td>{{ peinfo.digitalsignature.certificatesubject }}</td>
+            </tr>
+        </table>
 
-            <table class="table table-condensed table-bordered">
-                <tr>
-                    <th>PE Type</th>
-                    <th>Compile Time</th>
-                    <th>Subsystem</th>
-                    <th>Base Address</th>
-                </tr>
-                <tr>
-                    <td>{{ peinfo.type }}</td>
-                    <td>{{ petimestamp }}</td>
-                    <td>{{ subsystem }}</td>
-                    <td>{{ baseaddress }}</td>
-                </tr>
-            </table>
-
-            <table class="table table-condensed table-bordered">
-                <tr>
-                    <th>Checksum Raw</th>
-                    <th>Checksum API</th>
-                    <th>Checksum Computed</th>
-                </tr>
-                <tr>
-                    <td>{{ peinfo.pechecksum.pefileraw }}</td>
-                    <td>{{ peinfo.pechecksum.pefileapi }}</td>
-                    <td>{{ peinfo.pechecksum.pecomputedapi }}</td>
-                </tr>
-            </table>
-
-            <table class="table table-condensed table-bordered">
-                <tr>
-                    <th>Signature Exists</th>
-                    <th>Signature Verified</th>
-                    <th>Signature Description</th>
-                </tr>
-                <tr>
-                    <td>{{ peinfo.digitalsignature.signatureexists }}</td>
-                    <td>{{ peinfo.digitalsignature.signatureverified }}</td>
-                    <td>{{ peinfo.digitalsignature.description }}</td>
-                </tr>
-            </table>
-
-            <table class="table table-condensed table-bordered">
-                <tr>
-                    <th>Certificate Issuer</th>
-                    <th>Certificate Subject</th>
-                </tr>
-                <tr>
-                    <td>{{ peinfo.digitalsignature.certificateissuer }}</td>
-                    <td>{{ peinfo.digitalsignature.certificatesubject }}</td>
-                </tr>
-            </table>
-
-            <table class="table table-condensed table-bordered">
-                <tr>
-                    <th>Entry Point Signature</th>
-                    <th>Anomalies</th>
-                </tr>
-                <tr>
-                    <td>
-                        Name: {{ peinfo.detectedentrypointsignature.name }}
-                        Type: {{ peinfo.detectedentrypointsignature.type }}
-                    </td>
-                    <td>
-                        {% for s in get_list(peinfo.detectedanomalies.string) %}
-                            {{ s }}
-                        {% endfor %}
-                    </td>
-                </tr>
-                <tr>
-                    <th>Peak Entropy</th>
-                    <th>Peak Code Entropy</th>
-                </tr>
-                <tr>
-                    <td>{{ fi.peakentropy }}</td>
-                    <td>{{ fi.peakcodeentropy }}</td>
-                </tr>
-            </table>
-
-            <h4>Section Info</h4>
-            <table class="table table-condensed table-bordered">
-                <tr>
-                    <th>Section Name</th>
-                    <th>Section Type</th>
-                    <th>Size</th>
-                    <th>Characteristics</th>
-                    <th>Entropy</th>
-                </tr>
-                {% for section in get_list(peinfo.sections.section) %}
-                <tr>
-                    <td>{{ section.name }}</td>
-                    <td>{{ section.type }}</td>
-                    <td>{{ section.sizeinbytes }}</td>
-                    <td>{{ section.detectedcharacteristics }}</td>
-                    <td>{{ section.entropy.$.AverageValue }}</td>
-                </tr>
-                {% endfor %}
-            </table>
-
-            <h4>Other Info</h4>
-            <div id="exported-functions-div" class="collapsable collapsed" title="Exported Functions">
-                <ul>
-                    {% for s in get_list(peinfo.exports.exportedfunctions.string) %}
-                        <li>
-                            <span>
-                                {{ s }}
-                            </span>
-                        </li>
+        <table class="table table-condensed table-bordered">
+            <tr>
+                <th>Entry Point Signature</th>
+                <th>Anomalies</th>
+            </tr>
+            <tr>
+                <td>
+                    Name: {{ peinfo.detectedentrypointsignature.name }}
+                    Type: {{ peinfo.detectedentrypointsignature.type }}
+                </td>
+                <td>
+                    {% for s in get_list(peinfo.detectedanomalies.string) %}
+                        {{ s }}
                     {% endfor %}
-                </ul>
-            </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Peak Entropy</th>
+                <th>Peak Code Entropy</th>
+            </tr>
+            <tr>
+                <td>{{ fi.peakentropy }}</td>
+                <td>{{ fi.peakcodeentropy }}</td>
+            </tr>
+        </table>
 
-            <div id="imports-div" class="collapsable collapsed" title="Imports">
-                {% for module in get_list(peinfo.importedmodules.module) %}
-                    <h5>{{ module.name }}</h5>
-                    <ul>
-                        {% for s in get_list(module.importedfunctions.string) %}
-                            <li>{{ s }}</li>
-                        {% endfor %}
-                    </ul>
+        <h4>Section Info</h4>
+        <table class="table table-condensed table-bordered">
+            <tr>
+                <th>Section Name</th>
+                <th>Section Type</th>
+                <th>Size</th>
+                <th>Characteristics</th>
+                <th>Entropy</th>
+            </tr>
+            {% for section in get_list(peinfo.sections.section) %}
+            <tr>
+                <td>{{ section.name }}</td>
+                <td>{{ section.type }}</td>
+                <td>{{ section.sizeinbytes }}</td>
+                <td>{{ section.detectedcharacteristics }}</td>
+                <td>{{ section.entropy.$.AverageValue }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h4>Other Info</h4>
+        <div id="exported-functions-div" class="collapsable collapsed" collapsable-title="Exported Functions">
+            <ul>
+                {% for s in get_list(peinfo.exports.exportedfunctions.string) %}
+                    <li>
+                        <span>
+                            {{ s }}
+                        </span>
+                    </li>
                 {% endfor %}
-            </div>
-        {% endif %}<!-- End PEInfo -->
+            </ul>
+        </div>
 
-        {% if i.stringlist.string %}
-            <div id="strings-div" class="collapsable collapsed" title="Strings">
+        <div id="imports-div" class="collapsable collapsed" collapsable-title="Imports">
+            {% for module in get_list(peinfo.importedmodules.module) %}
+                <h5>{{ module.name }}</h5>
                 <ul>
-                    {% for s in get_list(i.stringlist.string) %}
+                    {% for s in get_list(module.importedfunctions.string) %}
                         <li>{{ s }}</li>
                     {% endfor %}
                 </ul>
-            </div>
+            {% endfor %}
+        </div>
+    {% endif %}<!-- End PEInfo -->
+
+    {% if i.stringlist.string %}
+        <div id="strings-div" class="collapsable collapsed" collapsable-title="Strings">
+            <ul>
+                {% for s in get_list(i.stringlist.string) %}
+                    <li>{{ s }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+
+    {% if i.streamlist.stream %}
+        <div id="streams-div" class="collapsable collapsed" collapsable-title="Streams">
+            <table class="table table-condensed">
+                <tr>
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>MD5</th>
+                </tr>
+                {% for stream in get_list(i.streamlist.stream) %}
+                <tr>
+                    <td>{{ stream.name }}</td>
+                    <td>{{ stream.sizeinbytes }}</td>
+                    <td>{{ stream.md5sum }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+
+{% endfor %}
+
+{% if i.registryitem %}
+    {% for ri in get_list(i.registryitem) %}
+        <h4>Persistence Registry Item</h4>
+        <table class="table table-condensed">
+            <tr>
+                <th>Modified Time</th>
+                <td>{{ ri.modified }}</td>
+            </tr>
+            <tr>
+                <th>Hive</th>
+                <td>{{ ri.hive }}</td>
+            </tr>
+            <tr>
+                <th>Path to Key</th>
+                <td>{{ ri.keypath }}</td>
+            </tr>
+            <tr>
+                <th>Full Path</th>
+                <td>{{ ri.path }}</td>
+            </tr>
+            <tr>
+                <th>Security ID</th>
+                <td>{{ ri.securityid }}</td>
+            </tr>
+            <tr>
+                <th>Value Name</th>
+                <td>{{ ri.valuename }}</td>
+            </tr>
+            <tr>
+                <th>Value Type</th>
+                <td>{{ ri.type }}</td>
+            </tr>
+            <tr>
+                <th>Size in Bytes</th>
+                <td>{{ ri.reportedlengthinbytes }}</td>
+            </tr>
+            <tr>
+                <th>Text</th>
+                <td>{{ ri.text }}</td>
+            </tr>
+            <tr>
+                <th>Base 64 Encoded Data</th>
+                <td>{{ ri.value }}</td>
+            </tr>
+        </table>
+    {% endfor %}
+{% endif %}
+
+{% if i.serviceitem %}
+    {% for si in get_list(i.serviceitem) %}
+        <h4>Service Info</h4>
+        <table class="table table-condensed">
+            <tr>
+                <th>Name</th>
+                <td>{{ si.name }}</td>
+            </tr>
+            <tr>
+                <th>Descriptive Name</th>
+                <td>{{ si.descriptivename }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ si.description }}</td>
+            </tr>
+            <tr>
+                <th>Mode</th>
+                <td>{{ si.mode }}</td>
+            </tr>
+            <tr>
+                <th>Started As</th>
+                <td>{{ si.startedas }}</td>
+            </tr>
+            <tr>
+                <th>Path</th>
+                <td>{{ si.path }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ si.status }}</td>
+            </tr>
+            <tr>
+                <th>Service DLL</th>
+                <td>{{ si.servicedll }}</td>
+            </tr>
+            <tr>
+                <th>PID</th>
+                <td>{{ si.pid }}</td>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <td>{{ si.type }}</td>
+            </tr>
+        </table>
+
+        {% if si.pathsignatureexists or si.pathsignatureverified or si.pathsignaturedescription or si.pathcertificatesubject or si.pathcertificateissuer or si.pathmd5sum or si.pathsha1sum or si.pathsha256sum %}
+            <h4>Path Details</h4>
+            <table class="table table-condensed">
+                {% if si.pathsignatureexists %}
+                <tr>
+                    <th>Signature Exists</th>
+                    <td>{{ si.pathsignatureexists }}</td>
+                </tr>
+                {% endif %}
+                {% if si.pathsignatureverified %}
+                <tr>
+                    <th>Signature Verified</th>
+                    <td>{{ si.pathsignatureverified }}</td>
+                </tr>
+                {% endif %}
+                {% if si.pathsignaturedescription %}
+                <tr>
+                    <th>Signature Description</th>
+                    <td>{{ si.pathsignaturedescription }}</td>
+                </tr>
+                {% endif %}
+                {% if si.pathcertificatesubject %}
+                <tr>
+                    <th>Certificate Subject</th>
+                    <td>{{ si.pathcertificatesubject }}</td>
+                </tr>
+                {% endif %}
+                {% if si.pathcertificateissuer %}
+                <tr>
+                    <th>Certificate Issuer</th>
+                    <td>{{ si.pathcertificateissuer }}</td>
+                </tr>
+                {% endif %}
+                {% if si.pathmd5sum %}
+                <tr>
+                    <th>MD5 Sum</th>
+                    <td>{{ si.pathmd5sum }}</td>
+                </tr>
+                {% endif %}
+                {% if si.pathsha1sum %}
+                <tr>
+                    <th>SHA1 Sum</th>
+                    <td>{{ si.pathsha1sum }}</td>
+                </tr>
+                {% endif %}
+                {% if si.pathsha256sum %}
+                <tr>
+                    <th>SHA256 Sum</th>
+                    <td>{{ si.pathsha256sum }}</td>
+                </tr>
+                {% endif %}
+            </table>
         {% endif %}
 
-        {% if i.streamlist.stream %}
-            <div id="streams-div" class="collapsable collapsed" title="Streams">
-                <table class="table table-condensed">
-                    <tr>
-                        <th>Name</th>
-                        <th>Size</th>
-                        <th>MD5</th>
-                    </tr>
-                    {% for stream in get_list(i.streamlist.stream) %}
-                    <tr>
-                        <td>{{ stream.name }}</td>
-                        <td>{{ stream.sizeinbytes }}</td>
-                        <td>{{ stream.md5sum }}</td>
-                    </tr>
-                    {% endfor %}
-                </table>
-            </div>
+        {% if si.servicedllsignatureexists or si.servicedllsignatureverified or si.servicedllsignaturedescription or si.servicedllcertificatesubject or si.servicedllcertificateissuer or si.servicedllmd5sum or si.servicedllsha1sum or si.servicedllsha256sum %}
+            <h4>Service DLL Details</h4>
+            <table class="table table-condensed">
+                {% if si.servicedllsignatureexists %}
+                <tr>
+                    <th>Signature Exists</th>
+                    <td>{{ si.servicedllsignatureexists }}</td>
+                </tr>
+                {% endif %}
+                {% if si.servicedllsignatureverified %}
+                <tr>
+                    <th>Signature Verified</th>
+                    <td>{{ si.servicedllsignatureverified }}</td>
+                </tr>
+                {% endif %}
+                {% if si.servicedllsignaturedescription %}
+                <tr>
+                    <th>Signature Description</th>
+                    <td>{{ si.servicedllsignaturedescription }}</td>
+                </tr>
+                {% endif %}
+                {% if si.servicedllcertificatesubject %}
+                <tr>
+                    <th>Certificate Subject</th>
+                    <td>{{ si.servicedllcertificatesubject }}</td>
+                </tr>
+                {% endif %}
+                {% if si.servicedllcertificateissuer %}
+                <tr>
+                    <th>Certificate Issuer</th>
+                    <td>{{ si.servicedllcertificateissuer }}</td>
+                </tr>
+                {% endif %}
+                {% if si.servicedllmd5sum %}
+                <tr>
+                    <th>MD5 Sum</th>
+                    <td>{{ si.servicedllmd5sum }}</td>
+                </tr>
+                {% endif %}
+                {% if si.servicedllsha1sum %}
+                <tr>
+                    <th>SHA1 Sum</th>
+                    <td>{{ si.servicedllsha1sum }}</td>
+                </tr>
+                {% endif %}
+                {% if si.servicedllsha256sum %}
+                <tr>
+                    <th>SHA256 Sum</th>
+                    <td>{{ si.servicedllsha256sum }}</td>
+                </tr>
+                {% endif %}
+            </table>
         {% endif %}
 
     {% endfor %}
 
-    {% if i.registryitem %}
-        {% for ri in get_list(i.registryitem) %}
-            <h4>Persistence Registry Item</h4>
-            <table class="table table-condensed">
-                <tr>
-                    <th>Modified Time</th>
-                    <td>{{ ri.modified }}</td>
-                </tr>
-                <tr>
-                    <th>Hive</th>
-                    <td>{{ ri.hive }}</td>
-                </tr>
-                <tr>
-                    <th>Path to Key</th>
-                    <td>{{ ri.keypath }}</td>
-                </tr>
-                <tr>
-                    <th>Full Path</th>
-                    <td>{{ ri.path }}</td>
-                </tr>
-                <tr>
-                    <th>Security ID</th>
-                    <td>{{ ri.securityid }}</td>
-                </tr>
-                <tr>
-                    <th>Value Name</th>
-                    <td>{{ ri.valuename }}</td>
-                </tr>
-                <tr>
-                    <th>Value Type</th>
-                    <td>{{ ri.type }}</td>
-                </tr>
-                <tr>
-                    <th>Size in Bytes</th>
-                    <td>{{ ri.reportedlengthinbytes }}</td>
-                </tr>
-                <tr>
-                    <th>Text</th>
-                    <td>{{ ri.text }}</td>
-                </tr>
-                <tr>
-                    <th>Base 64 Encoded Data</th>
-                    <td>{{ ri.value }}</td>
-                </tr>
-            </table>
-        {% endfor %}
-    {% endif %}
-
-    {% if i.serviceitem %}
-        {% for si in get_list(i.serviceitem) %}
-            <h4>Service Info</h4>
-            <table class="table table-condensed">
-                <tr>
-                    <th>Name</th>
-                    <td>{{ si.name }}</td>
-                </tr>
-                <tr>
-                    <th>Descriptive Name</th>
-                    <td>{{ si.descriptivename }}</td>
-                </tr>
-                <tr>
-                    <th>Description</th>
-                    <td>{{ si.description }}</td>
-                </tr>
-                <tr>
-                    <th>Mode</th>
-                    <td>{{ si.mode }}</td>
-                </tr>
-                <tr>
-                    <th>Started As</th>
-                    <td>{{ si.startedas }}</td>
-                </tr>
-                <tr>
-                    <th>Path</th>
-                    <td>{{ si.path }}</td>
-                </tr>
-                <tr>
-                    <th>Status</th>
-                    <td>{{ si.status }}</td>
-                </tr>
-                <tr>
-                    <th>Service DLL</th>
-                    <td>{{ si.servicedll }}</td>
-                </tr>
-                <tr>
-                    <th>PID</th>
-                    <td>{{ si.pid }}</td>
-                </tr>
-                <tr>
-                    <th>Type</th>
-                    <td>{{ si.type }}</td>
-                </tr>
-            </table>
-
-            {% if si.pathsignatureexists or si.pathsignatureverified or si.pathsignaturedescription or si.pathcertificatesubject or si.pathcertificateissuer or si.pathmd5sum or si.pathsha1sum or si.pathsha256sum %}
-                <h4>Path Details</h4>
-                <table class="table table-condensed">
-                    {% if si.pathsignatureexists %}
-                    <tr>
-                        <th>Signature Exists</th>
-                        <td>{{ si.pathsignatureexists }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if si.pathsignatureverified %}
-                    <tr>
-                        <th>Signature Verified</th>
-                        <td>{{ si.pathsignatureverified }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if si.pathsignaturedescription %}
-                    <tr>
-                        <th>Signature Description</th>
-                        <td>{{ si.pathsignaturedescription }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if si.pathcertificatesubject %}
-                    <tr>
-                        <th>Certificate Subject</th>
-                        <td>{{ si.pathcertificatesubject }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if si.pathcertificateissuer %}
-                    <tr>
-                        <th>Certificate Issuer</th>
-                        <td>{{ si.pathcertificateissuer }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if si.pathmd5sum %}
-                    <tr>
-                        <th>MD5 Sum</th>
-                        <td>{{ si.pathmd5sum }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if si.pathsha1sum %}
-                    <tr>
-                        <th>SHA1 Sum</th>
-                        <td>{{ si.pathsha1sum }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if si.pathsha256sum %}
-                    <tr>
-                        <th>SHA256 Sum</th>
-                        <td>{{ si.pathsha256sum }}</td>
-                    </tr>
-                    {% endif %}
-                </table>
-            {% endif %}
-
-            {% if si.servicedllsignatureexists or si.servicedllsignatureverified or si.servicedllsignaturedescription or si.servicedllcertificatesubject or si.servicedllcertificateissuer or si.servicedllmd5sum or si.servicedllsha1sum or si.servicedllsha256sum %}
-                <h4>Service DLL Details</h4>
-                <table class="table table-condensed">
-                    {% if si.servicedllsignatureexists %}
-                    <tr>
-                        <th>Signature Exists</th>
-                        <td>{{ si.servicedllsignatureexists }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if si.servicedllsignatureverified %}
-                    <tr>
-                        <th>Signature Verified</th>
-                        <td>{{ si.servicedllsignatureverified }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if si.servicedllsignaturedescription %}
-                    <tr>
-                        <th>Signature Description</th>
-                        <td>{{ si.servicedllsignaturedescription }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if si.servicedllcertificatesubject %}
-                    <tr>
-                        <th>Certificate Subject</th>
-                        <td>{{ si.servicedllcertificatesubject }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if si.servicedllcertificateissuer %}
-                    <tr>
-                        <th>Certificate Issuer</th>
-                        <td>{{ si.servicedllcertificateissuer }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if si.servicedllmd5sum %}
-                    <tr>
-                        <th>MD5 Sum</th>
-                        <td>{{ si.servicedllmd5sum }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if si.servicedllsha1sum %}
-                    <tr>
-                        <th>SHA1 Sum</th>
-                        <td>{{ si.servicedllsha1sum }}</td>
-                    </tr>
-                    {% endif %}
-                    {% if si.servicedllsha256sum %}
-                    <tr>
-                        <th>SHA256 Sum</th>
-                        <td>{{ si.servicedllsha256sum }}</td>
-                    </tr>
-                    {% endif %}
-                </table>
-            {% endif %}
-
-        {% endfor %}
-
-    {% endif %}
-
-</div>
+{% endif %}

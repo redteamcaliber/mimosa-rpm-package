@@ -1,6 +1,6 @@
 {% set processitem = content.processitem %}
 
-<div id="process-item-div" class="collapsable-header" title="<i class='icon-file'></i> Process/Item">
+<div id="process-item-div" class="collapsable-header" collapsable-title="<i class='icon-file'></i> Process/Item">
 
     <h4>Process Info</h4>
 
@@ -54,7 +54,7 @@
     <h4>Handle Types</h4>
 
     {% for handle_type in content.handle_types %}
-        <div id="{{ handle_type }}-div" class="collapsable collapsed" title="{{ handle_type }}">
+        <div id="{{ handle_type }}-div" class="collapsable collapsed" collapsable-title="{{ handle_type }}">
             <table class="table table-condensed table-bordered">
                 <tr>
                     <th>Name</th>
@@ -91,7 +91,7 @@
     {% endif %}
 
     {% if processitem.sectionlist %}
-        <div id="sections-div" class="collapsable collapsed" title="Sections">
+        <div id="sections-div" class="collapsable collapsed" collapsable-title="Sections">
             <table class="table table-condensed table-bordered">
                 <tr>
                     <th>Name</th>
@@ -108,7 +108,7 @@
     {% endif %}
 
     {% if processitem.portlist.portitem %}
-        <div id="ports-div" class="collapsable collapsed" title="Port List">
+        <div id="ports-div" class="collapsable collapsed" collapsable-title="Port List">
             <table class="table table-condensed table-bordered">
                 <tr>
                     <th>PID</th>
@@ -137,16 +137,17 @@
     {% endif %}
 
 
-<div id="portal-formated-data-div" class="collapsable collapsed" title="Portal Formatted Data">
-<textarea title="Click to Highlight"
-          cols="80"
-          rows="10"
-          style="width: 95%;"
-          onclick="this.select();">
-Process Name: {{ processitem.name }}
-Process ID: {{ processitem.pid }}
-Process Start: {{ processitem.starttime }}
-Process Path: {{ processitem.path }}</textarea>
+<div id="portal-formated-data-div" class="collapsable collapsed" collapsable-title="Portal Formatted Data">
+    <textarea title="Click to Highlight"
+              cols="80"
+              rows="10"
+              style="width: 95%;"
+              onclick="this.select();">
+        Process Name: {{ processitem.name }}
+        Process ID: {{ processitem.pid }}
+        Process Start: {{ processitem.starttime }}
+        Process Path: {{ processitem.path }}
+    </textarea>
 </div>
 
 </div><!-- End Process Item div -->

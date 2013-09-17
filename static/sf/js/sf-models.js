@@ -224,6 +224,7 @@ StrikeFinder.AuditModel = Backbone.Model.extend({
     },
     url: function () {
         return _.sprintf('/sf/api/audit/%s', this.id);
+        //return _.sprintf('/sf/api/hits/%s/html', this.id);
     }
 });
 

@@ -1,36 +1,34 @@
 {% set i = content.driveritem %}
 
-<div id="driver-item-div" class="collapsable-header" title="<i class='icon-file'></i> Driver/Item">
-    <h4>Driver Info</h4>
+<h4>Driver Info</h4>
 
-    <table class="table table-condensed">
-        <tr>
-            <th>Driver Object Address</th>
-            <td>{{ i.driverobjectaddress }}</td>
-        </tr>
-        <tr>
-            <th>Image Base</th>
-            <td>{{ i.imagebase }}</td>
-        </tr>
-        <tr>
-            <th>Image Size</th>
-            <td>{{ i.imagesize }}</td>
-        </tr>
-        <tr>
-            <th>Driver Name</th>
-            <td>{{ i.drivername }}</td>
-        </tr>
-        <tr>
-            <th>Driver Init</th>
-            <td>{{ i.driverinit }}</td>
-        </tr>
-        <tr>
-            <th>Driver Start IO</th>
-            <td>{{ i.driverstartio }}</td>
-        </tr>
-        <tr>
-            <th>Driver Unload</th>
-            <td>{{ i.driverunload }}</td>
-        </tr>
-    </table>
-</div>
+<table class="table table-condensed">
+    <tr>
+        <th>Driver Object Address</th>
+        <td>{{ i.driverobjectaddress }}</td>
+    </tr>
+    <tr>
+        <th>Image Base</th>
+        <td>{{ i.imagebase }}</td>
+    </tr>
+    <tr>
+        <th>Image Size</th>
+        <td>{{ i.imagesize }}</td>
+    </tr>
+    <tr>
+        <th>Driver Name</th>
+        <td>{{ i.drivername }}</td>
+    </tr>
+    <tr>
+        <th>Driver Init</th>
+        <td>{{ i.driverinit }}</td>
+    </tr>
+    <tr>
+        <th>Driver Start IO</th>
+        <td>{{ i.driverstartio }}</td>
+    </tr>
+    <tr>
+        <th>Driver Unload</th>
+        <td>{{ i.driverunload }}</td>
+    </tr>
+</table>
