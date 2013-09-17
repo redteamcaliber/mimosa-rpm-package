@@ -20,6 +20,24 @@ StrikeFinder.get_blockui_message = function (message) {
         "</h4></span>", message);
 };
 
+StrikeFinder.collapse = function(el) {
+    _.each($(el).find('.collapsable-header'), function(collapsable) {
+        var v = new StrikeFinder.CollapsableContentView({
+            el: '#' + collapsable.id,
+            title: $(collapsable).attr('title'),
+            title_class: 'uac-header'
+        });
+    });
+    _.each($(el).find('.collapsable'), function(collapsable) {
+        var v = new StrikeFinder.CollapsableContentView({
+            el: '#' + collapsable.id,
+            title: $(collapsable).attr('title'),
+            title_class: 'uac-sub-header',
+            display_toggle: false
+        });
+    });
+};
+
 /**
  * Retrieve the default block ui options.
  * @param message - the message to display.

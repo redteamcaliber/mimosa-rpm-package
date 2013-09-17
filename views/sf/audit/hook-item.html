@@ -1,118 +1,102 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet version="1.0"
-                xmlns:atom="http://www.w3.org/2005/Atom"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-                xmlns:user="urn:userscripts"
-                xmlns:mir="urn:mandiant-intelligent-response"
-        >
-    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
-    <xsl:output method="html" />
+{% set i = content.hookitem %}
+
+<div id="hook-item-div" class="collapsable-header" title="<i class='icon-file'></i> Hook/Item">
+    <h4>Hook Info</h4>
+
+    <table class="table table-condensed">
+        <tr>
+            <th style='width: 150px'>Description</th>
+            <td >{{ i.hookdescription }}</td>
+        </tr>
+        <tr>
+            <th>Hooked Function</th>
+            <td >{{ i.hookedfunction }}</td>
+        </tr>
+        <tr>
+            <th>Hooked Module</th>
+            <td >{{ i.hookedmodule }}</td>
+        </tr>
+        <tr>
+            <th>Hooking Module</th>
+            <td >{{ i.hookingmodule }}</td>
+        </tr>
+        <tr>
+            <th>Hooking Address</th>
+            <td >{{ i.hookingaddress }}</td>
+        </tr>
+    </table>
+
+    {% if i.digitalsignaturehooking.signatureexists or i.digitalsignaturehooking.signatureverified or i.digitalsignaturehooking.description or i.digitalsignaturehooking.certificatesubject or i.digitalsignaturehooking.certificateissuer %}
+    <h4>Hooking Digital Signature</h4>
+    <table class="table table-condensed">
+        {% if i.digitalsignaturehooking.signatureexists %}
+        <tr>
+            <th style='width: 150px'>Signature Exists</th>
+            <td >{{ i.digitalsignaturehooking.signatureexists }}</td>
+        </tr>
+        {% endif %}
+        {% if i.digitalsignaturehooking.signatureverified %}
+        <tr>
+            <th>Signature Verified</th>
+            <td >{{ i.digitalsignaturehooking.signatureverified }}</td>
+        </tr>
+        {% endif %}
+        {% if i.digitalsignaturehooking.description %}
+        <tr>
+            <th>Signature Description</th>
+            <td >{{ i.digitalsignaturehooking.description }}</td>
+        </tr>
+        {% endif %}
+        {% if i.digitalsignaturehooking.certificatesubject %}
+        <tr>
+            <th>Certificate Subject</th>
+            <td >{{ i.digitalsignaturehooking.certificatesubject }}</td>
+        </tr>
+        {% endif %}
+        {% if i.digitalsignaturehooking/certificateissuer %}
+        <tr>
+            <th>Certificate Issuer</th>
+            <td >{{ i.digitalsignaturehooking.certificateissuer }}</td>
+        </tr>
+        {% endif %}
+    </table>
+    {% endif %}
+
+    {% if i.digitalsignaturehooked.signatureexists or i.digitalsignaturehooked.signatureverified or i.digitalsignaturehooked.description or i.digitalsignaturehooked.certificatesubject or i.digitalsignaturehooked.certificateissuer %}
+    <h4>Hooked Digital Signature</h4>
+    <table class="table table-condensed">
+        {% if i.digitalsignaturehooked.signatureexists %}
+        <tr>
+            <th style='width: 150px'>Signature Exists</th>
+            <td >{{ i.digitalsignaturehooked.signatureexists }}</td>
+        </tr>
+        {% endif %}
+        {% if i.digitalsignaturehooked.signatureverified %}
+        <tr>
+            <th>Signature Verified</th>
+            <td >{{ i.digitalsignaturehooked.signatureverified }}</td>
+        </tr>
+        {% endif %}
+        {% if i.digitalsignaturehooked.signaturedescription %}
+        <tr>
+            <th>Signature Description</th>
+            <td >{{ i.digitalsignaturehooked.signaturedescription }}</td>
+        </tr>
+        {% endif %}
+        {% if i.digitalsignaturehooked.certificatesubject %}
+        <tr>
+            <th>Certificate Subject</th>
+            <td >{{ i.digitalsignaturehooked.certificatesubject }}</td>
+        </tr>
+        {% endif %}
+        {% if i.digitalsignaturehooked.certificateissuer %}
+        <tr>
+            <th>Certificate Issuer</th>
+            <td >{{ i.digitalsignaturehooked.certificateissuer }}</td>
+        </tr>
+        {% endif %}
+    </table>
+    {% endif %}
+</div>
 
 
-
-
-    <!-- ############################################################### -->
-    <xsl:template match="/HookItem">
-
-        <div class="xslt-contents" xslt-title="Hook Information">
-            <table     width="95%">
-                <tr>
-                    <th>Description</th>
-                    <td ><xsl:value-of select="HookDescription"/></td>
-                </tr>
-                <tr>
-                    <th>Hooked Function</th>
-                    <td ><xsl:value-of select="HookedFunction"/></td>
-                </tr>
-                <tr>
-                    <th>Hooked Module</th>
-                    <td ><xsl:value-of select="HookedModule"/></td>
-                </tr>
-                <tr>
-                    <th>Hooking Module</th>
-                    <td ><xsl:value-of select="HookingModule"/></td>
-                </tr>
-                <tr>
-                    <th>Hooking Address</th>
-                    <td ><xsl:value-of select="HookingAddress"/></td>
-                </tr>
-            </table>
-        </div>
-        <xsl:if test="DigitalSignatureHooking/SignatureExists or DigitalSignatureHooking/SignatureVerified or DigitalSignatureHooking/Description or DigitalSignatureHooking/CertificateSubject or DigitalSignatureHooking/CertificateIssuer">
-            <div class="xslt-contents" xslt-title="Hooking Digital Signature">
-                <table     width="95%">
-                    <xsl:if test="DigitalSignatureHooking/SignatureExists">
-                        <tr>
-                            <th>Signature Exists</th>
-                            <td ><xsl:value-of select="DigitalSignatureHooking/SignatureExists"/></td>
-                        </tr>
-                    </xsl:if>
-                    <xsl:if test="DigitalSignatureHooking/SignatureVerified">
-                        <tr>
-                            <th>Signature Verified</th>
-                            <td ><xsl:value-of select="DigitalSignatureHooking/SignatureVerified"/></td>
-                        </tr>
-                    </xsl:if>
-                    <xsl:if test="DigitalSignatureHooking/SignatureDescription">
-                        <tr>
-                            <th>Signature Description</th>
-                            <td ><xsl:value-of select="DigitalSignatureHooking/SignatureDescription"/></td>
-                        </tr>
-                    </xsl:if>
-                    <xsl:if test="DigitalSignatureHooking/CertificateSubject">
-                        <tr>
-                            <th>Certificate Subject</th>
-                            <td ><xsl:value-of select="DigitalSignatureHooking/CertificateSubject"/></td>
-                        </tr>
-                    </xsl:if>
-                    <xsl:if test="DigitalSignatureHooking/CertificateIssuer">
-                        <tr>
-                            <th>Certificate Issuer</th>
-                            <td ><xsl:value-of select="DigitalSignatureHooking/CertificateIssuer"/></td>
-                        </tr>
-                    </xsl:if>
-                </table>
-            </div>
-        </xsl:if>
-
-        <xsl:if test="DigitalSignatureHooked/SignatureExists or DigitalSignatureHooked/SignatureVerified or DigitalSignatureHooked/Description or DigitalSignatureHooked/CertificateSubject or DigitalSignatureHooked/CertificateIssuer">
-            <div class="xslt-contents" xslt-title="Hooked Digital Signature">
-                <table     width="95%">
-                    <xsl:if test="DigitalSignatureHooked/SignatureExists">
-                        <tr>
-                            <th>Signature Exists</th>
-                            <td ><xsl:value-of select="DigitalSignatureHooked/SignatureExists"/></td>
-                        </tr>
-                    </xsl:if>
-                    <xsl:if test="DigitalSignatureHooked/SignatureVerified">
-                        <tr>
-                            <th>Signature Verified</th>
-                            <td ><xsl:value-of select="DigitalSignatureHooked/SignatureVerified"/></td>
-                        </tr>
-                    </xsl:if>
-                    <xsl:if test="DigitalSignatureHooked/SignatureDescription">
-                        <tr>
-                            <th>Signature Description</th>
-                            <td ><xsl:value-of select="DigitalSignatureHooked/SignatureDescription"/></td>
-                        </tr>
-                    </xsl:if>
-                    <xsl:if test="DigitalSignatureHooked/CertificateSubject">
-                        <tr>
-                            <th>Certificate Subject</th>
-                            <td ><xsl:value-of select="DigitalSignatureHooked/CertificateSubject"/></td>
-                        </tr>
-                    </xsl:if>
-                    <xsl:if test="DigitalSignatureHooked/CertificateIssuer">
-                        <tr>
-                            <th>Certificate Issuer</th>
-                            <td ><xsl:value-of select="DigitalSignatureHooked/CertificateIssuer"/></td>
-                        </tr>
-                    </xsl:if>
-                </table>
-            </div>
-        </xsl:if>
-
-    </xsl:template>
-</xsl:stylesheet>

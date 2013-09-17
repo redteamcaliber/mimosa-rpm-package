@@ -46,7 +46,6 @@
                 event.type = "tripleclick";
 
                 // let jQuery handle the triggering of "tripleclick" event handlers
-                //jQuery.event.handle.apply(this, arguments);
                 jQuery.event.dispatch.apply(this, arguments);
             }
             $elem.data('clicks', clicks);
@@ -82,8 +81,7 @@
             var settings = $.extend({
                 'selector': '.highlighter-container',
                 'minWords': 0,
-                'complete': function () {
-                }
+                'complete': function() {}
             }, options);
             var numClicks = 0;
             var topOffset = 0;
@@ -139,7 +137,7 @@
                                 }
                                 // console.log(expandedSelRange);
                                 expandedSelRange.collapse(false);
-                            } else if (range.endOffset === 0) {
+                            } else if(range.endOffset === 0 ) {
                                 topOffset = -25;
                                 leftOffset = 40;
                             }
@@ -179,11 +177,10 @@
 
                     $(settings.selector).css("top", position.top + topOffset + "px");
                     $(settings.selector).css("left", position.left + leftOffset + "px");
-                    $(settings.selector).show(300, function () {
-                        settings.complete(selText);
+                    $(settings.selector).show(300, function() {
+                        settings.complete(selText, sel);
                     });
                 }
-
                 $(settings.selector).hide();
                 $(settings.selector).css("position", "absolute");
                 $(document).bind('mouseup.highlighter', function (e) {

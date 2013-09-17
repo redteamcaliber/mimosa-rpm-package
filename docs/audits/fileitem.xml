@@ -1,0 +1,247 @@
+<FileItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" uid="B53F347E-1BB9-4B58-A642-F301D087F5C5" created="2013-02-21T17:03:44Z"><DevicePath>\Device\HarddiskVolume2</DevicePath>
+    <FullPath>C:\Program Files\Common Files\microsoft shared\DAO\dao360.dll</FullPath>
+    <Drive>C</Drive>
+    <FilePath>Program Files\Common Files\microsoft shared\DAO</FilePath>
+    <FileName>dao360.dll</FileName>
+    <FileExtension>dll</FileExtension>
+    <SizeInBytes>610304</SizeInBytes>
+    <Created>2009-06-10T21:13:52Z</Created>
+    <Modified>2009-07-14T01:15:08Z</Modified>
+    <Accessed>2009-06-10T21:13:52Z</Accessed>
+    <Changed>2011-01-07T20:57:10Z</Changed>
+    <FileAttributes>Archive</FileAttributes>
+    <Username>NT SERVICE\TrustedInstaller</Username>
+    <SecurityID>S-1-5-80-956008885-3418522649-1831038044-1853292631-2271478464</SecurityID>
+    <SecurityType>SidTypeWellKnownGroup</SecurityType>
+    <Md5sum>fc877611e178fa17e23f99d9694590a0</Md5sum>
+    <Sha1sum>5b9e15f716f4d32ca249e5a81d4739f20bbc276c</Sha1sum>
+    <Sha256sum>a09132479bf9d6ec78448688986984c66973434fa0c92dc7406c0fbcbf522f33</Sha256sum>
+    <PEInfo><Type>Dll</Type>
+        <Subsystem>Windows_GUI</Subsystem>
+        <BaseAddress>461045760</BaseAddress>
+        <PETimeStamp>2008-11-19T19:51:37Z</PETimeStamp>
+        <PEChecksum><PEFileRaw>627485</PEFileRaw>
+            <PEFileAPI>627485</PEFileAPI>
+            <PEComputedAPI>627485</PEComputedAPI>
+        </PEChecksum>
+        <Exports><ExportsTimeStamp>2008-11-19T18:45:14Z</ExportsTimeStamp>
+            <NumberOfFunctions>5</NumberOfFunctions>
+            <NumberOfNames>5</NumberOfNames>
+            <DllName>DAO360.dll</DllName>
+            <ExportedFunctions><string>DllGetClassObject</string>
+                <string>DllCanUnloadNow</string>
+                <string>DllRegisterServer</string>
+                <string>DllUnregisterServer</string>
+                <string>DllRegisterServerEx</string>
+            </ExportedFunctions>
+        </Exports>
+        <ImportedModules><Module><Name>msvcrt.dll</Name>
+            <NumberOfFunctions>26</NumberOfFunctions>
+            <ImportedFunctions><string>wcstod</string>
+                <string>wcsstr</string>
+                <string>_vsnwprintf</string>
+                <string>_vsnprintf</string>
+                <string>memcmp</string>
+                <string>toupper</string>
+                <string>_purecall</string>
+                <string>memmove</string>
+                <string>memcpy</string>
+                <string>??3@YAXPAX@Z</string>
+                <string>free</string>
+                <string>malloc</string>
+                <string>memchr</string>
+                <string>_wtoi</string>
+                <string>atol</string>
+                <string>atoi</string>
+                <string>_wcsnicmp</string>
+                <string>wcscspn</string>
+                <string>wcschr</string>
+                <string>??1type_info@@UAE@XZ</string>
+                <string>__dllonexit</string>
+                <string>_onexit</string>
+                <string>?terminate@@YAXXZ</string>
+                <string>??2@YAPAXI@Z</string>
+                <string>memset</string>
+                <string>__CxxFrameHandler</string>
+            </ImportedFunctions>
+        </Module>
+            <Module><Name>KERNEL32.dll</Name>
+                <NumberOfFunctions>41</NumberOfFunctions>
+                <ImportedFunctions><string>GetSystemTimeAsFileTime</string>
+                    <string>TerminateProcess</string>
+                    <string>GetCurrentProcess</string>
+                    <string>UnhandledExceptionFilter</string>
+                    <string>QueryPerformanceCounter</string>
+                    <string>GetTickCount</string>
+                    <string>RtlUnwind</string>
+                    <string>SetUnhandledExceptionFilter</string>
+                    <string>DeleteCriticalSection</string>
+                    <string>InitializeCriticalSection</string>
+                    <string>GlobalUnlock</string>
+                    <string>GlobalFree</string>
+                    <string>GlobalHandle</string>
+                    <string>GlobalReAlloc</string>
+                    <string>GlobalAlloc</string>
+                    <string>GlobalLock</string>
+                    <string>GetSystemDefaultLCID</string>
+                    <string>CompareStringA</string>
+                    <string>IsDBCSLeadByte</string>
+                    <string>TlsSetValue</string>
+                    <string>lstrlenA</string>
+                    <string>TlsGetValue</string>
+                    <string>InterlockedDecrement</string>
+                    <string>Sleep</string>
+                    <string>InterlockedIncrement</string>
+                    <string>FreeLibrary</string>
+                    <string>GetProcAddress</string>
+                    <string>LoadLibraryA</string>
+                    <string>TlsFree</string>
+                    <string>TlsAlloc</string>
+                    <string>MultiByteToWideChar</string>
+                    <string>GetModuleFileNameA</string>
+                    <string>GetModuleHandleA</string>
+                    <string>lstrlenW</string>
+                    <string>WideCharToMultiByte</string>
+                    <string>LeaveCriticalSection</string>
+                    <string>GetCurrentThreadId</string>
+                    <string>EnterCriticalSection</string>
+                    <string>GetCurrentProcessId</string>
+                    <string>LoadLibraryExA</string>
+                    <string>CompareStringW</string>
+                </ImportedFunctions>
+            </Module>
+            <Module><Name>USER32.dll</Name>
+                <NumberOfFunctions>8</NumberOfFunctions>
+                <ImportedFunctions><string>PeekMessageW</string>
+                    <string>TranslateMessage</string>
+                    <string>IsWindowVisible</string>
+                    <string>GetWindowThreadProcessId</string>
+                    <string>GetWindowLongA</string>
+                    <string>GetWindow</string>
+                    <string>GetDesktopWindow</string>
+                    <string>DispatchMessageW</string>
+                </ImportedFunctions>
+            </Module>
+            <Module><Name>ADVAPI32.dll</Name>
+                <NumberOfFunctions>5</NumberOfFunctions>
+                <ImportedFunctions><string>RegCloseKey</string>
+                    <string>RegCreateKeyExA</string>
+                    <string>RegOpenKeyExA</string>
+                    <string>RegDeleteKeyA</string>
+                    <string>RegSetValueExA</string>
+                </ImportedFunctions>
+            </Module>
+            <Module><Name>ole32.dll</Name>
+                <NumberOfFunctions>4</NumberOfFunctions>
+                <ImportedFunctions><string>CoGetClassObject</string>
+                    <string>CoInitialize</string>
+                    <string>CoUninitialize</string>
+                    <string>CoGetMalloc</string>
+                </ImportedFunctions>
+            </Module>
+            <Module><Name>OLEAUT32.dll</Name>
+                <NumberOfFunctions>30</NumberOfFunctions>
+                <ImportedFunctions><string>OLEAUT32.dll:001d</string>
+                    <string>OLEAUT32.dll:00ca</string>
+                    <string>OLEAUT32.dll:001a</string>
+                    <string>OLEAUT32.dll:0019</string>
+                    <string>OLEAUT32.dll:0013</string>
+                    <string>OLEAUT32.dll:0017</string>
+                    <string>OLEAUT32.dll:0018</string>
+                    <string>OLEAUT32.dll:000a</string>
+                    <string>OLEAUT32.dll:000c</string>
+                    <string>OLEAUT32.dll:0003</string>
+                    <string>OLEAUT32.dll:0093</string>
+                    <string>OLEAUT32.dll:0028</string>
+                    <string>OLEAUT32.dll:0010</string>
+                    <string>OLEAUT32.dll:0016</string>
+                    <string>OLEAUT32.dll:0015</string>
+                    <string>OLEAUT32.dll:000f</string>
+                    <string>OLEAUT32.dll:0095</string>
+                    <string>OLEAUT32.dll:0096</string>
+                    <string>OLEAUT32.dll:0006</string>
+                    <string>OLEAUT32.dll:0004</string>
+                    <string>OLEAUT32.dll:001c</string>
+                    <string>OLEAUT32.dll:0009</string>
+                    <string>OLEAUT32.dll:0007</string>
+                    <string>OLEAUT32.dll:00c8</string>
+                    <string>OLEAUT32.dll:00c9</string>
+                    <string>OLEAUT32.dll:0008</string>
+                    <string>OLEAUT32.dll:0002</string>
+                    <string>OLEAUT32.dll:001e</string>
+                    <string>OLEAUT32.dll:00a2</string>
+                    <string>OLEAUT32.dll:00a1</string>
+                </ImportedFunctions>
+            </Module>
+        </ImportedModules>
+        <DigitalSignature><SignatureExists>true</SignatureExists>
+            <SignatureVerified>true</SignatureVerified>
+            <Description>The file is signed and the signature was verified.</Description>
+            <CertificateSubject>Microsoft Windows</CertificateSubject>
+            <CertificateIssuer>Microsoft Windows Verification PCA</CertificateIssuer>
+        </DigitalSignature>
+        <VersionInfoList><VersionInfoItem><Language>English (United States)</Language>
+            <ProductName>Microsoft® Jet</ProductName>
+            <ProductVersion>03.60.9756.0</ProductVersion>
+            <CompanyName>Microsoft Corporation</CompanyName>
+            <FileDescription>Microsoft DAO 3.6 Object Library</FileDescription>
+            <FileVersion>03.60.9756.0</FileVersion>
+            <InternalName>DAO360</InternalName>
+            <LegalCopyright>© Microsoft Corporation. All rights reserved.</LegalCopyright>
+            <OriginalFilename>DAO360.DLL</OriginalFilename>
+        </VersionInfoItem>
+        </VersionInfoList>
+        <ResourceInfoList><ResourceInfoItem><Name>1</Name>
+            <Type>VERSION</Type>
+            <Size>832</Size>
+            <Language>English (United States)</Language>
+        </ResourceInfoItem>
+            <ResourceInfoItem><Name>1</Name>
+                <Type>TYPELIB</Type>
+                <Size>55056</Size>
+                <Language>English (United States)</Language>
+            </ResourceInfoItem>
+        </ResourceInfoList>
+        <Sections><NumberOfSections>6</NumberOfSections>
+            <ActualNumberOfSections>6</ActualNumberOfSections>
+            <Section><Name>.text</Name>
+                <Type>None</Type>
+                <SizeInBytes>438272</SizeInBytes>
+                <DetectedCharacteristics>Read Execute Code</DetectedCharacteristics>
+                <Entropy AverageValue="0.807697"/>
+            </Section>
+            <Section><Name>.rdata</Name>
+                <Type>None</Type>
+                <SizeInBytes>69632</SizeInBytes>
+                <DetectedCharacteristics>Read</DetectedCharacteristics>
+                <Entropy AverageValue="0.766743"/>
+            </Section>
+            <Section><Name>.data</Name>
+                <Type>None</Type>
+                <SizeInBytes>8192</SizeInBytes>
+                <DetectedCharacteristics>Read Write</DetectedCharacteristics>
+                <Entropy AverageValue="0.563324"/>
+            </Section>
+            <Section><Name>.CRT</Name>
+                <Type>None</Type>
+                <SizeInBytes>4096</SizeInBytes>
+                <DetectedCharacteristics>Read</DetectedCharacteristics>
+                <Entropy AverageValue="0.0718394"/>
+            </Section>
+            <Section><Name>.rsrc</Name>
+                <Type>None</Type>
+                <SizeInBytes>57344</SizeInBytes>
+                <DetectedCharacteristics>Read</DetectedCharacteristics>
+                <Entropy AverageValue="0.731838"/>
+            </Section>
+            <Section><Name>.reloc</Name>
+                <Type>None</Type>
+                <SizeInBytes>28672</SizeInBytes>
+                <DetectedCharacteristics>Read</DetectedCharacteristics>
+                <Entropy AverageValue="0.843502"/>
+            </Section>
+        </Sections>
+    </PEInfo>
+    <PeakEntropy>0.843502</PeakEntropy>
+    <PeakCodeEntropy>0.807697</PeakCodeEntropy>
+</FileItem>

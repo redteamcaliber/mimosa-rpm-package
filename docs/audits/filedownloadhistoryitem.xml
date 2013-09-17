@@ -1,0 +1,24 @@
+<FileDownloadHistoryItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" uid="C42F5C54-BA71-41E3-BBEF-A5556270B150" created="2013-02-05T05:23:40Z"><Profile>Content.IE5</Profile>
+    <BrowserName>Internet Explorer</BrowserName>
+    <BrowserVersion>9.0.8112.16421</BrowserVersion>
+    <Username>user</Username>
+    <DownloadType>Auto</DownloadType>
+    <FileName>favicon[1].ico</FileName>
+    <SourceURL>https://ieonline.microsoft.com/favicon.ico</SourceURL>
+    <TargetDirectory>C:\Users\User\AppData\Local\Microsoft\Windows\Temporary Internet Files\Content.IE5\1WKR8X4F\favicon[1].ico</TargetDirectory>
+    <FullHttpHeader>HTTP/1.1 200 OK&#13;
+        Content-Length: 894&#13;
+        Content-Type: image/x-icon&#13;
+        ETag: 135797D10F8E44EBECEAD54B057C5F130000037E&#13;
+        P3P: CP=&quot;NON UNI COM NAV STA LOC CURa DEVa PSAa PSDa OUR IND&quot;, policyref=&quot;http://privacy.msn.com/w3c/p3p.xml&quot;&#13;
+        &#13;
+        ~U:user&#13;
+    </FullHttpHeader>
+    <LastAccessedDate>2010-09-14T20:40:33Z</LastAccessedDate>
+    <LastModifiedDate>2011-01-08T23:32:34Z</LastModifiedDate>
+    <BytesDownloaded>894</BytesDownloaded>
+    <MaxBytes>894</MaxBytes>
+    <CacheFlags>CacheEnabled,Sticky,Normal</CacheFlags>
+    <CacheHitCount>1</CacheHitCount>
+    <LastCheckedDate>2011-01-08T23:32:36Z</LastCheckedDate>
+</FileDownloadHistoryItem>

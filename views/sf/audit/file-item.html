@@ -140,279 +140,292 @@
             </td>
         </tr>
     </table>
-<table class="table table-condensed table-bordered" width="100%">
-    <tr>
-        <th>Checksum Raw</th>
-        <th>Checksum API</th>
-        <th>Checksum Computed</th>
-    </tr>
-    <tr>
-        <td>
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEFileRaw">
-                {{ fileitem.pechecksum.pefileraw }}&nbsp;
-            </span>
-        </td>
-        <td>
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEFileAPI">
-                {{ peinfo.pechecksum.pefileapi }}&nbsp;
-            </span>
-        </td>
-        <td>
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEComputedAPI">
-                {{ peinfo.pechecksum.pecomputedapi }}&nbsp;
-            </span>
-        </td>
-    </tr>
-</table>
-<table class="table table-condensed table-bordered" width="100%">
-    <tr>
-        <th>Signature Exists</th>
-        <th>Signature Verified</th>
-        <th>Signature Description</th>
-    </tr>
-    <tr>
-        <td>
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/SignatureExists">
-                {{ peinfo.digitalsignature.signatureexists }}&nbsp;
-            </span>
-        </td>
-        <td>
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/SignatureVerified">
-                {{ peinfo.digatalsignature.signatureverified }}&nbsp;
-            </span>
-        </td>
-        <td>
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/Description">
-                {{ peinfo.digatalsignature.description }}&nbsp;
-            </span>
-        </td>
-    </tr>
-</table>
-<table width="100%" class="table table-condensed table-bordered">
-    <tr>
-        <th>Certificate Issuer</th>
-        <th>Certificate Subject</th>
-    </tr>
-    <tr>
-        <td>
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/CertificateIssuer">
-                {{ peinfo.digitalsignature.certificateissuer }}&nbsp;
-            </span>
-        </td>
-        <td>
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/CertificateSubject">
-                {{ peinfo.digitalsignature.certificatesubject }}&nbsp;
-            </span>
-        </td>
-    </tr>
-</table>
-<table width="100%" class="table table-condensed table-bordered">
-    <tr>
-        <th>Entry Point Signature</th>
-        <th>Anomalies</th>
-    </tr>
-    <tr>
-        <td>
-            Name:
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedEntryPointSignature/Name">
-                {{ peinfo.detectedentrypointsignature.name }}&nbsp;
-            </span>
-            <br/>
-            Type:
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedEntryPointSignature/Type">
-                {{ peinfo.detectedentrypointsignature.type }}&nbsp;
-            </span>
-        </td>
-        <td>
-            {% for s in get_list(peinfo.detectedanomalies.string) %}
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedAnomalies/string">
-                    {{ s }}
-                </span><br/>
-            {% endfor %}
-        </td>
-    </tr>
-    <tr>
-        <th>Peak Entropy</th>
-        <th>Peak Code Entropy</th>
-    </tr>
-    <tr>
-        <td>
-            <span class="ioc-term" ioc-term="FileItem/PeakEntropy">
-                {{ peinfo.peakentropy }}&nbsp;
-            </span>
-        </td>
-        <td>
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/PeakCodeEntropy">
-                {{ peinfo.peakcodentropy }}&nbsp;
-            </span>
-        </td>
-    </tr>
-</table>
 
-<table class="table table-condensed table-bordered">
-    <tr>
-        <th>Section Name</th>
-        <th>Section Type</th>
-        <th>Size</th>
-        <th>Characteristics</th>
-        <th>Entropy</th>
-    </tr>
-    {% for section in peinfo.sections.section %}
+    <table class="table table-condensed table-bordered" width="100%">
         <tr>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Name">
-                    {{ section.name }}&nbsp;
-                </span>
-            </td>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Type">
-                    {{ section.type }}&nbsp;
-                </span>
-            </td>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/SizeInBytes">
-                    {{ section.sizeinbytes }}&nbsp;
-                </span>
-            </td>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/DetectedCharacteristics">
-                    {{ section.detectedcharacteristics }}&nbsp;
-                </span>
-            </td>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Entropy/@AverageValue">
-                    {{ section.entropy.$.AverageValue }}&nbsp;
-                </span>
-            </td>
-        </tr>
-    {% endfor %}
-</table>
-
-{% if peinfo.versioninfolist.versioninfoitem %}
-    {% set versioninfoitem = peinfo.versioninfolist.versioninfoitem %}
-    <h4>Version Info</h4>
-    <table class="table table-condensed">
-        <tr>
-            <th>Language</th>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/Language">
-                    {{ versioninfoitem.language }}
-                </span>
-            </td>
+            <th>Checksum Raw</th>
+            <th>Checksum API</th>
+            <th>Checksum Computed</th>
         </tr>
         <tr>
-            <th>Product Name</th>
             <td>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/ProductName">
-                    {{ versioninfoitem.productname }}
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEFileRaw">
+                    {{ fileitem.pechecksum.pefileraw }}&nbsp;
                 </span>
             </td>
-        </tr>
-        <tr>
-            <th>Product Version</th>
-            <td><span class="ioc-term"
-                      ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/ProductVersion">
-                {{ versioninfoitem.productversion }}
-            </span>
-        </td>
-        </tr>
-        <tr>
-            <th>Comments</th>
             <td>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/Comments">
-                    {{ versioninfoitem.comments }}
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEFileAPI">
+                    {{ peinfo.pechecksum.pefileapi }}&nbsp;
                 </span>
             </td>
-        </tr>
-        <tr>
-            <th>Company Name</th>
             <td>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/CompanyName">
-                    {{ versioninfoitem.companyname }}
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <th>File Description</th>
-            <td>
-                <span class="ioc-term"
-                      ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileDescription">
-                    {{ versioninfoitem.filedescription }}
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <th>File Version</th>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileVersion">
-                    {{ versioninfoitem.fileversion }}
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <th>Internal Name</th>
-            <td>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/InternalName">
-                    {{ versioninfoitem.internalname }}
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <th>Legal Copyright</th>
-            <td>
-                <span class="ioc-term"
-                      ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/LegalCopyright">
-                    {{ versioninfoitem.legalcopyright }}
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <th>Original Filename</th>
-            <td>
-                <span class="ioc-term"
-                      ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/OriginalFilename">
-                    {{ versioninfoitem.originalfilename }}
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEComputedAPI">
+                    {{ peinfo.pechecksum.pecomputedapi }}&nbsp;
                 </span>
             </td>
         </tr>
     </table>
-{% endif %}
 
-<br/>
+    <table class="table table-condensed table-bordered" width="100%">
+        <tr>
+            <th>Signature Exists</th>
+            <th>Signature Verified</th>
+            <th>Signature Description</th>
+        </tr>
+        <tr>
+            <td>
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/SignatureExists">
+                    {{ peinfo.digitalsignature.signatureexists }}&nbsp;
+                </span>
+            </td>
+            <td>
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/SignatureVerified">
+                    {{ peinfo.digatalsignature.signatureverified }}&nbsp;
+                </span>
+            </td>
+            <td>
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/Description">
+                    {{ peinfo.digatalsignature.description }}&nbsp;
+                </span>
+            </td>
+        </tr>
+    </table>
 
-<div id="exported-functions-div" class="collapsable collapsed" title="Exported Functions">
-    <ul>
-        {% for s in get_list(peinfo.exports.exportedfunctions.string) %}
-        <li>
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/Exports/ExportedFunctions/string">{{ s }}</span>
-        </li>
+    <table width="100%" class="table table-condensed table-bordered">
+        <tr>
+            <th>Certificate Issuer</th>
+            <th>Certificate Subject</th>
+        </tr>
+        <tr>
+            <td>
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/CertificateIssuer">
+                    {{ peinfo.digitalsignature.certificateissuer }}&nbsp;
+                </span>
+            </td>
+            <td>
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/CertificateSubject">
+                    {{ peinfo.digitalsignature.certificatesubject }}&nbsp;
+                </span>
+            </td>
+        </tr>
+    </table>
+
+    <table width="100%" class="table table-condensed table-bordered">
+        <tr>
+            <th>Entry Point Signature</th>
+            <th>Anomalies</th>
+        </tr>
+        <tr>
+            <td>
+                Name:
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedEntryPointSignature/Name">
+                    {{ peinfo.detectedentrypointsignature.name }}&nbsp;
+                </span>
+                <br/>
+                Type:
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedEntryPointSignature/Type">
+                    {{ peinfo.detectedentrypointsignature.type }}&nbsp;
+                </span>
+            </td>
+            <td>
+                {% for s in get_list(peinfo.detectedanomalies.string) %}
+                    <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedAnomalies/string">
+                        {{ s }}
+                    </span><br/>
+                {% endfor %}
+            </td>
+        </tr>
+        <tr>
+            <th>Peak Entropy</th>
+            <th>Peak Code Entropy</th>
+        </tr>
+        <tr>
+            <td>
+                <span class="ioc-term" ioc-term="FileItem/PeakEntropy">
+                    {{ peinfo.peakentropy }}&nbsp;
+                </span>
+            </td>
+            <td>
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/PeakCodeEntropy">
+                    {{ peinfo.peakcodentropy }}&nbsp;
+                </span>
+            </td>
+        </tr>
+    </table>
+
+    <table class="table table-condensed table-bordered">
+        <tr>
+            <th>Section Name</th>
+            <th>Section Type</th>
+            <th>Size</th>
+            <th>Characteristics</th>
+            <th>Entropy</th>
+        </tr>
+        {% for section in peinfo.sections.section %}
+            <tr>
+                <td>
+                    <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Name">
+                        {{ section.name }}&nbsp;
+                    </span>
+                </td>
+                <td>
+                    <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Type">
+                        {{ section.type }}&nbsp;
+                    </span>
+                </td>
+                <td>
+                    <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/SizeInBytes">
+                        {{ section.sizeinbytes }}&nbsp;
+                    </span>
+                </td>
+                <td>
+                    <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/DetectedCharacteristics">
+                        {{ section.detectedcharacteristics }}&nbsp;
+                    </span>
+                </td>
+                <td>
+                    <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Entropy/@AverageValue">
+                        {{ section.entropy.$.AverageValue }}&nbsp;
+                    </span>
+                </td>
+            </tr>
         {% endfor %}
-    </ul>
-</div>
+    </table>
 
-<div id="imported-functions-div" class="collapsable collapsed" title="Imported Functions">
-    {% for module in peinfo.importedmodules.module %}
-    <li>
-            <span class="ioc-term" ioc-term="FileItem/PEInfo/ImportedModules/Name">
-                {{ module.name }}
-            </span>
+    {% if peinfo.versioninfolist.versioninfoitem %}
+        {% set versioninfoitem = peinfo.versioninfolist.versioninfoitem %}
+        <h4>Version Info</h4>
+        <table class="table table-condensed">
+            <tr>
+                <th>Language</th>
+                <td>
+                    <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/Language">
+                        {{ versioninfoitem.language }}
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>Product Name</th>
+                <td>
+                    <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/ProductName">
+                        {{ versioninfoitem.productname }}
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>Product Version</th>
+                <td><span class="ioc-term"
+                          ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/ProductVersion">
+                    {{ versioninfoitem.productversion }}
+                </span>
+            </td>
+            </tr>
+            <tr>
+                <th>Comments</th>
+                <td>
+                    <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/Comments">
+                        {{ versioninfoitem.comments }}
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>Company Name</th>
+                <td>
+                    <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/CompanyName">
+                        {{ versioninfoitem.companyname }}
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>File Description</th>
+                <td>
+                    <span class="ioc-term"
+                          ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileDescription">
+                        {{ versioninfoitem.filedescription }}
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>File Version</th>
+                <td>
+                    <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileVersion">
+                        {{ versioninfoitem.fileversion }}
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>Internal Name</th>
+                <td>
+                    <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/InternalName">
+                        {{ versioninfoitem.internalname }}
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>Legal Copyright</th>
+                <td>
+                    <span class="ioc-term"
+                          ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/LegalCopyright">
+                        {{ versioninfoitem.legalcopyright }}
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>Original Filename</th>
+                <td>
+                    <span class="ioc-term"
+                          ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/OriginalFilename">
+                        {{ versioninfoitem.originalfilename }}
+                    </span>
+                </td>
+            </tr>
+        </table>
+    {% endif %}
 
-        {% if module.importedfunctions.string %}
-        <ul>
-            {% for s in get_list(module.importedfunctions.string) %}
-            <li>
+    <br/>
+
+    {% if peinfo.exports.exportedfunctions %}
+        <div id="exported-functions-div" class="collapsable collapsed" title="Exported Functions">
+            <span style="font-weight: bold">{{ peinfo.exports.dllname }}</span>
+
+            <table class="table table-condensed">
+                {% for s in get_list(peinfo.exports.exportedfunctions.string) %}
+                <tr>
+                    <td>
+                        <span class="ioc-term" ioc-term="FileItem/PEInfo/Exports/ExportedFunctions/string">{{ s }}</span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+
+    {% if peinfo.importedmodules.module %}
+        <div id="imported-functions-div" class="collapsable collapsed" title="Imported Functions">
+            {% for module in peinfo.importedmodules.module %}
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/ImportedModules/Name" style="font-weight: bold">
+                    {{ module.name }}
+                </span>
+
+                <table class="table table-condensed">
+                    {% for s in get_list(module.importedfunctions.string) %}
+                    <tr>
+                        <td>
                         <span class="ioc-term" ioc-term="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string">
                             {{ s }}
                         </span>
-            </li>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
             {% endfor %}
-        </ul>
-        {% endif %}
-    </li>
-    {% endfor %}
-</div>
+        </div>
+    {% endif %}
 
+{% else %}
+    <br/>
 {% endif %}<!-- end fileitem.peinfo -->
+
 
 {% if fileitem.stringlist.string %}
     <div class="collapsable collapsed" title="Strings">

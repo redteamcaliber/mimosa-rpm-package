@@ -1,0 +1,12 @@
+<DnsEntryItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              uid="C1762215-CFF7-4575-9FC5-33263E875C67" created="2013-02-05T05:17:58Z">
+    <Host>wer.microsoft.com</Host>
+    <RecordName>g.gtld-servers.net</RecordName>
+    <RecordType>A</RecordType>
+    <TimeToLive>PT529S</TimeToLive>
+    <Flags>Additional</Flags>
+    <DataLength>4</DataLength>
+    <RecordData>
+        <IPv4Address>192.42.93.30</IPv4Address>
+    </RecordData>
+</DnsEntryItem>

@@ -1,6 +1,13 @@
 UAC ToDo
 ========
 
+### Look into code submitting an array of expression keys when creating a suppression.
+
+### Add scrolling support to the audit div.
+
+### Add FileItem/PEInfo/Exports/DllName to the File/Item audit template.
+    - [23366](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#bug/23366)
+
 ### Add copy to the context menu.
 
 ### Add a app token check to the SSO ware.

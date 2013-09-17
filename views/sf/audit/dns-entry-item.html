@@ -1,391 +1,438 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet version="1.0"
-                xmlns:atom="http://www.w3.org/2005/Atom"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-                xmlns:user="urn:userscripts"
-                xmlns:mir="urn:mandiant-intelligent-response"
-        >
-<!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
-<xsl:output method="html" />
-<xsl:template match="/DnsEntryItem">
-<div class="xslt-contents" xslt-title="DNS Information">
-    <table     width="95%">
+{% set i = content.dnsentryitem %}
+
+<div id="dns-entry-item-div" class="collapsable-header" title="<i class='icon-file'></i> DNSEntry/Item">
+
+    <h4>DNS Information</h4>
+    
+    <table class="table table-condensed">
         <tr>
-            <th>Host</th>
-            <td><xsl:value-of select="Host"/></td>
+            <th style="width: 150px">Host</th>
+            <td>{{ i.host }}</td>
         </tr>
         <tr>
-            <th>Record Name</th>
-            <td><xsl:value-of select="RecordName"/></td>
+            <th style="width: 150px">Record Name</th>
+            <td>{{ i.recordname }}</td>
         </tr>
         <tr>
-            <th>Record Type</th>
-            <td><xsl:value-of select="RecordType"/></td>
+            <th style="width: 150px">Record Type</th>
+            <td>{{ i.recordtype }}</td>
         </tr>
         <tr>
-            <th>Time to Live</th>
-            <td><xsl:value-of select="TimeToLive"/></td>
+            <th style="width: 150px">Time to Live</th>
+            <td>{{ i.timetolive }}</td>
         </tr>
         <tr>
-            <th>Flags</th>
-            <td><xsl:value-of select="Flags"/></td>
+            <th style="width: 150px">Flags</th>
+            <td>{{ i.flags }}</td>
         </tr>
         <tr>
-            <th>Data Length</th>
-            <td><xsl:value-of select="DataLength"/></td>
+            <th style="width: 150px">Data Length</th>
+            <td>{{ i.datalength }}</td>
         </tr>
     </table>
+
+    <div class="collapsable collapsed" title="Record Data">
+        <table class="table table-condensed">
+        
+            {% if i.recorddata.host %}
+                <tr>
+                    <th style="width: 150px">Host</th>
+                    <td >{{ i.recorddata.host }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.ipv4address %}
+                <tr>
+                    <th style="width: 150px">IPv4 Address</th>
+                    <td >{{ i.recorddata.ipv4address }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.primaryservername %}
+                <tr>
+                    <th style="width: 150px">Primary Server Name</th>
+                    <td >{{ i.recorddata.primaryservername }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.foo %}
+                <tr>
+                    <th style="width: 150px">foo</th>
+                    <td >{{ i.recorddata.administratorname }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.administratorname %}
+                <tr>
+                    <th style="width: 150px">Administrator Name</th>
+                    <td >{{ i.recorddata.serialnumber }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.refresh %}
+                <tr>
+                    <th style="width: 150px">Refresh</th>
+                    <td >{{ i.recorddata.refresh }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.retry %}
+                <tr>
+                    <th style="width: 150px">Retry</th>
+                    <td >{{ i.recorddata.retry }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.expire %}
+                <tr>
+                    <th style="width: 150px">Expire</th>
+                    <td >{{ i.recorddata.expire }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.defaulttimetolive %}
+                <tr>
+                    <th style="width: 150px">Default Time To Live</th>
+                    <td >{{ i.recorddata.defaulttimetolive }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.mailboxname %}
+                <tr>
+                    <th style="width: 150px">Mailbox Name</th>
+                    <td >{{ i.recorddata.mailboxname }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.mailboxerrorsname %}
+                <tr>
+                    <th style="width: 150px">Mailbox Errors Name</th>
+                    <td >{{ i.recorddata.mailboxerrorsname }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.mxhost %}
+                <tr>
+                    <th style="width: 150px">Mx Host</th>
+                    <td >{{ i.recorddata.mxhost }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.preference %}
+                <tr>
+                    <th style="width: 150px">Preference</th>
+                    <td >{{ i.recorddata.preference }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.string %}
+                <tr>
+                    <th style="width: 150px">String</th>
+                    <td >{{ i.recorddata.string }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.blob %}
+                <tr>
+                    <th style="width: 150px">Blob</th>
+                    <td >{{ i.recorddata.blob }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.bitmask %}
+                <tr>
+                    <th style="width: 150px">Bitmask</th>
+                    <td >{{ i.recorddata.bitmask }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.ipv6address %}
+                <tr>
+                    <th style="width: 150px">IPv6 Address</th>
+                    <td >{{ i.recorddata.ipv6address }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.algorithm %}
+                <tr>
+                    <th style="width: 150px">Algorithm</th>
+                    <td >{{ i.recorddata.algorithm }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.protocol %}
+                <tr>
+                    <th style="width: 150px">Protocol</th>
+                    <td >{{ i.recorddata.protocol }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.keyflags %}
+                <tr>
+                    <th style="width: 150px">Key Flags</th>
+                    <td >{{ i.recorddata.keyflags }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.RecordData/Signer %}
+                <tr>
+                    <th style="width: 150px">Signer</th>
+                    <td >{{ i.recorddata.signer }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.typecovered %}
+                <tr>
+                    <th style="width: 150px">Type Covered</th>
+                    <td >{{ i.recorddata.typecovered }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.labelcount %}
+                <tr>
+                    <th style="width: 150px">Label Count</th>
+                    <td >{{ i.recorddata.labelcount }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.originaltimetolive %}
+                <tr>
+                    <th>Original Time To Live</th>
+                    <td >{{ i.recorddata.originaltimetolive }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.expirationdate %}
+                <tr>
+                    <th style="width: 150px">ExpirationDate</th>
+                    <td >{{ i.recorddata.expirationdate }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.datesigned %}
+                <tr>
+                    <th style="width: 150px">Date Signed</th>
+                    <td >{{ i.recorddata.datesigned }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.keytag %}
+                <tr>
+                    <th style="width: 150px">Key Tag</th>
+                    <td >{{ i.recorddata.keytag }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.addresstype %}
+                <tr>
+                    <th style="width: 150px">Address Type</th>
+                    <td >{{ i.recorddata.addresstype }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.atmaddress %}
+                <tr>
+                    <th style="width: 150px">ATM Address</th>
+                    <td >{{ i.recorddata.atmaddress }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.nexthost %}
+                <tr>
+                    <th style="width: 150px">Next Host</th>
+                    <td >{{ i.recorddata.nexthost }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.type %}
+                <tr>
+                    <th style="width: 150px">Type</th>
+                    <td >{{ i.recorddata.type }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.targethost %}
+                <tr>
+                    <th style="width: 150px">Target Host</th>
+                    <td >{{ i.recorddata.targethost }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.RecordData/Priority %}
+                <tr>
+                    <th style="width: 150px">Priority</th>
+                    <td >{{ i.recorddata.priority }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.RecordData/Weight %}
+                <tr>
+                    <th style="width: 150px">Weight</th>
+                    <td >{{ i.recorddata.weight }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.RecordData/Port %}
+                <tr>
+                    <th style="width: 150px">Port</th>
+                    <td >{{ i.recorddata.port }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.order %}
+                <tr>
+                    <th style="width: 150px">Order</th>
+                    <td >{{ i.recorddata.order }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.services %}
+                <tr>
+                    <th style="width: 150px">Services</th>
+                    <td >{{ i.recorddata.services }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.regularexpression %}
+                <tr>
+                    <th style="width: 150px">Regular Expression</th>
+                    <td >{{ i.recorddata.regularexpression }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.replacement %}
+                <tr>
+                    <th style="width: 150px">Replacement</th>
+                    <td >{{ i.recorddata.replacement }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.digesttype %}
+                <tr>
+                    <th style="width: 150px">Digest Type</th>
+                    <td >{{ i.recorddata.digesttype }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.digestlength %}
+                <tr>
+                    <th style="width: 150px">Digest Length</th>
+                    <td >{{ i.recorddata.digestlength }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.digest %}
+                <tr>
+                    <th style="width: 150px">Digest</th>
+                    <td >{{ i.recorddata.digest }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.keylength %}
+                <tr>
+                    <th style="width: 150px">Key Length</th>
+                    <td >{{ i.recorddata.keylength }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.publickey %}
+                <tr>
+                    <th style="width: 150px">Public Key</th>
+                    <td >{{ i.recorddata.publickey }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.keyname %}
+                <tr>
+                    <th style="width: 150px">Key Name</th>
+                    <td >{{ i.recorddata.keyname }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.key %}
+                <tr>
+                    <th style="width: 150px">Key</th>
+                    <td >{{ i.recorddata.key }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.creationdate %}
+                <tr>
+                    <th style="width: 150px">Creation Date</th>
+                    <td >{{ i.recorddata.creationdate }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.error %}
+                <tr>
+                    <th style="width: 150px">Error</th>
+                    <td >{{ i.recorddata.error }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.mode %}
+                <tr>
+                    <th style="width: 150px">Mode</th>
+                    <td >{{ i.recorddata.mode }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.signaturelength %}
+                <tr>
+                    <th style="width: 150px">Signature Length</th>
+                    <td >{{ i.recorddata.signaturelength }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.signature %}
+                <tr>
+                    <th style="width: 150px">Signature</th>
+                    <td >{{ i.recorddata.signature }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.fudgetime %}
+                <tr>
+                    <th style="width: 150px">Fudge Time</th>
+                    <td >{{ i.recorddata.fudgetime }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.originalxid %}
+                <tr>
+                    <th style="width: 150px">Original Xid</th>
+                    <td >{{ i.recorddata.originalxid }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.mappingflag %}
+                <tr>
+                    <th style="width: 150px">Mapping Flag</th>
+                    <td >{{ i.recorddata.mappingflag }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.winsserveripv4address %}
+                <tr>
+                    <th style="width: 150px">Wins Server IPv4 Address</th>
+                    <td >{{ i.recorddata.winsserveripv4address }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.lookuptimeout %}
+                <tr>
+                    <th style="width: 150px">Lookup Timeout</th>
+                    <td >{{ i.recorddata.lookuptimeout }}</td>
+                </tr>
+            {% endif %}
+            
+            {% if i.recorddata.cachetimeout %}
+                <tr>
+                    <th style="width: 150px">Cache Timeout</th>
+                    <td >{{ i.recorddata.cachetimeout }}</td>
+                </tr>
+            {% endif %}
+    
+        </table>
+    </div>
 </div>
-<div class="xslt-contents" xslt-title="Record Data">
-<table     width="95%">
-<xsl:if test="RecordData/Host">
-    <tr>
-        <th>Host</th>
-        <td ><xsl:value-of select="RecordData/Host"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/IPv4Address">
-    <tr>
-        <th>IPv4 Address</th>
-        <td ><xsl:value-of select="RecordData/IPv4Address"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/PrimaryServerName">
-    <tr>
-        <th>Primary Server Name</th>
-        <td ><xsl:value-of select="RecordData/PrimaryServerName"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/foo">
-    <tr>
-        <th>foo</th>
-        <td ><xsl:value-of select="RecordData/AdministratorName"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/AdministratorName">
-    <tr>
-        <th>Administrator Name</th>
-        <td ><xsl:value-of select="RecordData/SerialNumber"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Refresh">
-    <tr>
-        <th>Refresh</th>
-        <td ><xsl:value-of select="RecordData/Refresh"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Retry">
-    <tr>
-        <th>Retry</th>
-        <td ><xsl:value-of select="RecordData/Retry"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Expire">
-    <tr>
-        <th>Expire</th>
-        <td ><xsl:value-of select="RecordData/Expire"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/DefaultTimeToLive">
-    <tr>
-        <th>Default Time To Live</th>
-        <td ><xsl:value-of select="RecordData/DefaultTimeToLive"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/MailboxName">
-    <tr>
-        <th>Mailbox Name</th>
-        <td ><xsl:value-of select="RecordData/MailboxName"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/MailboxErrorsName">
-    <tr>
-        <th>Mailbox Errors Name</th>
-        <td ><xsl:value-of select="RecordData/MailboxErrorsName"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/MxHost">
-    <tr>
-        <th>Mx Host</th>
-        <td ><xsl:value-of select="RecordData/MxHost"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Preference">
-    <tr>
-        <th>Preference</th>
-        <td ><xsl:value-of select="RecordData/Preference"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/String">
-    <tr>
-        <th>String</th>
-        <td ><xsl:value-of select="RecordData/String"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Blob">
-    <tr>
-        <th>Blob</th>
-        <td ><xsl:value-of select="RecordData/Blob"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Bitmask">
-    <tr>
-        <th>Bitmask</th>
-        <td ><xsl:value-of select="RecordData/Bitmask"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/IPv6Address">
-    <tr>
-        <th>IPv6 Address</th>
-        <td ><xsl:value-of select="RecordData/IPv6Address"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Algorithm">
-    <tr>
-        <th>Algorithm</th>
-        <td ><xsl:value-of select="RecordData/Algorithm"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Protocol">
-    <tr>
-        <th>Protocol</th>
-        <td ><xsl:value-of select="RecordData/Protocol"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/KeyFlags">
-    <tr>
-        <th>Key Flags</th>
-        <td ><xsl:value-of select="RecordData/KeyFlags"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Signer">
-    <tr>
-        <th>Signer</th>
-        <td ><xsl:value-of select="RecordData/Signer"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/TypeCovered">
-    <tr>
-        <th>Type Covered</th>
-        <td ><xsl:value-of select="RecordData/TypeCovered"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/LabelCount">
-    <tr>
-        <th>Label Count</th>
-        <td ><xsl:value-of select="RecordData/LabelCount"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/OriginalTimeToLive">
-    <tr>
-        <th>Original Time To Live</th>
-        <td ><xsl:value-of select="RecordData/OriginalTimeToLive"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/ExpirationDate">
-    <tr>
-        <th>ExpirationDate</th>
-        <td ><xsl:value-of select="RecordData/ExpirationDate"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/DateSigned">
-    <tr>
-        <th>Date Signed</th>
-        <td ><xsl:value-of select="RecordData/DateSigned"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/KeyTag">
-    <tr>
-        <th>Key Tag</th>
-        <td ><xsl:value-of select="RecordData/KeyTag"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/AddressType">
-    <tr>
-        <th>Address Type</th>
-        <td ><xsl:value-of select="RecordData/AddressType"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/ATMAddress">
-    <tr>
-        <th>ATM Address</th>
-        <td ><xsl:value-of select="RecordData/ATMAddress"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/NextHost">
-    <tr>
-        <th>Next Host</th>
-        <td ><xsl:value-of select="RecordData/NextHost"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Type">
-    <tr>
-        <th>Type</th>
-        <td ><xsl:value-of select="RecordData/Type"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/TargetHost">
-    <tr>
-        <th>Target Host</th>
-        <td ><xsl:value-of select="RecordData/TargetHost"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Priority">
-    <tr>
-        <th>Priority</th>
-        <td ><xsl:value-of select="RecordData/Priority"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Weight">
-    <tr>
-        <th>Weight</th>
-        <td ><xsl:value-of select="RecordData/Weight"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Port">
-    <tr>
-        <th>Port</th>
-        <td ><xsl:value-of select="RecordData/Port"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Order">
-    <tr>
-        <th>Order</th>
-        <td ><xsl:value-of select="RecordData/Order"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Services">
-    <tr>
-        <th>Services</th>
-        <td ><xsl:value-of select="RecordData/Services"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/RegularExpression">
-    <tr>
-        <th>Regular Expression</th>
-        <td ><xsl:value-of select="RecordData/RegularExpression"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Replacement">
-    <tr>
-        <th>Replacement</th>
-        <td ><xsl:value-of select="RecordData/Replacement"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/DigestType">
-    <tr>
-        <th>Digest Type</th>
-        <td ><xsl:value-of select="RecordData/DigestType"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/DigestLength">
-    <tr>
-        <th>Digest Length</th>
-        <td ><xsl:value-of select="RecordData/DigestLength"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Digest">
-    <tr>
-        <th>Digest</th>
-        <td ><xsl:value-of select="RecordData/Digest"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/KeyLength">
-    <tr>
-        <th>Key Length</th>
-        <td ><xsl:value-of select="RecordData/KeyLength"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/PublicKey">
-    <tr>
-        <th>Public Key</th>
-        <td ><xsl:value-of select="RecordData/PublicKey"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/KeyName">
-    <tr>
-        <th>Key Name</th>
-        <td ><xsl:value-of select="RecordData/KeyName"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Key">
-    <tr>
-        <th>Key</th>
-        <td ><xsl:value-of select="RecordData/Key"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/CreationDate">
-    <tr>
-        <th>Creation Date</th>
-        <td ><xsl:value-of select="RecordData/CreationDate"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Error">
-    <tr>
-        <th>Error</th>
-        <td ><xsl:value-of select="RecordData/Error"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Mode">
-    <tr>
-        <th>Mode</th>
-        <td ><xsl:value-of select="RecordData/Mode"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/SignatureLength">
-    <tr>
-        <th>Signature Length</th>
-        <td ><xsl:value-of select="RecordData/SignatureLength"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/Signature">
-    <tr>
-        <th>Signature</th>
-        <td ><xsl:value-of select="RecordData/Signature"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/FudgeTime">
-    <tr>
-        <th>Fudge Time</th>
-        <td ><xsl:value-of select="RecordData/FudgeTime"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/OriginalXid">
-    <tr>
-        <th>Original Xid</th>
-        <td ><xsl:value-of select="RecordData/OriginalXid"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/MappingFlag">
-    <tr>
-        <th>Mapping Flag</th>
-        <td ><xsl:value-of select="RecordData/MappingFlag"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/WinsServerIPv4Address">
-    <tr>
-        <th>Wins Server IPv4 Address</th>
-        <td ><xsl:value-of select="RecordData/WinsServerIPv4Address"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/LookupTimeout">
-    <tr>
-        <th>Lookup Timeout</th>
-        <td ><xsl:value-of select="RecordData/LookupTimeout"/></td>
-    </tr>
-</xsl:if>
-<xsl:if test="RecordData/CacheTimeout">
-    <tr>
-        <th>Cache Timeout</th>
-        <td ><xsl:value-of select="RecordData/CacheTimeout"/></td>
-    </tr>
-</xsl:if>
-
-</table>
-</div>
-</xsl:template>
-
-</xsl:stylesheet>
-

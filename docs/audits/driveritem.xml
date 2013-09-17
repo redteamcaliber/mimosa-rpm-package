@@ -1,0 +1,58 @@
+<DriverItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" uid="CF0AC4D0-F176-42C9-A2BF-445982BAA873" created="2013-02-05T05:25:18Z"><DriverObjectAddress>1050078712</DriverObjectAddress>
+    <ImageBase>2526973952</ImageBase>
+    <ImageSize>36864</ImageSize>
+    <DriverName>C:\Windows\System32\drivers\asyncmac.sys</DriverName>
+    <DriverInit>2526998590</DriverInit>
+    <DriverStartIo>0</DriverStartIo>
+    <DriverUnload>2526978608</DriverUnload>
+    <DeviceItem><DeviceObject>2215772200</DeviceObject>
+        <AttachedToDeviceObject>2237061616</AttachedToDeviceObject>
+        <AttachedToDriverObject>2222647472</AttachedToDriverObject>
+        <AttachedToDriverName>C:\Windows\System32\drivers\swenum.sys</AttachedToDriverName>
+    </DeviceItem>
+    <DeviceItem><DeviceObject>2237065768</DeviceObject>
+    </DeviceItem>
+    <IRP_MJ_CREATE>2265080467</IRP_MJ_CREATE>
+    <IRP_MJ_CREATE_NAMED_PIPE>2265503428</IRP_MJ_CREATE_NAMED_PIPE>
+    <IRP_MJ_CLOSE>2265081418</IRP_MJ_CLOSE>
+    <IRP_MJ_READ>2265503428</IRP_MJ_READ>
+    <IRP_MJ_WRITE>2265503428</IRP_MJ_WRITE>
+    <IRP_MJ_QUERY_INFORMATION>2265503428</IRP_MJ_QUERY_INFORMATION>
+    <IRP_MJ_SET_INFORMATION>2265503428</IRP_MJ_SET_INFORMATION>
+    <IRP_MJ_QUERY_EA>2265503428</IRP_MJ_QUERY_EA>
+    <IRP_MJ_SET_EA>2265503428</IRP_MJ_SET_EA>
+    <IRP_MJ_FLUSH_BUFFERS>2265503428</IRP_MJ_FLUSH_BUFFERS>
+    <IRP_MJ_QUERY_VOLUME_INFORMATION>2265503428</IRP_MJ_QUERY_VOLUME_INFORMATION>
+    <IRP_MJ_SET_VOLUME_INFORMATION>2265503428</IRP_MJ_SET_VOLUME_INFORMATION>
+    <IRP_MJ_DIRECTORY_CONTROL>2265503428</IRP_MJ_DIRECTORY_CONTROL>
+    <IRP_MJ_FILE_SYSTEM_CONTROL>2265503428</IRP_MJ_FILE_SYSTEM_CONTROL>
+    <IRP_MJ_DEVICE_CONTROL>2265503623</IRP_MJ_DEVICE_CONTROL>
+    <IRP_MJ_INTERNAL_DEVICE_CONTROL>2265503428</IRP_MJ_INTERNAL_DEVICE_CONTROL>
+    <IRP_MJ_SHUTDOWN>2265503428</IRP_MJ_SHUTDOWN>
+    <IRP_MJ_LOCK_CONTROL>2265503428</IRP_MJ_LOCK_CONTROL>
+    <IRP_MJ_CLEANUP>2265503428</IRP_MJ_CLEANUP>
+    <IRP_MJ_CREATE_MAILSLOT>2265503428</IRP_MJ_CREATE_MAILSLOT>
+    <IRP_MJ_QUERY_SECURITY>2265503428</IRP_MJ_QUERY_SECURITY>
+    <IRP_MJ_SET_SECURITY>2265503428</IRP_MJ_SET_SECURITY>
+    <IRP_MJ_POWER>2265094450</IRP_MJ_POWER>
+    <IRP_MJ_SYSTEM_CONTROL>2265327213</IRP_MJ_SYSTEM_CONTROL>
+    <IRP_MJ_DEVICE_CHANGE>2265503428</IRP_MJ_DEVICE_CHANGE>
+    <IRP_MJ_QUERY_QUOTA>2265503428</IRP_MJ_QUERY_QUOTA>
+    <IRP_MJ_SET_QUOTA>2265503428</IRP_MJ_SET_QUOTA>
+    <IRP_MJ_PNP>2265548532</IRP_MJ_PNP>
+    <Md5sum>add2ade1c2b285ab8378d2daaf991481</Md5sum>
+    <Sha1sum>80b6266ea1a086d96dab9d3166a7bba1f5fb52cf</Sha1sum>
+    <Sha256sum>7965a705f37924c0ec7a934e64e89c5df4069816e2eea3509e0ac90f78910519</Sha256sum>
+    <SignatureExists>true</SignatureExists>
+    <SignatureVerified>true</SignatureVerified>
+    <SignatureDescription>The file is signed and the signature was verified.</SignatureDescription>
+    <CertificateSubject>Microsoft Windows</CertificateSubject>
+    <CertificateIssuer>Microsoft Windows Verification PCA</CertificateIssuer>
+    <PEInfo><DigitalSignature><SignatureExists>true</SignatureExists>
+        <SignatureVerified>true</SignatureVerified>
+        <Description>The file is signed and the signature was verified.</Description>
+        <CertificateSubject>Microsoft Windows</CertificateSubject>
+        <CertificateIssuer>Microsoft Windows Verification PCA</CertificateIssuer>
+    </DigitalSignature>
+    </PEInfo>
+</DriverItem>

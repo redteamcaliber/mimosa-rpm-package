@@ -1274,21 +1274,7 @@ StrikeFinder.AuditView = StrikeFinder.View.extend({
         var html = _.template($("#audit-template").html(), data);
         view.$el.html(html);
 
-        _.each(view.$('.collapsable-header'), function(collapsable) {
-            var v = new StrikeFinder.CollapsableContentView({
-                el: '#' + collapsable.id,
-                title: view.$(collapsable).attr('title'),
-                title_class: 'uac-header'
-            });
-        });
-        _.each(view.$('.collapsable'), function(collapsable) {
-            var v = new StrikeFinder.CollapsableContentView({
-                el: '#' + collapsable.id,
-                title: view.$(collapsable).attr('title'),
-                title_class: 'uac-sub-header',
-                display_toggle: false
-            });
-        });
+        StrikeFinder.collapse(this.el);
 
         return this;
     },
@@ -1311,6 +1297,7 @@ StrikeFinder.AuditContextMenuView = StrikeFinder.View.extend({
     },
     events: {
         "click #suppress-item": "suppress",
+        "click #auto-suppress-item": "auto_suppress",
         "click #acquire-item": "acquire",
         "click #tag-item": "tag",
         "click #close-item": "cancel"
@@ -1320,7 +1307,34 @@ StrikeFinder.AuditContextMenuView = StrikeFinder.View.extend({
 
         $(view.options.source).highlighter({
             selector: _.sprintf('#%s', view.el.id),
-            complete: function (selection) {
+            complete: function (selection, el) {
+                //console.dir(el);
+
+                // TODO: Clean this up.
+                // Try and get the element the user clicked on.
+                if (el && el.baseNode && el.baseNode.parentElement) {
+                    var span = el.baseNode.parentElement;
+                    if (span && $(span).hasClass('ioc-term')) {
+                        var ioc_term = $(span).attr('ioc-term');
+                        if (ioc_term) {
+                            // The user clicked on an IOC term span.
+                            log.debug('ioc-term: ' + ioc_term);
+                            view.ioc_term = ioc_term;
+                            view.$('#ioc-term-item').text(ioc_term);
+                            view.$('#auto-suppress-item').css('display', 'block');
+                        }
+                        else {
+                            view.$('#auto-suppress-item').css('display', 'none');
+                        }
+                    }
+                    else {
+                        view.$('#auto-suppress-item').css('display', 'none');
+                    }
+                }
+                else {
+                    view.$('#auto-suppress-item').css('display', 'none');
+                }
+
                 if (!_.isEmpty(selection)) {
                     selection = _.trim(selection);
                 }
@@ -1352,6 +1366,10 @@ StrikeFinder.AuditContextMenuView = StrikeFinder.View.extend({
     },
     suppress: function (ev) {
         this.trigger("suppress", this.selection);
+        this.$el.hide();
+    },
+    auto_suppress: function(ev) {
+        this.trigger("auto-suppress", this.ioc_term);
         this.$el.hide();
     },
     acquire: function (ev) {

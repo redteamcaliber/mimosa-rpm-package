@@ -1,6 +1,33 @@
 Unified Analyst Console (UAC) Release Notes
 ===========================================
 
+Mandiant-uac-ws-0.2-6 - September ?th, 2013
+-------------------------------------------
+
+### General
+
+- Added additional overlay panels when loading data to resolve [#23297](https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#bug/23297).
+  With large audit files taking so long to display a better UI blocking mechanism was necessary.  It should be noted
+  that double clicking on the faded area during loading will hide the overlay in case loading is taking too long.
+
+### Acquisitions
+
+- Resolved acquisitions issue [#23206](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#bug/23206)
+  where filtering was not working properly.  This issue is reliant on the last Seasick deployment.
+
+### Suppressions
+
+- Many of the audit template files have now been marked up to enable auto suppressing.  When selecting text the context
+  menu will now display an item to automatically suppress the item based on the markup without displaying the dialog.
+  For instance, 'Suppress File/Item'.  The existing menu item is still intact if you wish to bring up the full dialog.
+
+### Audits
+
+- Converted the XSLT templates to server side templates in the web tier to improve performance.  This should resolve
+  bug [#23204](https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#bug/23204).
+- Improved the rendering of many of the audit types.
+
+
 Mandiant-uac-ws-0.2-5 - September 9th, 2013
 -------------------------------------------
 

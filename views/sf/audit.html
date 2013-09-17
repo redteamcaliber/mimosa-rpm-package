@@ -1,0 +1,92 @@
+{% extends "sf/base.html" %}
+
+{% block title %}Audit Viewer - {{ super() }}{% endblock %}
+
+{% block head %}
+{{ super() }}
+
+<script type="text/javascript">
+    StrikeFinder.AuditTestModel = Backbone.Model.extend({
+        url: '/sf/api/audit',
+        defaults: {
+            rowitem_type: '',
+            content: ''
+        }
+    });
+    StrikeFinder.AuditTestView = StrikeFinder.View.extend({
+        events: {
+            'click #submit': 'submit'
+        },
+        initialize: function(options) {
+
+        },
+        submit: function(ev) {
+            var view = this;
+            var content = view.$('#content').val();
+
+            if (!content) {
+                StrikeFinder.display_error('"audit_xml" is required.');
+                return; // **EXIT**
+            }
+
+            var model = new StrikeFinder.AuditTestModel({
+                content: content
+            });
+            model.save({}, {
+                success: function (model, response, options) {
+                    var output = $('#output');
+                    output.html(response.content);
+                    StrikeFinder.collapse(output);
+                },
+                error: function (model, xhr, options) {
+                    StrikeFinder.display_error('Error while submitting audit xml.');
+                }
+            })
+        },
+        render: function() {
+
+        }
+    });
+
+    $(document).ready(function () {
+        var view = new StrikeFinder.AuditTestView({
+            el: document.body
+        });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span6">
+                <label for="content">
+                    <h4>
+                        <i class="icon-file"> </i> Audit XML Content
+                    </h4>
+                </label>
+                <textarea id="content"
+                          style="width: 100%; height: 300px; font-family: monospace"
+                          placeholder="Paste the audit XML content here.">
+                </textarea>
+                <button id="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span12"></div>
+        </div>
+        <div class="row-fluid">
+            <div class="span6">
+                <h4><i class='icon-table'> </i> Audit HTML Output</h4>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span6">
+                <div id="output"
+                     style="overflow: auto">
+                    &nbsp;
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

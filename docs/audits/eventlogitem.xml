@@ -1,0 +1,20 @@
+<EventLogItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" uid="D6E3A46C-DF69-428E-8747-CC1CAA489542" created="2013-02-05T05:23:44Z"><log>Application</log>
+    <source>VSS</source>
+    <index>7</index>
+    <EID>8212</EID>
+    <type>Information</type>
+    <genTime>2011-01-07T21:16:42Z</genTime>
+    <writeTime>2011-01-07T21:16:42Z</writeTime>
+    <machine>37L4247D28-05</machine>
+    <message>Volume Shadow Copy Service: Writer with name BITS Writer-++-{4969d978-be47-48b0-b100-f328f07ac1e0}-++-
+
+        Operation:
+        Initializing Writer
+
+        Context:
+        Writer Class Id: {4969d978-be47-48b0-b100-f328f07ac1e0}
+        Writer Name: BITS Writer-++- and ID 184 attempted to subscribe during setup.&#13;
+        MmQyMDQzNmY2NDY1M2EyMDU3NTI1NDU3NTI1NDQ5NDMzMDMwMzAzMDMwMzgzMjMzMmQyMDQzNjE2YzZjM2EyMDU3NTI1NDU3NTI1NDQ5NDMzMDMwMzAzMDMwMzczNzM0MmQyMDUwNDk0NDNhMjAyMDMwMzAzMDMwMzAzOTMyMzgyZDIwNTQ0OTQ0M2EyMDIwMzAzMDMwMzAzMTMxMzQzMDJkMjA0MzRkNDQzYTIwMjA0MzNhNWM1NzY5NmU2NDZmNzc3MzVjNzM3OTczNzQ2NTZkMzMzMjVjNzM3NjYzNjg2ZjczNzQyZTY1Nzg2NTIwMmQ2YjIwNmU2NTc0NzM3NjYzNzMyMDIwMjAyMDIwMjAyZDIwNTU3MzY1NzIzYTIwNGU2MTZkNjUzYTIwNGU1NDIwNDE1NTU0NDg0ZjUyNDk1NDU5NWM1MzU5NTM1NDQ1NGQyYzIwNTM0OTQ0M2E1MzJkMzEyZDM1MmQzMTM4MjA=&#13;
+    </message>
+    <category>(0)</category>
+</EventLogItem>

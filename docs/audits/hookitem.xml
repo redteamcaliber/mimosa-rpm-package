@@ -1,0 +1,18 @@
+<HookItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" uid="B78ACB59-2179-4B04-A9A7-450A05AE6A49" created="2013-02-05T05:41:19Z"><HookDescription>Driver</HookDescription>
+    <HookedFunction>IRP_MJ_WRITE</HookedFunction>
+    <HookedModule>C:\Windows\System32\drivers\asyncmac.sys</HookedModule>
+    <HookingModule>C:\Windows\System32\drivers\ndis.sys</HookingModule>
+    <HookingAddress>2265503428</HookingAddress>
+    <DigitalSignatureHooking><SignatureExists>true</SignatureExists>
+        <SignatureVerified>true</SignatureVerified>
+        <Description>The file is signed and the signature was verified.</Description>
+        <CertificateSubject>Microsoft Windows</CertificateSubject>
+        <CertificateIssuer>Microsoft Windows Verification PCA</CertificateIssuer>
+    </DigitalSignatureHooking>
+    <DigitalSignatureHooked><SignatureExists>true</SignatureExists>
+        <SignatureVerified>true</SignatureVerified>
+        <Description>The file is signed and the signature was verified.</Description>
+        <CertificateSubject>Microsoft Windows</CertificateSubject>
+        <CertificateIssuer>Microsoft Windows Verification PCA</CertificateIssuer>
+    </DigitalSignatureHooked>
+</HookItem>

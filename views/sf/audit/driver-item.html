@@ -1,53 +1,36 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet version="1.0"
-                xmlns:atom="http://www.w3.org/2005/Atom"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-                xmlns:user="urn:userscripts"
-                xmlns:mir="urn:mandiant-intelligent-response"
-        >
-    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
-    <xsl:output method="html" />
+{% set i = content.driveritem %}
 
+<div id="driver-item-div" class="collapsable-header" title="<i class='icon-file'></i> Driver/Item">
+    <h4>Driver Info</h4>
 
-
-
-    <!-- ############################################################### -->
-    <xsl:template match="/DriverItem">
-
-        <div class="xslt-contents" xslt-title="Driver Info">
-            <table     width="95%">
-                <tr>
-                    <th>Driver Object Address</th>
-                    <td><xsl:value-of select="DriverObjectAddress"/></td>
-                </tr>
-                <tr>
-                    <th>Image Base</th>
-                    <td><xsl:value-of select="ImageBase"/></td>
-                </tr>
-                <tr>
-                    <th>Image Size</th>
-                    <td><xsl:value-of select="ImageSize"/></td>
-                </tr>
-                <tr>
-                    <th>Driver Name</th>
-                    <td><xsl:value-of select="DriverName"/></td>
-                </tr>
-                <tr>
-                    <th>Driver Init</th>
-                    <td><xsl:value-of select="DriverInit"/></td>
-                </tr>
-                <tr>
-                    <th>Driver Start IO</th>
-                    <td><xsl:value-of select="DriverStartIo"/></td>
-                </tr>
-                <tr>
-                    <th>Driver Unload</th>
-                    <td><xsl:value-of select="DriverUnload"/></td>
-                </tr>
-            </table>
-        </div>
-    </xsl:template>
-
-</xsl:stylesheet>
+    <table class="table table-condensed">
+        <tr>
+            <th>Driver Object Address</th>
+            <td>{{ i.driverobjectaddress }}</td>
+        </tr>
+        <tr>
+            <th>Image Base</th>
+            <td>{{ i.imagebase }}</td>
+        </tr>
+        <tr>
+            <th>Image Size</th>
+            <td>{{ i.imagesize }}</td>
+        </tr>
+        <tr>
+            <th>Driver Name</th>
+            <td>{{ i.drivername }}</td>
+        </tr>
+        <tr>
+            <th>Driver Init</th>
+            <td>{{ i.driverinit }}</td>
+        </tr>
+        <tr>
+            <th>Driver Start IO</th>
+            <td>{{ i.driverstartio }}</td>
+        </tr>
+        <tr>
+            <th>Driver Unload</th>
+            <td>{{ i.driverunload }}</td>
+        </tr>
+    </table>
+</div>

@@ -1,0 +1,268 @@
+<PersistenceItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                 uid="C0DF25BC-51FC-4521-BFE9-009100F461CD" created="2013-02-05T05:22:00Z">
+    <PersistenceType>Registry</PersistenceType>
+    <RegPath>HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run\VMware Tools</RegPath>
+    <RegText>&quot;C:\Program Files\VMware\VMware Tools\VMwareTray.exe&quot;</RegText>
+    <RegOwner>BUILTIN\Administrators</RegOwner>
+    <RegModified>2013-02-02T20:02:27Z</RegModified>
+    <FilePath>c:\program files\VMware\vmware tools\vmwaretray.exe</FilePath>
+    <FileOwner>NT AUTHORITY\SYSTEM</FileOwner>
+    <FileCreated>2012-05-29T13:07:22Z</FileCreated>
+    <FileModified>2012-05-29T13:07:22Z</FileModified>
+    <FileAccessed>2013-02-02T20:02:05Z</FileAccessed>
+    <FileChanged>2013-02-02T20:02:05Z</FileChanged>
+    <SignatureExists>true</SignatureExists>
+    <SignatureVerified>true</SignatureVerified>
+    <SignatureDescription>The file is signed and the signature was verified.</SignatureDescription>
+    <CertificateSubject>&quot;VMware</CertificateSubject>
+    <CertificateIssuer>VeriSign Class 3 Code Signing 2009-2 CA</CertificateIssuer>
+    <md5sum>f09b6b55385404c72269c6707cb1600e</md5sum>
+    <sha1sum>e96af391497e8698d0348666dbe308a9264f6b8d</sha1sum>
+    <sha256sum>355d9d69488397d2e812f1e7390d63d9bf3c00165383781c5ca20f6bf5f85590</sha256sum>
+    <FileItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+              uid="8D75D3BF-D5BF-4B66-8BFB-5ACE7D6612CB" created="2013-02-05T05:22:00Z">
+        <DevicePath>\Device\HarddiskVolume2</DevicePath>
+        <FullPath>c:\program files\VMware\vmware tools\vmwaretray.exe</FullPath>
+        <Drive>c</Drive>
+        <FilePath>program files\VMware\vmware tools</FilePath>
+        <FileName>vmwaretray.exe</FileName>
+        <FileExtension>exe</FileExtension>
+        <SizeInBytes>58520</SizeInBytes>
+        <Created>2012-05-29T13:07:22Z</Created>
+        <Modified>2012-05-29T13:07:22Z</Modified>
+        <Accessed>2013-02-02T20:02:05Z</Accessed>
+        <Changed>2013-02-02T20:02:05Z</Changed>
+        <FileAttributes>Archive</FileAttributes>
+        <Username>NT AUTHORITY\SYSTEM</Username>
+        <SecurityID>S-1-5-18</SecurityID>
+        <SecurityType>SidTypeUser</SecurityType>
+        <Md5sum>f09b6b55385404c72269c6707cb1600e</Md5sum>
+        <Sha1sum>e96af391497e8698d0348666dbe308a9264f6b8d</Sha1sum>
+        <Sha256sum>355d9d69488397d2e812f1e7390d63d9bf3c00165383781c5ca20f6bf5f85590</Sha256sum>
+        <PEInfo>
+            <Type>Executable</Type>
+            <Subsystem>Windows_GUI</Subsystem>
+            <BaseAddress>4194304</BaseAddress>
+            <PETimeStamp>2012-05-29T14:07:55Z</PETimeStamp>
+            <PEChecksum>
+                <PEFileRaw>117802</PEFileRaw>
+                <PEFileAPI>117802</PEFileAPI>
+                <PEComputedAPI>117802</PEComputedAPI>
+            </PEChecksum>
+            <ExtraneousBytes>6808</ExtraneousBytes>
+            <ImportedModules>
+                <Module>
+                    <Name>USER32.dll</Name>
+                    <NumberOfFunctions>24</NumberOfFunctions>
+                    <ImportedFunctions>
+                        <string>FindWindowW</string>
+                        <string>RegisterWindowMessageW</string>
+                        <string>LoadIconW</string>
+                        <string>RegisterClassW</string>
+                        <string>CreateWindowExW</string>
+                        <string>DestroyWindow</string>
+                        <string>DestroyIcon</string>
+                        <string>PostMessageW</string>
+                        <string>LoadStringW</string>
+                        <string>TranslateMessage</string>
+                        <string>DispatchMessageW</string>
+                        <string>GetMessageW</string>
+                        <string>DestroyMenu</string>
+                        <string>TrackPopupMenuEx</string>
+                        <string>SetForegroundWindow</string>
+                        <string>GetCursorPos</string>
+                        <string>SetMenuDefaultItem</string>
+                        <string>AppendMenuW</string>
+                        <string>CreatePopupMenu</string>
+                        <string>SetTimer</string>
+                        <string>LoadImageW</string>
+                        <string>GetDoubleClickTime</string>
+                        <string>KillTimer</string>
+                        <string>DefWindowProcW</string>
+                    </ImportedFunctions>
+                </Module>
+                <Module>
+                    <Name>SHELL32.dll</Name>
+                    <NumberOfFunctions>2</NumberOfFunctions>
+                    <ImportedFunctions>
+                        <string>ShellExecuteExW</string>
+                        <string>Shell_NotifyIconW</string>
+                    </ImportedFunctions>
+                </Module>
+                <Module>
+                    <Name>MSVCR90.dll</Name>
+                    <NumberOfFunctions>29</NumberOfFunctions>
+                    <ImportedFunctions>
+                        <string>_controlfp_s</string>
+                        <string>_invoke_watson</string>
+                        <string>_except_handler4_common</string>
+                        <string>_decode_pointer</string>
+                        <string>_onexit</string>
+                        <string>_lock</string>
+                        <string>__dllonexit</string>
+                        <string>_unlock</string>
+                        <string>?terminate@@YAXXZ</string>
+                        <string>memset</string>
+                        <string>free</string>
+                        <string>_amsg_exit</string>
+                        <string>__getmainargs</string>
+                        <string>_cexit</string>
+                        <string>_exit</string>
+                        <string>_XcptFilter</string>
+                        <string>_ismbblead</string>
+                        <string>exit</string>
+                        <string>_acmdln</string>
+                        <string>_initterm</string>
+                        <string>_initterm_e</string>
+                        <string>_configthreadlocale</string>
+                        <string>__setusermatherr</string>
+                        <string>_adjust_fdiv</string>
+                        <string>__p__commode</string>
+                        <string>__p__fmode</string>
+                        <string>_encode_pointer</string>
+                        <string>__set_app_type</string>
+                        <string>_crt_debugger_hook</string>
+                    </ImportedFunctions>
+                </Module>
+                <Module>
+                    <Name>glib-2.0.dll</Name>
+                    <NumberOfFunctions>3</NumberOfFunctions>
+                    <ImportedFunctions>
+                        <string>g_logv</string>
+                        <string>g_key_file_free</string>
+                        <string>g_key_file_get_boolean</string>
+                    </ImportedFunctions>
+                </Module>
+                <Module>
+                    <Name>vmtools.dll</Name>
+                    <NumberOfFunctions>15</NumberOfFunctions>
+                    <ImportedFunctions>
+                        <string>StrUtil_StrToUint</string>
+                        <string>VmCheck_IsVirtualWorld</string>
+                        <string>System_GetServiceState</string>
+                        <string>GuestApp_OpenUrl</string>
+                        <string>VMTools_LoadConfig</string>
+                        <string>vm_free</string>
+                        <string>GuestApp_GetInstallPath</string>
+                        <string>Str_Asprintf</string>
+                        <string>Panic</string>
+                        <string>CodeSet_Utf8ToUtf16le</string>
+                        <string>Hostinfo_GetOSType</string>
+                        <string>WinReg_SetDWORD</string>
+                        <string>RpcOut_sendOne</string>
+                        <string>WinReg_GetDWORD</string>
+                        <string>VMTools_ConfigLogging</string>
+                    </ImportedFunctions>
+                </Module>
+                <Module>
+                    <Name>KERNEL32.dll</Name>
+                    <NumberOfFunctions>17</NumberOfFunctions>
+                    <ImportedFunctions>
+                        <string>GetSystemTimeAsFileTime</string>
+                        <string>GetCurrentProcessId</string>
+                        <string>GetCurrentThreadId</string>
+                        <string>GetTickCount</string>
+                        <string>QueryPerformanceCounter</string>
+                        <string>IsDebuggerPresent</string>
+                        <string>SetUnhandledExceptionFilter</string>
+                        <string>UnhandledExceptionFilter</string>
+                        <string>GetCurrentProcess</string>
+                        <string>TerminateProcess</string>
+                        <string>GetStartupInfoA</string>
+                        <string>InterlockedCompareExchange</string>
+                        <string>Sleep</string>
+                        <string>InterlockedExchange</string>
+                        <string>SetProcessShutdownParameters</string>
+                        <string>GetExitCodeProcess</string>
+                        <string>CloseHandle</string>
+                    </ImportedFunctions>
+                </Module>
+            </ImportedModules>
+            <DigitalSignature>
+                <SignatureExists>true</SignatureExists>
+                <SignatureVerified>true</SignatureVerified>
+                <Description>The file is signed and the signature was verified.</Description>
+                <CertificateSubject>&quot;VMware</CertificateSubject>
+                <CertificateIssuer>VeriSign Class 3 Code Signing 2009-2 CA</CertificateIssuer>
+            </DigitalSignature>
+            <DetectedAnomalies>
+                <string>contains_eof_data</string>
+            </DetectedAnomalies>
+            <Sections>
+                <NumberOfSections>5</NumberOfSections>
+                <ActualNumberOfSections>5</ActualNumberOfSections>
+                <Section>
+                    <Name>.text</Name>
+                    <Type>None</Type>
+                    <SizeInBytes>6656</SizeInBytes>
+                    <DetectedCharacteristics>Read Execute Code</DetectedCharacteristics>
+                    <Entropy AverageValue="0.74497"/>
+                </Section>
+                <Section>
+                    <Name>.rdata</Name>
+                    <Type>None</Type>
+                    <SizeInBytes>4608</SizeInBytes>
+                    <DetectedCharacteristics>Read</DetectedCharacteristics>
+                    <Entropy AverageValue="0.662205"/>
+                </Section>
+                <Section>
+                    <Name>.data</Name>
+                    <Type>None</Type>
+                    <SizeInBytes>512</SizeInBytes>
+                    <DetectedCharacteristics>Read Write</DetectedCharacteristics>
+                    <Entropy AverageValue="0.0530264"/>
+                </Section>
+                <Section>
+                    <Name>.rsrc</Name>
+                    <Type>Resource</Type>
+                    <SizeInBytes>37376</SizeInBytes>
+                    <DetectedCharacteristics>Read</DetectedCharacteristics>
+                    <Entropy AverageValue="0.679204"/>
+                </Section>
+                <Section>
+                    <Name>.reloc</Name>
+                    <Type>None</Type>
+                    <SizeInBytes>1536</SizeInBytes>
+                    <DetectedCharacteristics>Read</DetectedCharacteristics>
+                    <Entropy AverageValue="0.270259"/>
+                </Section>
+            </Sections>
+        </PEInfo>
+        <PeakEntropy>0.74497</PeakEntropy>
+        <PeakCodeEntropy>0.74497</PeakCodeEntropy>
+    </FileItem>
+    <ServiceItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                 uid="AA737FC2-8301-4BAE-8772-B35FE5596FA4" created="2013-02-05T05:22:23Z">
+        <pathmd5sum>1b133875b8aa8ac48969bd3458afe9f5</pathmd5sum>
+        <pathsha256sum>01753bdd47f3f9bc0e0d23a069b9c56d4ae6a6b6295bc19b95ae245d25b12744</pathsha256sum>
+        <description></description>
+        <pathsha1sum>dafb3caa2403a2f37b304816adecf6588b583c82</pathsha1sum>
+        <status>SERVICE_STOPPED</status>
+        <mode>SERVICE_DEMAND_START</mode>
+        <descriptiveName>1394 OHCI Compliant Host Controller</descriptiveName>
+        <type>SERVICE_KERNEL_DRIVER</type>
+        <startedAs></startedAs>
+        <pid>0</pid>
+        <pathSignatureVerified>true</pathSignatureVerified>
+        <arguments>\SystemRoot\system32\drivers\1394ohci.sys</arguments>
+        <name>1394ohci</name>
+        <pathSignatureDescription>The file is signed and the signature was verified.</pathSignatureDescription>
+        <pathCertificateIssuer>Microsoft Windows Verification PCA</pathCertificateIssuer>
+        <pathCertificateSubject>Microsoft Windows</pathCertificateSubject>
+        <path>C:\Windows\System32\drivers\1394ohci.sys</path>
+        <pathSignatureExists>true</pathSignatureExists>
+    </ServiceItem>
+    <RegistryItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  uid="3C5F5E8F-98C4-47F6-98F8-6EE792900E7A" created="2013-02-05T05:22:00Z">
+        <KeyPath>Microsoft\Windows\CurrentVersion\Run\</KeyPath>
+        <Type>REG_SZ</Type>
+        <Modified>2013-02-02T20:02:27Z</Modified>
+        <ValueName>VMware Tools</ValueName>
+        <Username>BUILTIN\Administrators</Username>
+        <Text>&quot;C:\Program Files\VMware\VMware Tools\VMwareTray.exe&quot;</Text>
+        <ReportedLengthInBytes>108</ReportedLengthInBytes>
+        <Hive>HKEY_LOCAL_MACHINE\Software</Hive>
+        <Path>HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run\VMware Tools</Path>
+        <SecurityID>S-1-5-32-544</SecurityID>
+    </RegistryItem>
+</PersistenceItem>

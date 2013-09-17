@@ -1,0 +1,107 @@
+{% set i = content.filedownloadhistoryitem %}
+
+<div id="file-download-history-item-div" class="collapsable-header" title="<i class='icon-file'></i> FileDownloadHistory/Item">
+    <h4>File Download History Info</h4>
+
+    <table class="table table-condensed">
+        <tr>
+            <th style="min-width: 150px">Last Accessed Date</th>
+            <td>{{ i.lastaccesseddate }}</td>
+        </tr>
+        <tr>
+            <th>Last Modified Date</th>
+            <td>{{ i.lastmodifieddate }}</td>
+        </tr>
+        <tr>
+            <th>Last Checked Date</th>
+            <td>{{ i.lastcheckeddate }}</td>
+        </tr>
+        <tr>
+            <th>Browser Name</th>
+            <td>{{ i.browsername }}</td>
+        </tr>
+        <tr>
+            <th>Browser Version</th>
+            <td>{{ i.browserversion }}</td>
+        </tr>
+        <tr>
+            <th>User Name</th>
+            <td>{{ i.username }}</td>
+        </tr>
+        <tr>
+            <th>Profile</th>
+            <td>{{ i.profile }}</td>
+        </tr>
+        <tr>
+            <th>Source URL</th>
+            <td>{{ i.sourceurl }}</td>
+        </tr>
+        <tr>
+            <th>File Name</th>
+            <td>{{ i.filename }}</td>
+        </tr>
+        <tr>
+            <th>Bytes Downloaded</th>
+            <td>{{ i.bytesdownloaded }}</td>
+        </tr>
+        <tr>
+            <th>Max Bytes</th>
+            <td>{{ i.maxbytes }}</td>
+        </tr>
+        <tr>
+            <th>Target Directory</th>
+            <td>{{ i.targetdirectoty }}</td>
+        </tr>
+        <tr>
+            <th>Temporary Path</th>
+            <td>{{ i.temporarypath }}</td>
+        </tr>
+        <tr>
+            <th>Referrer</th>
+            <td>{{ i.referrer }}</td>
+        </tr>
+        <tr>
+            <th>Download Type</th>
+            <td>{{ i.downloadtype }}</td>
+        </tr>
+        <tr>
+            <th>Cache Flags</th>
+            <td>{{ i.cacheflags }}</td>
+        </tr>
+        <tr>
+            <th>Cache Hit Count</th>
+            <td>{{ i.cachehitcount }}</td>
+        </tr>
+        <tr>
+            <th>Full Http Header</th>
+            <td>
+                {{ i.fullhttpheader }}
+            </td>
+        </tr>
+        <tr>
+            <th>Mime Type</th>
+            <td>{{ i.mimetype }}</td>
+        </tr>
+        <tr>
+            <th>Download Started</th>
+            <td>{{ i.startdate }}</td>
+        </tr>
+        <tr>
+            <th>Download Finished</th>
+            <td>{{ i.enddate }}</td>
+        </tr>
+        <tr>
+            <th>State</th>
+            <td>{{ i.state }}</td>
+        </tr>
+        <tr>
+            <th>Auto-Resume</th>
+            <td>{{ i.autoresume }}</td>
+        </tr>
+        <tr>
+            <th>Last Synched Cache</th>
+            <td>{{ i.lastcachesynchdate }}</td>
+        </tr>
+
+    </table>
+</div>

@@ -1,7 +1,11 @@
-1.5
-
 
 curl --tlsv1 -d '{"uid":"app.uac","password":"Nm9y.XoW7w]qPjK"}' https://login.mandiant.com/api/auth
 
 
 \sci.\S+
+
+# Make quoted string lower case
+
+cat views/sf/audit/driver-item.html | sed 's/".*"/\L&/g'
+
+cat views/sf/audit/form-history-item.html | sed 's/".*"/\L&/g'
