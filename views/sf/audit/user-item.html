@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsl:stylesheet version="1.0"
+                xmlns:atom="http://www.w3.org/2005/Atom"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+                xmlns:user="urn:userscripts"
+                xmlns:mir="urn:mandiant-intelligent-response"
+        >
+    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
+    <xsl:output method="html" />
+
+    <!-- ############################################################### -->
+    <xsl:template match="/UserItem">
+        <div class="xslt-contents" xslt-title="User Info">
+            <table     width="95%">
+                <tr>
+                    <th>User Name</th>
+                    <td><xsl:value-of select="Username"/></td>
+                </tr>
+                <tr>
+                    <th>Full Name</th>
+                    <td><xsl:value-of select="fullname"/></td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td><xsl:value-of select="description"/></td>
+                </tr>
+                <tr>
+                    <th>Home Directory</th>
+                    <td><xsl:value-of select="homedirectory"/></td>
+                </tr>
+                <tr>
+                    <th>Script Path</th>
+                    <td><xsl:value-of select="scriptpath"/></td>
+                </tr>
+                <tr>
+                    <th>Security ID</th>
+                    <td><xsl:value-of select="SecurityID"/></td>
+                </tr>
+                <tr>
+                    <th>Security Type</th>
+                    <td><xsl:value-of select="SecurityType"/></td>
+                </tr>
+                <tr>
+                    <th>Last Login</th>
+                    <td><xsl:value-of select="LastLogin"/></td>
+                </tr>
+                <tr>
+                    <th>Is Disabled</th>
+                    <td><xsl:value-of select="disabled"/></td>
+                </tr>
+                <tr>
+                    <th>Is Locked Out</th>
+                    <td><xsl:value-of select="lockedout"/></td>
+                </tr>
+                <tr>
+                    <th>Is Password Required</th>
+                    <td><xsl:value-of select="passwordrequired"/></td>
+                </tr>
+                <tr>
+                    <th>Password Age</th>
+                    <td><xsl:value-of select="userpasswordage"/></td>
+                </tr>
+            </table>
+        </div>
+        <div class="xslt-contents" xslt-title="Groups">
+            <table     width="95%">
+                <tr>
+                    <th>Group Name</th>
+                </tr>
+                <xsl:for-each select="grouplist/groupname">
+                    <tr>
+                        <td><xsl:value-of select="."/></td>
+                    </tr>
+                </xsl:for-each>
+            </table>
+        </div>
+    </xsl:template>
+
+</xsl:stylesheet>

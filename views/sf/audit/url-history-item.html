@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xsl:stylesheet version="1.0"
+                xmlns:atom="http://www.w3.org/2005/Atom"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
+                xmlns:user="urn:userscripts"
+                xmlns:mir="urn:mandiant-intelligent-response"
+        >
+    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
+    <xsl:output method="html" />
+
+
+    <!-- ############################################################### -->
+    <xsl:template match="/UrlHistoryItem">
+        <div class="xslt-contents" xslt-title="URL History Item Info">
+            <table     width="95%">
+                <tr>
+                    <th>Profile</th>
+                    <td><xsl:value-of select="Profile"/></td>
+                </tr>
+                <tr>
+                    <th>Browser Name</th>
+                    <td><xsl:value-of select="BrowserName"/></td>
+                </tr>
+                <tr>
+                    <th>Browser Version</th>
+                    <td><xsl:value-of select="BrowserVersion"/></td>
+                </tr>
+                <tr>
+                    <th>User Name</th>
+                    <td><xsl:value-of select="Username"/></td>
+                </tr>
+                <tr>
+                    <th>URL</th>
+                    <td><xsl:value-of select="URL"/></td>
+                </tr>
+                <tr>
+                    <th>Page Title</th>
+                    <td><xsl:value-of select="PageTitle"/></td>
+                </tr>
+                <tr>
+                    <th>Host Name</th>
+                    <td><xsl:value-of select="HostName"/></td>
+                </tr>
+                <tr>
+                    <th>User Typed</th>
+                    <td><xsl:value-of select="Typed"/></td>
+                </tr>
+                <tr>
+                    <th>Hidden</th>
+                    <td><xsl:value-of select="Hidden"/></td>
+                </tr>
+                <tr>
+                    <th>Visited From</th>
+                    <td><xsl:value-of select="VisitFrom"/></td>
+                </tr>
+                <tr>
+                    <th>Visit Type</th>
+                    <td><xsl:value-of select="VisitType"/></td>
+                </tr>
+                <tr>
+                    <th>Visit Count</th>
+                    <td><xsl:value-of select="VisitCount"/></td>
+                </tr>
+                <tr>
+                    <th>Last Visited</th>
+                    <td><xsl:value-of select="LastVisitDate"/></td>
+                </tr>
+                <tr>
+                    <th>Last Visited Local</th>
+                    <td><xsl:value-of select="LastVisitDateLocal"/></td>
+                </tr>
+                <tr>
+                    <th>First Visited</th>
+                    <td><xsl:value-of select="FirstVisitDate"/></td>
+                </tr>
+                <tr>
+                    <th>First Bookmarked</th>
+                    <td><xsl:value-of select="FirstBookmarkDate"/></td>
+                </tr>
+                <tr>
+                    <th>Thumbnail</th>
+                    <td><xsl:value-of select="Thumbnail"/></td>
+                </tr>
+                <tr>
+                    <th>Indexed Content</th>
+                    <td><xsl:value-of select="IndexedContent"/></td>
+                </tr>
+            </table>
+        </div>
+    </xsl:template>
+
+</xsl:stylesheet>
