@@ -1100,6 +1100,8 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
         this.filtered = true;
 
         this.listenTo(this.collection, 'sync', this.render);
+
+        this.$el.css('margin-bottom', '20px');
     },
     render: function () {
         var view = this;

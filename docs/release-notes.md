@@ -9,6 +9,8 @@ Mandiant-uac-ws-0.2-6 - September ?th, 2013
 - Added additional overlay panels when loading data to resolve [#23297](https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#bug/23297).
   With large audit files taking so long to display a better UI blocking mechanism was necessary.  It should be noted
   that double clicking on the faded area during loading will hide the overlay in case loading is taking too long.
+- The hits details views have been refactored to adhere to the UI engineers recommendations.  The audit details and IOC
+  details have been swapped giving more attention to the audits and making it easier to view comments.
 
 ### Acquisitions
 
