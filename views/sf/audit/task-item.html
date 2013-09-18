@@ -1,244 +1,223 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet version="1.0"
-                xmlns:atom="http://www.w3.org/2005/Atom"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-                xmlns:user="urn:userscripts"
-                xmlns:mir="urn:mandiant-intelligent-response"
-        >
-<!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
-<xsl:output method="html" />
+{% set i = content.taskitem %}
 
+<h4>Task Info</h4>
 
+<table class="table table-condensed">
+    <tr>
+        <th class="sf-audit-heading">Name</th>
+        <td>{{ i.name }}</td>
+    </tr>
+    <tr>
+        <th>Comment</th>
+        <td>{{ i.comment }}</td>
+    </tr>
+    <tr>
+        <th>Status</th>
+        <td>{{ i.status }}</td>
+    </tr>
+    <tr>
+        <th>Priority</th>
+        <td>{{ i.priority }}</td>
+    </tr>
+    <tr>
+        <th>Exit Code</th>
+        <td>{{ i.exitcode }}</td>
+    </tr>
+    <tr>
+        <th>Creator</th>
+        <td>{{ i.creator }}</td>
+    </tr>
+    <tr>
+        <th>Account Name</th>
+        <td>{{ i.accountname }}</td>
+    </tr>
+    {% if i.virtualpath %}
+    <tr>
+        <th>Virtual Path</th>
+        <td>{{ i.virtualpath }}</td>
+    </tr>
+    {% endif %}
+    {% if i.creationdate %}
+    <tr>
+        <th>Creation Date</th>
+        <td>{{ i.creationdate }}</td>
+    </tr>
+    {% endif %}
+    {% if i.accountrunlevel %}
+    <tr>
+        <th>Account Run Level</th>
+        <td>{{ i.accountrunlevel }}</td>
+    </tr>
+    {% endif %}
+    {% if i.accountlogontype %}
+    <tr>
+        <th>Account Logon Type</th>
+        <td>{{ i.accountlogontype }}</td>
+    </tr>
+    {% endif %}
+    {% if i.md5sum %}
+    <tr>
+        <th>MD5 Sum</th>
+        <td>{{ i.md5sum }}</td>
+    </tr>
+    {% endif %}
+    {% if i.sha1sum %}
+    <tr>
+        <th>SHA1 Sum</th>
+        <td>{{ i.sha1sum }}</td>
+    </tr>
+    {% endif %}
+    {% if i.sha256sum %}
+    <tr>
+        <th>SHA256 Sum</th>
+        <td>{{ i.sha256sum }}</td>
+    </tr>
+    {% endif %}
+    <tr>
+        <th>Flags</th>
+        <td>{{ i.flag }}</td>
+    </tr>
+</table>
 
-<xsl:template match="/TaskItem">
-<div class="xslt-contents" xslt-title="Task Info">
-    <table     width="95%">
-        <tr>
-            <th>Name</th>
-            <td><xsl:value-of select="Name"/></td>
-        </tr>
-        <tr>
-            <th>Comment</th>
-            <td><xsl:value-of select="Comment"/></td>
-        </tr>
-        <tr>
-            <th>Status</th>
-            <td><xsl:value-of select="Status"/></td>
-        </tr>
-        <tr>
-            <th>Priority</th>
-            <td><xsl:value-of select="Priority"/></td>
-        </tr>
-        <tr>
-            <th>Exit Code</th>
-            <td><xsl:value-of select="ExitCode"/></td>
-        </tr>
-        <tr>
-            <th>Creator</th>
-            <td><xsl:value-of select="Creator"/></td>
-        </tr>
-        <tr>
-            <th>Account Name</th>
-            <td><xsl:value-of select="AccountName"/></td>
-        </tr>
-        <xsl:if test="VirtualPath">
+{% if i.actionlist %}
+    <h4>Actions</h4>
+    {% for action in get_list(i.actionlist.action) %}
+        <h5>{{ action.actiontype }}</h5>
+        <table class="table table-condensed table-bordered" style="margin-left: 10px">
             <tr>
-                <th>Virtual Path</th>
-                <td><xsl:value-of select="VirtualPath"/></td>
-            </tr>
-        </xsl:if>
-        <xsl:if test="CreationDate">
-            <tr>
-                <th>Creation Date</th>
-                <td><xsl:value-of select="CreationDate"/></td>
-            </tr>
-        </xsl:if>
-        <xsl:if test="AccountRunLevel">
-            <tr>
-                <th>Account Run Level</th>
-                <td><xsl:value-of select="AccountRunLevel"/></td>
-            </tr>
-        </xsl:if>
-        <xsl:if test="AccountLogonType">
-            <tr>
-                <th>Account Logon Type</th>
-                <td><xsl:value-of select="AccountLogonType"/></td>
-            </tr>
-        </xsl:if>
-        <xsl:if test="md5sum">
-            <tr>
-                <th>MD5 Sum</th>
-                <td><xsl:value-of select="md5sum"/></td>
-            </tr>
-        </xsl:if>
-        <xsl:if test="sha1sum">
-            <tr>
-                <th>SHA1 Sum</th>
-                <td><xsl:value-of select="sha1sum"/></td>
-            </tr>
-        </xsl:if>
-        <xsl:if test="sha256sum">
-            <tr>
-                <th>SHA256 Sum</th>
-                <td><xsl:value-of select="sha256sum"/></td>
-            </tr>
-        </xsl:if>
-        <tr>
-            <th>Flags</th>
-            <td><xsl:value-of select="Flag"/></td>
-        </tr>
-    </table>
-</div>
-
-<xsl:if test="ActionList">
-    <div class="xslt-contents" xslt-title="Actions">
-        <xsl:for-each select="ActionList/Action">
-            <xsl:value-of select="ActionType"/>
-            <table     width="95%">
-                <tr>
-                    <th>ExecProgramPath</th>
-                    <td><xsl:value-of select="ExecProgramPath"/></td>
-                </tr>
-                <tr>
-                    <th>ExecArguments</th>
-                    <td><xsl:value-of select="ExecArguments"/></td>
-                </tr>
-            </table>
-        </xsl:for-each>
-    </div>
-</xsl:if>
-
-<xsl:if test="ApplicationName">
-    <div class="xslt-contents" xslt-title="Application">
-        <table     width="95%">
-            <tr>
-                <th >Application Name</th>
-                <td ><xsl:value-of select="ApplicationName"/></td>
+                <th style="width: 50%">ExecProgramPath</th>
+                <td>{{ action.execprogrampath }}</td>
             </tr>
             <tr>
-                <th>Parameters</th>
-                <td><xsl:value-of select="Parameters"/></td>
-            </tr>
-            <tr>
-                <th>Working Directory</th>
-                <td><xsl:value-of select="WorkingDirectory"/></td>
-            </tr>
-            <tr>
-                <th>Work Item Data</th>
-                <td><xsl:value-of select="WorkItemData"/></td>
+                <th>ExecArguments</th>
+                <td>{{ action.execarguments }}</td>
             </tr>
         </table>
-    </div>
-</xsl:if>
+    {% endfor %}
+{% endif %}
+
+{% if i.applicationname %}
+<h4>Application</h4>
+<table class="table table-condensed">
+    <tr>
+        <th class="sf-audit-heading">Application Name</th>
+        <td >{{ i.applicationname }}</td>
+    </tr>
+    <tr>
+        <th>Parameters</th>
+        <td>{{ i.parameters }}</td>
+    </tr>
+    <tr>
+        <th>Working Directory</th>
+        <td>{{ i.workingdirectory }}</td>
+    </tr>
+    <tr>
+        <th>Work Item Data</th>
+        <td>{{ i.workitemdata }}</td>
+    </tr>
+</table>
+{% endif %}
+
+<h4>Schedule</h4>
+<table class="table table-condensed">
+    <tr>
+        <th class="sf-audit-heading">Most Recent Run Time</th>
+        <td>{{ i.mostrecentruntime }}</td>
+    </tr>
+    <tr>
+        <th>Next Run Time</th>
+        <td>{{ i.nextruntime }}</td>
+    </tr>
+    <tr>
+        <th>Max Run Time</th>
+        <td>{{ i.maxruntime }}</td>
+    </tr>
+</table>
 
 
-<div class="xslt-contents" xslt-title="Schedule">
-    <table     width="95%">
+{% if i.signatureexists or i.signatureverified or i.signaturedescription or i.certificatesubject or i.certificateissuer %}
+<h4>Digital Signature</h4>
+
+<table class="table table-condensed">
+    {% if i.signatureexists %}
+    <tr>
+        <th class="sf-audit-heading">Signature Exists</th>
+        <td>{{ i.signatureexists }}</td>
+    </tr>
+    {% endif %}
+    {% if i.signatureverified %}
+    <tr>
+        <th>Signature Verified</th>
+        <td >{{ i.signatureverified }}</td>
+    </tr>
+    {% endif %}
+    {% if i.signaturedescription %}
+    <tr>
+        <th>Signature Description</th>
+        <td >{{ i.signaturedescription }}</td>
+    </tr>
+    {% endif %}
+    {% if i.certificatesubject %}
+    <tr>
+        <th>Certificate Subject</th>
+        <td >{{ i.certificatesubject }}</td>
+    </tr>
+    {% endif %}
+    {% if i.certificateissuer %}
+    <tr>
+        <th>Certificate Issuer</th>
+        <td >{{ i.certificateissuer }}</td>
+    </tr>
+    {% endif %}
+</table>
+{% endif %}
+
+
+<h4>Triggers</h4>
+{% for trigger in get_list(i.triggerlist.trigger) %}
+
+    <h5>{{ trigger.triggerbegin }}</h5>
+
+    <table class="table table-condensed table-bordered" style="margin-left: 10px">
         <tr>
-            <th>Most Recent Run Time</th>
-            <td><xsl:value-of select="MostRecentRunTime"/></td>
+            <th style="width: 50%">Begins</th>
+            <td>{{ trigger.triggerbegin }}</td>
         </tr>
         <tr>
-            <th>Next Run Time</th>
-            <td><xsl:value-of select="NextRunTime"/></td>
+            <th>Frequency</th>
+            <td>{{ trigger.triggerfrequency }}</td>
+        </tr>
+        <tr>
+            <th>Trigger Enabled</th>
+            <td>{{ trigger.triggerenabled }}</td>
+        </tr>
+        <tr>
+            <th>Trigger End</th>
+            <td>{{ trigger.triggerend }}</td>
         </tr>
         <tr>
             <th>Max Run Time</th>
-            <td><xsl:value-of select="MaxRunTime"/></td>
+            <td>{{ trigger.triggermaxruntime }}</td>
+        </tr>
+        <tr>
+            <th>Delay</th>
+            <td>{{ trigger.triggerdelay }}</td>
+        </tr>
+        <tr>
+            <th>Session Change Type</th>
+            <td>{{ trigger.triggersessionchangetype }}</td>
+        </tr>
+        <tr>
+            <th>Subscription</th>
+            <td>{{ trigger.triggersubscription }}</td>
+        </tr>
+        <tr>
+            <th>Value Queries</th>
+            <td>{{ trigger.triggervaluequeries }}</td>
+        </tr>
+        <tr>
+            <th>Username</th>
+            <td>{{ trigger.triggerusername }}</td>
         </tr>
     </table>
-</div>
-
-
-<xsl:if test="SignatureExists or SignatureVerified or SignatureDescription or CertificateSubject or CertificateIssuer">
-    <div class="xslt-contents" xslt-title="Digital Signature">
-        <table     width="95%">
-            <xsl:if test="SignatureExists">
-                <tr>
-                    <th>Signature Exists</th>
-                    <td><xsl:value-of select="SignatureExists"/></td>
-                </tr>
-            </xsl:if>
-            <xsl:if test="SignatureVerified">
-                <tr>
-                    <th>Signature Verified</th>
-                    <td ><xsl:value-of select="SignatureVerified"/></td>
-                </tr>
-            </xsl:if>
-            <xsl:if test="SignatureDescription">
-                <tr>
-                    <th>Signature Description</th>
-                    <td ><xsl:value-of select="SignatureDescription"/></td>
-                </tr>
-            </xsl:if>
-            <xsl:if test="CertificateSubject">
-                <tr>
-                    <th>Certificate Subject</th>
-                    <td ><xsl:value-of select="CertificateSubject"/></td>
-                </tr>
-            </xsl:if>
-            <xsl:if test="CertificateIssuer">
-                <tr>
-                    <th>Certificate Issuer</th>
-                    <td ><xsl:value-of select="CertificateIssuer"/></td>
-                </tr>
-            </xsl:if>
-        </table>
-    </div>
-</xsl:if>
-
-
-
-<div class="xslt-contents" xslt-title="Triggers">
-    <xsl:for-each select="TriggerList/Trigger">
-        <xsl:value-of select="TriggerBegin"/>
-        <table     width="95%">
-            <tr>
-                <th>Begins</th>
-                <td><xsl:value-of select="TriggerBegin"/></td>
-            </tr>
-            <tr>
-                <th>Frequency</th>
-                <td><xsl:value-of select="TriggerFrequency"/></td>
-            </tr>
-            <tr>
-                <th>Trigger Enabled</th>
-                <td><xsl:value-of select="TriggerEnabled"/></td>
-            </tr>
-            <tr>
-                <th>Trigger End</th>
-                <td><xsl:value-of select="TriggerEnd"/></td>
-            </tr>
-            <tr>
-                <th>Max Run Time</th>
-                <td><xsl:value-of select="TriggerMaxRunTime"/></td>
-            </tr>
-            <tr>
-                <th>Delay</th>
-                <td><xsl:value-of select="TriggerDelay"/></td>
-            </tr>
-            <tr>
-                <th>Session Change Type</th>
-                <td><xsl:value-of select="TriggerSessionChangeType"/></td>
-            </tr>
-            <tr>
-                <th>Subscription</th>
-                <td><xsl:value-of select="TriggerSubscription"/></td>
-            </tr>
-            <tr>
-                <th>Value Queries</th>
-                <td><xsl:value-of select="TriggerValueQueries"/></td>
-            </tr>
-            <tr>
-                <th>Username</th>
-                <td><xsl:value-of select="TriggerUsername"/></td>
-            </tr>
-        </table>
-    </xsl:for-each>
-</div>
-
-</xsl:template>
-
-</xsl:stylesheet>
+{% endfor %}

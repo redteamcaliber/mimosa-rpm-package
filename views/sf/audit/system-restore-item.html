@@ -1,125 +1,111 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet version="1.0"
-                xmlns:atom="http://www.w3.org/2005/Atom"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-                xmlns:user="urn:userscripts"
-                xmlns:mir="urn:mandiant-intelligent-response"
-        >
-    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
-    <xsl:output method="html" />
+{% set i = content.systemrestoreitem %}
 
-    <xsl:template match="/SystemRestoreItem">
-        <div class="xslt-contents" xslt-title="Restore Point Information">
-            <table     width="95%">
-                <tr>
-                    <th>Name</th>
-                    <td><xsl:value-of select="RestorePointName"/></td>
-                </tr>
-                <tr>
-                    <th>Full Path</th>
-                    <td><xsl:value-of select="RestorePointFullPath"/></td>
-                </tr>
-                <tr>
-                    <th>Description</th>
-                    <td><xsl:value-of select="RestorePointDescription"/></td>
-                </tr>
-                <tr>
-                    <th>Type</th>
-                    <td><xsl:value-of select="RestorePointType"/></td>
-                </tr>
-                <tr>
-                    <th>Created</th>
-                    <td><xsl:value-of select="Created"/></td>
-                </tr>
-                <tr>
-                    <th>Change Event</th>
-                    <td><xsl:value-of select="ChangeEvent"/></td>
-                </tr>
-                <tr>
-                    <th>Change Log File Name</th>
-                    <td><xsl:value-of select="ChangeLogFileName"/></td>
-                </tr>
-                <tr>
-                    <th>Change Log Entry Sequence Number</th>
-                    <td><xsl:value-of select="ChangeLogEntrySequenceNumber"/></td>
-                </tr>
-                <tr>
-                    <th>Change Log Entry Type</th>
-                    <td><xsl:value-of select="ChangeLogEntryType"/></td>
-                </tr>
-                <tr>
-                    <th>Change Log Entry Flags</th>
-                    <td><xsl:value-of select="ChangeLogEntryFlags"/></td>
-                </tr>
-                <tr>
-                    <th>File Attributes</th>
-                    <td><xsl:value-of select="FileAttributes"/></td>
-                </tr>
-                <tr>
-                    <th>ACL Change Username</th>
-                    <td><xsl:value-of select="AclChangeUsername"/></td>
-                </tr>
-                <tr>
-                    <th>ACL Change Security ID</th>
-                    <td><xsl:value-of select="AclChangeSecurityID"/></td>
-                </tr>
-                <tr>
-                    <th>Process Name</th>
-                    <td><xsl:value-of select="ProcessName"/></td>
-                </tr>
-                <tr>
-                    <th>Debug Info Process ID</th>
-                    <td><xsl:value-of select="DebugInfoProcessId"/></td>
-                </tr>
-                <tr>
-                    <th>Debug Info Thread ID</th>
-                    <td><xsl:value-of select="DebugInfoThreadId"/></td>
-                </tr>
-                <tr>
-                    <th>Debug Info Process Name</th>
-                    <td><xsl:value-of select="DebugInfoProcessName"/></td>
-                </tr>
-                <tr>
-                    <th>Debug Info Time Stamp</th>
-                    <td><xsl:value-of select="DebugInfoTimeStamp"/></td>
-                </tr>
-                <tr>
-                    <th>Original FileName</th>
-                    <td><xsl:value-of select="OriginalFileName"/></td>
-                </tr>
-                <tr>
-                    <th>Original Volume Path</th>
-                    <td><xsl:value-of select="OriginalVolumePath"/></td>
-                </tr>
-                <tr>
-                    <th>Original Short File Name</th>
-                    <td><xsl:value-of select="OriginalShortFileName"/></td>
-                </tr>
-                <tr>
-                    <th>Backup File Name</th>
-                    <td><xsl:value-of select="BackupFileName"/></td>
-                </tr>
-                <tr>
-                    <th>New Name</th>
-                    <td><xsl:value-of select="NewFileName"/></td>
-                </tr>
-            </table>
-        </div>
+<h4>Restore Point Information</h4>
 
-        <div class="xslt-contents" xslt-title="Regsitry Hives">
-            <table     width="95%">
-                <tr>
-                    <th>Hive Name</th>
-                </tr>
-                <xsl:for-each select="RegistryHives/String">
-                    <tr>
-                        <td><xsl:value-of select="."/></td>
-                    </tr>
-                </xsl:for-each>
-            </table>
-        </div>
-    </xsl:template>
+<table class="table table-condensed">
+    <tr>
+        <th>Name</th>
+        <td>{{ i.restorepointname }}</td>
+    </tr>
+    <tr>
+        <th>Full Path</th>
+        <td>{{ i.restorepointfullpath }}</td>
+    </tr>
+    <tr>
+        <th>Description</th>
+        <td>{{ i.restorepointdescription }}</td>
+    </tr>
+    <tr>
+        <th>Type</th>
+        <td>{{ i.restorepointtype }}</td>
+    </tr>
+    <tr>
+        <th>Created</th>
+        <td>{{ i.created }}</td>
+    </tr>
+    <tr>
+        <th>Change Event</th>
+        <td>{{ i.changeevent }}</td>
+    </tr>
+    <tr>
+        <th>Change Log File Name</th>
+        <td>{{ i.changelogfilename }}</td>
+    </tr>
+    <tr>
+        <th>Change Log Entry Sequence Number</th>
+        <td>{{ i.changelogentrysequencenumber }}</td>
+    </tr>
+    <tr>
+        <th>Change Log Entry Type</th>
+        <td>{{ i.changelogentrytype }}</td>
+    </tr>
+    <tr>
+        <th>Change Log Entry Flags</th>
+        <td>{{ i.changelogentryflags }}</td>
+    </tr>
+    <tr>
+        <th>File Attributes</th>
+        <td>{{ i.fileattributes }}</td>
+    </tr>
+    <tr>
+        <th>ACL Change Username</th>
+        <td>{{ i.aclchangeusername }}</td>
+    </tr>
+    <tr>
+        <th>ACL Change Security ID</th>
+        <td>{{ i.aclchangesecurityid }}</td>
+    </tr>
+    <tr>
+        <th>Process Name</th>
+        <td>{{ i.processname }}</td>
+    </tr>
+    <tr>
+        <th>Debug Info Process ID</th>
+        <td>{{ i.debuginfoprocessid }}</td>
+    </tr>
+    <tr>
+        <th>Debug Info Thread ID</th>
+        <td>{{ i.debuginfothreadid }}</td>
+    </tr>
+    <tr>
+        <th>Debug Info Process Name</th>
+        <td>{{ i.debuginfoprocessname }}</td>
+    </tr>
+    <tr>
+        <th>Debug Info Time Stamp</th>
+        <td>{{ i.debuginfotimestamp }}</td>
+    </tr>
+    <tr>
+        <th>Original FileName</th>
+        <td>{{ i.originalfilename }}</td>
+    </tr>
+    <tr>
+        <th>Original Volume Path</th>
+        <td>{{ i.originalvolumepath }}</td>
+    </tr>
+    <tr>
+        <th>Original Short File Name</th>
+        <td>{{ i.originalshortfilename }}</td>
+    </tr>
+    <tr>
+        <th>Backup File Name</th>
+        <td>{{ i.backupfilename }}</td>
+    </tr>
+    <tr>
+        <th>New Name</th>
+        <td>{{ i.newfilename }}</td>
+    </tr>
+</table>
 
-</xsl:stylesheet>
+<h4>Registry Hives</h4>
+
+<table class="table table-condensed">
+    <tr>
+        <th>Hive Name</th>
+    </tr>
+    {% for s in get_list(i.registryhives.string) %}
+        <tr>
+            <td>{{ s }}</td>
+        </tr>
+    {% endfor %}
+</table>

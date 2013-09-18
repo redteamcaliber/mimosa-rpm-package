@@ -1,0 +1,69 @@
+<SystemInfoItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" uid="02DDC898-EF8C-4B8B-AF5E-AE99F6457825" created="2013-02-05T05:17:51Z"><directory>C:\Windows\system32</directory>
+    <machine>JTLWIN7X86VM</machine>
+    <totalphysical>1073274880</totalphysical>
+    <availphysical>584720384</availphysical>
+    <uptime>PT595S</uptime>
+    <OS>Windows 7 Professional 7601 Service Pack 1</OS>
+    <OSbitness>32-bit</OSbitness>
+    <hostname>JTLWin7x86VM</hostname>
+    <date>2013-02-05T05:17:51Z</date>
+    <user>SYSTEM</user>
+    <domain>JTL</domain>
+    <processor>Intel(R) Xeon(R) CPU           X5647  @ 2.93GHz</processor>
+    <patchLevel>Service Pack 1</patchLevel>
+    <buildNumber>7601</buildNumber>
+    <procType>Multiprocessor Free</procType>
+    <productID>00371-221-5397774-86682</productID>
+    <productName>Windows 7 Professional</productName>
+    <regOrg></regOrg>
+    <regOwner>User</regOwner>
+    <installDate>2011-01-07T18:54:12Z</installDate>
+    <MAC>00-0c-29-e2-7b-53</MAC>
+    <timezoneDST>Eastern Daylight Time</timezoneDST>
+    <timezoneStandard>Eastern Standard Time</timezoneStandard>
+    <biosInfo><biosDate>01/07/11</biosDate>
+        <biosVersion>INTEL  - 6040000</biosVersion>
+    </biosInfo>
+    <networkArray><networkInfo><adapter>{DBBCF5C6-F15E-4463-AED0-50DC7284806B}</adapter>
+        <description>Intel(R) PRO/1000 MT Network Connection</description>
+        <MAC>00-0c-29-e2-7b-53</MAC>
+        <ipArray><ipInfo><ipAddress>10.0.10.138</ipAddress>
+            <subnetMask>255.255.255.0</subnetMask>
+        </ipInfo>
+        </ipArray>
+        <ipGatewayArray><ipGateway>10.0.10.1</ipGateway>
+        </ipGatewayArray>
+        <dhcpServerArray><dhcpServer>10.0.10.1</dhcpServer>
+        </dhcpServerArray>
+        <dhcpLeaseExpires>2013-02-02T22:03:55Z</dhcpLeaseExpires>
+        <dhcpLeaseObtained>2013-02-02T20:03:55Z</dhcpLeaseObtained>
+    </networkInfo>
+        <networkInfo><adapter>{E29AC6C2-7037-11DE-816D-806E6F6E6963}</adapter>
+            <description>Software Loopback Interface 1</description>
+            <MAC>00-0c-29-e2-7b-53</MAC>
+            <ipArray><ipInfo/>
+                <ipInfo><ipAddress>127.0.0.1</ipAddress>
+                </ipInfo>
+            </ipArray>
+            <ipGatewayArray/>
+            <dhcpServerArray/>
+        </networkInfo>
+        <networkInfo><adapter>{B71E9718-20B9-4CC8-A675-5066904CA387}</adapter>
+            <description>Microsoft ISATAP Adapter</description>
+            <MAC>00-00-00-00-00-00-00-e0</MAC>
+            <ipArray><ipInfo/>
+            </ipArray>
+            <ipGatewayArray/>
+            <dhcpServerArray/>
+        </networkInfo>
+        <networkInfo><adapter>{969E4855-AE2F-40E8-A152-A04D9FF6A2B9}</adapter>
+            <description>Teredo Tunneling Pseudo-Interface</description>
+            <MAC>00-00-00-00-00-00-00-e0</MAC>
+            <ipArray><ipInfo/>
+                <ipInfo/>
+            </ipArray>
+            <ipGatewayArray/>
+            <dhcpServerArray/>
+        </networkInfo>
+    </networkArray>
+</SystemInfoItem>

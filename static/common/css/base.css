@@ -67,6 +67,10 @@ html, body {
     color: #000000;
 }
 
+.sf-audit-heading {
+    width: 150px
+}
+
 .nowrap {
     white-space: nowrap;
 }

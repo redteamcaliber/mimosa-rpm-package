@@ -4,44 +4,44 @@
 <h4>Port Info</h4>
 <table class="table table-condensed">
     <tr>
-        <td><b>Protocol</b></td>
+        <th class="sf-audit-heading"><b>Protocol</b></th>
         <td>{{ i.protocol }}</td>
     </tr>
     <tr>
-        <td><b>State</b></td>
+        <th>State</th>
         <td>{{ i.state }}</td>
     </tr>
     <tr>
-        <td><b>Local IP</b></td>
+        <th>Local IP</th>
         <td>{{ i.localip }}</td>
     </tr>
     <tr>
-        <td><b>Local Port</b></td>
+        <th>Local Port</th>
         <td>{{ i.localport }}</td>
     </tr>
     <tr>
-        <td><b>Remote IP</b></td>
+        <th>Remote IP</th>
         <td>{{ i.remoteip }}</td>
     </tr>
     <tr>
-        <td><b>Remote Port</b></td>
+        <th>Remote Port</th>
         <td>{{ i.remoteport }}</td>
     </tr>
     <tr>
-        <td><b>PID</b></td>
+        <th>PID</th>
         <td>{{ i.pid }}</td>
     </tr>
     <tr>
-        <td><b>Process</b></td>
+        <th>Process</th>
         <td>{{ i.process }}</td>
     </tr>
     <tr>
-        <td><b>Path</b></td>
+        <th>Path</th>
         <td>{{ i.path }}</td>
     </tr>
     {% if i.creationtime %}
         <tr>
-            <td><b>Creation Time</b></td>
+            <th>Creation Time</th>
             <td>{{ i.creationtime }}</td>
         </tr>
     {% endif %}
@@ -49,11 +49,11 @@
 
 <div class="collapsable collapsed" collapsable-title="portal Formatted Data">
     <textarea title="click to highlight" style="width:95%; height:102px;" onclick="this.select();">
-        Protocol:        {{ i.protocol }}
-        State:           {{ i.state }}
-        Local IP:        {{ i.localip }}
-        Remote IP:       {{ i.remoteip }}
-        Process ID:      {{ i.pid }}
-        Process Name:    {{ i.process }}
+Protocol:        {{ i.protocol }}
+State:           {{ i.state }}
+Local IP:        {{ i.localip }}
+Remote IP:       {{ i.remoteip }}
+Process ID:      {{ i.pid }}
+Process Name:    {{ i.process }}
     </textarea>
 </div>

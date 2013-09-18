@@ -1,0 +1,16 @@
+<UserItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" uid="A7862E6F-0906-4A35-913D-B7B19D5991FF" created="2013-02-05T05:23:37Z"><Username>User</Username>
+    <SecurityID>S-1-5-21-3590400409-2213701423-4190908390-1000</SecurityID>
+    <SecurityType>SidTypeUser</SecurityType>
+    <fullname>JTLWin7x86VM\User</fullname>
+    <description></description>
+    <homedirectory></homedirectory>
+    <scriptpath></scriptpath>
+    <grouplist><groupname>None</groupname>
+        <groupname>Administrators</groupname>
+    </grouplist>
+    <LastLogin>2013-02-02T20:05:09Z</LastLogin>
+    <disabled>false</disabled>
+    <lockedout>false</lockedout>
+    <passwordrequired>false</passwordrequired>
+    <userpasswordage>PT65615432S</userpasswordage>
+</UserItem>

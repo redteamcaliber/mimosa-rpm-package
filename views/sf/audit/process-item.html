@@ -6,7 +6,7 @@
 
     <table class="table table-condensed table-bordered">
         <tr>
-            <th width="100">PID</th>
+            <th class="sf-audit-heading">PID</th>
             <td><span class="ioc-term" ioc-term="ProcessItem/pid">{{ processitem.pid }}</span></td>
         </tr>
         <tr>
@@ -57,7 +57,7 @@
         <div id="{{ handle_type }}-div" class="collapsable collapsed" collapsable-title="{{ handle_type }}">
             <table class="table table-condensed table-bordered">
                 <tr>
-                    <th>Name</th>
+                    <th class="sf-audit-heading">Name</th>
                     <th>Index</th>
                     <th>Access Mask</th>
                     <th>Object Addr</th>
@@ -111,7 +111,7 @@
         <div id="ports-div" class="collapsable collapsed" collapsable-title="Port List">
             <table class="table table-condensed table-bordered">
                 <tr>
-                    <th>PID</th>
+                    <th class="sf-audit-heading">PID</th>
                     <th>Protocol</th>
                     <th>Local Port</th>
                     <th>Local IP</th>
@@ -143,10 +143,10 @@
               rows="10"
               style="width: 95%;"
               onclick="this.select();">
-        Process Name: {{ processitem.name }}
-        Process ID: {{ processitem.pid }}
-        Process Start: {{ processitem.starttime }}
-        Process Path: {{ processitem.path }}
+Process Name: {{ processitem.name }}
+Process ID: {{ processitem.pid }}
+Process Start: {{ processitem.starttime }}
+Process Path: {{ processitem.path }}
     </textarea>
 </div>
 

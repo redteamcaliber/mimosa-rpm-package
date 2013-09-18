@@ -1,84 +1,72 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet version="1.0"
-                xmlns:atom="http://www.w3.org/2005/Atom"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-                xmlns:user="urn:userscripts"
-                xmlns:mir="urn:mandiant-intelligent-response"
-        >
-    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
-    <xsl:output method="html" />
+{% set i = content.volumeitem %}
 
-    <xsl:template match="/VolumeItem">
-        <div class="xslt-contents" xslt-title="Volume Info">
-            <table     width="95%">
-                <tr>
-                    <th>Volume Name</th>
-                    <td><xsl:value-of select="VolumeName"/></td>
-                </tr>
-                <tr>
-                    <th>Device Path</th>
-                    <td><xsl:value-of select="DevicePath"/></td>
-                </tr>
-                <tr>
-                    <th>Drive Letter</th>
-                    <td><xsl:value-of select="DriveLetter"/></td>
-                </tr>
-                <tr>
-                    <th>Volume Type</th>
-                    <td><xsl:value-of select="Type"/></td>
-                </tr>
-                <tr>
-                    <th>File System</th>
-                    <td><xsl:value-of select="FileSystemName"/></td>
-                </tr>
-                <tr>
-                    <th>Name</th>
-                    <td><xsl:value-of select="Name"/></td>
-                </tr>
-                <tr>
-                    <th>Serial Number</th>
-                    <td><xsl:value-of select="SerialNumber"/></td>
-                </tr>
-                <tr>
-                    <th>Creation Time</th>
-                    <td><xsl:value-of select="CreationTime"/></td>
-                </tr>
-                <tr>
-                    <th>Is Mounted</th>
-                    <td><xsl:value-of select="IsMounted"/></td>
-                </tr>
-            </table>
-        </div>
-        <div class="xslt-contents" xslt-title="Flags">
-            <table     width="95%">
-                <tr>
-                    <th>File System Flags</th>
-                    <td><xsl:value-of select="FileSystemFlags"/></td>
-                </tr>
-            </table>
-        </div>
-        <div class="xslt-contents" xslt-title="Allocation Information">
-            <table     width="95%">
-                <tr>
-                    <th>Bytes per Sector</th>
-                    <td><xsl:value-of select="BytesPerSector"/></td>
-                </tr>
-                <tr>
-                    <th>Sectors per allocation unit</th>
-                    <td><xsl:value-of select="SectorsPerAllocationUnit"/></td>
-                </tr>
-                <tr>
-                    <th>Total Allocation Units</th>
-                    <td><xsl:value-of select="TotalAllocationUnits"/></td>
-                </tr>
-                <tr>
-                    <th>Available Allocation Units</th>
-                    <td><xsl:value-of select="ActualAvailableAllocationUnits"/></td>
-                </tr>
-            </table>
-        </div>
-    </xsl:template>
+<h4>Volume Info</h4>
 
-</xsl:stylesheet>
+<table class="table table-condensed">
+    <tr>
+        <th class="sf-audit-heading">Volume Name</th>
+        <td>{{ i.volumename }}</td>
+    </tr>
+    <tr>
+        <th>Device Path</th>
+        <td>{{ i.devicepath }}</td>
+    </tr>
+    <tr>
+        <th>Drive Letter</th>
+        <td>{{ i.driveletter }}</td>
+    </tr>
+    <tr>
+        <th>Volume Type</th>
+        <td>{{ i.type }}</td>
+    </tr>
+    <tr>
+        <th>File System</th>
+        <td>{{ i.filesystemname }}</td>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <td>{{ i.name }}</td>
+    </tr>
+    <tr>
+        <th>Serial Number</th>
+        <td>{{ i.serialnumber }}</td>
+    </tr>
+    <tr>
+        <th>Creation Time</th>
+        <td>{{ i.creationtime }}</td>
+    </tr>
+    <tr>
+        <th>Is Mounted</th>
+        <td>{{ i.ismounted }}</td>
+    </tr>
+</table>
+
+<h4>Flags</h4>
+
+<table class="table table-condensed">
+    <tr>
+        <th class="sf-audit-heading">File System Flags</th>
+        <td>{{ i.filesystemflags }}</td>
+    </tr>
+</table>
+
+<h4>Allocation Information</h4>
+
+<table class="table table-condensed">
+    <tr>
+        <th class="sf-audit-heading">Bytes per Sector</th>
+        <td>{{ i.bytespersector }}</td>
+    </tr>
+    <tr>
+        <th>Sectors per allocation unit</th>
+        <td>{{ i.sectorsperallocationunit }}</td>
+    </tr>
+    <tr>
+        <th>Total Allocation Units</th>
+        <td>{{ i.totalallocationunits }}</td>
+    </tr>
+    <tr>
+        <th>Available Allocation Units</th>
+        <td>{{ i.actualavailableallocationunits }}</td>
+    </tr>
+</table>

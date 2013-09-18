@@ -1,129 +1,110 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet version="1.0"
-                xmlns:atom="http://www.w3.org/2005/Atom"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-                xmlns:user="urn:userscripts"
-                xmlns:mir="urn:mandiant-intelligent-response"
-        >
-    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
-    <xsl:output method="html" />
+{% set i = content.systeminfoitem %}
 
+<h4>Machine Information</h4>
 
-    <!-- ############################################################### -->
-    <xsl:template match="/SystemInfoItem">
-        <div class="xslt-contents" xslt-title="Machine Information">
-            <table     width="95%">
-                <tr>
-                    <td><b>Machine Name</b></td>
-                    <td><xsl:value-of select="machine"/></td>
-                </tr>
-                <tr>
-                    <td><b>Host Name</b></td>
-                    <td><xsl:value-of select="hostname"/></td>
-                </tr>
-                <tr>
-                    <td><b>System Date</b></td>
-                    <td><xsl:value-of select="date"/></td>
-                </tr>
-                <tr>
-                    <td><b>Time Zone DST</b></td>
-                    <td><xsl:value-of select="timezoneDST"/></td>
-                </tr>
-                <tr>
-                    <td><b>Time Zone Standard</b></td>
-                    <td><xsl:value-of select="timezoneStandard"/></td>
-                </tr>
-                <tr>
-                    <td><b>Processor</b></td>
-                    <td><xsl:value-of select="processor"/></td>
-                </tr>
-                <tr>
-                    <td><b>Processor Type</b></td>
-                    <td><xsl:value-of select="procType"/></td>
-                </tr>
-                <tr>
-                    <td><b>Primary Network Adapter MAC</b></td>
-                    <td><xsl:value-of select="MAC"/></td>
-                </tr>
-                <tr>
-                    <td><b>Total Physical Memory</b></td>
-                    <td><xsl:value-of select="totalphysical"/></td>
-                </tr>
-                <tr>
-                    <td><b>Available Physical Memory</b></td>
-                    <td><xsl:value-of select="availphysical"/></td>
-                </tr>
-                <tr>
-                    <td><b>Uptime</b></td>
-                    <td><xsl:value-of select="uptime"/></td>
-                </tr>
-            </table>
-        </div>
+<table class="table table-condensed">
+    <tr>
+        <th class="sf-audit-heading">Machine Name</th>
+        <td>{{ i.machine }}</td>
+    </tr>
+    <tr>
+        <th>Host Name</th>
+        <td>{{ i.hostname }}</td>
+    </tr>
+    <tr>
+        <th>System Date</th>
+        <td>{{ i.date }}</td>
+    </tr>
+    <tr>
+        <th>Time Zone DST</th>
+        <td>{{ i.timezonedst }}</td>
+    </tr>
+    <tr>
+        <th>Time Zone Standard</th>
+        <td>{{ i.timezonestandard }}</td>
+    </tr>
+    <tr>
+        <th>Processor</th>
+        <td>{{ i.processor }}</td>
+    </tr>
+    <tr>
+        <th>Processor Type</th>
+        <td>{{ i.proctype }}</td>
+    </tr>
+    <tr>
+        <th>Primary Network Adapter MAC</th>
+        <td>{{ i.mac }}</td>
+    </tr>
+    <tr>
+        <th>Total Physical Memory</th>
+        <td>{{ i.totalphysical }}</td>
+    </tr>
+    <tr>
+        <th>Available Physical Memory</th>
+        <td>{{ i.availphysical }}</td>
+    </tr>
+    <tr>
+        <th>Uptime</th>
+        <td>{{ i.uptime }}</td>
+    </tr>
+</table>
 
-        <div class="xslt-contents" xslt-title="BIOS Information">
-            <table     width="95%">
-                <tr>
-                    <td><b>BIOS Date String</b></td>
-                    <td><xsl:value-of select="biosInfo/biosDate"/></td>
-                </tr>
-                <tr>
-                    <td><b>BIOS Version</b></td>
-                    <td><xsl:value-of select="biosInfo/biosVersion"/></td>
-                </tr>
-            </table>
-        </div>
+<h4>BIOS Information</h4>
 
-        <div class="xslt-contents" xslt-title="Nentwork Adapters">
-            <xsl:for-each select="networkArray/networkInfo">
-                <xsl:value-of select="description"/>
-                <div class="outline" >
-                    <table     width="95%">
-                        <tr>
-                            <td style="color:#000000;"><b>Adapter</b></td>
-                            <td style="color:#000000;"><xsl:value-of select="adapter"/></td>
-                        </tr>
-                        <tr>
-                            <td style="color:#000000;"><b>MAC Address</b></td>
-                            <td style="color:#000000;"><xsl:value-of select="MAC"/></td>
-                        </tr>
-                    </table>
-                    <UL style="padding: 0px; margin: 3px;">
-                        <xsl:for-each select="ipArray/ipInfo">
-                            <li> IP Address <xsl:value-of select="ipAddress"/>
-                                <div class="outline" >
-                                    <table     width="95%">
-                                        <tr>
-                                            <td style="color:#000000;"><b>IP Address</b></td>
-                                            <td style="color:#000000;"><xsl:value-of select="ipAddress"/></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="color:#000000;"><b>Subnet Mask</b></td>
-                                            <td style="color:#000000;"><xsl:value-of select="subnetMask"/></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </li>
-                        </xsl:for-each>
-                        <xsl:for-each select="ipGatewayArray/ipGateway">
-                            <li> Gateway Information
-                                <div class="outline" >
-                                    <xsl:value-of select="."/>
-                                </div>
-                            </li>
-                        </xsl:for-each>
-                        <xsl:for-each select="dhcpServerArray/dhcpServer">
-                            <li>  DHCP Servers
-                                <div class="outline" >
-                                    <xsl:value-of select="."/>
-                                </div>
-                            </li>
-                        </xsl:for-each>
-                    </UL>
-                </div>
-            </xsl:for-each>
-        </div>
-    </xsl:template>
+<table class="table table-condensed">
+    <tr>
+        <th class="sf-audit-heading">BIOS Date String</th>
+        <td>{{ i.biosinfo/biosdate }}</td>
+    </tr>
+    <tr>
+        <th>BIOS Version</th>
+        <td>{{ i.biosinfo/biosversion }}</td>
+    </tr>
+</table>
 
-</xsl:stylesheet>
+<h4>Network Adapters</h4>
+
+{% for networkinfo in get_list(i.networkarray.networkinfo) %}
+    <h5>{{ networkinfo.description }}</h5>
+
+    <table class="table table-condensed table-bordered" style="margin-left: 5px">
+        <tr>
+            <th style="width: 50%">Adapter</th>
+            <td>{{ networkinfo.adapter }}</td>
+        </tr>
+        <tr>
+            <th>MAC Address</th>
+            <td>{{ networkinfo.mac }}</td>
+        </tr>
+
+        {% for ipinfo in get_list(networkinfo.iparray.ipinfo) %}
+            {% if ipinfo.ipaddress %}
+                <tr>
+                    <th>IP Address</th>
+                    <td>{{ ipinfo.ipaddress }}</td>
+                </tr>
+            {% endif %}
+            {% if ipinfo.subnetmask %}
+                <tr>
+                    <th>Subnet Mask</th>
+                    <td>{{ ipinfo.subnetmask }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+
+        {% for ipgateway in get_list(networkinfo.ipgatewayarray.ipgateway) %}
+            <tr>
+                <th>Gateway Information</th>
+                <td>{{ ipgateway }}</td>
+            </tr>
+        {% endfor %}
+
+        {% for dhcpserver in get_list(networkinfo.dhcpserverarray.dhcpserver) %}
+            <tr>
+                <th>DHCP Server</th>
+                <td>{{ dhcpserver }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endfor %}

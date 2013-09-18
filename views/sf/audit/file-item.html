@@ -401,10 +401,12 @@
 
     {% if peinfo.importedmodules.module %}
         <div id="imported-functions-div" class="collapsable collapsed" collapsable-title="Imported Functions">
-            {% for module in peinfo.importedmodules.module %}
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/ImportedModules/Name" style="font-weight: bold">
-                    {{ module.name }}
-                </span>
+            {% for module in get_list(peinfo.importedmodules.module) %}
+                <h5>
+                    <span class="ioc-term" ioc-term="FileItem/PEInfo/ImportedModules/Name" style="font-weight: bold">
+                        {{ module.name }}
+                    </span>
+                </h5>
 
                 <table class="table table-condensed">
                     {% for s in get_list(module.importedfunctions.string) %}
@@ -429,16 +431,13 @@
 {% if fileitem.stringlist.string %}
     <div class="collapsable collapsed" collapsable-title="Strings">
         <ul>
-            <li>
-                <div class="outline">
-                    {% for s in get_list(fileitem.stringlist.string) %}
-                        <span class="ioc-term" ioc-term="FileItem/StringList/string">
-                            {{ s }}
-                        </span>
-                        <br/>
-                    {% endfor %}
-                </div>
-            </li>
+            {% for s in get_list(fileitem.stringlist.string) %}
+                <li>
+                    <span class="ioc-term" ioc-term="FileItem/StringList/string">
+                        {{ s }}
+                    </span>
+                </li>
+            {% endfor %}
         </ul>
     </div>
 {% endif %}
@@ -485,14 +484,14 @@
                   rows="10"
                   style="width: 95%;"
                   onclick="this.select();">
-        File Name: {{ fileitem.filename }}
-        MD5 Hash: {{ fileitem.md5sum }}
-        File Created: {{ fileitem.created }}
-        Last Accessed: {{ fileitem.accessed }}
-        Last Modified: {{ fileitem.modified }}
-        Entry Modified:{{ fileitem.changed }}
-        File Size: {{ fileitem.sizeinbytes }}
-        File Path: {% if fileitem.drive %}{{ fileitem.drive }}:\{{ fileitem.filepath }}{% endif %}
-        File Owner: {{ fileitem.username }}
+File Name: {{ fileitem.filename }}
+MD5 Hash: {{ fileitem.md5sum }}
+File Created: {{ fileitem.created }}
+Last Accessed: {{ fileitem.accessed }}
+Last Modified: {{ fileitem.modified }}
+Entry Modified:{{ fileitem.changed }}
+File Size: {{ fileitem.sizeinbytes }}
+File Path: {% if fileitem.drive %}{{ fileitem.drive }}:\{{ fileitem.filepath }}{% endif %}
+File Owner: {{ fileitem.username }}
     </textarea>
 </div>

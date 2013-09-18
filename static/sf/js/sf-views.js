@@ -114,6 +114,7 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
             anchor.attr('data-toggle', 'collapse');
             anchor.attr('data-parent', view.name + '-accordion');
             anchor.attr('href', '#collapse-' + view.name);
+            anchor.css('text-decoration', 'none');
 
             anchor.append(title_span);
             anchor.append(icon);

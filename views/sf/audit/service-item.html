@@ -1,183 +1,179 @@
 {% set si = content.serviceitem %}
 
-<div id="service-item-div" class="collapsable-header" collapsable-title="<i class='icon-file'></i> Service/Item">
-    
-    <h4>Service Info</h4>
+<h4>Service Info</h4>
 
+<table class="table table-condensed">
+    <tr>
+        <th class="sf-audit-heading">Name</th>
+        <td>{{ si.name }}</td>
+    </tr>
+    <tr>
+        <th>Descriptive Name</th>
+        <td>{{ si.descriptivename }}</td>
+    </tr>
+    <tr>
+        <th>Description</th>
+        <td>{{ si.description }}</td>
+    </tr>
+    <tr>
+        <th>Mode</th>
+        <td>{{ si.mode }}</td>
+    </tr>
+    <tr>
+        <th>Started As</th>
+        <td>{{ si.startedas }}</td>
+    </tr>
+    <tr>
+        <th>Path</th>
+        <td>{{ si.path }}</td>
+    </tr>
+    <tr>
+        <th>Status</th>
+        <td>{{ si.status }}</td>
+    </tr>
+    <tr>
+        <th>Service DLL</th>
+        <td>{{ si.servicedll }}</td>
+    </tr>
+    <tr>
+        <th>PID</th>
+        <td>{{ si.pid }}</td>
+    </tr>
+    <tr>
+        <th>Type</th>
+        <td>{{ si.type }}</td>
+    </tr>
+</table>
+
+{% if si.pathsignatureexists or si.pathsignatureverified or pathsignaturedescription or si.pathcertificatesubject or si.pathcertificateissuer or si.pathmd5sum or si.pathsha1sum or si.pathsha256sum %}
+    <h4>Path Details</h4>
     <table class="table table-condensed">
+        {% if si.pathsignatureexists %}
         <tr>
-            <td>Name</td>
-            <td>{{ si.name }}</td>
+            <th class="sf-audit-heading">Signature Exists</th>
+            <td>{{ si.pathsignatureexists }}</td>
         </tr>
+        {% endif %}
+
+        {% if si.pathsignatureverified %}
         <tr>
-            <td>Descriptive Name</td>
-            <td>{{ si.descriptivename }}</td>
+            <th>Signature Verified</th>
+            <td>{{ si.pathsignatureverified }}</td>
         </tr>
+        {% endif %}
+
+        {% if si.pathsignaturedescription %}
         <tr>
-            <td>Description</td>
-            <td>{{ si.description }}</td>
+            <th>Signature Description</th>
+            <td>{{ si.pathsignaturedescription }}</td>
         </tr>
+        {% endif %}
+
+        {% if si.pathcertificatesubject %}
         <tr>
-            <td>Mode</td>
-            <td>{{ si.mode }}</td>
+            <th>Certificate Subject</th>
+            <td>{{ si.pathcertificatesubject }}</td>
         </tr>
+        {% endif %}
+
+        {% if si.pathcerificateissuer %}
         <tr>
-            <td>Started As</td>
-            <td>{{ si.startedas }}</td>
+            <th>Certificate Issuer</th>
+            <td>{{ si.pathcerificateissuer }}</td>
         </tr>
-        <tr>
-            <td>Path</td>
-            <td>{{ si.path }}</td>
-        </tr>
-        <tr>
-            <td>Status</td>
-            <td>{{ si.status }}</td>
-        </tr>
-        <tr>
-            <td>Service DLL</td>
-            <td>{{ si.servicedll }}</td>
-        </tr>
-        <tr>
-            <td>PID</td>
-            <td>{{ si.pid }}</td>
-        </tr>
-        <tr>
-            <td>Type</td>
-            <td>{{ si.type }}</td>
-        </tr>
+        {% endif %}
+
+        {% if si.pathmd5sum %}
+            <tr>
+                <th>MD5 Sum</th>
+                <td>{{ si.pathmd5sum }}</td>
+            </tr>
+        {% endif %}
+
+        {% if si.pathsha1sum %}
+            <tr>
+                <th>SHA1 Sum</th>
+                <td>{{ si.pathsha1sum }}</td>
+            </tr>
+        {% endif %}
+
+        {% if si.pathsha256sum %}
+            <tr>
+                <th>SHA256 Sum</th>
+                <td>{{ si.pathsha256sum }}</td>
+            </tr>
+        {% endif %}
     </table>
+{% endif %}
 
-    {% if si.pathsignatureexists or si.pathsignatureverified or pathsignaturedescription or si.pathcertificatesubject or si.pathcertificateissuer or si.pathmd5sum or si.pathsha1sum or si.pathsha256sum %}
-        <h4>Path Details</h4>
-        <table class="table table-condensed">
-            {% if si.pathsignatureexists %}
+{% if si.servicedllsignatureexists or si.servicedllsignatureverified or servicedllsignaturedescription or servicedllcertificatesubject or servicedllcertificateissuer or servicedllmd5sum or servicedllsha1sum or servicedllsha256sum %}
+    <h4>Service DLL Details</h4>
+    <table class="table table-condensed">
+        {% if si.servicedllsignatureexists %}
+        <tr>
+            <th class="sf-audit-heading">Signature Exists</th>
+            <td>{{ si.servicedllsignatureexists }}</td>
+        </tr>
+        {% endif %}
+
+        {% if si.servicedllsignatureverified %}
+        <tr>
+            <th>Signature Verified</th>
+            <td>{{ si.servicedllsignatureverified }}</td>
+        </tr>
+        {% endif %}
+
+        {% if si.servicedllsignaturedescription %}
+        <tr>
+            <th>Signature Description</th>
+            <td>{{ si.servicedllsignaturedescription }}</td>
+        </tr>
+        {% endif %}
+
+        {% if si.servicedllcertificatesubject %}
+        <tr>
+            <th>Certificate Subject</th>
+            <td>{{ si.servicedllcertificatesubject }}</td>
+        </tr>
+        {% endif %}
+
+        {% if si.servicedllcertificateissuer %}
             <tr>
-                <td>Signature Exists</td>
-                <td>{{ si.pathsignatureexists }}</td>
+                <th>Certificate Issuer</th>
+                <td>{{ si.servicedllcertificateissuer }}</td>
             </tr>
-            {% endif %}
+        {% endif %}
 
-            {% if si.pathsignatureverified %}
-            <tr>
-                <td>Signature Verified</td>
-                <td>{{ si.pathsignatureverified }}</td>
-            </tr>
-            {% endif %}
+        {% if si.servicedllmd5sum %}
+        <tr>
+            <th>MD5 Sum</th>
+            <td>{{ si.servicedllmd5sum }}</td>
+        </tr>
+        {% endif %}
 
-            {% if si.pathsignaturedescription %}
-            <tr>
-                <td>Signature Description</td>
-                <td>{{ si.pathsignaturedescription }}</td>
-            </tr>
-            {% endif %}
+        {% if si.serviceDLLsha1sum %}
+        <tr>
+            <th>SHA1 Sum</th>
+            <td>{{ si.serviceDLLsha1sum }}</td>
+        </tr>
+        {% endif %}
 
-            {% if si.pathcertificatesubject %}
-            <tr>
-                <td>Certificate Subject</td>
-                <td>{{ si.pathcertificatesubject }}</td>
-            </tr>
-            {% endif %}
+        {% if si.servicedllsha256sum %}
+        <tr>
+            <th>SHA256 Sum</th>
+            <td>si.servicedllsha256sum</td>
+        </tr>
+        {% endif %}
+    </table>
+{% endif %}
 
-            {% if si.pathcerificateissuer %}
-            <tr>
-                <td>Certificate Issuer</td>
-                <td>{{ si.pathcerificateissuer }}</td>
-            </tr>
-            {% endif %}
+<br/>
 
-            {% if si.pathmd5sum %}
-                <tr>
-                    <td>MD5 Sum</td>
-                    <td>{{ si.pathmd5sum }}</td>
-                </tr>
-            {% endif %}
-
-            {% if si.pathsha1sum %}
-                <tr>
-                    <td>SHA1 Sum</td>
-                    <td>{{ si.pathsha1sum }}</td>
-                </tr>
-            {% endif %}
-
-            {% if si.pathsha256sum %}
-                <tr>
-                    <td>SHA256 Sum</td>
-                    <td>{{ si.pathsha256sum }}</td>
-                </tr>
-            {% endif %}
-        </table>
-    {% endif %}
-
-    {% if si.servicedllsignatureexists or si.servicedllsignatureverified or servicedllsignaturedescription or servicedllcertificatesubject or servicedllcertificateissuer or servicedllmd5sum or servicedllsha1sum or servicedllsha256sum %}
-        <h4>Service DLL Details</h4>
-        <table class="table table-condensed">
-            {% if si.servicedllsignatureexists %}
-            <tr>
-                <td>Signature Exists</td>
-                <td>{{ si.servicedllsignatureexists }}</td>
-            </tr>
-            {% endif %}
-
-            {% if si.servicedllsignatureverified %}
-            <tr>
-                <td>Signature Verified</td>
-                <td>{{ si.servicedllsignatureverified }}</td>
-            </tr>
-            {% endif %}
-
-            {% if si.servicedllsignaturedescription %}
-            <tr>
-                <td>Signature Description</td>
-                <td>{{ si.servicedllsignaturedescription }}</td>
-            </tr>
-            {% endif %}
-
-            {% if si.servicedllcertificatesubject %}
-            <tr>
-                <td>Certificate Subject</td>
-                <td>{{ si.servicedllcertificatesubject }}</td>
-            </tr>
-            {% endif %}
-
-            {% if si.servicedllcertificateissuer %}
-                <tr>
-                    <td>Certificate Issuer</td>
-                    <td>{{ si.servicedllcertificateissuer }}</td>
-                </tr>
-            {% endif %}
-
-            {% if si.servicedllmd5sum %}
-            <tr>
-                <td>MD5 Sum</td>
-                <td>{{ si.servicedllmd5sum }}</td>
-            </tr>
-            {% endif %}
-
-            {% if si.serviceDLLsha1sum %}
-            <tr>
-                <td>SHA1 Sum</td>
-                <td>{{ si.serviceDLLsha1sum }}</td>
-            </tr>
-            {% endif %}
-
-            {% if si.servicedllsha256sum %}
-            <tr>
-                <td>SHA256 Sum</td>
-                <td>si.servicedllsha256sum</td>
-            </tr>
-            {% endif %}
-        </table>
-    {% endif %}
-
-    <br/>
-
-    <div id="portal-formatted-data-div" class="collapsable collapsed" collapsable-title="Portal Formatted Data">
-        <textarea title="Click to Highlight" style="width:95%; height:100px;" onclick="this.select();">
-            Service Name:    {{ si.name }}
-            Service DLL:     {{ si.servicedll }}
-            Process ID:      {{ si.pid }}
-            Status:          {{ si.status }}
-        </textarea>
-    </div>
-
+<div id="portal-formatted-data-div" class="collapsable collapsed" collapsable-title="Portal Formatted Data">
+    <textarea title="Click to Highlight" style="width:95%; height:100px;" onclick="this.select();">
+Service Name:    {{ si.name }}
+Service DLL:     {{ si.servicedll }}
+Process ID:      {{ si.pid }}
+Status:          {{ si.status }}
+    </textarea>
 </div>

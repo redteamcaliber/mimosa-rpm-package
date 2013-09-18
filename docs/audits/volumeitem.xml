@@ -1,0 +1,15 @@
+<VolumeItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" uid="4A159A57-C2FA-49F4-B5BC-FDA3FEC8A12F" created="2013-02-05T05:17:54Z"><VolumeName>\\?\Volume{f9d31236-1aa1-11e0-8921-806e6f6e6963}\</VolumeName>
+    <DevicePath>\Device\HarddiskVolume2</DevicePath>
+    <DriveLetter>C</DriveLetter>
+    <Type>DRIVE_FIXED</Type>
+    <Name></Name>
+    <SerialNumber>3361913119</SerialNumber>
+    <FileSystemFlags>FILE_CASE_SENSITIVE_SEARCH FILE_CASE_PRESERVED_NAMES FILE_UNICODE_ON_DISK FILE_PERSISTENT_ACLS FILE_FILE_COMPRESSION FILE_VOLUME_QUOTAS FILE_SUPPORTS_SPARSE_FILES FILE_SUPPORTS_REPARSE_POINTS FILE_SUPPORTS_OBJECT_IDS FILE_SUPPORTS_ENCRYPTION FILE_NAMED_STREAMS</FileSystemFlags>
+    <FileSystemName>NTFS</FileSystemName>
+    <ActualAvailableAllocationUnits>1206215</ActualAvailableAllocationUnits>
+    <TotalAllocationUnits>4168191</TotalAllocationUnits>
+    <BytesPerSector>512</BytesPerSector>
+    <SectorsPerAllocationUnit>8</SectorsPerAllocationUnit>
+    <CreationTime>2011-01-07T20:56:40Z</CreationTime>
+    <IsMounted>true</IsMounted>
+</VolumeItem>

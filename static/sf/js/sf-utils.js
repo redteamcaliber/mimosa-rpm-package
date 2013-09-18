@@ -21,15 +21,31 @@ StrikeFinder.get_blockui_message = function (message) {
 };
 
 StrikeFinder.collapse = function(el) {
-    _.each($(el).find('.collapsable-header'), function(collapsable) {
-        var v = new StrikeFinder.CollapsableContentView({
+    jq_el = $(el);
+    if (jq_el.hasClass('collapsable-header')) {
+        new StrikeFinder.CollapsableContentView({
+            el: '#' + jq_el.attr('id'),
+            title: jq_el.attr('collapsable-title'),
+            title_class: 'uac-header'
+        });
+    }
+    _.each(jq_el.find('.collapsable-header'), function(collapsable) {
+        new StrikeFinder.CollapsableContentView({
             el: '#' + collapsable.id,
             title: $(collapsable).attr('collapsable-title'),
             title_class: 'uac-header'
         });
     });
-    _.each($(el).find('.collapsable'), function(collapsable) {
-        var v = new StrikeFinder.CollapsableContentView({
+    if (jq_el.hasClass('collapsable')) {
+        new StrikeFinder.CollapsableContentView({
+            el: '#' + jq_el.attr('id'),
+            title: jq_el.attr('collapsable-title'),
+            title_class: 'uac-sub-header',
+            display_toggle: false
+        });
+    }
+    _.each(jq_el.find('.collapsable'), function(collapsable) {
+        new StrikeFinder.CollapsableContentView({
             el: '#' + collapsable.id,
             title: $(collapsable).attr('collapsable-title'),
             title_class: 'uac-sub-header',

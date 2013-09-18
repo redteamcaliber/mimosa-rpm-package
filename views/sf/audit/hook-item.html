@@ -4,7 +4,7 @@
 
 <table class="table table-condensed">
     <tr>
-        <th style='width: 150px'>Description</th>
+        <th class="sf-audit-heading">Description</th>
         <td >{{ i.hookdescription }}</td>
     </tr>
     <tr>
@@ -30,7 +30,7 @@
 <table class="table table-condensed">
     {% if i.digitalsignaturehooking.signatureexists %}
     <tr>
-        <th style='width: 150px'>Signature Exists</th>
+        <th class="sf-audit-heading">Signature Exists</th>
         <td >{{ i.digitalsignaturehooking.signatureexists }}</td>
     </tr>
     {% endif %}
@@ -66,7 +66,7 @@
 <table class="table table-condensed">
     {% if i.digitalsignaturehooked.signatureexists %}
     <tr>
-        <th style='width: 150px'>Signature Exists</th>
+        <th class="sf-audit-heading">Signature Exists</th>
         <td >{{ i.digitalsignaturehooked.signatureexists }}</td>
     </tr>
     {% endif %}

@@ -1,0 +1,21 @@
+<TaskItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" uid="FC9A4F04-CAD0-42C2-8FE6-8421DE5D2F28" created="2013-02-05T05:18:03Z"><Name>AD RMS Rights Policy Template Management (Manual)</Name>
+    <VirtualPath>\Microsoft\Windows\Active Directory Rights Management Services Client\AD RMS Rights Policy Template Management (Manual)</VirtualPath>
+    <ExitCode>1</ExitCode>
+    <CreationDate>2006-11-10T14:29:55Z</CreationDate>
+    <Comment>Updates the AD RMS rights policy templates for the user. This job provides a credential prompt if authentication to the template distribution web service on the server fails.</Comment>
+    <Creator>Microsoft Corporation</Creator>
+    <MaxRunTime>PT1H</MaxRunTime>
+    <Flag>TASK_FLAG_DONT_START_IF_ON_BATTERIES TASK_FLAG_KILL_IF_GOING_ON_BATTERIES TASK_FLAG_DISABLED TASK_FLAG_RUN_IF_CONNECTED_TO_INTERNET TASK_FLAG_KILL_ON_IDLE_END </Flag>
+    <AccountRunLevel>TASK_RUNLEVEL_LUA</AccountRunLevel>
+    <AccountLogonType>TASK_LOGON_GROUP</AccountLogonType>
+    <Status>SCHED_S_TASK_READY</Status>
+    <ActionList><Action><ActionType>COM Handler</ActionType>
+        <COMClassId>{BF5CB148-7C77-4D8A-A53E-D81C70CF743C}</COMClassId>
+    </Action>
+    </ActionList>
+    <TriggerList><Trigger><TriggerEnabled>false</TriggerEnabled>
+        <TriggerFrequency>TASK_TRIGGER_LOGON</TriggerFrequency>
+        <TriggerDelay>PT1H</TriggerDelay>
+    </Trigger>
+    </TriggerList>
+</TaskItem>

@@ -369,8 +369,8 @@
 </script>
 
 <script type="text/template" id="prev-next-template">
-    <a title="previous" class="btn btn-link prev"><i class="icon-circle-arrow-up icon-2x"></i></a>
-    <a title="next" class="btn btn-link next"><i class="icon-circle-arrow-down icon-2x"></i></a>
+    <a title="previous" class="btn btn-link prev" style="text-decoration: none"><i class="icon-circle-arrow-up icon-3x"></i></a>
+    <a title="next" class="btn btn-link next" style="text-decoration: none"><i class="icon-circle-arrow-down icon-3x"></i></a>
 </script>
 
 <script type="text/template" id="host-template">
@@ -492,10 +492,7 @@
 <script id="hits-details-template" type="text/template">
     <div class='row-fluid sf-details-view'>
         <div class='span6'>
-            <div id='iocs-div'></div>
-        </div>
-
-        <div class='span6'>
+            <!-- Audit View -->
             <div class="row-fluid" style="margin-bottom: 10px">
                 <table>
                     <tr>
@@ -514,6 +511,13 @@
             <div class='row-fluid'>
                 <div id="audit-div"></div>
             </div>
+        </div>
+
+        <div class='span6'>
+            <!-- IOCs View -->
+            <div id='iocs-div'></div>
+
+            <!-- Comments View -->
             <div class='row-fluid'>
                 <div id='comments-collapsable-div'>
                     <div id='comments-div'></div>

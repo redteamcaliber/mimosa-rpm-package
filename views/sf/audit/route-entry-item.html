@@ -1,85 +1,70 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<xsl:stylesheet version="1.0"
-                xmlns:atom="http://www.w3.org/2005/Atom"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xmlns:msxsl="urn:schemas-microsoft-com:xslt"
-                xmlns:user="urn:userscripts"
-                xmlns:mir="urn:mandiant-intelligent-response"
-        >
-    <!--<xsl:output method="html" doctype-public="-//W3C//DTD HTML 4.01//EN" />-->
-    <xsl:output method="html" />
+{% set i = content.routeentryitem %}
 
-    <xsl:template match="/RouteEntryItem">
+<h4>Route Info</h4>
 
-        <div class="xslt-contents" xslt-title="Route Information">
-            <table     width="95%">
-                <tr>
-                    <th>Interface</th>
-                    <td><xsl:value-of select="Interface"/></td>
-                </tr>
-                <tr>
-                    <th>Is IPv6</th>
-                    <td><xsl:value-of select="IsIPv6"/></td>
-                </tr>
-                <tr>
-                    <th>Destination</th>
-                    <td><xsl:value-of select="Destination"/></td>
-                </tr>
-                <tr>
-                    <th>Gateway</th>
-                    <td><xsl:value-of select="Gateway"/></td>
-                </tr>
-                <tr>
-                    <th>Netmask</th>
-                    <td><xsl:value-of select="Netmask"/></td>
-                </tr>
-                <tr>
-                    <th>Type</th>
-                    <td><xsl:value-of select="RouteType"/></td>
-                </tr>
-                <tr>
-                    <th>Protocol</th>
-                    <td><xsl:value-of select="Protocol"/></td>
-                </tr>
-                <tr>
-                    <th>Valid Lifetime</th>
-                    <td><xsl:value-of select="ValidLifetime"/></td>
-                </tr>
-                <tr>
-                    <th>Preferred Lifetime</th>
-                    <td><xsl:value-of select="PreferredLifetime"/></td>
-                </tr>
-                <tr>
-                    <th>Route Age</th>
-                    <td><xsl:value-of select="RouteAge"/></td>
-                </tr>
-                <tr>
-                    <th>Metric</th>
-                    <td><xsl:value-of select="Metric"/></td>
-                </tr>
-                <tr>
-                    <th>Is Loopback</th>
-                    <td><xsl:value-of select="IsLoopback"/></td>
-                </tr>
-                <tr>
-                    <th>Is Autoconfigure Address</th>
-                    <td><xsl:value-of select="IsAutoconfigureAddress"/></td>
-                </tr>
-                <tr>
-                    <th>Is Publish</th>
-                    <td><xsl:value-of select="IsPublish"/></td>
-                </tr>
-                <tr>
-                    <th>Is Immortal</th>
-                    <td><xsl:value-of select="IsImmortal"/></td>
-                </tr>
-                <tr>
-                    <th>Origin</th>
-                    <td><xsl:value-of select="Origin"/></td>
-                </tr>
-            </table>
-        </div>
-    </xsl:template>
-
-</xsl:stylesheet>
+<table class="table table-condensed">
+    <tr>
+        <th class="sf-audit-heading">Interface</th>
+        <td>{{ i.interface }}</td>
+    </tr>
+    <tr>
+        <th>Is IPv6</th>
+        <td>{{ i.isipv6 }}</td>
+    </tr>
+    <tr>
+        <th>Destination</th>
+        <td>{{ i.destination }}</td>
+    </tr>
+    <tr>
+        <th>Gateway</th>
+        <td>{{ i.gateway }}</td>
+    </tr>
+    <tr>
+        <th>Netmask</th>
+        <td>{{ i.netmask }}</td>
+    </tr>
+    <tr>
+        <th>Type</th>
+        <td>{{ i.routetype }}</td>
+    </tr>
+    <tr>
+        <th>Protocol</th>
+        <td>{{ i.protocol }}</td>
+    </tr>
+    <tr>
+        <th>Valid Lifetime</th>
+        <td>{{ i.validlifetime }}</td>
+    </tr>
+    <tr>
+        <th>Preferred Lifetime</th>
+        <td>{{ i.preferredlifetime }}</td>
+    </tr>
+    <tr>
+        <th>Route Age</th>
+        <td>{{ i.routeage }}</td>
+    </tr>
+    <tr>
+        <th>Metric</th>
+        <td>{{ i.metric }}</td>
+    </tr>
+    <tr>
+        <th>Is Loopback</th>
+        <td>{{ i.isloopback }}</td>
+    </tr>
+    <tr>
+        <th>Is Autoconfigure Address</th>
+        <td>{{ i.isautoconfigureaddress }}</td>
+    </tr>
+    <tr>
+        <th>Is Publish</th>
+        <td>{{ i.ispublish }}</td>
+    </tr>
+    <tr>
+        <th>Is Immortal</th>
+        <td>{{ i.isimmortal }}</td>
+    </tr>
+    <tr>
+        <th>Origin</th>
+        <td>{{ i.origin }}</td>
+    </tr>
+</table>
