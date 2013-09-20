@@ -33,6 +33,9 @@ Mandiant-uac-ws-0.2-6 - September 20th, 2013
 - Added a page to be able to view audit HTML output for an audit XML file.
 - Resolved [#23366](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#bug/23366),
   Added FileItem/PEInfo/Exports/DllName to the File/Item audit template.
+- An audit viewer page was added to support testing of the templates in development.  The page allows you to paste in an
+  XML audit and display the results through the UAC template.  The page was used in development though Ross suggested
+  that it might be useful for analysts.  It is located at [https://uac.vm.mandiant.com/sf/audit/](https://uac.vm.mandiant.com/sf/audit/).
 
 
 
