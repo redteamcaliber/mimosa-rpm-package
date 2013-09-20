@@ -8,18 +8,6 @@ StrikeFinder.format_suppression = function (s) {
     return _.sprintf('%s \'%s\' \'%s\' (preservecase=%s)', s.itemkey, s.itemvalue, s.condition, s.preservecase);
 };
 
-/**
- * Retrieve a formatted blocking message.
- * @param message - the message to display.
- * @returns {*} - the formatted message.
- */
-StrikeFinder.get_blockui_message = function (message) {
-    return _.sprintf("<span class=''><h4>" +
-        "<i class='icon-spinner icon-spin icon-3x' style='vertical-align: middle'></i> " +
-        "%s" +
-        "</h4></span>", message);
-};
-
 StrikeFinder.collapse = function(el) {
     jq_el = $(el);
     if (jq_el.hasClass('collapsable-header')) {
@@ -60,52 +48,53 @@ StrikeFinder.collapse = function(el) {
  * @returns - the default options.
  */
 StrikeFinder.get_blockui_options = function (message) {
-    if (message === undefined) {
-        message = 'Loading...';
-    }
-
     return {
-        message: message ? StrikeFinder.get_blockui_message(message) : message,
+        message: message ? message : '',
         css: {
-            border: "1px solid #822433",
-            padding: '15px',
-            color: "#822433",
-            opacity: .9,
-            backgroundColor: "#ffffff"
+            border: "0px solid #cccccc",
+            padding: '0px',
+            opacity: .8,
+            backgroundColor: ''
         },
         overlayCSS: {
             backgroundColor: '#ffffff',
-            opacity: .6
+            opacity: .8
         },
         baseZ: 5000
     }
 };
 
-StrikeFinder.blockui = function (ev) {
-    $.blockUI(StrikeFinder.get_blockui_options('Loading...'));
-    $('.blockOverlay').attr('title','Double click the overlay to unblock').dblclick($.unblockUI);
+StrikeFinder.block = function (ev) {
+    $.blockUI(StrikeFinder.get_blockui_options());
 };
 
-StrikeFinder.blockui_element = function(el) {
-    el.block(StrikeFinder.get_blockui_options(null));
+StrikeFinder.block_element = function(el, message) {
+    $(el).block(StrikeFinder.get_blockui_options('<img src="/static/img/ajax-loader.gif">'));
 };
 
-StrikeFinder.unblockui = function(el) {
+StrikeFinder.unblock = function(el) {
     if (el) {
-        el.unblock();
+        $(el).unblock();
     }
     else {
         $.unblockUI();
     }
 };
 
+//$(document).ajaxStop($.unblockUI);
+
+/**
+ * Block the entire UI and run the function that invokes and AJAX action.  The UI should be unblocked after the AJAX
+ * operation is completed.
+ * @param fn - the function to run.  This function MUST invoke an operation.
+ */
 StrikeFinder.run = function (fn) {
     try {
-        StrikeFinder.blockui();
+        StrikeFinder.block();
         fn();
     }
     finally {
-        StrikeFinder.unblockui();
+        StrikeFinder.unblock();
     }
 };
 
@@ -182,8 +171,6 @@ Backbone.sync = function (method, model, options) {
  * Required to make jQuery drop the subscripts off of array parameters.
  */
 jQuery.ajaxSettings.traditional = true;
-
-$(document).ajaxStart(StrikeFinder.blockui).ajaxStop($.unblockUI);
 
 $(document).ajaxError(function (collection, response, options) {
 

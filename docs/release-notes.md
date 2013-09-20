@@ -21,7 +21,9 @@ Mandiant-uac-ws-0.2-6 - September ?th, 2013
 
 - Many of the audit template files have now been marked up to enable auto suppressing.  When selecting text the context
   menu will now display an item to automatically suppress the item based on the markup without displaying the dialog.
-  For instance, 'Suppress File/Item'.  The existing menu item is still intact if you wish to bring up the full dialog.
+  The suppression uses an 'is' condition by default.  For instance, 'Suppress File/Item'.  The existing menu item is
+  still intact if you wish to bring up the full dialog.  When using the full dialog the ioc term is pre selected when
+  it's available.
 
 ### Audits
 
@@ -29,6 +31,9 @@ Mandiant-uac-ws-0.2-6 - September ?th, 2013
   bug [#23204](https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#bug/23204).
 - Improved the rendering of many of the audit types.
 - Added a page to be able to view audit HTML output for an audit XML file.
+- Resolved [#23366](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#bug/23366),
+  Added FileItem/PEInfo/Exports/DllName to the File/Item audit template.
+
 
 
 Mandiant-uac-ws-0.2-5 - September 9th, 2013

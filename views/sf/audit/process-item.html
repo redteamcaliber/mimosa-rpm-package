@@ -1,140 +1,138 @@
 {% set processitem = content.processitem %}
 
-<div id="process-item-div" class="collapsable-header" collapsable-title="<i class='icon-file'></i> Process/Item">
+<h4>Process Info</h4>
 
-    <h4>Process Info</h4>
+<table class="table table-condensed table-bordered">
+    <tr>
+        <th class="sf-audit-heading">PID</th>
+        <td><span class="ioc-term" ioc-term="ProcessItem/pid">{{ processitem.pid }}</span></td>
+    </tr>
+    <tr>
+        <th>Parent PID</th>
+        <td><span class="ioc-term" ioc-term="ProcessItem/parentpid">{{ processitem.parentpid }}</span></td>
+    </tr>
+    <tr>
+        <th>Path</th>
+        <td><span class="ioc-term" ioc-term="ProcessItem/path">{{ processitem.path }}</span></td>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <td><span class="ioc-term" ioc-term="ProcessItem/name">{{ processitem.name }}</span></td>
+    </tr>
+    <tr>
+        <th valign="top">Arguments</th>
+        <td><span class="ioc-term" ioc-term="ProcessItem/arguments">{{ processitem.arguments }}</span></td>
+    </tr>
+    <tr>
+        <th>Username</th>
+        <td><span class="ioc-term" ioc-term="ProcessItem/Username">{{ processitem.username }}</span></td>
+    </tr>
+    <tr>
+        <th>Security ID</th>
+        <td><span class="ioc-term" ioc-term="ProcessItem/SecurityID">{{ processitem.securityid }}</span></td>
+    </tr>
+    <tr>
+        <th>Security Type</th>
+        <td><span class="ioc-term" ioc-term="ProcessItem/SecurityType">{{ processitem.securitytype }}</span></td>
+    </tr>
+    <tr>
+        <th>Start Time</th>
+        <td><span class="ioc-term" ioc-term="ProcessItem/startTime">{{ processitem.starttime }}</span></td>
+    </tr>
+    <tr>
+        <th>Kernel Time</th>
+        <td><span class="ioc-term" ioc-term="ProcessItem/kernelTime">{{ processitem.kerneltime }}</span></td>
+    </tr>
+    <tr>
+        <th>User Time</th>
+        <td><span class="ioc-term" ioc-term="ProcessItem/userTime">{{ processitem.usertime }}</span></td>
+    </tr>
+</table>
 
-    <table class="table table-condensed table-bordered">
-        <tr>
-            <th class="sf-audit-heading">PID</th>
-            <td><span class="ioc-term" ioc-term="ProcessItem/pid">{{ processitem.pid }}</span></td>
-        </tr>
-        <tr>
-            <th>Parent PID</th>
-            <td><span class="ioc-term" ioc-term="ProcessItem/parentpid">{{ processitem.parentpid }}</span></td>
-        </tr>
-        <tr>
-            <th>Path</th>
-            <td><span class="ioc-term" ioc-term="ProcessItem/path">{{ processitem.path }}</span></td>
-        </tr>
-        <tr>
-            <th>Name</th>
-            <td><span class="ioc-term" ioc-term="ProcessItem/name">{{ processitem.name }}</span></td>
-        </tr>
-        <tr>
-            <th valign="top">Arguments</th>
-            <td><span class="ioc-term" ioc-term="ProcessItem/arguments">{{ processitem.arguments }}</span></td>
-        </tr>
-        <tr>
-            <th>Username</th>
-            <td><span class="ioc-term" ioc-term="ProcessItem/Username">{{ processitem.username }}</span></td>
-        </tr>
-        <tr>
-            <th>Security ID</th>
-            <td><span class="ioc-term" ioc-term="ProcessItem/SecurityID">{{ processitem.securityid }}</span></td>
-        </tr>
-        <tr>
-            <th>Security Type</th>
-            <td><span class="ioc-term" ioc-term="ProcessItem/SecurityType">{{ processitem.securitytype }}</span></td>
-        </tr>
-        <tr>
-            <th>Start Time</th>
-            <td><span class="ioc-term" ioc-term="ProcessItem/startTime">{{ processitem.starttime }}</span></td>
-        </tr>
-        <tr>
-            <th>Kernel Time</th>
-            <td><span class="ioc-term" ioc-term="ProcessItem/kernelTime">{{ processitem.kerneltime }}</span></td>
-        </tr>
-        <tr>
-            <th>User Time</th>
-            <td><span class="ioc-term" ioc-term="ProcessItem/userTime">{{ processitem.usertime }}</span></td>
-        </tr>
-    </table>
+<h4>Handle Types</h4>
 
-    <h4>Handle Types</h4>
+{% for handle_type in content.handle_types %}
+    <div id="{{ handle_type }}-div" class="collapsable collapsed" collapsable-title="{{ handle_type }}">
+        <table class="table table-condensed table-bordered">
+            <tr>
+                <th class="sf-audit-heading">Name</th>
+                <th>Index</th>
+                <th>Access Mask</th>
+                <th>Object Addr</th>
+                <th>Handle Count</th>
+                <th>Ptr Count</th>
+            </tr>
 
-    {% for handle_type in content.handle_types %}
-        <div id="{{ handle_type }}-div" class="collapsable collapsed" collapsable-title="{{ handle_type }}">
-            <table class="table table-condensed table-bordered">
-                <tr>
-                    <th class="sf-audit-heading">Name</th>
-                    <th>Index</th>
-                    <th>Access Mask</th>
-                    <th>Object Addr</th>
-                    <th>Handle Count</th>
-                    <th>Ptr Count</th>
-                </tr>
-
-                {% for handle in get_map_value(content.handle_map, handle_type, 'name') %}
-                <tr>
-                    <td><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/Name">{{ handle.name }}</span></td>
-                    <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/Index">{{ handle.index }}</span></td>
-                    <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/AccessMask">{{ handle.acccessmask }}</span></td>
-                    <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/ObjectAddress">{{ handle.objectaddress }}</span></td>
-                    <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/HandleCount">{{ handle.handlecount }}</span></td>
-                    <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/PointerCount">{{ handle.pointercount }}</span></td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-    {% endfor %}
-
-    <br/>
-
-    {% if processitem.stringlist.string %}
-        <h4>String List</h4>
-        <ul>
-            {% for s in get_list(processitem.stringlist.string) %}
-                <li>{{ s }}</li>
+            {% for handle in get_map_value(content.handle_map, handle_type, 'name') %}
+            <tr>
+                <td><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/Name">{{ handle.name }}</span></td>
+                <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/Index">{{ handle.index }}</span></td>
+                <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/AccessMask">{{ handle.acccessmask }}</span></td>
+                <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/ObjectAddress">{{ handle.objectaddress }}</span></td>
+                <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/HandleCount">{{ handle.handlecount }}</span></td>
+                <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/PointerCount">{{ handle.pointercount }}</span></td>
+            </tr>
             {% endfor %}
-        </ul>
-    {% endif %}
+        </table>
+    </div>
+{% endfor %}
 
-    {% if processitem.sectionlist %}
-        <div id="sections-div" class="collapsable collapsed" collapsable-title="Sections">
-            <table class="table table-condensed table-bordered">
-                <tr>
-                    <th>Name</th>
-                </tr>
-                {% for section in get_list(processitem.sectionlist.memorysection) %}
-                    {% if section.name %}
-                        <tr>
-                            <td><span class="ioc-term" ioc-term="ProcessItem/SectionList/MemorySection/Name">{{ section.name }}</span></td>
-                        </tr>
-                    {% endif %}
-                {% endfor %}
-            </table>
-        </div>
-    {% endif %}
+<br/>
 
-    {% if processitem.portlist.portitem %}
-        <div id="ports-div" class="collapsable collapsed" collapsable-title="Port List">
-            <table class="table table-condensed table-bordered">
-                <tr>
-                    <th class="sf-audit-heading">PID</th>
-                    <th>Protocol</th>
-                    <th>Local Port</th>
-                    <th>Local IP</th>
-                    <th>Remote Port</th>
-                    <th>Remote IP</th>
-                    <th>State</th>
-                    <th>Creation Time</th>
-                </tr>
-                {% for port in get_list(processitem.portlist.portitem) %}
-                <tr>
-                    <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/pid">{{ port.pid }}</span></td>
-                    <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/protocol">{{ port.protocol }}</span></td>
-                    <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/localPort">{{ port.localport }}</span></td>
-                    <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/localIP">{{ port.localip }}</span></td>
-                    <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/remotePort">{{ port.remoteport }}</span></td>
-                    <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/remoteIP">{{ port.remoteip }}</span></td>
-                    <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/state">{{ port.state }}</span></td>
-                    <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/CreationTime">{{ port.creationtime }}</span></td>
-                </tr>
-                {% endfor %}
-            </table>
-        </div>
-    {% endif %}
+{% if processitem.stringlist.string %}
+    <h4>String List</h4>
+    <ul>
+        {% for s in get_list(processitem.stringlist.string) %}
+            <li>{{ s }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+{% if processitem.sectionlist %}
+    <div id="sections-div" class="collapsable collapsed" collapsable-title="Sections">
+        <table class="table table-condensed table-bordered">
+            <tr>
+                <th>Name</th>
+            </tr>
+            {% for section in get_list(processitem.sectionlist.memorysection) %}
+                {% if section.name %}
+                    <tr>
+                        <td><span class="ioc-term" ioc-term="ProcessItem/SectionList/MemorySection/Name">{{ section.name }}</span></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+{% endif %}
+
+{% if processitem.portlist.portitem %}
+    <div id="ports-div" class="collapsable collapsed" collapsable-title="Port List">
+        <table class="table table-condensed table-bordered">
+            <tr>
+                <th class="sf-audit-heading">PID</th>
+                <th>Protocol</th>
+                <th>Local Port</th>
+                <th>Local IP</th>
+                <th>Remote Port</th>
+                <th>Remote IP</th>
+                <th>State</th>
+                <th>Creation Time</th>
+            </tr>
+            {% for port in get_list(processitem.portlist.portitem) %}
+            <tr>
+                <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/pid">{{ port.pid }}</span></td>
+                <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/protocol">{{ port.protocol }}</span></td>
+                <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/localPort">{{ port.localport }}</span></td>
+                <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/localIP">{{ port.localip }}</span></td>
+                <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/remotePort">{{ port.remoteport }}</span></td>
+                <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/remoteIP">{{ port.remoteip }}</span></td>
+                <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/state">{{ port.state }}</span></td>
+                <td><span class="ioc-term" ioc-term="ProcessItem/PortList/PortItem/CreationTime">{{ port.creationtime }}</span></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endif %}
 
 
 <div id="portal-formated-data-div" class="collapsable collapsed" collapsable-title="Portal Formatted Data">
@@ -149,5 +147,3 @@ Process Start: {{ processitem.starttime }}
 Process Path: {{ processitem.path }}
     </textarea>
 </div>
-
-</div><!-- End Process Item div -->

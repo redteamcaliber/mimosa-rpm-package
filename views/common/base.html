@@ -50,6 +50,8 @@
 <link href="/static/css/jquery.iocViewer.css" rel="stylesheet"/>
 
 <script src="/static/js/moment.min.js"></script>
+<script src="/static/js/spin.min.js"></script>
+
 
 <style type="text/css">
     .mandiant-logo {
@@ -126,11 +128,9 @@
     </div>
     {% endblock %}
 
-    <div class="container-fluid">
-        {% block content %}
+    {% block content %}
 
-        {% endblock %}
-    </div>
+    {% endblock %}
 
     {% block tail %}
 
@@ -144,7 +144,7 @@
     <div class="container">
         <p class="muted credit">
             &copy; 2013 Mandiant Corporation. All rights reserved.
-            <span class="pull-right">Version: 0.2.5</span>
+            <span class="pull-right">Version: 0.2.6</span>
         </p>
     </div>
     {% endblock %}

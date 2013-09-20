@@ -1,46 +1,34 @@
 UAC ToDo
 ========
 
-### Look into being able to select columns in datatables.
-
-### Clear the old data when rendering the views.
-
-### Change the title to some other attribute in collapsables.
-
-### Look into code submitting an array of expression keys when creating a suppression.
-
-### Add scrolling support to the audit div.
-
-### Add FileItem/PEInfo/Exports/DllName to the File/Item audit template.
-    - [23366](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#bug/23366)
+### Add auth token to the default env files.
 
 ### Add copy to the context menu.
 
-### Add a app token check to the SSO ware.
-
-### Look into making API level unit tests possible.
+### Remove the IOC title since it's already displayed in the tab view.
 
 ### Make suppressions linkable from the hits view.
 
-### Add an auto suppress capability.
-    - Look into replacing the XSLT capability with a template instead.
-    - Should always be "is".
+### Display the current shopping criteria on the criteria rollup.
 
 ### Add counts to the rollups, especially the hits rollup.
 
-### Display the current shopping criteria on the criteria rollup.
+### Tagging
+    -Replace the tagging component with something that is stateful.
+    -Refresh the host view whenever an item is tagged because the counts need to be updated.
+
 
 ### Look into sorting issues with the previous next control.
+
+### Look into being able to select columns in datatables.
+
+### Look into making API level unit tests possible.
 
 ### Automatically update the version number???
 
 ### Improve the 500 error reporting in UAC.
 
 ### Look into why add comment is a get and not a post???
-
-### Tagging
-    -Replace the tagging component with something that is stateful.
-    -Refresh the host view whenever an item is tagged because the counts need to be updated.
 
 ### Re-factor the env.json.
     -Move the log settings to server.

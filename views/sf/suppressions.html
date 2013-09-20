@@ -37,7 +37,7 @@
 
                 view.suppressions.reset(StrikeFinder.suppressions);
             },
-            do_render_hits: function (data) {
+            render_hits: function (data) {
                 var view = this;
 
                 log.debug('Row selected: ' + JSON.stringify(data));
@@ -58,13 +58,11 @@
                     });
                 });
 
-                view.hits_table_view.fetch(suppression_id);
+                view.hits_table_view.fetch({
+                    suppression_id: suppression_id
+                });
 
                 $('.hits-view').fadeIn().show();
-            },
-            render_hits: function (data) {
-                var view = this;
-                view.do_render_hits(data);
             }
         });
 
@@ -95,7 +93,9 @@
         </div>
     </div>
 
-    <div id="hits-details-view"></div>
+    {% set hide_hits = true %}
+    {% set hide_suppressions = true %}
+    {% include "sf/hits_template.html" %}
 
     <div class="row-fluid">
         <div class="span12">

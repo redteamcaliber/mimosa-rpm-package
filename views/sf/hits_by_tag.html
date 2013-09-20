@@ -56,10 +56,19 @@
             view.listenTo(view.collection, 'sync', view.render);
         },
         fetch: function (tagname) {
+            var view = this;
             if (tagname) {
-                this.collection.tagname = tagname;
+                view.collection.tagname = tagname;
             }
-            this.collection.fetch();
+            StrikeFinder.block();
+            view.collection.fetch({
+                success: function() {
+                    StrikeFinder.unblock();
+                },
+                error: function() {
+                    StrikeFinder.unblock();
+                }
+            });
         }
     });
 
@@ -147,7 +156,9 @@
         </div>
     </div>
 
-    <div id="hits-details-div"></div>
+    {% set hide_hits = true %}
+    {% set hide_suppressions = true %}
+    {% include "sf/hits_template.html" %}
 
     <div class="row-fluid">
         <div class="span12">
