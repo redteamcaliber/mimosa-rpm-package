@@ -104,7 +104,9 @@
         </div>
     </div>
 
-    <div id="hits-details"></div>
+    {% set hide_hits = true %}
+    {% set hide_suppressions = true %}
+    {% include "sf/hits_template.html" %}
 </div>
 
 <br/>
