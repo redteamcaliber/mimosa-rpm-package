@@ -1,11 +1,7 @@
 UAC ToDo
 ========
 
-### Add auth token to the default env files.
-
 ### Add copy to the context menu.
-
-### Remove the IOC title since it's already displayed in the tab view.
 
 ### Make suppressions linkable from the hits view.
 
@@ -14,9 +10,9 @@ UAC ToDo
 ### Add counts to the rollups, especially the hits rollup.
 
 ### Tagging
-    -Replace the tagging component with something that is stateful.
-    -Refresh the host view whenever an item is tagged because the counts need to be updated.
-
+    - Replace the tagging component with something that is stateful.
+    - Refresh the host view whenever an item is tagged because the counts need to be updated.
+    - Move the tag component closer to the audit data.
 
 ### Look into sorting issues with the previous next control.
 

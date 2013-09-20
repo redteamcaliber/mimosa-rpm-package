@@ -26,6 +26,7 @@
         "auth_user": "app.uac",
         "auth_pass": "<REPLACE>",
         "auth_url": "https://login.mandiant.com/api/auth",
+        "auth_token": "AC",
         "auth_cookie": "m_login",
         "login_url": "https://login.mandiant.com",
         "refresh_url": "https://login.mandiant.com/refresh",

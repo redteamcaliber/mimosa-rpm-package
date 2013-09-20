@@ -271,9 +271,9 @@
         $viewer = $('<div>').addClass('ioc').addClass('ioc-guid-' + iocObject.id)
             .append($metadata=$('<div>').addClass('ioc-metadata'))
             .append($criteria=$('<div>').addClass('ioc-definition'));
-        if (iocObject.name) {
-            $metadata.append($('<div>').addClass('ioc-name').html(iocObject.name));
-        }
+        //if (iocObject.name) {
+        //    $metadata.append($('<div>').addClass('ioc-name').html(iocObject.name));
+        //}
         var uidline =  iocObject.id;
         if ( iocObject.links['threatgroup'] ) { uidline += " - " +iocObject.links['threatgroup'][0].text; }
         if ( iocObject.links['threatcategory'] ) { uidline += " - " +iocObject.links['threatcategory'][0].text; }
