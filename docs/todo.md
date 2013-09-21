@@ -1,6 +1,23 @@
 UAC ToDo
 ========
 
+### Ensure all suppressions are displayed since there is no paging controls.
+### Ensure all comments are displayed since there is no paging controls.
+
+### Allow user to page through datatables.
+
+### Pre-select the IOC term on the mass tag dialog whenever possible.
+
+### Need the ability to link to a hit in uac.
+
+### Add server side paging to the hits by tag view.  There are too many hits to reasonably display the current data.
+
+### Process item's need to support scrolling within the collapsable divs.
+
+### Add a link from the acquisition list to the host view.
+
+### When displaying a hit after checkout then logout there is an error when clicking on the hits link.
+
 ### Add copy to the context menu.
 
 ### Make suppressions linkable from the hits view.

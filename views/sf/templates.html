@@ -1,5 +1,4 @@
 <!-- StrikeFinder View Templates -->
-<!-- StrikeFinder View Templates -->
 
 <script type="text/template" id="ioc-details-template">
     <div class="uac-header">
@@ -366,50 +365,54 @@
 
 <script type="text/template" id="host-template">
     <div class="row-fluid">
-        <div class="span6">
+        <div class="span4">
             <span style="font-weight: bold">
                 <%= cluster.engagement.client.name %>: <%= domain %> / <%= hostname %>
             </span>
         </div>
-        <div class="span3">
+        <div class="span2">
             <%= time_formatted %>
         </div>
-        <div class="span3">
+        <div class="span1">
             <span class="label label-<%= time_label %>"><%= time_caption %></span>
         </div>
     </div>
     <div class="row-fluid">
-        <div class="span3">
+        <div class="span2">
             <span style="font-family: courier"><%= ip %></span>
         </div>
-        <div class="span3">
+        <div class="span2">
             <%= product_name %> <%= os_patch_level %>
         </div>
-        <div class="span3">
+        <div class="span2">
             <%= version %>
         </div>
-        <div class="span3">
+        <div class="span2">
             <%= cluster.engagement.number %>
         </div>
     </div>
     <div class="row-fluid">
-        <div class="span2">
-            NotReviewed: <%= counts.notreviewed %>
-        </div>
-        <div class="span2">
-            Investigating: <%= counts.investigating %>
-        </div>
-        <div class="span2">
-            Escalate: <%= counts.escalate %>
-        </div>
-        <div class="span2">
-            NotReported: <%= counts.unreported %>
-        </div>
-        <div class="span2">
-            Reported: <%= counts.reported %>
-        </div>
-        <div class="span2">
-            Delete: <%= counts.delete %>
+        <div class="span7">
+            <div class="row-fluid">
+                <div class="span2">
+                    NotReviewed: <%= counts.notreviewed %>
+                </div>
+                <div class="span2">
+                    Investigating: <%= counts.investigating %>
+                </div>
+                <div class="span2">
+                    Escalate: <%= counts.escalate %>
+                </div>
+                <div class="span2">
+                    NotReported: <%= counts.unreported %>
+                </div>
+                <div class="span2">
+                    Reported: <%= counts.reported %>
+                </div>
+                <div class="span2">
+                    Delete: <%= counts.delete %>
+                </div>
+            </div>
         </div>
     </div>
 </script>

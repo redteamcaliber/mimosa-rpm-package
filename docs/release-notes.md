@@ -1,8 +1,16 @@
 Unified Analyst Console (UAC) Release Notes
 ===========================================
 
+Mandiant-uac-ws-0.2-8 - September 20th, 2013
+--------------------------------------------
+
+### Viewing Hits
+
+- Added the ability to use the previous next control to iterate through table pages. [#24137](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/24137)
+
+
 Mandiant-uac-ws-0.2-6 - September 20th, 2013
--------------------------------------------
+--------------------------------------------
 
 ### General
 

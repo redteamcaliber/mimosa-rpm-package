@@ -3,15 +3,17 @@
 {% block title %}StrikeFinder - {{ super() }}{% endblock %}
 
 {% block head %}
-{{ super() }}
+    {{ super() }}
 
-<script lang="text/javascript" src="/static/sf/js/sf-utils.js"></script>
-<script lang="text/javascript" src="/static/sf/js/sf-models.js"></script>
-<script lang="text/javascript" src="/static/sf/js/sf-views.js"></script>
+    <script lang="text/javascript" src="/static/sf/js/sf-utils.js"></script>
+    <script lang="text/javascript" src="/static/sf/js/sf-models.js"></script>
+    <script lang="text/javascript" src="/static/sf/js/sf-views.js"></script>
+
+    {% include "/sf/templates.html" %}
 {% endblock %}
 
 {% block nav_menu %}
-<li><a href="/sf/shopping/"><i class="icon-shopping-cart"></i> Shopping</a></li>
+<li><a href="/sf/shopping/"><i class="icon-search"></i> IOC Selection</a></li>
 <li><a href="/sf/hits/"><i class="icon-list"></i> Hit Review</a></li>
 <li><a href="/sf/suppressions/"><i class="icon-level-down"></i> Suppressions</a></li>
 <li><a href="/sf/hits_by_tag/"><i class="icon-tags"></i> Hits by Tag</a></li>

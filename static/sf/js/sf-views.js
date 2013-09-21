@@ -177,29 +177,41 @@ StrikeFinder.TableViewControls = StrikeFinder.View.extend({
         });
 
         if (view.table !== undefined) {
-            if (view.table.is_prev()) {
+            if (view.table.is_prev() || view.table.is_prev_page()) {
                 view.$('a.prev').removeAttr('disabled');
             }
             else {
                 view.$('a.prev').attr('disabled', true);
             }
 
-            if (view.table.is_next()) {
+            if (view.table.is_next() || view.table.is_next_page()) {
+                // Enable the next record link.
                 view.$('a.next').removeAttr('disabled');
             }
             else {
+                // Disable the next record link.
                 view.$('a.next').attr('disabled', true);
             }
         }
     },
     on_prev: function () {
         if (this.table !== undefined) {
-            this.table.prev();
+            if (this.table.is_prev()) {
+                this.table.prev();
+            }
+            else if (this.table.is_prev_page()) {
+                this.table.prev_page();
+            }
         }
     },
     on_next: function () {
         if (this.table !== undefined) {
-            this.table.next();
+            if (this.table.is_next()) {
+                this.table.next();
+            }
+            else if (this.table.is_next_page()) {
+                this.table.next_page();
+            }
         }
     },
     close: function () {
@@ -309,6 +321,17 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             return -1;
         }
     },
+    get_current_page: function() {
+        var settings = this.get_settings();
+        return Math.ceil(settings._iDisplayStart / settings._iDisplayLength) + 1;
+    },
+    get_total_rows: function() {
+        return this.get_settings()._iRecordsTotal;
+    },
+    get_total_pages: function() {
+        var settings = this.get_settings();
+        return Math.ceil(settings._iRecordsTotal / settings._iDisplayLength);
+    },
     is_prev: function () {
         var pos = this.get_selected_position();
         return (pos > 0);
@@ -332,6 +355,37 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                 this.select_row(pos + 1);
             }
         }
+    },
+    is_prev_page: function() {
+        return this.get_current_page() != 1;
+    },
+    is_next_page: function() {
+        return this.get_current_page() < this.get_total_pages();
+    },
+    prev_page: function() {
+        if (this.is_prev_page()) {
+            this.set_page(this.get_current_page() - 2); // set page takes an index.
+        }
+    },
+    next_page: function() {
+        if (this.is_next_page()) {
+            this.set_page(this.get_current_page()); // set page takes an index.
+        }
+    },
+    /**
+     * Set the current page of the table.
+     * @param page_index - the zero based page index.
+     */
+    set_page: function(page_index) {
+        var view = this;
+        var current_page = view.get_current_page();
+        if (page_index + 1 > current_page) {
+            view._page_next = true;
+        }
+        else {
+            view._page_prev = true;
+        }
+        this.get_table().fnPageChange(page_index);
     },
     length: function () {
         return this.$el.fnGetData().length;
@@ -418,19 +472,19 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
      * @returns {*}
      */
     render: function (params) {
-        if (!this.el) {
+        var view = this;
+
+        if (!view.el) {
             // Error
             alert('Error: Undefined "el" in TableView');
             return;
         }
 
         // Destroy the existing table if there is one.
-        this.destroy();
-
-        var that = this;
+        view.destroy();
 
         // Construct the table settings.
-        var settings = StrikeFinder.get_datatables_settings(this, this.options);
+        var settings = StrikeFinder.get_datatables_settings(view, view.options);
         // Apply any parameters passed to the settings.
         if (params) {
             if (params['server_params'] != null) {
@@ -450,14 +504,37 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             }
         }
 
-        if (this.collection) {
+        if (view.collection) {
             // If a collection is defined then use the data from the collection.
-            settings['aaData'] = this.collection.toJSON();
+            settings['aaData'] = view.collection.toJSON();
         }
 
+        // Listen to draw events to account for the fact that datatables does not fire page change events.  This code
+        // makes up for that shortcoming by manually determining when the user has used the previous next component to
+        // page through the table.
+        view.listenTo(view, 'draw', function() {
+            if (view._page_prev) {
+                // User has iterated through the table to the previous page.
+                view.trigger('page', view.get_current_page());
+                // Select the last record in the current view.
+                view.select_row(view.length() - 1);
+                // Clear the flag.
+                view._page_prev = false;
+            }
+            else if (view._page_next) {
+                // User has iterated to through the table to the next page.
+                view.trigger('page', view.get_current_page());
+                // Select the next record in the view.
+                view.select_row(0);
+                // Clear the flag.
+                view._page_next = false;
+            }
+        });
+
         // Create the table.
-        var table = this.$el.dataTable(settings);
-        return this;
+        var table = view.$el.dataTable(settings);
+
+        return view;
     },
     fetch: function (params) {
         var view = this;
@@ -1009,7 +1086,7 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
 
         view.hits_collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
-            title: '<i class="icon-list"></i> Hits',
+            title: '',
             title_class: 'uac-header',
             collapsed: true
         });
@@ -1027,9 +1104,14 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
             {sTitle: "Summary2", mData: "summary2", sWidth: "45%", bSortable: false}
         ];
         view.options.sDom = 'Rltip';
-        view.options.iDisplayLength = 200;
+        view.options.iDisplayLength = 10;
         view.listenTo(view, 'load', function () {
-            view.select_row(0)
+            // Select the first row.
+            view.select_row(0);
+
+            // Update the title with the count of the rows.
+            view.hits_collapsable.set('title', _.sprintf('<i class="icon-list"></i> Hits (%s)',
+                view.get_total_rows()));
         });
     }
 });
@@ -2087,9 +2169,11 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
         // Add a collapsable around the shopping view.
         view.shopping_collapsable = new StrikeFinder.CollapsableContentView({
             el: '#' + view.el.id,
-            title: '<i class="icon-search"></i> IOC Shopping Criteria',
             title_class: 'uac-header'
         });
+
+        // Use the default title.
+        view.set_title('');
 
         // Load the model with the users default search criteria.
         view.model = new StrikeFinder.UserCriteriaModel(StrikeFinder.usersettings);
@@ -2157,12 +2241,6 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             // Add the iocnamehash as a class.
             $(row).addClass(data['iocnamehash']);
         });
-        view.listenTo(view.ioc_summaries_view, 'load', function () {
-            var iocnamehash = view.model.get('iocnamehash');
-            if (iocnamehash) {
-                $('.' + iocnamehash).click();
-            }
-        });
 
         // Initialize the IOC details view.
         view.ioc_details_view = new StrikeFinder.IOCDetailsView({
@@ -2213,6 +2291,9 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
 
         view.render_summaries();
     },
+    set_title: function(title) {
+        this.shopping_collapsable.set('title', '<i class="icon-search"></i> IOC Selection' + title);
+    },
     render_summaries: function () {
         var view = this;
         view.ioc_details_view.hide();
@@ -2248,17 +2329,21 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
         var view = this;
 
         if (!view.hits_view) {
+            // Create the hits view.
             view.hits_view = new StrikeFinder.HitsView({
                 el: '#hits-view-div'
             });
         }
 
+        // Fetch the hits data.
         view.hits_view.fetch(params);
 
         if (view.shopping_collapsable) {
+            // Toggle the shopping collapsable.
             view.shopping_collapsable.toggle();
         }
 
+        // Display the hits view.
         view.hits_view.show();
     }
 });
