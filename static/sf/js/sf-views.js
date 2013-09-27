@@ -999,7 +999,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                 {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false, bSortable: true},
                 {sTitle: "Name", mData: 'comment', sClass: 'nowrap', bSortable: true},
                 {sTitle: "IOC", mData: 'iocname', bSortable: true},
-                {sTitle: "IOC UID", mData: 'ioc_uid', bSortable: true},
+                {sTitle: "IOC UUID", mData: 'ioc_uuid', bSortable: true},
                 {sTitle: "Hits", mData: 'suppressed', bSortable: true},
                 {sTitle: "Rule", mData: 'comment', bSortable: true},
                 {sTitle: "Global", mData: 'cluster_name', bVisible: true, bSortable: true},
@@ -2534,7 +2534,7 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
         view.options['aoColumns'] = [
             {sTitle: "uuid", mData: "uuid", bVisible: false},
             {sTitle: "Tag", mData: "tagname", bVisible: true},
-            {sTitle: "IOC UUID", mData: "ioc_uid"},
+            {sTitle: "IOC UUID", mData: "ioc_uuid"},
             {sTitle: "IOC Name", mData: "iocname"},
             {sTitle: "Expression String", mData: "exp_string"},
             {sTitle: "Summary", mData: "summary1"},

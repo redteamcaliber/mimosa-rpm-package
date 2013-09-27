@@ -199,7 +199,7 @@ StrikeFinder.IOCModel = Backbone.Model.extend({
         name: "",
         content: "",
         exp_key: "",
-        ioc_uid: "",
+        ioc_uuid: "",
         details: "",
         iocnamehash: "",
         uuid: 0
@@ -272,7 +272,7 @@ StrikeFinder.SuppressionListItem = Backbone.Model.extend({
         created: '',
         exp_key: '',
         details: '',
-        ioc_uid: '',
+        ioc_uuid: '',
         iocname: '',
         iocnamehash: ''
     },
