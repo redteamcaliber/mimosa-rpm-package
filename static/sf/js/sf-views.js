@@ -1,6 +1,5 @@
 var StrikeFinder = StrikeFinder || {};
 
-
 StrikeFinder.View = Backbone.View.extend({
     show: function () {
         this.$el.fadeIn().show();
