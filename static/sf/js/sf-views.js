@@ -237,7 +237,7 @@ StrikeFinder.get_datatables_settings = function (parent, settings) {
                 // Select the row.
                 $(nRow).addClass('info').siblings().removeClass('info');
                 // Trigger a click event.
-                parent.trigger('click', parent.get_data(ev.currentTarget));
+                parent.trigger('click', parent.get_data(ev.currentTarget), ev);
             };
 
             // Remove any existing click events for the row.
@@ -286,9 +286,10 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         $(nRow).addClass('info').siblings().removeClass('info');
     },
     select_row: function (index) {
-        var length = this.length();
+        var view = this;
+        var length = view.length();
 
-        if (this.length() <= 0) {
+        if (view.length() <= 0) {
             return undefined;
         }
         else if (index + 1 > length) {
@@ -298,10 +299,16 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             var pos = this.get_selected_position();
             if (pos != index) {
                 // Only select if we are not already on the row.
-                var node = this.get_nodes(index);
+                var node = view.get_nodes(index);
                 if (node) {
                     $(node).click();
                 }
+
+                var container = $(view.get_dom_table()).parent();
+                if (container) {
+                    container.scrollTo($(node));
+                }
+
                 return node;
             }
             else {
@@ -321,14 +328,14 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             return -1;
         }
     },
-    get_current_page: function() {
+    get_current_page: function () {
         var settings = this.get_settings();
         return Math.ceil(settings._iDisplayStart / settings._iDisplayLength) + 1;
     },
-    get_total_rows: function() {
+    get_total_rows: function () {
         return this.get_settings()._iRecordsTotal;
     },
-    get_total_pages: function() {
+    get_total_pages: function () {
         var settings = this.get_settings();
         return Math.ceil(settings._iRecordsTotal / settings._iDisplayLength);
     },
@@ -356,18 +363,18 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             }
         }
     },
-    is_prev_page: function() {
+    is_prev_page: function () {
         return this.get_current_page() != 1;
     },
-    is_next_page: function() {
+    is_next_page: function () {
         return this.get_current_page() < this.get_total_pages();
     },
-    prev_page: function() {
+    prev_page: function () {
         if (this.is_prev_page()) {
             this.set_page(this.get_current_page() - 2); // set page takes an index.
         }
     },
-    next_page: function() {
+    next_page: function () {
         if (this.is_next_page()) {
             this.set_page(this.get_current_page()); // set page takes an index.
         }
@@ -376,7 +383,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
      * Set the current page of the table.
      * @param page_index - the zero based page index.
      */
-    set_page: function(page_index) {
+    set_page: function (page_index) {
         var view = this;
         var current_page = view.get_current_page();
         if (page_index + 1 > current_page) {
@@ -512,7 +519,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         // Listen to draw events to account for the fact that datatables does not fire page change events.  This code
         // makes up for that shortcoming by manually determining when the user has used the previous next component to
         // page through the table.
-        view.listenTo(view, 'draw', function() {
+        view.listenTo(view, 'draw', function () {
             if (view._page_prev) {
                 // User has iterated through the table to the previous page.
                 view.trigger('page', view.get_current_page());
@@ -543,10 +550,10 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                 // User has supplied options to the fetch call.
                 if (!params.success && !params.error) {
                     // Has not overidden the success and error callbacks, block for them.
-                    params.success = function() {
+                    params.success = function () {
                         StrikeFinder.unblock();
                     };
-                    params.error = function() {
+                    params.error = function () {
                         StrikeFinder.unblock();
                     };
                     StrikeFinder.block();
@@ -561,11 +568,11 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                 // Block the UI before the fetch.
                 StrikeFinder.block();
                 view.collection.fetch({
-                    success: function() {
+                    success: function () {
                         // Unblock the ui.
                         StrikeFinder.unblock();
                     },
-                    error: function() {
+                    error: function () {
                         // Unblock the ui.
                         StrikeFinder.unblock();
                     }
@@ -573,7 +580,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             }
         }
         else {
-            StrikeFinder.run(function() {
+            StrikeFinder.run(function () {
                 view.render({
                     'server_params': params
                 });
@@ -882,10 +889,10 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
         StrikeFinder.block();
         view.collection.fetch({
             data: params,
-            success: function() {
+            success: function () {
                 StrikeFinder.unblock();
             },
-            failure: function() {
+            failure: function () {
                 StrikeFinder.unblock();
             }
         });
@@ -1086,7 +1093,7 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
 
         view.hits_collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
-            title: '',
+            title: '&nbsp;',
             title_class: 'uac-header',
             collapsed: true
         });
@@ -1103,16 +1110,30 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
             {sTitle: "Summary", mData: "summary1", sWidth: "45%", bSortable: false},
             {sTitle: "Summary2", mData: "summary2", sWidth: "45%", bSortable: false}
         ];
-        view.options.sDom = 'Rltip';
-        view.options.iDisplayLength = 10;
+        view.options.sDom = 'RltipS';
+        view.options.iDisplayLength = 100;
         view.listenTo(view, 'load', function () {
             // Select the first row.
             view.select_row(0);
-
-            // Update the title with the count of the rows.
-            view.hits_collapsable.set('title', _.sprintf('<i class="icon-list"></i> Hits (%s)',
-                view.get_total_rows()));
         });
+        view.listenTo(view, 'click', function(row, ev) {
+            var position = view.get_position(ev.currentTarget);
+
+            var title;
+            if (position !== undefined) {
+                title = _.sprintf('<i class="icon-list"></i> Hits (%s of %s)', position + 1, view.get_total_rows());
+            }
+            else {
+                title = _.sprintf('<i class="icon-list"></i> Hits (%s)', view.get_total_rows());
+            }
+            // Update the title with the count of the rows.
+            view.hits_collapsable.set('title', title);
+        });
+
+        view.options.bScrollInfinite = true;
+        view.options.bScrollCollapse = true;
+        view.options.sScrollY = '400px';
+        view.options.iScrollLoadGap = 100;
     }
 });
 
@@ -2046,10 +2067,10 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
 
         StrikeFinder.block_element(view.$el);
         view.collection.fetch({
-            success: function() {
+            success: function () {
                 StrikeFinder.unblock(view.$el);
             },
-            error: function() {
+            error: function () {
                 StrikeFinder.unblock(view.$el);
             }
         });
@@ -2291,7 +2312,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
 
         view.render_summaries();
     },
-    set_title: function(title) {
+    set_title: function (title) {
         this.shopping_collapsable.set('title', '<i class="icon-search"></i> IOC Selection' + title);
     },
     render_summaries: function () {
@@ -2411,7 +2432,12 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
             // Not enough parameters have been supplied, try loading from the server.
 
             log.debug('Parameters not satisfied, attempting to load from the server.');
-            view.params = StrikeFinder.usersettings;
+            view.params = {
+                services: StrikeFinder.usersettings.services,
+                clusters: StrikeFinder.usersettings.clusters,
+                exp_key: StrikeFinder.usersettings.exp_key[0],
+                usertoken: StrikeFinder.usersettings.usertoken
+            };
 
             log.debug('Loaded user settings: ' + JSON.stringify(view.params));
 
@@ -2462,10 +2488,11 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
     fetch_callback: function () {
         var view = this;
         // Update the hits details view with the current selected expression.
+
         view.hits_details_view.exp_key = view.params.exp_key;
 
         if (view.params.usertoken) {
-            StrikeFinder.run(function() {
+            StrikeFinder.run(function () {
                 var usertoken_params = {
                     usertoken: view.params.usertoken
                 };
@@ -2474,7 +2501,7 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
             });
         }
         else {
-            StrikeFinder.run(function() {
+            StrikeFinder.run(function () {
                 var exp_key_params = {
                     services: view.params.services,
                     clusters: view.params.clusters,
@@ -2641,6 +2668,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                     exp_key: view.exp_key,
                     cluster_uuid: view.row.cluster_uuid
                 };
+
                 if (ioc_term) {
                     options.itemkey = ioc_term;
                 }
@@ -2679,7 +2707,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                     rowitem_type: view.row.rowitem_type
                 });
             });
-            view.listenTo(view.context_menu, 'auto-suppress', function(selection, ioc_term) {
+            view.listenTo(view.context_menu, 'auto-suppress', function (selection, ioc_term) {
                 // Auto create a suppression.
                 var suppression_model = new StrikeFinder.SuppressionModel({
                     itemvalue: selection,
@@ -2703,7 +2731,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                     // Ok.
                     StrikeFinder.block();
                     suppression_model.save({}, {
-                        success: function(model, response, options) {
+                        success: function (model, response, options) {
                             try {
                                 // Get the suppression count.
                                 var count = response['count'];
@@ -2718,7 +2746,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                                 StrikeFinder.unblock();
                             }
                         },
-                        error: function() {
+                        error: function () {
                             try {
                                 StrikeFinder.display_error("Error while auto creating suppression.");
                             }
@@ -2819,7 +2847,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
         var view = this;
         view.acquisitions_collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
-            title: '<i class="icon-cloud-download"></i> Acquisitions',
+            title: '',
             title_class: 'uac-header'
         });
 
@@ -2903,6 +2931,10 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
 
         view.listenTo(view, 'row:created', view.on_create_row);
         view.listenTo(view, 'row:click', view.on_row_click);
+        view.listenTo(view, 'load', function () {
+            view.acquisitions_collapsable.set('title', _.sprintf('<i class="icon-cloud-download"></i> Acquisitions (%s)',
+                view.get_total_rows()));
+        });
     },
     on_create_row: function (row, data, index) {
         // Display a toolip if there is an error message.

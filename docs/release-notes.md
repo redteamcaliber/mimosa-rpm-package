@@ -1,8 +1,12 @@
 Unified Analyst Console (UAC) Release Notes
 ===========================================
 
-Mandiant-uac-ws-0.2-8 - September 20th, 2013
---------------------------------------------
+Mandiant-uac-ws-0.2-8 - October 1st, 2013
+-----------------------------------------
+
+### General
+
+- Added counts to rolled up table views.
 
 ### Viewing Hits
 

@@ -41,9 +41,9 @@ div.ioc-metadata {
 
 
 div.ioc-name {
-    padding: 2px;
+    padding-top: 10px;
     text-align: left;
-    font-size: 20px;
+    font-size: 14px;
     font-weight: bold;
     text-overflow: ellipsis;
     text-shadow: 0px 1px #fff;

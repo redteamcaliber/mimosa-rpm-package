@@ -1,0 +1,26 @@
+<FileItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" uid="E3F04D0F-EBEF-4DEA-A754-12C9FC34AA0D" created="2013-02-05T06:27:49Z"><DevicePath>\Device\HarddiskVolume2</DevicePath>
+    <FullPath>C:\$BadClus</FullPath>
+    <Drive>C</Drive>
+    <FileName>$BadClus</FileName>
+    <Username>NT AUTHORITY\SYSTEM</Username>
+    <SecurityID>S-1-5-18</SecurityID>
+    <SecurityType>SidTypeUser</SecurityType>
+    <SizeInBytes>0</SizeInBytes>
+    <Created>2011-01-07T20:56:40Z</Created>
+    <Modified>2011-01-07T20:56:40Z</Modified>
+    <Accessed>2011-01-07T20:56:40Z</Accessed>
+    <Changed>2011-01-07T20:56:40Z</Changed>
+    <FilenameCreated>2011-01-07T20:56:40Z</FilenameCreated>
+    <FilenameModified>2011-01-07T20:56:40Z</FilenameModified>
+    <FilenameAccessed>2011-01-07T20:56:40Z</FilenameAccessed>
+    <FilenameChanged>2011-01-07T20:56:40Z</FilenameChanged>
+    <FileAttributes>Hidden System</FileAttributes>
+    <INode>8</INode>
+    <Md5sum>d41d8cd98f00b204e9800998ecf8427e</Md5sum>
+    <Sha1sum>da39a3ee5e6b4b0d3255bfef95601890afd80709</Sha1sum>
+    <Sha256sum>e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</Sha256sum>
+    <StreamList><Stream xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" uid="84749C0B-D5FB-4A15-9AF7-44F1CFC69047" created="2013-02-05T06:27:49Z"><Name>$Bad</Name>
+        <SizeInBytes>17072910336</SizeInBytes>
+    </Stream>
+    </StreamList>
+</FileItem>

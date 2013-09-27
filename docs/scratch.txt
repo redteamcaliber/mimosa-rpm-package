@@ -1,3 +1,66 @@
+Unfinished task
+
+{
+    "name": "SDfsdfsd",
+    "ready": false,
+    "started": null,
+    "state": "PENDING",
+    "id": "47fc9ee3-584d-4d9d-b1db-21cf49aa80c2"
+}
+
+Submission result
+
+{
+    "suppression_id": 165,
+    "args": {
+        "iochit_exp_key": "1701275ed06d730acadb4cbb4a502978",
+        "itemtype": "FileItem",
+        "cluster_uuid": null,
+        "comment": "new api suppression",
+        "itemkey": "FileItem/Md5sum",
+        "negate": false,
+        "user_uuid": "anthony.milano@mandiant.com",
+        "preservecase": false,
+        "condition": "is",
+        "itemvalue": "dcd24e74e83830db057ec0f96c480f4b"
+    },
+    "task_id": "47fc9ee3-584d-4d9d-b1db-21cf49aa80c1"
+}
+
+Detail
+
+{
+    "name": "SDfsdfsd",
+    "ready": true,
+    "started": 1380295489.560505,
+    "state": "SUCCESS",
+    "id": "47fc9ee3-584d-4d9d-b1db-21cf49aa80c1",
+    "result": {
+        "suppression_id": 165,
+        "completed": 1380295489.648408,
+        "task": "suppressions.check",
+        "summary": 1
+    }
+}
+
+List
+
+[
+    {
+        "nane": "SDFsdfsdfds",
+        "ready": true,
+        "started": 1380295489.560505,
+        "state": "SUCCESS",
+        "id": "47fc9ee3-584d-4d9d-b1db-21cf49aa80c1",
+        "result": {
+            "suppression_id": 165,
+            "completed": 1380295489.648408,
+            "task": "suppressions.check",
+            "summary": 1
+        }
+    }
+]
+
 
 curl --tlsv1 -d '{"uid":"app.uac","password":"Nm9y.XoW7w]qPjK"}' https://login.mandiant.com/api/auth
 

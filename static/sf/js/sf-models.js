@@ -460,7 +460,7 @@ StrikeFinder.CommentsCollection = Backbone.Collection.extend({
         this.rowitem_uuid = options["rowitem_uuid"];
     },
     url: function () {
-        return _.sprintf('/sf/api/hits/%s/comments', this.rowitem_uuid);
+        return _.sprintf('/sf/api/hits/%s/comments?limit=0', this.rowitem_uuid);
     }
 });
 
