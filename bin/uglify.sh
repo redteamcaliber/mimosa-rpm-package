@@ -9,6 +9,6 @@ PATH=$PATH:/opt/node/node-v0.10.15-linux-x64/bin/
 
 uglifyjs -o static/sf/js/sf-models.js static/sf/js/sf-models.js
 uglifyjs -o static/sf/js/sf-views.js static/sf/js/sf-views.js
-uglifyjs -o static/sf/js/sf-views.js static/sf/js/sf-tasks.js
+# uglifyjs -o static/sf/js/sf-views.js static/sf/js/sf-tasks.js
 uglifyjs -o static/sf/js/sf-utils.js static/sf/js/sf-utils.js
 uglifyjs -o static/js/jquery.iocViewer.js static/js/jquery.iocViewer.js
