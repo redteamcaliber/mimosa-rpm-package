@@ -5,9 +5,19 @@
 {% block head %}
     {{ super() }}
 
-    <script lang="text/javascript" src="/static/sf/js/sf-utils.js"></script>
-    <script lang="text/javascript" src="/static/sf/js/sf-models.js"></script>
-    <script lang="text/javascript" src="/static/sf/js/sf-views.js"></script>
+    <script lang="text/javascript" src="/static/sf/js/utils.js"></script>
+    <script lang="text/javascript" src="/static/sf/js/models.js"></script>
+    <script lang="text/javascript" src="/static/sf/js/components.js"></script>
+
+    <script lang="text/javascript" src="/static/sf/js/hits.js"></script>
+
+    <script lang="text/javascript" src="/static/sf/js/acquisitions.js"></script>
+    <script lang="text/javascript" src="/static/sf/js/hits_by_tag.js"></script>
+    <script lang="text/javascript" src="/static/sf/js/hosts.js"></script>
+    <script lang="text/javascript" src="/static/sf/js/shopping.js"></script>
+    <script lang="text/javascript" src="/static/sf/js/suppressions.js"></script>
+    <script lang="text/javascript" src="/static/sf/js/tasks.js"></script>
+
 
     {% include "/sf/templates.html" %}
 {% endblock %}
@@ -18,6 +28,7 @@
 <li><a href="/sf/suppressions/"><i class="icon-level-down"></i> Suppressions</a></li>
 <li><a href="/sf/hits_by_tag/"><i class="icon-tags"></i> Hits by Tag</a></li>
 <li><a href="/sf/acquisitions/"><i class="icon-cloud-download"></i> Acquisitions</a></li>
+<li><a href="/sf/tasks/"><i class="icon-tasks"></i> Tasks</a></li>
 <li>
     <div style="margin-top: 5px;">
         <div id="host-select" class="pull-right" style="width: 200px"></div>

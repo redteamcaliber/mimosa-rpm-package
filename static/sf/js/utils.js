@@ -4,9 +4,78 @@ var StrikeFinder = StrikeFinder || {};
 // StrikeFinder Utility Methods.
 //
 
-StrikeFinder.format_suppression = function (s) {
-    return _.sprintf('%s \'%s\' \'%s\' (preservecase=%s)', s.itemkey, s.itemvalue, s.condition, s.preservecase);
+
+//
+// Task Utilities.
+//
+
+/**
+ * Wait for a process to complete polling fn(callback) until done is true.  A callback is passed into fn() to specify
+ * that the process is completed invoke callback(true) or callback(false) otherwise.
+ * @param fn - the function to invoke.
+ * @param callback - the function to invoke when complete.  callback(true) if the process was completed.
+ * @param options - delay - optional delay in milliseconds.  Defaults to 2000.
+ *                  max_intervals - the maximum number of intervals.  Defaults to 5.
+ */
+StrikeFinder.wait_for = function(fn, callback, options) {
+    var result = false;
+    var delay = 2000;
+    var max_intervals = 5;
+
+    if (options) {
+        if (options.delay) {
+            delay = options.delay;
+        }
+        if (options.max_intervals) {
+            max_intervals = options.max_intervals;
+        }
+    }
+
+    var interval_count = 0;
+    var interval = setInterval(function() {
+        try {
+            if (interval_count >= max_intervals) {
+                // Exceed maximum number of tries.
+                clearInterval(interval);
+                callback(false);
+            }
+            else {
+                fn(function(done) {
+                    if (done) {
+                        // Client is done.
+                        clearInterval(interval);
+                        callback(true);
+                    }
+                    else {
+                        // Increment the interval count.
+                        interval_count = interval_count + 1;
+                    }
+                });
+            }
+        }
+        catch (e) {
+            // Error
+            log.error('Exception while waiting for task result.', e);
+            StrikeFinder.display_error('Exception while waiting for task result.');
+            clearInterval(interval);
+            callback(false);
+        }
+    }, delay);
 };
+
+
+//
+// Suppression Formatting Utilities.
+//
+StrikeFinder.format_suppression = function (s) {
+    return _.sprintf('%s \'%s\' \'%s\' (preservecase=%s)', s.itemkey, s.condition, s.itemvalue, s.preservecase);
+};
+
+
+
+//
+// Collapsable Utilities.
+//
 
 StrikeFinder.collapse = function(el) {
     jq_el = $(el);
@@ -41,6 +110,12 @@ StrikeFinder.collapse = function(el) {
         });
     });
 };
+
+
+
+//
+// Display Blocking Functions.
+//
 
 /**
  * Retrieve the default block ui options.
@@ -109,8 +184,10 @@ StrikeFinder.show_views = function (views, on) {
     });
 };
 
+
+
 //
-// ---------- Utilities ----------
+// Growl Message Output.
 //
 
 StrikeFinder.display_info = function (message) {
@@ -145,9 +222,8 @@ StrikeFinder.display_error = function (message) {
     });
 };
 
-
 //
-// Override Backbone default settings.
+// Backbone Stuff.
 //
 
 /**
@@ -163,8 +239,9 @@ Backbone.sync = function (method, model, options) {
 };
 
 
+
 //
-// Override jQuery defaults.
+// JQuery Stuff.
 //
 
 /**
@@ -202,25 +279,34 @@ $(document).ajaxError(function (collection, response, options) {
 //    timeout: 180000
 //});
 
-/**
- * Tokenize a string based on whitespace and commas.
- * @param s - the input string.
- * @return the list of search terms.
- */
-function parse_search_string(s) {
-    var token_list = s.split(/[\s,]+/);
-    var valid_tokens = [];
-    _.each(token_list, function (t) {
-        if (t != '') {
-            valid_tokens.push(t);
-        }
-    });
-    return valid_tokens;
-}
 
-function format_date(s) {
-    return s ? moment(s, 'YYYY-MM-DDTHH:mm:ss.SSS').format('YYYY-MM-DD HH:mm:ss') : '';
-}
+
+
+//
+// Date Formatting.
+//
+
+StrikeFinder.DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+
+StrikeFinder.format_date_string = function(s) {
+    return s ? moment(s, 'YYYY-MM-DDTHH:mm:ss.SSS').format(StrikeFinder.DATE_FORMAT) : '';
+};
+
+StrikeFinder.format_unix_date = function(unix) {
+    if (unix) {
+        var input;
+        if (typeof unix == 'string') {
+            input = parseFloat(unix);
+        }
+        else {
+            input = unix;
+        }
+        return moment.unix(input).format(StrikeFinder.DATE_FORMAT);
+    }
+    else {
+        return '';
+    }
+};
 
 function format_expression(s) {
     console.log(s);

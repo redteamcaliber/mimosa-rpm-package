@@ -1,7 +1,16 @@
 UAC ToDo
 ========
 
-### Display N of N Hits in the title bar of the hits table.
+### Implement task results for:
+    - Creating suppressions
+    - Mass tagging.
+    - Deleting suppressions.
+
+### Use infinite scrolling and display N of N Hits in the title bar of the hits table.
+    -Suppressions table.
+    -Suppressions hits table.
+    -Hits by tag hits table.
+    -Acquisitions table.
 
 ### Add username to the error log output.
 

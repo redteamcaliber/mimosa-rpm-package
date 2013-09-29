@@ -590,6 +590,23 @@ StrikeFinder.AgentHostCollection = Backbone.Collection.extend({
     }
 });
 
+StrikeFinder.Task = Backbone.Model.extend({
+    urlRoot: '/sf/api/tasks',
+    defaults: {
+        description: '',
+        ready: false,
+        started: undefined,
+        state: undefined,
+        id: '',
+        result: undefined
+    }
+});
+
+StrikeFinder.TaskCollection = Backbone.Collection.extend({
+    url: '/sf/api/tasks',
+    model: StrikeFinder.Task
+});
+
 StrikeFinder.ClientModel = Backbone.Model.extend({
     defaults: {
         uuid: '',

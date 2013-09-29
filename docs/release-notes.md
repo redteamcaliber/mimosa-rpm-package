@@ -7,10 +7,25 @@ Mandiant-uac-ws-0.2-8 - October 1st, 2013
 ### General
 
 - Added counts to rolled up table views.
+- File acquisition default set to raw.
+  [#24264](https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/24264)
+- Renamed the shopping page to IOC Selection.
+  [#23750](https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/23750)
 
-### Viewing Hits
+### Hits
 
-- Added the ability to use the previous next control to iterate through table pages. [#24137](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/24137)
+- The IOC selection and hits tables now support infinite scrolling.  The hits tables currently load the first 200
+  records and will load 200 more upon scrolling to the end of the table until the records run out.  Using the previous
+  next control on the hits view will also trigger the table to load another 200 records.
+  [#24137](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/24137)
+- Resolved issue with the streams section of the File/Item audit template.
+  [#24376](https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#bug/24376)
+
+### Asynchronous tasks for suppression creation, suppression deletion, and mass tagging.
+
+- The StrikeFinder API was modified to process long running tasks in the background.  If tasks run for more than
+  approximately 10 seconds they will be processed in the background.  The results can be checked on the task list.  A
+  new task list icon has been added to the main menu.
 
 
 Mandiant-uac-ws-0.2-6 - September 20th, 2013
