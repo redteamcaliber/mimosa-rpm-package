@@ -1,8 +1,10 @@
 UAC ToDo
 ========
 
+### Pre populate the IOC term value on the mass tag form.
+
 ### Implement task results for:
-    - Creating suppressions
+    X - Creating suppressions
     - Mass tagging.
     - Deleting suppressions.
 
@@ -13,6 +15,8 @@ UAC ToDo
     -Acquisitions table.
 
 ### Add username to the error log output.
+
+### Look into adding a tagname filter/facet to the hits table.
 
 ### Look into implementing a client side table keyword search on the server side paged tables.
 

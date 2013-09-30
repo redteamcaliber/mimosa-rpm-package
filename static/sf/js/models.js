@@ -407,6 +407,13 @@ StrikeFinder.MassTagModel = Backbone.Model.extend({
         perform_updates: false,
         comment: ''
     },
+    as_string: function() {
+        return _.sprintf('%s \'%s\' \'%s\' (preservecase=%s)',
+            this.get('itemkey'),
+            this.get('condition'),
+            this.get('itemvalue'),
+            this.get('preservecase'));
+    },
     url: "/sf/api/hits/masstag",
     validate: function (attr, options) {
         var results = [];

@@ -22,7 +22,7 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
             {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
             {sTitle: "rowitem_type", mData: "rowitem_type", bVisible: false, bSortable: false},
-            {sTitle: "Tag", mData: "tagname", sWidth: "10%", bSortable: true},
+            {sTitle: "Tag", mData: "tagname", sWidth: "10%", bSortable: false},
             {sTitle: "Summary", mData: "summary1", sWidth: "45%", bSortable: false},
             {sTitle: "Summary2", mData: "summary2", sWidth: "45%", bSortable: false}
         ];
@@ -525,7 +525,7 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
 
         try {
             // Immediately block to prevent multiple submissions.
-            StrikeFinder.block_element(form);
+            StrikeFinder.block_element(form, 'Processing...');
 
             // Update the model with the form data.
             view.model.set('tagname', view.$("#tagname").val());
@@ -534,7 +534,6 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
             view.model.set('preservecase', view.$("#preservecase").is(":checked"));
             view.model.set('itemvalue', view.$("#itemvalue").val());
             view.model.set('comment', view.$('#comment').val());
-            view.model.set('perform_updates', false);
 
             // Handle the scope.
             var scope = view.$('input:radio[name=scope]:checked').val();
@@ -567,40 +566,56 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
             StrikeFinder.unblock(form);
         }
 
-        StrikeFinder.block_element(form);
+        StrikeFinder.block_element(form, 'Processing...');
         view.model.save({}, {
             success: function (model, response, options) {
                 try {
-                    // Get the tag count.
-                    var count = response.count;
-                    log.debug(JSON.stringify(view.model.attributes));
+                    // Submitted the task successfully.
+                    StrikeFinder.display_success('Submitted task for mass tag: ' + view.model.as_string());
 
-                    if (count <= 0) {
-                        // Nothing to tag.
-                        alert('Your request didn\'t match any hits, try again.');
-                        return // **EXIT**
-                    }
+                    StrikeFinder.wait_for(
+                        function (callback) {
+                            // Check task result.
+                            var task = new StrikeFinder.Task({id: response.task_id});
+                            task.fetch({
+                                success: function (model, response, options) {
+                                    if (response.state == 'SUCCESS') {
+                                        // The task was completed successfully.
+                                        var success_message = 'Successfully tagged %s hit(s) with for: %s';
+                                        StrikeFinder.display_success(_.sprintf(success_message,
+                                            response.result.summary, view.model.as_string()));
 
-                    if (window.confirm(_.sprintf('Mass tag %d items?', count))) {
-                        // Tag the rows.
-                        var newModel = new StrikeFinder.MassTagModel(view.model.attributes);
-                        newModel.set('perform_updates', true);
-                        newModel.save({}, {
-                            success: function (model, response) {
-                                // OK.
-                                count = response.count;
+                                        // Notify that the mass tag was created.
+                                        view.trigger('create', view.model);
 
-                                view.$("#mass-tag-form").modal("hide");
-
-                                // Notify that a tags were created.
-                                view.trigger('create', newModel);
-
-                                StrikeFinder.display_success(_.sprintf('Successfully tagged %d items.', count));
+                                        // Done.
+                                        callback(true);
+                                    }
+                                    else {
+                                        // Not done.
+                                        callback(false);
+                                    }
+                                },
+                                error: function () {
+                                    // Error.
+                                    StrikeFinder.display_error('Error while checking task status.');
+                                    // Done.
+                                    callback(true);
+                                }
+                            });
+                        },
+                        function (completed) {
+                            if (!completed) {
+                                var task_message = _.sprintf('The task for mass tag: %s is still running and ' +
+                                    'its results can be viewed on the <a href="/sf/tasks">Task List</a>.',
+                                    view.model.as_string());
+                                StrikeFinder.display_info(task_message);
                             }
-                        })
-                    }
+                        }
+                    );
                 }
                 finally {
+                    view.$("#mass-tag-form").modal("hide");
                     StrikeFinder.unblock(form);
                 }
             },
@@ -725,8 +740,6 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
                 });
                 return; // **EXIT**
             }
-
-            view.$("#suppression-form").modal("hide");
         }
         finally {
             StrikeFinder.unblock(form);
@@ -740,14 +753,12 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
                         view.model.as_string());
                     StrikeFinder.display_success(submit_message);
 
-                    var completed = StrikeFinder.wait_for(
+                    StrikeFinder.wait_for(
                         function (callback) {
                             // Check task result.
                             var task = new StrikeFinder.Task({id: response.task_id});
                             task.fetch({
                                 success: function (model, response, options) {
-                                    console.dir(response);
-
                                     if (response.state == 'SUCCESS') {
                                         // The task was completed successfully.
                                         var success_message = 'Successfully suppressed %s hit(s) with suppression: %s';
@@ -784,6 +795,7 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
                     );
                 }
                 finally {
+                    view.$("#suppression-form").modal("hide");
                     StrikeFinder.unblock(form);
                 }
             },
@@ -1223,7 +1235,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 el: '#dialog-div'
             });
             view.listenTo(view.mass_tag_form, 'create', function (model) {
-                view.trigger('create:masstag', view.row, model);
+                view.trigger('create:masstag    ', view.row, model);
             });
 
             // Context menu.
@@ -1317,7 +1329,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
 
                                 // Try and wait for the task result.
                                 StrikeFinder.wait_for(
-                                    function(callback) {
+                                    function (callback) {
                                         // Check task result.
                                         var task = new StrikeFinder.Task({id: response.task_id});
                                         task.fetch({
@@ -1349,7 +1361,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                                             }
                                         });
                                     },
-                                    function(complete) {
+                                    function (complete) {
                                         if (!complete) {
                                             // The task did not complete and is running in the background.
                                             var task_message = _.sprintf('The task for suppression: %s is still running and ' +
