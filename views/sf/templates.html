@@ -176,7 +176,11 @@
             <select id="itemkey" required="true" style="width: 400px">
                 <option></option>
                 <% _.each( terms, function( item, index ) { %>
-                <option id="<%= item.text %>"><%= item.title %></option>
+                    <% if (itemkey == item.text) { %>
+                    <option id="<%= item.text %>" selected><%= item.title %></option>
+                    <% } else { %>
+                    <option id="<%= item.text %>"><%= item.title %></option>
+                    <% } %>
                 <% }) %>
             </select>
 
@@ -295,7 +299,7 @@
         <tr>
             <td style="width: 80%">
                 <span class="uac-header">
-                    <a href="/sf/host/<%= hash %>/"><%= cluster.engagement.client.name %>: <%= domain %> / <%= hostname %></a>
+                    <%= cluster.engagement.client.name %>: <%= domain %> / <a href="/sf/host/<%= hash %>/"><%= hostname %></a>
                 </span>
             </td>
             <td>

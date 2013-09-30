@@ -13,61 +13,63 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
         if (confirm(message)) {
             view.model.destroy({
                 success: function (model, response, options) {
-                    try {
-                        // The task was submitted successfully to delete the suppression.
-                        var response_object = JSON.parse(response);
-                        var task_id = response_object.task_id;
+                    // The task was submitted successfully to delete the suppression.
+                    var response_object = JSON.parse(response);
+                    var task_id = response_object.task_id;
 
-                        // Block the UI while deleting.
-                        StrikeFinder.block();
+                    // Block the UI while deleting.
+                    StrikeFinder.block();
 
-                        StrikeFinder.display_success('Submitted task for delete: ' + view.model.as_string());
+                    StrikeFinder.display_success('Submitted task for delete: ' + view.model.as_string());
 
-                        // Try and wait for the task to complete.
-                        StrikeFinder.wait_for(
-                            function (callback) {
-                                // Check task result.
-                                var task = new StrikeFinder.Task({id: task_id});
-                                task.fetch({
-                                    success: function (model, response, options) {
-                                        if (response.state == 'SUCCESS') {
-                                            // The task was completed successfully.
-                                            StrikeFinder.display_success('Successfully deleted suppression: ' +
-                                                view.model.as_string());
+                    // Try and wait for the task to complete.
+                    StrikeFinder.wait_for(
+                        function (callback) {
+                            // Check task result.
+                            var task = new StrikeFinder.Task({id: task_id});
+                            task.fetch({
+                                success: function (model, response, options) {
+                                    if (response.state == 'SUCCESS') {
+                                        // The task was completed successfully.
+                                        StrikeFinder.display_success('Successfully deleted suppression: ' +
+                                            view.model.as_string());
 
-                                            // Notify that the suppression was deleted.
-                                            view.trigger('delete', view.model);
+                                        // Notify that the suppression was deleted.
+                                        view.trigger('delete', view.model);
 
-                                            // Done.
-                                            callback(true);
-                                        }
-                                        else {
-                                            // Not done.
-                                            callback(false);
-                                        }
-                                    },
-                                    error: function () {
-                                        // Error.
-                                        StrikeFinder.display_error('Error while checking task status.');
+                                        // Unblock the UI.
+                                        StrikeFinder.unblock();
+
                                         // Done.
                                         callback(true);
                                     }
-                                });
-                            },
-                            function (completed) {
-                                if (!completed) {
-                                    // The task is still running.
-                                    var task_message = _.sprintf('The task deleting suppression: %s is still running and ' +
-                                        'its results can be viewed on the <a href="/sf/tasks">Task List</a>.',
-                                        view.model.as_string());
-                                    StrikeFinder.display_info(task_message);
+                                    else {
+                                        // Not done.
+                                        callback(false);
+                                    }
+                                },
+                                error: function () {
+                                    // Error.
+                                    StrikeFinder.display_error('Error while checking task status.');
+                                    // Unblock the UI.
+                                    StrikeFinder.unblock();
+                                    // Done.
+                                    callback(true);
                                 }
+                            });
+                        },
+                        function (completed) {
+                            if (!completed) {
+                                // The task is still running.
+                                var task_message = _.sprintf('The task deleting suppression: %s is still running and ' +
+                                    'its results can be viewed on the <a href="/sf/tasks">Task List</a>.',
+                                    view.model.as_string());
+                                StrikeFinder.display_info(task_message);
+                                // Unblock the UI.
+                                StrikeFinder.unblock();
                             }
-                        );
-                    }
-                    finally {
-                        StrikeFinder.unblock();
-                    }
+                        }
+                    );
                 }
             });
         }

@@ -464,9 +464,9 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
             // Error, exp_key is required.
             throw new Error('"exp_key" is undefined.');
         }
-        else if (!params.item_value) {
-            // Error, item_value is required.
-            throw new Error('"item_value" is undefined.');
+        else if (!params.itemvalue) {
+            // Error, itemvalue is required.
+            throw new Error('"itemvalue" is undefined.');
         }
         else if (!params.rowitem_type) {
             // Error, rowitem_type is required.
@@ -483,12 +483,16 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
 
         // Create a new mass tag model.
         view.model = new StrikeFinder.MassTagModel({
-            itemvalue: params.item_value,
+            itemvalue: params.itemvalue,
             rowitem_type: params.rowitem_type,
             exp_key: params.exp_key,
             cluster_uuid: params.cluster_uuid,
             am_cert_hash: params.am_cert_hash
         });
+
+        if (params.itemkey) {
+            view.model.set('itemkey', params.itemkey);
+        }
 
         // Deep copy the model values.
         var data = this.model.toJSON();
@@ -569,57 +573,63 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
         StrikeFinder.block_element(form, 'Processing...');
         view.model.save({}, {
             success: function (model, response, options) {
-                try {
-                    var task_id = response.task_id;
+                var task_id = response.task_id;
 
-                    // Submitted the task successfully.
-                    StrikeFinder.display_success('Submitted task for mass tag: ' + view.model.as_string());
+                // Submitted the task successfully.
+                StrikeFinder.display_success('Submitted task for mass tag: ' + view.model.as_string());
 
-                    StrikeFinder.wait_for(
-                        function (callback) {
-                            // Check task result.
-                            var task = new StrikeFinder.Task({id: task_id});
-                            task.fetch({
-                                success: function (model, response, options) {
-                                    if (response.state == 'SUCCESS') {
-                                        // The task was completed successfully.
-                                        var success_message = 'Successfully tagged %s hit(s) with for: %s';
-                                        StrikeFinder.display_success(_.sprintf(success_message,
-                                            response.result.summary, view.model.as_string()));
+                StrikeFinder.wait_for(
+                    function (callback) {
+                        // Check task result.
+                        var task = new StrikeFinder.Task({id: task_id});
+                        task.fetch({
+                            success: function (model, response, options) {
+                                if (response.state == 'SUCCESS') {
+                                    // The task was completed successfully.
+                                    var success_message = 'Successfully tagged %s hit(s) with for: %s';
+                                    StrikeFinder.display_success(_.sprintf(success_message,
+                                        response.result.summary, view.model.as_string()));
 
-                                        // Notify that the mass tag was created.
-                                        view.trigger('create', view.model);
+                                    // Notify that the mass tag was created.
+                                    view.trigger('create', view.model);
 
-                                        // Done.
-                                        callback(true);
-                                    }
-                                    else {
-                                        // Not done.
-                                        callback(false);
-                                    }
-                                },
-                                error: function () {
-                                    // Error.
-                                    StrikeFinder.display_error('Error while checking task status.');
+                                    // Hide the form.
+                                    view.$("#mass-tag-form").modal("hide");
+                                    StrikeFinder.unblock(form);
+
                                     // Done.
                                     callback(true);
                                 }
-                            });
-                        },
-                        function (completed) {
-                            if (!completed) {
-                                var task_message = _.sprintf('The task for mass tag: %s is still running and ' +
-                                    'its results can be viewed on the <a href="/sf/tasks">Task List</a>.',
-                                    view.model.as_string());
-                                StrikeFinder.display_info(task_message);
+                                else {
+                                    // Not done.
+                                    callback(false);
+                                }
+                            },
+                            error: function () {
+                                // Error.
+                                StrikeFinder.display_error('Error while checking task status.');
+
+                                // Unblock the UI.
+                                StrikeFinder.unblock(form);
+
+                                // Done.
+                                callback(true);
                             }
+                        });
+                    },
+                    function (completed) {
+                        if (!completed) {
+                            var task_message = _.sprintf('The task for mass tag: %s is still running and ' +
+                                'its results can be viewed on the <a href="/sf/tasks">Task List</a>.',
+                                view.model.as_string());
+                            StrikeFinder.display_info(task_message);
+
+                            // Hide the form.
+                            view.$("#mass-tag-form").modal("hide");
+                            StrikeFinder.unblock(form);
                         }
-                    );
-                }
-                finally {
-                    view.$("#mass-tag-form").modal("hide");
-                    StrikeFinder.unblock(form);
-                }
+                    }
+                );
             },
             error: function () {
                 StrikeFinder.unblock(form);
@@ -645,7 +655,7 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
     render: function (params) {
         var view = this;
 
-        var item_value = params.item_value;
+        var itemvalue = params.itemvalue;
         var rowitem_type = params.rowitem_type;
         var exp_key = params.exp_key;
         var cluster_uuid = params.cluster_uuid;
@@ -659,9 +669,9 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
             // Error, exp_key is required.
             throw new Error('"exp_key" is undefined.');
         }
-        else if (!params.item_value) {
-            // Error, item_value is required.
-            throw new Error('"item_value" is undefined.');
+        else if (!params.itemvalue) {
+            // Error, itemvalue is required.
+            throw new Error('"itemvalue" is undefined.');
         }
         else if (!params.rowitem_type) {
             // Error, item_type is required.
@@ -676,7 +686,7 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
 
         // Create a new suppression model and associated it with the form.
         view.model = new StrikeFinder.SuppressionModel({
-            itemvalue: item_value,
+            itemvalue: itemvalue,
             rowitem_type: rowitem_type,
             exp_key: exp_key,
             cluster_uuid: cluster_uuid
@@ -750,56 +760,59 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
         StrikeFinder.block_element(form, 'Processing...');
         view.model.save({}, {
             success: function (model, response, options) {
-                try {
-                    var submit_message = _.sprintf('Submitted task for suppression: %s',
-                        view.model.as_string());
-                    StrikeFinder.display_success(submit_message);
+                var submit_message = _.sprintf('Submitted task for suppression: %s',
+                    view.model.as_string());
+                StrikeFinder.display_success(submit_message);
 
-                    StrikeFinder.wait_for(
-                        function (callback) {
-                            // Check task result.
-                            var task = new StrikeFinder.Task({id: response.task_id});
-                            task.fetch({
-                                success: function (model, response, options) {
-                                    if (response.state == 'SUCCESS') {
-                                        // The task was completed successfully.
-                                        var success_message = 'Successfully suppressed %s hit(s) with suppression: %s';
-                                        StrikeFinder.display_success(_.sprintf(success_message,
-                                            response.result.summary, view.model.as_string()));
+                StrikeFinder.wait_for(
+                    function (callback) {
+                        // Check task result.
+                        var task = new StrikeFinder.Task({id: response.task_id});
+                        task.fetch({
+                            success: function (model, response, options) {
+                                if (response.state == 'SUCCESS') {
+                                    // The task was completed successfully.
+                                    var success_message = 'Successfully suppressed %s hit(s) with suppression: %s';
+                                    StrikeFinder.display_success(_.sprintf(success_message,
+                                        response.result.summary, view.model.as_string()));
 
-                                        // Notify that a suppression was created.
-                                        view.trigger('create', view.model);
+                                    // Notify that a suppression was created.
+                                    view.trigger('create', view.model);
 
-                                        // Done.
-                                        callback(true);
-                                    }
-                                    else {
-                                        // Not done.
-                                        callback(false);
-                                    }
-                                },
-                                error: function () {
-                                    // Error.
-                                    StrikeFinder.display_error('Error while checking task status.');
+                                    // Hide the form.
+                                    view.$("#suppression-form").modal("hide");
+                                    StrikeFinder.unblock(form);
+
                                     // Done.
                                     callback(true);
                                 }
-                            });
-                        },
-                        function (completed) {
-                            if (!completed) {
-                                var task_message = _.sprintf('The task for suppression: %s is still running and ' +
-                                    'its results can be viewed on the <a href="/sf/tasks">Task List</a>.',
-                                    view.model.as_string());
-                                StrikeFinder.display_info(task_message);
+                                else {
+                                    // Not done.
+                                    callback(false);
+                                }
+                            },
+                            error: function () {
+                                // Error.
+                                StrikeFinder.display_error('Error while checking task status.');
+                                StrikeFinder.unblock(form);
+                                // Done.
+                                callback(true);
                             }
+                        });
+                    },
+                    function (completed) {
+                        if (!completed) {
+                            var task_message = _.sprintf('The task for suppression: %s is still running and ' +
+                                'its results can be viewed on the <a href="/sf/tasks">Task List</a>.',
+                                view.model.as_string());
+                            StrikeFinder.display_info(task_message);
+
+                            // Hide the form.
+                            view.$("#suppression-form").modal("hide");
+                            StrikeFinder.unblock(form);
                         }
-                    );
-                }
-                finally {
-                    view.$("#suppression-form").modal("hide");
-                    StrikeFinder.unblock(form);
-                }
+                    }
+                );
             },
             error: function () {
                 try {
@@ -1253,7 +1266,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                     selection, data.rowitem_type, ioc_term));
 
                 var options = {
-                    item_value: selection,
+                    itemvalue: selection,
                     rowitem_type: view.row.rowitem_type,
                     exp_key: view.exp_key,
                     cluster_uuid: view.row.cluster_uuid
@@ -1289,7 +1302,8 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
             view.listenTo(view.context_menu, 'tag', function (selection, ioc_term) {
                 var agent_host_data = view.agenthost_view.attributes();
                 view.mass_tag_form.render({
-                    item_value: selection,
+                    itemvalue: selection,
+                    itemkey: ioc_term,
                     exp_key: view.exp_key,
                     am_cert_hash: view.row.am_cert_hash,
                     cluster_uuid: view.row.cluster_uuid,
@@ -1323,60 +1337,62 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
 
                     suppression_model.save({}, {
                         success: function (model, response, options) {
-                            try {
-                                // The task has been submitted for the suppression.
-                                var submit_message = _.sprintf('Submitted task for suppression: %s',
-                                    suppression_model.as_string());
-                                StrikeFinder.display_success(submit_message);
+                            // The task has been submitted for the suppression.
+                            var submit_message = _.sprintf('Submitted task for suppression: %s',
+                                suppression_model.as_string());
+                            StrikeFinder.display_success(submit_message);
 
-                                // Try and wait for the task result.
-                                StrikeFinder.wait_for(
-                                    function (callback) {
-                                        // Check task result.
-                                        var task = new StrikeFinder.Task({id: response.task_id});
-                                        task.fetch({
-                                            success: function (model, response, options) {
-                                                // Examine the current task result.
+                            // Try and wait for the task result.
+                            StrikeFinder.wait_for(
+                                function (callback) {
+                                    // Check task result.
+                                    var task = new StrikeFinder.Task({id: response.task_id});
+                                    task.fetch({
+                                        success: function (model, response, options) {
+                                            // Examine the current task result.
 
-                                                if (response.state == 'SUCCESS') {
-                                                    // The task was completed successfully.
-                                                    var msg = _.sprintf('Successfully suppressed %s hits for %s',
-                                                        response.result.summary, suppression_model.as_string());
-                                                    StrikeFinder.display_success(msg);
+                                            if (response.state == 'SUCCESS') {
+                                                // The task was completed successfully.
+                                                var msg = _.sprintf('Successfully suppressed %s hits for %s',
+                                                    response.result.summary, suppression_model.as_string());
+                                                StrikeFinder.display_success(msg);
 
-                                                    // Notify that a suppression was created.
-                                                    view.trigger('create:suppression', view.row, suppression_model);
+                                                // Notify that a suppression was created.
+                                                view.trigger('create:suppression', view.row, suppression_model);
 
-                                                    // Done.
-                                                    callback(true);
-                                                }
-                                                else {
-                                                    // The task has not completed yet.
-                                                    callback(false);
-                                                }
-                                            },
-                                            error: function () {
-                                                // Error.
-                                                StrikeFinder.display_error('Error while checking task status.');
+                                                // Unblock the UI.
+                                                StrikeFinder.unblock();
+
                                                 // Done.
                                                 callback(true);
                                             }
-                                        });
-                                    },
-                                    function (complete) {
-                                        if (!complete) {
-                                            // The task did not complete and is running in the background.
-                                            var task_message = _.sprintf('The task for suppression: %s is still running and ' +
-                                                'its results can be viewed on the <a href="/sf/tasks">Task List</a>.',
-                                                suppression_model.as_string());
-                                            StrikeFinder.display_info(task_message);
+                                            else {
+                                                // The task has not completed yet.
+                                                callback(false);
+                                            }
+                                        },
+                                        error: function () {
+                                            // Error.
+                                            StrikeFinder.display_error('Error while checking task status.');
+                                            // Unblock the UI.
+                                            StrikeFinder.unblock();
+                                            // Done.
+                                            callback(true);
                                         }
+                                    });
+                                },
+                                function (complete) {
+                                    if (!complete) {
+                                        // The task did not complete and is running in the background.
+                                        var task_message = _.sprintf('The task for suppression: %s is still running and ' +
+                                            'its results can be viewed on the <a href="/sf/tasks">Task List</a>.',
+                                            suppression_model.as_string());
+                                        StrikeFinder.display_info(task_message);
+                                        // Unblock the UI.
+                                        StrikeFinder.unblock();
                                     }
-                                );
-                            }
-                            finally {
-                                StrikeFinder.unblock();
-                            }
+                                }
+                            );
                         },
                         error: function () {
                             try {

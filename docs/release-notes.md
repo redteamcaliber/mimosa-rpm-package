@@ -20,12 +20,16 @@ Mandiant-uac-ws-0.2-8 - October 1st, 2013
   [#24137](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/24137)
 - Resolved issue with the streams section of the File/Item audit template.
   [#24376](https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#bug/24376)
+- Modfied Customer/cluster/host link of the hits views to make copy and pasting easier.
+  [#24463](https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/24463)
+- Populating the IOC term value whenever possible on the mass tag form.
 
 ### Asynchronous tasks for suppression creation, suppression deletion, and mass tagging.
 
 - The StrikeFinder API was modified to process long running tasks in the background.  If tasks run for more than
   approximately 10 seconds they will be processed in the background.  The results can be checked on the task list.  A
   new task list icon has been added to the main menu.
+  [#24275](https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userStory/24275)
 
 
 Mandiant-uac-ws-0.2-6 - September 20th, 2013

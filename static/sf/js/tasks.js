@@ -12,7 +12,7 @@ StrikeFinder.TaskTableView = StrikeFinder.TableView.extend({
 
         view.options.aoColumns = [
             {sTitle: 'id', mData: 'id', bVisible: false, bSortable: true},
-            {sTitle: "Description", mData: 'description', bVisible: true, bSortable: true},
+            {sTitle: "Description", mData: 'description', bVisible: true, bSortable: true, sWidth: '70%'},
             {sTitle: "Started", mData: 'started', bVisible: true, bSortable: true, sDefaultContent: ''},
             {sTitle: "Completed", mData: 'result.completed', bVisible: true, bSortable: true, sDefaultContent: ''},
             {sTitle: "State", mData: 'state', bVisible: true, bSortable: true}
