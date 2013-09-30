@@ -570,13 +570,15 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
         view.model.save({}, {
             success: function (model, response, options) {
                 try {
+                    var task_id = response.task_id;
+
                     // Submitted the task successfully.
                     StrikeFinder.display_success('Submitted task for mass tag: ' + view.model.as_string());
 
                     StrikeFinder.wait_for(
                         function (callback) {
                             // Check task result.
-                            var task = new StrikeFinder.Task({id: response.task_id});
+                            var task = new StrikeFinder.Task({id: task_id});
                             task.fetch({
                                 success: function (model, response, options) {
                                     if (response.state == 'SUCCESS') {
