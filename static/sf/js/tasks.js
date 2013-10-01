@@ -61,7 +61,7 @@ StrikeFinder.TaskTableView = StrikeFinder.TableView.extend({
             }
         ];
 
-        view.options.sDom = 'Rltip';
+        view.options.sDom = 'ltip';
         view.options.iDisplayLength = 100;
 
         if (view.collection) {
@@ -71,20 +71,6 @@ StrikeFinder.TaskTableView = StrikeFinder.TableView.extend({
                 view.tasks_collapsable.set('title', title);
             });
         }
-
-//        view.listenTo(view, 'click', function(row, ev) {
-//            var position = view.get_position(ev.currentTarget);
-//
-//            var title;
-//            if (position !== undefined) {
-//                title = _.sprintf('<i class="icon-list"></i> Hits (%s of %s)', position + 1, view.get_total_rows());
-//            }
-//            else {
-//                title = _.sprintf('<i class="icon-list"></i> Hits (%s)', view.get_total_rows());
-//            }
-//            // Update the title with the count of the rows.
-//            view.hits_collapsable.set('title', title);
-//        });
     }
 });
 

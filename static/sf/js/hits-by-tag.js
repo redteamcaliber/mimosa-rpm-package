@@ -29,7 +29,7 @@ StrikeFinder.HitsByTagTableView = StrikeFinder.TableView.extend({
 
         view.options.aaSorting = [];
 
-        view.options['sDom'] = "Rlftip";
+        view.options.sDom = 'Rlf<"sf-table-wrapper"t>ip';
 
         if (!this.collection) {
             view.collection = new StrikeFinder.HitsCollection();

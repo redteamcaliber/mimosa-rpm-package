@@ -47,8 +47,8 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
         if (options.title) {
             view.title = options['title'];
         }
-        else if (view.el.title) {
-            view.title = view.el.title;
+        else {
+            view.title = '&nbsp;';
         }
 
         this.title_class = options['title_class'];

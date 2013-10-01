@@ -14,9 +14,8 @@ Mandiant-uac-ws-0.2-8 - October 1st, 2013
 
 ### Hits
 
-- The IOC selection and hits tables now support infinite scrolling.  The hits tables currently load the first 200
-  records and will load 200 more upon scrolling to the end of the table until the records run out.  Using the previous
-  next control on the hits view will also trigger the table to load another 200 records.
+- The previous/next table controls now allow paging through the table results.  Clicking next at the end of the list
+  will trigger the table to jump to the next page of data.
   [#24137](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/24137)
 - Resolved issue with the streams section of the File/Item audit template.
   [#24376](https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#bug/24376)

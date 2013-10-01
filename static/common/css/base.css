@@ -7,25 +7,6 @@
     overflow: auto;
 }
 
-/*.dataTables_wrapper {*/
-    /*overflow: scroll;*/
-/*}*/
-
-/*.dataTables_scrollBody {*/
-    /*overflow-x: visible !important;*/
-    /*width: auto;*/
-/*}*/
-
-/*.dataTables_scrollHead {*/
-    /*overflow: visible !important;*/
-/*}*/
-
-/*.dataTables_scrollHeadInner {*/
-
-/*}*/
-
-/* Bootstrap Settings */
-
 html, body {
     height: 100%;
 }
