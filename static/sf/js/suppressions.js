@@ -145,14 +145,10 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                 }
             ];
 
-            view.options['aaSorting'] = [];
+            view.options.aaSorting = [];
         }
         else {
-            this.options['iDisplayLength'] = 10;
-
-            view.options['sDom'] = 'Rlftip';
-
-            view.options['aoColumns'] = [
+            view.options.aoColumns = [
                 {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false, bSortable: true},
                 {sTitle: "Name", mData: 'comment', sClass: 'nowrap', bSortable: true},
                 {sTitle: "IOC", mData: 'iocname', bSortable: true},
@@ -164,7 +160,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                 {sTitle: "Created", mData: 'created', bSortable: true}
             ];
 
-            view.options['aoColumnDefs'] = [
+            view.options.aoColumnDefs = [
                 {
                     // Add an option to the display name to delete the row.
                     mRender: function (data, type, row) {
@@ -201,9 +197,12 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                 }
             ];
 
-            view.options['aaSorting'] = [
+            view.options.aaSorting = [
                 [ 0, "asc" ]
             ];
+
+            view.options.iDisplayLength = 10;
+            view.options.sDom = 'Rlftip';
         }
 
         // Keep track of the row views.

@@ -2,9 +2,27 @@
  * DataTables Style Fixes
  */
 
-.dataTables_wrapper {
-    overflow: auto
+.sf-table-wrapper {
+    width: 100%;
+    overflow: auto;
 }
+
+/*.dataTables_wrapper {*/
+    /*overflow: scroll;*/
+/*}*/
+
+/*.dataTables_scrollBody {*/
+    /*overflow-x: visible !important;*/
+    /*width: auto;*/
+/*}*/
+
+/*.dataTables_scrollHead {*/
+    /*overflow: visible !important;*/
+/*}*/
+
+/*.dataTables_scrollHeadInner {*/
+
+/*}*/
 
 /* Bootstrap Settings */
 

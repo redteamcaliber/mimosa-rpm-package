@@ -43,13 +43,14 @@ StrikeFinder.IOCSummaryTableView = StrikeFinder.TableView.extend({
         options.aaSorting = [
             [ 0, "asc" ]
         ];
+
         options.sDom = 'ftiS';
 
-        options.iDisplayLength = 200;
-        options.bScrollInfinite = true;
-        options.bScrollCollapse = true;
-        options.sScrollY = '600px';
-        options.iScrollLoadGap = 200;
+        view.options.iDisplayLength = 200;
+        view.options.bScrollInfinite = true;
+        view.options.bScrollCollapse = true;
+        view.options.sScrollY = '600px';
+        view.options.iScrollLoadGap = 200;
     }
 });
 
@@ -120,12 +121,12 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
                 oLanguage: {
                     sLoadingRecords: "<i class='icon-refresh icon-spin icon-large'></i> Loading..."
                 },
-                sDom: 'tiS',
-                iDisplayLength: 200,
-                bScrollInfinite: true,
-                bScrollCollapse: true,
-                sScrollY: '600px',
-                iScrollLoadGap: 200
+                sDom: 't',
+                iDisplayLength: -1
+                //bScrollInfinite: true,
+                //bScrollCollapse: true,
+                //sScrollY: '600px',
+                //iScrollLoadGap: 200
             });
             table.on("click", function (data) {
                 var exp_key = data['exp_key'];

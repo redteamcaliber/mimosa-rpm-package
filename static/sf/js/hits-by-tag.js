@@ -18,7 +18,7 @@ StrikeFinder.HitsByTagTableView = StrikeFinder.TableView.extend({
             {sTitle: "Owner", mData: "username", sWidth: '10%'}
         ];
 
-        view.options['aoColumnDefs'] = [
+        view.options.aoColumnDefs = [
             {
                 mRender: function (data, type, row) {
                     return StrikeFinder.format_date_string(data);
@@ -27,7 +27,7 @@ StrikeFinder.HitsByTagTableView = StrikeFinder.TableView.extend({
             }
         ];
 
-        view.options['aaSorting'] = [];
+        view.options.aaSorting = [];
 
         view.options['sDom'] = "Rlftip";
 
@@ -77,6 +77,7 @@ StrikeFinder.HitsByTagView = StrikeFinder.View.extend({
         log.debug('Rendering hits for tagname: ' + view.tagname);
         view.run_once('init_hits', function() {
 
+            // TODO: Change this to a regular collapsable view so that the title can be updated.
             // Initialize the collapsables.
             StrikeFinder.collapse(view.$el);
 
@@ -85,6 +86,7 @@ StrikeFinder.HitsByTagView = StrikeFinder.View.extend({
             });
             view.listenTo(view.hits_table_view, 'load', function () {
                 view.hits_table_view.select_row(0);
+                //view.hits_table_view.get_table().fnAdjustColumnSizing();
             });
 
             // Create the hits details view.

@@ -26,14 +26,13 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
             {sTitle: "Summary", mData: "summary1", sWidth: "45%", bSortable: false},
             {sTitle: "Summary2", mData: "summary2", sWidth: "45%", bSortable: false}
         ];
-        view.options.sDom = 'RltipS';
 
         view.listenTo(view, 'load', function () {
             // Select the first row.
             view.select_row(0);
         });
         view.listenTo(view, 'click', function (row, ev) {
-            var position = view.get_position(ev.currentTarget);
+            var position = view.get_absolute_index(ev.currentTarget);
 
             var title;
             if (position !== undefined) {
@@ -46,11 +45,8 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
             view.hits_collapsable.set('title', title);
         });
 
-        view.options.iDisplayLength = 200;
-        view.options.bScrollInfinite = true;
-        view.options.bScrollCollapse = true;
-        view.options.sScrollY = '400px';
-        view.options.iScrollLoadGap = 200;
+        view.options.sDom = 'Rl<"sf-table-wrapper"t>ip';
+        view.options.iDisplayLength = 100;
     }
 });
 

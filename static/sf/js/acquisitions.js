@@ -23,7 +23,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
             {sTitle: "Updated", mData: "update_datetime", bSortable: true},
             {sTitle: "User", mData: "user", bSortable: true},
             {sTitle: "Method", mData: "method", bSortable: true},
-            {sTitle: "State", mData: "state", bSortable: true},
+            {sTitle: "State", mData: "state", bSortable: true, sWidth: '75px'},
             {sTitle: "Error Message", mData: "error_message", bVisible: false, bSortable: false},
             {sTitle: "Link", mData: "acquired_file", bVisible: false, bSortable: false}
         ];
@@ -84,6 +84,8 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
                 aTargets: [9]
             }
         ];
+
+        view.options.iDisplayLength = 100;
 
         view.options['sDom'] = 'Rltip';
 

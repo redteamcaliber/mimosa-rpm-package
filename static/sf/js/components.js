@@ -225,7 +225,7 @@ StrikeFinder.get_datatables_settings = function (parent, settings) {
         iDisplayLength: 10,
         aLengthMenu: [10, 25, 50, 100, 200],
         sDom: "t",
-        bAutoWidth: false,
+        bAutoWidth: true,
         sPaginationType: "bootstrap",
         bSortClasses: false,
         bProcessing: false,
@@ -287,10 +287,9 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         $(nRow).addClass('info').siblings().removeClass('info');
     },
     select_row: function (index) {
-        var view = this;
-        var length = view.length();
+        var length = this.length();
 
-        if (view.length() <= 0) {
+        if (this.length() <= 0) {
             return undefined;
         }
         else if (index + 1 > length) {
@@ -300,22 +299,10 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             var pos = this.get_selected_position();
             if (pos != index) {
                 // Only select if we are not already on the row.
-                var node = view.get_nodes(index);
+                var node = this.get_nodes(index);
                 if (node) {
                     $(node).click();
                 }
-
-                try {
-                    var container = $(view.get_dom_table()).parent();
-                    if (container) {
-                        container.scrollTo($(node));
-                    }
-                }
-                catch (e) {
-                    // Error, ignore.
-                    log.warn(e);
-                }
-
                 return node;
             }
             else {
@@ -371,10 +358,10 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         }
     },
     is_prev_page: function () {
-        return this.options.paging == true && this.get_current_page() != 1;
+        return this.get_current_page() != 1;
     },
     is_next_page: function () {
-        return this.options.paging == true && this.get_current_page() < this.get_total_pages();
+        return this.get_current_page() < this.get_total_pages();
     },
     prev_page: function () {
         if (this.is_prev_page()) {
@@ -424,6 +411,9 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
     },
     get_position: function (node) {
         return this.$el.fnGetPosition(node);
+    },
+    get_absolute_index: function (node) {
+        return (this.get_current_page() - 1) * this.get_settings()._iDisplayLength + this.get_position(node);
     },
     get_settings: function () {
         return this.$el.fnSettings();

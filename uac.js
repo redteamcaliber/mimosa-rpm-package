@@ -78,9 +78,12 @@ app.use(function (req, res, next) {
 
 // Add a general error handler.
 app.use(function errorHandler(err, req, res, next) {
-    log.error(_.sprintf('Error handler caught exception (code: %s) while rendering %s url: %s', res.statusCode,
-        req.method, req.originalUrl));
-    err.stack ? log.error(err.stack) : log.error(err);
+    var message = 'Global error handler caught exception while rendering %s url: %s (status: %s, uid: %s) \n%s';
+    var uid = req.attributes && req.attributes.uid ? uid : 'Unknown';
+    var stack = err.stack ? err.stack : err;
+
+    // Log the error message and stack trace.
+    log.error(_.sprintf(message, req.method, req.originalUrl, res.statusCode, uid, stack));
 
     if (req.xhr) {
         // Send a 500 response to AJAX clients.

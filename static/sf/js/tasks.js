@@ -61,14 +61,8 @@ StrikeFinder.TaskTableView = StrikeFinder.TableView.extend({
             }
         ];
 
-        view.options.sDom = 'ftiS';
+        view.options.sDom = 'Rltip';
         view.options.iDisplayLength = 100;
-
-        // Make the table support infinite scrolling.
-        view.options.bScrollInfinite = true;
-        view.options.bScrollCollapse = true;
-        view.options.sScrollY = '700px';
-        view.options.iScrollLoadGap = 100;
 
         if (view.collection) {
             view.listenTo(view.collection, 'reset', view.render);

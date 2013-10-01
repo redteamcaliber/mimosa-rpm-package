@@ -1,31 +1,46 @@
 UAC ToDo
 ========
 
-### Pre populate the IOC term value on the mass tag form.
+### Hit Identity:
+    - Need a hit identity option picker on the audit view.
+    - Need a rollup option
+    - Selecting a hit identity drives the IOC and comments views.
+    - Need to move the tag option to the top of the audit area.
+        - Update the audit templates to remove the headers.
+        - The tag value can change based on a hit identity selection.
 
-### Implement task results for:
-    X - Creating suppressions
-    - Mass tagging.
-    - Deleting suppressions.
+### IOC Selection, Name hash, ioc_uuid selection.
 
-### Use infinite scrolling and display N of N Hits in the title bar of the hits table.
+### Need to select the IOC tab related to the expression that was selected on the shopping page.
+
+### Rollup
+    - Prompt for a tag.
+
+# Look into slickgrid - https://github.com/mleibman/SlickGrid and http://dojofoundation.org/packages/dgrid/#demos
+    - Roll your own:
+        -What do you need?
+            - cell renderers
+            - paging
+            - callbacks
+            - sorting
+            - searching
+            - ajax support
+
+### Make suppressions linkable from the hits view.
+
+### Display N of N Hits in the title bar of the hits table.
     -Suppressions table.
     -Suppressions hits table.
     -Hits by tag hits table.
     -Acquisitions table.
+
+### Add hostname link to the acqusitions table.
 
 ### Add username to the error log output.
 
 ### Look into adding a tagname filter/facet to the hits table.
 
 ### Look into implementing a client side table keyword search on the server side paged tables.
-
-### Remove the IOC name from the hits page.
-
-### When displaying a hit after checkout then logout there is an error when clicking on the hits link.
-    - Disable the hits link when there is not a usertoken.
-
-### Pre-select the IOC term on the mass tag dialog whenever possible.
 
 ### #23777 - Allow Suppression Creation on All Hits Views
 
@@ -46,8 +61,6 @@ UAC ToDo
 ### Add a link from the acquisition list to the host view.
 
 ### Add copy to the context menu.
-
-### Make suppressions linkable from the hits view.
 
 ### Add counts to the rollups, especially the hits rollup.
     - Comments, hits by tag, suppressions, suppress hits.
