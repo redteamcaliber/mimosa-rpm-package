@@ -1,6 +1,23 @@
 Unified Analyst Console (UAC) Release Notes
 ===========================================
 
+
+Mandiant-uac-ws-0.2-9 - October 4th, 2013
+-----------------------------------------
+
+### Hit Identity
+
+-
+
+
+Mandiant-uac-ws-0.2-9 - October 4th, 2013
+-----------------------------------------
+
+### Fixes
+
+- Corrected issues with the tables on the suppressions view.
+
+
 Mandiant-uac-ws-0.2-8 - October 1st, 2013
 -----------------------------------------
 

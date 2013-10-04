@@ -1154,36 +1154,42 @@ StrikeFinder.IdentitiesView = StrikeFinder.View.extend({
         // Debug
         log.debug('Found ' + identical_hits.length + ' identical hits for row: ' + uuid);
 
-        _.each(identical_hits, function(hit, index) {
-            var title = StrikeFinder.format_date_string(hit.created);
-            menu.append(_.sprintf('<li><a name="%s" title="%s">%s</a></li>',
-                hit.uuid, title, title));
-        });
+        if (identical_hits.length == 1) {
+            view.$el.addClass('disabled');
+            view.$el.children().addClass('disabled');
 
-        view.$('.selected').html('Current: ' + StrikeFinder.format_date_string(view.model.get('created')));
+            var hit = identical_hits[0];
+            view.$('.selected').html(view.get_title(hit.created, hit.tagtitle, true, false));
+        }
+        else {
+            _.each(identical_hits, function(hit, index) {
+                if (uuid == hit.uuid) {
+                    // This is the item being displayed, don't put it in the list.  Update the title instead.
+                    view.$('.selected').html(view.get_title(hit.created, null, index == 0, true));
+                }
+                else {
+                    // Item is not the one being render, add to the list of selections.
+                    menu.append(_.sprintf('<li><a name="%s">%s</a></li>',
+                        hit.uuid, view.get_title(hit.created, hit.tagtitle, index == 0, false)));
+                }
+            });
+        }
 
         return view;
     },
+    get_title: function(created, tag, is_current, is_list) {
+        var target_string = is_current ? ' &#42;' : '';
+        var caret_string = is_list ? ' <b class="caret"></b>' : '';
+        var tag_string = tag ? ' - ' + tag : '';
+        return _.sprintf('%s %s %s %s', StrikeFinder.format_date_string(created), tag_string, target_string, caret_string);
+    },
     on_click: function (ev) {
         var view = this;
-        var tagname = $(ev.currentTarget).attr('name');
-        var uuid = view.model.get('uuid');
+        var selected_uuid = $(ev.currentTarget).attr('name');
 
-        log.debug(_.sprintf('Setting tag: %s on rowitem_uuid: %s', tagname, uuid));
+        log.debug('Selected identity: ' + selected_uuid);
 
-        var tag_model = new StrikeFinder.SetTagModel({
-            rowitem_uuid: uuid,
-            tagname: tagname
-        });
-        tag_model.save({}, {
-            async: false,
-            success: function () {
-                log.debug(_.sprintf('Applied tag: %s to rowitem_uuid: %s', tagname, uuid));
-
-                StrikeFinder.display_success('Successfully applied tag: ' + tagname);
-                view.trigger('create', uuid, tagname);
-            }
-        });
+        view.trigger('click', selected_uuid);
     }
 });
 
@@ -1281,6 +1287,9 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
             view.identities_view = new StrikeFinder.IdentitiesView({
                 el: '#identities',
                 model: view.audit
+            });
+            view.listenTo(view.identities_view, 'click', function(uuid_identity) {
+                view.fetch(uuid_identity);
             });
 
             // Suppression form.
@@ -1470,23 +1479,32 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
 
         view.fetch();
     },
-    fetch: function () {
+    fetch: function (uuid_identity) {
         var view = this;
 
         // Update the child views with the current row's parameters.
 
-        // Update the host data.
-        view.agenthost_view.fetch(view.row.am_cert_hash);
+        var uuid;
+        if (uuid_identity) {
+            uuid = uuid_identity;
+        }
+        else {
+            uuid = view.row.uuid;
+
+            // Update the host data unless we are just changing to another identity.  Assumes that other identities
+            // are always for the same host.
+            view.agenthost_view.fetch(view.row.am_cert_hash);
+        }
 
         // Fetch the related audit and update the audit view, tags view, and identity data.
-        view.audit.set('id', view.row.uuid, {silent:true});
+        view.audit.set('id', uuid, {silent:true});
         view.audit.fetch();
 
         // Update the IOC.
-        view.ioc_tabs_view.fetch(view.row.uuid);
+        view.ioc_tabs_view.fetch(uuid);
 
         // Update the comments.
-        view.comments_view.fetch(view.row.uuid);
+        view.comments_view.fetch(uuid);
 
         $('.sf-details-view').fadeIn().show();
     }
