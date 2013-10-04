@@ -51,39 +51,6 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
 });
 
 /**
- * Hits table for a suppression.
- */
-StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
-    initialize: function () {
-        var view = this;
-
-        view.hits_collapsable = new StrikeFinder.CollapsableContentView({
-            el: view.el,
-            title: '<i class="icon-level-down"></i> Suppressed Hits',
-            title_class: 'uac-header'
-        });
-
-        view.options['sAjaxSource'] = '/sf/api/hits';
-        view.options.sAjaxDataProp = 'results';
-        view.options['bServerSide'] = true;
-
-        view.options['aoColumns'] = [
-            {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
-            {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
-            {sTitle: "rowitem_type", mData: "rowitem_type", bVisible: false, bSortable: false},
-            {sTitle: "Tag", mData: "tagname", bVisible: false, bSortable: false},
-            {sTitle: "Summary", mData: "summary1", bSortable: false},
-            {sTitle: "Summary2", mData: "summary2", bSortable: false}
-        ];
-
-        view.options['sDom'] = 'Rltip';
-        view.listenTo(view, 'load', function () {
-            view.select_row(0)
-        });
-    }
-});
-
-/**
  * Agent host view.
  */
 StrikeFinder.AgentHostView = StrikeFinder.View.extend({

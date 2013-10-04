@@ -150,7 +150,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
         else {
             view.options.aoColumns = [
                 {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false, bSortable: true},
-                {sTitle: "Name", mData: 'comment', sClass: 'nowrap', bSortable: true},
+                {sTitle: "Name", mData: 'comment', bSortable: true},
                 {sTitle: "IOC", mData: 'iocname', bSortable: true},
                 {sTitle: "IOC UUID", mData: 'ioc_uuid', bSortable: true},
                 {sTitle: "Hits", mData: 'suppressed', bSortable: true},
@@ -202,7 +202,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
             ];
 
             view.options.iDisplayLength = 10;
-            view.options.sDom = 'Rlftip';
+            view.options.sDom = 'Rl<"sf-table-wrapper"t>ip';
         }
 
         // Keep track of the row views.
@@ -237,6 +237,41 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
         this.collection.fetch();
     }
 });
+
+/**
+ * Hits table for a suppression.
+ */
+StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
+    initialize: function () {
+        var view = this;
+
+        view.hits_collapsable = new StrikeFinder.CollapsableContentView({
+            el: view.el,
+            title: '<i class="icon-level-down"></i> Suppressed Hits',
+            title_class: 'uac-header'
+        });
+
+        view.options['sAjaxSource'] = '/sf/api/hits';
+        view.options.sAjaxDataProp = 'results';
+        view.options['bServerSide'] = true;
+
+        view.options['aoColumns'] = [
+            {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
+            {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
+            {sTitle: "rowitem_type", mData: "rowitem_type", bVisible: false, bSortable: false},
+            {sTitle: "Tag", mData: "tagname", bVisible: false, bSortable: false},
+            {sTitle: "Summary", mData: "summary1", bSortable: false},
+            {sTitle: "Summary2", mData: "summary2", bSortable: false}
+        ];
+
+        view.options.sDom = 'Rl<"sf-table-wrapper"t>ip';
+
+        view.listenTo(view, 'load', function () {
+            view.select_row(0)
+        });
+    }
+});
+
 
 StrikeFinder.SuppressionsAppView = StrikeFinder.View.extend({
     initialize: function () {
