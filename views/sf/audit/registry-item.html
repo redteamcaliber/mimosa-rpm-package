@@ -1,7 +1,5 @@
 {% set i = content.registryitem %}
 
-    <h4>Registry Item Info</h4>
-
     {% set text_items = get_list(i.text) %}
     {% set text_length = text_items.length %}
 
@@ -74,10 +72,10 @@
     {% set registrytext = i.text %}
 {% endif %}
         <textarea title="Click to Highlight" style="width:95%; height:70px;" onclick="this.select();">
-Registry Path:   {{ i.keypath }}
-Registry Key:    {{ i.valuename }}
-Registry Text:   {{ registrytext }}
-Last Modified:   {{ i.modified }}
+Registry Path: {{ i.keypath }}
+Registry Key:  {{ i.valuename }}
+Registry Text: {{ registrytext }}
+Last Modified: {{ i.modified }}
         </textarea>
     </div>
 

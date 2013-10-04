@@ -51,39 +51,6 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
 });
 
 /**
- * Hits table for a suppression.
- */
-StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
-    initialize: function () {
-        var view = this;
-
-        view.hits_collapsable = new StrikeFinder.CollapsableContentView({
-            el: view.el,
-            title: '<i class="icon-level-down"></i> Suppressed Hits',
-            title_class: 'uac-header'
-        });
-
-        view.options['sAjaxSource'] = '/sf/api/hits';
-        view.options.sAjaxDataProp = 'results';
-        view.options['bServerSide'] = true;
-
-        view.options['aoColumns'] = [
-            {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
-            {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
-            {sTitle: "rowitem_type", mData: "rowitem_type", bVisible: false, bSortable: false},
-            {sTitle: "Tag", mData: "tagname", bVisible: false, bSortable: false},
-            {sTitle: "Summary", mData: "summary1", bSortable: false},
-            {sTitle: "Summary2", mData: "summary2", bSortable: false}
-        ];
-
-        view.options['sDom'] = 'Rltip';
-        view.listenTo(view, 'load', function () {
-            view.select_row(0)
-        });
-    }
-});
-
-/**
  * Agent host view.
  */
 StrikeFinder.AgentHostView = StrikeFinder.View.extend({
@@ -1095,62 +1062,128 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
  * View for rendering a selectable list of tags values.
  */
 StrikeFinder.TagView = StrikeFinder.View.extend({
-    initialize: function (options) {
-        if (options.rowitem_uuid) {
-            this.rowitem_uuid = options.rowitem_uuid;
+    initialize: function(options) {
+        // Initialize the list of possible tag values.
+        this.tags = new StrikeFinder.TagCollection(StrikeFinder.tags);
+
+        if (this.model) {
+            // Re-draw the tags view whenever the model is reloaded.
+            this.listenTo(this.model, 'sync', this.render);
         }
-        if (!this.collection) {
-            this.collection = new StrikeFinder.TagCollection();
-        }
-        this.listenTo(this.collection, 'reset', this.render);
     },
     events: {
-        'click li > a': 'on_click'
+        'click .dropdown-menu > li > a': 'on_click'
     },
     render: function () {
-        var data = {
-            title: 'Tag',
-            icon: 'icon-tag',
-            get_description: function (item) {
-                if ($(item).is('[description]')) {
-                    return item['description'];
-                }
-                else {
-                    return '';
-                }
-            },
-            options: this.collection.toJSON()
-        };
-        var html = _.template($("#drop-down-template").html(), data);
-        this.$el.html(html);
+        var view = this;
 
-        return this;
+        // Get the drop down menu.
+        var menu = view.$('.dropdown-menu');
+        // Remove any child elements.
+        menu.empty();
+
+        var tagname = view.model.get('tagname');
+
+        var selected_value = undefined;
+
+        view.tags.each(function(item) {
+            var item_name = item.get('name');
+            var item_title = item.get('title');
+
+            if (tagname && tagname == item_name) {
+                // Save off the value to display.
+                selected_value = item_title;
+            }
+            else {
+                menu.append(_.sprintf('<li><a name="%s" title="%s">%s</a></li>',
+                    item_name, item_name, item_title));
+            }
+        });
+
+        if (selected_value) {
+            view.$('.selected').html(selected_value);
+        }
+
+        return view;
     },
     on_click: function (ev) {
         var view = this;
         var tagname = $(ev.currentTarget).attr('name');
+        var uuid = view.model.get('uuid');
 
-        log.debug(_.sprintf('Setting tag: %s on rowitem_uuid: %s', tagname, view.rowitem_uuid));
+        log.debug(_.sprintf('Setting tag: %s on rowitem_uuid: %s', tagname, uuid));
 
         var tag_model = new StrikeFinder.SetTagModel({
-            rowitem_uuid: view.rowitem_uuid,
+            rowitem_uuid: uuid,
             tagname: tagname
         });
         tag_model.save({}, {
             async: false,
             success: function () {
-                log.debug(_.sprintf('Applied tag: %s to rowitem_uuid: %s', tagname, view.rowitem_uuid));
+                log.debug(_.sprintf('Applied tag: %s to rowitem_uuid: %s', tagname, uuid));
 
                 StrikeFinder.display_success('Successfully applied tag: ' + tagname);
-                view.trigger('create', view.rowitem_uuid, tagname);
+                view.trigger('create', uuid, tagname);
             }
         });
-    },
-    fetch: function (rowitem_uuid) {
-        if (rowitem_uuid) {
-            // Don't actually re-fetch the tags but update the row id.
-            this.rowitem_uuid = rowitem_uuid;
+    }
+});
+
+StrikeFinder.IdentitiesView = StrikeFinder.View.extend({
+    initialize: function(options) {
+        if (this.model) {
+            // Re-draw the view whenever the model is reloaded.
+            this.listenTo(this.model, 'sync', this.render);
         }
+    },
+    events: {
+        'click .dropdown-menu > li > a': 'on_click'
+    },
+    render: function () {
+        var view = this;
+
+        // Get the drop down menu.
+        var menu = view.$('.dropdown-menu');
+        // Remove any child elements.
+        menu.empty();
+
+        var uuid = view.model.get('uuid');
+        var identical_hits = view.model.get('identical_hits');
+        var selected = undefined;
+
+        // Debug
+        log.debug('Found ' + identical_hits.length + ' identical hits for row: ' + uuid);
+
+        _.each(identical_hits, function(hit, index) {
+            var title = StrikeFinder.format_date_string(hit.created);
+            menu.append(_.sprintf('<li><a name="%s" title="%s">%s</a></li>',
+                hit.uuid, title, title));
+        });
+
+        view.$('.selected').html('Current: ' + StrikeFinder.format_date_string(view.model.get('created')));
+
+        return view;
+    },
+    on_click: function (ev) {
+        var view = this;
+        var tagname = $(ev.currentTarget).attr('name');
+        var uuid = view.model.get('uuid');
+
+        log.debug(_.sprintf('Setting tag: %s on rowitem_uuid: %s', tagname, uuid));
+
+        var tag_model = new StrikeFinder.SetTagModel({
+            rowitem_uuid: uuid,
+            tagname: tagname
+        });
+        tag_model.save({}, {
+            async: false,
+            success: function () {
+                log.debug(_.sprintf('Applied tag: %s to rowitem_uuid: %s', tagname, uuid));
+
+                StrikeFinder.display_success('Successfully applied tag: ' + tagname);
+                view.trigger('create', uuid, tagname);
+            }
+        });
     }
 });
 
@@ -1219,9 +1252,35 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 el: '#iocs-div'
             });
 
-            // File info view.
+            // Audit view.
+            view.audit = new StrikeFinder.AuditModel();
             view.audit_view = new StrikeFinder.AuditView({
-                el: $("#audit-div")
+                el: $("#audit-div"),
+                model: view.audit
+            });
+
+            // Update the audit type on the view.
+            view.listenTo(view.audit, 'sync', function() {
+                $('#audit-type').html(view.audit.get('rowitem_type'));
+            });
+
+            // Initialize the tag view from the audit data.
+            if (!'tag' in view.options || view.options.tag !== false) {
+                // Display the tags view unless explicitly disabled.
+                view.tags_view = new StrikeFinder.TagView({
+                    el: '#tags',
+                    model: view.audit
+                });
+                view.listenTo(view.tags_view, 'create', function (rowitem_uuid, tagname) {
+                    // Trigger an event when a new tag has been created.
+                    view.trigger('create:tag', view.row, tagname);
+                });
+            }
+
+            // Initialize the identities view.
+            view.identities_view = new StrikeFinder.IdentitiesView({
+                el: '#identities',
+                model: view.audit
             });
 
             // Suppression form.
@@ -1407,20 +1466,6 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
             view.comments_view = new StrikeFinder.CommentsView({
                 el: '#comments-div'
             });
-
-            if (!'tag' in view.options || view.options.tag !== false) {
-                // Display the tags view unless explicitly disabled.
-                view.tags = new StrikeFinder.TagCollection();
-                view.tags_view = new StrikeFinder.TagView({
-                    el: '#tags-div',
-                    collection: view.tags
-                });
-                view.tags.reset(StrikeFinder.tags);
-                view.listenTo(view.tags_view, 'create', function (rowitem_uuid, tagname) {
-                    // Trigger an event when a new tag has been created.
-                    view.trigger('create:tag', view.row, tagname);
-                });
-            }
         });
 
         view.fetch();
@@ -1429,14 +1474,19 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
         var view = this;
 
         // Update the child views with the current row's parameters.
+
+        // Update the host data.
         view.agenthost_view.fetch(view.row.am_cert_hash);
+
+        // Fetch the related audit and update the audit view, tags view, and identity data.
+        view.audit.set('id', view.row.uuid, {silent:true});
+        view.audit.fetch();
+
+        // Update the IOC.
         view.ioc_tabs_view.fetch(view.row.uuid);
-        view.audit_view.fetch(view.row.uuid);
+
+        // Update the comments.
         view.comments_view.fetch(view.row.uuid);
-        if (view.tags_view) {
-            // There are cases where the tags_view is not create/enabled.
-            view.tags_view.fetch(view.row.uuid);
-        }
 
         $('.sf-details-view').fadeIn().show();
     }

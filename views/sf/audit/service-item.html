@@ -1,7 +1,5 @@
 {% set si = content.serviceitem %}
 
-<h4>Service Info</h4>
-
 <table class="table table-condensed">
     <tr>
         <th class="sf-audit-heading">Name</th>
@@ -171,9 +169,9 @@
 
 <div id="portal-formatted-data-div" class="collapsable collapsed" collapsable-title="Portal Formatted Data">
     <textarea title="Click to Highlight" style="width:95%; height:100px;" onclick="this.select();">
-Service Name:    {{ si.name }}
-Service DLL:     {{ si.servicedll }}
-Process ID:      {{ si.pid }}
-Status:          {{ si.status }}
+Service Name: {{ si.name }}
+Service DLL:  {{ si.servicedll }}
+Process ID:   {{ si.pid }}
+Status:       {{ si.status }}
     </textarea>
 </div>

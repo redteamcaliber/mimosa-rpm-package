@@ -1,31 +1,6 @@
 UAC ToDo
 ========
 
-### Hit Identity:
-    - Need a hit identity option picker on the audit view.
-    - Need a rollup option
-    - Selecting a hit identity drives the IOC and comments views.
-    - Need to move the tag option to the top of the audit area.
-        - Update the audit templates to remove the headers.
-        - The tag value can change based on a hit identity selection.
-
-### IOC Selection, Name hash, ioc_uuid selection.
-
-### Need to select the IOC tab related to the expression that was selected on the shopping page.
-
-### Rollup
-    - Prompt for a tag.
-
-# Look into slickgrid - https://github.com/mleibman/SlickGrid and http://dojofoundation.org/packages/dgrid/#demos
-    - Roll your own:
-        -What do you need?
-            - cell renderers
-            - paging
-            - callbacks
-            - sorting
-            - searching
-            - ajax support
-
 ### Make suppressions linkable from the hits view.
 
 ### Display N of N Hits in the title bar of the hits table.
@@ -36,7 +11,15 @@ UAC ToDo
 
 ### Add hostname link to the acqusitions table.
 
-### Add username to the error log output.
+# Look into slickgrid - https://github.com/mleibman/SlickGrid and http://dojofoundation.org/packages/dgrid/#demos
+    - Roll your own:
+        -What do you need?
+            - cell renderers
+            - paging
+            - callbacks
+            - sorting
+            - searching
+            - ajax support
 
 ### Look into adding a tagname filter/facet to the hits table.
 

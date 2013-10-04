@@ -23,24 +23,51 @@
                     <td style="width: 100%">
                         <!-- Agent Host View -->
                         <div id="agent-host-div" style="width: 100%; margin-left: 10px">
-                            <div style="width: 100%; height: 400px"></div>
                         </div>
-                    </td>
-                    <td style="vertical-align: top">
-                        <!-- Tags View -->
-                        <div id="tags-div" class="pull-right"></div>
                     </td>
                 </tr>
             </table>
         </div>
 
-        <!-- Audit View Template -->
-        <div class='row-fluid sf-details-view' style="overflow: auto">
-            <div id="audit-div">
-                <div style="width: 100%; height: 400px"></div>
+        <!-- Toolbar -->
+        <div class="row-fluid sf-details-view" style="display: none">
+            <div class="pull-left">
+                <h4>
+                    <span id="audit-type"></span>
+                </h4>
+            </div>
+
+            <div class="pull-right">
+                <ul class="nav nav-pills pull-right" style="vertical-align: middle; margin-bottom: 0px">
+                    <li id="tags" class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-tags"></i> Tag: <span class="selected"></span> <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- Tag values. -->
+                        </ul>
+                    </li>
+
+                    <li id="identities" class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="icon-calendar"></i> Identity: <span class="selected"></span> <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <!-- Identity values. -->
+                        </ul>
+
+                    </li>
+                    <li>
+                        <a><i class="icon-collapse-top"></i> Rollup</a>
+                    </li>
+                </ul>
             </div>
         </div>
 
+        <!-- Audit View Template -->
+        <div class='row-fluid sf-details-view' style="overflow: auto">
+            <div id="audit-div">
+                <div style="width: 100%; height: 300px;"></div>
+            </div>
+        </div>
     </div>
 
     <div class='span6'>
@@ -57,7 +84,7 @@
         <!-- IOCs View Template -->
         <div class='row-fluid sf-details-view'>
             <div id='iocs-div'>
-                <div style="width: 100%; height: 400px"></div>
+                <div style="width: 100%; height: 200px"></div>
             </div>
         </div>
 

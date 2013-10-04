@@ -86,7 +86,6 @@ StrikeFinder.HitsByTagView = StrikeFinder.View.extend({
             });
             view.listenTo(view.hits_table_view, 'load', function () {
                 view.hits_table_view.select_row(0);
-                //view.hits_table_view.get_table().fnAdjustColumnSizing();
             });
 
             // Create the hits details view.

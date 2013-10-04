@@ -225,7 +225,7 @@ StrikeFinder.get_datatables_settings = function (parent, settings) {
         iDisplayLength: 10,
         aLengthMenu: [10, 25, 50, 100, 200],
         sDom: "t",
-        bAutoWidth: true,
+        bAutoWidth: false,
         sPaginationType: "bootstrap",
         bSortClasses: false,
         bProcessing: false,

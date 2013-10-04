@@ -1,7 +1,5 @@
 {% set processitem = content.processitem %}
 
-<h4>Process Info</h4>
-
 <table class="table table-condensed table-bordered">
     <tr>
         <th class="sf-audit-heading">PID</th>
@@ -141,9 +139,9 @@
               rows="10"
               style="width: 95%;"
               onclick="this.select();">
-Process Name: {{ processitem.name }}
-Process ID: {{ processitem.pid }}
+Process Name:  {{ processitem.name }}
+Process ID:    {{ processitem.pid }}
 Process Start: {{ processitem.starttime }}
-Process Path: {{ processitem.path }}
+Process Path:  {{ processitem.path }}
     </textarea>
 </div>

@@ -1,6 +1,5 @@
 {% set fileitem = content.fileitem %}
 
-<h4>File Item Info</h4>
 <table class="table table-condensed">
     <tr>
         <th class="sf-audit-heading">Full Path</th>
@@ -426,14 +425,14 @@
               rows="10"
               style="width: 95%;"
               onclick="this.select();">
-        File Name: {{ fileitem.filename }}
-        MD5 Hash: {{ fileitem.md5sum }}
-        File Created: {{ fileitem.created }}
-        Last Accessed: {{ fileitem.accessed }}
-        Last Modified: {{ fileitem.modified }}
-        Entry Modified:{{ fileitem.changed }}
-        File Size: {{ fileitem.sizeinbytes }}
-        File Path: {% if fileitem.drive %}{{ fileitem.drive }}:\{{ fileitem.filepath }}{% endif %}
-        File Owner: {{ fileitem.username }}
+File Name:      {{ fileitem.filename }}
+MD5 Hash:       {{ fileitem.md5sum }}
+File Created:   {{ fileitem.created }}
+Last Accessed:  {{ fileitem.accessed }}
+Last Modified:  {{ fileitem.modified }}
+Entry Modified: {{ fileitem.changed }}
+File Size:      {{ fileitem.sizeinbytes }}
+File Path:      {% if fileitem.drive %}{{ fileitem.drive }}:\{{ fileitem.filepath }}{% endif %}
+File Owner:     {{ fileitem.username }}
     </textarea>
 </div>
