@@ -23,8 +23,8 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
             {sTitle: "rowitem_type", mData: "rowitem_type", bVisible: false, bSortable: false},
             {sTitle: "Tag", mData: "tagname", sWidth: "10%", bSortable: false},
-            {sTitle: "Summary", mData: "summary1", sWidth: "45%", bSortable: false},
-            {sTitle: "Summary2", mData: "summary2", sWidth: "45%", bSortable: false}
+            {sTitle: "Summary", mData: "summary1", sWidth: "45%", bSortable: false, sClass: 'wrap'},
+            {sTitle: "Summary2", mData: "summary2", sWidth: "45%", bSortable: false, sClass: 'wrap'}
         ];
 
         view.listenTo(view, 'load', function () {
@@ -1107,6 +1107,8 @@ StrikeFinder.TagView = StrikeFinder.View.extend({
         return view;
     },
     on_click: function (ev) {
+        StrikeFinder.block();
+
         var view = this;
         var tagname = $(ev.currentTarget).attr('name');
         var uuid = view.model.get('uuid');
@@ -1120,10 +1122,18 @@ StrikeFinder.TagView = StrikeFinder.View.extend({
         tag_model.save({}, {
             async: false,
             success: function () {
-                log.debug(_.sprintf('Applied tag: %s to rowitem_uuid: %s', tagname, uuid));
-
-                StrikeFinder.display_success('Successfully applied tag: ' + tagname);
-                view.trigger('create', uuid, tagname);
+                try {
+                    view.trigger('create', uuid, tagname);
+                    log.debug(_.sprintf('Applied tag: %s to rowitem_uuid: %s', tagname, uuid));
+                    StrikeFinder.display_success('Successfully applied tag: ' + tagname);
+                }
+                finally {
+                    StrikeFinder.unblock();
+                }
+            },
+            error: function() {
+                StrikeFinder.unblock();
+                StrikeFinder.display_error('Error while applying tag.');
             }
         });
     }
@@ -1155,13 +1165,14 @@ StrikeFinder.IdentitiesView = StrikeFinder.View.extend({
         log.debug('Found ' + identical_hits.length + ' identical hits for row: ' + uuid);
 
         if (identical_hits.length == 1) {
-            view.$el.addClass('disabled');
-            view.$el.children().addClass('disabled');
+            view.$el.find('button').prop('disabled', true);
 
             var hit = identical_hits[0];
-            view.$('.selected').html(view.get_title(hit.created, hit.tagtitle, true, false));
+            view.$('.selected').html(view.get_title(hit.created, null, true, false));
         }
         else {
+            view.$el.find('button').prop('disabled', false);
+
             _.each(identical_hits, function(hit, index) {
                 if (uuid == hit.uuid) {
                     // This is the item being displayed, don't put it in the list.  Update the title instead.
@@ -1177,19 +1188,94 @@ StrikeFinder.IdentitiesView = StrikeFinder.View.extend({
 
         return view;
     },
-    get_title: function(created, tag, is_current, is_list) {
+    /**
+     * Create a common title string for the menu items.
+     * @param created - the row created date.
+     * @param tag - the tagname value.
+     * @param is_current - if the item is the latest.
+     * @param is_caret - whether to include a caret in the output.
+     * @returns {string} - the title string.
+     */
+    get_title: function(created, tag, is_current, is_caret) {
         var target_string = is_current ? ' &#42;' : '';
-        var caret_string = is_list ? ' <b class="caret"></b>' : '';
+        var caret_string = is_caret ? ' <span class="caret"></span>' : '';
         var tag_string = tag ? ' - ' + tag : '';
         return _.sprintf('%s %s %s %s', StrikeFinder.format_date_string(created), tag_string, target_string, caret_string);
     },
     on_click: function (ev) {
         var view = this;
+        // Get the selected uuid.
         var selected_uuid = $(ev.currentTarget).attr('name');
-
+        // Debug
         log.debug('Selected identity: ' + selected_uuid);
-
+        // Trigger an event that the row uuid was selected.
         view.trigger('click', selected_uuid);
+    }
+});
+
+/**
+ * View for displaying the merge button and handling the related actions.
+ */
+StrikeFinder.MergeView = StrikeFinder.View.extend({
+    initialize: function(options) {
+        if (this.model) {
+            // Re-draw the view whenever the model is reloaded.
+            this.listenTo(this.model, 'sync', this.render);
+        }
+    },
+    events: {
+        'click': 'on_click'
+    },
+    render: function () {
+        var view = this;
+
+        var current_uuid = view.model.get('uuid');
+        var identical_hits = view.model.get('identical_hits');
+        var enabled = false;
+
+        // Enable the merge option when there are more than one identical hits and the currently selected identity
+        // is not the target of the merge operation.
+        if (identical_hits &&
+            identical_hits.length > 1 &&
+            current_uuid != identical_hits[0].uuid) {
+            enabled = true;
+        }
+
+        // Enable disable the merge component.
+        view.$el.prop('disabled', enabled);
+    },
+    /**
+     * Handle the click of the merge button.
+     * @param ev - the click event.
+     */
+    on_click: function(ev) {
+        var view = this;
+        StrikeFinder.block();
+
+        // Merge the current identity into the current.
+        var uuid = view.model.get('uuid');
+        var merge_model = new Backbone.Model();
+        merge_model.url = '/sf/api/hits/' + uuid + '/merge';
+        merge_model.save({}, {
+            success: function(model, response, options) {
+                try {
+                    log.debug('Merged ' + uuid + ' into ' + response.uuid);
+
+                    StrikeFinder.display_success('Successfully merged identities.');
+
+                    // Notify that a merge has taken place.
+                    view.trigger('merge', uuid, response.uuid);
+                }
+                finally {
+                    StrikeFinder.unblock();
+                }
+            },
+            error: function() {
+                // Error.
+                StrikeFinder.unblock();
+                StrikeFinder.display_error('Error while performing merge.');
+            }
+        });
     }
 });
 
@@ -1290,6 +1376,52 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
             });
             view.listenTo(view.identities_view, 'click', function(uuid_identity) {
                 view.fetch(uuid_identity);
+            });
+
+            // Merge button view.
+            view.merge_view = new StrikeFinder.MergeView({
+                el: '#merge',
+                model: view.audit
+            });
+            view.listenTo(view.merge_view, 'merge', function(source_uuid, dest_uuid) {
+                // A merge operation has taken place, reload the hits view.
+                if (view.row.uuid == dest_uuid) {
+                    // The currently selected row is the merge destination.  Reload the hits and re-select the same
+                    // row.
+                    view.hits_table_view.reload({
+                        name: 'uuid',
+                        value: dest_uuid
+                    });
+                }
+                else {
+                    // The currently selected row is not the destination and has been deleted as part of the merge
+                    // operation.
+
+                    log.debug('The item being merged is being deleted...');
+
+                    var next_data = view.hits_table_view.peek_next_data();
+                    if (next_data) {
+                        // Select the next row.
+                        view.hits_table_view.reload({
+                            name: 'uuid',
+                            value: next_data.uuid
+                        });
+                    }
+                    else {
+                        var prev_data = view.hits_table_view.peek_prev_data();
+                        if (prev_data) {
+                            // Select the previous row.
+                            view.hits_table_view.reload({
+                                name: 'uuid',
+                                value: prev_data.uuid
+                            })
+                        }
+                        else {
+                            // Try and select the first row if there is one.
+                            view.hits_table_view.select_row(0);
+                        }
+                    }
+                }
             });
 
             // Suppression form.

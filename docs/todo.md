@@ -1,6 +1,14 @@
 UAC ToDo
 ========
 
+### Should not be able to merge when the selected identity is the primary.
+
+### Modify the merge button to be a drop down of action values.
+
+### Display the portal formatted data in a fixed width font.
+
+### Escape the text fields in the audits.
+
 ### Make suppressions linkable from the hits view.
 
 ### Display N of N Hits in the title bar of the hits table.

@@ -7,7 +7,12 @@ Mandiant-uac-ws-0.2-9 - October 4th, 2013
 
 ### Hit Identity
 
--
+- Implemented the basic hit identity functions.
+   [#24602](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/24602)
+
+### General
+
+- Enabled better wrapping in tables and audits.
 
 
 Mandiant-uac-ws-0.2-9 - October 4th, 2013

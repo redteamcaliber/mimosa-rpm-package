@@ -12,8 +12,8 @@ StrikeFinder.HitsByTagTableView = StrikeFinder.TableView.extend({
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false},
             {sTitle: "Item Type", mData: "rowitem_type", sWidth: '10%'},
             {sTitle: "Tag", mData: "tagname", bVisible: false},
-            {sTitle: "Summary", mData: "summary1", sWidth: '20%'},
-            {sTitle: "Summary2", mData: "summary2", sWidth: '20%'},
+            {sTitle: "Summary", mData: "summary1", sWidth: '20%', sClass: 'wrap'},
+            {sTitle: "Summary2", mData: "summary2", sWidth: '20%', sClass: 'wrap'},
             {sTitle: "MD5sum", mData: "md5sum", sWidth: '10%'},
             {sTitle: "Owner", mData: "username", sWidth: '10%'}
         ];

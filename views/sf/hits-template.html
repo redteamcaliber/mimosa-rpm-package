@@ -38,28 +38,25 @@
             </div>
 
             <div class="pull-right">
-                <ul class="nav nav-pills pull-right" style="vertical-align: middle; margin-bottom: 0px">
-                    <li id="tags" class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="icon-tags"></i> Tag: <span class="selected"></span> <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <!-- Tag values. -->
-                        </ul>
-                    </li>
+                <div id="tags" class="btn-group">
+                    <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-tags"></i> Tag: <span class="selected"></span> <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <!-- Tag values. -->
+                    </ul>
+                </div>
 
-                    <li id="identities" class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown"><i class="icon-calendar"></i> Identity: <span
-                                class="selected"></span></a>
-                        <ul class="dropdown-menu">
-                            <!-- Identity values. -->
-                        </ul>
+                <div id="identities" class="btn-group">
+                    <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-calendar"></i> Identity: <span class="selected"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <!-- Identity values. -->
+                    </ul>
+                </div>
 
-                    </li>
-                    <li>
-                        <a><i class="icon-collapse-top"></i> Merge</a>
-                    </li>
-                </ul>
+                <button id="merge" class="btn btn-link"><i class="icon-collapse-top"></i> Merge</button>
             </div>
         </div>
 

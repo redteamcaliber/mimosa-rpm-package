@@ -3,61 +3,61 @@
 <table class="table table-condensed">
     <tr>
         <th class="sf-audit-heading">Full Path</th>
-        <td><span class="ioc-term" ioc-term="FileItem/FullPath">{{ fileitem.fullpath }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/FullPath">{{ fileitem.fullpath }}</span></td>
     </tr>
     <tr>
         <th>Device Path</th>
-        <td><span class="ioc-term" ioc-term="FileItem/DevicePath">{{ fileitem.devicepath }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/DevicePath">{{ fileitem.devicepath }}</span></td>
     </tr>
     <tr>
         <th>File Attributes</th>
-        <td><span class="ioc-term" ioc-term="FileItem/FileAttributes">{{ fileitem.fileattributes }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/FileAttributes">{{ fileitem.fileattributes }}</span></td>
     </tr>
     <tr>
         <th>Size</th>
-        <td><span class="ioc-term" ioc-term="FileItem/SizeInBytes">{{ fileitem.sizeinbytes }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/SizeInBytes">{{ fileitem.sizeinbytes }}</span></td>
     </tr>
     <tr>
         <th>MD5</th>
-        <td><span class="ioc-term" ioc-term="FileItem/Md5sum">{{ fileitem.md5sum }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/Md5sum">{{ fileitem.md5sum }}</span></td>
     </tr>
     <tr>
         <th>Owner</th>
-        <td><span class="ioc-term" ioc-term="FileItem/Username">{{ fileitem.username }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/Username">{{ fileitem.username }}</span></td>
     </tr>
     <tr>
         <th>Created</th>
-        <td><span class="ioc-term" ioc-term="FileItem/Created">{{ fileitem.created }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/Created">{{ fileitem.created }}</span></td>
     </tr>
     <tr>
         <th>Accessed</th>
-        <td><span class="ioc-term" ioc-term="FileItem/Accessed">{{ fileitem.accessed }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/Accessed">{{ fileitem.accessed }}</span></td>
     </tr>
     <tr>
         <th>Modified</th>
-        <td><span class="ioc-term" ioc-term="FileItem/Modified">{{ fileitem.modified }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/Modified">{{ fileitem.modified }}</span></td>
     </tr>
     <tr>
         <th>Changed</th>
-        <td><span class="ioc-term" ioc-term="FileItem/FilenameChanged">{{ fileitem.changed }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/FilenameChanged">{{ fileitem.changed }}</span></td>
     </tr>
     {% if fileitem.filenamecreated %}
     <tr>
         <th>Filename Created</th>
-        <td><span class="ioc-term" ioc-term="FileItem/FilenameCreated">{{ fileitem.filenamecreated }}</span>
+        <td ><span class="ioc-term" ioc-term="FileItem/FilenameCreated">{{ fileitem.filenamecreated }}</span>
         </td>
     </tr>
     <tr>
         <th>Filename Accessed</th>
-        <td><span class="ioc-term" ioc-term="FileItem/FilenameAccessed">{{ fileitem.filename.accessed }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/FilenameAccessed">{{ fileitem.filename.accessed }}</span></td>
     </tr>
     <tr>
         <th>Filename Modified</th>
-        <td><span class="ioc-term" ioc-term="FileItem/FilenameModified">{{ fileitem.filenamemodified }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/FilenameModified">{{ fileitem.filenamemodified }}</span></td>
     </tr>
     <tr>
         <th>Filename Changed</th>
-        <td><span class="ioc-term" ioc-term="FileItem/FilenameChanged">{{ fileitem.filenamechanged }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/FilenameChanged">{{ fileitem.filenamechanged }}</span></td>
     </tr>
     {% endif %}
 </table>
@@ -69,39 +69,39 @@
 <table class="table table-condensed">
     <tr>
         <th>PE Type</th>
-        <td><span class="ioc-term" ioc-term="FileItem/PEInfo/Type">{{ peinfo.type }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/PEInfo/Type">{{ peinfo.type }}</span></td>
     </tr>
     <tr>
         <th>Compile Time</th>
-        <td><span class="ioc-term" ioc-term="FileItem/PEInfo/PETimeStamp">{{ peinfo.petimestamp }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/PEInfo/PETimeStamp">{{ peinfo.petimestamp }}</span></td>
     </tr>
     <tr>
         <th>Subsystem</th>
-        <td><span class="ioc-term" ioc-term="FileItem/PEInfo/Subsystem">{{ peinfo.subsystem }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/PEInfo/Subsystem">{{ peinfo.subsystem }}</span></td>
     </tr>
     <tr>
         <th>Base Address</th>
-        <td><span class="ioc-term" ioc-term="FileItem/PEInfo/BaseAddress">{{ peinfo.baseaddress }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/PEInfo/BaseAddress">{{ peinfo.baseaddress }}</span></td>
     </tr>
     <tr>
         <th class="sf-audit-heading">Checksum Raw</th>
-        <td><span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEFileRaw">{{ fileitem.pechecksum.pefileraw }}&nbsp;</span>
+        <td ><span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEFileRaw">{{ fileitem.pechecksum.pefileraw }}&nbsp;</span>
         </td>
     </tr>
     <tr>
         <th>Checksum API</th>
-        <td><span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEFileAPI">{{ peinfo.pechecksum.pefileapi }}&nbsp;</span>
+        <td ><span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEFileAPI">{{ peinfo.pechecksum.pefileapi }}&nbsp;</span>
         </td>
     </tr>
     <tr>
         <th>Checksum Computed</th>
-        <td><span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEComputedAPI">{{ peinfo.pechecksum.pecomputedapi }}&nbsp;</span>
+        <td ><span class="ioc-term" ioc-term="FileItem/PEInfo/PEChecksum/PEComputedAPI">{{ peinfo.pechecksum.pecomputedapi }}&nbsp;</span>
         </td>
     </tr>
     {% if peinfo.digitalsignature.signatureexists %}
     <tr>
         <th>Signature Exists</th>
-        <td>
+        <td >
                         <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/SignatureExists">
                             {{ peinfo.digitalsignature.signatureexists }}
                         </span>
@@ -111,7 +111,7 @@
     {% if peinfo.digatalsignature.signatureverified %}
     <tr>
         <th>Signature Verified</th>
-        <td>
+        <td >
                     <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/SignatureVerified">
                         {{ peinfo.digatalsignature.signatureverified }}
                     </span>
@@ -121,57 +121,57 @@
     {% if peinfo.digatalsignature.description %}
     <tr>
         <th>Signature Description</th>
-        <td>
-                    <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/Description">
-                        {{ peinfo.digatalsignature.description }}
-                    </span>
+        <td >
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/Description">
+                {{ peinfo.digatalsignature.description }}
+            </span>
         </td>
     </tr>
     {% endif %}
     {% if peinfo.digitalsignature.certificateissuer %}
     <tr>
         <th>Certificate Issuer</th>
-        <td>
-                    <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/CertificateIssuer">
-                        {{ peinfo.digitalsignature.certificateissuer }}
-                    </span>
+        <td >
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/CertificateIssuer">
+                {{ peinfo.digitalsignature.certificateissuer }}
+            </span>
         </td>
     </tr>
     {% endif %}
     {% if peinfo.digitalsignature.certificatesubject %}
     <tr>
         <th>Certificate Subject</th>
-        <td>
-                    <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/CertificateSubject">
-                        {{ peinfo.digitalsignature.certificatesubject }}
-                    </span>
+        <td >
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/DigitalSignature/CertificateSubject">
+                {{ peinfo.digitalsignature.certificatesubject }}
+            </span>
         </td>
     </tr>
     {% endif %}
     {% if peinfo.detectedentrypointsignature.name or peinfo.detectedentrypointsignature.type %}
     <tr>
         <th>Entry Point Signature</th>
-        <td>
+        <td >
             Name:
-                    <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedEntryPointSignature/Name">
-                        {{ peinfo.detectedentrypointsignature.name }}
-                    </span>
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedEntryPointSignature/Name">
+                {{ peinfo.detectedentrypointsignature.name }}
+            </span>
             -
             Type:
-                    <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedEntryPointSignature/Type">
-                        {{ peinfo.detectedentrypointsignature.type }}
-                    </span>
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedEntryPointSignature/Type">
+                {{ peinfo.detectedentrypointsignature.type }}
+            </span>
         </td>
     </tr>
     {% endif %}
     {% if peinfo.detectedanomalies.string %}
     <tr>
         <th>Anomalies</th>
-        <td>
+        <td >
             {% for s in get_list(peinfo.detectedanomalies.string) %}
-                        <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedAnomalies/string">
-                            {{ s }}
-                        </span>&nbsp;
+                <span class="ioc-term" ioc-term="FileItem/PEInfo/DetectedAnomalies/string">
+                    {{ s }}
+                </span>&nbsp;
             {% endfor %}
         </td>
     </tr>
@@ -179,20 +179,20 @@
     {% if peinfo.peakentropy %}
     <tr>
         <th>Peak Entropy</th>
-        <td>
-                    <span class="ioc-term" ioc-term="FileItem/PeakEntropy">
-                        {{ peinfo.peakentropy }}
-                    </span>
+        <td >
+            <span class="ioc-term" ioc-term="FileItem/PeakEntropy">
+                {{ peinfo.peakentropy }}
+            </span>
         </td>
     </tr>
     {% endif %}
     {% if peinfo.peakcodentropy %}
     <tr>
         <th>Peak Code Entropy</th>
-        <td>
-                    <span class="ioc-term" ioc-term="FileItem/PEInfo/PeakCodeEntropy">
-                        {{ peinfo.peakcodentropy }}
-                    </span>
+        <td >
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/PeakCodeEntropy">
+                {{ peinfo.peakcodentropy }}
+            </span>
         </td>
     </tr>
     {% endif %}
@@ -209,29 +209,29 @@
     {% for section in peinfo.sections.section %}
     <tr>
         <td>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Name">
-                    {{ section.name }}&nbsp;
-                </span>
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Name">
+                {{ section.name }}&nbsp;
+            </span>
         </td>
         <td>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Type">
-                    {{ section.type }}&nbsp;
-                </span>
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Type">
+                {{ section.type }}&nbsp;
+            </span>
         </td>
         <td>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/SizeInBytes">
-                    {{ section.sizeinbytes }}&nbsp;
-                </span>
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/SizeInBytes">
+                {{ section.sizeinbytes }}&nbsp;
+            </span>
         </td>
         <td>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/DetectedCharacteristics">
-                    {{ section.detectedcharacteristics }}&nbsp;
-                </span>
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/DetectedCharacteristics">
+                {{ section.detectedcharacteristics }}&nbsp;
+            </span>
         </td>
         <td>
-                <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Entropy/@AverageValue">
-                    {{ section.entropy.$.AverageValue }}&nbsp;
-                </span>
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/Sections/Section/Entropy/@AverageValue">
+                {{ section.entropy.$.AverageValue }}&nbsp;
+            </span>
         </td>
     </tr>
     {% endfor %}
@@ -244,84 +244,85 @@
     <tr>
         <th>Language</th>
         <td>
-                        <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/Language">
-                            {{ versioninfoitem.language }}
-                        </span>
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/Language">
+                {{ versioninfoitem.language }}
+            </span>
         </td>
     </tr>
     <tr>
         <th>Product Name</th>
         <td>
-                        <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/ProductName">
-                            {{ versioninfoitem.productname }}
-                        </span>
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/ProductName">
+                {{ versioninfoitem.productname }}
+            </span>
         </td>
     </tr>
     <tr>
         <th>Product Version</th>
-        <td><span class="ioc-term"
+        <td>
+            <span class="ioc-term"
                   ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/ProductVersion">
-                        {{ versioninfoitem.productversion }}
-                    </span>
+                {{ versioninfoitem.productversion }}
+            </span>
         </td>
     </tr>
     <tr>
         <th>Comments</th>
         <td>
-                        <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/Comments">
-                            {{ versioninfoitem.comments }}
-                        </span>
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/Comments">
+                {{ versioninfoitem.comments }}
+            </span>
         </td>
     </tr>
     <tr>
         <th>Company Name</th>
         <td>
-                        <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/CompanyName">
-                            {{ versioninfoitem.companyname }}
-                        </span>
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/CompanyName">
+                {{ versioninfoitem.companyname }}
+            </span>
         </td>
     </tr>
     <tr>
         <th>File Description</th>
         <td>
-                        <span class="ioc-term"
-                              ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileDescription">
-                            {{ versioninfoitem.filedescription }}
-                        </span>
+            <span class="ioc-term"
+                  ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileDescription">
+                {{ versioninfoitem.filedescription }}
+            </span>
         </td>
     </tr>
     <tr>
         <th>File Version</th>
         <td>
-                        <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileVersion">
-                            {{ versioninfoitem.fileversion }}
-                        </span>
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/FileVersion">
+                {{ versioninfoitem.fileversion }}
+            </span>
         </td>
     </tr>
     <tr>
         <th>Internal Name</th>
         <td>
-                        <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/InternalName">
-                            {{ versioninfoitem.internalname }}
-                        </span>
+            <span class="ioc-term" ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/InternalName">
+                {{ versioninfoitem.internalname }}
+            </span>
         </td>
     </tr>
     <tr>
         <th>Legal Copyright</th>
         <td>
-                        <span class="ioc-term"
-                              ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/LegalCopyright">
-                            {{ versioninfoitem.legalcopyright }}
-                        </span>
+            <span class="ioc-term"
+                  ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/LegalCopyright">
+                {{ versioninfoitem.legalcopyright }}
+            </span>
         </td>
     </tr>
     <tr>
         <th>Original Filename</th>
         <td>
-                        <span class="ioc-term"
-                              ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/OriginalFilename">
-                            {{ versioninfoitem.originalfilename }}
-                        </span>
+            <span class="ioc-term"
+                  ioc-term="FileItem/PEInfo/VersionInfoList/VersionInfoItem/OriginalFilename">
+                {{ versioninfoitem.originalfilename }}
+            </span>
         </td>
     </tr>
 </table>
@@ -349,19 +350,19 @@
 <div id="imported-functions-div" class="collapsable collapsed" collapsable-title="Imported Functions">
     {% for module in get_list(peinfo.importedmodules.module) %}
     <h5>
-                    <span class="ioc-term" ioc-term="FileItem/PEInfo/ImportedModules/Name" style="font-weight: bold">
-                        {{ module.name }}
-                    </span>
+        <span class="ioc-term" ioc-term="FileItem/PEInfo/ImportedModules/Name" style="font-weight: bold">
+            {{ module.name }}
+        </span>
     </h5>
 
     <table class="table table-condensed">
         {% for s in get_list(module.importedfunctions.string) %}
         <tr>
             <td>
-                        <span class="ioc-term"
-                              ioc-term="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string">
-                            {{ s }}
-                        </span>
+                <span class="ioc-term"
+                      ioc-term="FileItem/PEInfo/ImportedModules/Module/ImportedFunctions/string">
+                    {{ s }}
+                </span>
             </td>
         </tr>
         {% endfor %}
@@ -379,9 +380,9 @@
     <ul>
         {% for s in get_list(fileitem.stringlist.string) %}
         <li>
-                    <span class="ioc-term" ioc-term="FileItem/StringList/string">
-                        {{ s }}
-                    </span>
+            <span class="ioc-term" ioc-term="FileItem/StringList/string">
+                {{ s }}
+            </span>
         </li>
         {% endfor %}
     </ul>
@@ -423,6 +424,7 @@
     <textarea title="Click to Highlight"
               cols="80"
               rows="10"
+              class="fixed-font"
               style="width: 95%;"
               onclick="this.select();">
 File Name:      {{ fileitem.filename }}

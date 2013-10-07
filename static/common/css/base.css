@@ -73,6 +73,14 @@ html, body {
     white-space: nowrap;
 }
 
+.wrap {
+    word-break: break-all;
+}
+
+.ioc-term {
+    word-break: break-all !important;
+}
+
 .uac-opaque {
     opacity: .3
 }
@@ -103,4 +111,8 @@ html, body {
 
 .mandiant-red {
     background-color: #98354a;
+}
+
+.fixed-font {
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
 }
