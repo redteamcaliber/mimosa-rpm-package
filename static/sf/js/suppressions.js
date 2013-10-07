@@ -265,13 +265,11 @@ StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
         ];
 
         view.options.sDom = 'Rl<"sf-table-wrapper"t>ip';
-
         view.listenTo(view, 'load', function () {
             view.select_row(0)
         });
     }
 });
-
 
 StrikeFinder.SuppressionsAppView = StrikeFinder.View.extend({
     initialize: function () {
