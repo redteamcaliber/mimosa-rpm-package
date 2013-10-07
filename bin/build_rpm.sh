@@ -2,11 +2,11 @@
 
 # Version settings.
 NAME="Mandiant-uac-ws"
-VERSION="0.2"
-RELEASE="9"
+VERSION="0.3"
+RELEASE="0"
 
 # The git branch to build.
-BRANCH=master
+BRANCH=hit_identity
 # The repo to build.
 REPO=git@github.mandiant.com:amilano/uac-node.git
 
