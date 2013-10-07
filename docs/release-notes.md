@@ -2,7 +2,7 @@ Unified Analyst Console (UAC) Release Notes
 ===========================================
 
 
-Mandiant-uac-ws-0.2-9 - October 4th, 2013
+Mandiant-uac-ws-0.3-0 - October 15th, 2013
 -----------------------------------------
 
 ### Hit Identity
