@@ -1231,18 +1231,18 @@ StrikeFinder.MergeView = StrikeFinder.View.extend({
 
         var current_uuid = view.model.get('uuid');
         var identical_hits = view.model.get('identical_hits');
-        var enabled = false;
+        var disabled = true;
 
         // Enable the merge option when there are more than one identical hits and the currently selected identity
         // is not the target of the merge operation.
         if (identical_hits &&
             identical_hits.length > 1 &&
             current_uuid != identical_hits[0].uuid) {
-            enabled = true;
+            disabled = false;
         }
 
         // Enable disable the merge component.
-        view.$el.prop('disabled', enabled);
+        view.$el.prop('disabled', disabled);
     },
     /**
      * Handle the click of the merge button.
