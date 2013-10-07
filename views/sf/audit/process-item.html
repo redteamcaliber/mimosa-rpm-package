@@ -1,7 +1,5 @@
 {% set processitem = content.processitem %}
 
-<h4>Process Info</h4>
-
 <table class="table table-condensed table-bordered">
     <tr>
         <th class="sf-audit-heading">PID</th>
@@ -49,33 +47,35 @@
     </tr>
 </table>
 
-<h4>Handle Types</h4>
+{% if content.handle_types and content.handle_types.length > 0 %}
+    <h4>Handle Types</h4>
 
-{% for handle_type in content.handle_types %}
-    <div id="{{ handle_type }}-div" class="collapsable collapsed" collapsable-title="{{ handle_type }}">
-        <table class="table table-condensed table-bordered">
-            <tr>
-                <th class="sf-audit-heading">Name</th>
-                <th>Index</th>
-                <th>Access Mask</th>
-                <th>Object Addr</th>
-                <th>Handle Count</th>
-                <th>Ptr Count</th>
-            </tr>
+    {% for handle_type in content.handle_types %}
+        <div id="{{ handle_type }}-div" class="collapsable collapsed" collapsable-title="{{ handle_type }}">
+            <table class="table table-condensed table-bordered">
+                <tr>
+                    <th class="sf-audit-heading">Name</th>
+                    <th>Index</th>
+                    <th>Access Mask</th>
+                    <th>Object Addr</th>
+                    <th>Handle Count</th>
+                    <th>Ptr Count</th>
+                </tr>
 
-            {% for handle in get_map_value(content.handle_map, handle_type, 'name') %}
-            <tr>
-                <td><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/Name">{{ handle.name }}</span></td>
-                <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/Index">{{ handle.index }}</span></td>
-                <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/AccessMask">{{ handle.acccessmask }}</span></td>
-                <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/ObjectAddress">{{ handle.objectaddress }}</span></td>
-                <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/HandleCount">{{ handle.handlecount }}</span></td>
-                <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/PointerCount">{{ handle.pointercount }}</span></td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-{% endfor %}
+                {% for handle in get_map_value(content.handle_map, handle_type, 'name') %}
+                <tr>
+                    <td><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/Name">{{ handle.name }}</span></td>
+                    <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/Index">{{ handle.index }}</span></td>
+                    <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/AccessMask">{{ handle.acccessmask }}</span></td>
+                    <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/ObjectAddress">{{ handle.objectaddress }}</span></td>
+                    <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/HandleCount">{{ handle.handlecount }}</span></td>
+                    <td align="right"><span class="ioc-term" ioc-term="ProcessItem/HandleList/Handle/PointerCount">{{ handle.pointercount }}</span></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endfor %}
+{% endif %}
 
 <br/>
 
@@ -140,10 +140,11 @@
               cols="80"
               rows="10"
               style="width: 95%;"
-              onclick="this.select();">
-Process Name: {{ processitem.name }}
-Process ID: {{ processitem.pid }}
+              onclick="this.select();"
+              class="fixed-font">
+Process Name:  {{ processitem.name }}
+Process ID:    {{ processitem.pid }}
 Process Start: {{ processitem.starttime }}
-Process Path: {{ processitem.path }}
+Process Path:  {{ processitem.path }}
     </textarea>
 </div>

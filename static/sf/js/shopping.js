@@ -24,12 +24,12 @@ StrikeFinder.IOCSummaryTableView = StrikeFinder.TableView.extend({
         options.aoColumns = [
             {sTitle: "IOC Name", mData: "iocname"},
             {sTitle: "Hash", mData: "iocnamehash", bVisible: false},
-            {sTitle: "Supp", mData: "suppressed", sWidth: '10%'},
-            {sTitle: "Claimed", mData: "checkedoutexpressions", sWidth: '10%'},
+            {sTitle: "Supp", mData: "suppressed"},
+            {sTitle: "Claimed", mData: "checkedoutexpressions"},
             {sTitle: "Total", mData: "totalexpressions", bVisible: false},
-            {sTitle: "Open", mData: "open", sWidth: '10%'},
-            {sTitle: "In Progress", mData: "inprogress", sWidth: '10%'},
-            {sTitle: "Closed", mData: "closed", sWidth: '10%'}
+            {sTitle: "Open", mData: "open"},
+            {sTitle: "In Progress", mData: "inprogress"},
+            {sTitle: "Closed", mData: "closed"}
         ];
         options.aoColumnDefs = [
             {
@@ -40,6 +40,7 @@ StrikeFinder.IOCSummaryTableView = StrikeFinder.TableView.extend({
                 "aTargets": [3]
             }
         ];
+
         options.aaSorting = [
             [ 0, "asc" ]
         ];

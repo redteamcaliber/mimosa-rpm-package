@@ -222,10 +222,7 @@ StrikeFinder.AuditModel = Backbone.Model.extend({
     defaults: {
         html: ""
     },
-    url: function () {
-        return _.sprintf('/sf/api/audit/%s', this.id);
-        //return _.sprintf('/sf/api/hits/%s/html', this.id);
-    }
+    urlRoot: '/sf/api/audit'
 });
 
 /**
@@ -614,6 +611,13 @@ StrikeFinder.TaskCollection = Backbone.Collection.extend({
     model: StrikeFinder.Task
 });
 
+StrikeFinder.Identity = Backbone.Model.extend({
+});
+
+StrikeFinder.IdentitiesCollection = Backbone.Collection.extend({
+    model: StrikeFinder.Identity
+});
+
 StrikeFinder.ClientModel = Backbone.Model.extend({
     defaults: {
         uuid: '',
@@ -625,3 +629,5 @@ StrikeFinder.ClientCollection = Backbone.Collection.extend({
     url: '/sf/api/clients',
     model: StrikeFinder.ClientModel
 });
+
+

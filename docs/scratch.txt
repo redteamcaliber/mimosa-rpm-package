@@ -1,3 +1,16 @@
+64c440cc-d185-4b80-b873-d5554d93a559
+
+
+        File Name: xCmd.exe
+        MD5 Hash: 84da626422409b4adecd7a23d1b4801f
+        File Created: 2013-04-23T06:52:06Z
+        Last Accessed: 2013-04-23T06:52:06Z
+        Last Modified: 2013-04-23T06:52:07Z
+        Entry Modified:2013-09-22T19:39:35Z
+        File Size: 454144
+        File Path: C:\Users\AppData\Local\Temp\{40717B58-105A-4A01-9EE1-F76F3235D810}
+        File Owner: DOMAIN\USER
+
 Unfinished task
 
 {

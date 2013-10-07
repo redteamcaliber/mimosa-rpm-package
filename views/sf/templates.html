@@ -2,11 +2,10 @@
 
 <script type="text/template" id="ioc-details-template">
     <div class="uac-header">
-        <!--<i class="icon-list"></i> <a id="ioc-details-item" class="uac-header"><%= legend %></a>-->
         <i class="icon-list"></i> <span class="uac-header"><%= legend %></span>
     </div>
 
-    <hr/>
+    <hr style="margin-top: 5px"/>
 
     <% _.each( items, function( item, index ) { %>
 
@@ -297,22 +296,24 @@
 <script type="text/template" id="agent-host-template">
     <table style="width: 100%">
         <tr>
-            <td style="width: 80%">
+            <td>
                 <span class="uac-header">
-                    <%= cluster.engagement.client.name %>: <%= domain %> / <a href="/sf/host/<%= hash %>/"><%= hostname %></a>
+                    <%= cluster.engagement.client.name %>: <%= domain %> /
+                    <a href="/sf/host/<%= hash %>/"><%= hostname %></a> /
+                    <a href="/sf/host/<%= hash %>/"><%= ip %></a>
                 </span>
             </td>
             <td>
-                <%= ip %>
+
             </td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td>
                 <%= product_name %> <%= os_patch_level %>
             </td>
         </tr>
         <tr>
-            <td colspan="2">
+            <td>
                 <table style="width: 100%">
                     <tr>
                         <td>NotReviewed: <%= counts.notreviewed %></td>
@@ -336,6 +337,19 @@
 <script type="text/template" id="agent-host-error-template">
     <h4 class="text-warning">Error obtaining host data, check Seasick status.</h4>
     <code><%= am_cert_hash %></code>
+</script>
+
+<script type="text/template" id="command-view-template">
+    <a class="dropdown-toggle" data-toggle="dropdown">
+        <i class="<%= icon_class %>"></i> <%= title %>: <%= selected %> <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+        <% _.each( options, function( item, index ) { %>
+            <li>
+                <a name="<%= item.name %>" title="<%= get_description(item) %>"><%= item.name %></a>
+            </li>
+        <% }) %>
+    </ul>
 </script>
 
 <script type="text/template" id='drop-down-template'>

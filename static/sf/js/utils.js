@@ -126,6 +126,7 @@ StrikeFinder.get_blockui_options = function (message) {
     return {
         message: message ? message : '',
         css: {
+            width: '100%',
             border: "0px solid #cccccc",
             padding: '0px',
             opacity: .8,
