@@ -23,8 +23,8 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
             {sTitle: "rowitem_type", mData: "rowitem_type", bVisible: false, bSortable: false},
             {sTitle: "Tag", mData: "tagname", sWidth: "10%", bSortable: false},
-            {sTitle: "Summary", mData: "summary1", sWidth: "45%", bSortable: false},
-            {sTitle: "Summary2", mData: "summary2", sWidth: "45%", bSortable: false}
+            {sTitle: "Summary", mData: "summary1", sWidth: "45%", bSortable: false, sClass: 'wrap'},
+            {sTitle: "Summary2", mData: "summary2", sWidth: "45%", bSortable: false, sClass: 'wrap'}
         ];
 
         view.listenTo(view, 'load', function () {
@@ -1062,62 +1062,220 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
  * View for rendering a selectable list of tags values.
  */
 StrikeFinder.TagView = StrikeFinder.View.extend({
-    initialize: function (options) {
-        if (options.rowitem_uuid) {
-            this.rowitem_uuid = options.rowitem_uuid;
+    initialize: function(options) {
+        // Initialize the list of possible tag values.
+        this.tags = new StrikeFinder.TagCollection(StrikeFinder.tags);
+
+        if (this.model) {
+            // Re-draw the tags view whenever the model is reloaded.
+            this.listenTo(this.model, 'sync', this.render);
         }
-        if (!this.collection) {
-            this.collection = new StrikeFinder.TagCollection();
-        }
-        this.listenTo(this.collection, 'reset', this.render);
     },
     events: {
-        'click li > a': 'on_click'
+        'click .dropdown-menu > li > a': 'on_click'
     },
     render: function () {
-        var data = {
-            title: 'Tag',
-            icon: 'icon-tag',
-            get_description: function (item) {
-                if ($(item).is('[description]')) {
-                    return item['description'];
-                }
-                else {
-                    return '';
-                }
-            },
-            options: this.collection.toJSON()
-        };
-        var html = _.template($("#drop-down-template").html(), data);
-        this.$el.html(html);
+        var view = this;
 
-        return this;
+        // Get the drop down menu.
+        var menu = view.$('.dropdown-menu');
+        // Remove any child elements.
+        menu.empty();
+
+        var tagname = view.model.get('tagname');
+
+        var selected_value = undefined;
+
+        view.tags.each(function(item) {
+            var item_name = item.get('name');
+            var item_title = item.get('title');
+
+            if (tagname && tagname == item_name) {
+                // Save off the value to display.
+                selected_value = item_title;
+            }
+            else {
+                menu.append(_.sprintf('<li><a name="%s" title="%s">%s</a></li>',
+                    item_name, item_name, item_title));
+            }
+        });
+
+        if (selected_value) {
+            view.$('.selected').html(selected_value);
+        }
+
+        return view;
     },
     on_click: function (ev) {
+        StrikeFinder.block();
+
         var view = this;
         var tagname = $(ev.currentTarget).attr('name');
+        var uuid = view.model.get('uuid');
 
-        log.debug(_.sprintf('Setting tag: %s on rowitem_uuid: %s', tagname, view.rowitem_uuid));
+        log.debug(_.sprintf('Setting tag: %s on rowitem_uuid: %s', tagname, uuid));
 
         var tag_model = new StrikeFinder.SetTagModel({
-            rowitem_uuid: view.rowitem_uuid,
+            rowitem_uuid: uuid,
             tagname: tagname
         });
         tag_model.save({}, {
             async: false,
             success: function () {
-                log.debug(_.sprintf('Applied tag: %s to rowitem_uuid: %s', tagname, view.rowitem_uuid));
-
-                StrikeFinder.display_success('Successfully applied tag: ' + tagname);
-                view.trigger('create', view.rowitem_uuid, tagname);
+                try {
+                    view.trigger('create', uuid, tagname);
+                    log.debug(_.sprintf('Applied tag: %s to rowitem_uuid: %s', tagname, uuid));
+                    StrikeFinder.display_success('Successfully applied tag: ' + tagname);
+                }
+                finally {
+                    StrikeFinder.unblock();
+                }
+            },
+            error: function() {
+                StrikeFinder.unblock();
+                StrikeFinder.display_error('Error while applying tag.');
             }
         });
-    },
-    fetch: function (rowitem_uuid) {
-        if (rowitem_uuid) {
-            // Don't actually re-fetch the tags but update the row id.
-            this.rowitem_uuid = rowitem_uuid;
+    }
+});
+
+StrikeFinder.IdentitiesView = StrikeFinder.View.extend({
+    initialize: function(options) {
+        if (this.model) {
+            // Re-draw the view whenever the model is reloaded.
+            this.listenTo(this.model, 'sync', this.render);
         }
+    },
+    events: {
+        'click .dropdown-menu > li > a': 'on_click'
+    },
+    render: function () {
+        var view = this;
+
+        // Get the drop down menu.
+        var menu = view.$('.dropdown-menu');
+        // Remove any child elements.
+        menu.empty();
+
+        var uuid = view.model.get('uuid');
+        var identical_hits = view.model.get('identical_hits');
+        var selected = undefined;
+
+        // Debug
+        log.debug('Found ' + identical_hits.length + ' identical hits for row: ' + uuid);
+
+        if (identical_hits.length == 1) {
+            view.$el.find('button').prop('disabled', true);
+
+            var hit = identical_hits[0];
+            view.$('.selected').html(view.get_title(hit.created, null, true, false));
+        }
+        else {
+            view.$el.find('button').prop('disabled', false);
+
+            _.each(identical_hits, function(hit, index) {
+                if (uuid == hit.uuid) {
+                    // This is the item being displayed, don't put it in the list.  Update the title instead.
+                    view.$('.selected').html(view.get_title(hit.created, null, index == 0, true));
+                }
+                else {
+                    // Item is not the one being render, add to the list of selections.
+                    menu.append(_.sprintf('<li><a name="%s">%s</a></li>',
+                        hit.uuid, view.get_title(hit.created, hit.tagtitle, index == 0, false)));
+                }
+            });
+        }
+
+        return view;
+    },
+    /**
+     * Create a common title string for the menu items.
+     * @param created - the row created date.
+     * @param tag - the tagname value.
+     * @param is_current - if the item is the latest.
+     * @param is_caret - whether to include a caret in the output.
+     * @returns {string} - the title string.
+     */
+    get_title: function(created, tag, is_current, is_caret) {
+        var target_string = is_current ? ' &#42;' : '';
+        var caret_string = is_caret ? ' <span class="caret"></span>' : '';
+        var tag_string = tag ? ' - ' + tag : '';
+        return _.sprintf('%s %s %s %s', StrikeFinder.format_date_string(created), tag_string, target_string, caret_string);
+    },
+    on_click: function (ev) {
+        var view = this;
+        // Get the selected uuid.
+        var selected_uuid = $(ev.currentTarget).attr('name');
+        // Debug
+        log.debug('Selected identity: ' + selected_uuid);
+        // Trigger an event that the row uuid was selected.
+        view.trigger('click', selected_uuid);
+    }
+});
+
+/**
+ * View for displaying the merge button and handling the related actions.
+ */
+StrikeFinder.MergeView = StrikeFinder.View.extend({
+    initialize: function(options) {
+        if (this.model) {
+            // Re-draw the view whenever the model is reloaded.
+            this.listenTo(this.model, 'sync', this.render);
+        }
+    },
+    events: {
+        'click': 'on_click'
+    },
+    render: function () {
+        var view = this;
+
+        var current_uuid = view.model.get('uuid');
+        var identical_hits = view.model.get('identical_hits');
+        var disabled = true;
+
+        // Enable the merge option when there are more than one identical hits and the currently selected identity
+        // is not the target of the merge operation.
+        if (identical_hits &&
+            identical_hits.length > 1 &&
+            current_uuid != identical_hits[0].uuid) {
+            disabled = false;
+        }
+
+        // Enable disable the merge component.
+        view.$el.prop('disabled', disabled);
+    },
+    /**
+     * Handle the click of the merge button.
+     * @param ev - the click event.
+     */
+    on_click: function(ev) {
+        var view = this;
+        StrikeFinder.block();
+
+        // Merge the current identity into the current.
+        var uuid = view.model.get('uuid');
+        var merge_model = new Backbone.Model();
+        merge_model.url = '/sf/api/hits/' + uuid + '/merge';
+        merge_model.save({}, {
+            success: function(model, response, options) {
+                try {
+                    log.debug('Merged ' + uuid + ' into ' + response.uuid);
+
+                    StrikeFinder.display_success('Successfully merged identities.');
+
+                    // Notify that a merge has taken place.
+                    view.trigger('merge', uuid, response.uuid);
+                }
+                finally {
+                    StrikeFinder.unblock();
+                }
+            },
+            error: function() {
+                // Error.
+                StrikeFinder.unblock();
+                StrikeFinder.display_error('Error while performing merge.');
+            }
+        });
     }
 });
 
@@ -1186,9 +1344,84 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 el: '#iocs-div'
             });
 
-            // File info view.
+            // Audit view.
+            view.audit = new StrikeFinder.AuditModel();
             view.audit_view = new StrikeFinder.AuditView({
-                el: $("#audit-div")
+                el: $("#audit-div"),
+                model: view.audit
+            });
+
+            // Update the audit type on the view.
+            view.listenTo(view.audit, 'sync', function() {
+                $('#audit-type').html(view.audit.get('rowitem_type'));
+            });
+
+            // Initialize the tag view from the audit data.
+            if (!'tag' in view.options || view.options.tag !== false) {
+                // Display the tags view unless explicitly disabled.
+                view.tags_view = new StrikeFinder.TagView({
+                    el: '#tags',
+                    model: view.audit
+                });
+                view.listenTo(view.tags_view, 'create', function (rowitem_uuid, tagname) {
+                    // Trigger an event when a new tag has been created.
+                    view.trigger('create:tag', view.row, tagname);
+                });
+            }
+
+            // Initialize the identities view.
+            view.identities_view = new StrikeFinder.IdentitiesView({
+                el: '#identities',
+                model: view.audit
+            });
+            view.listenTo(view.identities_view, 'click', function(uuid_identity) {
+                view.fetch(uuid_identity);
+            });
+
+            // Merge button view.
+            view.merge_view = new StrikeFinder.MergeView({
+                el: '#merge',
+                model: view.audit
+            });
+            view.listenTo(view.merge_view, 'merge', function(source_uuid, dest_uuid) {
+                // A merge operation has taken place, reload the hits view.
+                if (view.row.uuid == dest_uuid) {
+                    // The currently selected row is the merge destination.  Reload the hits and re-select the same
+                    // row.
+                    view.hits_table_view.reload({
+                        name: 'uuid',
+                        value: dest_uuid
+                    });
+                }
+                else {
+                    // The currently selected row is not the destination and has been deleted as part of the merge
+                    // operation.
+
+                    log.debug('The item being merged is being deleted...');
+
+                    var next_data = view.hits_table_view.peek_next_data();
+                    if (next_data) {
+                        // Select the next row.
+                        view.hits_table_view.reload({
+                            name: 'uuid',
+                            value: next_data.uuid
+                        });
+                    }
+                    else {
+                        var prev_data = view.hits_table_view.peek_prev_data();
+                        if (prev_data) {
+                            // Select the previous row.
+                            view.hits_table_view.reload({
+                                name: 'uuid',
+                                value: prev_data.uuid
+                            })
+                        }
+                        else {
+                            // Try and select the first row if there is one.
+                            view.hits_table_view.select_row(0);
+                        }
+                    }
+                }
             });
 
             // Suppression form.
@@ -1374,36 +1607,36 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
             view.comments_view = new StrikeFinder.CommentsView({
                 el: '#comments-div'
             });
-
-            if (!'tag' in view.options || view.options.tag !== false) {
-                // Display the tags view unless explicitly disabled.
-                view.tags = new StrikeFinder.TagCollection();
-                view.tags_view = new StrikeFinder.TagView({
-                    el: '#tags-div',
-                    collection: view.tags
-                });
-                view.tags.reset(StrikeFinder.tags);
-                view.listenTo(view.tags_view, 'create', function (rowitem_uuid, tagname) {
-                    // Trigger an event when a new tag has been created.
-                    view.trigger('create:tag', view.row, tagname);
-                });
-            }
         });
 
         view.fetch();
     },
-    fetch: function () {
+    fetch: function (uuid_identity) {
         var view = this;
 
         // Update the child views with the current row's parameters.
-        view.agenthost_view.fetch(view.row.am_cert_hash);
-        view.ioc_tabs_view.fetch(view.row.uuid);
-        view.audit_view.fetch(view.row.uuid);
-        view.comments_view.fetch(view.row.uuid);
-        if (view.tags_view) {
-            // There are cases where the tags_view is not create/enabled.
-            view.tags_view.fetch(view.row.uuid);
+
+        var uuid;
+        if (uuid_identity) {
+            uuid = uuid_identity;
         }
+        else {
+            uuid = view.row.uuid;
+
+            // Update the host data unless we are just changing to another identity.  Assumes that other identities
+            // are always for the same host.
+            view.agenthost_view.fetch(view.row.am_cert_hash);
+        }
+
+        // Fetch the related audit and update the audit view, tags view, and identity data.
+        view.audit.set('id', uuid, {silent:true});
+        view.audit.fetch();
+
+        // Update the IOC.
+        view.ioc_tabs_view.fetch(uuid);
+
+        // Update the comments.
+        view.comments_view.fetch(uuid);
 
         $('.sf-details-view').fadeIn().show();
     }
