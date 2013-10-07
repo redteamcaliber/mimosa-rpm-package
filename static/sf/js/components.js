@@ -278,7 +278,7 @@ StrikeFinder.get_datatables_settings = function (parent, settings) {
  * Generic Backbone table view component.
  */
 StrikeFinder.TableView = StrikeFinder.View.extend({
-    initialize: function () {
+    initialize: function (options) {
         if (this.collection) {
             this.listenTo(this.collection, 'sync', this.render);
         }
@@ -286,28 +286,42 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
     highlight_row: function (nRow) {
         $(nRow).addClass('info').siblings().removeClass('info');
     },
-    select_row: function (index) {
-        var length = this.length();
+    /**
+     * Initiate a click event on a row.
+     * @param index_or_node - the row index or row node.
+     * @returns the row node or undefined.
+     */
+    select_row: function (index_or_node) {
+        if (typeof index_or_node == 'number') {
+            var length = this.length();
 
-        if (this.length() <= 0) {
-            return undefined;
-        }
-        else if (index + 1 > length) {
-            return undefined;
-        }
-        else {
-            var pos = this.get_selected_position();
-            if (pos != index) {
-                // Only select if we are not already on the row.
-                var node = this.get_nodes(index);
-                if (node) {
-                    $(node).click();
-                }
-                return node;
-            }
-            else {
+            if (this.length() <= 0) {
                 return undefined;
             }
+            else if (index_or_node + 1 > length) {
+                return undefined;
+            }
+            else {
+                var pos = this.get_selected_position();
+                if (pos != index_or_node) {
+                    // Only select if we are not already on the row.
+                    var node = this.get_nodes(index_or_node);
+                    if (node) {
+                        $(node).click();
+                    }
+                    return node;
+                }
+                else {
+                    return undefined;
+                }
+            }
+        }
+        else if (index_or_node) {
+            $(index_or_node).click();
+            return index_or_node;
+        }
+        else {
+            return undefined;
         }
     },
     get_selected: function () {
@@ -340,6 +354,26 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
     is_next: function () {
         var pos = this.get_selected_position();
         return pos + 1 < this.length();
+    },
+    peek_prev_data: function() {
+        var selected = this.get_selected();
+        if (selected !== undefined && selected.length == 1) {
+            var pos = this.get_position(selected.get(0));
+            return this.get_data(pos - 1)
+        }
+        // No previous.
+        return undefined;
+    },
+    peek_next_data: function() {
+        if (this.is_next()) {
+            var selected = this.get_selected();
+            if (selected !== undefined && selected.length == 1) {
+                var pos = this.get_position(selected.get(0));
+                return this.get_data(pos + 1);
+            }
+        }
+        // No next.
+        return undefined;
     },
     prev: function () {
         var selected = this.get_selected();
@@ -429,17 +463,23 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
     is_datatable: function () {
         return $.fn.DataTable.fnIsDataTable(this.get_dom_table());
     },
-    reload: function (isStandingRedraw) {
-        if (this.collection !== undefined) {
-            this.collection.fetch();
-        }
-        else {
-            if (isStandingRedraw) {
-                this.$el.fnStandingRedraw();
-            }
-            else {
-                this.$el.fnDraw();
-            }
+    reload: function (value_pair) {
+        //if (this.collection !== undefined) {
+        //    this.collection.fetch();
+        //}
+        //else {
+        //    if (isStandingRedraw) {
+        //        this.$el.fnStandingRedraw();
+        //    }
+        //    else {
+        //        this.$el.fnDraw();
+        //    }
+        //}
+
+        this.$el.fnDraw(false);
+
+        if (value_pair) {
+            this._value_pair = value_pair;
         }
     },
     destroy: function () {
@@ -513,26 +553,48 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             settings['aaData'] = view.collection.toJSON();
         }
 
-        // Listen to draw events to account for the fact that datatables does not fire page change events.  This code
-        // makes up for that shortcoming by manually determining when the user has used the previous next component to
-        // page through the table.
-        view.listenTo(view, 'draw', function () {
-            if (view._page_prev) {
-                // User has iterated through the table to the previous page.
-                view.trigger('page', view.get_current_page());
-                // Select the last record in the current view.
-                view.select_row(view.length() - 1);
-                // Clear the flag.
-                view._page_prev = false;
-            }
-            else if (view._page_next) {
-                // User has iterated to through the table to the next page.
-                view.trigger('page', view.get_current_page());
-                // Select the next record in the view.
-                view.select_row(0);
-                // Clear the flag.
-                view._page_next = false;
-            }
+        // The following block is one time initialization for the table view and is specifically placed in the render
+        // function to allow sub-classes to define an initialize method without having to worry about calling the
+        // superclass initialization.
+        view.run_once('TableView::render::init', function () {
+            // Listen to draw events to account for the fact that datatables does not fire page change events.  This code
+            // makes up for that shortcoming by manually determining when the user has used the previous next component to
+            // page through the table.
+            view.listenTo(view, 'draw', function () {
+                if (view._page_prev) {
+                    // User has iterated through the table to the previous page.
+                    view.trigger('page', view.get_current_page());
+                    // Select the last record in the current view.
+                    view.select_row(view.length() - 1);
+                    // Clear the flag.
+                    view._page_prev = false;
+                }
+                else if (view._page_next) {
+                    // User has iterated to through the table to the next page.
+                    view.trigger('page', view.get_current_page());
+                    // Select the next record in the view.
+                    view.select_row(0);
+                    // Clear the flag.
+                    view._page_next = false;
+                }
+
+                if (view._value_pair) {
+                    // Attempt to select the row related to the value pair after a draw event.
+                    var nodes = this.get_nodes();
+                    for (var i = 0; i < nodes.length; i++) {
+                        var node = nodes[i];
+                        var data = this.get_data(node);
+
+                        if (view._value_pair.name &&
+                            view._value_pair.value &&
+                            data[view._value_pair.name] == view._value_pair.value) {
+
+                            // Select the node.
+                            this.select_row(node);
+                        }
+                    }
+                }
+            });
         });
 
         // Create the table.
