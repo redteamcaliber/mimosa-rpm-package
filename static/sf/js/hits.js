@@ -144,6 +144,21 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
         var html = _.template($("#ioc-tabs-template").html(), data);
         view.$el.html(html);
 
+        view.$('a[data-toggle="tab"]').on('shown', function(e) {
+            var exp_key = e.target.name;
+            log.debug('Selected IOC with exp_key: ' + exp_key);
+            view.trigger('ioc:selected', exp_key);
+        });
+
+        if (view.options.default) {
+            // Select the specified tab.
+            $('a[name="' + view.options.default +'"]').tab('show');
+        }
+        else {
+            // Select the first tab.
+            view.$('a').first().tab('show');
+        }
+
         // Run the IOC viewer.
         view.$("pre").iocViewer();
 
@@ -270,6 +285,9 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
 
         StrikeFinder.block_element(this.$el);
         this.collection.fetch();
+    },
+    get_selected_exp_key: function() {
+
     }
 });
 
@@ -1168,7 +1186,7 @@ StrikeFinder.IdentitiesView = StrikeFinder.View.extend({
             view.$el.find('button').prop('disabled', true);
 
             var hit = identical_hits[0];
-            view.$('.selected').html(view.get_title(hit.created, null, true, false));
+            view.$('.selected').html(view.get_title(hit.created, null, true, false, false));
         }
         else {
             view.$el.find('button').prop('disabled', false);
@@ -1176,12 +1194,15 @@ StrikeFinder.IdentitiesView = StrikeFinder.View.extend({
             _.each(identical_hits, function(hit, index) {
                 if (uuid == hit.uuid) {
                     // This is the item being displayed, don't put it in the list.  Update the title instead.
-                    view.$('.selected').html(view.get_title(hit.created, null, index == 0, true));
+                    view.$('.selected').html(view.get_title(hit.created, null, index == 0, false, true));
+
+                    menu.append(_.sprintf('<li><a name="%s">%s</a></li>',
+                        hit.uuid, view.get_title(hit.created, hit.tagtitle, index == 0, true, false)));
                 }
                 else {
                     // Item is not the one being render, add to the list of selections.
                     menu.append(_.sprintf('<li><a name="%s">%s</a></li>',
-                        hit.uuid, view.get_title(hit.created, hit.tagtitle, index == 0, false)));
+                        hit.uuid, view.get_title(hit.created, hit.tagtitle, index == 0, false, false)));
                 }
             });
         }
@@ -1196,20 +1217,24 @@ StrikeFinder.IdentitiesView = StrikeFinder.View.extend({
      * @param is_caret - whether to include a caret in the output.
      * @returns {string} - the title string.
      */
-    get_title: function(created, tag, is_current, is_caret) {
+    get_title: function(created, tag, is_current, is_selected, is_caret) {
+        var selected_string = is_selected ? '&#10004;' : !is_caret ?'&nbsp;&nbsp;&nbsp;' : '';
         var target_string = is_current ? ' &#42;' : '';
         var caret_string = is_caret ? ' <span class="caret"></span>' : '';
         var tag_string = tag ? ' - ' + tag : '';
-        return _.sprintf('%s %s %s %s', StrikeFinder.format_date_string(created), tag_string, target_string, caret_string);
+        return _.sprintf('%s %s %s %s %s', selected_string, StrikeFinder.format_date_string(created), tag_string, target_string, caret_string);
     },
     on_click: function (ev) {
         var view = this;
         // Get the selected uuid.
         var selected_uuid = $(ev.currentTarget).attr('name');
-        // Debug
-        log.debug('Selected identity: ' + selected_uuid);
-        // Trigger an event that the row uuid was selected.
-        view.trigger('click', selected_uuid);
+
+        if (selected_uuid != view.model.get('uuid')) {
+            // Debug
+            log.debug('Selected identity: ' + selected_uuid);
+            // Trigger an event that the row uuid was selected.
+            view.trigger('click', selected_uuid);
+        }
     }
 });
 
@@ -1341,14 +1366,25 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
 
             // IOC tabs view.
             view.ioc_tabs_view = new StrikeFinder.IOCTabsView({
-                el: '#iocs-div'
+                el: '#iocs-div',
+                default: view.exp_key // The default expression to display.
             });
+
+            // TODO: Have the audit view listen to the IOC tabs view to determine which IOC to suppress, tag, etc.
+            // TODO: Add the an IOC selection to suppression and mass tag form.  The form should be defaulted to the
+            //       selected IOC.
+            // TODO: Look into auto suppression and ensure that it is using the expression that is currently selected
+            //       in the tabs view.
+            // TODO: Look through the expressions usage and ensure that the appropriate values are being used.
 
             // Audit view.
             view.audit = new StrikeFinder.AuditModel();
             view.audit_view = new StrikeFinder.AuditView({
                 el: $("#audit-div"),
                 model: view.audit
+            });
+            view.listenTo(view.ioc_tabs_view, 'ioc:selected', function(exp_key) {
+                view.audit_view.exp_key = exp_key;
             });
 
             // Update the audit type on the view.

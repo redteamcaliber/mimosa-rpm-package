@@ -1,6 +1,8 @@
 UAC ToDo
 ========
 
+### Look into making the identity drop down display more obvious to what you are looking at.
+
 ### Should not be able to merge when the selected identity is the primary.
 
 ### Modify the merge button to be a drop down of action values.

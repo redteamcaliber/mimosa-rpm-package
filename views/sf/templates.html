@@ -21,8 +21,8 @@
 <script type="text/template" id="ioc-tabs-template">
     <ul class="nav nav-tabs" id="ioc-tabs" style="margin-bottom: 0px">
         <% _.each( items, function( item, index ) { %>
-            <li class="<%= get_active_class(index) %>">
-                <a href="#ioc-tab-<%= index %>" data-toggle="tab">
+            <li>
+                <a name="<%= item.exp_key %>" href="#ioc-tab-<%= index %>" data-toggle="tab">
                     <span style="font-weight: bold"><%= item.name %></span>
                 </a>
             </li>
