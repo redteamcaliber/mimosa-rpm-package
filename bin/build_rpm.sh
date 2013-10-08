@@ -6,7 +6,7 @@ VERSION="0.3"
 RELEASE="0"
 
 # The git branch to build.
-BRANCH=master
+BRANCH=multiple_exp_key
 # The repo to build.
 REPO=git@github.mandiant.com:amilano/uac-node.git
 

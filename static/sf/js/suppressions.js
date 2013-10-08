@@ -150,14 +150,14 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
         else {
             view.options.aoColumns = [
                 {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false, bSortable: true},
-                {sTitle: "Name", mData: 'comment', bSortable: true},
-                {sTitle: "IOC", mData: 'iocname', bSortable: true},
-                {sTitle: "IOC UUID", mData: 'ioc_uuid', bSortable: true},
+                {sTitle: "Name", mData: 'comment', bSortable: true, sClass: 'nowrap'},
+                {sTitle: "IOC", mData: 'iocname', bSortable: true, sClass: 'nowrap'},
+                {sTitle: "IOC UUID", mData: 'ioc_uuid', bSortable: false, bVisible: false},
                 {sTitle: "Hits", mData: 'suppressed', bSortable: true},
-                {sTitle: "Rule", mData: 'comment', bSortable: true},
+                {sTitle: "Rule", mData: 'comment', bSortable: true, sClass: 'wrap'},
                 {sTitle: "Global", mData: 'cluster_name', bVisible: true, bSortable: true},
                 {sTitle: "Author", mData: 'user_uuid', bSortable: true},
-                {sTitle: "Created", mData: 'created', bSortable: true}
+                {sTitle: "Created", mData: 'created', bSortable: true, sClass: 'nowrap'}
             ];
 
             view.options.aoColumnDefs = [
@@ -260,8 +260,8 @@ StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
             {sTitle: "rowitem_type", mData: "rowitem_type", bVisible: false, bSortable: false},
             {sTitle: "Tag", mData: "tagname", bVisible: false, bSortable: false},
-            {sTitle: "Summary", mData: "summary1", bSortable: false},
-            {sTitle: "Summary2", mData: "summary2", bSortable: false}
+            {sTitle: "Summary", mData: "summary1", bSortable: false, sClass: 'wrap'},
+            {sTitle: "Summary2", mData: "summary2", bSortable: false, sClass: 'wrap'}
         ];
 
         view.options.sDom = 'Rl<"sf-table-wrapper"t>ip';

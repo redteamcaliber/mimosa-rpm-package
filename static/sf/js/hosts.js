@@ -20,8 +20,8 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
             {sTitle: "IOC UUID", mData: "ioc_uuid"},
             {sTitle: "IOC Name", mData: "iocname"},
             {sTitle: "Expression String", mData: "exp_string"},
-            {sTitle: "Summary", mData: "summary1"},
-            {sTitle: "Summary2", mData: "summary2"},
+            {sTitle: "Summary", mData: "summary1", sClass: 'wrap'},
+            {sTitle: "Summary2", mData: "summary2", sClass: 'wrap'},
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false}
         ];
         view.options['aaSorting'] = [];
