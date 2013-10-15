@@ -14,7 +14,7 @@
 
         <!-- Prev/Next View, Host Template View -->
         <div class="row-fluid sf-details-view" style="display: none; margin-bottom: 10px">
-            <table>
+            <table id="agent-host-formatting-table">
                 <tr>
                     <td style="vertical-align: top">
                         <!-- PrevNext View -->
@@ -42,7 +42,7 @@
                     <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
                         <i class="icon-tags"></i> Tag: <span class="selected"></span> <span class="caret"></span>
                     </button>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu pull-right">
                         <!-- Tag values. -->
                     </ul>
                 </div>
@@ -69,19 +69,9 @@
     </div>
 
     <div class='span6'>
-
-        <!-- Suppressions View Template -->
-        {% if not hide_suppressions %}
-        <div class="row-fluid">
-            <table id="suppressions-table"
-                   class="table table-striped table-bordered table-hover table-condensed">
-            </table>
-        </div>
-        {% endif %}
-
         <!-- IOCs View Template -->
         <div class='row-fluid sf-details-view'>
-            <div id='iocs-div'>
+            <div id='iocs-div' style="margin-bottom: 20px">
                 <div style="width: 100%; height: 200px"></div>
             </div>
         </div>

@@ -19,52 +19,8 @@
 
         $(document).ready(function () {
             (function () {
-
-                // The app to display the views on this page.
-                var HostsApp = StrikeFinder.View.extend({
-                    initialize: function(options) {
-                        var view = this;
-
-                        view.model = new StrikeFinder.AgentHostModel(StrikeFinder.host);
-
-                        // The hosts view.
-                        view.hosts_view = new StrikeFinder.HostView({
-                            el: '#host-div',
-                            model: view.model
-                        });
-                        view.hosts_view.render();
-
-                        // The hits view.
-                        view.hits_table_view = new StrikeFinder.HostHitsTableView({
-                            el: '#hits-table'
-                        });
-                        view.listenTo(view.hits_table_view, 'load', function () {
-                            // Load the first hit on load of the view.
-                            view.hits_table_view.select_row(0);
-                        });
-
-                        // The hits details.
-                        view.hits_details_view = new StrikeFinder.HitsDetailsView({
-                            el: '#hits-details',
-                            hits_table_view: view.hits_table_view,
-                            suppress: false,    // Don't support suppression creation.
-                            masstag: false      // Don't support mass tagging.
-                        });
-                        view.listenTo(view.hits_details_view, 'create:tag', function(row, tagname) {
-                            view.hits_table_view.update_row('uuid', row.uuid, 'tagname', tagname, 0);
-                            view.hits_details_view.fetch();
-                        });
-
-                        view.fetch(view.model.get('hash'));
-                    },
-                    fetch: function(am_cert_hash) {
-                        var view = this;
-                        view.hits_table_view.fetch(am_cert_hash);
-                    }
-                });
-
                 // Create an app instance.
-                var hosts_app = new HostsApp({
+                var hosts_app = new StrikeFinder.HostsApp({
                     el: $(document.body)
                 });
             })();
@@ -90,7 +46,6 @@
     </div>
 
     {% set hide_hits = true %}
-    {% set hide_suppressions = true %}
     {% include "sf/hits-template.html" %}
 </div>
 

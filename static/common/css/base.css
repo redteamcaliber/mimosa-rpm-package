@@ -75,6 +75,7 @@ html, body {
 
 .wrap {
     word-break: break-all;
+    overflow: hidden;
 }
 
 .ioc-term {

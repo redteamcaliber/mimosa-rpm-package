@@ -1,15 +1,19 @@
 UAC ToDo
 ========
 
-### Look into making the identity drop down display more obvious to what you are looking at.
+### Refresh hits after suppression deletion.
 
-### Should not be able to merge when the selected identity is the primary.
+### Refresh the hosts view on suppression or mass tag creation.
+
+### Look into why ioc term spans are not working in Firefox.
+
+### Look into Handlebars templates - http://handlebarsjs.com/
+
+### Update the IOC terms.
+    - https://github.mandiant.com/OpenIOC/OpenIOC_Terms/blob/master/current.iocterms
+    - Look for mistakes and overrides.
 
 ### Modify the merge button to be a drop down of action values.
-
-### Display the portal formatted data in a fixed width font.
-
-### Escape the text fields in the audits.
 
 ### Make suppressions linkable from the hits view.
 
@@ -19,7 +23,7 @@ UAC ToDo
     -Hits by tag hits table.
     -Acquisitions table.
 
-### Add hostname link to the acqusitions table.
+### Add hostname link to the acquisitions table.
 
 # Look into slickgrid - https://github.com/mleibman/SlickGrid and http://dojofoundation.org/packages/dgrid/#demos
     - Roll your own:

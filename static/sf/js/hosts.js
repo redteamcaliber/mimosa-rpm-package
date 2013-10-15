@@ -16,26 +16,40 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
 
         view.options['aoColumns'] = [
             {sTitle: "uuid", mData: "uuid", bVisible: false},
-            {sTitle: "Tag", mData: "tagname", bVisible: true},
-            {sTitle: "IOC UUID", mData: "ioc_uuid"},
-            {sTitle: "IOC Name", mData: "iocname"},
-            {sTitle: "Expression String", mData: "exp_string"},
-            {sTitle: "Summary", mData: "summary1", sClass: 'wrap'},
-            {sTitle: "Summary2", mData: "summary2", sClass: 'wrap'},
+            {sTitle: "Tag", mData: "tagname", bVisible: true, sWidth: '5%'},
+            {sTitle: "IOC UUID", mData: "ioc_uuid", bVisible: false},
+            {sTitle: "IOC Name", mData: "iocname", sWidth: '10%'},
+            {sTitle: "Expression String", mData: "exp_string", sWidth: '25%'},
+            {sTitle: "Summary", mData: "summary1", sClass: 'wrap', sWidth: '30%'},
+            {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', sWidth: '30%'},
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false}
         ];
         view.options['aaSorting'] = [];
 
         view.options.sDom = 'Rl<"sf-table-wrapper"t>ip';
 
-        if (!this.collection) {
-            view.collection = new StrikeFinder.HitsCollection();
-        }
-        view.listenTo(view.collection, 'sync', view.render);
-    },
-    fetch: function (am_cert_hash) {
-        this.collection.am_cert_hash = am_cert_hash;
-        this.collection.fetch();
+        view.options.sAjaxSource = '/sf/api/hits';
+        view.options.sAjaxDataProp = 'results';
+        view.options.bServerSide = true;
+
+        view.listenTo(view, 'load', function () {
+            // Load the first hit on load of the view.
+            view.select_row(0);
+        });
+
+        view.listenTo(view, 'click', function (row, ev) {
+            var position = view.get_absolute_index(ev.currentTarget);
+
+            var title;
+            if (position !== undefined) {
+                title = _.sprintf('<i class="icon-list"></i> Hits (%s of %s)', position + 1, view.get_total_rows());
+            }
+            else {
+                title = _.sprintf('<i class="icon-list"></i> Hits (%s)', view.get_total_rows());
+            }
+            // Update the title with the count of the rows.
+            view.collapsable.set('title', title);
+        });
     }
 });
 
@@ -81,5 +95,45 @@ StrikeFinder.HostView = StrikeFinder.View.extend({
             this.model.id = am_cert_hash;
         }
         this.model.fetch();
+    }
+});
+
+StrikeFinder.HostsApp = StrikeFinder.View.extend({
+    initialize: function(options) {
+        var view = this;
+
+        view.model = new StrikeFinder.AgentHostModel(StrikeFinder.host);
+
+        // The hosts view.
+        view.hosts_view = new StrikeFinder.HostView({
+            el: '#host-div',
+            model: view.model
+        });
+        view.hosts_view.render();
+
+        // The hits view.
+        view.hits_table_view = new StrikeFinder.HostHitsTableView({
+            el: '#hits-table'
+        });
+
+        // The hits details.
+        view.hits_details_view = new StrikeFinder.HitsDetailsView({
+            el: '#hits-details',
+            hits_table_view: view.hits_table_view
+        });
+        view.listenTo(view.hits_details_view, 'create:tag', function(row, tagname) {
+            view.hits_table_view.update_row('uuid', row.uuid, 'tagname', tagname, 0);
+            view.hits_details_view.fetch();
+        });
+
+        // TODO: Need to refresh this view on suppression or mass tag creation.
+
+        view.fetch(view.model.get('hash'));
+    },
+    fetch: function(am_cert_hash) {
+        var view = this;
+        view.hits_table_view.fetch({
+            am_cert_hash: am_cert_hash
+        });
     }
 });

@@ -5,17 +5,17 @@ StrikeFinder.HitsByTagTableView = StrikeFinder.TableView.extend({
         var view = this;
 
         view.options['aoColumns'] = [
-            {sTitle: "uuid", mData: "uuid", bVisible: false},
-            {sTitle: "Updated", mData: "updated", sWidth: '10%'},
-            {sTitle: "Cluster", mData: "cluster_name", sWidth: '10%'},
-            {sTitle: "Host", mData: "hostname", sWidth: '10%'},
-            {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false},
-            {sTitle: "Item Type", mData: "rowitem_type", sWidth: '10%'},
-            {sTitle: "Tag", mData: "tagname", bVisible: false},
-            {sTitle: "Summary", mData: "summary1", sWidth: '20%', sClass: 'wrap'},
-            {sTitle: "Summary2", mData: "summary2", sWidth: '20%', sClass: 'wrap'},
-            {sTitle: "MD5sum", mData: "md5sum", sWidth: '10%'},
-            {sTitle: "Owner", mData: "username", sWidth: '10%'}
+            {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: false},
+            {sTitle: "Updated", mData: "updated", sClass: 'nowrap', bSortable: false},
+            {sTitle: "Cluster", mData: "cluster_name", bSortable: false},
+            {sTitle: "Host", mData: "hostname", bSortable: false},
+            {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
+            {sTitle: "Item Type", mData: "rowitem_type", bSortable: false},
+            {sTitle: "Tag", mData: "tagname", bVisible: false, bSortable: false},
+            {sTitle: "Summary", mData: "summary1", sClass: 'wrap', sWidth: '30%', bSortable: false},
+            {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', sWidth: '30%', bSortable: false},
+            {sTitle: "MD5sum", mData: "md5sum", bSortable: false},
+            {sTitle: "Owner", mData: "username", bSortable: false}
         ];
 
         view.options.aoColumnDefs = [
@@ -29,27 +29,11 @@ StrikeFinder.HitsByTagTableView = StrikeFinder.TableView.extend({
 
         view.options.aaSorting = [];
 
-        view.options.sDom = 'Rlf<"sf-table-wrapper"t>ip';
+        view.options.sDom = 'Rl<"sf-table-wrapper"t>ip';
 
-        if (!this.collection) {
-            view.collection = new StrikeFinder.HitsCollection();
-        }
-        view.listenTo(view.collection, 'sync', view.render);
-    },
-    fetch: function (tagname) {
-        var view = this;
-        if (tagname) {
-            view.collection.tagname = tagname;
-        }
-        StrikeFinder.block();
-        view.collection.fetch({
-            success: function() {
-                StrikeFinder.unblock();
-            },
-            error: function() {
-                StrikeFinder.unblock();
-            }
-        });
+        view.options.sAjaxSource = '/sf/api/hits';
+        view.options.sAjaxDataProp = 'results';
+        view.options.bServerSide = true;
     }
 });
 
@@ -77,23 +61,23 @@ StrikeFinder.HitsByTagView = StrikeFinder.View.extend({
         log.debug('Rendering hits for tagname: ' + view.tagname);
         view.run_once('init_hits', function() {
 
-            // TODO: Change this to a regular collapsable view so that the title can be updated.
-            // Initialize the collapsables.
-            StrikeFinder.collapse(view.$el);
+            view.hits_collapsable = new StrikeFinder.CollapsableContentView({
+                el: '#hits-table',
+                title_class: 'uac-header'
+            });
 
             view.hits_table_view = new StrikeFinder.HitsByTagTableView({
                 el: '#hits-table'
             });
             view.listenTo(view.hits_table_view, 'load', function () {
                 view.hits_table_view.select_row(0);
+                view.set_title(_.sprintf('%s (%s)', view.tagname, view.hits_table_view.get_total_rows()));
             });
 
             // Create the hits details view.
             view.hits_details_view = new StrikeFinder.HitsDetailsView({
                 el: '#hits-details-div',
-                hits_table_view: view.hits_table_view,
-                suppress: false,
-                masstag: false
+                hits_table_view: view.hits_table_view
             });
             view.listenTo(view.hits_details_view, 'create:tag', function () {
                 view.hits_table_view.fetch();
@@ -101,9 +85,12 @@ StrikeFinder.HitsByTagView = StrikeFinder.View.extend({
         });
         view.fetch();
     },
+    set_title: function(title) {
+        this.hits_collapsable.set('title', '<i class="icon-tag"></i> ' + title);
+    },
     fetch: function() {
-        var view = this;
-        $('#hits-div-title').html('<i class="icon-tag"></i> ' + view.tagname);
-        view.hits_table_view.fetch(view.tagname);
+        this.hits_table_view.fetch({
+            tagname: this.tagname
+        });
     }
 });

@@ -107,24 +107,26 @@ StrikeFinder.AgentHostView = StrikeFinder.View.extend({
  * Tabbed view of IOC's.
  */
 StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
-    events: {
-        'click .ioc-definition': 'on_click'
-    },
+    //constructor: function IOCTabsView() {
+    //    IOCTabsView.__super__.constructor.apply(
+    //        this, arguments
+    //    );
+    //},
     initialize: function (options) {
-        this.el.title = 'Click to toggle filtering on and off.';
+        var view = this;
 
-        if (!this.collection) {
-            this.collection = new StrikeFinder.IOCCollection([], {
+        view.el.title = 'Click to toggle filtering on and off.';
+
+        if (!view.collection) {
+            view.collection = new StrikeFinder.IOCCollection([], {
                 rowitem_uuid: options.rowitem_uuid
             });
         }
 
         // Filter by default.
-        this.filtered = true;
+        view.filtered = true;
 
-        this.listenTo(this.collection, 'sync', this.render);
-
-        this.$el.css('margin-bottom', '20px');
+        //view.listenTo(view.collection, 'sync', this.render);
     },
     render: function () {
         var view = this;
@@ -141,31 +143,35 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
             }
         };
 
+        // Cleanup any existing components the view has created before rendering.
+        view.close();
+
         var html = _.template($("#ioc-tabs-template").html(), data);
         view.$el.html(html);
 
-        view.$('a[data-toggle="tab"]').on('shown', function(e) {
-            var exp_key = e.target.name;
-            log.debug('Selected IOC with exp_key: ' + exp_key);
-            view.trigger('ioc:selected', exp_key);
+        view.delegateEvents({
+            'click .ioc-definition': 'on_click',
+            'shown a[data-toggle="tab"]': 'on_shown'
         });
 
-        if (view.options.default) {
-            // Select the specified tab.
-            $('a[name="' + view.options.default +'"]').tab('show');
-        }
-        else {
-            // Select the first tab.
-            view.$('a').first().tab('show');
-        }
-
-        // Run the IOC viewer.
-        view.$("pre").iocViewer();
+        // Run the IOC viewer on all the pre-formatted elements.
+        view.$el.find("pre").iocViewer();
 
         // Filter by default.
         view.filter();
 
         return this;
+    },
+    select_tab: function(exp_key) {
+        var view = this;
+        if (exp_key) {
+            // Select the specified tab.
+            view.$el.find('li > a[name="' + exp_key +'"]').tab('show');
+        }
+        else {
+            // Select the first tab.
+            view.$el.find('li > a').first().tab('show');
+        }
     },
     /**
      * Filter the IOC viewer to only the relevant hits.
@@ -176,7 +182,7 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
         // Iterator over the related IOC models and adjust the corresponding tab.
         _.each(view.collection.models, function (model, index, list) {
             var ioc_tab_selector = '#ioc-tab-' + index;
-            var ioc_tab_element = view.$(ioc_tab_selector);
+            var ioc_tab_element = view.$el.find(ioc_tab_selector);
 
             // Hide the metadata.
             //ioc_tab_element.find('.ioc-metadata').hide();
@@ -185,7 +191,7 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
             var ioc_definition_list = ioc_tab_element.find('.ioc-definition');
             if (ioc_definition_list.length != 1) {
                 log.error('Unable to find IOC definition: ' + ioc_definition_list.length);
-                console.dir(ioc_definition_list);
+                //console.dir(ioc_definition_list);
             }
             var ioc_definition_element = ioc_definition_list;
             ioc_definition_element.addClass('highlighted');
@@ -215,9 +221,9 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
                 var selected_element_path = view.get_path(selected_element.get(0), ioc_definition_element.get(0));
                 _.each(selected_element_path, function (selected_path_item) {
                     // Display the selected item.
-                    view.$(selected_path_item).show();
+                    view.$el.find(selected_path_item).show();
                     // Mark the item as highlighted so it's not hidden.
-                    view.$(selected_path_item).addClass('highlighted');
+                    view.$el.find(selected_path_item).addClass('highlighted');
                 });
 
                 // Highlight the item.
@@ -235,7 +241,7 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
         _.each(view.collection.models, function (model, index, list) {
             var ioc_tab_selector = '#ioc-tab-' + index;
             log.debug('ioc_tab_selection: ' + ioc_tab_selector);
-            var ioc_tab_element = view.$(ioc_tab_selector);
+            var ioc_tab_element = view.$el.find(ioc_tab_selector);
 
             // Find the root IOC definition.
             var ioc_definition_list = ioc_tab_element.find('.ioc-definition');
@@ -246,6 +252,36 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
             ioc_definition_list.find('*').show();
             //ioc_definition_list.find('*').removeClass('uac-opaque').removeClass('highlighted');
         });
+    },
+    /**
+     * Handler for an IOC tab being selected.
+     * @param ev - the related event.
+     */
+    on_shown: function(ev) {
+        var view = this;
+        var exp_key = ev.target.name;
+
+        log.debug('Selected IOC with exp_key: ' + exp_key);
+        view.trigger('ioc:selected', exp_key);
+
+        if (!_.has(view.suppressions_table_map, exp_key)) {
+            // Initialize the suppressions table for the expression.
+
+            log.debug('Initializing suppressions table for exp_key: ' + exp_key);
+
+            var suppressions_table = new StrikeFinder.SuppressionsTableView({
+                el: view.$el.find(_.sprintf('table#%s.suppressions-table', exp_key)),
+                condensed: true
+            });
+            view.listenTo(suppressions_table, 'delete', function() {
+                // Trigger a higher level event when a suppression has been deleted.
+                view.trigger('suppression:deleted');
+            });
+
+            view.suppressions_table_map[exp_key] = suppressions_table;
+
+            suppressions_table.fetch(exp_key);
+        }
     },
     on_click: function () {
         var view = this;
@@ -268,7 +304,7 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
         var path = '';
         var results = [];
         for (; element != parent && element && element.nodeType == 1; element = element.parentNode) {
-            var inner = view.$(element).children().length == 0 ? view.$(element).text() : '';
+            var inner = view.$el.find(element).children().length == 0 ? view.$el.find(element).text() : '';
             results.push(element);
             var eleSelector = element.tagName.toLowerCase() +
                 ((inner.length > 0) ? ':contains(\'' + inner + '\')' : '');
@@ -286,8 +322,22 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
         StrikeFinder.block_element(this.$el);
         this.collection.fetch();
     },
-    get_selected_exp_key: function() {
+    close: function() {
+        var view = this;
 
+        // Clean up any of the existing tables and rows.
+        if (view.suppressions_table_map) {
+            log.debug('Closing ' + Object.keys(view.suppressions_table_map).length + ' suppression tables...');
+            _.each(_.values(view.suppressions_table_map), function(table) {
+                log.debug('Cleaning up table: ' + table.el.id);
+                view.stopListening(table);
+                table.close();
+            });
+        }
+        view.suppressions_table_map = {};
+
+        // Remove the elements from the DOM.
+        view.remove();
     }
 });
 
@@ -313,7 +363,7 @@ StrikeFinder.AuditView = StrikeFinder.View.extend({
     render: function () {
         var view = this;
 
-        view.$el.html(_.unescape(view.model.get('content')));
+        view.$el.html(view.model.get('content'));
 
         StrikeFinder.collapse(this.el);
 
@@ -495,6 +545,12 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
         }
 
         data.tags = StrikeFinder.tags;
+        if (params.iocs) {
+            data.iocs = params.iocs.toJSON();
+        }
+        else {
+            data.iocs = [];
+        }
 
         // Retrieve the related IOC terms.
         var template = _.template($("#mass-tag-form-template").html(), data);
@@ -513,6 +569,7 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
             StrikeFinder.block_element(form, 'Processing...');
 
             // Update the model with the form data.
+            view.model.set('exp_key', view.$("#exp_key").children(":selected").attr("id"));
             view.model.set('tagname', view.$("#tagname").val());
             view.model.set('itemkey', view.$("#itemkey").children(":selected").attr("id"));
             view.model.set('condition', view.$("#condition").val());
@@ -638,7 +695,7 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
 
         var itemvalue = params.itemvalue;
         var rowitem_type = params.rowitem_type;
-        var exp_key = params.exp_key;
+        var     exp_key = params.exp_key;
         var cluster_uuid = params.cluster_uuid;
 
         log.debug('Creating suppression for exp_key: ' + exp_key);
@@ -678,7 +735,7 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
         }
 
         // Deep copy the model values.
-        var data = this.model.toJSON();
+        var data = view.model.toJSON();
 
         var terms = new StrikeFinder.IOCTermsCollection([], {
             rowitem_type: this.model.get("rowitem_type")
@@ -689,11 +746,19 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
 
         if (terms) {
             log.debug('Retrieved ' + terms.length + ' terms...');
-            data['terms'] = terms.toJSON();
+            data.terms = terms.toJSON();
         }
         else {
             log.warning('Terms was invalid');
-            data['terms'] = [];
+            data.terms = [];
+        }
+
+        // Add the ioc's.
+        if (params.iocs) {
+            data.iocs = params.iocs.toJSON();
+        }
+        else {
+            data.iocs = [];
         }
 
         // Retrieve the related IOC terms.
@@ -711,6 +776,7 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
             StrikeFinder.block_element(form, 'Processing...');
 
             // Update the model.
+            view.model.set('exp_key', view.$("#exp_key").children(":selected").attr("id"));
             view.model.set('comment', view.$("#comment").val());
             view.model.set('condition', view.$("#condition").val());
             view.model.set('itemkey', view.$("#itemkey").children(":selected").attr("id"));
@@ -1111,6 +1177,9 @@ StrikeFinder.TagView = StrikeFinder.View.extend({
             if (tagname && tagname == item_name) {
                 // Save off the value to display.
                 selected_value = item_title;
+
+                menu.append(_.sprintf('<li><a name="%s" title="%s">%s &#10004;</a></li>',
+                    item_name, item_name, item_title));
             }
             else {
                 menu.append(_.sprintf('<li><a name="%s" title="%s">%s</a></li>',
@@ -1218,11 +1287,11 @@ StrikeFinder.IdentitiesView = StrikeFinder.View.extend({
      * @returns {string} - the title string.
      */
     get_title: function(created, tag, is_current, is_selected, is_caret) {
-        var selected_string = is_selected ? '&#10004;' : !is_caret ?'&nbsp;&nbsp;&nbsp;' : '';
-        var target_string = is_current ? ' &#42;' : '';
+        var selected_string = is_selected ? '&#10004;' : '';
+        var target_string = is_current ? '&#42;' : '';
         var caret_string = is_caret ? ' <span class="caret"></span>' : '';
         var tag_string = tag ? ' - ' + tag : '';
-        return _.sprintf('%s %s %s %s %s', selected_string, StrikeFinder.format_date_string(created), tag_string, target_string, caret_string);
+        return _.sprintf('%s %s %s %s %s', StrikeFinder.format_date_string(created), tag_string, target_string, selected_string, caret_string);
     },
     on_click: function (ev) {
         var view = this;
@@ -1365,26 +1434,35 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
             });
 
             // IOC tabs view.
+            view.iocs = new StrikeFinder.IOCCollection();
             view.ioc_tabs_view = new StrikeFinder.IOCTabsView({
-                el: '#iocs-div',
-                default: view.exp_key // The default expression to display.
+                collection: view.iocs
             });
-
-            // TODO: Have the audit view listen to the IOC tabs view to determine which IOC to suppress, tag, etc.
-            // TODO: Add the an IOC selection to suppression and mass tag form.  The form should be defaulted to the
-            //       selected IOC.
-            // TODO: Look into auto suppression and ensure that it is using the expression that is currently selected
-            //       in the tabs view.
-            // TODO: Look through the expressions usage and ensure that the appropriate values are being used.
+            view.listenTo(view.ioc_tabs_view, 'ioc:selected', function(exp_key) {
+                // Update the hits details view expression key whenever an IOC tab is selected.
+                view.exp_key = exp_key;
+                log.debug('Hits details view now associated with exp_key: ' + exp_key);
+            });
+            view.listenTo(view.ioc_tabs_view, 'suppression:deleted', function() {
+                // Reload the hits after a suppression has been deleted.  Attempt to select the same row that we are
+                // current positioned on.
+                view.hits_table_view.refresh({
+                    name: 'uuid',
+                    value: view.row.uuid
+                });
+            });
+            view.listenTo(view.iocs, 'sync', function() {
+                // Reload the tabs view.
+                $('#iocs-div').html(view.ioc_tabs_view.render().el);
+                // Select and IOC tab.
+                view.ioc_tabs_view.select_tab(view.default_exp_key);
+            });
 
             // Audit view.
             view.audit = new StrikeFinder.AuditModel();
             view.audit_view = new StrikeFinder.AuditView({
                 el: $("#audit-div"),
                 model: view.audit
-            });
-            view.listenTo(view.ioc_tabs_view, 'ioc:selected', function(exp_key) {
-                view.audit_view.exp_key = exp_key;
             });
 
             // Update the audit type on the view.
@@ -1400,8 +1478,10 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                     model: view.audit
                 });
                 view.listenTo(view.tags_view, 'create', function (rowitem_uuid, tagname) {
-                    // Trigger an event when a new tag has been created.
-                    view.trigger('create:tag', view.row, tagname);
+                    // Reload the details view.
+                    view.fetch(rowitem_uuid);
+                    // We have tagged the Trigger an event when a new tag has been created.
+                    view.trigger('create:tag', rowitem_uuid, tagname);
                 });
             }
 
@@ -1423,8 +1503,8 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 // A merge operation has taken place, reload the hits view.
                 if (view.row.uuid == dest_uuid) {
                     // The currently selected row is the merge destination.  Reload the hits and re-select the same
-                    // row.
-                    view.hits_table_view.reload({
+                    // the target row item.
+                    view.hits_table_view.refresh({
                         name: 'uuid',
                         value: dest_uuid
                     });
@@ -1438,7 +1518,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                     var next_data = view.hits_table_view.peek_next_data();
                     if (next_data) {
                         // Select the next row.
-                        view.hits_table_view.reload({
+                        view.hits_table_view.refresh({
                             name: 'uuid',
                             value: next_data.uuid
                         });
@@ -1447,7 +1527,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                         var prev_data = view.hits_table_view.peek_prev_data();
                         if (prev_data) {
                             // Select the previous row.
-                            view.hits_table_view.reload({
+                            view.hits_table_view.refresh({
                                 name: 'uuid',
                                 value: prev_data.uuid
                             })
@@ -1465,6 +1545,10 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 el: $("#dialog-div")
             });
             view.listenTo(view.suppression_form_view, 'create', function (model) {
+                view.hits_table_view({
+                    name: 'uuid',
+                    value: view.row.uuid
+                });
                 view.trigger('create:suppression', view.row, model);
             });
 
@@ -1482,7 +1566,14 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 el: '#dialog-div'
             });
             view.listenTo(view.mass_tag_form, 'create', function (model) {
-                view.trigger('create:masstag    ', view.row, model);
+                // TODO: Reload the hits table???
+
+                // Refresh the data in the hits table and stay on the same record.
+                view.hits_table_view.refresh({
+                    name: 'uuid',
+                    value: view.row.uuid
+                });
+                view.trigger('create:masstag', view.row, model);
             });
 
             // Context menu.
@@ -1501,7 +1592,8 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                     itemvalue: selection,
                     rowitem_type: view.row.rowitem_type,
                     exp_key: view.exp_key,
-                    cluster_uuid: view.row.cluster_uuid
+                    cluster_uuid: view.row.cluster_uuid,
+                    iocs: view.iocs
                 };
 
                 if (ioc_term) {
@@ -1540,7 +1632,8 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                     am_cert_hash: view.row.am_cert_hash,
                     cluster_uuid: view.row.cluster_uuid,
                     rowitem_uuid: view.row.rowitem_uuid,
-                    rowitem_type: view.row.rowitem_type
+                    rowitem_type: view.row.rowitem_type,
+                    iocs: view.iocs
                 });
             });
             view.listenTo(view.context_menu, 'auto-suppress', function (selection, ioc_term) {
@@ -1588,6 +1681,11 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                                                 var msg = _.sprintf('Successfully suppressed %s hits for %s',
                                                     response.result.summary, suppression_model.as_string());
                                                 StrikeFinder.display_success(msg);
+
+                                                // Reload the hits view after a suppression has been created.  There is
+                                                // no way to determine what record to select because the one we are on
+                                                // will most likely be deleted.
+                                                view.hits_table_view.reload();
 
                                                 // Notify that a suppression was created.
                                                 view.trigger('create:suppression', view.row, suppression_model);
@@ -1687,13 +1785,6 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
 
         view.params = {};
 
-        // Suppressions.
-        view.suppressions_table = new StrikeFinder.SuppressionsTableView({
-            el: '#suppressions-table',
-            condensed: true
-        });
-        view.listenTo(view.suppressions_table, 'delete', view.fetch);
-
         // Hits.
         view.hits_table_view = new StrikeFinder.HitsTableView({
             el: '#hits-table'
@@ -1704,24 +1795,16 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
             el: '#hits-details-div',
             hits_table_view: view.hits_table_view
         });
-        view.listenTo(view.hits_details_view, 'create:tag', function (row, tagname) {
+        view.listenTo(view.hits_details_view, 'create:tag', function (rowitem_uuid, tagname) {
             // A new tag has been created, loop through the table nodes and manually update the tagname
             // for the relevant row.  This is a shortcut rather than re-loading the entire table.
-            view.hits_table_view.update_row('uuid', row.uuid, 'tagname', tagname, 0);
-            // Refresh the comments.
-            view.hits_details_view.fetch();
+            view.hits_table_view.update_row('uuid', rowitem_uuid, 'tagname', tagname, 0);
         });
         view.listenTo(view.hits_details_view, 'create:acquire', function (row, model) {
             // An aquisition has been created, update the row's tag value.
             view.hits_table_view.update_row('uuid', row.uuid, 'tagname', 'investigating', 0);
             // Refresh the comments.
             view.hits_details_view.fetch();
-        });
-        view.listenTo(view.hits_details_view, 'create:suppression', function () {
-            view.fetch();
-        });
-        view.listenTo(view.hits_details_view, 'create:masstag', function () {
-            view.fetch();
         });
     },
     fetch: function (params) {
@@ -1820,8 +1903,5 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
                 view.hits_table_view.fetch(exp_key_params);
             });
         }
-
-        // Refresh the hits view based on the current expression.
-        view.suppressions_table.fetch(view.params.exp_key);
     }
 });

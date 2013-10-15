@@ -99,10 +99,9 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
             title_class: 'uac-header',
             collapsed: condensed
         });
-
         var update_title = function () {
             // Update the suppressions collapsable count whenever the data has changed.
-            var title_template = '<i class="icon-level-down"></i> Active Suppressions (%d)';
+            var title_template = '<i class="icon-level-down"></i> Related Suppressions (%d)';
             view.suppressions_collapsable.set('title', _.sprintf(title_template, view.collection.length));
         };
         view.collection.listenTo(view.collection, 'sync', update_title);
@@ -114,10 +113,10 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
             view.options['sDom'] = 't';
 
             view.options['aoColumns'] = [
-                {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false, bSortable: true},
-                {sTitle: "Suppression", mData: 'comment', bVisible: true, bSortable: true},
-                {sTitle: "Global", mData: 'cluster_name', bVisible: true, bSortable: true},
-                {sTitle: "Hits", mData: 'suppressed', bVisible: true, bSortable: true}
+                {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false, bSortable: false},
+                {sTitle: "Suppression", mData: 'comment', bVisible: true, bSortable: false},
+                {sTitle: "Global", mData: 'cluster_name', bVisible: true, bSortable: false},
+                {sTitle: "Hits", mData: 'suppressed', bVisible: true, bSortable: false}
             ];
 
             view.options['aoColumnDefs'] = [
@@ -149,7 +148,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
         }
         else {
             view.options.aoColumns = [
-                {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false, bSortable: true},
+                {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false},
                 {sTitle: "Name", mData: 'comment', bSortable: true, sClass: 'nowrap'},
                 {sTitle: "IOC", mData: 'iocname', bSortable: true, sClass: 'nowrap'},
                 {sTitle: "IOC UUID", mData: 'ioc_uuid', bSortable: false, bVisible: false},
@@ -217,24 +216,27 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
             });
             view.suppression_row_views.push(suppression_row);
         };
-
-        view.listenTo(view, 'destroy', function () {
-            // Clean up an existing suppressions row views any time the table is destroyed.
-            if (view.suppression_row_views) {
-                log.debug(_.sprintf('Cleaning up %d existing suppression row views...',
-                    view.suppression_row_views.length));
-                _.each(view.suppression_row_views, function (suppression_row) {
-                    suppression_row.close();
-                });
-            }
-            view.suppression_row_views = [];
-        });
     },
     fetch: function (exp_key) {
         if (exp_key) {
             this.collection.exp_key = exp_key;
         }
         this.collection.fetch();
+    },
+    close: function() {
+        log.debug('Closing suppression table: ' + this.el.id + ' with ' + this.suppression_row_views.length + ' rows.');
+
+        // Clean up the suppression row listeners.
+        _.each(this.suppression_row_views, function(row) {
+            row.close();
+        });
+        this.suppression_row_views = [];
+
+        // Destroy the suppressions datatable.
+        this.destroy();
+
+        // Remove any current listeners.
+        this.stopListening();
     }
 });
 

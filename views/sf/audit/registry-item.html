@@ -33,18 +33,6 @@
             <td><span class="ioc-term" ioc-term="RegistryItem/ReportedLengthInBytes">{{ i.reportedlengthinbytes }}</span></td>
         </tr>
 
-        {% if text_length <= 1 %}
-            <tr>
-                <th>Text</th>
-                <td>{{ i.text }}</td>
-            </tr>
-        {% endif %}
-
-        <tr>
-            <th>Base 64 Encoded Data</th>
-            <td><span class="ioc-term" ioc-term="RegistryItem/Value">{{ i.value }}</span></td>
-        </tr>
-
         <tr>
             <th>Security ID</th>
             <td><span class="ioc-term" ioc-term="RegistryItem/SecurityID">{{ i.securityid }}</span></td>
@@ -53,17 +41,23 @@
 
     <br/>
 
-    {% if text_length > 1 %}
-        <div id="text-div" class="collapsable collapsed" collapsable-title="Text">
+    <div id="base-64-div" class="collapsable collapsed" collapsable-title="Base 64 Encoded Data">
+        <div style="max-height: 500px; overflow: auto">
+            <span class="ioc-term" ioc-term="RegistryItem/Value">{{ i.value }}</span>
+        </div>
+    </div>
+
+    <div id="text-div" class="collapsable collapsed" collapsable-title="Text">
+        <div style="max-height: 500px; overflow: auto">
             <ul>
                 {% for text in text_items %}
-                    <li>
-                        <span class="ioc-term" ioc-term="RegistryItem/Text">{{ text }}</span>
-                    </li>
+                <li>
+                    <span class="ioc-term" ioc-term="RegistryItem/Text" style="wrap">{{ text }}</span>
+                </li>
                 {% endfor %}
             </ul>
         </div>
-    {% endif %}
+    </div>
 
     <div id="portal-formatted-data-div" class="collapsable collapsed" collapsable-title="Portal Formatted Data">
 {% if i.value %}

@@ -29,12 +29,20 @@
         <% }) %>
     </ul>
 
-    <div class="tab-content">
+    <div class="tab-content" style="border: 1px solid #dddddd; border-top: 0px">
         <% _.each( items, function( item, index ) { %>
-        <div class="tab-pane <%= get_active_class(index) %>" id="ioc-tab-<%= index %>">
-                <pre>
-                    <%- item.content %>
-                </pre>
+        <div id="ioc-tab-<%= index %>"
+             class="tab-pane <%= get_active_class(index) %>">
+            <pre>
+                <%- item.content %>
+            </pre>
+
+            <div id="suppressions-table-div" style="margin: 10px">
+                <!-- Suppressions View Template -->
+                <table id="<%= item.exp_key %>"
+                       class="table table-striped table-bordered table-condensed suppressions-table">
+                </table>
+            </div>
         </div>
         <% }) %>
     </div>
@@ -92,6 +100,17 @@
             <p>
                 <label>Suppression Name:</label>
                 <input id="comment" type="text" required="true" value="<%= itemvalue %>" style="width: 500px"/>
+
+                <label>IOC:</label>
+                <select id="exp_key" required="true" style="width: 400px">
+                    <% _.each( iocs, function( ioc, index ) { %>
+                        <% if (exp_key == ioc.exp_key) { %>
+                            <option id="<%= ioc.exp_key %>" selected><%= ioc.name %> - <%= ioc.uuid %></option>
+                        <% } else { %>
+                            <option id="<%= ioc.exp_key %>"><%= ioc.name %> - <%= ioc.uuid %></option>
+                        <% } %>
+                    <% }) %>
+                </select>
 
                 <label>Term:</label>
                 <select id="itemkey" required="true" style="width: 400px">
@@ -170,6 +189,17 @@
                     <input type="radio" name="scope" id="am_cert_hash_option" value="agent"> This Agent
                 </label>
             </div>
+
+            <label>IOC:</label>
+            <select id="exp_key" required="true" style="width: 400px">
+                <% _.each( iocs, function( ioc, index ) { %>
+                    <% if (exp_key == ioc.exp_key) { %>
+                        <option id="<%= ioc.exp_key %>" selected><%= ioc.name %> - <%= ioc.uuid %></option>
+                    <% } else { %>
+                        <option id="<%= ioc.exp_key %>"><%= ioc.name %> - <%= ioc.uuid %></option>
+                    <% } %>
+                <% }) %>
+            </select>
 
             <label>Term:</label>
             <select id="itemkey" required="true" style="width: 400px">
@@ -255,7 +285,7 @@
                        required="true"
                        style="width: 500px"/>
 
-            <table style="width: 100%">
+            <table id="acquire-form-formatting-table" style="width: 100%">
                 <tr>
                     <td style="width: 50%">
                         <label>Method:</label>
@@ -294,7 +324,7 @@
 </script>
 
 <script type="text/template" id="agent-host-template">
-    <table style="width: 100%">
+    <table id="agent-host-template-formatting-table" style="width: 100%">
         <tr>
             <td>
                 <span class="uac-header">
@@ -314,7 +344,7 @@
         </tr>
         <tr>
             <td>
-                <table style="width: 100%">
+                <table id="agent-host-template-counts-formatting-table" style="width: 100%">
                     <tr>
                         <td>NotReviewed: <%= counts.notreviewed %></td>
                         <td>Investigating: <%= counts.investigating %></td>

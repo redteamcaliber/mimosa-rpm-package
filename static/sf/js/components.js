@@ -25,6 +25,13 @@ StrikeFinder.View = Backbone.View.extend({
             view.do_render.apply(view, args);
         }
         return view;
+    },
+    /**
+     * Return the list of event listerners.
+     * @returns {*}
+     */
+    get_listeners: function() {
+        return this._listeners ? _.values(this._listeners) : [];
     }
 });
 
@@ -341,11 +348,16 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         return Math.ceil(settings._iDisplayStart / settings._iDisplayLength) + 1;
     },
     get_total_rows: function () {
-        return this.get_settings()._iRecordsTotal;
+        if (this.get_settings().oInit.bServerSide) {
+            return this.get_settings()._iRecordsTotal;
+        }
+        else {
+            return this.get_nodes().length;
+        }
     },
     get_total_pages: function () {
         var settings = this.get_settings();
-        return Math.ceil(settings._iRecordsTotal / settings._iDisplayLength);
+        return Math.ceil(this.get_total_rows() / settings._iDisplayLength);
     },
     is_prev: function () {
         var pos = this.get_selected_position();
@@ -447,7 +459,12 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         return this.$el.fnGetPosition(node);
     },
     get_absolute_index: function (node) {
-        return (this.get_current_page() - 1) * this.get_settings()._iDisplayLength + this.get_position(node);
+        if (this.get_settings().oInit.bServerSide) {
+            return (this.get_current_page() - 1) * this.get_settings()._iDisplayLength + this.get_position(node);
+        }
+        else {
+            return this.get_position(node);
+        }
     },
     get_settings: function () {
         return this.$el.fnSettings();
@@ -463,24 +480,17 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
     is_datatable: function () {
         return $.fn.DataTable.fnIsDataTable(this.get_dom_table());
     },
-    reload: function (value_pair) {
-        //if (this.collection !== undefined) {
-        //    this.collection.fetch();
-        //}
-        //else {
-        //    if (isStandingRedraw) {
-        //        this.$el.fnStandingRedraw();
-        //    }
-        //    else {
-        //        this.$el.fnDraw();
-        //    }
-        //}
-
+    is_server_side: function() {
+        return this.get_settings().oInit.bServerSide;
+    },
+    reload: function() {
         this.$el.fnDraw(false);
-
+    },
+    refresh: function (value_pair, bComplete) {
         if (value_pair) {
             this._value_pair = value_pair;
         }
+        this.$el.fnDraw(false);
     },
     destroy: function () {
         // Destroy the old table if it exists.
@@ -579,7 +589,13 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                 }
 
                 if (view._value_pair) {
+                    // During a reload operation a value to select has been specified.  Attempt to select the row that
+                    // corresponds to the supplied name value pair.
+                    log.debug(_.sprintf('Attempting to reselect table row value: name=%s, value=%s',
+                        view._value_pair.name, view._value_pair.value));
+
                     // Attempt to select the row related to the value pair after a draw event.
+                    var found = false;
                     var nodes = this.get_nodes();
                     for (var i = 0; i < nodes.length; i++) {
                         var node = nodes[i];
@@ -591,7 +607,17 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
 
                             // Select the node.
                             this.select_row(node);
+
+                            found = true;
+
+                            break;
                         }
+                    }
+
+                    if (!found) {
+                        // If the matching row was not found it is assumed that it was deleted, select the first
+                        // row instead.
+                        this.select_row(0);
                     }
                 }
             });

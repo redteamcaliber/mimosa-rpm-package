@@ -1,0 +1,49 @@
+{% extends "sf/base.html" %}
+
+{% block title %}DataTables Test - {{ super() }}{% endblock %}
+
+{% block head %}
+{{ super() }}
+
+<script type="text/javascript">
+    var exp_key = 'a72aea98a3bc79861df28473c7a01996';
+    var table;
+
+    function create() {
+        if (table) {
+            table.close();
+        }
+        table = new StrikeFinder.SuppressionsTableView({
+            el: '#test-table',
+            condensed: true
+        });
+    }
+
+    function fetch() {
+        table.fetch(exp_key);
+    }
+
+    $(document).ready(function () {
+
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span8">
+            <table id="test-table" class="table table-bordered">
+            </table>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <button class="btn btn-primary" onclick="create();">
+            Create
+        </button>
+        <button class="btn btn-primary" onclick="fetch();">
+            Fetch
+        </button>
+    </div>
+</div>
+{% endblock %}
