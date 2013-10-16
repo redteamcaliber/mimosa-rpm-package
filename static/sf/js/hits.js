@@ -1545,10 +1545,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 el: $("#dialog-div")
             });
             view.listenTo(view.suppression_form_view, 'create', function (model) {
-                view.hits_table_view({
-                    name: 'uuid',
-                    value: view.row.uuid
-                });
+                view.hits_table_view.reload(0);
                 view.trigger('create:suppression', view.row, model);
             });
 
@@ -1566,8 +1563,6 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 el: '#dialog-div'
             });
             view.listenTo(view.mass_tag_form, 'create', function (model) {
-                // TODO: Reload the hits table???
-
                 // Refresh the data in the hits table and stay on the same record.
                 view.hits_table_view.refresh({
                     name: 'uuid',
@@ -1685,7 +1680,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                                                 // Reload the hits view after a suppression has been created.  There is
                                                 // no way to determine what record to select because the one we are on
                                                 // will most likely be deleted.
-                                                view.hits_table_view.reload();
+                                                view.hits_table_view.reload(0);
 
                                                 // Notify that a suppression was created.
                                                 view.trigger('create:suppression', view.row, suppression_model);

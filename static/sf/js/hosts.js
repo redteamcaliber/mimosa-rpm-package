@@ -15,14 +15,14 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
         });
 
         view.options['aoColumns'] = [
-            {sTitle: "uuid", mData: "uuid", bVisible: false},
-            {sTitle: "Tag", mData: "tagname", bVisible: true, sWidth: '5%'},
-            {sTitle: "IOC UUID", mData: "ioc_uuid", bVisible: false},
-            {sTitle: "IOC Name", mData: "iocname", sWidth: '10%'},
-            {sTitle: "Expression String", mData: "exp_string", sWidth: '25%'},
-            {sTitle: "Summary", mData: "summary1", sClass: 'wrap', sWidth: '30%'},
-            {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', sWidth: '30%'},
-            {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false}
+            {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: false},
+            {sTitle: "Tag", mData: "tagname", bVisible: true, sWidth: '5%', bSortable: false},
+            {sTitle: "IOC UUID", mData: "ioc_uuid", bVisible: false, bSortable: false},
+            {sTitle: "IOC Name", mData: "iocname", sWidth: '10%', bSortable: false},
+            {sTitle: "Expression String", mData: "exp_string", sWidth: '25%', bSortable: false},
+            {sTitle: "Summary", mData: "summary1", sClass: 'wrap', sWidth: '30%', bSortable: false},
+            {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', sWidth: '30%', bSortable: false},
+            {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false}
         ];
         view.options['aaSorting'] = [];
 

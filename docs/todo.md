@@ -1,6 +1,8 @@
 UAC ToDo
 ========
 
+### Update release notes.
+
 ### Refresh hits after suppression deletion.
 
 ### Refresh the hosts view on suppression or mass tag creation.
@@ -12,6 +14,8 @@ UAC ToDo
 ### Update the IOC terms.
     - https://github.mandiant.com/OpenIOC/OpenIOC_Terms/blob/master/current.iocterms
     - Look for mistakes and overrides.
+
+### The suppressions list should be refreshed after deleting a suppression.
 
 ### Modify the merge button to be a drop down of action values.
 

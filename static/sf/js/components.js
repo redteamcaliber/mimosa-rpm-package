@@ -483,7 +483,10 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
     is_server_side: function() {
         return this.get_settings().oInit.bServerSide;
     },
-    reload: function() {
+    reload: function(row_index) {
+        if (row_index !== undefined) {
+            this._row_index = row_index;
+        }
         this.$el.fnDraw(false);
     },
     refresh: function (value_pair, bComplete) {
@@ -588,9 +591,15 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                     view._page_next = false;
                 }
 
-                if (view._value_pair) {
-                    // During a reload operation a value to select has been specified.  Attempt to select the row that
-                    // corresponds to the supplied name value pair.
+                if (view._row_index !== undefined) {
+                    // During a refresh reload operation a row index to select has been specified.  Attempt to select
+                    // the row that corresponds to the index.
+                    view.select_row(view._row_index);
+                    view._row_index = undefined;
+                }
+                else if (view._value_pair) {
+                    // During a refresh/reload operation a value to select has been specified.  Attempt to select the
+                    // row that corresponds to the supplied name value pair.
                     log.debug(_.sprintf('Attempting to reselect table row value: name=%s, value=%s',
                         view._value_pair.name, view._value_pair.value));
 
@@ -619,6 +628,9 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                         // row instead.
                         this.select_row(0);
                     }
+
+                    // Clear the value pair.
+                    view._value_pair = undefined;
                 }
             });
         });

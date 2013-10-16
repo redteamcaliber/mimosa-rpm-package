@@ -79,9 +79,10 @@ StrikeFinder.HitsByTagView = StrikeFinder.View.extend({
                 el: '#hits-details-div',
                 hits_table_view: view.hits_table_view
             });
-            view.listenTo(view.hits_details_view, 'create:tag', function () {
-                view.hits_table_view.fetch();
-            });
+//            view.listenTo(view.hits_details_view, 'create:masstag', function () {
+//                // TODO: Need to pass parameters here.
+//                view.hits_table_view.fetch();
+//            });
         });
         view.fetch();
     },
