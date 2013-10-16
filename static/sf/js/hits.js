@@ -402,12 +402,11 @@ StrikeFinder.AuditContextMenuView = StrikeFinder.View.extend({
         $(view.options.source).highlighter({
             selector: _.sprintf('#%s', view.el.id),
             complete: function (selection, el) {
-                //console.dir(el);
 
                 // TODO: Clean this up.
                 // Try and get the element the user clicked on.
-                if (el && el.baseNode && el.baseNode.parentElement) {
-                    var span = el.baseNode.parentElement;
+                if (el && el.focusNode && el.focusNode.parentElement) {
+                    var span = el.focusNode.parentElement;
                     if (span && $(span).hasClass('ioc-term')) {
                         var ioc_term = $(span).attr('ioc-term');
                         if (ioc_term) {

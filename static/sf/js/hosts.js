@@ -126,8 +126,6 @@ StrikeFinder.HostsApp = StrikeFinder.View.extend({
             view.hits_details_view.fetch();
         });
 
-        // TODO: Need to refresh this view on suppression or mass tag creation.
-
         view.fetch(view.model.get('hash'));
     },
     fetch: function(am_cert_hash) {
