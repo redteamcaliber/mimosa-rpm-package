@@ -2,7 +2,7 @@ Unified Analyst Console (UAC) Release Notes
 ===========================================
 
 
-Mandiant-uac-ws-0.3-0 - October 15th, 2013
+Mandiant-uac-ws-0.3-0 - October 17th, 2013
 -----------------------------------------
 
 ### Hit Identity
@@ -12,7 +12,24 @@ Mandiant-uac-ws-0.3-0 - October 15th, 2013
 
 ### General
 
+- Enabled suppressions and mass tagging on all hits views (except suppressions view).
+  [#23777](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/23777)
+- Hits are now paged via server side processing on the hits by tag view.
+  [#24139](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/24139)
+- Modified portal formatted data to match requested output.
+  [24601](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/24601)
+
+### Bug Fixes
+
 - Enabled better wrapping in tables and audits.
+- Fixed issue related to auto-suppress option not showing up in Firefox.
+- Fixed discovery time label on the hosts view.
+  [25262](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#bug/25262)
+
+### Back End
+
+- Read-only IOC rematching capability exposed to a limited number of analysts in order to evaluate its accuracy.
+  [24837](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/24837)
 
 
 Mandiant-uac-ws-0.2-9 - October 4th, 2013

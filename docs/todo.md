@@ -1,14 +1,6 @@
 UAC ToDo
 ========
 
-### Update release notes.
-
-### Refresh hits after suppression deletion.
-
-### Refresh the hosts view on suppression or mass tag creation.
-
-### Look into why ioc term spans are not working in Firefox.
-
 ### Look into Handlebars templates - http://handlebarsjs.com/
 
 ### Update the IOC terms.
