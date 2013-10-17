@@ -283,7 +283,18 @@ StrikeFinder.SuppressionsAppView = StrikeFinder.View.extend({
             collection: view.suppressions
         });
         view.listenTo(view.suppressions_table, 'click', view.render_hits);
-        view.listenTo(view.suppressions_table, 'delete', view.fetch);
+        view.listenTo(view.suppressions_table, 'delete', function() {
+            StrikeFinder.block();
+            view.suppressions.fetch({
+                success: function() {
+                    view.suppressions_table.select_row(0);
+                    StrikeFinder.unblock();
+                },
+                failure: function() {
+                    StrikeFinder.unblock();
+                }
+            });
+        });
         view.listenTo(view.suppressions_table, 'empty', function () {
             $('.hits-view').fadeOut().hide();
             $('.details-view').fadeOut().hide();
