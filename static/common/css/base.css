@@ -2,11 +2,6 @@
  * DataTables Style Fixes
  */
 
-.sf-table-wrapper {
-    width: 100%;
-    overflow: auto;
-}
-
 html, body {
     height: 100%;
 }

@@ -87,7 +87,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
 
         view.options.iDisplayLength = 100;
 
-        view.options['sDom'] = 'Rltip';
+        view.options['sDom'] = 'ltip';
 
         view.listenTo(view, 'row:created', view.on_create_row);
         view.listenTo(view, 'row:click', view.on_row_click);

@@ -44,8 +44,12 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
             // Update the title with the count of the rows.
             view.hits_collapsable.set('title', title);
         });
+        view.listenTo(view, 'empty', function() {
+            title = _.sprintf('<i class="icon-list"></i> Hits (%s)', '0');
+            view.hits_collapsable.set('title', title);
+        });
 
-        view.options.sDom = 'Rl<"sf-table-wrapper"t>ip';
+        view.options.sDom = 'ltip';
         view.options.iDisplayLength = 100;
     }
 });
@@ -404,27 +408,36 @@ StrikeFinder.AuditContextMenuView = StrikeFinder.View.extend({
             complete: function (selection, el) {
 
                 // TODO: Clean this up.
+
+                var child_elements;
+
                 // Try and get the element the user clicked on.
-                if (el && el.focusNode && el.focusNode.parentElement) {
-                    var span = el.focusNode.parentElement;
+                if (el && el.anchorNode && el.anchorNode.parentElement) {
+
+                    var span = el.anchorNode.parentElement;
                     if (span && $(span).hasClass('ioc-term')) {
-                        var ioc_term = $(span).attr('ioc-term');
-                        if (ioc_term) {
-                            // The user clicked on an IOC term span.
-                            log.debug('ioc-term: ' + ioc_term);
-                            view.ioc_term = ioc_term;
-                            view.$('#ioc-term-item').text(ioc_term);
-                            view.$('#auto-suppress-item').css('display', 'block');
-                        }
-                        else {
-                            view.$('#auto-suppress-item').css('display', 'none');
-                        }
+                        // The user clicked on an IOC term span.
+                        var term1 = $(span).attr('ioc-term');
+                        log.debug('ioc-term: ' + term1);
+                        view.ioc_term = term1;
+                        view.$('#ioc-term-item').text(term1);
+                        view.$('#auto-suppress-item').css('display', 'block');
+                    }
+                    else if ((child_elements = $(el.anchorNode).find('.ioc-term')) && child_elements.length == 1) {
+                        // The user clicked an IOC term.
+                        var term2 = child_elements.attr('ioc-term');
+                        log.debug('ioc-term: ' + term2);
+                        view.ioc_term = term2;
+                        view.$('#ioc-term-item').text(term2);
+                        view.$('#auto-suppress-item').css('display', 'block');
                     }
                     else {
+                        // Auto suppress is not available.
                         view.$('#auto-suppress-item').css('display', 'none');
                     }
                 }
                 else {
+                    // Auto suppress is not available.
                     view.$('#auto-suppress-item').css('display', 'none');
                 }
 
@@ -1250,7 +1263,12 @@ StrikeFinder.IdentitiesView = StrikeFinder.View.extend({
         // Debug
         log.debug('Found ' + identical_hits.length + ' identical hits for row: ' + uuid);
 
-        if (identical_hits.length == 1) {
+        if (identical_hits.length == 0) {
+            view.$el.find('button').prop('disabled', true);
+
+            view.$('.selected').html(view.get_title(view.model.get('created'), null, true, false, false));
+        }
+        else if (identical_hits.length == 1) {
             view.$el.find('button').prop('disabled', true);
 
             var hit = identical_hits[0];

@@ -28,8 +28,7 @@ StrikeFinder.HitsByTagTableView = StrikeFinder.TableView.extend({
         ];
 
         view.options.aaSorting = [];
-
-        view.options.sDom = 'Rl<"sf-table-wrapper"t>ip';
+        view.options.sDom = 'ltip';
 
         view.options.sAjaxSource = '/sf/api/hits';
         view.options.sAjaxDataProp = 'results';

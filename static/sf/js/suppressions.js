@@ -101,7 +101,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
         });
         var update_title = function () {
             // Update the suppressions collapsable count whenever the data has changed.
-            var title_template = '<i class="icon-level-down"></i> Related Suppressions (%d)';
+            var title_template = '<i class="icon-level-down"></i> Suppressions (%d)';
             view.suppressions_collapsable.set('title', _.sprintf(title_template, view.collection.length));
         };
         view.collection.listenTo(view.collection, 'sync', update_title);
@@ -201,7 +201,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
             ];
 
             view.options.iDisplayLength = 10;
-            view.options.sDom = 'Rl<"sf-table-wrapper"t>ip';
+            view.options.sDom = 'ltip';
         }
 
         // Keep track of the row views.
@@ -266,7 +266,7 @@ StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
             {sTitle: "Summary2", mData: "summary2", bSortable: false, sClass: 'wrap'}
         ];
 
-        view.options.sDom = 'Rl<"sf-table-wrapper"t>ip';
+        view.options.sDom = 'ltip';
         view.listenTo(view, 'load', function () {
             view.select_row(0)
         });
