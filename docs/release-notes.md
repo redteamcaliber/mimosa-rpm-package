@@ -1,6 +1,26 @@
 Unified Analyst Console (UAC) Release Notes
 ===========================================
 
+Mandiant-uac-ws-0.4-0 - November 6th, 2013
+------------------------------------------
+
+### Acquisitions
+
+- Acquisitions details available through clicking a row in the acquisitions list.  Only rows that have successfully
+  completed will show details.  [#25433](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=A09A90F249C90C242895D7E4321D4D28#userstory/25433)
+- The host column values are now linked to the hosts view. [#25604](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=A09A90F249C90C242895D7E4321D4D28#iteration/25604)
+
+### Suppressions
+
+- Enabled client side searching in the suppressions list.  This may need to be removed long term if the number of
+  suppressions becomes to large to page on the client.
+- Added wrapping to the suppression name.
+
+### General
+
+- Refactored the env.json settings to be more generic to support re-use across projects.  Will require a merge of the
+  settings files.  An updated template is provided.
+
 
 Mandiant-uac-ws-0.3-0 - October 17th, 2013
 -----------------------------------------
