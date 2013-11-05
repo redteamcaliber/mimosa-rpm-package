@@ -21,11 +21,11 @@
 <script type="text/template" id="ioc-tabs-template">
     <ul class="nav nav-tabs" id="ioc-tabs" style="margin-bottom: 0px">
         <% _.each( items, function( item, index ) { %>
-            <li>
-                <a name="<%= item.exp_key %>" href="#ioc-tab-<%= index %>" data-toggle="tab">
-                    <span style="font-weight: bold"><%= item.name %></span>
-                </a>
-            </li>
+        <li>
+            <a name="<%= item.exp_key %>" href="#ioc-tab-<%= index %>" data-toggle="tab">
+                <span style="font-weight: bold"><%= item.name %></span>
+            </a>
+        </li>
         <% }) %>
     </ul>
 
@@ -91,10 +91,13 @@
 </script>
 
 <script type="text/template" id="suppression-form-template">
-    <div id="suppression-form" class="modal hide fade">
+    <div id="suppression-form" class="modal hide fade" tabindex='-1'>
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3><icon class="icon-level-down"></icon> Create Suppression</h3>
+            <h3>
+                <icon class="icon-level-down"></icon>
+                Create Suppression
+            </h3>
         </div>
         <div class="modal-body">
             <p>
@@ -104,11 +107,11 @@
                 <label>IOC:</label>
                 <select id="exp_key" required="true" style="width: 400px">
                     <% _.each( iocs, function( ioc, index ) { %>
-                        <% if (exp_key == ioc.exp_key) { %>
-                            <option id="<%= ioc.exp_key %>" selected><%= ioc.name %> - <%= ioc.uuid %></option>
-                        <% } else { %>
-                            <option id="<%= ioc.exp_key %>"><%= ioc.name %> - <%= ioc.uuid %></option>
-                        <% } %>
+                    <% if (exp_key == ioc.exp_key) { %>
+                    <option id="<%= ioc.exp_key %>" selected><%= ioc.name %> - <%= ioc.uuid %></option>
+                    <% } else { %>
+                    <option id="<%= ioc.exp_key %>"><%= ioc.name %> - <%= ioc.uuid %></option>
+                    <% } %>
                     <% }) %>
                 </select>
 
@@ -116,11 +119,11 @@
                 <select id="itemkey" required="true" style="width: 400px">
                     <option></option>
                     <% _.each( terms, function( item, index ) { %>
-                        <% if (itemkey == item.text) { %>
-                            <option id="<%= item.text %>" selected><%= item.title %></option>
-                        <% } else { %>
-                            <option id="<%= item.text %>"><%= item.title %></option>
-                        <% } %>
+                    <% if (itemkey == item.text) { %>
+                    <option id="<%= item.text %>" selected><%= item.title %></option>
+                    <% } else { %>
+                    <option id="<%= item.text %>"><%= item.title %></option>
+                    <% } %>
                     <% }) %>
                 </select>
 
@@ -137,7 +140,8 @@
 
                 <span>
                     <label>
-                        <icon class="icon-file"></icon> Suppression Text
+                        <icon class="icon-file"></icon>
+                        Suppression Text
                     </label>
                 </span>
                 <input id="itemvalue"
@@ -156,20 +160,25 @@
         </div>
         <div class="modal-footer">
             <a id="cancel" class="btn">
-                <icon class="icon-remove-sign"></icon> Cancel
+                <icon class="icon-remove-sign"></icon>
+                Cancel
             </a>
             <a id="suppress" class="btn btn-primary">
-                <icon class="icon-level-down"></icon> Suppress
+                <icon class="icon-level-down"></icon>
+                Suppress
             </a>
         </div>
     </div>
 </script>
 
 <script type="text/template" id="mass-tag-form-template">
-    <div id="mass-tag-form" class="modal hide fade">
+    <div id="mass-tag-form" class="modal hide fade" tabindex='-1'>
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3><icon class="icon-tags"></icon> Mass Tag</h3>
+            <h3>
+                <icon class="icon-tags"></icon>
+                Mass Tag
+            </h3>
         </div>
         <div class="modal-body">
             <p>
@@ -193,11 +202,11 @@
             <label>IOC:</label>
             <select id="exp_key" required="true" style="width: 400px">
                 <% _.each( iocs, function( ioc, index ) { %>
-                    <% if (exp_key == ioc.exp_key) { %>
-                        <option id="<%= ioc.exp_key %>" selected><%= ioc.name %> - <%= ioc.uuid %></option>
-                    <% } else { %>
-                        <option id="<%= ioc.exp_key %>"><%= ioc.name %> - <%= ioc.uuid %></option>
-                    <% } %>
+                <% if (exp_key == ioc.exp_key) { %>
+                <option id="<%= ioc.exp_key %>" selected><%= ioc.name %> - <%= ioc.uuid %></option>
+                <% } else { %>
+                <option id="<%= ioc.exp_key %>"><%= ioc.name %> - <%= ioc.uuid %></option>
+                <% } %>
                 <% }) %>
             </select>
 
@@ -205,11 +214,11 @@
             <select id="itemkey" required="true" style="width: 400px">
                 <option></option>
                 <% _.each( terms, function( item, index ) { %>
-                    <% if (itemkey == item.text) { %>
-                    <option id="<%= item.text %>" selected><%= item.title %></option>
-                    <% } else { %>
-                    <option id="<%= item.text %>"><%= item.title %></option>
-                    <% } %>
+                <% if (itemkey == item.text) { %>
+                <option id="<%= item.text %>" selected><%= item.title %></option>
+                <% } else { %>
+                <option id="<%= item.text %>"><%= item.title %></option>
+                <% } %>
                 <% }) %>
             </select>
 
@@ -246,26 +255,32 @@
         </div>
         <div class="modal-footer">
             <a id="cancel" class="btn">
-                <icon class="icon-remove-sign"></icon> Cancel
+                <icon class="icon-remove-sign"></icon>
+                Cancel
             </a>
             <a id="tag" class="btn btn-primary">
-                <icon class="icon-tags"></icon> Add Tags
+                <icon class="icon-tags"></icon>
+                Add Tags
             </a>
         </div>
     </div>
 </script>
 
 <script type="text/template" id="acquire-form-template">
-    <div id="acquire-form" class="modal hide fade">
+    <div id="acquire-form" class="modal hide fade" tabindex='-1'>
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3><icon class="icon-cloud-download"></icon> Acquire File</h3>
+            <h3>
+                <icon class="icon-cloud-download"></icon>
+                Acquire File
+            </h3>
         </div>
         <div class="modal-body">
             <p>
                 <span>
                     <label>
-                        <icon class="icon-file"></icon> File Path
+                        <icon class="icon-file"></icon>
+                        File Path
                     </label>
                 </span>
                 <input id="file_path"
@@ -276,7 +291,8 @@
 
                 <span>
                     <label>
-                        <icon class="icon-file"></icon> File Name
+                        <icon class="icon-file"></icon>
+                        File Name
                     </label>
                 </span>
                 <input id="file_name"
@@ -314,10 +330,12 @@
         </div>
         <div class="modal-footer">
             <a id="cancel" class="btn">
-                <icon class="icon-remove-sign"></icon> Cancel
+                <icon class="icon-remove-sign"></icon>
+                Cancel
             </a>
             <a id="acquire" class="btn btn-primary">
-                <icon class="icon-cloud-download"></icon> Acquire
+                <icon class="icon-cloud-download"></icon>
+                Acquire
             </a>
         </div>
     </div>
@@ -375,9 +393,9 @@
     </a>
     <ul class="dropdown-menu">
         <% _.each( options, function( item, index ) { %>
-            <li>
-                <a name="<%= item.name %>" title="<%= get_description(item) %>"><%= item.name %></a>
-            </li>
+        <li>
+            <a name="<%= item.name %>" title="<%= get_description(item) %>"><%= item.name %></a>
+        </li>
         <% }) %>
     </ul>
 </script>
@@ -385,7 +403,7 @@
 <script type="text/template" id='drop-down-template'>
     <div class="btn-group">
         <a class="btn btn-primary dropdown-toggle"
-           data-toggle="dropdown" >
+           data-toggle="dropdown">
             <i class="<%= icon %>"></i> <%= title %> <span class="caret"></span>
         </a>
         <ul class="dropdown-menu pull-right">
@@ -539,4 +557,25 @@
             </td>
         </tr>
     </table>
+</script>
+
+<script id="acquisition-audit-template" type="text/template">
+    <div id="acqusition-audit-div" class="modal hide fade" style="overflow: auto" tabindex='-1'>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>
+                <icon class="icon-tags"></icon>
+                FileItem
+            </h3>
+        </div>
+        <div class="modal-body" style="max-height: 600px; overflow: auto">
+            <%= content %>
+        </div>
+        <div class="modal-footer">
+            <a id="close" class="btn btn-primary">
+                <icon class="icon-remove-sign"></icon>
+                Close
+            </a>
+        </div>
+    </div>
 </script>

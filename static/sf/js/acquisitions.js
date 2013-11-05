@@ -16,7 +16,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
         view.options['aoColumns'] = [
             {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
             {sTitle: "Cluster", mData: "cluster.name", bSortable: true},
-            {sTitle: "Agent", mData: "agent.hostname", bSortable: true},
+            {sTitle: "Host", mData: "agent.hostname", bSortable: true},
             {sTitle: "File Path", mData: "file_path", bSortable: true, sClass: 'wrap'},
             {sTitle: "File Name", mData: "file_name", bSortable: true, sClass: 'wrap'},
             {sTitle: "Created", mData: "create_datetime", bSortable: true, sClass: 'nowrap'},
@@ -33,6 +33,17 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
         ];
 
         view.options['aoColumnDefs'] = [
+            {
+                mRender: function (data, type, row) {
+                    if (data) {
+                        return _.sprintf('<a href="/sf/host/%s">%s</a>', row.agent.hash, data);
+                    }
+                    else {
+                        return data;
+                    }
+                },
+                aTargets: [2]
+            },
             {
                 mRender: function (data, type, row) {
                     if (row.link) {
@@ -90,7 +101,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
         view.options['sDom'] = 'ltip';
 
         view.listenTo(view, 'row:created', view.on_create_row);
-        view.listenTo(view, 'row:click', view.on_row_click);
+        view.listenTo(view, 'click', view.on_row_click);
         view.listenTo(view, 'load', function () {
             view.acquisitions_collapsable.set('title', _.sprintf('<i class="icon-cloud-download"></i> Acquisitions (%s)',
                 view.get_total_rows()));
@@ -105,6 +116,54 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
                 placement: 'left'
             });
         }
+    },
+    on_row_click: function (data) {
+        var view = this;
+        if (data.link) {
+            if (view.audit_dialog) {
+                view.audit_dialog.close();
+            }
+            view.audit_dialog = new StrikeFinder.AcquisitionsAuditView({
+                el: '#dialog-div',
+                acquisition_uuid: data.uuid
+            });
+        }
+    }
+});
+
+StrikeFinder.AcquisitionsAuditView = StrikeFinder.View.extend({
+    events: {
+        'click #close': 'on_close'
+    },
+    initialize: function () {
+        var view = this;
+        view.model = new StrikeFinder.AcquisitionAuditModel({
+            id: view.options.acquisition_uuid
+        });
+        view.listenTo(view.model, 'sync', view.render);
+        view.model.fetch();
+    },
+    render: function () {
+        var view = this;
+        view.$el.html(_.template($("#acquisition-audit-template").html(), view.model.toJSON()));
+
+        StrikeFinder.collapse(this.el);
+
+        view.$('#acqusition-audit-div').modal({
+            backdrop: false
+        }).css({
+                width: 'auto',
+                'margin-left': function () {
+                    return -($(this).width() / 2);
+                }
+            }
+        );
+    },
+    on_close: function() {
+        this.$("#acqusition-audit-div").modal("hide");
+    },
+    close: function () {
+        this.stopListening();
     }
 });
 

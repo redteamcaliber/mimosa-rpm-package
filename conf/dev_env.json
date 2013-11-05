@@ -2,10 +2,19 @@
     "server": {
         "port": 8000,
         "ssl": false,
+
         "ssl_key": "./conf/certs/uac_ws_key.pem",
-        "ssl_cert": "./conf/certs/uac_ws_cert.pem",
+        "ssl_cert": "./conf/cert/uac_ws_cert.pem",
+
+        "verify_ssl": false,
+
         "session_cookie": "uac.session",
-        "session_secret": "62d0f193-a1e3-45f9-bb41-7b22310309aa"
+        "session_secret": "62d0f193-a1e3-45f9-bb41-7b22310309aa",
+
+        "log_level": "debug",
+        "log_file": "./logs/uac.log",
+        "log_maxsize": "1048576",
+        "log_maxfiles": 10
     },
     "uac": {
         "db_name": "uac",
@@ -18,11 +27,6 @@
 
         "sf_api_url": "https://proxy.mcirt.mandiant.com/SF/",
         "ss_api_url": "https://proxy.mcirt.mandiant.com/SEASICK/",
-
-        "log_level": "debug",
-        "log_file": "./logs/uac.log",
-        "log_maxsize": "1048576",
-        "log_maxfiles": 10
     },
     "sso": {
         "auth_user": "app.uac",

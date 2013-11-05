@@ -20,17 +20,17 @@ var sf_routes = require('sf-routes');
 //
 log.remove(log.transports.Console);
 log.add(log.transports.Console, {
-    level: settings.get('uac:log_level'),
+    level: settings.get('server:log_level'),
     colorize: true
 });
 log.add(log.transports.File, {
-    level: settings.get('uac:log_level'),
+    level: settings.get('server:log_level'),
     colorize: true,
-    filename: settings.get('uac:log_file'),
+    filename: settings.get('server:log_file'),
     json: false,
     timestamp: true,
-    maxsize: settings.get('uac:log_maxsize'),
-    maxfiles: settings.get('uac:log_maxfiles')
+    maxsize: settings.get('server:log_maxsize'),
+    maxfiles: settings.get('server:log_maxfiles')
 });
 
 
@@ -61,12 +61,12 @@ route_utils.load_views(app);
 app.use(function (req, res, next) {
     try {
         log.error(_.sprintf('Requested page: %s was not found.', req.originalUrl));
-        if (req.xhr) {
-            // Send a 404 response to AJAX clients.
-            res.send(404, {error: req.originalUrl + ' is not available.'})
+        if (route_utils.is_html_request(req)) {
+            res.render('/uac/404.html');
         }
         else {
-            res.render('/uac/404.html');
+            // Send a 404 response to AJAX clients.
+            res.send(404, {error: req.originalUrl + ' is not available.'})
         }
     }
     catch (e) {
@@ -79,19 +79,18 @@ app.use(function (req, res, next) {
 // Add a general error handler.
 app.use(function errorHandler(err, req, res, next) {
     var message = 'Global error handler caught exception while rendering %s url: %s (status: %s, uid: %s) \n%s';
-    var uid = req.attributes && req.attributes.uid ? uid : 'Unknown';
+    var uid = req.attributes && req.attributes.uid ? req.attributes.uid : 'Unknown';
     var stack = err.stack ? err.stack : err;
 
     // Log the error message and stack trace.
     log.error(_.sprintf(message, req.method, req.originalUrl, res.statusCode, uid, stack));
 
-    if (req.xhr) {
-        // Send a 500 response to AJAX clients.
-        res.send(500, {error: req.originalUrl + ' is not available.'})
+    if (route_utils.is_html_request(req)) {
+
     }
     else {
-        // Display the formatted error page.
-        res.render('/uac/500.html');
+        // Send a 500 response to AJAX clients.
+        res.send(500, {error: req.originalUrl + ' is not available.'})
     }
 });
 
