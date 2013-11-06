@@ -236,9 +236,6 @@ StrikeFinder.get_datatables_settings = function (parent, settings) {
         sPaginationType: "bootstrap",
         bSortClasses: false,
         bProcessing: false,
-        oLanguage: {
-            sEmptyTable: "&lt;No Results Found&gt;"
-        },
         asStripClasses: [],
         fnRowCallback: function (nRow, data, iDisplayIndex, iDisplayIndexFull) {
             var click_handler = function (ev) {

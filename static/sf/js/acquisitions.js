@@ -13,6 +13,10 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
         view.options.sAjaxDataProp = 'results';
         view.options['bServerSide'] = true;
 
+        view.options.oLanguage = {
+            sEmptyTable: 'No acquisitions were found'
+        };
+
         view.options['aoColumns'] = [
             {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
             {sTitle: "Cluster", mData: "cluster.name", bSortable: true},

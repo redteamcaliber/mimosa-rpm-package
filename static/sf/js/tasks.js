@@ -22,6 +22,10 @@ StrikeFinder.TaskTableView = StrikeFinder.TableView.extend({
             [ 2, "desc" ]
         ];
 
+        view.options.oLanguage = {
+            sEmptyTable: 'No tasks were found'
+        };
+
         view.options['aoColumnDefs'] = [
             {
                 mRender: function (data, type, row) {

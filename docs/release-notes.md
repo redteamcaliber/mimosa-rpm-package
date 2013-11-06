@@ -9,12 +9,16 @@ Mandiant-uac-ws-0.4-0 - November 6th, 2013
 - Acquisitions details available through clicking a row in the acquisitions list.  Only rows that have successfully
   completed will show details.  [#25433](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=A09A90F249C90C242895D7E4321D4D28#userstory/25433)
 - The host column values are now linked to the hosts view. [#25604](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=A09A90F249C90C242895D7E4321D4D28#iteration/25604)
+- Added Filename Created, Filename Accessed, Filename Modified, Filename Changed to the FileItem audit template (at
+  the request of Dan).
 
 ### Suppressions
 
 - Enabled client side searching in the suppressions list.  This may need to be removed long term if the number of
   suppressions becomes to large to page on the client.
 - Added wrapping to the suppression name.
+- Suppressions table items are now linked to the suppressions view.  Selecting a suppression will navigate the user to
+  the suppressions view with only the selected suppression in the suppressions table.
 
 ### General
 

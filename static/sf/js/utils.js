@@ -10,14 +10,14 @@ var StrikeFinder = StrikeFinder || {};
 //
 
 /**
- * Wait for a process to complete polling fn(callback) until done is true.  A callback is passed into fn() to specify
- * that the process is completed invoke callback(true) or callback(false) otherwise.
- * @param fn - the function to invoke.
- * @param callback - the function to invoke when complete.  callback(true) if the process was completed.
+ * Wait for a task result to complete polling fn(callback) until done is true.  A callback is passed into fn() to
+ * specify that the process is completed invoke callback(true) or callback(false) otherwise.
+ * @param task_id - the task to wait for.
+ * @param callback - function(err, complete).
  * @param options - delay - optional delay in milliseconds.  Defaults to 2000.
  *                  max_intervals - the maximum number of intervals.  Defaults to 5.
  */
-StrikeFinder.wait_for = function(fn, callback, options) {
+StrikeFinder.wait_for_task = function(task_id, callback, options) {
     var result = false;
     var delay = 2000;
     var max_intervals = 5;
@@ -37,28 +37,35 @@ StrikeFinder.wait_for = function(fn, callback, options) {
             if (interval_count >= max_intervals) {
                 // Exceed maximum number of tries.
                 clearInterval(interval);
-                callback(false);
+                callback(null, false);
             }
             else {
-                fn(function(done) {
-                    if (done) {
-                        // Client is done.
+                var task = new StrikeFinder.Task({id: task_id});
+                task.fetch({
+                    success: function (model, response) {
+                        if (response.state == 'SUCCESS') {
+                            // The task was successful.
+                            clearInterval(interval);
+                            callback(null, true, response);
+                        }
+                        else {
+                            // Increment the interval count.
+                            interval_count = interval_count + 1;
+                        }
+                    },
+                    error: function(model, response) {
+                        // Error while looking up task result.
                         clearInterval(interval);
-                        callback(true);
-                    }
-                    else {
-                        // Increment the interval count.
-                        interval_count = interval_count + 1;
+                        callback('Error while checking on task result: ' + task_id);
                     }
                 });
             }
         }
         catch (e) {
             // Error
-            log.error('Exception while waiting for task result.', e);
-            StrikeFinder.display_error('Exception while waiting for task result.');
+            StrikeFinder.display_error(message);
             clearInterval(interval);
-            callback(false);
+            callback(e);
         }
     }, delay);
 };

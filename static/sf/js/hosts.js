@@ -85,7 +85,8 @@ StrikeFinder.HostView = StrikeFinder.View.extend({
         var data = this.model.toJSON();
 
         // Update the collapsable title.
-        var title = data.cluster.engagement.client.name + ' : ' + data.domain + ' / ' + data.hostname;
+        var title = _.sprintf('%s (%s) : %s / %s',
+            data.cluster.engagement.client.name, data.cluster.name, data.domain, data.hostname);
         view.collapsable.set('title', '<i class="icon-desktop"></i> ' + title);
         // Render the template.
         view.$el.html(_.template($('#host-template').html(), data));

@@ -20,56 +20,43 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
                     // Block the UI while deleting.
                     StrikeFinder.block();
 
-                    StrikeFinder.display_success('Submitted task for delete: ' + view.model.as_string());
+                    StrikeFinder.display_success('Submitted task for delete suppression: ' + view.model.as_string());
 
                     // Try and wait for the task to complete.
-                    StrikeFinder.wait_for(
-                        function (callback) {
-                            // Check task result.
-                            var task = new StrikeFinder.Task({id: task_id});
-                            task.fetch({
-                                success: function (model, response, options) {
-                                    if (response.state == 'SUCCESS') {
-                                        // The task was completed successfully.
-                                        StrikeFinder.display_success('Successfully deleted suppression: ' +
-                                            view.model.as_string());
+                    StrikeFinder.wait_for_task(response_object.task_id, function(err, completed, response) {
+                        // Unblock the UI.
+                        StrikeFinder.unblock();
 
-                                        // Notify that the suppression was deleted.
-                                        view.trigger('delete', view.model);
-
-                                        // Unblock the UI.
-                                        StrikeFinder.unblock();
-
-                                        // Done.
-                                        callback(true);
-                                    }
-                                    else {
-                                        // Not done.
-                                        callback(false);
-                                    }
-                                },
-                                error: function () {
-                                    // Error.
-                                    StrikeFinder.display_error('Error while checking task status.');
-                                    // Unblock the UI.
-                                    StrikeFinder.unblock();
-                                    // Done.
-                                    callback(true);
-                                }
-                            });
-                        },
-                        function (completed) {
-                            if (!completed) {
-                                // The task is still running.
-                                var task_message = _.sprintf('The task deleting suppression: %s is still running and ' +
-                                    'its results can be viewed on the <a href="/sf/tasks">Task List</a>.',
-                                    view.model.as_string());
-                                StrikeFinder.display_info(task_message);
-                                // Unblock the UI.
-                                StrikeFinder.unblock();
-                            }
+                        if (err) {
+                            // Error checking the task result.
+                            StrikeFinder.display_error(err);
                         }
-                    );
+                        else if (completed) {
+                            // The task was completed successfully.
+                            StrikeFinder.display_success('Successfully deleted suppression: ' +
+                                view.model.as_string());
+
+                            // Notify that the suppression was deleted.
+                            view.trigger('delete', view.model);
+                        }
+                        else {
+                            // The task is still running.
+                            var task_message = _.sprintf('The task deleting suppression: %s is still running and ' +
+                                'its results can be viewed on the <a href="/sf/tasks">Task List</a>.',
+                                view.model.as_string());
+                            StrikeFinder.display_info(task_message);
+                        }
+                    });
+                },
+                error: function(model, xhr) {
+                    // Error submitting the task.
+                    try {
+                        var message = xhr && xhr.responseText ? xhr.responseText : 'Response text not defined.';
+                        StrikeFinder.display_error('Error while submitting delete suppression task - ' + message);
+                    }
+                    finally {
+                        StrikeFinder.unblock();
+                    }
                 }
             });
         }
@@ -107,6 +94,16 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
         view.collection.listenTo(view.collection, 'sync', update_title);
         view.collection.listenTo(view.collection, 'reset', update_title);
 
+        view.listenTo(view, 'load', function () {
+            // Select the first row on load.
+            view.select_row(0);
+        });
+
+        view.options.oLanguage = {
+            sEmptyTable: 'No suppressions were found',
+            sZeroRecords: 'No matching suppressions found'
+        };
+
         if (condensed) {
             view.options['iDisplayLength'] = -1;
 
@@ -126,8 +123,14 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                     // Using `row[0]` is equivalent.
                     mRender: function (data, type, row) {
                         var formatted = StrikeFinder.format_suppression(row);
-                        return '<a class="btn btn-link destroy" data-toggle="tooltip" ' +
-                            'title="Delete Suppression" style="padding: 0px 0px"><i class="icon-remove-sign"></i></a> ' + formatted;
+
+                        var suppression_name = _.sprintf('<a href="/sf/suppressions/%s">%s</a>',
+                            row.suppression_id, formatted);
+
+                        var delete_link = '<a class="btn btn-link destroy" data-toggle="tooltip" ' +
+                            'title="Delete Suppression" style="padding: 0px 0px"><i class="icon-remove-sign"></i></a>';
+
+                        return delete_link + ' ' + suppression_name;
                     },
                     aTargets: [1]
                 },
@@ -149,11 +152,11 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
         else {
             view.options.aoColumns = [
                 {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false},
-                {sTitle: "Name", mData: 'comment', bSortable: true},
+                {sTitle: "Rule", mData: 'comment', bSortable: true, sClass: 'wrap'},
+                {sTitle: "Description", mData: 'comment', bSortable: true, sWidth: '25%'},
                 {sTitle: "IOC", mData: 'iocname', bSortable: true, sClass: 'nowrap'},
                 {sTitle: "IOC UUID", mData: 'ioc_uuid', bSortable: false, bVisible: false},
                 {sTitle: "Hits", mData: 'suppressed', bSortable: true},
-                {sTitle: "Rule", mData: 'comment', bSortable: true, sClass: 'wrap'},
                 {sTitle: "Global", mData: 'cluster_name', bVisible: true, bSortable: true},
                 {sTitle: "Author", mData: 'user_uuid', bSortable: true},
                 {sTitle: "Created", mData: 'created', bSortable: true, sClass: 'nowrap'}
@@ -161,19 +164,13 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
 
             view.options.aoColumnDefs = [
                 {
-                    // Add an option to the display name to delete the row.
+                    // Add an option to the display name to g the row.
                     mRender: function (data, type, row) {
                         return '<a class="btn btn-link destroy" data-toggle="tooltip" ' +
-                            'title="Delete Suppression" style="padding: 0px 0px"><i class="icon-remove-sign"></i></a> ' + data;
+                            'title="Delete Suppression" style="padding: 0px 0px"><i class="icon-remove-sign"></i></a> ' +
+                            StrikeFinder.format_suppression(row);
                     },
                     aTargets: [1]
-                },
-                {
-                    // Format the suppression in the rule format.
-                    mRender: function (data, type, row) {
-                        return StrikeFinder.format_suppression(row);
-                    },
-                    aTargets: [5]
                 },
                 {
                     // Render global or not.
@@ -253,6 +250,11 @@ StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
             title_class: 'uac-header'
         });
 
+        view.options.oLanguage = {
+            sEmptyTable: 'This suppression is not matching any hits',
+            sZeroRecords: 'No matching hits found'
+        };
+
         view.options['sAjaxSource'] = '/sf/api/hits';
         view.options.sAjaxDataProp = 'results';
         view.options['bServerSide'] = true;
@@ -284,16 +286,21 @@ StrikeFinder.SuppressionsAppView = StrikeFinder.View.extend({
         });
         view.listenTo(view.suppressions_table, 'click', view.render_hits);
         view.listenTo(view.suppressions_table, 'delete', function() {
-            StrikeFinder.block();
-            view.suppressions.fetch({
-                success: function() {
-                    view.suppressions_table.select_row(0);
-                    StrikeFinder.unblock();
-                },
-                failure: function() {
-                    StrikeFinder.unblock();
-                }
-            });
+            if (StrikeFinder.single_entity) {
+                view.suppressions.reset([]);
+            }
+            else {
+                StrikeFinder.block();
+                view.suppressions.fetch({
+                    success: function() {
+                        view.suppressions_table.select_row(0);
+                        StrikeFinder.unblock();
+                    },
+                    failure: function() {
+                        StrikeFinder.unblock();
+                    }
+                });
+            }
         });
         view.listenTo(view.suppressions_table, 'empty', function () {
             $('.hits-view').fadeOut().hide();

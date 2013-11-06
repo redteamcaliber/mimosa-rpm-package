@@ -3,13 +3,15 @@ UAC ToDo
 
 ## Tasks
 
-### Look into closing the dialog views.
+### Look into previous next shortcuts on the hits view.
+
+### Test the single entity mode for suppressions.
+
+### Implement facets
 
 ### Add some kind over overlay when sorting on the acquisitions page.  It's very slow so it appears as if it's not working.
 
 ### Look into better display for the case where there are no hits on the hit review page.
-
-### Setup unit testing for the UAC project.
 
 ### *** Send out instructions for the merging of the env.json file ***
     - Several of the settings moved from the uac section up to the server section in order to be more generic and allow
@@ -21,17 +23,7 @@ UAC ToDo
     - https://github.mandiant.com/OpenIOC/OpenIOC_Terms/blob/master/current.iocterms
     - Look for mistakes and overrides.
 
-### Suppressions table updates
-    - If the table is client paged then enable client side filtering and sorting.
-    - Remove the nowrap on the first column and test.
-
 ### Implement merge all
-
-### Implement facts
-
-### Implement the audit for an acquisition.
-    - Implement an API for retrieving an acquisition audit.
-        https://sick2.mandiant.com/api/v1/acquisition/c57b89b8-0de6-4df5-9a99-0afa1fbf09b4/fileitem/
 
 ### Modify the merge button to be a drop down of action values.
 

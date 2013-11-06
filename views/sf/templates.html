@@ -345,14 +345,11 @@
     <table id="agent-host-template-formatting-table" style="width: 100%">
         <tr>
             <td>
-                <span class="uac-header">
-                    <%= cluster.engagement.client.name %>: <%= domain %> /
+                <span class="uac-sub-header">
+                    <%= cluster.engagement.client.name %> (<%= cluster.name %>) : <%= domain %> /
                     <a href="/sf/host/<%= hash %>/"><%= hostname %></a> /
                     <a href="/sf/host/<%= hash %>/"><%= ip %></a>
                 </span>
-            </td>
-            <td>
-
             </td>
         </tr>
         <tr>
@@ -420,21 +417,19 @@
     <a title="previous"
        class="btn btn-link prev"
        style="text-decoration: none; padding: 0">
-        <i class="icon-circle-arrow-up icon-3x"></i>
+        <i class="icon-arrow-up icon-2x"></i>
     </a>
     <a title="next"
        class="btn btn-link next"
        style="text-decoration: none; padding: 0">
-        <i class="icon-circle-arrow-down icon-3x"></i>
+        <i class="icon-arrow-down icon-2x"></i>
     </a>
 </script>
 
 <script type="text/template" id="host-template">
     <div class="row-fluid">
         <div class="span4">
-            <span style="font-weight: bold">
-                <%= cluster.engagement.client.name %>: <%= domain %> / <%= hostname %>
-            </span>
+            <%= cluster.engagement.client.name %> (<%= cluster.name %>) : <%= domain %> / <%= hostname %>
         </div>
         <div class="span2">
             <%= time_formatted %>
@@ -447,10 +442,10 @@
         <div class="span2">
             <span style="font-family: courier"><%= ip %></span>
         </div>
-        <div class="span2">
+        <div class="span3">
             <%= product_name %> <%= os_patch_level %>
         </div>
-        <div class="span2">
+        <div class="span1">
             <%= version %>
         </div>
         <div class="span2">
@@ -490,9 +485,16 @@
                 <div class="container-fluid">
                     <div class="row-fluid">
                         <div class="span12">
-                            <h4>
-                                <%= cluster.engagement.client.name %>: <%= domain %> / <%= hostname %>
-                            </h4>
+                            <span style="font-weight: bold">
+                                <%= cluster.engagement.client.name %> (<%= cluster.name %>)
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <span style="font-weight: bold">
+                                <%= domain %> / <%= hostname %>
+                            </span>
                         </div>
                     </div>
                     <div class="row-fluid">

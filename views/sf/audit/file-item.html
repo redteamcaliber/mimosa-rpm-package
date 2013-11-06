@@ -49,7 +49,7 @@
     </tr>
     <tr>
         <th>Filename Accessed</th>
-        <td ><span class="ioc-term" ioc-term="FileItem/FilenameAccessed">{{ fileitem.filename.accessed }}</span></td>
+        <td ><span class="ioc-term" ioc-term="FileItem/FilenameAccessed">{{ fileitem.filenameaccessed }}</span></td>
     </tr>
     <tr>
         <th>Filename Modified</th>
@@ -427,14 +427,18 @@
               class="fixed-font"
               style="width: 95%;"
               onclick="this.select();">
-File Name:      {{ fileitem.filename }}
-MD5 Hash:       {{ fileitem.md5sum }}
-File Created:   {{ fileitem.created }}
-Last Accessed:  {{ fileitem.accessed }}
-Last Modified:  {{ fileitem.modified }}
-Entry Modified: {{ fileitem.changed }}
-File Size:      {{ fileitem.sizeinbytes }}
-File Path:      {% if fileitem.drive %}{{ fileitem.drive }}:\{{ fileitem.filepath }}{% endif %}
-File Owner:     {{ fileitem.username }}
+File Name:         {{ fileitem.filename }}
+MD5 Hash:          {{ fileitem.md5sum }}
+File Created:      {{ fileitem.created }}
+Last Accessed:     {{ fileitem.accessed }}
+Last Modified:     {{ fileitem.modified }}
+Entry Modified:    {{ fileitem.changed }}
+{% if fileitem.filenamecreated %}Filename Created:  {{ fileitem.filenamecreated }}
+Filename Accessed: {{ fileitem.filenameaccessed }}
+Filename Modified: {{ fileitem.filenamemodified }}
+Filname: Changed:  {{ fileitem.filenamechanged }}{% endif %}
+File Size:         {{ fileitem.sizeinbytes }}
+File Path:         {% if fileitem.drive %}{{ fileitem.drive }}:\{{ fileitem.filepath }}{% endif %}
+File Owner:        {{ fileitem.username }}
     </textarea>
 </div>

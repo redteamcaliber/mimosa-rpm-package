@@ -26,7 +26,7 @@
         "verify_ssl": false,
 
         "sf_api_url": "https://proxy.mcirt.mandiant.com/SF/",
-        "ss_api_url": "https://proxy.mcirt.mandiant.com/SEASICK/",
+        "ss_api_url": "https://proxy.mcirt.mandiant.com/SEASICK/"
     },
     "sso": {
         "auth_user": "app.uac",

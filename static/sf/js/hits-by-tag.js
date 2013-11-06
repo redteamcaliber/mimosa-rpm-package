@@ -27,6 +27,10 @@ StrikeFinder.HitsByTagTableView = StrikeFinder.TableView.extend({
             }
         ];
 
+        view.options.oLanguage = {
+            sEmptyTable: 'No hits were found for the specified tag'
+        };
+
         view.options.aaSorting = [];
         view.options.sDom = 'ltip';
 

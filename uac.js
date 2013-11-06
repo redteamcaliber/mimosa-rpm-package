@@ -86,7 +86,8 @@ app.use(function errorHandler(err, req, res, next) {
     log.error(_.sprintf(message, req.method, req.originalUrl, res.statusCode, uid, stack));
 
     if (route_utils.is_html_request(req)) {
-
+        // Display the formatted 500 page.
+        res.render('/uac/500.html');
     }
     else {
         // Send a 500 response to AJAX clients.
