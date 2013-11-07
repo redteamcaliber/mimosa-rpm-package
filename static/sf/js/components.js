@@ -182,6 +182,17 @@ StrikeFinder.TableViewControls = StrikeFinder.View.extend({
         view.run_once('init_template', function () {
             // Only write the template once.
             view.$el.html(_.template($('#prev-next-template').html()));
+
+            $(document).keyup(function(ev) {
+                if (ev.ctrlKey) {
+                    if (ev.keyCode == 68 || ev.keyCode == 40) {
+                        view.on_next();
+                    }
+                    else if (ev.keyCode == 85 || ev.keyCode == 38) {
+                        view.on_prev();
+                    }
+                }
+            });
         });
 
         if (view.table !== undefined) {
