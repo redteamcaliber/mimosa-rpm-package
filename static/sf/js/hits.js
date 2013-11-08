@@ -1,5 +1,6 @@
 var StrikeFinder = StrikeFinder || {};
 
+
 /**
  * Hits table view.
  */
@@ -1758,6 +1759,13 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
 
         view.params = {};
 
+        // Hits facets.
+//        view.facets = new StrikeFinder.HitsFacetsModel();
+//        view.facets_view = new StrikeFinder.HitsFacetsView({
+//            el: '#hits-facets-div',
+//            model: view.facets
+//        });
+
         // Hits.
         view.hits_table_view = new StrikeFinder.HitsTableView({
             el: '#hits-table'
@@ -1858,6 +1866,9 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
 
         if (view.params.usertoken) {
             StrikeFinder.run(function () {
+//                view.facets.usertoken = view.params.usertoken;
+//                view.facets.fetch();
+
                 var usertoken_params = {
                     usertoken: view.params.usertoken
                 };
@@ -1876,5 +1887,38 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
                 view.hits_table_view.fetch(exp_key_params);
             });
         }
+    }
+});
+
+/**
+ * View to render hits facets.
+ */
+StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
+    initialize: function() {
+        var view = this;
+
+//        view.collapsable = new StrikeFinder.CollapsableContentView({
+//            el: view.el,
+//            title: '<i class="icon-bar-chart"></i> Hits Facets',
+//            title_class: 'uac-header'
+//        });
+
+        view.listenTo(view.model, 'sync', view.render);
+    },
+    render: function() {
+        var view = this;
+        var attributes = view.model.attributes;
+        var keys = _.keys(attributes);
+
+        var data = {
+            keys: keys,
+            facets: attributes,
+            get_facet_values: function(facet) {
+                return this.facets[facet];
+            }
+        };
+
+        // Render the template.
+        view.$el.html(_.template($("#hits-facets-template").html(), data));
     }
 });

@@ -1,6 +1,15 @@
 Unified Analyst Console (UAC) Release Notes
 ===========================================
 
+Mandiant-uac-ws-0.5-0 - November ???th, 2013
+------------------------------------------
+
+### Hit Review
+
+- Keyboard shortcuts added for navigating hits.  On a Mac ctrl-u moves to the previous row and ctrl-d moves to the next
+  row (similiar to vi).  On Windows ctrl-up-arrow moves to the previous record and ctrl-down-arrow moves to the next record.
+
+
 Mandiant-uac-ws-0.4-0 - November 6th, 2013
 ------------------------------------------
 

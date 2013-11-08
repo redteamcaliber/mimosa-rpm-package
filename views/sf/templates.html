@@ -581,3 +581,23 @@
         </div>
     </div>
 </script>
+
+<script id="hits-facets-template" type="text/template">
+    <div class="row-fluid" style="margin-bottom: 15px">
+        <% _.each( keys, function( facet, index ) { %>
+        <div class="btn-group">
+            <a class="btn dropdown-toggle" data-toggle="dropdown">
+                <%= facet %>
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <% _.each( get_facet_values(facet), function(value, index) { %>
+                <li>
+                    <a name="<%= value.id %>" title="<%= value.value%>"><%= value.value %> (<%= value.count %>)</a>
+                </li>
+                <% }) %>
+            </ul>
+        </div>
+        <% }); %>
+    </div>
+</script>

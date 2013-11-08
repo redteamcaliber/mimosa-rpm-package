@@ -191,6 +191,40 @@ StrikeFinder.HitsCollection = Backbone.Collection.extend({
 });
 
 /**
+ * Model to retrieve hits facets.
+ */
+StrikeFinder.HitsFacetsModel = Backbone.Model.extend({
+    url: function() {
+        var result = '/sf/api/hits/facets?facets=tagname,md5sum&';
+        if (this.services) {
+            result += _.sprintf('services=%s', this.services);
+        }
+        if (this.clusters) {
+            result += _.sprintf('clusters=%s&', this.clusters);
+        }
+        if (this.exp_key) {
+            result += _.sprintf('exp_key=%s&', this.exp_key);
+        }
+        if (this.usertoken) {
+            result += _.sprintf('usertoken=%s&', this.usertoken);
+        }
+        if (this.iocnamehash) {
+            result += _.sprintf('iocnamehash=%s&', this.iocnamehash);
+        }
+        if (this.ioc_uuid) {
+            result += _.sprintf('ioc_uuid=%s&', this.ioc_uuid);
+        }
+        if (this.am_cert_hash) {
+            result += _.sprintf('am_cert_hash=%s&', this.am_cert_hash);
+        }
+        if (this.suppression_id) {
+            result += _.sprintf('suppression_id=%s&', this.suppression_id);
+        }
+        return result;
+    }
+});
+
+/**
  * Model that represents and IOC information object.
  */
 StrikeFinder.IOCModel = Backbone.Model.extend({
