@@ -1,101 +1,121 @@
-<div class="row-fluid">
-    {% if not hide_hits %}
-    <!-- Hits Facets -->
-    <div class="row-fluid">
-        <div id="hits-facets-div"></div>
-    </div>
+{% if not hide_hits %}
+<div class="row">
+    <div class="col-md-12">
+        <!-- Hits Facets -->
+        <div class="row">
+            <div class="col-md-12">
+                <div id="hits-facets-div"></div>
+            </div>
+        </div>
 
-    <!-- Hits View Template -->
-    <div class="row-fluid">
-        <div id="hits-div">
-            <table id="hits-table"
-                   class="table table-striped table-bordered table-hover table-condensed">
-            </table>
+        <!-- Hits View Template -->
+        <div class="row">
+            <div class="col-md-12">
+                <div id="hits-div">
+                    <table id="hits-table"
+                           class="table table-striped table-bordered table-hover table-condensed">
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-    {% endif %}
 </div>
-<div class='row-fluid'>
-    <div class='span6'>
+{% endif %}
+
+<div class='row'>
+    <div class='col-md-6'>
 
         <!-- Prev/Next View, Host Template View -->
-        <div class="row-fluid sf-details-view" style="display: none; margin-bottom: 10px">
-            <table id="agent-host-formatting-table" style="padding: 0%; border: none">
-                <tr>
-                    <td style="vertical-align: top">
-                        <!-- PrevNext View -->
-                        <div id="prev-next-div" class="pull-left" style="width:100%"></div>
-                    </td>
-                    <td style="width: 100%">
-                        <!-- Agent Host View -->
-                        <div id="agent-host-div" style="width: 100%; margin-left: 10px">
-                        </div>
-                    </td>
-                </tr>
-            </table>
+        <div class="row sf-details-view" style="display: none; margin-bottom: 10px">
+            <div class="col-md-12">
+                <table id="agent-host-formatting-table" style="padding: 0%; border: none">
+                    <tr>
+                        <td style="vertical-align: middle">
+                            <!-- PrevNext View -->
+                            <div id="prev-next-div" class="pull-left" style="width:100%"></div>
+                        </td>
+                        <td style="width: 100%">
+                            <!-- Agent Host View -->
+                            <div id="agent-host-div" style="width: 100%; margin-left: 10px">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
 
         <!-- Toolbar -->
-        <div class="row-fluid sf-details-view" style="display: none;">
-            <div class="pull-left">
-                <h4>
-                    <span id="audit-type"></span>
-                </h4>
-            </div>
-
-            <div class="pull-right">
-                <div id="tags" class="btn-group">
-                    <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
-                        <i class="icon-tags"></i> Tag: <span class="selected"></span> <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <!-- Tag values. -->
-                    </ul>
+        <div class="row sf-details-view" style="display: none;">
+            <div class="col-md-12">
+                <div class="pull-left">
+                    <h4>
+                        <span id="audit-type"></span>
+                    </h4>
                 </div>
 
-                <div id="identities" class="btn-group">
-                    <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
-                        <i class="icon-calendar"></i> Identity: <span class="selected"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <!-- Identity values. -->
-                    </ul>
-                </div>
+                <div class="pull-right">
+                    <div id="tags" class="btn-group">
+                        <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-tags"></i> Tag: <span class="selected"></span> <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <!-- Tag values. -->
+                        </ul>
+                    </div>
 
-                <button id="merge" class="btn btn-link"><i class="icon-collapse-top"></i> Merge</button>
+                    <div id="identities" class="btn-group">
+                        <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-calendar"></i> Identity: <span class="selected"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <!-- Identity values. -->
+                        </ul>
+                    </div>
+
+                    <button id="merge" class="btn btn-link"><i class="fa fa-collapse-top"></i> Merge</button>
+                </div>
             </div>
         </div>
 
         <!-- Audit View Template -->
-        <div class='row-fluid sf-details-view' style="overflow: auto">
-            <div id="audit-div">
-                <div style="width: 100%; height: 300px;"></div>
+        <div class='row sf-details-view' style="overflow: auto">
+            <div class="col-md-12">
+                <div id="audit-div">
+                    <div style="width: 100%; height: 300px;"></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class='span6'>
+    <div class='col-md-6'>
         <!-- IOCs View Template -->
-        <div class='row-fluid sf-details-view'>
-            <div id='iocs-div' style="margin-bottom: 20px">
-                <div style="width: 100%; height: 200px"></div>
+        <div class='row sf-details-view'>
+            <div class="col-md-12">
+                <div id='iocs-div' style="margin-bottom: 20px">
+                    <div style="width: 100%; height: 200px"></div>
+                </div>
             </div>
         </div>
 
         <!-- Comments View Template -->
-        <div class='row-fluid sf-details-view' style="display: none">
-
-            <div id='comments-collapsable-div'>
-                <div id='comments-div'>
-                    <div class="input-append span12">
-                        <input id="comment" class="span11" id="appendedInputButton" type="text">
-                        <button id="add-comment" class="btn btn-primary" type="button">
-                            <i class="icon-plus"></i> Add
-                        </button>
-                    </div>
-                    <div class="row-fluid">
-                        <table id="comments-table"
-                               class="table table-striped table-bordered table-hover table-condensed"></table>
+        <div class='row sf-details-view' style="display: none">
+            <div class="col-md-12">
+                <div id='comments-collapsable-div'>
+                    <div id='comments-div'>
+                        <div class="input-group">
+                            <input id="comment" class="form-control" id="appendedInputButton" type="text">
+                            <span class="input-group-btn">
+                                <button id="add-comment" class="btn btn-primary" type="button">
+                                    <i class="fa fa-plus"></i> Add
+                                </button>
+                            </span>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table id="comments-table"
+                                       class="table table-striped table-bordered table-hover table-condensed"></table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

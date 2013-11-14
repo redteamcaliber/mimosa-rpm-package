@@ -75,7 +75,7 @@ StrikeFinder.wait_for_task = function(task_id, callback, options) {
 // Suppression Formatting Utilities.
 //
 StrikeFinder.format_suppression = function (s) {
-    return _.sprintf('%s \'%s\' \'%s\' (preservecase=%s)', s.itemkey, s.condition, s.itemvalue, s.preservecase);
+    return _.sprintf('%s \'%s\' \'%s\' (preservecase=%s)', s.itemkey, s.condition, _.escape(s.itemvalue), s.preservecase);
 };
 
 
@@ -104,7 +104,6 @@ StrikeFinder.collapse = function(el) {
         new StrikeFinder.CollapsableContentView({
             el: '#' + jq_el.attr('id'),
             title: jq_el.attr('collapsable-title'),
-            title_class: 'uac-sub-header',
             display_toggle: false
         });
     }
@@ -112,7 +111,6 @@ StrikeFinder.collapse = function(el) {
         new StrikeFinder.CollapsableContentView({
             el: '#' + collapsable.id,
             title: $(collapsable).attr('collapsable-title'),
-            title_class: 'uac-sub-header',
             display_toggle: false
         });
     });
@@ -123,6 +121,35 @@ StrikeFinder.collapse = function(el) {
 //
 // Display Blocking Functions.
 //
+
+/**
+ * Attempt to compute a reasonable overlay color or use a default.
+ */
+StrikeFinder.get_overlay_color = function() {
+    if (!document.body) {
+        // If the document body is not initialized use a default value.
+        return '#cccccc';
+    }
+    else {
+        // The body is available.
+        if (!StrikeFinder.OVERLAY_COLOR) {
+            // Overlay color has not been computed, use the body background color.
+            var style = window.getComputedStyle(document.body);
+            if (style && style.getPropertyValue('background-color')) {
+                StrikeFinder.OVERLAY_COLOR = style.getPropertyValue('background-color');
+            }
+            else {
+                // Unable to compute the overlay color, use a default.
+                StrikeFinder.OVERLAY_COLOR = '#cccccc';
+            }
+        }
+        return StrikeFinder.OVERLAY_COLOR;
+    }
+};
+
+StrikeFinder.reset_overlay_color = function() {
+    StrikeFinder.OVERLAY_COLOR = undefined;
+};
 
 /**
  * Retrieve the default block ui options.
@@ -140,8 +167,8 @@ StrikeFinder.get_blockui_options = function (message) {
             backgroundColor: ''
         },
         overlayCSS: {
-            backgroundColor: '#ffffff',
-            opacity: .8
+            backgroundColor: StrikeFinder.get_overlay_color(),
+            opacity: .5
         },
         baseZ: 5000
     }
@@ -199,6 +226,7 @@ StrikeFinder.show_views = function (views, on) {
 //
 
 StrikeFinder.display_info = function (message) {
+    message = message ? message += '&nbsp;' : message;
     $.bootstrapGrowl(message, {
         type: 'info',
         width: 'auto',
@@ -207,6 +235,7 @@ StrikeFinder.display_info = function (message) {
 };
 
 StrikeFinder.display_warn = function (message) {
+    message = message ? message += '&nbsp;' : message;
     $.bootstrapGrowl(message, {
         type: 'warn',
         width: 'auto',
@@ -215,6 +244,7 @@ StrikeFinder.display_warn = function (message) {
 };
 
 StrikeFinder.display_success = function (message) {
+    message = message ? message += '&nbsp;' : message;
     $.bootstrapGrowl(message, {
         type: 'success',
         width: 'auto',
@@ -223,8 +253,9 @@ StrikeFinder.display_success = function (message) {
 };
 
 StrikeFinder.display_error = function (message) {
+    message = message ? message += '&nbsp;' : message;
     $.bootstrapGrowl(message, {
-        type: 'error',
+        type: 'danger',
         width: 'auto',
         delay: 15000
     });
@@ -314,6 +345,30 @@ StrikeFinder.format_unix_date = function(unix) {
     else {
         return '';
     }
+};
+
+/**
+ * Change the current UAC theme.
+ * @param theme - the theme name.
+ */
+StrikeFinder.set_theme = function(theme) {
+    var url;
+    if (theme) {
+        // Generate the theme url.
+        url = _.sprintf('/static/bootstrap/css/bootstrap.min-%s.css', theme);
+    }
+    else {
+        // Use the default.
+        url = '/static/bootstrap/css/bootstrap.min.css';
+    }
+    // Reload the CSS.
+    $('link[title="bootstrap-theme"]').attr('href', url);
+
+    // Set a cookie specifying the current theme.
+    document.cookie = _.sprintf('theme=%s', theme);
+
+    // Clear the overlay color since the theme has been changed.
+    StrikeFinder.reset_overlay_color();
 };
 
 function format_expression(s) {

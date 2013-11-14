@@ -3,6 +3,12 @@ UAC ToDo
 
 ## Tasks
 
+### Bootstrap Stuff
+    - Build a theme switcher.
+
+### Integrate the type ahead search box.
+    - http://twitter.github.io/typeahead.js/
+
 ### Look into previous next shortcuts on the hits view.
 
 ### Test the single entity mode for suppressions.

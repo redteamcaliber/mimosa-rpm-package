@@ -30,7 +30,7 @@ StrikeFinder.View = Backbone.View.extend({
      * Return the list of event listerners.
      * @returns {*}
      */
-    get_listeners: function() {
+    get_listeners: function () {
         return this._listeners ? _.values(this._listeners) : [];
     }
 });
@@ -69,33 +69,35 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
 
         view.run_once('init_render', function () {
             // Create the accordion inner div.
-            var accordion_inner = $(document.createElement('div'));
-            accordion_inner.addClass('accordion-inner');
-            view.$el.wrap(accordion_inner);
-            accordion_inner = view.$el.parent();
+            var panel_body = $(document.createElement('div'));
+            panel_body.addClass('panel-body');
+            view.$el.wrap(panel_body);
+            panel_body = view.$el.parent();
 
             // Create the accordion body.
-            var accordion_body = $(document.createElement('div'));
-            accordion_body.attr('id', 'collapse-' + view.name);
-            accordion_body.addClass('accordion-body');
-            accordion_body.addClass('collapse');
+            var panel_collapse = $(document.createElement('div'));
+            panel_collapse.attr('id', 'collapse-' + view.name);
+            panel_collapse.addClass('panel-collapse');
+            panel_collapse.addClass('collapse');
             if (!view.collapsed) {
-                accordion_body.addClass('in');
+                panel_collapse.addClass('in');
             }
-            accordion_inner.wrap(accordion_body);
-            accordion_body = accordion_inner.parent();
+            panel_body.wrap(panel_collapse);
+            panel_collapse = panel_body.parent();
 
             // Create the accordion group div.
-            var accordion_group = $(document.createElement('div'));
-            accordion_group.addClass('accordion-group');
-            accordion_body.wrap(accordion_group);
-            accordion_group = accordion_body.parent();
+            var panel = $(document.createElement('div'));
+            panel.addClass('panel');
+            panel.addClass('panel-default');
+            panel.css('margin-bottom', '10px');
+            panel_collapse.wrap(panel);
+            panel = panel_collapse.parent();
 
             // Create the accordion div.
-            var accordion = $(document.createElement('div'));
-            accordion.attr('id', view.name + '-accordion');
-            accordion.addClass('accordion');
-            accordion_group.wrap(accordion);
+            var panel_group = $(document.createElement('div'));
+            panel_group.attr('id', view.name + '-accordion');
+            panel_group.addClass('panel-group');
+            panel.wrap(panel_group);
 
             // Create the title.
             var title_span = $(document.createElement('span'));
@@ -110,8 +112,8 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
             if (view.display_toggle) {
                 // Create the icon.
                 var icon = $(document.createElement('i'));
-                icon.addClass('icon-chevron-sign-down');
-                icon.addClass('icon-large');
+                icon.addClass('fa fa-chevron-circle-down');
+                icon.addClass('fa-lg');
                 icon.addClass('pull-right');
             }
 
@@ -127,12 +129,17 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
             anchor.append(title_span);
             anchor.append(icon);
 
-            // Create the accordion heading div.
-            var heading_div = $(document.createElement('div'));
-            heading_div.addClass('accordion-heading');
-            heading_div.append(anchor);
+            // Create the panel header.
+            var panel_title = $(document.createElement('h4'));
+            panel_title.addClass('panel-title');
+            panel_title.append(anchor);
 
-            accordion_group.prepend(heading_div);
+            // Create the accordion heading div.
+            var panel_heading = $(document.createElement('div'));
+            panel_heading.addClass('panel-heading');
+            panel_heading.append(panel_title);
+
+            panel.prepend(panel_heading);
         });
 
         return this;
@@ -183,7 +190,7 @@ StrikeFinder.TableViewControls = StrikeFinder.View.extend({
             // Only write the template once.
             view.$el.html(_.template($('#prev-next-template').html()));
 
-            $(document).keyup(function(ev) {
+            $(document).keyup(function (ev) {
                 if (ev.ctrlKey) {
                     if (ev.keyCode == 68 || ev.keyCode == 40) {
                         view.on_next();
@@ -247,11 +254,11 @@ StrikeFinder.get_datatables_settings = function (parent, settings) {
         sPaginationType: "bootstrap",
         bSortClasses: false,
         bProcessing: false,
-        asStripClasses: [],
+        asStripeClasses: [],
         fnRowCallback: function (nRow, data, iDisplayIndex, iDisplayIndexFull) {
             var click_handler = function (ev) {
                 // Select the row.
-                $(nRow).addClass('info').siblings().removeClass('info');
+                $(nRow).addClass('active').siblings().removeClass('active');
                 // Trigger a click event.
                 parent.trigger('click', parent.get_data(ev.currentTarget), ev);
             };
@@ -260,9 +267,11 @@ StrikeFinder.get_datatables_settings = function (parent, settings) {
             $(nRow).unbind('click', click_handler);
             // Bind a click event to the row.
             $(nRow).bind('click', click_handler);
+
+            return nRow;
         },
-        fnCreatedRow: function (nRow, aData, iDataIndex) {
-            parent.trigger('row:created', nRow, aData, iDataIndex);
+        fnCreatedRow: function (nRow, data, iDataIndex) {
+            parent.trigger('row:created', nRow, data, iDataIndex);
         },
         fnInitComplete: function (oSettings, json) {
             parent.trigger('load', oSettings, json);
@@ -299,7 +308,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         }
     },
     highlight_row: function (nRow) {
-        $(nRow).addClass('info').siblings().removeClass('info');
+        $(nRow).addClass('active').siblings().removeClass('active');
     },
     /**
      * Initiate a click event on a row.
@@ -340,7 +349,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         }
     },
     get_selected: function () {
-        return this.$('tr.info');
+        return this.$('tr.active');
     },
     get_selected_position: function () {
         var selected = this.get_selected();
@@ -375,7 +384,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         var pos = this.get_selected_position();
         return pos + 1 < this.length();
     },
-    peek_prev_data: function() {
+    peek_prev_data: function () {
         var selected = this.get_selected();
         if (selected !== undefined && selected.length == 1) {
             var pos = this.get_position(selected.get(0));
@@ -384,7 +393,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         // No previous.
         return undefined;
     },
-    peek_next_data: function() {
+    peek_next_data: function () {
         if (this.is_next()) {
             var selected = this.get_selected();
             if (selected !== undefined && selected.length == 1) {
@@ -488,10 +497,10 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
     is_datatable: function () {
         return $.fn.DataTable.fnIsDataTable(this.get_dom_table());
     },
-    is_server_side: function() {
+    is_server_side: function () {
         return this.get_settings().oInit.bServerSide;
     },
-    reload: function(row_index) {
+    reload: function (row_index) {
         if (row_index !== undefined) {
             this._row_index = row_index;
         }
@@ -646,6 +655,14 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         // Create the table.
         var table = view.$el.dataTable(settings);
 
+        if (view.$el.parent()) {
+            // Assign the bootstrap class to the length select.
+            var length_select = view.$el.parent().find('select');
+            if (length_select) {
+                length_select.addClass('form-control');
+            }
+        }
+
         return view;
     },
     fetch: function (params) {
@@ -710,6 +727,16 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                 $(cols[row_column_index]).html(row_update_value);
                 break; // **EXIT**
             }
+        }
+    },
+    /**
+     * Escape a cell.
+     */
+    escape_cell: function(row, index) {
+        var col = this.get_settings().aoColumns[index];
+        var td = $(_.sprintf('td:eq(%s)', index), row);
+        if (td) {
+            td.html(_.escape(td.html()));
         }
     }
 });

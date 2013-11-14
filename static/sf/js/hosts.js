@@ -10,8 +10,7 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
 
         view.collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
-            title: '<i class="icon-list"></i> Hits',
-            title_class: 'uac-header'
+            title: '<i class="fa fa-list"></i> Hits'
         });
 
         view.options['aoColumns'] = [
@@ -42,10 +41,10 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
 
             var title;
             if (position !== undefined) {
-                title = _.sprintf('<i class="icon-list"></i> Hits (%s of %s)', position + 1, view.get_total_rows());
+                title = _.sprintf('<i class="fa fa-list"></i> Hits (%s of %s)', position + 1, view.get_total_rows());
             }
             else {
-                title = _.sprintf('<i class="icon-list"></i> Hits (%s)', view.get_total_rows());
+                title = _.sprintf('<i class="fa fa-list"></i> Hits (%s)', view.get_total_rows());
             }
             // Update the title with the count of the rows.
             view.collapsable.set('title', title);
@@ -87,7 +86,7 @@ StrikeFinder.HostView = StrikeFinder.View.extend({
         // Update the collapsable title.
         var title = _.sprintf('%s (%s) : %s / %s',
             data.cluster.engagement.client.name, data.cluster.name, data.domain, data.hostname);
-        view.collapsable.set('title', '<i class="icon-desktop"></i> ' + title);
+        view.collapsable.set('title', '<i class="fa fa-desktop"></i> ' + title);
         // Render the template.
         view.$el.html(_.template($('#host-template').html(), data));
     },

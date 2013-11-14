@@ -71,7 +71,7 @@ StrikeFinder.TaskTableView = StrikeFinder.TableView.extend({
         if (view.collection) {
             view.listenTo(view.collection, 'reset', view.render);
             view.listenTo(view.collection, 'reset', function() {
-                var title = _.sprintf('<i class="icon-tasks"></i> Tasks (%s)', view.collection.length);
+                var title = _.sprintf('<i class="fa fa-tasks"></i> Tasks (%s)', view.collection.length);
                 view.tasks_collapsable.set('title', title);
             });
         }

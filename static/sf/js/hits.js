@@ -41,16 +41,16 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
 
             var title;
             if (position !== undefined) {
-                title = _.sprintf('<i class="icon-list"></i> Hits (%s of %s)', position + 1, view.get_total_rows());
+                title = _.sprintf('<i class="fa fa-list"></i> Hits (%s of %s)', position + 1, view.get_total_rows());
             }
             else {
-                title = _.sprintf('<i class="icon-list"></i> Hits (%s)', view.get_total_rows());
+                title = _.sprintf('<i class="fa fa-list"></i> Hits (%s)', view.get_total_rows());
             }
             // Update the title with the count of the rows.
             view.hits_collapsable.set('title', title);
         });
         view.listenTo(view, 'empty', function () {
-            title = _.sprintf('<i class="icon-list"></i> Hits (%s)', '0');
+            title = _.sprintf('<i class="fa fa-list"></i> Hits (%s)', '0');
             view.hits_collapsable.set('title', title);
         });
 
@@ -160,7 +160,7 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
 
         view.delegateEvents({
             'click .ioc-definition': 'on_click',
-            'shown a[data-toggle="tab"]': 'on_shown'
+            'shown.bs.tab a[data-toggle="tab"]': 'on_shown'
         });
 
         // Run the IOC viewer on all the pre-formatted elements.
@@ -236,7 +236,8 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
                 });
 
                 // Highlight the item.
-                selected_element.find('> span.ioc-rule').css({'background': '#FFF79A', 'font-weight': 'bold'});
+                selected_element.find('> span.ioc-rule')
+                    .css({'background': '#FFF79A', 'font-weight': 'bold', color: '#2C3539'});
             });
         });
     },
@@ -1015,6 +1016,35 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
     }
 });
 
+StrikeFinder.CommentsTableView = StrikeFinder.TableView.extend({
+    initialize: function() {
+        var view = this;
+        view.options.iDisplayLength = -1;
+        view.options.aoColumns = [
+            {sTitle: "Created", mData: "created", sWidth: "20%", bSortable: true},
+            {sTitle: "Comment", mData: "comment", sWidth: "60%", bSortable: true},
+            {sTitle: "User", mData: "user_uuid", sWidth: "20%", bSortable: true}
+        ];
+        view.options.aaSorting = [
+            [ 0, "desc" ]
+        ];
+        view.options.aoColumnDefs = [
+            {
+                mRender: function (data, type, row) {
+                    return StrikeFinder.format_date_string(data);
+                },
+                aTargets: [0]
+            }
+        ];
+        view.options.oLanguage = {
+            sEmptyTable: 'No comments have been entered'
+        };
+
+        view.listenTo(view, 'row:created', function(row, data, index) {
+            view.escape_cell(row, 1);
+        });
+    }
+});
 /**
  * View to display and create comments.
  */
@@ -1027,8 +1057,7 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
 
         view.comments_collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
-            title: '<i class="icon-comments"></i> Comments',
-            title_class: 'uac-header'
+            title: '<i class="fa fa-comments"></i> Comments'
         });
 
         if (!view.collection) {
@@ -1046,29 +1075,9 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
         var view = this;
 
         this.run_once('init_views', function () {
-            view.comments_table = new StrikeFinder.TableView({
+            view.comments_table = new StrikeFinder.CommentsTableView({
                 el: view.$("#comments-table"),
-                collection: view.collection,
-                iDisplayLength: -1,
-                aoColumns: [
-                    {sTitle: "Created", mData: "created", sWidth: "20%", bSortable: true},
-                    {sTitle: "Comment", mData: "comment", sWidth: "60%", bSortable: true},
-                    {sTitle: "User", mData: "user_uuid", sWidth: "20%", bSortable: true}
-                ],
-                aaSorting: [
-                    [ 0, "desc" ]
-                ],
-                aoColumnDefs: [
-                    {
-                        mRender: function (data, type, row) {
-                            return StrikeFinder.format_date_string(data);
-                        },
-                        aTargets: [0]
-                    }
-                ],
-                oLanguage: {
-                    sEmptyTable: 'No comments have been entered'
-                }
+                collection: view.collection
             });
             view.comments_table.render();
         });
@@ -1899,7 +1908,7 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
 
 //        view.collapsable = new StrikeFinder.CollapsableContentView({
 //            el: view.el,
-//            title: '<i class="icon-bar-chart"></i> Hits Facets',
+//            title: '<i class="fa fa-bar-chart"></i> Hits Facets',
 //            title_class: 'uac-header'
 //        });
 

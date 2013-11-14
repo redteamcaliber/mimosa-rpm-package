@@ -363,7 +363,7 @@ StrikeFinder.AcquireModel = Backbone.Model.extend({
             results.push('"user" is required.');
         }
         if (_.isEmpty(attr.password)) {
-            results.push('"password is required.');
+            results.push('"password" is required.');
         }
         if (_.isEmpty(attr.file_path)) {
             results.push('"file path" is required.');

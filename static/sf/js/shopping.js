@@ -119,9 +119,6 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
                         aTargets: [3]
                     }
                 ],
-                oLanguage: {
-                    sLoadingRecords: "<i class='icon-refresh icon-spin icon-large'></i> Loading..."
-                },
                 sDom: 't',
                 iDisplayLength: -1
                 //bScrollInfinite: true,
@@ -165,8 +162,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
 
         // Add a collapsable around the shopping view.
         view.shopping_collapsable = new StrikeFinder.CollapsableContentView({
-            el: '#' + view.el.id,
-            title_class: 'uac-header'
+            el: '#' + view.el.id
         });
 
         // Use the default title.
@@ -289,7 +285,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
         view.render_summaries();
     },
     set_title: function (title) {
-        this.shopping_collapsable.set('title', '<i class="icon-search"></i> IOC Selection' + title);
+        this.shopping_collapsable.set('title', '<i class="fa fa-search"></i> IOC Selection' + title);
     },
     render_summaries: function () {
         var view = this;

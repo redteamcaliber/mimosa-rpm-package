@@ -90,7 +90,7 @@ StrikeFinder.HitsByTagView = StrikeFinder.View.extend({
         view.fetch();
     },
     set_title: function(title) {
-        this.hits_collapsable.set('title', '<i class="icon-tag"></i> ' + title);
+        this.hits_collapsable.set('title', '<i class="fa fa-tag"></i> ' + title);
     },
     fetch: function() {
         this.hits_table_view.fetch({

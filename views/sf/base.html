@@ -23,17 +23,16 @@
 {% endblock %}
 
 {% block nav_menu %}
-<li><a href="/sf/shopping/"><i class="icon-search"></i> IOC Selection</a></li>
-<li><a href="/sf/hits/"><i class="icon-list"></i> Hit Review</a></li>
-<li><a href="/sf/suppressions/"><i class="icon-level-down"></i> Suppressions</a></li>
-<li><a href="/sf/hits_by_tag/"><i class="icon-tags"></i> Hits by Tag</a></li>
-<li><a href="/sf/acquisitions/"><i class="icon-cloud-download"></i> Acquisitions</a></li>
-<li><a href="/sf/tasks/"><i class="icon-tasks"></i> Tasks</a></li>
-<li>
-    <div style="margin-top: 5px;">
-        <div id="host-select" class="pull-right" style="width: 200px"></div>
-    </div>
-</li>
+<li><a href="/sf/shopping/"><i class="fa fa-search"></i> IOC Selection</a></li>
+<li><a href="/sf/hits/"><i class="fa fa-list"></i> Hit Review</a></li>
+<li><a href="/sf/suppressions/"><i class="fa fa-level-down"></i> Suppressions</a></li>
+<li><a href="/sf/hits_by_tag/"><i class="fa fa-tags"></i> Hits by Tag</a></li>
+<li><a href="/sf/acquisitions/"><i class="fa fa-cloud-download"></i> Acquisitions</a></li>
+<li><a href="/sf/tasks/"><i class="fa fa-tasks"></i> Tasks</a></li>
+{% endblock %}
+
+{% block form_menu %}
+    <div id="host-select" class="nav" style="padding-top: 5px; width: 200px"></div>
 {% endblock %}
 
 {% block tail %}

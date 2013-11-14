@@ -4,11 +4,12 @@
 
 {% block head %}
     {{ super() }}
+
 <style>
     /* Override the default dialog position so that it is not in front of the file/info view. */
-    .modal, .modal.fade.in {
-        top: 20%;
-        left: 30%;
+    .modal-content {
+        margin-left: -65%;
+        width: 550px;
     }
 </style>
 
@@ -26,9 +27,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container">
     {% include "sf/hits-template.html" %}
-
-    <br/>
 </div>
 {% endblock %}

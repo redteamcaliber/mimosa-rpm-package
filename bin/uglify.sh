@@ -7,6 +7,8 @@ fi
 
 PATH=$PATH:/opt/node/node-v0.10.15-linux-x64/bin/
 
+uglifyjs -o static/datatables/js/dataTables.boostrap.js
+
 uglifyjs -o static/sf/js/acquisitions.js static/sf/js/acquisitions.js
 uglifyjs -o static/sf/js/components.js static/sf/js/components.js
 uglifyjs -o static/sf/js/hits.js static/sf/js/hits.js
