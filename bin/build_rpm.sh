@@ -91,7 +91,7 @@ echo 'OK'
 # Import the node dependencies.
 cd $PROJECT_DIR
 chmod +x ./bin/*
-./bin/install_libs.sh
+./bin/install_libs.sh --production
 
 # Uglify the js files.
 ./bin/uglify.sh 'TRUE'
