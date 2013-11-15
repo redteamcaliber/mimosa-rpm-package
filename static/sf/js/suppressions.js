@@ -157,7 +157,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
         else {
             view.options.aoColumns = [
                 {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false},
-                {sTitle: "Rule", mData: 'comment', bSortable: true, sClass: 'wrap'},
+                {sTitle: "Rule", mData: 'comment', bSortable: true, sWidth: '25%'},
                 {sTitle: "Description", mData: 'comment', bSortable: true, sWidth: '25%'},
                 {sTitle: "IOC", mData: 'iocname', bSortable: true, sClass: 'nowrap'},
                 {sTitle: "IOC UUID", mData: 'ioc_uuid', bSortable: false, bVisible: false},
@@ -208,7 +208,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
             ];
 
             view.options.iDisplayLength = 10;
-            view.options.sDom = 'lftip';
+            view.options.sDom = 'lf<"sf-table-wrapper"t>ip';
         }
 
         // Keep track of the row views.

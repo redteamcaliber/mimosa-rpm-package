@@ -28,13 +28,6 @@ body {
  * Additional overall page customizations.
  */
 
-/* For large screens use the full width. */
-/*@media (min-width: 1200px) {*/
-    /*.container {*/
-        /*width: 95%;*/
-    /*}*/
-/*}*/
-
 #wrap > .container {
     width: 98%;
     padding: 0px 15px 20px 15px;
@@ -70,6 +63,11 @@ body {
     font-size: 14px;
     font-weight: bold;
     color: #000000;
+}
+
+.sf-table-wrapper {
+    width: 100%;
+    overflow: auto;
 }
 
 .sf-audit-heading {

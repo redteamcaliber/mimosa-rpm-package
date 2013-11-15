@@ -364,8 +364,10 @@ StrikeFinder.set_theme = function(theme) {
     // Reload the CSS.
     $('link[title="bootstrap-theme"]').attr('href', url);
 
+    // Clear the old cookie.
+    document.cookie = 'theme=;expires=' + new Date(0).toUTCString() + ';path=/';
     // Set a cookie specifying the current theme.
-    document.cookie = _.sprintf('theme=%s', theme);
+    document.cookie = _.sprintf('theme=%s;path=/', theme);
 
     // Clear the overlay color since the theme has been changed.
     StrikeFinder.reset_overlay_color();
