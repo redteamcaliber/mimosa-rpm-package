@@ -12,24 +12,24 @@
     "private": true,
     "scripts": {},
     "dependencies": {
-        "clone": "~0.1.0",
-        "config": "~0.4.0",
-        "underscore": "~1.5.0",
-        "underscore.string": "~2.3.0",
-        "winston": "~0.7.0",
-        "pg": "~2.2.0",
-        "nconf": "~0.6.0",
-        "async": "~0.2.9",
-        "request": "~2.25.0",
-        "nunjucks": "~0.1.9",
-        "express": "~3.3.4",
-        "moment": "~2.1.0",
-        "xml2js": "~0.2.8"
+        "clone": "~0.1",
+        "config": "~0.4",
+        "underscore": "~1.5",
+        "underscore.string": "~2.3",
+        "winston": "~0.7",
+        "pg": "~2.2",
+        "nconf": "~0.6",
+        "async": "~0.2",
+        "request": "~2.25",
+        "nunjucks": "~0.1",
+        "express": "~3.3",
+        "moment": "~2.1",
+        "xml2js": "~0.2"
     },
     "devDependencies": {
-        "mocha": "~1.13.0",
-        "chai": "~1.8.0",
-        "should": "~2.0.0"
+        "mocha": "~1.13",
+        "chai": "~1.8",
+        "should": "~2.0"
     },
     "license": "Commercial"
 }
