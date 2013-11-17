@@ -83,7 +83,6 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
         view.suppressions_collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
             'title': '&nbsp;',
-            title_class: 'uac-header',
             collapsed: condensed
         });
         var update_title = function () {
@@ -133,7 +132,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                             row.suppression_id, formatted);
 
                         var delete_link = '<a class="btn btn-link destroy" data-toggle="tooltip" ' +
-                            'title="Delete Suppression" style="padding: 0px 0px"><i class="fa fa-remove-sign"></i></a>';
+                            'title="Delete Suppression" style="padding: 0px 0px; border: none"><i class="fa fa-times-circle text-info"></i></a>';
 
                         return delete_link + ' ' + suppression_name;
                     },
@@ -177,7 +176,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                     // Add an option to the display name to g the row.
                     mRender: function (data, type, row) {
                         return '<a class="btn btn-link destroy" data-toggle="tooltip" ' +
-                            'title="Delete Suppression" style="padding: 0px 0px"><i class="fa fa-remove-sign"></i></a> ' +
+                            'title="Delete Suppression" style="padding: 0px 0px; border: none"><i class="fa fa-times-circle text-info"></i></a> ' +
                             StrikeFinder.format_suppression(row);
                     },
                     aTargets: [1]
@@ -257,8 +256,7 @@ StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
 
         view.hits_collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
-            title: '<i class="fa fa-level-down"></i> Suppressed Hits',
-            title_class: 'uac-header'
+            title: '<i class="fa fa-level-down"></i> Suppressed Hits'
         });
 
         view.options.oLanguage = {

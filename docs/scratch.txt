@@ -1,3 +1,20 @@
+https://proxy.mcirt.mandiant.com/SF/hits?
+    0=9402af9a-f99b-45c3-8f86-651aa1d87f75&
+    1=307c4caf-a778-4410-ae1b-1373a54649f4&
+    2=Methodology&
+    3=Identities&
+    sEcho=1
+    &iColumns=6&
+    sColumns=&
+    iDisplayStart=0&
+    iDisplayLength=10&
+    mDataProp_0=uuid&mDataProp_1=am_cert_hash&
+    mDataProp_2=rowitem_type
+    &mDataProp_3=tagname&
+    mDataProp_4=summary1&
+    mDataProp_5=summary2&
+    sSearch=&
+    bRegex=false&sSearch_0=&bRegex_0=false&bSearchable_0=true&sSearch_1=&bRegex_1=false&bSearchable_1=true&sSearch_2=&bRegex_2=false&bSearchable_2=true&sSearch_3=&bRegex_3=false&bSearchable_3=true&sSearch_4=&bRegex_4=false&bSearchable_4=true&sSearch_5=&bRegex_5=false&bSearchable_5=true&iSortCol_0=0&sSortDir_0=asc&iSortingCols=1&bSortable_0=true&bSortable_1=false&bSortable_2=false&bSortable_3=false&bSortable_4=false&bSortable_5=false&services=&clusters=&exp_key=&usertoken=&iocnamehash=&ioc_uuid=&am_cert_hash=&suppression_id=&tagname=&a9217663be6321eea6cc0213bdf1ac99=&eed8dcd2b82a7f43ff15c84f456bcbd8=&_=1384658997174%20returned%20bad%20http%20status%20code:%20404
 
 
 

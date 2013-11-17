@@ -657,10 +657,12 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
 
         if (view.$el.parent()) {
             // Assign the bootstrap class to the length select.
-            var length_select = view.$el.parent().find('select');
-            if (length_select) {
-                length_select.addClass('form-control');
-            }
+            var length_selects = $('.dataTables_wrapper select');
+            _.each(length_selects, function(length_select) {
+                if (!$(length_select).hasClass('form-control')) {
+                    $(length_select).addClass('form-control');
+                }
+            });
         }
 
         return view;

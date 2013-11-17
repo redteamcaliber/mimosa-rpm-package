@@ -1,27 +1,44 @@
 UAC ToDo
 ========
 
+## Questions
+
+### Need to discuss what the usersettings is going to return when a user specifies a namehash.
+    - Can the user even checkout a namehash or is it just for viewing?
+        If checkout is possible then:
+            - How will it be visualized on the shopping view?
+            - How will I know that a user selected a namehash?
+            - Will the exp_key be removed when I checkout a namehash?
+    - Should facets be added to the hits by tag view.  If so we may need to decrease the number of columns.  Which ones
+      can be removed?
+
 ## Tasks
 
+### Implement facets
+    - The selected event on the facets view is not properly passing the facet type field.  I believe tagname is the only
+      one that works.
+    - Need to test selecting multiple facets of the same type.
+    - Need to implement the refresh button on the facets view.
+    - Need to add facets to the hosts view.
+
+### Implement Pipelining
+    - Add the pipeling code to datatables and allow caching of a much larger result set.
+    - Change the default hits views to be open and rendering 10 hits.
+
+### Implement additional info level auditing.
+    - Add auditing.
+    - Specify that the default UAC log level should be info.
+    - Update the default config files.
+
 ### Bootstrap Stuff
-    - Build a theme switcher.
+    - Google fonts issues.
 
 ### Integrate the type ahead search box.
     - http://twitter.github.io/typeahead.js/
 
-### Look into previous next shortcuts on the hits view.
-
-### Test the single entity mode for suppressions.
-
-### Implement facets
-
 ### Add some kind over overlay when sorting on the acquisitions page.  It's very slow so it appears as if it's not working.
 
 ### Look into better display for the case where there are no hits on the hit review page.
-
-### *** Send out instructions for the merging of the env.json file ***
-    - Several of the settings moved from the uac section up to the server section in order to be more generic and allow
-      code sharing between projects.
 
 ### Look into Handlebars templates - http://handlebarsjs.com/
 

@@ -9,6 +9,11 @@ Mandiant-uac-ws-0.5-0 - November ???th, 2013
 - Keyboard shortcuts added for navigating hits.  On a Mac ctrl-u moves to the previous row and ctrl-d moves to the next
   row (similiar to vi).  On Windows ctrl-up-arrow moves to the previous record and ctrl-down-arrow moves to the next record.
 
+### General
+
+- Theme support.
+- Tasks moved under the user menu.
+
 
 Mandiant-uac-ws-0.4-0 - November 6th, 2013
 ------------------------------------------

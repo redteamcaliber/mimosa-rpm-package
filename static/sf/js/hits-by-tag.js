@@ -32,7 +32,7 @@ StrikeFinder.HitsByTagTableView = StrikeFinder.TableView.extend({
         };
 
         view.options.aaSorting = [];
-        view.options.sDom = 'ltip';
+        view.options.sDom = 'l<"<sf-table-wrapper"t>ip';
 
         view.options.sAjaxSource = '/sf/api/hits';
         view.options.sAjaxDataProp = 'results';
@@ -65,8 +65,7 @@ StrikeFinder.HitsByTagView = StrikeFinder.View.extend({
         view.run_once('init_hits', function() {
 
             view.hits_collapsable = new StrikeFinder.CollapsableContentView({
-                el: '#hits-table',
-                title_class: 'uac-header'
+                el: '#hits-table'
             });
 
             view.hits_table_view = new StrikeFinder.HitsByTagTableView({

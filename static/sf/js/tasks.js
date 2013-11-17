@@ -6,7 +6,6 @@ StrikeFinder.TaskTableView = StrikeFinder.TableView.extend({
 
         view.tasks_collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
-            title_class: 'uac-header',
             collapsed: false
         });
 

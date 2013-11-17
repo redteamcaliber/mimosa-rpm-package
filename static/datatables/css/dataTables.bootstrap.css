@@ -100,24 +100,24 @@ div.dataTables_scrollFoot table {
  */
 .table tbody tr.active td,
 .table tbody tr.active th {
-    background-color: #428bca;
-    color: white;
+    background-color: #d9edf7;
+    color: #333;
 }
 .table tbody tr.active td a:link,
 .table tbody tr.active td a:visited,
 .table tbody tr.active td a:hover,
 .table tbody tr.active td a:active {
-    color: white;
+    color: #333;
 }
 
 .table tbody tr.active:hover td,
 .table tbody tr.active:hover th {
-    background-color: #0075b0 !important;
+    background-color: #d9edf7 !important;
 }
 
 .table-striped tbody tr.active:nth-child(odd) td,
 .table-striped tbody tr.active:nth-child(odd) th {
-    background-color: #428bca;
+    background-color: #d9edf7;
 }
 
 table.DTTT_selectable tbody tr {

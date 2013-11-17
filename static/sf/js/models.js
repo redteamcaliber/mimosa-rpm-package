@@ -190,35 +190,104 @@ StrikeFinder.HitsCollection = Backbone.Collection.extend({
     }
 });
 
+StrikeFinder.HitsCriteria = Backbone.Model.extend({
+    _defaults: {
+        services: [],
+        clusters: [],
+        exp_key: [],
+        usertoken: [],
+        iocnamehash: [],
+        ioc_uuid: [],
+        am_cert_hash: [],
+        suppression_id: [],
+        tagname: []
+    },
+    defaults: this._defaults,
+    initialize: function () {
+        this.listenTo(this, "change", this.on_change);
+    },
+    on_change: function(ev) {
+        var view = this;
+        log.debug('Hits facets criteria changed: ' + JSON.stringify(view.changed));
+    },
+    /**
+     * Add value to the list associated with the key.  Adds the list if it does not exist.
+     * @param k
+     * @param v
+     */
+    add: function(k, v) {
+        var vals = this.get(k);
+        if (vals) {
+            vals.push(v);
+        }
+        else {
+            vals = [v];
+            this.set(k, vals);
+        }
+    },
+    /**
+     * Store and set the initial parameters on this model.  These parameters should survive a model reset.
+     * @param initial_params - the map of parameters.
+     */
+    set_initial: function(initial_params) {
+        var view = this;
+        view.initial_params = initial_params;
+        _.each(_.keys(initial_params), function(key) {
+            view.set(key, initial_params[key]);
+        });
+    },
+    refresh: function() {
+        this.trigger('refresh', this.attributes);
+    },
+    /**
+     * Reset the search criteria to the original default values.
+     */
+    reset: function() {
+        this.clear();
+        console.dir(this._defaults);
+        this.set(this.defaults);
+        if (this.initial_params) {
+            this.set_initial(this.initial_params);
+        }
+        this.refresh();
+    }
+});
+
 /**
  * Model to retrieve hits facets.
  */
 StrikeFinder.HitsFacetsModel = Backbone.Model.extend({
+    initialize: function() {
+        this.params = {};
+    },
     url: function() {
-        var result = '/sf/api/hits/facets?facets=tagname,md5sum&';
-        if (this.services) {
-            result += _.sprintf('services=%s', this.services);
+        var result = '/sf/api/hits/facets?facets=tagname,iocname,item_type,md5sum,am_cert_hash,username';
+        if (this.params.services && this.params.services.length > 0) {
+            result += '&' + $.param({services: this.params.services});
         }
-        if (this.clusters) {
-            result += _.sprintf('clusters=%s&', this.clusters);
+        if (this.params.clusters && this.params.clusters.length > 0) {
+            result += '&' + $.param({clusters: this.params.clusters});
         }
-        if (this.exp_key) {
-            result += _.sprintf('exp_key=%s&', this.exp_key);
+        if (this.params.exp_key && this.params.exp_key.length > 0) {
+            result += '&' + $.param({exp_key: this.params.exp_key});
         }
-        if (this.usertoken) {
-            result += _.sprintf('usertoken=%s&', this.usertoken);
+        if (this.params.usertoken && this.params.usertoken.length > 0) {
+            result += '&' + $.param({usertoken: this.params.usertoken});
         }
-        if (this.iocnamehash) {
-            result += _.sprintf('iocnamehash=%s&', this.iocnamehash);
+        if (this.params.iocnamehash && this.params.iocnamehash.length > 0) {
+            result += '&' + $.param({iocnamehash: this.params.iocnamehash});
         }
-        if (this.ioc_uuid) {
-            result += _.sprintf('ioc_uuid=%s&', this.ioc_uuid);
+        if (this.params.ioc_uuid && this.params.ioc_uuid.length > 0) {
+            result += '&' + $.param({ioc_uuid: this.params.ioc_uuid});
         }
-        if (this.am_cert_hash) {
-            result += _.sprintf('am_cert_hash=%s&', this.am_cert_hash);
+        if (this.params.am_cert_hash && this.params.am_cert_hash.length > 0) {
+            result += '&' + $.param({am_cert_hash: this.params.am_cert_hash});
         }
-        if (this.suppression_id) {
-            result += _.sprintf('suppression_id=%s&', this.suppression_id);
+        if (this.params.suppression_id && this.params.suppression_id > 0) {
+            result += '&' + $.param({suppression_id: this.params.suppression_id});
+        }
+        if (this.params.tagname && this.params.tagname.length > 0) {
+            result += '&' + $.param({tagname: this.params.tagname});
         }
         return result;
     }

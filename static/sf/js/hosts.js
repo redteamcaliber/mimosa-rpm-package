@@ -18,7 +18,6 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
             {sTitle: "Tag", mData: "tagname", bVisible: true, sWidth: '5%', bSortable: false},
             {sTitle: "IOC UUID", mData: "ioc_uuid", bVisible: false, bSortable: false},
             {sTitle: "IOC Name", mData: "iocname", sWidth: '10%', bSortable: false},
-            {sTitle: "Expression String", mData: "exp_string", sWidth: '25%', bSortable: false},
             {sTitle: "Summary", mData: "summary1", sClass: 'wrap', sWidth: '30%', bSortable: false},
             {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', sWidth: '30%', bSortable: false},
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false}
@@ -73,9 +72,7 @@ StrikeFinder.HostView = StrikeFinder.View.extend({
         }
 
         view.collapsable = new StrikeFinder.CollapsableContentView({
-            el: view.el,
-            title: '',
-            title_class: 'uac-header'
+            el: view.el
         });
     },
     render: function () {

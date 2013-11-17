@@ -10,9 +10,7 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
 
         view.hits_collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
-            title: '&nbsp;',
-            title_class: 'uac-header',
-            collapsed: true
+            title: '&nbsp;'
         });
 
         view.options.sAjaxSource = '/sf/api/hits';
@@ -55,7 +53,7 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
         });
 
         view.options.sDom = 'ltip';
-        view.options.iDisplayLength = 100;
+        view.options.iDisplayLength = 10;
     }
 });
 
@@ -116,11 +114,6 @@ StrikeFinder.AgentHostView = StrikeFinder.View.extend({
  * Tabbed view of IOC's.
  */
 StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
-    //constructor: function IOCTabsView() {
-    //    IOCTabsView.__super__.constructor.apply(
-    //        this, arguments
-    //    );
-    //},
     initialize: function (options) {
         var view = this;
 
@@ -237,7 +230,7 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
 
                 // Highlight the item.
                 selected_element.find('> span.ioc-rule')
-                    .css({'background': '#FFF79A', 'font-weight': 'bold', color: '#2C3539'});
+                    .css({'background': '#FFF79A', 'font-weight': 'bold', color: '#33311e'});
             });
         });
     },
@@ -1768,12 +1761,15 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
 
         view.params = {};
 
+        // The criteria container.
+        view.criteria = new StrikeFinder.HitsCriteria();
+
         // Hits facets.
-//        view.facets = new StrikeFinder.HitsFacetsModel();
-//        view.facets_view = new StrikeFinder.HitsFacetsView({
-//            el: '#hits-facets-div',
-//            model: view.facets
-//        });
+        view.facets = new StrikeFinder.HitsFacetsModel();
+        view.facets_view = new StrikeFinder.HitsFacetsView({
+            el: '#hits-facets-div',
+            model: view.facets
+        });
 
         // Hits.
         view.hits_table_view = new StrikeFinder.HitsTableView({
@@ -1791,10 +1787,38 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
             view.hits_table_view.update_row('uuid', rowitem_uuid, 'tagname', tagname, 0);
         });
         view.listenTo(view.hits_details_view, 'create:acquire', function (row, model) {
-            // An aquisition has been created, update the row's tag value.
+            // An acquisition has been created, update the row's tag value.
             view.hits_table_view.update_row('uuid', row.uuid, 'tagname', 'investigating', 0);
             // Refresh the comments.
             view.hits_details_view.fetch();
+        });
+
+        // Listen to criteria changes and reload the views.
+        view.listenTo(view.criteria, 'refresh', function(attributes) {
+            log.debug('Refreshing the hits view...');
+            console.dir(attributes);
+
+            // Reload the facets.
+            view.facets.params = attributes;
+            view.facets.fetch();
+
+            // Reload the hits.
+            view.hits_table_view.fetch(attributes);
+        });
+
+        view.listenTo(view.facets_view, 'selected', function(type, value) {
+            StrikeFinder.run(function() {
+                log.debug(_.sprintf('selected: %s, %s', type, value));
+                view.criteria.add(type, value);
+                view.criteria.refresh();
+            });
+        });
+
+        view.listenTo(view.facets_view, 'reset', function() {
+            StrikeFinder.run(function() {
+                // User reset the filter criteria.
+                view.criteria.reset();
+            });
         });
     },
     fetch: function (params) {
@@ -1871,31 +1895,25 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
         var view = this;
         // Update the hits details view with the current selected expression.
 
+        // TODO: Is this being used any more??  Possibly setting the default ioc tab to this?
         view.hits_details_view.exp_key = view.params.exp_key;
 
+        // Update the hits criteria.
         if (view.params.usertoken) {
             StrikeFinder.run(function () {
-//                view.facets.usertoken = view.params.usertoken;
-//                view.facets.fetch();
-
-                var usertoken_params = {
-                    usertoken: view.params.usertoken
-                };
-                log.debug('Fetching hits with params: ' + JSON.stringify(usertoken_params));
-                view.hits_table_view.fetch(usertoken_params);
+                view.criteria.set_initial({'usertoken': [view.params.usertoken]});
             });
         }
         else {
             StrikeFinder.run(function () {
-                var exp_key_params = {
-                    services: view.params.services,
-                    clusters: view.params.clusters,
-                    exp_key: view.params.exp_key
-                };
-                log.debug('Fetching hits with params: ' + JSON.stringify(exp_key_params));
-                view.hits_table_view.fetch(exp_key_params);
+                view.criteria.set_initial({
+                    'services': view.params.services,
+                    'clusters': view.params.clusters,
+                    'exp_key': [view.params.exp_key]
+                });
             });
         }
+        view.criteria.refresh();
     }
 });
 
@@ -1906,28 +1924,109 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
     initialize: function() {
         var view = this;
 
-//        view.collapsable = new StrikeFinder.CollapsableContentView({
-//            el: view.el,
-//            title: '<i class="fa fa-bar-chart"></i> Hits Facets',
-//            title_class: 'uac-header'
-//        });
-
         view.listenTo(view.model, 'sync', view.render);
+
+        view.titles = {
+            username: 'User',
+            md5sum: 'MD5',
+            tagname: 'Tag',
+            iocname: 'IOC',
+            item_type: 'Item Type',
+            am_cert_hash: 'AM Cert Hash'
+        };
+
+        view.icons = {
+            username: 'fa-users',
+            md5sum: 'fa-file',
+            tagname: 'fa-tags',
+            iocname: 'fa-warning',
+            item_type: 'fa-info',
+            am_cert_hash: 'fa-desktop'
+        };
+
+        view.keys = [
+            'tagname',
+            'iocname',
+            'item_type',
+            'md5sum',
+            'am_cert_hash',
+            'username'
+        ];
+    },
+    /**
+     * Shorten a string value.
+     * @param s - the string.
+     * @param length - the total length the result string should be.
+     * @returns - a shortened string.
+     */
+    shorten: function (s, length) {
+        if (!length) {
+            length = 8;
+        }
+        if (s && s.length > length) {
+            var section_length = length / 2;
+            return s.substring(0, section_length) + '...' + s.substring(s.length - section_length, s.length);
+        }
+        else {
+            return s;
+        }
     },
     render: function() {
         var view = this;
         var attributes = view.model.attributes;
-        var keys = _.keys(attributes);
+
+        if (attributes.am_cert_hash) {
+            _.each(attributes.am_cert_hash, function(hash, index) {
+                hash.abbrev = view.shorten(hash.value, 8);
+            });
+        }
+
+        if (attributes.md5sum) {
+            _.each(attributes.md5sum, function(md5, index) {
+                md5.abbrev = view.shorten(md5.value, 8);
+            });
+        }
 
         var data = {
-            keys: keys,
+            keys: view.keys,
             facets: attributes,
             get_facet_values: function(facet) {
                 return this.facets[facet];
+            },
+            get_facet_count: function(facet) {
+                return this.facets[facet].length;
+            },
+            get_facet_title: function(facet) {
+                var title = view.titles[facet];
+                return title ? title : facet;
+            },
+            get_facet_icon: function(facet) {
+                var icon = view.icons[facet];
+                return icon ? icon : 'fa-meh';
+            },
+            get_visibility: function(facet) {
+                return facet == 'tagname';
             }
         };
 
+        view.undelegateEvents();
+
         // Render the template.
         view.$el.html(_.template($("#hits-facets-template").html(), data));
+
+        view.delegateEvents({
+            'click li a': 'on_click',
+            'click #reset-facets': 'reset_facets',
+            'click #refresh-facets': 'refresh_facets'
+        });
+    },
+    on_click: function(ev) {
+        this.trigger('selected', 'tagname', ev.currentTarget.name);
+    },
+    reset_facets: function(ev) {
+        this.trigger('reset');
+    },
+    refresh_facets: function(ev) {
+        this.trigger('refresh');
     }
 });

@@ -84,7 +84,7 @@
         <li class="divider"></li>
         <li>
             <a id="close-item" tabindex="-1">
-                <icon class="fa fa-remove-sign"></icon>
+                <icon class="fa fa-times-circle"></icon>
                 Close
             </a>
         </li>
@@ -177,7 +177,7 @@
                 </div>
                 <div class="modal-footer">
                     <button id="cancel" class="btn" data-dismiss="modal">
-                        <icon class="fa fa-remove-sign"></icon>
+                        <icon class="fa fa-times-circle"></icon>
                         Cancel
                     </button>
                     <button id="suppress" class="btn btn-primary">
@@ -295,7 +295,7 @@
                 </div>
                 <div class="modal-footer">
                     <button id="cancel" class="btn">
-                        <icon class="fa fa-remove-sign"></icon>
+                        <icon class="fa fa-times-circle"></icon>
                         Cancel
                     </button>
                     <button id="tag" class="btn btn-primary">
@@ -376,7 +376,7 @@
                 </div>
                 <div class="modal-footer">
                     <button id="cancel" class="btn">
-                        <icon class="fa fa-remove-sign" data-dismiss="modal"></icon>
+                        <icon class="fa fa-times-circle" data-dismiss="modal"></icon>
                         Cancel
                     </button>
                     <button id="acquire" class="btn btn-primary">
@@ -391,65 +391,65 @@
 
 <script type="text/template" id="agent-host-template">
     <div class="row" style="margin-bottom: 3px">
-        <div class="col-md-12" style="margin-left: 0px; padding-left: 0px">
-            <span style="font-weight: bold">
+        <div class="col-md-12" margin-right: 0px; padding-right: 0px">
+            <span style="font-size: 16px; font-weight: bold">
                 <%= cluster.engagement.client.name %> (<%= cluster.name %>) : <%= domain %> /
-                <a href="/sf/host/<%= hash %>/"><%= hostname %></a> /
-                <a href="/sf/host/<%= hash %>/"><%= ip %></a>
+                <a href="/sf/host/<%= hash %>/"><%= hostname %></a>
             </span>
         </div>
     </div>
     <div class="row" style="margin-bottom: 3px">
-        <div class="col-md-12" style="margin-left: 0px; padding-left: 0px">
+        <div class="col-sm-6"">
             <%= product_name %> <%= os_patch_level %>
         </div>
-    </div>
-    <div class="row" style="margin-bottom: 3px">
-        <div class="col-lg-2" style="margin: 0px; padding: 0px">
-            NotReviewed <span class="badge"><%= counts.notreviewed %></span>
+        <div class="col-sm-3">
+            <a href="/sf/host/<%= hash %>/"><%= ip %></a>
         </div>
-        <div class="col-lg-2" style="margin: 0px; padding: 0px">
-            Investigating <span class="badge"><%= counts.investigating %></span>
-        </div>
-        <div class="col-lg-2" style="margin: 0px; padding: 0px">
-            Escalate <span class="badge"><%= counts.escalate %></span>
-        </div>
-        <div class="col-lg-2" style="margin: 0px; padding: 0px">
-            NotReported <span class="badge"><%= counts.unreported %></span>
-        </div>
-        <div class="col-lg-2" style="margin: 0px; padding: 0px">
-            Reported <span class="badge"><%= counts.reported %></span>
-        </div>
-        <div class="col-lg-2" style="margin: 0px; padding: 0px">
-            Delete <span class="badge"><%= counts.delete %></span>
+        <div class="col-sm-">
+            <%= version %>
         </div>
     </div>
-    <!--<table id="agent-host-template-formatting-table" style="width: 100%">-->
-        <!--<tr>-->
-            <!--<td>-->
-
-            <!--</td>-->
-        <!--</tr>-->
-        <!--<tr>-->
-            <!--<td>-->
-                <!---->
-            <!--</td>-->
-        <!--</tr>-->
-        <!--<tr>-->
-            <!--<td>-->
-                <!--<table id="agent-host-template-counts-formatting-table" style="width: 100%;">-->
-                    <!--<tr>-->
-                        <!--<td>NotReviewed <span class="badge"><%= counts.notreviewed %></span></td>-->
-                        <!--<td>Investigating <span class="badge"><%= counts.investigating %></span></td>-->
-                        <!--<td>Escalate <span class="badge"><%= counts.escalate %></span></td>-->
-                        <!--<td>NotReported <span class="badge"><%= counts.unreported %></span></td>-->
-                        <!--<td>Reported <span class="badge"><%= counts.reported %></span></td>-->
-                        <!--<td>Delete <span class="badge"><%= counts.delete %></span></td>-->
-                    <!--</tr>-->
-                <!--</table>-->
-            <!--</td>-->
-        <!--</tr>-->
-    <!--</table>-->
+    <div class="row">
+            <div class="col-sm-2">
+                NotReviewed
+            </div>
+            <div class="col-sm-2">
+                <span class="badge"><%= counts.notreviewed %></span>
+            </div>
+            <div class="col-sm-2">
+                Investigating
+            </div>
+            <div class="col-sm-2">
+                <span class="badge"><%= counts.investigating %></span>
+            </div>
+            <div class="col-sm-2">
+                Escalate
+            </div>
+            <div class="col-sm-2">
+                <span class="badge"><%= counts.escalate %></span>
+            </div>
+    </div>
+    <div class="row">
+            <div class="col-sm-2">
+                NotReported
+            </div>
+            <div class="col-sm-2">
+                <span class="badge"><%= counts.unreported %></span>
+            </div>
+            <div class="col-sm-2">
+                Reported
+            </div>
+            <div class="col-sm-2">
+                <span class="badge"><%= counts.reported %></span>
+            </div>
+            <div class="col-sm-2">
+                Delete
+            </div>
+            <div class="col-sm-2">
+                <span class="badge"><%= counts.delete %></span>
+            </div>
+        </div>
+    </div>
 </script>
 
 <script type="text/template" id="agent-host-empty-template">
@@ -496,7 +496,7 @@
         <div class="col-md-12">
             <a title="previous"
                class="btn btn-link prev"
-               style="text-decoration: none; padding: 3px 0px 3px 0px; border: none">
+               style="text-decoration: none; padding: 10px 0px 3px 0px; border: none">
                 <i class="fa fa-arrow-up fa-2x"></i>
             </a>
         </div>
@@ -514,7 +514,7 @@
 
 <script type="text/template" id="host-template">
     <div class="row" style="margin-bottom: 5px">
-        <div class="col-md-5">
+        <div class="col-md-6">
             <%= cluster.engagement.client.name %> (<%= cluster.name %>) : <%= domain %> / <%= hostname %>
         </div>
         <div class="col-md-2">
@@ -667,7 +667,7 @@
                 </div>
                 <div class="modal-footer">
                     <button id="close" type="button" class="btn btn-default" data-dismiss="modal">
-                        <icon class="fa fa-remove-sign"></icon> Close
+                        <icon class="fa fa-times-circle"></icon> Close
                     </button>
                 </div>
 
@@ -677,21 +677,59 @@
 </script>
 
 <script id="hits-facets-template" type="text/template">
-    <div class="row" style="margin-bottom: 15px">
-        <% _.each( keys, function( facet, index ) { %>
-        <div class="btn-group">
-            <a class="btn dropdown-toggle" data-toggle="dropdown">
-                <%= facet %>
-                <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-                <% _.each( get_facet_values(facet), function(value, index) { %>
-                <li>
-                    <a name="<%= value.id %>" title="<%= value.value%>"><%= value.value %> (<%= value.count %>)</a>
-                </li>
-                <% }) %>
-            </ul>
+
+    <% _.each( keys, function( facet, index ) { %>
+    <div class="row" style="margin-bottom: 5px">
+
+        <div class="col-md-12">
+            <!-- A div to represent the collapsable facet content. -->
+            <div id="<%= facet %>-div" class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#<%= facet %>-div" href="#collapse-<%= facet %>">
+                                <i class="fa <%= get_facet_icon(facet) %>"></i>
+                                <%= get_facet_title(facet) %>
+                                <span class="badge pull-right"><%= get_facet_count(facet) %></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse-<%= facet %>" class="panel-collapse collapse <%= get_visibility(facet) ? 'in' : '' %>">
+                        <div class="panel-body" style="max-height: 250px; padding: 10px; overflow: auto">
+                                <ul class="list-group" style="margin-bottom: 0px">
+                                <% _.each( get_facet_values(facet), function(value, index) { %>
+                                <li class="list-group-item" style="margin-bottom: 1px">
+                                    <a name="<%= value.id %>" title="<%= value.value %>">
+                                        <%= value.abbrev ? value.abbrev : value.value %>
+                                        <span class="badge pull-right"><%= value.count %></span>
+                                    </a>
+                                </li>
+                                <% }) %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <% }); %>
+
     </div>
+
+    <% }); %>
+
+    <div class="row">
+        <div class="col-sm-6" style="padding-right: 5px">
+            <button id="reset-facets"
+                    type="button"
+                    class="btn btn-default form-control">
+                <i class="fa fa-undo"></i> Reset
+            </button>
+        </div>
+        <div class="col-sm-6" style="padding-left: 5px">
+            <button type="refresh-facets"
+                    class="btn btn-success form-control">
+                <i class="fa fa-refresh"></i> Refresh
+            </button>
+        </div>
+    </div>
+
 </script>

@@ -89,15 +89,13 @@ StrikeFinder.collapse = function(el) {
     if (jq_el.hasClass('collapsable-header')) {
         new StrikeFinder.CollapsableContentView({
             el: '#' + jq_el.attr('id'),
-            title: jq_el.attr('collapsable-title'),
-            title_class: 'uac-header'
+            title: jq_el.attr('collapsable-title')
         });
     }
     _.each(jq_el.find('.collapsable-header'), function(collapsable) {
         new StrikeFinder.CollapsableContentView({
             el: '#' + collapsable.id,
-            title: $(collapsable).attr('collapsable-title'),
-            title_class: 'uac-header'
+            title: $(collapsable).attr('collapsable-title')
         });
     });
     if (jq_el.hasClass('collapsable')) {

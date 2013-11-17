@@ -6,7 +6,6 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
         view.acquisitions_collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
             title: '',
-            title_class: 'uac-header'
         });
 
         view.options['sAjaxSource'] = '/sf/api/acquisitions';
@@ -171,8 +170,7 @@ StrikeFinder.AcquisitionsView = StrikeFinder.View.extend({
 
         view.criteria_collapsable = new StrikeFinder.CollapsableContentView({
             el: '#criteria-div',
-            title: '<i class="fa fa-search"></i> Acquisitions Search Criteria',
-            title_class: 'uac-header'
+            title: '<i class="fa fa-search"></i> Acquisitions Search Criteria'
         });
 
         // Clusters options.

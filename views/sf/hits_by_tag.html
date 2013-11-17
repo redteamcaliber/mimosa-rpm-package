@@ -37,17 +37,8 @@
             <select id="tag-select"></select>
         </div>
     </div>
-    <div class='row'>
-        <div class='col-md-12'>
-            <div id="hits-div">
-                <table id="hits-table"
-                       class="table table-striped table-bordered table-hover">
-                </table>
-            </div>
-        </div>
-    </div>
 
-    {% set hide_hits = true %}
+    {% set hide_facets = true %}
     {% include "sf/hits-template.html" %}
 
     <div class="row">
