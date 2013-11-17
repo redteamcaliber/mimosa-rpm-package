@@ -6,3 +6,5 @@
 PATH=$PATH:/opt/node/node-v0.10.15-linux-x64/bin/
 
 npm install $1 $2
+
+
