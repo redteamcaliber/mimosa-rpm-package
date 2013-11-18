@@ -121,35 +121,6 @@ StrikeFinder.collapse = function(el) {
 //
 
 /**
- * Attempt to compute a reasonable overlay color or use a default.
- */
-StrikeFinder.get_overlay_color = function() {
-    if (!document.body) {
-        // If the document body is not initialized use a default value.
-        return '#cccccc';
-    }
-    else {
-        // The body is available.
-        if (!StrikeFinder.OVERLAY_COLOR) {
-            // Overlay color has not been computed, use the body background color.
-            var style = window.getComputedStyle(document.body);
-            if (style && style.getPropertyValue('background-color')) {
-                StrikeFinder.OVERLAY_COLOR = style.getPropertyValue('background-color');
-            }
-            else {
-                // Unable to compute the overlay color, use a default.
-                StrikeFinder.OVERLAY_COLOR = '#cccccc';
-            }
-        }
-        return StrikeFinder.OVERLAY_COLOR;
-    }
-};
-
-StrikeFinder.reset_overlay_color = function() {
-    StrikeFinder.OVERLAY_COLOR = undefined;
-};
-
-/**
  * Retrieve the default block ui options.
  * @param message - the message to display.
  * @returns - the default options.
@@ -165,7 +136,7 @@ StrikeFinder.get_blockui_options = function (message) {
             backgroundColor: ''
         },
         overlayCSS: {
-            backgroundColor: StrikeFinder.get_overlay_color(),
+            backgroundColor: UAC.get_overlay_color(),
             opacity: .5
         },
         baseZ: 5000
@@ -345,31 +316,7 @@ StrikeFinder.format_unix_date = function(unix) {
     }
 };
 
-/**
- * Change the current UAC theme.
- * @param theme - the theme name.
- */
-StrikeFinder.set_theme = function(theme) {
-    var url;
-    if (theme) {
-        // Generate the theme url.
-        url = _.sprintf('/static/bootstrap/css/bootstrap.min-%s.css', theme);
-    }
-    else {
-        // Use the default.
-        url = '/static/bootstrap/css/bootstrap.min.css';
-    }
-    // Reload the CSS.
-    $('link[title="bootstrap-theme"]').attr('href', url);
 
-    // Clear the old cookie.
-    document.cookie = 'theme=;expires=' + new Date(0).toUTCString() + ';path=/';
-    // Set a cookie specifying the current theme.
-    document.cookie = _.sprintf('theme=%s;path=/', theme);
-
-    // Clear the overlay color since the theme has been changed.
-    StrikeFinder.reset_overlay_color();
-};
 
 function format_expression(s) {
     console.log(s);

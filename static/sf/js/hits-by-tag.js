@@ -10,12 +10,12 @@ StrikeFinder.HitsByTagTableView = StrikeFinder.TableView.extend({
             {sTitle: "Cluster", mData: "cluster_name", bSortable: false},
             {sTitle: "Host", mData: "hostname", bSortable: false},
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
-            {sTitle: "Item Type", mData: "rowitem_type", bSortable: false},
+            {sTitle: "Item Type", mData: "rowitem_type", bSortable: false, bVisible: false},
             {sTitle: "Tag", mData: "tagname", bVisible: false, bSortable: false},
             {sTitle: "Summary", mData: "summary1", sClass: 'wrap', sWidth: '30%', bSortable: false},
             {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', sWidth: '30%', bSortable: false},
-            {sTitle: "MD5sum", mData: "md5sum", bSortable: false},
-            {sTitle: "Owner", mData: "username", bSortable: false}
+            {sTitle: "MD5sum", mData: "md5sum", bSortable: false, bVisible: false},
+            {sTitle: "Owner", mData: "username", bSortable: false, bVisible: false}
         ];
 
         view.options.aoColumnDefs = [

@@ -31,14 +31,15 @@
 <div class="container">
     <div class='row' style="margin-bottom: 15px">
         <div class='col-md-12'>
-                    <span class="uac-header">
-                        <i class="fa fa-filter"></i> Filter By Tag
-                    </span>
+            <label>
+                <h4>
+                    <i class="fa fa-filter"></i> Filter By Tag
+                </h4>
+            </label>
             <select id="tag-select"></select>
         </div>
     </div>
 
-    {% set hide_facets = true %}
     {% include "sf/hits-template.html" %}
 
     <div class="row">

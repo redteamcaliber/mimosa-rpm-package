@@ -93,31 +93,29 @@ div.dataTables_scrollFoot table {
 }
 
 
-
-
 /*
  * TableTools styles
  */
 .table tbody tr.active td,
 .table tbody tr.active th {
-    background-color: #d9edf7;
-    color: #333;
+    background-color: #2a9fd6;
+    color: #fff;
 }
 .table tbody tr.active td a:link,
 .table tbody tr.active td a:visited,
 .table tbody tr.active td a:hover,
 .table tbody tr.active td a:active {
-    color: #333;
+    color: #fff;
 }
 
 .table tbody tr.active:hover td,
 .table tbody tr.active:hover th {
-    background-color: #d9edf7 !important;
+    background-color: #2a9fd6 !important;
 }
 
 .table-striped tbody tr.active:nth-child(odd) td,
 .table-striped tbody tr.active:nth-child(odd) th {
-    background-color: #d9edf7;
+    background-color: #2a9fd6;
 }
 
 table.DTTT_selectable tbody tr {

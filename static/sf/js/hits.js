@@ -1820,12 +1820,6 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
                 view.criteria.reset();
             });
         });
-
-        view.listenTo(view.facets_view, 'refresh', function() {
-            // User refreshed the view.
-            // TODO: Implement me!
-            StrikeFinder.display_info('PATIENCE YOU MUST HAVE my young padawan');
-        });
     },
     fetch: function (params) {
         var view = this;
@@ -2011,7 +2005,15 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
                 return icon ? icon : 'fa-meh';
             },
             get_visibility: function(facet) {
-                return facet == 'tagname';
+                if (facet == 'tagname') {
+                    return true;
+                }
+                else if (view.model.params[facet] && view.model.params[facet].length > 0) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
             }
         };
 

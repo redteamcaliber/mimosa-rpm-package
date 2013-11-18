@@ -52,6 +52,9 @@
 <script src="/static/js/moment.min.js"></script>
 <script src="/static/js/jquery.scrollTo.min.js"></script>
 
+<!-- Common UAC support. -->
+<script src="/static/uac/js/common.js"></script>
+
 
 <style type="text/css">
     .mandiant-logo {
@@ -94,7 +97,7 @@
                 </form>
 
                 {% if req.attributes.uid %}
-                <ul class="nav navbar-nav navbar-right">
+                <ul id="uac-user-nav" class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-user"></i> {{ req.attributes.uid }} <b class="caret"></b>
@@ -106,56 +109,13 @@
                                 </a>
                             </li>
                             <li class="divider"></li>
-                            <li>
-                                <a href="javascript: StrikeFinder.set_theme()">
-                                    <i class="fa fa-picture-o"></i> Default Theme
+                            {% for theme in themes %}
+                            <li class="{% if theme.id == current_theme %}disabled{% endif %}">
+                                <a class="uac-theme" data-uac-theme="{{ theme.id }}">
+                                    <i class="fa fa-picture-o"></i> {{ theme.name }} Theme
                                 </a>
                             </li>
-                            <li>
-                                <a href="javascript: StrikeFinder.set_theme('cerulean')">
-                                    <i class="fa fa-picture-o"></i> Cerulean Theme
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript: StrikeFinder.set_theme('cosmo')">
-                                    <i class="fa fa-picture-o"></i> Cosmo Theme
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript: StrikeFinder.set_theme('cyborg')">
-                                    <i class="fa fa-picture-o"></i> Cyborg Theme
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript: StrikeFinder.set_theme('flatly')">
-                                    <i class="fa fa-picture-o"></i> Flatly Theme
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript: StrikeFinder.set_theme('journal')">
-                                    <i class="fa fa-picture-o"></i> Journal Theme
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript: StrikeFinder.set_theme('readable')">
-                                    <i class="fa fa-picture-o"></i> Readable Theme
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript: StrikeFinder.set_theme('simplex')">
-                                    <i class="fa fa-picture-o"></i> Simplex Theme
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript: StrikeFinder.set_theme('slate')">
-                                    <i class="fa fa-picture-o"></i> Slate Theme
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript: StrikeFinder.set_theme('united')">
-                                    <i class="fa fa-picture-o"></i> United Theme
-                                </a>
-                            </li>
+                            {% endfor %}
                             <li class="divider"></li>
                             <li>
                                 <a href="/logout/">

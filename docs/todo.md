@@ -15,24 +15,25 @@ UAC ToDo
 ## Tasks
 
 ### Implement facets
-    - The selected event on the facets view is not properly passing the facet type field.  I believe tagname is the only
-      one that works.
-    - Need to test selecting multiple facets of the same type.
-    - Need to implement the refresh button on the facets view.
-    - Need to add facets to the hosts view.
+    - Leave open any facet collapsable that has a filter in play.
+    - Add facets to the hosts view.
+    - Add facets to the suppressions view.
+    - Add facets to the hits by tag view.
 
 ### Application themes
-    - Need to move the them Javascript code to a common uac.js file.  Currently it is referencing a StrikeFinder file
-      that is not being loaded on the uac view.
 
 ### Implement Pipelining
-    - Add the pipeling code to datatables and allow caching of a much larger result set.
+    - Add the pipelining code to datatables and allow caching of a much larger result set.
     - Change the default hits views to be open and rendering 10 hits.
 
 ### Implement additional info level auditing.
     - Add auditing.
     - Specify that the default UAC log level should be info.
     - Update the default config files.
+
+### Render hits criteria
+    - On the hits view render the details regarding what hits you are viewing.
+    - Potentially remove the shopping rollup?
 
 ### Bootstrap Stuff
     - Google fonts issues.
