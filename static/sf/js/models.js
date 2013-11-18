@@ -232,6 +232,7 @@ StrikeFinder.HitsCriteria = Backbone.Model.extend({
      */
     set_initial: function(initial_params) {
         var view = this;
+        view.clear();
         view.initial_params = initial_params;
         _.each(_.keys(initial_params), function(key) {
             view.set(key, initial_params[key]);

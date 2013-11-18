@@ -21,6 +21,10 @@ UAC ToDo
     - Need to implement the refresh button on the facets view.
     - Need to add facets to the hosts view.
 
+### Application themes
+    - Need to move the them Javascript code to a common uac.js file.  Currently it is referencing a StrikeFinder file
+      that is not being loaded on the uac view.
+
 ### Implement Pipelining
     - Add the pipeling code to datatables and allow caching of a much larger result set.
     - Change the default hits views to be open and rendering 10 hits.
