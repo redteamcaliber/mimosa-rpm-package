@@ -30,6 +30,11 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
         view.options.sAjaxDataProp = 'results';
         view.options.bServerSide = true;
 
+        view.options.oLanguage = {
+            sEmptyTable: 'This host does not have any hits.',
+            sZeroRecords: 'No matching hits found'
+        };
+
         view.listenTo(view, 'load', function () {
             // Load the first hit on load of the view.
             view.select_row(0);
@@ -123,12 +128,43 @@ StrikeFinder.HostsApp = StrikeFinder.View.extend({
             view.hits_details_view.fetch();
         });
 
-        view.fetch(view.model.get('hash'));
-    },
-    fetch: function(am_cert_hash) {
-        var view = this;
-        view.hits_table_view.fetch({
-            am_cert_hash: am_cert_hash
+        // The criteria container.
+        view.criteria = new StrikeFinder.HitsCriteria();
+        // Specify the host as default criteria.
+        view.criteria.set_initial({am_cert_hash: view.model.get('hash')});
+
+        // Hits facets.
+        view.facets = new StrikeFinder.HitsFacetsModel();
+        view.facets_view = new StrikeFinder.HitsFacetsView({
+            el: '#hits-facets-div',
+            model: view.facets
         });
+
+        // Listen to criteria changes and reload the views.
+        view.listenTo(view.criteria, 'refresh', function(attributes) {
+            // Reload the facets.
+            view.facets.params = attributes;
+            view.facets.fetch();
+
+            // Reload the hits.
+            view.hits_table_view.fetch(attributes);
+        });
+
+        view.listenTo(view.facets_view, 'selected', function(type, value) {
+            StrikeFinder.run(function() {
+                log.debug(_.sprintf('selected: %s, %s', type, value));
+                view.criteria.add(type, value);
+                view.criteria.refresh();
+            });
+        });
+
+        view.listenTo(view.facets_view, 'reset', function() {
+            StrikeFinder.run(function() {
+                // User reset the filter criteria.
+                view.criteria.reset();
+            });
+        });
+
+        view.criteria.refresh();
     }
 });

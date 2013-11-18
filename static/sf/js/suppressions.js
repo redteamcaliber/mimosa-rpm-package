@@ -260,7 +260,7 @@ StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
         });
 
         view.options.oLanguage = {
-            sEmptyTable: 'This suppression is not matching any hits',
+            sEmptyTable: 'The selected suppression is not matching any hits',
             sZeroRecords: 'No matching hits found'
         };
 
@@ -326,6 +326,16 @@ StrikeFinder.SuppressionsAppView = StrikeFinder.View.extend({
         var suppression_id = data['suppression_id'];
 
         view.run_once('init_hits', function () {
+            // The criteria container.
+            view.criteria = new StrikeFinder.HitsCriteria();
+
+            // Hits facets.
+            view.facets = new StrikeFinder.HitsFacetsModel();
+            view.facets_view = new StrikeFinder.HitsFacetsView({
+                el: '#hits-facets-div',
+                model: view.facets
+            });
+
             view.hits_table_view = new StrikeFinder.HitsSuppressionTableView({
                 el: '#hits-table'
             });
@@ -337,11 +347,37 @@ StrikeFinder.SuppressionsAppView = StrikeFinder.View.extend({
                 suppress: false,
                 masstag: false
             });
+
+            // Listen to criteria changes and reload the views.
+            view.listenTo(view.criteria, 'refresh', function(attributes) {
+                // Reload the facets.
+                view.facets.params = attributes;
+                view.facets.fetch();
+
+                // Reload the hits.
+                view.hits_table_view.fetch(attributes);
+            });
+
+            view.listenTo(view.facets_view, 'selected', function(type, value) {
+                StrikeFinder.run(function() {
+                    log.debug(_.sprintf('selected: %s, %s', type, value));
+                    view.criteria.add(type, value);
+                    view.criteria.refresh();
+                });
+            });
+
+            view.listenTo(view.facets_view, 'reset', function() {
+                StrikeFinder.run(function() {
+                    // User reset the filter criteria.
+                    view.criteria.reset();
+                });
+            });
         });
 
-        view.hits_table_view.fetch({
-            suppression_id: suppression_id
-        });
+        // Specify the host as default criteria.
+        view.criteria.set_initial({suppression_id: suppression_id});
+        // Refresh the hits data.
+        view.criteria.refresh();
 
         $('.hits-view').fadeIn().show();
     }

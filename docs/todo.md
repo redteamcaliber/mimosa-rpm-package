@@ -15,10 +15,13 @@ UAC ToDo
 ## Tasks
 
 ### Implement facets
-    - Leave open any facet collapsable that has a filter in play.
     - Add facets to the hosts view.
     - Add facets to the suppressions view.
     - Add facets to the hits by tag view.
+    - The add method should check to make sure the criteria has not already been added.
+
+### Implement hits sorting
+    -Add sorting to the hits table on the hits view, host view, suppressions view, and hits by tag view.
 
 ### Application themes
 
