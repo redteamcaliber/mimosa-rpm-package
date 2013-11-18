@@ -699,7 +699,11 @@
                                 <ul class="list-group" style="margin-bottom: 0px">
                                 <% _.each( get_facet_values(facet), function(value, index) { %>
                                 <li class="list-group-item" style="margin-bottom: 1px">
-                                    <a name="<%= value.id %>" title="<%= value.value %>">
+                                    <a name="<%= value.id %>"
+                                       title="<%= value.value %>"
+                                       data-facet-type="<%= facet %>"
+                                       data-facet-id="<%= value.id %>"
+                                       data-facet-value="<%= value.value %>">
                                         <%= value.abbrev ? value.abbrev : value.value %>
                                         <span class="badge pull-right"><%= value.count %></span>
                                     </a>
@@ -725,7 +729,7 @@
             </button>
         </div>
         <div class="col-sm-6" style="padding-left: 5px">
-            <button type="refresh-facets"
+            <button id="refresh-facets"
                     class="btn btn-success form-control">
                 <i class="fa fa-refresh"></i> Refresh
             </button>

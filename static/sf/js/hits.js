@@ -1795,7 +1795,7 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
 
         // Listen to criteria changes and reload the views.
         view.listenTo(view.criteria, 'refresh', function(attributes) {
-            log.debug('Refreshing the hits view...');
+            log.info('Refreshing the hits views...');
             console.dir(attributes);
 
             // Reload the facets.
@@ -1819,6 +1819,12 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
                 // User reset the filter criteria.
                 view.criteria.reset();
             });
+        });
+
+        view.listenTo(view.facets_view, 'refresh', function() {
+            // User refreshed the view.
+            // TODO: Implement me!
+            StrikeFinder.display_info('PATIENCE YOU MUST HAVE my young padawan');
         });
     },
     fetch: function (params) {
@@ -2021,7 +2027,16 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
         });
     },
     on_click: function(ev) {
-        this.trigger('selected', 'tagname', ev.currentTarget.name);
+        var attributes = ev.currentTarget.attributes;
+        var facet_type = attributes['data-facet-type'].value;
+        var facet_id = attributes['data-facet-id'].value;
+        if (facet_type && facet_id) {
+            this.trigger('selected', facet_type, facet_id);
+        }
+        else {
+            // Error
+            StrikeFinder.display_error('Error: anchor does not have facet attributes defined.');
+        }
     },
     reset_facets: function(ev) {
         this.trigger('reset');

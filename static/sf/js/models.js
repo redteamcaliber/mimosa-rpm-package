@@ -208,7 +208,8 @@ StrikeFinder.HitsCriteria = Backbone.Model.extend({
     },
     on_change: function(ev) {
         var view = this;
-        log.debug('Hits facets criteria changed: ' + JSON.stringify(view.changed));
+        log.debug('Hits facets criteria changed...');
+        console.dir(view.changed);
     },
     /**
      * Add value to the list associated with the key.  Adds the list if it does not exist.
@@ -262,6 +263,8 @@ StrikeFinder.HitsFacetsModel = Backbone.Model.extend({
     },
     url: function() {
         var result = '/sf/api/hits/facets?facets=tagname,iocname,item_type,md5sum,am_cert_hash,username';
+
+        // Base filters.
         if (this.params.services && this.params.services.length > 0) {
             result += '&' + $.param({services: this.params.services});
         }
@@ -280,14 +283,28 @@ StrikeFinder.HitsFacetsModel = Backbone.Model.extend({
         if (this.params.ioc_uuid && this.params.ioc_uuid.length > 0) {
             result += '&' + $.param({ioc_uuid: this.params.ioc_uuid});
         }
-        if (this.params.am_cert_hash && this.params.am_cert_hash.length > 0) {
-            result += '&' + $.param({am_cert_hash: this.params.am_cert_hash});
-        }
         if (this.params.suppression_id && this.params.suppression_id > 0) {
             result += '&' + $.param({suppression_id: this.params.suppression_id});
         }
+
+        // Facet filters.
         if (this.params.tagname && this.params.tagname.length > 0) {
             result += '&' + $.param({tagname: this.params.tagname});
+        }
+        if (this.params.ioc_name && this.params.ioc_name.length > 0) {
+            result += '&' + $.param({ioc_name: this.params.ioc_name});
+        }
+        if (this.params.item_type && this.params.item_type.length > 0) {
+            result += '&' + $.param({item_type: this.params.item_type});
+        }
+        if (this.params.md5sum && this.params.md5sum.length > 0) {
+            result += '&' + $.param({md5sum: this.params.md5sum});
+        }
+        if (this.params.am_cert_hash && this.params.am_cert_hash.length > 0) {
+            result += '&' + $.param({am_cert_hash: this.params.am_cert_hash});
+        }
+        if (this.params.username && this.params.username.length > 0) {
+            result += '&' + $.param({username: this.params.username});
         }
         return result;
     }

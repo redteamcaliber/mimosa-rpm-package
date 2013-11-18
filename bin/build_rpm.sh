@@ -89,12 +89,16 @@ fi
 echo 'OK'
 
 # Import the node dependencies.
+echo 'Installing dependencies...'
 cd $PROJECT_DIR
 chmod +x ./bin/*
 ./bin/install_libs.sh
+echo 'OK'
 
 # Uglify the js files.
+echo 'Running uglify...'
 ./bin/uglify.sh 'TRUE'
+echo 'OK'
 
 # Create the rpm tar.
 echo "Creating the source tar file: $TAR_FILE from source: $PROJECT_DIR/*"
