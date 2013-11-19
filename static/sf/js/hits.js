@@ -1761,16 +1761,6 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
 
         view.params = {};
 
-        // The criteria container.
-        view.criteria = new StrikeFinder.HitsCriteria();
-
-        // Hits facets.
-        view.facets = new StrikeFinder.HitsFacetsModel();
-        view.facets_view = new StrikeFinder.HitsFacetsView({
-            el: '#hits-facets-div',
-            model: view.facets
-        });
-
         // Hits.
         view.hits_table_view = new StrikeFinder.HitsTableView({
             el: '#hits-table'
@@ -1793,32 +1783,15 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
             view.hits_details_view.fetch();
         });
 
+        // Hits facets.
+        view.facets_view = new StrikeFinder.HitsFacetsView({
+            el: '#hits-facets-div'
+        });
+
         // Listen to criteria changes and reload the views.
-        view.listenTo(view.criteria, 'refresh', function(attributes) {
-            log.info('Refreshing the hits views...');
-            console.dir(attributes);
-
-            // Reload the facets.
-            view.facets.params = attributes;
-            view.facets.fetch();
-
+        view.listenTo(view.facets_view, 'refresh', function(attributes) {
             // Reload the hits.
             view.hits_table_view.fetch(attributes);
-        });
-
-        view.listenTo(view.facets_view, 'selected', function(type, value) {
-            StrikeFinder.run(function() {
-                log.debug(_.sprintf('selected: %s, %s', type, value));
-                view.criteria.add(type, value);
-                view.criteria.refresh();
-            });
-        });
-
-        view.listenTo(view.facets_view, 'reset', function() {
-            StrikeFinder.run(function() {
-                // User reset the filter criteria.
-                view.criteria.reset();
-            });
         });
     },
     fetch: function (params) {
@@ -1900,20 +1873,15 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
 
         // Update the hits criteria.
         if (view.params.usertoken) {
-            StrikeFinder.run(function () {
-                view.criteria.set_initial({'usertoken': [view.params.usertoken]});
-            });
+            view.facets_view.fetch({'usertoken': [view.params.usertoken]});
         }
         else {
-            StrikeFinder.run(function () {
-                view.criteria.set_initial({
-                    'services': view.params.services,
-                    'clusters': view.params.clusters,
-                    'exp_key': [view.params.exp_key]
-                });
+            view.facets_view.fetch({
+                'services': view.params.services,
+                'clusters': view.params.clusters,
+                'exp_key': [view.params.exp_key]
             });
         }
-        view.criteria.refresh();
     }
 });
 
@@ -1924,8 +1892,7 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
     initialize: function() {
         var view = this;
 
-        view.listenTo(view.model, 'sync', view.render);
-
+        // TODO: move the outwards.
         view.titles = {
             username: 'User',
             md5sum: 'MD5',
@@ -1952,6 +1919,14 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
             'am_cert_hash',
             'username'
         ];
+
+        // Create the facets model.
+        view.model = new StrikeFinder.HitsFacetsModel();
+        // Redraw the facets on sync.
+        view.listenTo(view.model, 'sync', view.render);
+
+        // Create the criteria.
+        view.criteria = new StrikeFinder.HitsCriteria();
     },
     /**
      * Shorten a string value.
@@ -2005,10 +1980,7 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
                 return icon ? icon : 'fa-meh';
             },
             get_visibility: function(facet) {
-                if (facet == 'tagname') {
-                    return true;
-                }
-                else if (view.model.params[facet] && view.model.params[facet].length > 0) {
+                if (view.model.params[facet] && view.model.params[facet].length > 0) {
                     return true;
                 }
                 else {
@@ -2029,21 +2001,53 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
         });
     },
     on_click: function(ev) {
+        var view = this;
         var attributes = ev.currentTarget.attributes;
         var facet_type = attributes['data-facet-type'].value;
         var facet_id = attributes['data-facet-id'].value;
         if (facet_type && facet_id) {
-            this.trigger('selected', facet_type, facet_id);
+            log.debug(_.sprintf('Facet selected: %s, %s', facet_type, facet_id));
+            view.criteria.add(facet_type, facet_id);
+
+            view.load_facets();
+
+            // Bubble a selected event.
+            view.trigger('selected', facet_type, facet_id);
         }
         else {
             // Error
             StrikeFinder.display_error('Error: anchor does not have facet attributes defined.');
         }
     },
-    reset_facets: function(ev) {
-        this.trigger('reset');
+    /**
+     * User reset the filter criteria.
+     */
+    reset_facets: function() {
+        var view = this;
+        view.criteria.reset();
+
+        view.load_facets();
+
+        // Bubble a reset event.
+        view.trigger('reset');
     },
-    refresh_facets: function(ev) {
-        this.trigger('refresh');
+    get_criteria: function() {
+        return this.criteria;
+    },
+    /**
+     * Load the hits facets based on the views criteria.
+     */
+    load_facets: function() {
+        var view = this;
+        view.model.params = view.criteria.attributes;
+        StrikeFinder.block_element(view.$el);
+        view.model.fetch();
+
+        view.trigger('refresh', view.criteria.attributes);
+    },
+    fetch: function(params) {
+        // Set the initial params on the hits criteria.  These params will survive a reset.
+        this.criteria.set_initial(params);
+        this.load_facets();
     }
 });

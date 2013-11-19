@@ -14,32 +14,42 @@ UAC ToDo
 
 ## Tasks
 
+### Implement Pipelining
+    x - Make the pipelining code be in the TableView to be instance specific.
+    x - The code doesn't seem to be aware of the aaData / sAjaxDataProp setting.
+    x - Add the pipelining code to datatables and allow caching of a much larger result set.
+    x - Change the default hits views to be open and rendering 10 hits.
+    - Allow clients to override the pipeline cache size.
+
 ### Implement facets
-    - Add facets to the hosts view.
-    - Add facets to the suppressions view.
-    - Add facets to the hits by tag view.
-    - The add method should check to make sure the criteria has not already been added.
+    - Refactor the suppressions view for criteria change.
+    - Refactor the hosts view for criteria change.
+    - Refactor the hits by tag view for criteria change.
+    - Add the ability to remove a facet criteria.
+    - Display the full md5 and am_cert_hash.
 
 ### Implement hits sorting
     -Add sorting to the hits table on the hits view, host view, suppressions view, and hits by tag view.
 
 ### Application themes
-
-### Implement Pipelining
-    - Add the pipelining code to datatables and allow caching of a much larger result set.
-    - Change the default hits views to be open and rendering 10 hits.
+    - Look into the host search view.
 
 ### Implement additional info level auditing.
     - Add auditing.
     - Specify that the default UAC log level should be info.
     - Update the default config files.
 
+### Write up release notes.
+
+### Look into Grunt build and deployment scripts.
+    - http://gruntjs.com/getting-started
+    - https://npmjs.org/package/grunt-sed
+
 ### Render hits criteria
     - On the hits view render the details regarding what hits you are viewing.
     - Potentially remove the shopping rollup?
 
 ### Bootstrap Stuff
-    - Google fonts issues.
 
 ### Integrate the type ahead search box.
     - http://twitter.github.io/typeahead.js/

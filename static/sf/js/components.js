@@ -245,6 +245,7 @@ StrikeFinder.TableViewControls = StrikeFinder.View.extend({
     }
 });
 
+
 StrikeFinder.get_datatables_settings = function (parent, settings) {
     var defaults = {
         iDisplayLength: 10,
@@ -255,6 +256,9 @@ StrikeFinder.get_datatables_settings = function (parent, settings) {
         bSortClasses: false,
         bProcessing: false,
         asStripeClasses: [],
+        fnServerData: function(sSource, aoData, fnCallback) {
+            parent.pipeline(sSource, aoData, fnCallback);
+        },
         fnRowCallback: function (nRow, data, iDisplayIndex, iDisplayIndexFull) {
             var click_handler = function (ev) {
                 // Select the row.
@@ -302,7 +306,7 @@ StrikeFinder.get_datatables_settings = function (parent, settings) {
  * Generic Backbone table view component.
  */
 StrikeFinder.TableView = StrikeFinder.View.extend({
-    initialize: function (options) {
+    initialize: function () {
         if (this.collection) {
             this.listenTo(this.collection, 'sync', this.render);
         }
@@ -506,7 +510,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         }
         this.$el.fnDraw(false);
     },
-    refresh: function (value_pair, bComplete) {
+    refresh: function (value_pair) {
         if (value_pair) {
             this._value_pair = value_pair;
         }
@@ -658,7 +662,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         if (view.$el.parent()) {
             // Assign the bootstrap class to the length select.
             var length_selects = $('.dataTables_wrapper select');
-            _.each(length_selects, function(length_select) {
+            _.each(length_selects, function (length_select) {
                 if (!$(length_select).hasClass('form-control')) {
                     $(length_select).addClass('form-control');
                 }
@@ -675,12 +679,12 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                 if (!params.success && !params.error) {
                     // Has not overidden the success and error callbacks, block for them.
                     params.success = function () {
-                        StrikeFinder.unblock();
+                        StrikeFinder.unblock(view.$el);
                     };
                     params.error = function () {
-                        StrikeFinder.unblock();
+                        StrikeFinder.unblock(view.$el);
                     };
-                    StrikeFinder.block();
+                    StrikeFinder.block_element(view.$el);
                     view.collection.fetch(params);
                 }
                 else {
@@ -690,24 +694,22 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             }
             else {
                 // Block the UI before the fetch.
-                StrikeFinder.block();
+                StrikeFinder.block_element(view.$el);
                 view.collection.fetch({
                     success: function () {
                         // Unblock the ui.
-                        StrikeFinder.unblock();
+                        StrikeFinder.unblock(view.$el);
                     },
                     error: function () {
                         // Unblock the ui.
-                        StrikeFinder.unblock();
+                        StrikeFinder.unblock(view.$el);
                     }
                 });
             }
         }
         else {
-            StrikeFinder.run(function () {
-                view.render({
-                    'server_params': params
-                });
+            view.render({
+                'server_params': params
             });
         }
     },
@@ -732,13 +734,154 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         }
     },
     /**
-     * Escape a cell.
+     * Escape a cells contents.
      */
     escape_cell: function(row, index) {
         var col = this.get_settings().aoColumns[index];
         var td = $(_.sprintf('td:eq(%s)', index), row);
         if (td) {
             td.html(_.escape(td.html()));
+        }
+    },
+    set_key: function (aoData, sKey, mValue) {
+        for (var i = 0, iLen = aoData.length; i < iLen; i++) {
+            if (aoData[i].name == sKey) {
+                aoData[i].value = mValue;
+            }
+        }
+    },
+    get_key: function (aoData, sKey) {
+        for (var i = 0, iLen = aoData.length; i < iLen; i++) {
+            if (aoData[i].name == sKey) {
+                return aoData[i].value;
+            }
+        }
+        return null;
+    },
+    pipeline: function (sSource, aoData, fnCallback) {
+        var view = this;
+        var ajax_data_prop = view.get_settings().sAjaxDataProp;
+
+        if (!view.cache) {
+            // Initialize the cache the first time.
+            view.cache = {
+                iCacheLower: -1
+            };
+        }
+
+        var iPipe = 10;
+        /* Adjust the pipe size */
+
+        var bNeedServer = false;
+        var sEcho = view.get_key(aoData, "sEcho");
+        var iRequestStart = view.get_key(aoData, "iDisplayStart");
+        var iRequestLength = view.get_key(aoData, "iDisplayLength");
+        var iRequestEnd = iRequestStart + iRequestLength;
+        view.cache.iDisplayStart = iRequestStart;
+
+        /* outside pipeline? */
+        if (view.cache.iCacheLower < 0 ||
+            iRequestStart < view.cache.iCacheLower ||
+            iRequestEnd > view.cache.iCacheUpper) {
+            bNeedServer = true;
+        }
+        else if (aoData.length != view.cache.lastRequest.length) {
+            // The number of parameters is different between the current request and the last request, assume that
+            // going back to the server is necessary.
+            bNeedServer = true;
+        }
+        else if (view.cache.lastRequest) {
+            for (var i = 0, iLen = aoData.length; i < iLen; i++) {
+                var param = aoData[i];
+                var last_param = view.cache.lastRequest[i];
+                var is_param_array = Array.isArray(param);
+                var is_last_param_array = Array.isArray(last_param);
+                if (is_param_array && is_last_param_array) {
+                    // The params are both arrays, compare them.
+                    if (param.length != last_param.length) {
+                        // The array lengths don't match, assume the server is needed.
+                        bNeedServer = true;
+                        break; // **EXIT**
+                    }
+                    else {
+                        // Need to compare the actual array contents.
+                        for (var param_index = 0; param.length; param_index++) {
+                            var p1 = param[param_index];
+                            var p2 = last_param[param_index];
+                            if (p1.value != p2.value) {
+                                bNeedServer = true;
+                                break; // **EXIT**
+                            }
+                        }
+                    }
+                }
+                else if (is_param_array && !is_last_param_array || !is_param_array && is_last_param_array) {
+                    // Parameter type mismatch.
+                    bNeedServer = true;
+                    break; // **EXIT**
+                }
+                else if (param.name != "iDisplayStart" && param.name != "iDisplayLength" && param.name != "sEcho") {
+                    if (param.value != last_param.value) {
+                        bNeedServer = true;
+                        break; // **EXIT**
+                    }
+                }
+            }
+        }
+
+        /* Store the request for checking next time around */
+        view.cache.lastRequest = aoData.slice();
+
+        if (bNeedServer) {
+            if (iRequestStart < view.cache.iCacheLower) {
+                iRequestStart = iRequestStart - (iRequestLength * (iPipe - 1));
+                if (iRequestStart < 0) {
+                    iRequestStart = 0;
+                }
+            }
+
+            view.cache.iCacheLower = iRequestStart;
+            view.cache.iCacheUpper = iRequestStart + (iRequestLength * iPipe);
+            view.cache.iDisplayLength = view.get_key(aoData, "iDisplayLength");
+            view.set_key(aoData, "iDisplayStart", iRequestStart);
+            view.set_key(aoData, "iDisplayLength", iRequestLength * iPipe);
+
+            // Block the UI before the AJAX call.
+            StrikeFinder.block_element(view.$el);
+
+            $.getJSON(sSource, aoData, function (json) {
+                /* Callback processing */
+                view.cache.lastJson = jQuery.extend(true, {}, json);
+
+                if (view.cache.iCacheLower != view.cache.iDisplayStart) {
+                    json[ajax_data_prop].splice(0, view.cache.iDisplayStart - view.cache.iCacheLower);
+                }
+
+                json[ajax_data_prop].splice(view.cache.iDisplayLength, json[ajax_data_prop].length);
+
+                fnCallback(json);
+            })
+                .always(function() {
+                    // Unblock the UI.
+                    StrikeFinder.unblock(view.$el);
+                });
+        }
+        else {
+            try {
+                // Block the UI before processing.
+                StrikeFinder.block_element(view.$el)
+
+                json = jQuery.extend(true, {}, view.cache.lastJson);
+                json.sEcho = sEcho;
+                /* Update the echo for each response */
+                json[ajax_data_prop].splice(0, iRequestStart - view.cache.iCacheLower);
+                json[ajax_data_prop].splice(iRequestLength, json[ajax_data_prop].length);
+                fnCallback(json);
+            }
+            finally {
+                // Unblock the UI.
+                StrikeFinder.unblock(view.$el);
+            }
         }
     }
 });

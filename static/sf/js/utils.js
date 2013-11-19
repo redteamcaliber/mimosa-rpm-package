@@ -147,6 +147,10 @@ StrikeFinder.block = function (ev) {
     $.blockUI(StrikeFinder.get_blockui_options());
 };
 
+StrikeFinder.block_element_remove = function(el, message) {
+    $(el).block(StrikeFinder.get_blockui_options('<img src="/static/img/ajax-loader.gif">'));
+};
+
 StrikeFinder.block_element = function(el, message) {
     $(el).block(StrikeFinder.get_blockui_options('<img src="/static/img/ajax-loader.gif">'));
 };

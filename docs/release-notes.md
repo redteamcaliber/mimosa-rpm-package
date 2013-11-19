@@ -6,14 +6,18 @@ Mandiant-uac-ws-0.5-0 - November ???th, 2013
 
 ### Hit Review
 
-- Faceted searching on the hits and host views.
+- Faceted searching on the hits, hosts, suppressions, and hits by tag views.
+- Facets open if there is a filter condition in play.
+- Table view pipelining implemented for optimal paging.  The default hits table views now display 10 records by default
+  though load several hundred records into client caching only going back to the server as necessary.
 - Keyboard shortcuts added for navigating hits.  On a Mac ctrl-u moves to the previous row and ctrl-d moves to the next
-  row (similiar to vi).  On Windows ctrl-up-arrow moves to the previous record and ctrl-down-arrow moves to the next record.
+  row (similar to vi).  On Windows ctrl-up-arrow moves to the previous record and ctrl-down-arrow moves to the next record.
+- Sorting???
 
 ### General
 
-- Theme support.
-- Tasks moved under the user menu.
+- Theme support available under the user main (far right menu).  Several open source theme options are now available to
+  choose from.  Theme settings are currently stored as a browser cookie.
 
 
 Mandiant-uac-ws-0.4-0 - November 6th, 2013

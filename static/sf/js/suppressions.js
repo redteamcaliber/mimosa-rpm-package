@@ -338,46 +338,20 @@ StrikeFinder.SuppressionsAppView = StrikeFinder.View.extend({
                 masstag: false
             });
 
-            // The criteria container.
-            view.criteria = new StrikeFinder.HitsCriteria();
-
             // Hits facets.
-            view.facets = new StrikeFinder.HitsFacetsModel();
             view.facets_view = new StrikeFinder.HitsFacetsView({
-                el: '#hits-facets-div',
-                model: view.facets
+                el: '#hits-facets-div'
             });
 
             // Listen to criteria changes and reload the views.
-            view.listenTo(view.criteria, 'refresh', function(attributes) {
-                // Reload the facets.
-                view.facets.params = attributes;
-                view.facets.fetch();
-
+            view.listenTo(view.facets_view, 'refresh', function(attributes) {
                 // Reload the hits.
                 view.hits_table_view.fetch(attributes);
-            });
-
-            view.listenTo(view.facets_view, 'selected', function(type, value) {
-                StrikeFinder.run(function() {
-                    log.debug(_.sprintf('selected: %s, %s', type, value));
-                    view.criteria.add(type, value);
-                    view.criteria.refresh();
-                });
-            });
-
-            view.listenTo(view.facets_view, 'reset', function() {
-                StrikeFinder.run(function() {
-                    // User reset the filter criteria.
-                    view.criteria.reset();
-                });
             });
         });
 
         // Specify the host as default criteria.
-        view.criteria.set_initial({suppression_id: suppression_id});
-        // Refresh the hits data.
-        view.criteria.refresh();
+        view.facets_view.fetch({suppression_id: suppression_id});
 
         $('.hits-view').fadeIn().show();
     }

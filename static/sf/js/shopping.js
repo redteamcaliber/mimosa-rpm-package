@@ -139,14 +139,14 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
     fetch: function (params) {
         var view = this;
         view.params = params;
-        StrikeFinder.block();
+        StrikeFinder.block_element(view.$el);
         view.collection.fetch({
             data: params,
             success: function () {
-                StrikeFinder.unblock();
+                StrikeFinder.unblock(view.$el);
             },
-            failure: function () {
-                StrikeFinder.unblock();
+            error: function () {
+                StrikeFinder.unblock(view.$el);
             }
         });
     }
