@@ -57,43 +57,74 @@ StrikeFinder.HitsByTagView = StrikeFinder.View.extend({
             view.tagname = value;
             view.render();
         });
+
+        view.hits_collapsable = new StrikeFinder.CollapsableContentView({
+            el: '#hits-table'
+        });
+
+        view.hits_table_view = new StrikeFinder.HitsByTagTableView({
+            el: '#hits-table'
+        });
+        view.listenTo(view.hits_table_view, 'load', function () {
+            view.hits_table_view.select_row(0);
+            view.set_title(_.sprintf('%s (%s)', view.tagname, view.hits_table_view.get_total_rows()));
+        });
+
+        // Create the hits details view.
+        view.hits_details_view = new StrikeFinder.HitsDetailsView({
+            el: '#hits-details-div',
+            hits_table_view: view.hits_table_view
+        });
+
+        // The criteria container.
+        view.criteria = new StrikeFinder.HitsCriteria();
+
+        // Hits facets.
+        view.facets = new StrikeFinder.HitsFacetsModel();
+        view.facets_view = new StrikeFinder.HitsFacetsView({
+            el: '#hits-facets-div',
+            model: view.facets
+        });
+
+        // Listen to criteria changes and reload the views.
+        view.listenTo(view.criteria, 'refresh', function(attributes) {
+            // Reload the facets.
+            view.facets.params = attributes;
+            view.facets.fetch();
+
+            // Reload the hits.
+            view.hits_table_view.fetch(attributes);
+        });
+
+        view.listenTo(view.facets_view, 'selected', function(type, value) {
+            console.log(_.sprintf('Selected %s, %s', type, value));
+            StrikeFinder.run(function() {
+                log.debug(_.sprintf('selected: %s, %s', type, value));
+                view.criteria.add(type, value);
+                view.criteria.refresh();
+            });
+        });
+
+        view.listenTo(view.facets_view, 'reset', function() {
+            StrikeFinder.run(function() {
+                // User reset the filter criteria.
+                view.criteria.reset();
+            });
+        });
+
+        // Load the searchable tags list.
         view.tags.reset(StrikeFinder.searchable_tags);
     },
     render: function() {
         var view = this;
         log.debug('Rendering hits for tagname: ' + view.tagname);
-        view.run_once('init_hits', function() {
 
-            view.hits_collapsable = new StrikeFinder.CollapsableContentView({
-                el: '#hits-table'
-            });
-
-            view.hits_table_view = new StrikeFinder.HitsByTagTableView({
-                el: '#hits-table'
-            });
-            view.listenTo(view.hits_table_view, 'load', function () {
-                view.hits_table_view.select_row(0);
-                view.set_title(_.sprintf('%s (%s)', view.tagname, view.hits_table_view.get_total_rows()));
-            });
-
-            // Create the hits details view.
-            view.hits_details_view = new StrikeFinder.HitsDetailsView({
-                el: '#hits-details-div',
-                hits_table_view: view.hits_table_view
-            });
-//            view.listenTo(view.hits_details_view, 'create:masstag', function () {
-//                // TODO: Need to pass parameters here.
-//                view.hits_table_view.fetch();
-//            });
+        StrikeFinder.run(function() {
+            view.criteria.set_initial({tagname: view.tagname});
+            view.criteria.refresh();
         });
-        view.fetch();
     },
     set_title: function(title) {
         this.hits_collapsable.set('title', '<i class="fa fa-tag"></i> ' + title);
-    },
-    fetch: function() {
-        this.hits_table_view.fetch({
-            tagname: this.tagname
-        });
     }
 });

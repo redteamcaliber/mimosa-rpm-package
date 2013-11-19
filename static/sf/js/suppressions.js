@@ -326,16 +326,6 @@ StrikeFinder.SuppressionsAppView = StrikeFinder.View.extend({
         var suppression_id = data['suppression_id'];
 
         view.run_once('init_hits', function () {
-            // The criteria container.
-            view.criteria = new StrikeFinder.HitsCriteria();
-
-            // Hits facets.
-            view.facets = new StrikeFinder.HitsFacetsModel();
-            view.facets_view = new StrikeFinder.HitsFacetsView({
-                el: '#hits-facets-div',
-                model: view.facets
-            });
-
             view.hits_table_view = new StrikeFinder.HitsSuppressionTableView({
                 el: '#hits-table'
             });
@@ -346,6 +336,16 @@ StrikeFinder.SuppressionsAppView = StrikeFinder.View.extend({
                 tag: false,
                 suppress: false,
                 masstag: false
+            });
+
+            // The criteria container.
+            view.criteria = new StrikeFinder.HitsCriteria();
+
+            // Hits facets.
+            view.facets = new StrikeFinder.HitsFacetsModel();
+            view.facets_view = new StrikeFinder.HitsFacetsView({
+                el: '#hits-facets-div',
+                model: view.facets
             });
 
             // Listen to criteria changes and reload the views.
