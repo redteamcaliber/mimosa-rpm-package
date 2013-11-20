@@ -1048,6 +1048,7 @@ StrikeFinder.CommentsTableView = StrikeFinder.TableView.extend({
      */
     fetch: function(rowitem_uuid) {
         var view = this;
+
         if (rowitem_uuid) {
             this.collection.rowitem_uuid = rowitem_uuid;
         }
@@ -1086,9 +1087,8 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
         "keyup #comment": "on_keyup"
     },
     fetch: function (rowitem_uuid) {
-        var view = this;
-
-        view.comments_table.fetch(rowitem_uuid);
+        this.rowitem_uuid = rowitem_uuid;
+        this.comments_table.fetch(this.rowitem_uuid);
     },
     hide: function () {
         // Hide the collapsable decorator.
@@ -1106,11 +1106,11 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
             return;
         }
 
-        log.debug("Creating comment for rowitem_uuid: " + view.comments_table.rowitem_uuid);
+        log.debug("Creating comment for rowitem_uuid: " + view.rowitem_uuid);
 
         var new_comment = new StrikeFinder.CommentsModel({
             comment: comment,
-            rowitem_uuid: view.comments_table.rowitem_uuid
+            rowitem_uuid: view.rowitem_uuid
         });
 
         log.debug('Comment rowitem_uuid: ' + new_comment.get('rowitem_uuid'));
