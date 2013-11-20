@@ -1036,6 +1036,30 @@ StrikeFinder.CommentsTableView = StrikeFinder.TableView.extend({
         view.listenTo(view, 'row:created', function(row, data, index) {
             view.escape_cell(row, 1);
         });
+
+        if (!view.collection) {
+            view.collection = new StrikeFinder.CommentsCollection();
+        }
+        view.listenTo(view.collection, 'sync', view.render);
+    },
+    /**
+     * Load the comments based on the row item.
+     * @param rowitem_uuid - the row item.
+     */
+    fetch: function(rowitem_uuid) {
+        var view = this;
+        if (rowitem_uuid) {
+            this.collection.rowitem_uuid = rowitem_uuid;
+        }
+        StrikeFinder.block_element(view.$el);
+        this.collection.fetch({
+            success: function () {
+                StrikeFinder.unblock(view.$el);
+            },
+            error: function () {
+                StrikeFinder.unblock(view.$el);
+            }
+        });
     }
 });
 /**
@@ -1045,7 +1069,7 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
     initialize: function (options) {
         var view = this;
         if (options.rowitem_uuid) {
-            this.rowitem_uuid = options.rowitem_uuid;
+            view.rowitem_uuid = options.rowitem_uuid;
         }
 
         view.comments_collapsable = new StrikeFinder.CollapsableContentView({
@@ -1053,46 +1077,18 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
             title: '<i class="fa fa-comments"></i> Comments'
         });
 
-        if (!view.collection) {
-            view.collection = new StrikeFinder.CommentsCollection([], {
-                rowitem_uuid: view.rowitem_uuid
-            });
-        }
-        view.listenTo(this.collection, 'sync', this.render);
+        view.comments_table = new StrikeFinder.CommentsTableView({
+            el: view.$("#comments-table")
+        });
     },
     events: {
         "click button": "add_comment",
         "keyup #comment": "on_keyup"
     },
-    render: function () {
-        var view = this;
-
-        this.run_once('init_views', function () {
-            view.comments_table = new StrikeFinder.CommentsTableView({
-                el: view.$("#comments-table"),
-                collection: view.collection
-            });
-            view.comments_table.render();
-        });
-
-        return this;
-    },
     fetch: function (rowitem_uuid) {
         var view = this;
 
-        if (rowitem_uuid) {
-            view.collection.rowitem_uuid = rowitem_uuid;
-        }
-
-        StrikeFinder.block_element(view.$el);
-        view.collection.fetch({
-            success: function () {
-                StrikeFinder.unblock(view.$el);
-            },
-            error: function () {
-                StrikeFinder.unblock(view.$el);
-            }
-        });
+        view.comments_table.fetch(rowitem_uuid);
     },
     hide: function () {
         // Hide the collapsable decorator.
@@ -1110,21 +1106,29 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
             return;
         }
 
-        var rowitem_uuid = view.collection.rowitem_uuid;
-        log.debug("Creating comment for rowitem_uuid: " + rowitem_uuid);
+        log.debug("Creating comment for rowitem_uuid: " + view.comments_table.rowitem_uuid);
 
         var new_comment = new StrikeFinder.CommentsModel({
             comment: comment,
-            rowitem_uuid: rowitem_uuid
+            rowitem_uuid: view.comments_table.rowitem_uuid
         });
 
-        log.debug('Comment rowitem_uuid: ' + new_comment.get('rowitem_uuid'))
+        log.debug('Comment rowitem_uuid: ' + new_comment.get('rowitem_uuid'));
 
+        StrikeFinder.block_element(view.$el);
         new_comment.save([], {
             async: false,
             success: function (model, response, options) {
+                StrikeFinder.unblock(view.$el);
+
                 $("#comment").val("");
-                view.collection.fetch();
+                view.comments_table.fetch();
+            },
+            error: function(model, xhr) {
+                // Error
+                StrikeFinder.unblock(view.$el);
+                var details = xhr && xhr.responseText ? xhr.responseText : 'Response text not defined.';
+                StrikeFinder.display_error('Error while creating new comment. - ' + details);
             }
         });
     },
