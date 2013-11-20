@@ -1785,11 +1785,11 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
         view.listenTo(view.hits_details_view, 'create:tag', function (rowitem_uuid, tagname) {
             // A new tag has been created, loop through the table nodes and manually update the tagname
             // for the relevant row.  This is a shortcut rather than re-loading the entire table.
-            view.hits_table_view.update_row('uuid', rowitem_uuid, 'tagname', tagname, 0);
+            view.hits_table_view.update_row('uuid', rowitem_uuid, 'tagname', tagname, 1);
         });
         view.listenTo(view.hits_details_view, 'create:acquire', function (row, model) {
             // An acquisition has been created, update the row's tag value.
-            view.hits_table_view.update_row('uuid', row.uuid, 'tagname', 'investigating', 0);
+            view.hits_table_view.update_row('uuid', row.uuid, 'tagname', 'investigating', 1);
             // Refresh the comments.
             view.hits_details_view.fetch();
         });
