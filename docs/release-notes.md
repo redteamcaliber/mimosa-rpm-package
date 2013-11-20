@@ -4,9 +4,7 @@ Unified Analyst Console (UAC) Release Notes
 Mandiant-uac-ws-0.5-0 - November 21st, 2013
 ------------------------------------------
 
-### Hit Review
-
-#### Faceted Hits [#25431](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/25431)
+### Faceted Hit Review [#25431](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/25431)
 
 - The ability to easily filter hits by a variety of properties has been implemented.  Users are now able to view
   hits facets counts on tagname, IOC, item type, MD5 (if applicable), am cert hash, and user.
@@ -15,7 +13,7 @@ Mandiant-uac-ws-0.5-0 - November 21st, 2013
 - Clicking on a facet again will remove it from the filter.  Reset clears all selected facets.
 - Hits facets are now integrated with hit review view, hosts view, suppressions view, and the hits by tag view.
 
-#### Hits Table Sorting
+### Hit Review Sorting
 
 - Sorting has been implemented on the hit review table, host hits table, suppressions hits table, and the hits by tag
   table.  Tagname, summary, and summary 2 have been enabled.
