@@ -92,7 +92,7 @@ echo 'OK'
 echo 'Installing dependencies...'
 cd $PROJECT_DIR
 chmod +x ./bin/*
-./bin/install_libs.sh
+./bin/install_libs.sh --production
 echo 'OK'
 
 # Uglify the js files.
