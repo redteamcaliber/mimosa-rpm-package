@@ -6,7 +6,7 @@ Mandiant-uac-ws-0.5-0 - November 21st, 2013
 
 ### Hit Review
 
-#### Faceted Hits
+#### Faceted Hits [#25431](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/25431)
 
 - The ability to easily filter hits by a variety of properties has been implemented.  Users are now able to view
   hits facets counts on tagname, IOC, item type, MD5 (if applicable), am cert hash, and user.
@@ -29,11 +29,16 @@ Mandiant-uac-ws-0.5-0 - November 21st, 2013
 - Keyboard shortcuts added for navigating hits.  On a Mac ctrl-u moves to the previous row and ctrl-d moves to the next
   row (similar to vi).  On Windows ctrl-up-arrow moves to the previous record and ctrl-down-arrow moves to the next record.
 
-
 ### General
 
 - Theme support available under the user main (far right menu).  Several open source theme options are now available to
   choose from.  Theme settings are currently stored as a browser cookie.
+
+### Hit Identity
+
+- Identity "merge" will update the tag of the targeted hit if the older version's tag is of higher precedence (ex: older
+  reported hit merged into a new notreviewed hit will change the tag of the new notreviewed hit to reported).
+- Fixed bug where a suppression was suppressing hits to an IOC's that it was not targeted for.
 
 
 Mandiant-uac-ws-0.4-0 - November 6th, 2013
