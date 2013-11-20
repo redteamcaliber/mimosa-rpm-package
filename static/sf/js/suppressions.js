@@ -110,7 +110,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
 
             view.options['aoColumns'] = [
                 {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false, bSortable: false},
-                {sTitle: "Suppression", mData: 'comment', bVisible: true, bSortable: false},
+                {sTitle: "Suppression", mData: 'comment', bVisible: true, bSortable: false, sClass: 'wrap'},
                 {sTitle: "Global", mData: 'cluster_name', bVisible: true, bSortable: false},
                 {sTitle: "Hits", mData: 'suppressed', bVisible: true, bSortable: false}
             ];
@@ -156,8 +156,8 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
         else {
             view.options.aoColumns = [
                 {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false},
-                {sTitle: "Rule", mData: 'comment', bSortable: true, sWidth: '25%'},
-                {sTitle: "Description", mData: 'comment', bSortable: true, sWidth: '25%'},
+                {sTitle: "Rule", mData: 'comment', bSortable: true, sWidth: '25%', sClass: 'wrap'},
+                {sTitle: "Description", mData: 'comment', bSortable: true, sWidth: '25%', sClass: 'wrap'},
                 {sTitle: "IOC", mData: 'iocname', bSortable: true, sClass: 'nowrap'},
                 {sTitle: "IOC UUID", mData: 'ioc_uuid', bSortable: false, bVisible: false},
                 {sTitle: "Hits", mData: 'suppressed', bSortable: true},
