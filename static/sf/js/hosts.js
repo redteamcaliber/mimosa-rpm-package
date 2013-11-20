@@ -15,14 +15,20 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
 
         view.options['aoColumns'] = [
             {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: false},
-            {sTitle: "Tag", mData: "tagname", bVisible: true, sWidth: '5%', bSortable: false},
+            {sTitle: "Created", mData: "created", bVisible: true, bSortable: true, sWidth: '10%', sClass: 'nowrap'},
+            {sTitle: "Tag", mData: "tagname", bVisible: true, sWidth: '5%', bSortable: true},
             {sTitle: "IOC UUID", mData: "ioc_uuid", bVisible: false, bSortable: false},
-            {sTitle: "IOC Name", mData: "iocname", sWidth: '10%', bSortable: false},
-            {sTitle: "Summary", mData: "summary1", sClass: 'wrap', sWidth: '30%', bSortable: false},
-            {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', sWidth: '30%', bSortable: false},
+            {sTitle: "IOC Name", mData: "iocname", sWidth: '10%', bSortable: true},
+            {sTitle: "Summary", mData: "summary1", sClass: 'wrap', sWidth: '30%', bSortable: true},
+            {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', sWidth: '30%', bSortable: true},
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false}
         ];
-        view.options['aaSorting'] = [];
+
+        view.options['aaSorting'] = [[1, 'desc']];
+
+        view.options.aoColumnDefs = [
+            view.date_formatter(1)
+        ];
 
         view.options.sDom = 'ltip';
 

@@ -768,8 +768,6 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                 iCacheLower: -1
             };
         }
-
-        var iPipe = 10;
         /* Adjust the pipe size */
 
         var bNeedServer = false;
@@ -833,6 +831,8 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         view.cache.lastRequest = aoData.slice();
 
         if (bNeedServer) {
+            var iPipe = 10;
+
             if (iRequestStart < view.cache.iCacheLower) {
                 iRequestStart = iRequestStart - (iRequestLength * (iPipe - 1));
                 if (iRequestStart < 0) {
@@ -882,6 +882,14 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                 // Unblock the UI.
                 StrikeFinder.unblock(view.$el);
             }
+        }
+    },
+    date_formatter: function(index) {
+        return {
+            mRender: function (data, type, row) {
+                return StrikeFinder.format_date_string(data);
+            },
+            aTargets: [index]
         }
     }
 });

@@ -19,14 +19,12 @@ UAC ToDo
     x - The code doesn't seem to be aware of the aaData / sAjaxDataProp setting.
     x - Add the pipelining code to datatables and allow caching of a much larger result set.
     x - Change the default hits views to be open and rendering 10 hits.
-    - Allow clients to override the pipeline cache size.
 
 ### Implement facets
-    - Refactor the suppressions view for criteria change.
-    - Refactor the hosts view for criteria change.
-    - Refactor the hits by tag view for criteria change.
+    x - Refactor the suppressions view for criteria change.
+    x - Refactor the hosts view for criteria change.
+    x - Refactor the hits by tag view for criteria change.
     - Add the ability to remove a facet criteria.
-    - Display the full md5 and am_cert_hash.
 
 ### Implement hits sorting
     -Add sorting to the hits table on the hits view, host view, suppressions view, and hits by tag view.

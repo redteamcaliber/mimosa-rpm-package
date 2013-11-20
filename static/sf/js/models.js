@@ -80,11 +80,11 @@ StrikeFinder.IOCDetailsModel = Backbone.Model.extend({
 StrikeFinder.IOCDetailsCollection = Backbone.Collection.extend({
     url: '/sf/api/ioc-summary',
     model: StrikeFinder.IOCDetailsModel,
-    parse: function(response, options) {
+    parse: function (response, options) {
         if (response && response.length > 0) {
             var ioc_uuids = [];
             var ioc_uuid_map = {};
-            _.each(response, function(item) {
+            _.each(response, function (item) {
                 if (_.indexOf(ioc_uuids, item.iocuuid) == -1) {
                     ioc_uuids.push(item.iocuuid);
                 }
@@ -95,7 +95,7 @@ StrikeFinder.IOCDetailsCollection = Backbone.Collection.extend({
             });
 
             results = [];
-            _.each(ioc_uuids, function(ioc_uuid) {
+            _.each(ioc_uuids, function (ioc_uuid) {
                 results.push({
                     iocuuid: ioc_uuid,
                     expressions: ioc_uuid_map[ioc_uuid]
@@ -185,7 +185,7 @@ StrikeFinder.HitsCollection = Backbone.Collection.extend({
         }
         return url;
     },
-    parse: function(response, options) {
+    parse: function (response, options) {
         return response.results ? response.results : [];
     }
 });
@@ -206,12 +206,17 @@ StrikeFinder.HitsCriteria = Backbone.Model.extend({
         tagname: []
     },
     defaults: this._defaults,
+    is_param: function (k, v) {
+        return this.attributes &&
+            _.has(this.attributes, k) &&
+            this.attributes[k] == v;
+    },
     /**
      * Add value to the list associated with the key.  Adds the list if it does not exist.
      * @param k - the criteria key.
      * @param v - the criteria value.
      */
-    add: function(k, v) {
+    add: function (k, v) {
         var values = this.get(k);
         // Only add the parameter once to the list of values.
         if (values && values.indexOf(v) == -1) {
@@ -227,32 +232,40 @@ StrikeFinder.HitsCriteria = Backbone.Model.extend({
      * @param k - the criteria key.
      * @param v - the criteria value.
      */
-    remove: function(k, v) {
-        var values = this.get(k);
-        if (values && values.length > 0) {
-            var value_index = values.indexOf(v)
-            if (value_index != -1) {
-                // Remove the value
-                values.splice(value_index, 1);
+    remove: function (k, v) {
+        if (!this.is_initial(k, v)) {
+            // Only remove parameters that are not part of the initial set.
+            var values = this.get(k);
+            if (values && values.length > 0) {
+                var value_index = values.indexOf(v);
+                if (value_index != -1) {
+                    // Remove the value
+                    values.splice(value_index, 1);
+                }
             }
         }
+    },
+    is_initial: function (k, v) {
+        return this.initial_params &&
+            _.has(this.initial_params, k) &&
+            this.initial_params[k] == v;
     },
     /**
      * Store and set the initial parameters on this model.  These parameters should survive a model reset.
      * @param initial_params - the map of parameters.
      */
-    set_initial: function(initial_params) {
+    set_initial: function (initial_params) {
         var view = this;
         view.clear();
         view.initial_params = initial_params;
-        _.each(_.keys(initial_params), function(key) {
+        _.each(_.keys(initial_params), function (key) {
             view.set(key, initial_params[key]);
         });
     },
     /**
      * Reset the search criteria to the original default values.
      */
-    reset: function() {
+    reset: function () {
         this.clear();
         this.set(this.defaults);
         if (this.initial_params) {
@@ -265,10 +278,10 @@ StrikeFinder.HitsCriteria = Backbone.Model.extend({
  * Model to retrieve hits facets.
  */
 StrikeFinder.HitsFacetsModel = Backbone.Model.extend({
-    initialize: function() {
+    initialize: function () {
         this.params = {};
     },
-    url: function() {
+    url: function () {
         var result = '/sf/api/hits/facets?facets=tagname,iocname,item_type,md5sum,am_cert_hash,username';
 
         // Base filters.
@@ -530,7 +543,7 @@ StrikeFinder.MassTagModel = Backbone.Model.extend({
         perform_updates: false,
         comment: ''
     },
-    as_string: function() {
+    as_string: function () {
         return _.sprintf('%s \'%s\' \'%s\' (preservecase=%s)',
             this.get('itemkey'),
             this.get('condition'),
@@ -606,17 +619,17 @@ StrikeFinder.TagModel = Backbone.Model.extend({
     }
 });
 StrikeFinder.TagCollection = Backbone.Collection.extend({
-    initialize: function(models, options) {
+    initialize: function (models, options) {
         if (options && options.searchable) {
             this.searchable = true;
         }
     },
     model: StrikeFinder.TagModel,
     url: '/sf/api/tags',
-    parse: function(response, options) {
+    parse: function (response, options) {
         if (this.searchable) {
             var results = [];
-            _.each(response, function(tag) {
+            _.each(response, function (tag) {
                 if (tag.name != 'notreviewed') {
                     results.push(tag);
                 }
@@ -701,7 +714,7 @@ StrikeFinder.AgentHostCollection = Backbone.Collection.extend({
             log.error('Expecting am_cert_hash or hosts to be set.');
         }
     },
-    parse: function(response, options) {
+    parse: function (response, options) {
         // TODO: The counts need to be merged back in!
         if (this.am_cert_hash) {
             var objects = response.objects;
@@ -726,7 +739,7 @@ StrikeFinder.AgentHostCollection = Backbone.Collection.extend({
  * Model for retrieving an acquisition audit.  Expects an acquisition_uuid to be supplied in the id field.
  */
 StrikeFinder.AcquisitionAuditModel = Backbone.Model.extend({
-    url: function() {
+    url: function () {
         return _.sprintf('/sf/api/acquisitions/%s/audit', this.id);
     }
 });

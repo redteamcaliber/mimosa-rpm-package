@@ -6,32 +6,28 @@ StrikeFinder.HitsByTagTableView = StrikeFinder.TableView.extend({
 
         view.options['aoColumns'] = [
             {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: false},
-            {sTitle: "Updated", mData: "updated", sClass: 'nowrap', bSortable: false},
+            {sTitle: "Updated", mData: "updated", sClass: 'nowrap', bSortable: true, sWidth: '10%'},
             {sTitle: "Cluster", mData: "cluster_name", bSortable: false},
             {sTitle: "Host", mData: "hostname", bSortable: false},
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
             {sTitle: "Item Type", mData: "rowitem_type", bSortable: false, bVisible: false},
             {sTitle: "Tag", mData: "tagname", bVisible: false, bSortable: false},
-            {sTitle: "Summary", mData: "summary1", sClass: 'wrap', sWidth: '30%', bSortable: false},
-            {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', sWidth: '30%', bSortable: false},
+            {sTitle: "Summary", mData: "summary1", sClass: 'wrap', sWidth: '30%', bSortable: true},
+            {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', sWidth: '30%', bSortable: true},
             {sTitle: "MD5sum", mData: "md5sum", bSortable: false, bVisible: false},
             {sTitle: "Owner", mData: "username", bSortable: false, bVisible: false}
         ];
 
+        view.options.aaSorting = [[1, 'desc']];
+
         view.options.aoColumnDefs = [
-            {
-                mRender: function (data, type, row) {
-                    return StrikeFinder.format_date_string(data);
-                },
-                aTargets: [1]
-            }
+            view.date_formatter(1)
         ];
 
         view.options.oLanguage = {
             sEmptyTable: 'No hits were found for the specified tag'
         };
 
-        view.options.aaSorting = [];
         view.options.sDom = 'l<"<sf-table-wrapper"t>ip';
 
         view.options.sAjaxSource = '/sf/api/hits';

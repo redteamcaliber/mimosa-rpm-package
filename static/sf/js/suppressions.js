@@ -269,13 +269,21 @@ StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
         view.options['bServerSide'] = true;
 
         view.options['aoColumns'] = [
-            {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
+            {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: false},
+            {sTitle: "Created", mData: "created", bVisible: true, bSortable: true, sClass: 'nowrap', sWidth: '10%'},
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
             {sTitle: "rowitem_type", mData: "rowitem_type", bVisible: false, bSortable: false},
             {sTitle: "Tag", mData: "tagname", bVisible: false, bSortable: false},
-            {sTitle: "Summary", mData: "summary1", bSortable: false, sClass: 'wrap'},
-            {sTitle: "Summary2", mData: "summary2", bSortable: false, sClass: 'wrap'}
+            {sTitle: "Summary", mData: "summary1", bSortable: true, sClass: 'wrap'},
+            {sTitle: "Summary2", mData: "summary2", bSortable: true, sClass: 'wrap'}
         ];
+
+        view.options.aaSorting = [[1, 'desc']];
+
+        view.options.aoColumnDefs = [
+            view.date_formatter(1)
+        ];
+
 
         view.options.sDom = 'ltip';
         view.listenTo(view, 'load', function () {

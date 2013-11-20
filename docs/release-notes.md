@@ -1,18 +1,34 @@
 Unified Analyst Console (UAC) Release Notes
 ===========================================
 
-Mandiant-uac-ws-0.5-0 - November ???th, 2013
+Mandiant-uac-ws-0.5-0 - November 21st, 2013
 ------------------------------------------
 
 ### Hit Review
 
-- Faceted searching on the hits, hosts, suppressions, and hits by tag views.
-- Facets open if there is a filter condition in play.
-- Table view pipelining implemented for optimal paging.  The default hits table views now display 10 records by default
-  though load several hundred records into client caching only going back to the server as necessary.
+#### Faceted Hits
+
+- The ability to easily filter hits by a variety of properties has been implemented.  Users are now able to view
+  hits facets counts on tagname, IOC, item type, MD5 (if applicable), am cert hash, and user.
+- Selecting a facet value will filter the visible hits displaying only those that match the selected criteria.
+- Multiple facet types may be selected at the same time allowing the user to narrow the list of hits.
+- Clicking on a facet again will remove it from the filter.  Reset clears all selected facets.
+- Hits facets are now integrated with hit review view, hosts view, suppressions view, and the hits by tag view.
+
+#### Hits Table Sorting
+
+- Sorting has been implemented on the hit review table, host hits table, suppressions hits table, and the hits by tag
+  table.  Tagname, summary, and summary 2 have been enabled.
+
+### Table View Pipelining
+
+- Table view "pipelining" has been implemented for optimal paging.  The default hits table views now display 10 records
+  by default though load several hundred records in a client cache only returning to the server when necessary.
+
+### Hits Keyboard Shortcut Navigation
 - Keyboard shortcuts added for navigating hits.  On a Mac ctrl-u moves to the previous row and ctrl-d moves to the next
   row (similar to vi).  On Windows ctrl-up-arrow moves to the previous record and ctrl-down-arrow moves to the next record.
-- Sorting???
+
 
 ### General
 

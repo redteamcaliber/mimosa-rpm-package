@@ -22,12 +22,19 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
         };
 
         view.options.aoColumns = [
-            {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
+            {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: false},
+            {sTitle: "Created", mData: "created", bVisible: true, bSortable: true, sClass: 'nowrap'},
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
             {sTitle: "rowitem_type", mData: "rowitem_type", bVisible: false, bSortable: false},
-            {sTitle: "Tag", mData: "tagname", sWidth: "10%", bSortable: false},
-            {sTitle: "Summary", mData: "summary1", sWidth: "45%", bSortable: false, sClass: 'wrap'},
-            {sTitle: "Summary2", mData: "summary2", sWidth: "45%", bSortable: false, sClass: 'wrap'}
+            {sTitle: "Tag", mData: "tagname", sWidth: "10%", bSortable: true},
+            {sTitle: "Summary", mData: "summary1", sWidth: "45%", bSortable: true, sClass: 'wrap'},
+            {sTitle: "Summary2", mData: "summary2", sWidth: "45%", bSortable: true, sClass: 'wrap'}
+        ];
+
+        view.options.aaSorting = [[1, 'desc']];
+
+        view.options.aoColumnDefs = [
+            view.date_formatter(1)
         ];
 
         view.listenTo(view, 'load', function () {
@@ -2011,7 +2018,12 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
         var facet_id = attributes['data-facet-id'].value;
         if (facet_type && facet_id) {
             log.debug(_.sprintf('Facet selected: %s, %s', facet_type, facet_id));
-            view.criteria.add(facet_type, facet_id);
+            if (view.criteria.is_param(facet_type, facet_id)) {
+                view.criteria.remove(facet_type, facet_id);
+            }
+            else {
+                view.criteria.add(facet_type, facet_id);
+            }
 
             view.load_facets();
 
