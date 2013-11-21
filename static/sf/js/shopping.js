@@ -99,7 +99,7 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
                 aaData: item.expressions,
                 aoColumns: [
                     {sTitle: "exp_key", mData: "exp_key", bVisible: false},
-                    {sTitle: "Expression", mData: "exp_string", sWidth: '50%'},
+                    {sTitle: "Expression", mData: "exp_string", sWidth: '50%', sClass: 'wrap'},
                     {sTitle: "Supp", mData: "suppressed", sWidth: '10%'},
                     {sTitle: "Claimed", mData: "checkedoutexpressions", sWidth: '10%'},
                     {sTitle: "Open", mData: "open", sWidth: '10%'},
@@ -121,10 +121,6 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
                 ],
                 sDom: 't',
                 iDisplayLength: -1
-                //bScrollInfinite: true,
-                //bScrollCollapse: true,
-                //sScrollY: '600px',
-                //iScrollLoadGap: 200
             });
             table.on("click", function (data) {
                 var exp_key = data['exp_key'];

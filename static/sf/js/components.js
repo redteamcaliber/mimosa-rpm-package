@@ -505,16 +505,19 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         return this.get_settings().oInit.bServerSide;
     },
     reload: function (row_index) {
+        this.clear_cache();
         if (row_index !== undefined) {
             this._row_index = row_index;
         }
         this.$el.fnDraw(false);
     },
     refresh: function (value_pair) {
+        this.clear_cache();
+
         if (value_pair) {
             this._value_pair = value_pair;
         }
-        this.$el.fnDraw(false);
+        this.$el.fnDraw(true);
     },
     destroy: function () {
         // Destroy the old table if it exists.
@@ -557,6 +560,9 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             alert('Error: Undefined "el" in TableView');
             return;
         }
+
+        // Clear the cache before re-destroying the table.
+        view.clear_cache();
 
         // Destroy the existing table if there is one.
         view.destroy();
@@ -757,6 +763,11 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             }
         }
         return null;
+    },
+    clear_cache: function() {
+        if (this.cache) {
+            this.cache = undefined;
+        }
     },
     pipeline: function (sSource, aoData, fnCallback) {
         var view = this;

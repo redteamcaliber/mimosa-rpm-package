@@ -834,9 +834,6 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
 
                         // Hide the form.
                         view.$("#suppression-form").modal("hide");
-
-                        // Done.
-                        callback(null, true);
                     }
                     else {
                         var task_message = _.sprintf('The task for suppression: %s is still running and ' +
@@ -1563,7 +1560,6 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 el: $("#dialog-div")
             });
             view.listenTo(view.suppression_form_view, 'create', function (model) {
-                view.hits_table_view.reload(0);
                 view.trigger('create:suppression', view.row, model);
             });
 
@@ -1694,11 +1690,6 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                                         response.result.summary, suppression_model.as_string());
                                     StrikeFinder.display_success(msg);
 
-                                    // Reload the hits view after a suppression has been created.  There is
-                                    // no way to determine what record to select because the one we are on
-                                    // will most likely be deleted.
-                                    view.hits_table_view.reload(0);
-
                                     // Notify that a suppression was created.
                                     view.trigger('create:suppression', view.row, suppression_model);
                                 }
@@ -1792,6 +1783,10 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
             view.hits_table_view.update_row('uuid', row.uuid, 'tagname', 'investigating', 1);
             // Refresh the comments.
             view.hits_details_view.fetch();
+        });
+        view.listenTo(view.hits_details_view, 'create:suppression', function() {
+            // Reload the facets after a suppression is created.
+            view.facets_view.fetch();
         });
 
         // Hits facets.
@@ -2062,8 +2057,13 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
         view.trigger('refresh', view.criteria.attributes);
     },
     fetch: function(params) {
-        // Set the initial params on the hits criteria.  These params will survive a reset.
-        this.criteria.set_initial(params);
+        log.info('Reloading the hits facets view...');
+
+        if (params) {
+            // Set the initial params on the hits criteria.  These params will survive a reset.
+            this.criteria.set_initial(params);
+        }
+
         this.load_facets();
     }
 });
