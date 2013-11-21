@@ -1577,11 +1577,6 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 el: '#dialog-div'
             });
             view.listenTo(view.mass_tag_form, 'create', function (model) {
-                // Refresh the data in the hits table and stay on the same record.
-                view.hits_table_view.refresh({
-                    name: 'uuid',
-                    value: view.row.uuid
-                });
                 view.trigger('create:masstag', view.row, model);
             });
 
@@ -1785,6 +1780,10 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
             view.hits_details_view.fetch();
         });
         view.listenTo(view.hits_details_view, 'create:suppression', function() {
+            // Reload the facets after a suppression is created.
+            view.facets_view.fetch();
+        });
+        view.listenTo(view.hits_details_view, 'create:masstag', function() {
             // Reload the facets after a suppression is created.
             view.facets_view.fetch();
         });

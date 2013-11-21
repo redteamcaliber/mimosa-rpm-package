@@ -19,8 +19,8 @@ UAC ToDo
     x - The code doesn't seem to be aware of the aaData / sAjaxDataProp setting.
     x - Add the pipelining code to datatables and allow caching of a much larger result set.
     x - Change the default hits views to be open and rendering 10 hits.
-    - Need to refresh the facets on the hosts, hits by tag views after creating a suppression.
-    - Should we reload the facets after a mass tag operation?
+    x - Need to refresh the facets on the hosts, hits by tag views after creating a suppression.
+    x - Should we reload the facets after a mass tag operation?
 
 ### Implement facets
     x - Refactor the suppressions view for criteria change.

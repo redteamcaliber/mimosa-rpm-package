@@ -133,6 +133,14 @@ StrikeFinder.HostsApp = StrikeFinder.View.extend({
             view.hits_table_view.update_row('uuid', row.uuid, 'tagname', tagname, 0);
             view.hits_details_view.fetch();
         });
+        view.listenTo(view.hits_details_view, 'create:suppression', function() {
+            // Reload the facets after a suppression is created.
+            view.facets_view.fetch();
+        });
+        view.listenTo(view.hits_details_view, 'create:masstag', function() {
+            // Reload the facets after a suppression is created.
+            view.facets_view.fetch();
+        });
 
         // Hits facets.
         view.facets_view = new StrikeFinder.HitsFacetsView({
