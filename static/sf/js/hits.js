@@ -10,9 +10,7 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
 
         view.hits_collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
-            title: '&nbsp;',
-            title_class: 'uac-header',
-            collapsed: true
+            title: '&nbsp;'
         });
 
         view.options.sAjaxSource = '/sf/api/hits';
@@ -24,12 +22,19 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
         };
 
         view.options.aoColumns = [
-            {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
+            {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: false},
+            {sTitle: "Created", mData: "created", bVisible: true, bSortable: true, sClass: 'nowrap'},
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
             {sTitle: "rowitem_type", mData: "rowitem_type", bVisible: false, bSortable: false},
-            {sTitle: "Tag", mData: "tagname", sWidth: "10%", bSortable: false},
-            {sTitle: "Summary", mData: "summary1", sWidth: "45%", bSortable: false, sClass: 'wrap'},
-            {sTitle: "Summary2", mData: "summary2", sWidth: "45%", bSortable: false, sClass: 'wrap'}
+            {sTitle: "Tag", mData: "tagname", sWidth: "10%", bSortable: true},
+            {sTitle: "Summary", mData: "summary1", sWidth: "45%", bSortable: true, sClass: 'wrap'},
+            {sTitle: "Summary2", mData: "summary2", sWidth: "45%", bSortable: true, sClass: 'wrap'}
+        ];
+
+        view.options.aaSorting = [[1, 'desc']];
+
+        view.options.aoColumnDefs = [
+            view.date_formatter(1)
         ];
 
         view.listenTo(view, 'load', function () {
@@ -41,21 +46,21 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
 
             var title;
             if (position !== undefined) {
-                title = _.sprintf('<i class="icon-list"></i> Hits (%s of %s)', position + 1, view.get_total_rows());
+                title = _.sprintf('<i class="fa fa-list"></i> Hits (%s of %s)', position + 1, view.get_total_rows());
             }
             else {
-                title = _.sprintf('<i class="icon-list"></i> Hits (%s)', view.get_total_rows());
+                title = _.sprintf('<i class="fa fa-list"></i> Hits (%s)', view.get_total_rows());
             }
             // Update the title with the count of the rows.
             view.hits_collapsable.set('title', title);
         });
         view.listenTo(view, 'empty', function () {
-            title = _.sprintf('<i class="icon-list"></i> Hits (%s)', '0');
+            title = _.sprintf('<i class="fa fa-list"></i> Hits (%s)', '0');
             view.hits_collapsable.set('title', title);
         });
 
         view.options.sDom = 'ltip';
-        view.options.iDisplayLength = 100;
+        view.options.iDisplayLength = 10;
     }
 });
 
@@ -116,11 +121,6 @@ StrikeFinder.AgentHostView = StrikeFinder.View.extend({
  * Tabbed view of IOC's.
  */
 StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
-    //constructor: function IOCTabsView() {
-    //    IOCTabsView.__super__.constructor.apply(
-    //        this, arguments
-    //    );
-    //},
     initialize: function (options) {
         var view = this;
 
@@ -160,7 +160,7 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
 
         view.delegateEvents({
             'click .ioc-definition': 'on_click',
-            'shown a[data-toggle="tab"]': 'on_shown'
+            'shown.bs.tab a[data-toggle="tab"]': 'on_shown'
         });
 
         // Run the IOC viewer on all the pre-formatted elements.
@@ -236,7 +236,8 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
                 });
 
                 // Highlight the item.
-                selected_element.find('> span.ioc-rule').css({'background': '#FFF79A', 'font-weight': 'bold'});
+                selected_element.find('> span.ioc-rule')
+                    .css({'background': '#FFF79A', 'font-weight': 'bold', color: '#33311e'});
             });
         });
     },
@@ -833,9 +834,6 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
 
                         // Hide the form.
                         view.$("#suppression-form").modal("hide");
-
-                        // Done.
-                        callback(null, true);
                     }
                     else {
                         var task_message = _.sprintf('The task for suppression: %s is still running and ' +
@@ -1015,75 +1013,51 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
     }
 });
 
-/**
- * View to display and create comments.
- */
-StrikeFinder.CommentsView = StrikeFinder.View.extend({
-    initialize: function (options) {
+StrikeFinder.CommentsTableView = StrikeFinder.TableView.extend({
+    initialize: function() {
         var view = this;
-        if (options.rowitem_uuid) {
-            this.rowitem_uuid = options.rowitem_uuid;
-        }
+        view.options.iDisplayLength = -1;
+        view.options.aoColumns = [
+            {sTitle: "Created", mData: "created", sWidth: "20%", bSortable: true},
+            {sTitle: "Comment", mData: "comment", sWidth: "60%", bSortable: true},
+            {sTitle: "User", mData: "user_uuid", sWidth: "20%", bSortable: true}
+        ];
+        view.options.aaSorting = [
+            [ 0, "desc" ]
+        ];
+        view.options.aoColumnDefs = [
+            {
+                mRender: function (data, type, row) {
+                    return StrikeFinder.format_date_string(data);
+                },
+                aTargets: [0]
+            }
+        ];
+        view.options.oLanguage = {
+            sEmptyTable: 'No comments have been entered'
+        };
 
-        view.comments_collapsable = new StrikeFinder.CollapsableContentView({
-            el: view.el,
-            title: '<i class="icon-comments"></i> Comments',
-            title_class: 'uac-header'
+        view.listenTo(view, 'row:created', function(row, data, index) {
+            view.escape_cell(row, 1);
         });
 
         if (!view.collection) {
-            view.collection = new StrikeFinder.CommentsCollection([], {
-                rowitem_uuid: view.rowitem_uuid
-            });
+            view.collection = new StrikeFinder.CommentsCollection();
         }
-        view.listenTo(this.collection, 'sync', this.render);
+        view.listenTo(view.collection, 'sync', view.render);
     },
-    events: {
-        "click button": "add_comment",
-        "keyup #comment": "on_keyup"
-    },
-    render: function () {
-        var view = this;
-
-        this.run_once('init_views', function () {
-            view.comments_table = new StrikeFinder.TableView({
-                el: view.$("#comments-table"),
-                collection: view.collection,
-                iDisplayLength: -1,
-                aoColumns: [
-                    {sTitle: "Created", mData: "created", sWidth: "20%", bSortable: true},
-                    {sTitle: "Comment", mData: "comment", sWidth: "60%", bSortable: true},
-                    {sTitle: "User", mData: "user_uuid", sWidth: "20%", bSortable: true}
-                ],
-                aaSorting: [
-                    [ 0, "desc" ]
-                ],
-                aoColumnDefs: [
-                    {
-                        mRender: function (data, type, row) {
-                            return StrikeFinder.format_date_string(data);
-                        },
-                        aTargets: [0]
-                    }
-                ],
-                oLanguage: {
-                    sEmptyTable: 'No comments have been entered'
-                }
-            });
-            view.comments_table.render();
-        });
-
-        return this;
-    },
-    fetch: function (rowitem_uuid) {
+    /**
+     * Load the comments based on the row item.
+     * @param rowitem_uuid - the row item.
+     */
+    fetch: function(rowitem_uuid) {
         var view = this;
 
         if (rowitem_uuid) {
-            view.collection.rowitem_uuid = rowitem_uuid;
+            this.collection.rowitem_uuid = rowitem_uuid;
         }
-
         StrikeFinder.block_element(view.$el);
-        view.collection.fetch({
+        this.collection.fetch({
             success: function () {
                 StrikeFinder.unblock(view.$el);
             },
@@ -1091,6 +1065,34 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
                 StrikeFinder.unblock(view.$el);
             }
         });
+    }
+});
+/**
+ * View to display and create comments.
+ */
+StrikeFinder.CommentsView = StrikeFinder.View.extend({
+    initialize: function (options) {
+        var view = this;
+        if (options.rowitem_uuid) {
+            view.rowitem_uuid = options.rowitem_uuid;
+        }
+
+        view.comments_collapsable = new StrikeFinder.CollapsableContentView({
+            el: view.el,
+            title: '<i class="fa fa-comments"></i> Comments'
+        });
+
+        view.comments_table = new StrikeFinder.CommentsTableView({
+            el: view.$("#comments-table")
+        });
+    },
+    events: {
+        "click button": "add_comment",
+        "keyup #comment": "on_keyup"
+    },
+    fetch: function (rowitem_uuid) {
+        this.rowitem_uuid = rowitem_uuid;
+        this.comments_table.fetch(this.rowitem_uuid);
     },
     hide: function () {
         // Hide the collapsable decorator.
@@ -1108,21 +1110,29 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
             return;
         }
 
-        var rowitem_uuid = view.collection.rowitem_uuid;
-        log.debug("Creating comment for rowitem_uuid: " + rowitem_uuid);
+        log.debug("Creating comment for rowitem_uuid: " + view.rowitem_uuid);
 
         var new_comment = new StrikeFinder.CommentsModel({
             comment: comment,
-            rowitem_uuid: rowitem_uuid
+            rowitem_uuid: view.rowitem_uuid
         });
 
-        log.debug('Comment rowitem_uuid: ' + new_comment.get('rowitem_uuid'))
+        log.debug('Comment rowitem_uuid: ' + new_comment.get('rowitem_uuid'));
 
+        StrikeFinder.block_element(view.$el);
         new_comment.save([], {
             async: false,
             success: function (model, response, options) {
+                StrikeFinder.unblock(view.$el);
+
                 $("#comment").val("");
-                view.collection.fetch();
+                view.comments_table.fetch();
+            },
+            error: function(model, xhr) {
+                // Error
+                StrikeFinder.unblock(view.$el);
+                var details = xhr && xhr.responseText ? xhr.responseText : 'Response text not defined.';
+                StrikeFinder.display_error('Error while creating new comment. - ' + details);
             }
         });
     },
@@ -1550,7 +1560,6 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 el: $("#dialog-div")
             });
             view.listenTo(view.suppression_form_view, 'create', function (model) {
-                view.hits_table_view.reload(0);
                 view.trigger('create:suppression', view.row, model);
             });
 
@@ -1568,11 +1577,6 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 el: '#dialog-div'
             });
             view.listenTo(view.mass_tag_form, 'create', function (model) {
-                // Refresh the data in the hits table and stay on the same record.
-                view.hits_table_view.refresh({
-                    name: 'uuid',
-                    value: view.row.uuid
-                });
                 view.trigger('create:masstag', view.row, model);
             });
 
@@ -1681,11 +1685,6 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                                         response.result.summary, suppression_model.as_string());
                                     StrikeFinder.display_success(msg);
 
-                                    // Reload the hits view after a suppression has been created.  There is
-                                    // no way to determine what record to select because the one we are on
-                                    // will most likely be deleted.
-                                    view.hits_table_view.reload(0);
-
                                     // Notify that a suppression was created.
                                     view.trigger('create:suppression', view.row, suppression_model);
                                 }
@@ -1759,13 +1758,6 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
 
         view.params = {};
 
-        // Hits facets.
-//        view.facets = new StrikeFinder.HitsFacetsModel();
-//        view.facets_view = new StrikeFinder.HitsFacetsView({
-//            el: '#hits-facets-div',
-//            model: view.facets
-//        });
-
         // Hits.
         view.hits_table_view = new StrikeFinder.HitsTableView({
             el: '#hits-table'
@@ -1779,13 +1771,32 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
         view.listenTo(view.hits_details_view, 'create:tag', function (rowitem_uuid, tagname) {
             // A new tag has been created, loop through the table nodes and manually update the tagname
             // for the relevant row.  This is a shortcut rather than re-loading the entire table.
-            view.hits_table_view.update_row('uuid', rowitem_uuid, 'tagname', tagname, 0);
+            view.hits_table_view.update_row('uuid', rowitem_uuid, 'tagname', tagname, 1);
         });
         view.listenTo(view.hits_details_view, 'create:acquire', function (row, model) {
-            // An aquisition has been created, update the row's tag value.
-            view.hits_table_view.update_row('uuid', row.uuid, 'tagname', 'investigating', 0);
+            // An acquisition has been created, update the row's tag value.
+            view.hits_table_view.update_row('uuid', row.uuid, 'tagname', 'investigating', 1);
             // Refresh the comments.
             view.hits_details_view.fetch();
+        });
+        view.listenTo(view.hits_details_view, 'create:suppression', function() {
+            // Reload the facets after a suppression is created.
+            view.facets_view.fetch();
+        });
+        view.listenTo(view.hits_details_view, 'create:masstag', function() {
+            // Reload the facets after a suppression is created.
+            view.facets_view.fetch();
+        });
+
+        // Hits facets.
+        view.facets_view = new StrikeFinder.HitsFacetsView({
+            el: '#hits-facets-div'
+        });
+
+        // Listen to criteria changes and reload the views.
+        view.listenTo(view.facets_view, 'refresh', function(attributes) {
+            // Reload the hits.
+            view.hits_table_view.fetch(attributes);
         });
     },
     fetch: function (params) {
@@ -1862,29 +1873,18 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
         var view = this;
         // Update the hits details view with the current selected expression.
 
+        // TODO: Is this being used any more??  Possibly setting the default ioc tab to this?
         view.hits_details_view.exp_key = view.params.exp_key;
 
+        // Update the hits criteria.
         if (view.params.usertoken) {
-            StrikeFinder.run(function () {
-//                view.facets.usertoken = view.params.usertoken;
-//                view.facets.fetch();
-
-                var usertoken_params = {
-                    usertoken: view.params.usertoken
-                };
-                log.debug('Fetching hits with params: ' + JSON.stringify(usertoken_params));
-                view.hits_table_view.fetch(usertoken_params);
-            });
+            view.facets_view.fetch({'usertoken': [view.params.usertoken]});
         }
         else {
-            StrikeFinder.run(function () {
-                var exp_key_params = {
-                    services: view.params.services,
-                    clusters: view.params.clusters,
-                    exp_key: view.params.exp_key
-                };
-                log.debug('Fetching hits with params: ' + JSON.stringify(exp_key_params));
-                view.hits_table_view.fetch(exp_key_params);
+            view.facets_view.fetch({
+                'services': view.params.services,
+                'clusters': view.params.clusters,
+                'exp_key': [view.params.exp_key]
             });
         }
     }
@@ -1897,28 +1897,172 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
     initialize: function() {
         var view = this;
 
-//        view.collapsable = new StrikeFinder.CollapsableContentView({
-//            el: view.el,
-//            title: '<i class="icon-bar-chart"></i> Hits Facets',
-//            title_class: 'uac-header'
-//        });
+        // TODO: move the outwards.
+        view.titles = {
+            username: 'User',
+            md5sum: 'MD5',
+            tagname: 'Tag',
+            iocname: 'IOC',
+            item_type: 'Item Type',
+            am_cert_hash: 'AM Cert Hash'
+        };
 
+        view.icons = {
+            username: 'fa-users',
+            md5sum: 'fa-file',
+            tagname: 'fa-tags',
+            iocname: 'fa-warning',
+            item_type: 'fa-info',
+            am_cert_hash: 'fa-desktop'
+        };
+
+        view.keys = [
+            'tagname',
+            'iocname',
+            'item_type',
+            'md5sum',
+            'am_cert_hash',
+            'username'
+        ];
+
+        // Create the facets model.
+        view.model = new StrikeFinder.HitsFacetsModel();
+        // Redraw the facets on sync.
         view.listenTo(view.model, 'sync', view.render);
+
+        // Create the criteria.
+        view.criteria = new StrikeFinder.HitsCriteria();
+    },
+    /**
+     * Shorten a string value.
+     * @param s - the string.
+     * @param length - the total length the result string should be.
+     * @returns - a shortened string.
+     */
+    shorten: function (s, length) {
+        if (!length) {
+            length = 8;
+        }
+        if (s && s.length > length) {
+            var section_length = length / 2;
+            return s.substring(0, section_length) + '...' + s.substring(s.length - section_length, s.length);
+        }
+        else {
+            return s;
+        }
     },
     render: function() {
         var view = this;
         var attributes = view.model.attributes;
-        var keys = _.keys(attributes);
+
+        if (attributes.am_cert_hash) {
+            _.each(attributes.am_cert_hash, function(hash, index) {
+                hash.abbrev = view.shorten(hash.value, 8);
+            });
+        }
+
+        if (attributes.md5sum) {
+            _.each(attributes.md5sum, function(md5, index) {
+                md5.abbrev = view.shorten(md5.value, 8);
+            });
+        }
 
         var data = {
-            keys: keys,
+            keys: view.keys,
             facets: attributes,
             get_facet_values: function(facet) {
                 return this.facets[facet];
+            },
+            get_facet_count: function(facet) {
+                return this.facets[facet].length;
+            },
+            get_facet_title: function(facet) {
+                var title = view.titles[facet];
+                return title ? title : facet;
+            },
+            get_facet_icon: function(facet) {
+                var icon = view.icons[facet];
+                return icon ? icon : 'fa-meh';
+            },
+            get_visibility: function(facet) {
+                if (view.model.params[facet] && view.model.params[facet].length > 0) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
             }
         };
 
+        view.undelegateEvents();
+
         // Render the template.
         view.$el.html(_.template($("#hits-facets-template").html(), data));
+
+        view.delegateEvents({
+            'click li a': 'on_click',
+            'click #reset-facets': 'reset_facets',
+            'click #refresh-facets': 'refresh_facets'
+        });
+    },
+    on_click: function(ev) {
+        var view = this;
+        var attributes = ev.currentTarget.attributes;
+        var facet_type = attributes['data-facet-type'].value;
+        var facet_id = attributes['data-facet-id'].value;
+        if (facet_type && facet_id) {
+            log.debug(_.sprintf('Facet selected: %s, %s', facet_type, facet_id));
+            if (view.criteria.is_param(facet_type, facet_id)) {
+                view.criteria.remove(facet_type, facet_id);
+            }
+            else {
+                view.criteria.add(facet_type, facet_id);
+            }
+
+            view.load_facets();
+
+            // Bubble a selected event.
+            view.trigger('selected', facet_type, facet_id);
+        }
+        else {
+            // Error
+            StrikeFinder.display_error('Error: anchor does not have facet attributes defined.');
+        }
+    },
+    /**
+     * User reset the filter criteria.
+     */
+    reset_facets: function() {
+        var view = this;
+        view.criteria.reset();
+
+        view.load_facets();
+
+        // Bubble a reset event.
+        view.trigger('reset');
+    },
+    get_criteria: function() {
+        return this.criteria;
+    },
+    /**
+     * Load the hits facets based on the views criteria.
+     */
+    load_facets: function() {
+        var view = this;
+        view.model.params = view.criteria.attributes;
+        StrikeFinder.block_element(view.$el);
+        view.model.fetch();
+
+        view.trigger('refresh', view.criteria.attributes);
+    },
+    fetch: function(params) {
+        log.info('Reloading the hits facets view...');
+
+        if (params) {
+            // Set the initial params on the hits criteria.  These params will survive a reset.
+            this.criteria.set_initial(params);
+        }
+
+        this.load_facets();
     }
 });

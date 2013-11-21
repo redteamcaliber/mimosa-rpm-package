@@ -1,21 +1,62 @@
 UAC ToDo
 ========
 
+## Questions
+
+### Need to discuss what the usersettings is going to return when a user specifies a namehash.
+    - Can the user even checkout a namehash or is it just for viewing?
+        If checkout is possible then:
+            - How will it be visualized on the shopping view?
+            - How will I know that a user selected a namehash?
+            - Will the exp_key be removed when I checkout a namehash?
+    - Should facets be added to the hits by tag view.  If so we may need to decrease the number of columns.  Which ones
+      can be removed?
+
 ## Tasks
 
-### Look into previous next shortcuts on the hits view.
-
-### Test the single entity mode for suppressions.
+### Implement Pipelining
+    x - Make the pipelining code be in the TableView to be instance specific.
+    x - The code doesn't seem to be aware of the aaData / sAjaxDataProp setting.
+    x - Add the pipelining code to datatables and allow caching of a much larger result set.
+    x - Change the default hits views to be open and rendering 10 hits.
+    x - Need to refresh the facets on the hosts, hits by tag views after creating a suppression.
+    x - Should we reload the facets after a mass tag operation?
 
 ### Implement facets
+    x - Refactor the suppressions view for criteria change.
+    x - Refactor the hosts view for criteria change.
+    x - Refactor the hits by tag view for criteria change.
+    - Add the ability to remove a facet criteria.
+
+### Implement hits sorting
+    -Add sorting to the hits table on the hits view, host view, suppressions view, and hits by tag view.
+
+### Application themes
+    - Look into the host search view.
+
+### Implement additional info level auditing.
+    - Add auditing.
+    - Specify that the default UAC log level should be info.
+    - Update the default config files.
+
+### Write up release notes.
+
+### Look into Grunt build and deployment scripts.
+    - http://gruntjs.com/getting-started
+    - https://npmjs.org/package/grunt-sed
+
+### Render hits criteria
+    - On the hits view render the details regarding what hits you are viewing.
+    - Potentially remove the shopping rollup?
+
+### Bootstrap Stuff
+
+### Integrate the type ahead search box.
+    - http://twitter.github.io/typeahead.js/
 
 ### Add some kind over overlay when sorting on the acquisitions page.  It's very slow so it appears as if it's not working.
 
 ### Look into better display for the case where there are no hits on the hit review page.
-
-### *** Send out instructions for the merging of the env.json file ***
-    - Several of the settings moved from the uac section up to the server section in order to be more generic and allow
-      code sharing between projects.
 
 ### Look into Handlebars templates - http://handlebarsjs.com/
 

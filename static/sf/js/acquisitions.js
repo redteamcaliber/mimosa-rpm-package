@@ -6,7 +6,6 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
         view.acquisitions_collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
             title: '',
-            title_class: 'uac-header'
         });
 
         view.options['sAjaxSource'] = '/sf/api/acquisitions';
@@ -76,7 +75,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
                     if (data) {
                         var label_class = '';
                         if (data == 'errored') {
-                            label_class = 'label-important';
+                            label_class = 'label-danger';
                         }
                         else if (data == 'cancelled') {
                             label_class = 'label-default';
@@ -107,7 +106,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
         view.listenTo(view, 'row:created', view.on_create_row);
         view.listenTo(view, 'click', view.on_row_click);
         view.listenTo(view, 'load', function () {
-            view.acquisitions_collapsable.set('title', _.sprintf('<i class="icon-cloud-download"></i> Acquisitions (%s)',
+            view.acquisitions_collapsable.set('title', _.sprintf('<i class="fa fa-cloud-download"></i> Acquisitions (%s)',
                 view.get_total_rows()));
         });
     },
@@ -155,13 +154,7 @@ StrikeFinder.AcquisitionsAuditView = StrikeFinder.View.extend({
 
         view.$('#acqusition-audit-div').modal({
             backdrop: false
-        }).css({
-                width: 'auto',
-                'margin-left': function () {
-                    return -($(this).width() / 2);
-                }
-            }
-        );
+        });
     },
     on_close: function() {
         this.$("#acqusition-audit-div").modal("hide");
@@ -177,8 +170,7 @@ StrikeFinder.AcquisitionsView = StrikeFinder.View.extend({
 
         view.criteria_collapsable = new StrikeFinder.CollapsableContentView({
             el: '#criteria-div',
-            title: '<i class="icon-search"></i> Acquisitions Search Criteria',
-            title_class: 'uac-header'
+            title: '<i class="fa fa-search"></i> Acquisitions Search Criteria'
         });
 
         // Clusters options.

@@ -7,7 +7,7 @@
 
 <link href="/static/common/css/base.css" rel="stylesheet"/>
 <link href="/static/datatables/css/jquery.dataTables.css" rel="stylesheet"/>
-<link href="/static/datatables/css/DT_bootstrap.css" rel="stylesheet"/>
+<link href="/static/datatables/css/dataTables.bootstrap.css" rel="stylesheet"/>
 <link href="/static/css/select2.css" rel="stylesheet"/>
 <link href="/static/css/bootstrapSwitch.css" rel="stylesheet"/>
 
@@ -35,7 +35,7 @@
 
 <!-- Datatables Support -->
 <script src="/static/datatables/js/jquery.dataTables.min.js"></script>
-<script src="/static/datatables/js/DT_bootstrap.js"></script>
+<script src="/static/datatables/js/dataTables.bootstrap.js"></script>
 
 <!-- Select2 -->
 <script src="/static/js/select2.min.js"></script>
@@ -52,10 +52,13 @@
 <script src="/static/js/moment.min.js"></script>
 <script src="/static/js/jquery.scrollTo.min.js"></script>
 
+<!-- Common UAC support. -->
+<script src="/static/uac/js/common.js"></script>
+
 
 <style type="text/css">
     .mandiant-logo {
-        background-image: url('/static/img/mandiant-trans.jpg');
+        background-image: url('/static/img/mandiant-trans.png');
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-position: center;
@@ -68,62 +71,63 @@
 
 <div id="wrap">
     {% block nav %}
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner nav-font">
-            <div class="container-fluid">
-                <!--
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+    <div class="navbar navbar-default navbar-static-top" role="navigation">
+        <div class="container" style="width: 100%">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="/">
+                    <img style="width: auto; height: 18px; vertical-align: top; border: solid 1px"
+                         src="/static/img/mandiant-bw.ico"> UAC
                 </a>
-                -->
-                <a class="brand" href="/">
-                    <img style="width: auto; height: 17px; vertical-align: top;"
-                         src="/static/img/mandiant-bw.ico">
-                    UAC
-                </a>
-
-                <div class="nav-collapse">
-                    <ul class="nav">
-                        {% block nav_menu %}
-                        {% endblock %}
-                    </ul>
-
-                    {% if req.attributes.uid %}
-                    <div class="nav-collapse collapse">
-                        <div class="btn-group pull-right">
-                            <a class="btn btn-info" href="#">
-                                <i class="icon-user icon-white"></i> {{ req.attributes.uid }}
-                            </a>
-                            <a class="btn btn-info dropdown-toggle" data-toggle="dropdown"
-                               href="#">
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="{{ settings.sso.login_url }}" target="_blank">
-                                        <i class="icon-fixed-width icon-cogs"></i> SSO Settings
-                                    </a>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <a href="/logout/">
-                                        <i class="icon-signout"></i> Sign Out
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    {% else %}
-                    <ul class="nav pull-right">
-                        {#
-                        <li><a href="{{ sso_url }}">Login</a></li>
-                        #}
-                    </ul>
-                    {% endif %}
-                </div>
             </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    {% block nav_menu %}
+                    {% endblock %}
+                </ul>
+
+                <form class="navbar-form navbar-left">
+                    {% block form_menu %}
+                    {% endblock %}
+                </form>
+
+                {% if req.attributes.uid %}
+                <ul id="uac-user-nav" class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-user"></i> {{ req.attributes.uid }} <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{{ settings.sso.login_url }}" target="_blank">
+                                    <i class="icon-fixed-width fa fa-cogs"></i> SSO Settings
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            {% for theme in themes %}
+                            <li class="{% if theme.id == current_theme %}disabled{% endif %}">
+                                <a class="uac-theme" data-uac-theme="{{ theme.id }}">
+                                    <i class="fa fa-picture-o"></i> {{ theme.name }} Theme
+                                </a>
+                            </li>
+                            {% endfor %}
+                            <li class="divider"></li>
+                            <li>
+                                <a href="/logout/">
+                                    <i class="fa fa-sign-out"></i> Sign Out
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+            <!-- /.nav-collapse -->
         </div>
     </div>
     {% endblock %}
@@ -135,16 +139,14 @@
     {% block tail %}
 
     {% endblock %}
-
-    <div id="push"></div>
 </div>
 
 <div id="footer">
     {% block footer %}
     <div class="container">
-        <p class="muted credit">
+        <p class="text-muted credit">
             &copy; 2013 Mandiant Corporation. All rights reserved.
-            <span class="pull-right">Version: 0.4.1</span>
+            <span class="pull-right">Version: 0.5.0</span>
         </p>
     </div>
     {% endblock %}

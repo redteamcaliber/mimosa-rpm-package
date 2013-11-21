@@ -1,64 +1,84 @@
 /**
- * DataTables Style Fixes
+ * Bootstrap Sticky Footer Styles
  */
-
-html, body {
+html,
+body {
     height: 100%;
+    /* The html and body elements cannot have any padding or margin. */
 }
 
+/* Wrapper for page content to push down footer */
 #wrap {
     min-height: 100%;
-    height: auto !important;
-    margin: 0 auto -40px;
+    height: auto;
+    /* Negative indent footer by its height */
+    margin: 0 auto -60px;
+    /* Pad bottom by footer height */
+    padding: 0 0 60px;
 }
 
-#push,
+/* Set the fixed height of the footer here */
 #footer {
-    height: 40px;
+    height: 60px;
+    /*background-color: #f5f5f5;*/
 }
 
-#footer {
-    background-color: #f5f5f5;
-}
+/**
+ * Additional overall page customizations.
+ */
 
-@media (max-width: 1200px) {
-    #footer {
-        margin-left: -20px;
-        margin-right: -20px;
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-}
-
-#wrap > .container-fluid {
-    padding-top: 60px;
+#wrap > .container {
+    width: 98%;
+    padding: 0px 15px 20px 15px;
 }
 
 .container .credit {
-    margin: 10px 0;
+    margin: 20px 0;
 }
 
-.nav-font {
-    font-size: 14px;
+#footer > .container {
+    width: 95%;
 }
 
-/* Override the max height of the modal dialog. */
-.modal-body {
-    max-height: 800px;
+table {
+    background-color: inherit;
 }
+
+.panel {
+    background-color: inherit;
+}
+
+
+/**
+ * DataTables Customizations.
+ */
+
+.datatables-wrapper > select {
+
+}
+
 
 /* UAC Styles */
 
 .uac-header {
-    font-size: 19.5px;
+    font-size: 16px;
     /*color: #006dcc;*/
-    color: #000000;
+    /*color: #000000;*/
 }
 
 .uac-sub-header {
     font-size: 14px;
     font-weight: bold;
     color: #000000;
+}
+
+.sf-table-wrapper {
+    width: 100%;
+    overflow: auto;
+}
+
+.small-font {
+    font-size: 90%;
 }
 
 .sf-audit-heading {
@@ -72,6 +92,13 @@ html, body {
 .wrap {
     word-break: break-all;
     overflow: hidden;
+}
+
+.truncate_100 {
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .ioc-term {
@@ -99,11 +126,11 @@ html, body {
 
 .select2-highlighted {
     color: #333333 !important;
-    background-color: #d9edf7 !important;
+    background-color: #f0f0f0 !important;
 }
 
 /*.accordion {*/
-    /*background-color: #fbfbfb;*/
+/*background-color: #fbfbfb;*/
 /*}*/
 
 .mandiant-red {

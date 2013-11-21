@@ -30,7 +30,7 @@ StrikeFinder.View = Backbone.View.extend({
      * Return the list of event listerners.
      * @returns {*}
      */
-    get_listeners: function() {
+    get_listeners: function () {
         return this._listeners ? _.values(this._listeners) : [];
     }
 });
@@ -69,33 +69,35 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
 
         view.run_once('init_render', function () {
             // Create the accordion inner div.
-            var accordion_inner = $(document.createElement('div'));
-            accordion_inner.addClass('accordion-inner');
-            view.$el.wrap(accordion_inner);
-            accordion_inner = view.$el.parent();
+            var panel_body = $(document.createElement('div'));
+            panel_body.addClass('panel-body');
+            view.$el.wrap(panel_body);
+            panel_body = view.$el.parent();
 
             // Create the accordion body.
-            var accordion_body = $(document.createElement('div'));
-            accordion_body.attr('id', 'collapse-' + view.name);
-            accordion_body.addClass('accordion-body');
-            accordion_body.addClass('collapse');
+            var panel_collapse = $(document.createElement('div'));
+            panel_collapse.attr('id', 'collapse-' + view.name);
+            panel_collapse.addClass('panel-collapse');
+            panel_collapse.addClass('collapse');
             if (!view.collapsed) {
-                accordion_body.addClass('in');
+                panel_collapse.addClass('in');
             }
-            accordion_inner.wrap(accordion_body);
-            accordion_body = accordion_inner.parent();
+            panel_body.wrap(panel_collapse);
+            panel_collapse = panel_body.parent();
 
             // Create the accordion group div.
-            var accordion_group = $(document.createElement('div'));
-            accordion_group.addClass('accordion-group');
-            accordion_body.wrap(accordion_group);
-            accordion_group = accordion_body.parent();
+            var panel = $(document.createElement('div'));
+            panel.addClass('panel');
+            panel.addClass('panel-default');
+            panel.css('margin-bottom', '10px');
+            panel_collapse.wrap(panel);
+            panel = panel_collapse.parent();
 
             // Create the accordion div.
-            var accordion = $(document.createElement('div'));
-            accordion.attr('id', view.name + '-accordion');
-            accordion.addClass('accordion');
-            accordion_group.wrap(accordion);
+            var panel_group = $(document.createElement('div'));
+            panel_group.attr('id', view.name + '-accordion');
+            panel_group.addClass('panel-group');
+            panel.wrap(panel_group);
 
             // Create the title.
             var title_span = $(document.createElement('span'));
@@ -110,8 +112,8 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
             if (view.display_toggle) {
                 // Create the icon.
                 var icon = $(document.createElement('i'));
-                icon.addClass('icon-chevron-sign-down');
-                icon.addClass('icon-large');
+                icon.addClass('fa fa-chevron-circle-down');
+                icon.addClass('fa-lg');
                 icon.addClass('pull-right');
             }
 
@@ -127,12 +129,17 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
             anchor.append(title_span);
             anchor.append(icon);
 
-            // Create the accordion heading div.
-            var heading_div = $(document.createElement('div'));
-            heading_div.addClass('accordion-heading');
-            heading_div.append(anchor);
+            // Create the panel header.
+            var panel_title = $(document.createElement('h4'));
+            panel_title.addClass('panel-title');
+            panel_title.append(anchor);
 
-            accordion_group.prepend(heading_div);
+            // Create the accordion heading div.
+            var panel_heading = $(document.createElement('div'));
+            panel_heading.addClass('panel-heading');
+            panel_heading.append(panel_title);
+
+            panel.prepend(panel_heading);
         });
 
         return this;
@@ -183,7 +190,7 @@ StrikeFinder.TableViewControls = StrikeFinder.View.extend({
             // Only write the template once.
             view.$el.html(_.template($('#prev-next-template').html()));
 
-            $(document).keyup(function(ev) {
+            $(document).keyup(function (ev) {
                 if (ev.ctrlKey) {
                     if (ev.keyCode == 68 || ev.keyCode == 40) {
                         view.on_next();
@@ -238,6 +245,7 @@ StrikeFinder.TableViewControls = StrikeFinder.View.extend({
     }
 });
 
+
 StrikeFinder.get_datatables_settings = function (parent, settings) {
     var defaults = {
         iDisplayLength: 10,
@@ -247,11 +255,14 @@ StrikeFinder.get_datatables_settings = function (parent, settings) {
         sPaginationType: "bootstrap",
         bSortClasses: false,
         bProcessing: false,
-        asStripClasses: [],
+        asStripeClasses: [],
+        fnServerData: function(sSource, aoData, fnCallback) {
+            parent.pipeline(sSource, aoData, fnCallback);
+        },
         fnRowCallback: function (nRow, data, iDisplayIndex, iDisplayIndexFull) {
             var click_handler = function (ev) {
                 // Select the row.
-                $(nRow).addClass('info').siblings().removeClass('info');
+                $(nRow).addClass('active').siblings().removeClass('active');
                 // Trigger a click event.
                 parent.trigger('click', parent.get_data(ev.currentTarget), ev);
             };
@@ -260,9 +271,11 @@ StrikeFinder.get_datatables_settings = function (parent, settings) {
             $(nRow).unbind('click', click_handler);
             // Bind a click event to the row.
             $(nRow).bind('click', click_handler);
+
+            return nRow;
         },
-        fnCreatedRow: function (nRow, aData, iDataIndex) {
-            parent.trigger('row:created', nRow, aData, iDataIndex);
+        fnCreatedRow: function (nRow, data, iDataIndex) {
+            parent.trigger('row:created', nRow, data, iDataIndex);
         },
         fnInitComplete: function (oSettings, json) {
             parent.trigger('load', oSettings, json);
@@ -293,13 +306,13 @@ StrikeFinder.get_datatables_settings = function (parent, settings) {
  * Generic Backbone table view component.
  */
 StrikeFinder.TableView = StrikeFinder.View.extend({
-    initialize: function (options) {
+    initialize: function () {
         if (this.collection) {
             this.listenTo(this.collection, 'sync', this.render);
         }
     },
     highlight_row: function (nRow) {
-        $(nRow).addClass('info').siblings().removeClass('info');
+        $(nRow).addClass('active').siblings().removeClass('active');
     },
     /**
      * Initiate a click event on a row.
@@ -340,7 +353,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         }
     },
     get_selected: function () {
-        return this.$('tr.info');
+        return this.$('tr.active');
     },
     get_selected_position: function () {
         var selected = this.get_selected();
@@ -375,7 +388,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         var pos = this.get_selected_position();
         return pos + 1 < this.length();
     },
-    peek_prev_data: function() {
+    peek_prev_data: function () {
         var selected = this.get_selected();
         if (selected !== undefined && selected.length == 1) {
             var pos = this.get_position(selected.get(0));
@@ -384,7 +397,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         // No previous.
         return undefined;
     },
-    peek_next_data: function() {
+    peek_next_data: function () {
         if (this.is_next()) {
             var selected = this.get_selected();
             if (selected !== undefined && selected.length == 1) {
@@ -488,20 +501,23 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
     is_datatable: function () {
         return $.fn.DataTable.fnIsDataTable(this.get_dom_table());
     },
-    is_server_side: function() {
+    is_server_side: function () {
         return this.get_settings().oInit.bServerSide;
     },
-    reload: function(row_index) {
+    reload: function (row_index) {
+        this.clear_cache();
         if (row_index !== undefined) {
             this._row_index = row_index;
         }
         this.$el.fnDraw(false);
     },
-    refresh: function (value_pair, bComplete) {
+    refresh: function (value_pair) {
+        this.clear_cache();
+
         if (value_pair) {
             this._value_pair = value_pair;
         }
-        this.$el.fnDraw(false);
+        this.$el.fnDraw(true);
     },
     destroy: function () {
         // Destroy the old table if it exists.
@@ -544,6 +560,9 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             alert('Error: Undefined "el" in TableView');
             return;
         }
+
+        // Clear the cache before re-destroying the table.
+        view.clear_cache();
 
         // Destroy the existing table if there is one.
         view.destroy();
@@ -646,6 +665,16 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         // Create the table.
         var table = view.$el.dataTable(settings);
 
+        if (view.$el.parent()) {
+            // Assign the bootstrap class to the length select.
+            var length_selects = $('.dataTables_wrapper select');
+            _.each(length_selects, function (length_select) {
+                if (!$(length_select).hasClass('form-control')) {
+                    $(length_select).addClass('form-control');
+                }
+            });
+        }
+
         return view;
     },
     fetch: function (params) {
@@ -656,12 +685,12 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                 if (!params.success && !params.error) {
                     // Has not overidden the success and error callbacks, block for them.
                     params.success = function () {
-                        StrikeFinder.unblock();
+                        StrikeFinder.unblock(view.$el);
                     };
                     params.error = function () {
-                        StrikeFinder.unblock();
+                        StrikeFinder.unblock(view.$el);
                     };
-                    StrikeFinder.block();
+                    StrikeFinder.block_element(view.$el);
                     view.collection.fetch(params);
                 }
                 else {
@@ -671,24 +700,22 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             }
             else {
                 // Block the UI before the fetch.
-                StrikeFinder.block();
+                StrikeFinder.block_element(view.$el);
                 view.collection.fetch({
                     success: function () {
                         // Unblock the ui.
-                        StrikeFinder.unblock();
+                        StrikeFinder.unblock(view.$el);
                     },
                     error: function () {
                         // Unblock the ui.
-                        StrikeFinder.unblock();
+                        StrikeFinder.unblock(view.$el);
                     }
                 });
             }
         }
         else {
-            StrikeFinder.run(function () {
-                view.render({
-                    'server_params': params
-                });
+            view.render({
+                'server_params': params
             });
         }
     },
@@ -710,6 +737,170 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                 $(cols[row_column_index]).html(row_update_value);
                 break; // **EXIT**
             }
+        }
+    },
+    /**
+     * Escape a cells contents.
+     */
+    escape_cell: function(row, index) {
+        var col = this.get_settings().aoColumns[index];
+        var td = $(_.sprintf('td:eq(%s)', index), row);
+        if (td) {
+            td.html(_.escape(td.html()));
+        }
+    },
+    set_key: function (aoData, sKey, mValue) {
+        for (var i = 0, iLen = aoData.length; i < iLen; i++) {
+            if (aoData[i].name == sKey) {
+                aoData[i].value = mValue;
+            }
+        }
+    },
+    get_key: function (aoData, sKey) {
+        for (var i = 0, iLen = aoData.length; i < iLen; i++) {
+            if (aoData[i].name == sKey) {
+                return aoData[i].value;
+            }
+        }
+        return null;
+    },
+    clear_cache: function() {
+        if (this.cache) {
+            this.cache = undefined;
+        }
+    },
+    pipeline: function (sSource, aoData, fnCallback) {
+        var view = this;
+        var ajax_data_prop = view.get_settings().sAjaxDataProp;
+
+        if (!view.cache) {
+            // Initialize the cache the first time.
+            view.cache = {
+                iCacheLower: -1
+            };
+        }
+        /* Adjust the pipe size */
+
+        var bNeedServer = false;
+        var sEcho = view.get_key(aoData, "sEcho");
+        var iRequestStart = view.get_key(aoData, "iDisplayStart");
+        var iRequestLength = view.get_key(aoData, "iDisplayLength");
+        var iRequestEnd = iRequestStart + iRequestLength;
+        view.cache.iDisplayStart = iRequestStart;
+
+        /* outside pipeline? */
+        if (view.cache.iCacheLower < 0 ||
+            iRequestStart < view.cache.iCacheLower ||
+            iRequestEnd > view.cache.iCacheUpper) {
+            bNeedServer = true;
+        }
+        else if (aoData.length != view.cache.lastRequest.length) {
+            // The number of parameters is different between the current request and the last request, assume that
+            // going back to the server is necessary.
+            bNeedServer = true;
+        }
+        else if (view.cache.lastRequest) {
+            for (var i = 0, iLen = aoData.length; i < iLen; i++) {
+                var param = aoData[i];
+                var last_param = view.cache.lastRequest[i];
+                var is_param_array = Array.isArray(param);
+                var is_last_param_array = Array.isArray(last_param);
+                if (is_param_array && is_last_param_array) {
+                    // The params are both arrays, compare them.
+                    if (param.length != last_param.length) {
+                        // The array lengths don't match, assume the server is needed.
+                        bNeedServer = true;
+                        break; // **EXIT**
+                    }
+                    else {
+                        // Need to compare the actual array contents.
+                        for (var param_index = 0; param.length; param_index++) {
+                            var p1 = param[param_index];
+                            var p2 = last_param[param_index];
+                            if (p1.value != p2.value) {
+                                bNeedServer = true;
+                                break; // **EXIT**
+                            }
+                        }
+                    }
+                }
+                else if (is_param_array && !is_last_param_array || !is_param_array && is_last_param_array) {
+                    // Parameter type mismatch.
+                    bNeedServer = true;
+                    break; // **EXIT**
+                }
+                else if (param.name != "iDisplayStart" && param.name != "iDisplayLength" && param.name != "sEcho") {
+                    if (param.value != last_param.value) {
+                        bNeedServer = true;
+                        break; // **EXIT**
+                    }
+                }
+            }
+        }
+
+        /* Store the request for checking next time around */
+        view.cache.lastRequest = aoData.slice();
+
+        if (bNeedServer) {
+            var iPipe = 10;
+
+            if (iRequestStart < view.cache.iCacheLower) {
+                iRequestStart = iRequestStart - (iRequestLength * (iPipe - 1));
+                if (iRequestStart < 0) {
+                    iRequestStart = 0;
+                }
+            }
+
+            view.cache.iCacheLower = iRequestStart;
+            view.cache.iCacheUpper = iRequestStart + (iRequestLength * iPipe);
+            view.cache.iDisplayLength = view.get_key(aoData, "iDisplayLength");
+            view.set_key(aoData, "iDisplayStart", iRequestStart);
+            view.set_key(aoData, "iDisplayLength", iRequestLength * iPipe);
+
+            // Block the UI before the AJAX call.
+            StrikeFinder.block_element(view.$el);
+
+            $.getJSON(sSource, aoData, function (json) {
+                /* Callback processing */
+                view.cache.lastJson = jQuery.extend(true, {}, json);
+
+                if (view.cache.iCacheLower != view.cache.iDisplayStart) {
+                    json[ajax_data_prop].splice(0, view.cache.iDisplayStart - view.cache.iCacheLower);
+                }
+
+                json[ajax_data_prop].splice(view.cache.iDisplayLength, json[ajax_data_prop].length);
+
+                fnCallback(json);
+            })
+                .always(function() {
+                    // Unblock the UI.
+                    StrikeFinder.unblock(view.$el);
+                });
+        }
+        else {
+            try {
+                // Block the UI before processing.
+                StrikeFinder.block_element(view.$el)
+
+                json = jQuery.extend(true, {}, view.cache.lastJson);
+                json.sEcho = sEcho;
+                /* Update the echo for each response */
+                json[ajax_data_prop].splice(0, iRequestStart - view.cache.iCacheLower);
+                json[ajax_data_prop].splice(iRequestLength, json[ajax_data_prop].length);
+                fnCallback(json);
+            }
+            finally {
+                // Unblock the UI.
+                StrikeFinder.unblock(view.$el);
+            }
+        }
+    },
+    date_formatter: function(index) {
+        return {
+            mRender: function (data, type, row) {
+                return StrikeFinder.format_date_string(data);
+            },
+            aTargets: [index]
         }
     }
 });

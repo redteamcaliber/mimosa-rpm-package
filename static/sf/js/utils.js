@@ -75,7 +75,7 @@ StrikeFinder.wait_for_task = function(task_id, callback, options) {
 // Suppression Formatting Utilities.
 //
 StrikeFinder.format_suppression = function (s) {
-    return _.sprintf('%s \'%s\' \'%s\' (preservecase=%s)', s.itemkey, s.condition, s.itemvalue, s.preservecase);
+    return _.sprintf('%s \'%s\' \'%s\' (preservecase=%s)', s.itemkey, s.condition, _.escape(s.itemvalue), s.preservecase);
 };
 
 
@@ -89,22 +89,19 @@ StrikeFinder.collapse = function(el) {
     if (jq_el.hasClass('collapsable-header')) {
         new StrikeFinder.CollapsableContentView({
             el: '#' + jq_el.attr('id'),
-            title: jq_el.attr('collapsable-title'),
-            title_class: 'uac-header'
+            title: jq_el.attr('collapsable-title')
         });
     }
     _.each(jq_el.find('.collapsable-header'), function(collapsable) {
         new StrikeFinder.CollapsableContentView({
             el: '#' + collapsable.id,
-            title: $(collapsable).attr('collapsable-title'),
-            title_class: 'uac-header'
+            title: $(collapsable).attr('collapsable-title')
         });
     });
     if (jq_el.hasClass('collapsable')) {
         new StrikeFinder.CollapsableContentView({
             el: '#' + jq_el.attr('id'),
             title: jq_el.attr('collapsable-title'),
-            title_class: 'uac-sub-header',
             display_toggle: false
         });
     }
@@ -112,7 +109,6 @@ StrikeFinder.collapse = function(el) {
         new StrikeFinder.CollapsableContentView({
             el: '#' + collapsable.id,
             title: $(collapsable).attr('collapsable-title'),
-            title_class: 'uac-sub-header',
             display_toggle: false
         });
     });
@@ -140,8 +136,8 @@ StrikeFinder.get_blockui_options = function (message) {
             backgroundColor: ''
         },
         overlayCSS: {
-            backgroundColor: '#ffffff',
-            opacity: .8
+            backgroundColor: UAC.get_overlay_color(),
+            opacity: .5
         },
         baseZ: 5000
     }
@@ -149,6 +145,10 @@ StrikeFinder.get_blockui_options = function (message) {
 
 StrikeFinder.block = function (ev) {
     $.blockUI(StrikeFinder.get_blockui_options());
+};
+
+StrikeFinder.block_element_remove = function(el, message) {
+    $(el).block(StrikeFinder.get_blockui_options('<img src="/static/img/ajax-loader.gif">'));
 };
 
 StrikeFinder.block_element = function(el, message) {
@@ -199,6 +199,7 @@ StrikeFinder.show_views = function (views, on) {
 //
 
 StrikeFinder.display_info = function (message) {
+    message = message ? message += '&nbsp;' : message;
     $.bootstrapGrowl(message, {
         type: 'info',
         width: 'auto',
@@ -207,6 +208,7 @@ StrikeFinder.display_info = function (message) {
 };
 
 StrikeFinder.display_warn = function (message) {
+    message = message ? message += '&nbsp;' : message;
     $.bootstrapGrowl(message, {
         type: 'warn',
         width: 'auto',
@@ -215,6 +217,7 @@ StrikeFinder.display_warn = function (message) {
 };
 
 StrikeFinder.display_success = function (message) {
+    message = message ? message += '&nbsp;' : message;
     $.bootstrapGrowl(message, {
         type: 'success',
         width: 'auto',
@@ -223,8 +226,9 @@ StrikeFinder.display_success = function (message) {
 };
 
 StrikeFinder.display_error = function (message) {
+    message = message ? message += '&nbsp;' : message;
     $.bootstrapGrowl(message, {
-        type: 'error',
+        type: 'danger',
         width: 'auto',
         delay: 15000
     });
@@ -315,6 +319,8 @@ StrikeFinder.format_unix_date = function(unix) {
         return '';
     }
 };
+
+
 
 function format_expression(s) {
     console.log(s);

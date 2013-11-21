@@ -1,13 +1,42 @@
 Unified Analyst Console (UAC) Release Notes
 ===========================================
 
-Mandiant-uac-ws-0.5-0 - November ???th, 2013
+Mandiant-uac-ws-0.5-0 - November 21st, 2013
 ------------------------------------------
 
-### Hit Review
+### Faceted Hit Review [#25431](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/25431)
 
+- The ability to easily filter hits by a variety of properties has been implemented.  Users are now able to view
+  hits facets counts on tagname, IOC, item type, MD5 (if applicable), am cert hash, and user.
+- Selecting a facet value will filter the visible hits displaying only those that match the selected criteria.
+- Multiple facet types may be selected at the same time allowing the user to narrow the list of hits.
+- Clicking on a facet again will remove it from the filter.  Reset clears all selected facets.
+- Hits facets are now integrated with hit review view, hosts view, suppressions view, and the hits by tag view.
+
+### Hit Review Sorting
+
+- Sorting has been implemented on the hit review table, host hits table, suppressions hits table, and the hits by tag
+  table.  Tagname, summary, and summary 2 have been enabled.
+
+### Table View Pipelining
+
+- Table view "pipelining" has been implemented for optimal paging.  The default hits table views now display 10 records
+  by default though load several hundred records in a client cache only returning to the server when necessary.
+
+### Hits Keyboard Shortcut Navigation
 - Keyboard shortcuts added for navigating hits.  On a Mac ctrl-u moves to the previous row and ctrl-d moves to the next
-  row (similiar to vi).  On Windows ctrl-up-arrow moves to the previous record and ctrl-down-arrow moves to the next record.
+  row (similar to vi).  On Windows ctrl-up-arrow moves to the previous record and ctrl-down-arrow moves to the next record.
+
+### General
+
+- Theme support available under the user main (far right menu).  Several open source theme options are now available to
+  choose from.  Theme settings are currently stored as a browser cookie.
+
+### Hit Identity
+
+- Identity "merge" will update the tag of the targeted hit if the older version's tag is of higher precedence (ex: older
+  reported hit merged into a new notreviewed hit will change the tag of the new notreviewed hit to reported).
+- Fixed bug where a suppression was suppressing hits to an IOC's that it was not targeted for.
 
 
 Mandiant-uac-ws-0.4-0 - November 6th, 2013

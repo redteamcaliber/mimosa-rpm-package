@@ -99,7 +99,7 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
                 aaData: item.expressions,
                 aoColumns: [
                     {sTitle: "exp_key", mData: "exp_key", bVisible: false},
-                    {sTitle: "Expression", mData: "exp_string", sWidth: '50%'},
+                    {sTitle: "Expression", mData: "exp_string", sWidth: '50%', sClass: 'wrap'},
                     {sTitle: "Supp", mData: "suppressed", sWidth: '10%'},
                     {sTitle: "Claimed", mData: "checkedoutexpressions", sWidth: '10%'},
                     {sTitle: "Open", mData: "open", sWidth: '10%'},
@@ -119,15 +119,8 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
                         aTargets: [3]
                     }
                 ],
-                oLanguage: {
-                    sLoadingRecords: "<i class='icon-refresh icon-spin icon-large'></i> Loading..."
-                },
                 sDom: 't',
                 iDisplayLength: -1
-                //bScrollInfinite: true,
-                //bScrollCollapse: true,
-                //sScrollY: '600px',
-                //iScrollLoadGap: 200
             });
             table.on("click", function (data) {
                 var exp_key = data['exp_key'];
@@ -142,14 +135,14 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
     fetch: function (params) {
         var view = this;
         view.params = params;
-        StrikeFinder.block();
+        StrikeFinder.block_element(view.$el);
         view.collection.fetch({
             data: params,
             success: function () {
-                StrikeFinder.unblock();
+                StrikeFinder.unblock(view.$el);
             },
-            failure: function () {
-                StrikeFinder.unblock();
+            error: function () {
+                StrikeFinder.unblock(view.$el);
             }
         });
     }
@@ -165,8 +158,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
 
         // Add a collapsable around the shopping view.
         view.shopping_collapsable = new StrikeFinder.CollapsableContentView({
-            el: '#' + view.el.id,
-            title_class: 'uac-header'
+            el: '#' + view.el.id
         });
 
         // Use the default title.
@@ -289,7 +281,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
         view.render_summaries();
     },
     set_title: function (title) {
-        this.shopping_collapsable.set('title', '<i class="icon-search"></i> IOC Selection' + title);
+        this.shopping_collapsable.set('title', '<i class="fa fa-search"></i> IOC Selection' + title);
     },
     render_summaries: function () {
         var view = this;

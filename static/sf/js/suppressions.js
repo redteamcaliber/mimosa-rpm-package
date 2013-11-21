@@ -83,12 +83,11 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
         view.suppressions_collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
             'title': '&nbsp;',
-            title_class: 'uac-header',
             collapsed: condensed
         });
         var update_title = function () {
             // Update the suppressions collapsable count whenever the data has changed.
-            var title_template = '<i class="icon-level-down"></i> Suppressions (%d)';
+            var title_template = '<i class="fa fa-level-down"></i> Suppressions (%d)';
             view.suppressions_collapsable.set('title', _.sprintf(title_template, view.collection.length));
         };
         view.collection.listenTo(view.collection, 'sync', update_title);
@@ -111,10 +110,15 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
 
             view.options['aoColumns'] = [
                 {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false, bSortable: false},
-                {sTitle: "Suppression", mData: 'comment', bVisible: true, bSortable: false},
+                {sTitle: "Suppression", mData: 'comment', bVisible: true, bSortable: false, sClass: 'wrap'},
                 {sTitle: "Global", mData: 'cluster_name', bVisible: true, bSortable: false},
                 {sTitle: "Hits", mData: 'suppressed', bVisible: true, bSortable: false}
             ];
+
+            view.listenTo(view, 'row:created', function(row) {
+                // Escape the comment field.
+                view.escape_cell(row, 1);
+            });
 
             view.options['aoColumnDefs'] = [
                 {
@@ -128,7 +132,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                             row.suppression_id, formatted);
 
                         var delete_link = '<a class="btn btn-link destroy" data-toggle="tooltip" ' +
-                            'title="Delete Suppression" style="padding: 0px 0px"><i class="icon-remove-sign"></i></a>';
+                            'title="Delete Suppression" style="padding: 0px 0px; border: none"><i class="fa fa-times-circle text-danger"></i></a>';
 
                         return delete_link + ' ' + suppression_name;
                     },
@@ -152,8 +156,8 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
         else {
             view.options.aoColumns = [
                 {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false},
-                {sTitle: "Rule", mData: 'comment', bSortable: true, sClass: 'wrap'},
-                {sTitle: "Description", mData: 'comment', bSortable: true, sWidth: '25%'},
+                {sTitle: "Rule", mData: 'comment', bSortable: true, sWidth: '25%', sClass: 'wrap'},
+                {sTitle: "Description", mData: 'comment', bSortable: true, sWidth: '25%', sClass: 'wrap'},
                 {sTitle: "IOC", mData: 'iocname', bSortable: true, sClass: 'nowrap'},
                 {sTitle: "IOC UUID", mData: 'ioc_uuid', bSortable: false, bVisible: false},
                 {sTitle: "Hits", mData: 'suppressed', bSortable: true},
@@ -162,12 +166,17 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                 {sTitle: "Created", mData: 'created', bSortable: true, sClass: 'nowrap'}
             ];
 
+            view.listenTo(view, 'row:created', function(row) {
+                // Escape the comment field.
+                view.escape_cell(row, 1);
+            });
+
             view.options.aoColumnDefs = [
                 {
                     // Add an option to the display name to g the row.
                     mRender: function (data, type, row) {
                         return '<a class="btn btn-link destroy" data-toggle="tooltip" ' +
-                            'title="Delete Suppression" style="padding: 0px 0px"><i class="icon-remove-sign"></i></a> ' +
+                            'title="Delete Suppression" style="padding: 0px 0px; border: none"><i class="fa fa-times-circle text-danger"></i></a> ' +
                             StrikeFinder.format_suppression(row);
                     },
                     aTargets: [1]
@@ -198,21 +207,22 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
             ];
 
             view.options.iDisplayLength = 10;
-            view.options.sDom = 'lftip';
+            view.options.sDom = 'lf<"sf-table-wrapper"t>ip';
         }
 
         // Keep track of the row views.
         view.suppression_row_views = [];
-        view.options['fnCreatedRow'] = function (nRow, aData, iDataIndex) {
+
+        view.listenTo(view, 'row:created', function(row, data, index) {
             var suppression_row = new StrikeFinder.SuppressionRowView({
-                el: $(nRow),
-                model: view.collection.at(iDataIndex)
+                el: $(row),
+                model: view.collection.at(index)
             });
             suppression_row.listenTo(suppression_row, 'delete', function () {
                 view.trigger('delete');
             });
             view.suppression_row_views.push(suppression_row);
-        };
+        });
     },
     fetch: function (exp_key) {
         if (exp_key) {
@@ -246,12 +256,11 @@ StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
 
         view.hits_collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
-            title: '<i class="icon-level-down"></i> Suppressed Hits',
-            title_class: 'uac-header'
+            title: '<i class="fa fa-level-down"></i> Suppressed Hits'
         });
 
         view.options.oLanguage = {
-            sEmptyTable: 'This suppression is not matching any hits',
+            sEmptyTable: 'The selected suppression is not matching any hits',
             sZeroRecords: 'No matching hits found'
         };
 
@@ -260,13 +269,21 @@ StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
         view.options['bServerSide'] = true;
 
         view.options['aoColumns'] = [
-            {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
+            {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: false},
+            {sTitle: "Created", mData: "created", bVisible: true, bSortable: true, sClass: 'nowrap', sWidth: '10%'},
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
             {sTitle: "rowitem_type", mData: "rowitem_type", bVisible: false, bSortable: false},
             {sTitle: "Tag", mData: "tagname", bVisible: false, bSortable: false},
-            {sTitle: "Summary", mData: "summary1", bSortable: false, sClass: 'wrap'},
-            {sTitle: "Summary2", mData: "summary2", bSortable: false, sClass: 'wrap'}
+            {sTitle: "Summary", mData: "summary1", bSortable: true, sClass: 'wrap'},
+            {sTitle: "Summary2", mData: "summary2", bSortable: true, sClass: 'wrap'}
         ];
+
+        view.options.aaSorting = [[1, 'desc']];
+
+        view.options.aoColumnDefs = [
+            view.date_formatter(1)
+        ];
+
 
         view.options.sDom = 'ltip';
         view.listenTo(view, 'load', function () {
@@ -328,11 +345,21 @@ StrikeFinder.SuppressionsAppView = StrikeFinder.View.extend({
                 suppress: false,
                 masstag: false
             });
+
+            // Hits facets.
+            view.facets_view = new StrikeFinder.HitsFacetsView({
+                el: '#hits-facets-div'
+            });
+
+            // Listen to criteria changes and reload the views.
+            view.listenTo(view.facets_view, 'refresh', function(attributes) {
+                // Reload the hits.
+                view.hits_table_view.fetch(attributes);
+            });
         });
 
-        view.hits_table_view.fetch({
-            suppression_id: suppression_id
-        });
+        // Specify the host as default criteria.
+        view.facets_view.fetch({suppression_id: suppression_id});
 
         $('.hits-view').fadeIn().show();
     }

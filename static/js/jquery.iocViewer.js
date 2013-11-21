@@ -341,7 +341,7 @@
                     str = links['link'][i].text;
                 }
                 LI.append(($li=$('<li>')
-                    .append(($('<A target="IOCNewTarget" href="' +str+'" \ >')
+                    .append(($('<A target="IOCNewTarget" href="' +str+'" \>')
                         .html(str)))));
             }
             linksUL.append( LI );
@@ -349,7 +349,10 @@
         }
 
 
-        $metadata.append($('<div>').addClass('ioc-description').html(iocObject.description));
+        $metadata.append($('<div>')
+            .addClass('ioc-description')
+            .addClass('well well-sm')
+            .html(iocObject.description));
 
         // Convert the logic tree.
         renderIndicator($criteria, iocObject.definition[0], 0);
@@ -358,6 +361,8 @@
                 , isFirst, isLast
                 , op=(indicator.operator && indicator.operator.toLowerCase());
             $ul.addClass('ioc-indicator');
+            $ul.addClass('panel');
+            $ul.addClass('panel-default');
             $ul.addClass('ioc-guid-' + indicator.id);
             $ul.append($('<span>').addClass('operator').text(op.toUpperCase()));
 //      $ul.text( indicator.operator.toUpperCase());
@@ -379,7 +384,9 @@
 
 
                     $ul.append(($li=$('<li>')
-                        .append($rule=$('<span>').addClass('ioc-rule')
+                        .append($rule=$('<span>')
+                            .addClass('ioc-rule')
+                            .addClass('well')
                             .append($('<span>').addClass('ioc-negate').text(negate))
                             .append($('<span>').addClass('ioc-term').text(prepTerm(node.term)))
                             .append($('<span>').addClass('ioc-condition').text(node.condition))

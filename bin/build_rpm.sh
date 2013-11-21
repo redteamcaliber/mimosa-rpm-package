@@ -2,11 +2,11 @@
 
 # Version settings.
 NAME="Mandiant-uac-ws"
-VERSION="0.4"
-RELEASE="1"
+VERSION="0.5"
+RELEASE="0"
 
 # The git branch to build.
-BRANCH=master
+BRANCH=facets
 
 # The repo to build.
 REPO=git@github.mandiant.com:amilano/uac-node.git
@@ -89,12 +89,16 @@ fi
 echo 'OK'
 
 # Import the node dependencies.
+echo 'Installing dependencies...'
 cd $PROJECT_DIR
 chmod +x ./bin/*
-./bin/install_libs.sh
+./bin/install_libs.sh --production
+echo 'OK'
 
 # Uglify the js files.
+echo 'Running uglify...'
 ./bin/uglify.sh 'TRUE'
+echo 'OK'
 
 # Create the rpm tar.
 echo "Creating the source tar file: $TAR_FILE from source: $PROJECT_DIR/*"

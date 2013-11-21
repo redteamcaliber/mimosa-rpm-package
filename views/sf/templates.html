@@ -2,7 +2,7 @@
 
 <script type="text/template" id="ioc-details-template">
     <div class="uac-header">
-        <i class="icon-list"></i> <span class="uac-header"><%= legend %></span>
+        <i class="fa fa-list"></i> <span class="uac-header"><%= legend %></span>
     </div>
 
     <hr style="margin-top: 5px"/>
@@ -29,10 +29,11 @@
         <% }) %>
     </ul>
 
-    <div class="tab-content" style="border: 1px solid #dddddd; border-top: 0px">
+    <div class="tab-content">
         <% _.each( items, function( item, index ) { %>
         <div id="ioc-tab-<%= index %>"
-             class="tab-pane <%= get_active_class(index) %>">
+             class="tab-pane fade <%= get_active_class(index) %> panel panel-default">
+
             <pre>
                 <%- item.content %>
             </pre>
@@ -53,13 +54,13 @@
         <% if (is_suppress) { %>
         <li>
             <a id="suppress-item" tabindex="-1">
-                <icon class="icon-level-down"></icon>
+                <icon class="fa fa-level-down"></icon>
                 Suppress...
             </a>
         </li>
         <li>
             <a id="auto-suppress-item" style="display: none" tabindex="-1">
-                <icon class="icon-level-down"></icon>
+                <icon class="fa fa-level-down"></icon>
                 Auto-Suppress <span id="ioc-term-item"/>
             </a>
         </li>
@@ -67,7 +68,7 @@
         <% if (is_acquire) { %>
         <li>
             <a id="acquire-item" tabindex="-1">
-                <icon class="icon-cloud-download"></icon>
+                <icon class="fa fa-cloud-download"></icon>
                 Acquire...
             </a>
         </li>
@@ -75,7 +76,7 @@
         <% if (is_masstag) { %>
         <li>
             <a id="tag-item" tabindex="-1">
-                <icon class="icon-tags"></icon>
+                <icon class="fa fa-tags"></icon>
                 Mass Tag...
             </a>
         </li>
@@ -83,7 +84,7 @@
         <li class="divider"></li>
         <li>
             <a id="close-item" tabindex="-1">
-                <icon class="icon-remove-sign"></icon>
+                <icon class="fa fa-times-circle"></icon>
                 Close
             </a>
         </li>
@@ -91,292 +92,369 @@
 </script>
 
 <script type="text/template" id="suppression-form-template">
-    <div id="suppression-form" class="modal hide fade" tabindex='-1'>
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>
-                <icon class="icon-level-down"></icon>
-                Create Suppression
-            </h3>
-        </div>
-        <div class="modal-body">
-            <p>
-                <label>Suppression Name:</label>
-                <input id="comment" type="text" required="true" value="<%= itemvalue %>" style="width: 500px"/>
+    <div id="suppression-form" class="modal fade" tabindex='-1'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><icon class="fa fa-level-down"></icon> Create Suppression</h4>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label>Suppression Name:</label>
+                            <input id="comment"
+                                   type="text"
+                                   required="true"
+                                   value="<%= itemvalue %>"
+                                   class="form-control"/>
+                        </div>
 
-                <label>IOC:</label>
-                <select id="exp_key" required="true" style="width: 400px">
-                    <% _.each( iocs, function( ioc, index ) { %>
-                    <% if (exp_key == ioc.exp_key) { %>
-                    <option id="<%= ioc.exp_key %>" selected><%= ioc.name %> - <%= ioc.uuid %></option>
-                    <% } else { %>
-                    <option id="<%= ioc.exp_key %>"><%= ioc.name %> - <%= ioc.uuid %></option>
-                    <% } %>
-                    <% }) %>
-                </select>
+                        <div class="form-group">
+                            <label>IOC:</label>
+                            <select id="exp_key" required="true" class="form-control">
+                                <% _.each( iocs, function( ioc, index ) { %>
+                                <% if (exp_key == ioc.exp_key) { %>
+                                <option id="<%= ioc.exp_key %>" selected><%= ioc.name %> - <%= ioc.uuid %></option>
+                                <% } else { %>
+                                <option id="<%= ioc.exp_key %>"><%= ioc.name %> - <%= ioc.uuid %></option>
+                                <% } %>
+                                <% }) %>
+                            </select>
+                        </div>
 
-                <label>Term:</label>
-                <select id="itemkey" required="true" style="width: 400px">
-                    <option></option>
-                    <% _.each( terms, function( item, index ) { %>
-                    <% if (itemkey == item.text) { %>
-                    <option id="<%= item.text %>" selected><%= item.title %></option>
-                    <% } else { %>
-                    <option id="<%= item.text %>"><%= item.title %></option>
-                    <% } %>
-                    <% }) %>
-                </select>
+                        <div class="form-group">
+                            <label>Term:</label>
+                            <select id="itemkey" required="true" class="form-control">
+                                <option></option>
+                                <% _.each( terms, function( item, index ) { %>
+                                <% if (itemkey == item.text) { %>
+                                <option id="<%= item.text %>" selected><%= item.title %></option>
+                                <% } else { %>
+                                <option id="<%= item.text %>"><%= item.title %></option>
+                                <% } %>
+                                <% }) %>
+                            </select>
+                        </div>
 
-                <label>Condition:</label>
-                <select id="condition" required="true">
-                    <option selected="true">contains</option>
-                    <option>ends-with</option>
-                    <option>greater-than</option>
-                    <option>is</option>
-                    <option>less-than</option>
-                    <option>matches</option>
-                    <option>starts-with</option>
-                </select>
+                        <div class="form-group">
+                            <label>Condition:</label>
+                            <select id="condition" required="true" class="form-control">
+                                <option selected="true">contains</option>
+                                <option>ends-with</option>
+                                <option>greater-than</option>
+                                <option>is</option>
+                                <option>less-than</option>
+                                <option>matches</option>
+                                <option>starts-with</option>
+                            </select>
+                        </div>
 
-                <span>
-                    <label>
-                        <icon class="icon-file"></icon>
-                        Suppression Text
-                    </label>
-                </span>
-                <input id="itemvalue"
-                       type="text"
-                       value="<%= itemvalue %>"
-                       required="true">
+                        <div class="form-group">
+                            <label>
+                                <icon class="fa fa-file"></icon>
+                                Suppression Text
+                            </label>
+                            <input id="itemvalue"
+                                   type="text"
+                                   value="<%= itemvalue %>"
+                                   required="true"
+                                    class="form-control">
+                        </div>
 
-                <label class="checkbox" style="margin-top: 15px">
-                    <input id="preservecase" type="checkbox" value=""/> Preserve Case
-                </label>
+                        <div class="checkbox" style="margin-top: 15px">
+                            <label>
+                                <input id="preservecase" type="checkbox" value=""/> Preserve Case
+                            </label>
+                        </div>
 
-                <label class="checkbox" style="margin-top: 15px">
-                    <input id="global" type="checkbox" checked="true"/> Global
-                </label>
-            </p>
-        </div>
-        <div class="modal-footer">
-            <a id="cancel" class="btn">
-                <icon class="icon-remove-sign"></icon>
-                Cancel
-            </a>
-            <a id="suppress" class="btn btn-primary">
-                <icon class="icon-level-down"></icon>
-                Suppress
-            </a>
+                        <div class="checkbox" style="margin-top: 15px">
+                            <label>
+                                <input id="global" type="checkbox" checked="true"/> Global
+                            </label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="cancel" class="btn" data-dismiss="modal">
+                        <icon class="fa fa-times-circle"></icon>
+                        Cancel
+                    </button>
+                    <button id="suppress" class="btn btn-primary">
+                        <icon class="fa fa-level-down"></icon>
+                        Suppress
+                    </button>
+                </div>
+
+            </div>
         </div>
     </div>
 </script>
 
 <script type="text/template" id="mass-tag-form-template">
-    <div id="mass-tag-form" class="modal hide fade" tabindex='-1'>
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>
-                <icon class="icon-tags"></icon>
-                Mass Tag
-            </h3>
-        </div>
-        <div class="modal-body">
-            <p>
-                <label>Tag:</label>
-                <select id="tagname" required="true">
-                    <option></option>
-                    <% _.each( tags, function( item, index ) { %>
-                    <option id="<%= item.name %>" title="<%= item.description %>"><%= item.name %></option>
-                    <% }) %>
-                </select>
+    <div id="mass-tag-form" class="modal fade" tabindex='-1'>
+        <div class="modal-dialog">
+            <div class="modal-content">
 
-            <div style="margin-top: 15px; margin-bottom: 15px">
-                <label class="radio">
-                    <input type="radio" name="scope" id="cluster_uuid_option" value="cluster" checked> This Cluster
-                </label>
-                <label class="radio">
-                    <input type="radio" name="scope" id="am_cert_hash_option" value="agent"> This Agent
-                </label>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4>
+                        <icon class="fa fa-tags"></icon>
+                        Mass Tag
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label>Tag</label>
+                            <select id="tagname" required="true" class="form-control" style="width: 300px">
+                                <option></option>
+                                <% _.each( tags, function( item, index ) { %>
+                                <option id="<%= item.name %>" title="<%= item.description %>"><%= item.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Scope</label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="scope" id="cluster_uuid_option" value="cluster" checked> This Cluster
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="scope" id="am_cert_hash_option" value="agent"> This Agent
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>IOC</label>
+                            <select id="exp_key" required="" class="form-control">
+                                <% _.each( iocs, function( ioc, index ) { %>
+                                <% if (exp_key == ioc.exp_key) { %>
+                                <option id="<%= ioc.exp_key %>" selected><%= ioc.name %> - <%= ioc.uuid %></option>
+                                <% } else { %>
+                                <option id="<%= ioc.exp_key %>"><%= ioc.name %> - <%= ioc.uuid %></option>
+                                <% } %>
+                                <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Term</label>
+                            <select id="itemkey" required="" class="form-control">
+                                <option></option>
+                                <% _.each( terms, function( item, index ) { %>
+                                <% if (itemkey == item.text) { %>
+                                <option id="<%= item.text %>" selected><%= item.title %></option>
+                                <% } else { %>
+                                <option id="<%= item.text %>"><%= item.title %></option>
+                                <% } %>
+                                <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Condition</label>
+                            <select id="condition" required="true" class="form-control" style="width: 300px">
+                                <option selected="true">contains</option>
+                                <option>ends-with</option>
+                                <option>greater-than</option>
+                                <option>is</option>
+                                <option>less-than</option>
+                                <option>matches</option>
+                                <option>starts-with</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                Value to Match
+                            </label>
+                            <input id="itemvalue"
+                                   type="text"
+                                   value="<%= itemvalue %>"
+                                   required="true"
+                                   class="form-control">
+                        </div>
+
+                        <div class="checkbox">
+                            <label>
+                                <input id="preservecase" type="checkbox" value=""/> Preserve Case
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Comment</label>
+                            <textarea id="comment" style="height: 50px" class="form-control"></textarea>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="cancel" class="btn">
+                        <icon class="fa fa-times-circle"></icon>
+                        Cancel
+                    </button>
+                    <button id="tag" class="btn btn-primary">
+                        <icon class="fa fa-tags"></icon>
+                        Add Tags
+                    </button>
+                </div>
+
             </div>
-
-            <label>IOC:</label>
-            <select id="exp_key" required="true" style="width: 400px">
-                <% _.each( iocs, function( ioc, index ) { %>
-                <% if (exp_key == ioc.exp_key) { %>
-                <option id="<%= ioc.exp_key %>" selected><%= ioc.name %> - <%= ioc.uuid %></option>
-                <% } else { %>
-                <option id="<%= ioc.exp_key %>"><%= ioc.name %> - <%= ioc.uuid %></option>
-                <% } %>
-                <% }) %>
-            </select>
-
-            <label>Term:</label>
-            <select id="itemkey" required="true" style="width: 400px">
-                <option></option>
-                <% _.each( terms, function( item, index ) { %>
-                <% if (itemkey == item.text) { %>
-                <option id="<%= item.text %>" selected><%= item.title %></option>
-                <% } else { %>
-                <option id="<%= item.text %>"><%= item.title %></option>
-                <% } %>
-                <% }) %>
-            </select>
-
-            <label>Condition:</label>
-            <select id="condition" required="true">
-                <option selected="true">contains</option>
-                <option>ends-with</option>
-                <option>greater-than</option>
-                <option>is</option>
-                <option>less-than</option>
-                <option>matches</option>
-                <option>starts-with</option>
-            </select>
-
-                <span>
-                    <label>
-                        Value to Match:
-                    </label>
-                </span>
-            <input id="itemvalue"
-                   type="text"
-                   value="<%= itemvalue %>"
-                   required="true"
-                   style="width: 500px">
-
-            <label class="checkbox" style="margin-top: 15px">
-                <input id="preservecase" type="checkbox" value=""/> Preserve Case
-            </label>
-
-            <label>Comment:</label>
-            <textarea id="comment" style="width: 500px; height: 50px" required="true"></textarea>
-
-            </p>
-        </div>
-        <div class="modal-footer">
-            <a id="cancel" class="btn">
-                <icon class="icon-remove-sign"></icon>
-                Cancel
-            </a>
-            <a id="tag" class="btn btn-primary">
-                <icon class="icon-tags"></icon>
-                Add Tags
-            </a>
         </div>
     </div>
 </script>
 
 <script type="text/template" id="acquire-form-template">
-    <div id="acquire-form" class="modal hide fade" tabindex='-1'>
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>
-                <icon class="icon-cloud-download"></icon>
-                Acquire File
-            </h3>
-        </div>
-        <div class="modal-body">
-            <p>
-                <span>
-                    <label>
-                        <icon class="icon-file"></icon>
-                        File Path
-                    </label>
-                </span>
-                <input id="file_path"
-                       type="text"
-                       value="<%= file_path %>"
-                       required="true"
-                       style="width: 500px"/>
+    <div id="acquire-form" class="modal fade" tabindex='-1'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4>
+                        <icon class="fa fa-cloud-download"></icon> Acquire File
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label>
+                                <icon class="fa fa-file"></icon> File Path
+                            </label>
+                            <input id="file_path"
+                                   type="text"
+                                   value="<%= file_path %>"
+                                   required="true"
+                                   class="form-control" />
+                        </div>
 
-                <span>
-                    <label>
-                        <icon class="icon-file"></icon>
-                        File Name
-                    </label>
-                </span>
-                <input id="file_name"
-                       type="text"
-                       value="<%= file_name %>"
-                       required="true"
-                       style="width: 500px"/>
+                        <div class="form-group">
+                            <label>
+                                <icon class="fa fa-file"></icon>
+                                File Name
+                            </label>
+                            <input id="file_name"
+                                   type="text"
+                                   value="<%= file_name %>"
+                                   required="true"
+                                   class="form-control"/>
+                        </div>
 
-            <table id="acquire-form-formatting-table" style="width: 100%">
-                <tr>
-                    <td style="width: 50%">
-                        <label>Method:</label>
-                        <select id="method" required="true">
-                            <option selected="true">raw</option>
-                            <option>api</option>
-                        </select>
-                    </td>
-                    <td>
-                        <label class="checkbox" style="margin-top: 15px">
-                            <input id="force" type="checkbox" value=""/> Force
-                        </label>
-                    </td>
-                </tr>
-            </table>
+                        <div class="form-group">
+                            <label>Method:</label>
+                            <select id="method" required="true" class="form-control" style="width: 200px">
+                                <option selected="true">raw</option>
+                                <option>api</option>
+                            </select>
+                        </div>
 
-            <label>Comment:</label>
-            <textarea id="comment" style="width: 500px; height: 50px"></textarea>
+                        <div class="checkbox">
+                            <label style="margin-top: 15px">
+                                <input id="force" type="checkbox" value=""/> Force
+                            </label>
+                        </div>
 
-            <label>MCIC User for Cluster - <%= cluster_name %>:</label>
-            <input id="user" type="text" required="true"/>
+                        <div class="form-group">
+                            <label>Comment:</label>
+                            <textarea id="comment" style="height: 50px" class="form-control"></textarea>
+                        </div>
 
-            <label>MCIC Password:</label>
-            <input id="password" type="password" required="true"/>
-            </p>
-        </div>
-        <div class="modal-footer">
-            <a id="cancel" class="btn">
-                <icon class="icon-remove-sign"></icon>
-                Cancel
-            </a>
-            <a id="acquire" class="btn btn-primary">
-                <icon class="icon-cloud-download"></icon>
-                Acquire
-            </a>
-        </div>
+                        <div class="form-group">
+                            <label>MCIC User for Cluster - <%= cluster_name %>:</label>
+                            <input id="user" type="text" required="true" class="form-control"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label>MCIC Password:</label>
+                            <input id="password" type="password" required="true" class="form-control"/>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="cancel" class="btn">
+                        <icon class="fa fa-times-circle" data-dismiss="modal"></icon>
+                        Cancel
+                    </button>
+                    <button id="acquire" class="btn btn-primary">
+                        <icon class="fa fa-cloud-download"></icon>
+                        Acquire
+                    </button>
+                </div>
+            </div>
+        <div>
     </div>
 </script>
 
 <script type="text/template" id="agent-host-template">
-    <table id="agent-host-template-formatting-table" style="width: 100%">
-        <tr>
-            <td>
-                <span class="uac-sub-header">
-                    <%= cluster.engagement.client.name %> (<%= cluster.name %>) : <%= domain %> /
-                    <a href="/sf/host/<%= hash %>/"><%= hostname %></a> /
-                    <a href="/sf/host/<%= hash %>/"><%= ip %></a>
-                </span>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <%= product_name %> <%= os_patch_level %>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <table id="agent-host-template-counts-formatting-table" style="width: 100%">
-                    <tr>
-                        <td>NotReviewed: <%= counts.notreviewed %></td>
-                        <td>Investigating: <%= counts.investigating %></td>
-                        <td>Escalate: <%= counts.escalate %></td>
-                        <td>NotReported: <%= counts.unreported %></td>
-                        <td>Reported: <%= counts.reported %></td>
-                        <td>Delete: <%= counts.delete %></td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+    <div class="row" style="margin-bottom: 3px">
+        <div class="col-md-12" margin-right: 0px; padding-right: 0px">
+            <span style="font-size: 16px; font-weight: bold">
+                <%= cluster.engagement.client.name %> (<%= cluster.name %>) : <%= domain %> /
+                <a href="/sf/host/<%= hash %>/"><%= hostname %></a>
+            </span>
+        </div>
+    </div>
+    <div class="row" style="margin-bottom: 3px">
+        <div class="col-sm-6"">
+            <%= product_name %> <%= os_patch_level %>
+        </div>
+        <div class="col-sm-3">
+            <a href="/sf/host/<%= hash %>/"><%= ip %></a>
+        </div>
+        <div class="col-sm-">
+            <%= version %>
+        </div>
+    </div>
+    <div class="row">
+            <div class="col-xs-2">
+                NotReviewed
+            </div>
+            <div class="col-xs-2">
+                <span class="badge"><%= counts.notreviewed %></span>
+            </div>
+            <div class="col-xs-2">
+                Investigating
+            </div>
+            <div class="col-xs-2">
+                <span class="badge"><%= counts.investigating %></span>
+            </div>
+            <div class="col-xs-2">
+                Escalate
+            </div>
+            <div class="col-xs-2">
+                <span class="badge"><%= counts.escalate %></span>
+            </div>
+    </div>
+    <div class="row">
+            <div class="col-xs-2">
+                NotReported
+            </div>
+            <div class="col-xs-2">
+                <span class="badge"><%= counts.unreported %></span>
+            </div>
+            <div class="col-xs-2">
+                Reported
+            </div>
+            <div class="col-xs-2">
+                <span class="badge"><%= counts.reported %></span>
+            </div>
+            <div class="col-xs-2">
+                Delete
+            </div>
+            <div class="col-xs-2">
+                <span class="badge"><%= counts.delete %></span>
+            </div>
+        </div>
+    </div>
 </script>
 
 <script type="text/template" id="agent-host-empty-template">
     <h4 class="text-warning">No data found in Seasick.</h4>
-    <code><%= am_cert_hash %></code>
+    <%= am_cert_hash %>
 </script>
 
 <script type="text/template" id="agent-host-error-template">
@@ -414,64 +492,72 @@
 </script>
 
 <script type="text/template" id="prev-next-template">
-    <a title="previous"
-       class="btn btn-link prev"
-       style="text-decoration: none; padding: 0">
-        <i class="icon-arrow-up icon-2x"></i>
-    </a>
-    <a title="next"
-       class="btn btn-link next"
-       style="text-decoration: none; padding: 0">
-        <i class="icon-arrow-down icon-2x"></i>
-    </a>
+    <div class="row">
+        <div class="col-md-12">
+            <a title="previous"
+               class="btn btn-link prev"
+               style="text-decoration: none; padding: 10px 0px 3px 0px; border: none">
+                <i class="fa fa-arrow-up fa-2x"></i>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <a title="next"
+               class="btn btn-link next"
+               style="text-decoration: none; padding: 3px 0px 3px 0px; border: none">
+                <i class="fa fa-arrow-down fa-2x"></i>
+            </a>
+        </div>
+    </div>
 </script>
 
 <script type="text/template" id="host-template">
-    <div class="row-fluid">
-        <div class="span4">
+    <div class="row" style="margin-bottom: 5px">
+        <div class="col-md-6">
             <%= cluster.engagement.client.name %> (<%= cluster.name %>) : <%= domain %> / <%= hostname %>
         </div>
-        <div class="span2">
+        <div class="col-md-2">
             <%= time_formatted %>
         </div>
-        <div class="span1">
+        <div class="col-md-1">
             <span class="label label-<%= time_label %>"><%= time_caption %></span>
         </div>
     </div>
-    <div class="row-fluid">
-        <div class="span2">
+    <div class="row" style="margin-bottom: 5px">
+        <div class="col-md-2">
             <span style="font-family: courier"><%= ip %></span>
         </div>
-        <div class="span3">
+        <div class="col-md-3">
             <%= product_name %> <%= os_patch_level %>
         </div>
-        <div class="span1">
+        <div class="col-md-1">
             <%= version %>
         </div>
-        <div class="span2">
+        <div class="col-md-2">
             <%= cluster.engagement.number %>
         </div>
     </div>
-    <div class="row-fluid">
-        <div class="span7">
-            <div class="row-fluid">
-                <div class="span2">
-                    NotReviewed: <%= counts.notreviewed %>
+    <div class="row" style="margin-bottom: 5px">
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-md-2">
+                    NotReviewed <span class="badge"><%= counts.notreviewed %></span>
                 </div>
-                <div class="span2">
-                    Investigating: <%= counts.investigating %>
+                <div class="col-md-2">
+                    Investigating <span class="badge"><%= counts.investigating %></span>
                 </div>
-                <div class="span2">
-                    Escalate: <%= counts.escalate %>
+                <div class="col-md-2">
+                    Escalate <span class="badge"><%= counts.escalate %></span>
                 </div>
-                <div class="span2">
-                    NotReported: <%= counts.unreported %>
+                <div class="col-md-2">
+                    NotReported <span class="badge"><%= counts.unreported %></span>
                 </div>
-                <div class="span2">
-                    Reported: <%= counts.reported %>
+                <div class="col-md-2">
+                    Reported <span class="badge"><%= counts.reported %></span>
                 </div>
-                <div class="span2">
-                    Delete: <%= counts.delete %>
+                <div class="col-md-2">
+                    Delete <span class="badge"><%= counts.delete %></span>
                 </div>
             </div>
         </div>
@@ -479,76 +565,81 @@
 </script>
 
 <script type="text/template" id="host-condensed-template">
-    <table class="table table-condensed table-bordered" style="width: 350px">
-        <tr>
-            <td>
-                <div class="container-fluid">
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <span style="font-weight: bold">
-                                <%= cluster.engagement.client.name %> (<%= cluster.name %>)
-                            </span>
-                        </div>
+    <div class="container" style="width: 500px; font-size: 95%; border: 1px solid #cccccc">
+        <div class="row">
+            <div class="col-sm-12" style="padding: 3px 15px 3px 15px">
+                <span style="font-weight: bold">
+                    <%= cluster.engagement.client.name %> (<%= cluster.name %>) : <%= domain %> / <%= hostname %>
+                </span>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12" style="padding: 3px 15px 3px 15px">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <%= time_formatted %>
                     </div>
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <span style="font-weight: bold">
-                                <%= domain %> / <%= hostname %>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="row-fluid">
-                        <div class="span6">
-                            <%= time_formatted %>
-                        </div>
-                        <div class="span6">
-                            <span class="label label-<%= time_label %> pull-right"><%= time_caption %></span>
-                        </div>
-                    </div>
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <%= product_name %> <%= os_patch_level %>
-                        </div>
-                    </div>
-                    <div class="row-fluid">
-                        <div class="span12">
-                            <%= ip %>
-                        </div>
-                    </div>
-                    <div class="row-fluid">
-                        <div class="span6">
-                            <%= cluster.engagement.number %>
-                        </div>
-                        <div class="span6">
-                            <%= version %>
-                        </div>
-                    </div>
-                    <div class="row-fluid">
-                        <div class="span4">
-                            NotReviewed: <%= counts.notreviewed %>
-                        </div>
-                        <div class="span4">
-                            Investigating: <%= counts.investigating %>
-                        </div>
-                        <div class="span4">
-                            Escalate: <%= counts.escalate %>
-                        </div>
-                    </div>
-                    <div class="row-fluid">
-                        <div class="span4">
-                            NotReported: <%= counts.unreported %>
-                        </div>
-                        <div class="span4">
-                            Reported: <%= counts.reported %>
-                        </div>
-                        <div class="span4">
-                            Delete: <%= counts.delete %>
-                        </div>
+                    <div class="col-sm-5">
+                        <span class="label label-<%= time_label %> pull-right"><%= time_caption %></span>
                     </div>
                 </div>
-            </td>
-        <tr>
-    </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12" style="padding: 3px 15px 3px 15px">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <%= product_name %> <%= os_patch_level %>
+                    </div>
+                    <div class="col-sm-4">
+                        <%= ip %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12" style="padding: 3px 15px 3px 15px">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <%= cluster.engagement.number %>
+                    </div>
+                    <div class="col-sm-6">
+                        <%= version %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12" style="padding: 3px 15px 3px 15px">
+                <div class="row">
+                    <div class="col-sm-4">
+                        NotReviewed <span class="badge pull-right"><%= counts.notreviewed %></span>
+                    </div>
+                    <div class="col-sm-4">
+                        Investigating <span class="badge pull-right"><%= counts.investigating %></span>
+                    </div>
+                    <div class="col-sm-4">
+                        Escalate <span class="badge pull-right"><%= counts.escalate %></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12" style="padding: 3px 15px 3px 15px">
+                <div class="row">
+                    <div class="col-sm-4">
+                        Unreported <span class="badge pull-right"><%= counts.unreported %></span>
+                    </div>
+                    <div class="col-sm-4">
+                        Reported: <span class="badge pull-right"><%= counts.reported %></span>
+                    </div>
+                    <div class="col-sm-4">
+                        Delete: <span class="badge pull-right"><%= counts.delete %></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </script>
 
 <script id="loading-template" type="text/template">
@@ -562,42 +653,81 @@
 </script>
 
 <script id="acquisition-audit-template" type="text/template">
-    <div id="acqusition-audit-div" class="modal hide fade" style="overflow: auto" tabindex='-1'>
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>
-                <icon class="icon-tags"></icon>
-                FileItem
-            </h3>
-        </div>
-        <div class="modal-body" style="max-height: 600px; overflow: auto">
-            <%= content %>
-        </div>
-        <div class="modal-footer">
-            <a id="close" class="btn btn-primary">
-                <icon class="icon-remove-sign"></icon>
-                Close
-            </a>
-        </div>
+    <div id="acqusition-audit-div" class="modal fade" style="overflow: auto" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4>
+                        <icon class="fa fa-tags"></icon> FileItem
+                    </h4>
+                </div>
+                <div class="modal-body" style="max-height: 600px; overflow: auto">
+                    <%= content %>
+                </div>
+                <div class="modal-footer">
+                    <button id="close" type="button" class="btn btn-default" data-dismiss="modal">
+                        <icon class="fa fa-times-circle"></icon> Close
+                    </button>
+                </div>
+
+            </div><!-- End model-content -->
+        </div><!-- End modal-dialog -->
     </div>
 </script>
 
 <script id="hits-facets-template" type="text/template">
-    <div class="row-fluid" style="margin-bottom: 15px">
-        <% _.each( keys, function( facet, index ) { %>
-        <div class="btn-group">
-            <a class="btn dropdown-toggle" data-toggle="dropdown">
-                <%= facet %>
-                <span class="caret"></span>
-            </a>
-            <ul class="dropdown-menu">
-                <% _.each( get_facet_values(facet), function(value, index) { %>
-                <li>
-                    <a name="<%= value.id %>" title="<%= value.value%>"><%= value.value %> (<%= value.count %>)</a>
-                </li>
-                <% }) %>
-            </ul>
+
+    <% _.each( keys, function( facet, index ) { %>
+    <div class="row" style="margin-bottom: 5px">
+
+        <div class="col-md-12">
+            <!-- A div to represent the collapsable facet content. -->
+            <div id="<%= facet %>-div" class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#<%= facet %>-div" href="#collapse-<%= facet %>">
+                                <i class="fa <%= get_facet_icon(facet) %>"></i>
+                                <%= get_facet_title(facet) %>
+                                <span class="badge pull-right"><%= get_facet_count(facet) %></span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse-<%= facet %>" class="panel-collapse collapse <%= get_visibility(facet) ? 'in' : '' %>">
+                        <div class="panel-body" style="max-height: 250px; padding: 10px; overflow: auto">
+                                <ul class="list-group" style="margin-bottom: 0px">
+                                <% _.each( get_facet_values(facet), function(value, index) { %>
+                                <li class="list-group-item" style="margin-bottom: 1px">
+                                    <a name="<%= value.id %>"
+                                       title="<%= value.value %>"
+                                       data-facet-type="<%= facet %>"
+                                       data-facet-id="<%= value.id %>"
+                                       data-facet-value="<%= value.value %>">
+                                        <%= value.abbrev ? value.abbrev : value.value %>
+                                        <span class="badge pull-right"><%= value.count %></span>
+                                </a>
+                                </li>
+                                <% }) %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <% }); %>
+
     </div>
+
+    <% }); %>
+
+    <div class="row" style="margin-bottom: 10px">
+        <div class="col-sm-12">
+            <button id="reset-facets"
+                    type="button"
+                    class="btn btn-default form-control">
+                <i class="fa fa-undo"></i> Reset
+            </button>
+        </div>
+    </div>
+
 </script>

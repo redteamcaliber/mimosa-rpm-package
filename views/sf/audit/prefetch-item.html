@@ -1,6 +1,6 @@
 {% set pi = content.prefetchitem %}
 
-<div id="prefetch-item-div" class="collapsable-header" collapsable-title="<i class='icon-file'></i> Prefetch/Item">
+<div id="prefetch-item-div" class="collapsable-header" collapsable-title="<i class='fa fa-file'></i> Prefetch/Item">
 
     <table class="table table-condensed">
         <tr>
@@ -42,7 +42,6 @@
     </table>
 
     {% if pi.accessedfilelist.accessedfile %}
-        <br/>
         <div id="accessed-file-list-div" class="collapsable collapsed" collapsable-title="Accessed File List">
             <table class="table table-condensed">
                 {% for file in get_list(pi.accessedfilelist.accessedfile) %}

@@ -10,27 +10,36 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
 
         view.collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
-            title: '<i class="icon-list"></i> Hits',
-            title_class: 'uac-header'
+            title: '<i class="fa fa-list"></i> Hits'
         });
 
         view.options['aoColumns'] = [
             {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: false},
-            {sTitle: "Tag", mData: "tagname", bVisible: true, sWidth: '5%', bSortable: false},
+            {sTitle: "Created", mData: "created", bVisible: true, bSortable: true, sWidth: '10%', sClass: 'nowrap'},
+            {sTitle: "Tag", mData: "tagname", bVisible: true, sWidth: '5%', bSortable: true},
             {sTitle: "IOC UUID", mData: "ioc_uuid", bVisible: false, bSortable: false},
-            {sTitle: "IOC Name", mData: "iocname", sWidth: '10%', bSortable: false},
-            {sTitle: "Expression String", mData: "exp_string", sWidth: '25%', bSortable: false},
-            {sTitle: "Summary", mData: "summary1", sClass: 'wrap', sWidth: '30%', bSortable: false},
-            {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', sWidth: '30%', bSortable: false},
+            {sTitle: "IOC Name", mData: "iocname", sWidth: '10%', bSortable: true},
+            {sTitle: "Summary", mData: "summary1", sClass: 'wrap', sWidth: '30%', bSortable: true},
+            {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', sWidth: '30%', bSortable: true},
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false}
         ];
-        view.options['aaSorting'] = [];
+
+        view.options['aaSorting'] = [[1, 'desc']];
+
+        view.options.aoColumnDefs = [
+            view.date_formatter(1)
+        ];
 
         view.options.sDom = 'ltip';
 
         view.options.sAjaxSource = '/sf/api/hits';
         view.options.sAjaxDataProp = 'results';
         view.options.bServerSide = true;
+
+        view.options.oLanguage = {
+            sEmptyTable: 'This host does not have any hits.',
+            sZeroRecords: 'No matching hits found'
+        };
 
         view.listenTo(view, 'load', function () {
             // Load the first hit on load of the view.
@@ -42,10 +51,10 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
 
             var title;
             if (position !== undefined) {
-                title = _.sprintf('<i class="icon-list"></i> Hits (%s of %s)', position + 1, view.get_total_rows());
+                title = _.sprintf('<i class="fa fa-list"></i> Hits (%s of %s)', position + 1, view.get_total_rows());
             }
             else {
-                title = _.sprintf('<i class="icon-list"></i> Hits (%s)', view.get_total_rows());
+                title = _.sprintf('<i class="fa fa-list"></i> Hits (%s)', view.get_total_rows());
             }
             // Update the title with the count of the rows.
             view.collapsable.set('title', title);
@@ -74,9 +83,7 @@ StrikeFinder.HostView = StrikeFinder.View.extend({
         }
 
         view.collapsable = new StrikeFinder.CollapsableContentView({
-            el: view.el,
-            title: '',
-            title_class: 'uac-header'
+            el: view.el
         });
     },
     render: function () {
@@ -87,7 +94,7 @@ StrikeFinder.HostView = StrikeFinder.View.extend({
         // Update the collapsable title.
         var title = _.sprintf('%s (%s) : %s / %s',
             data.cluster.engagement.client.name, data.cluster.name, data.domain, data.hostname);
-        view.collapsable.set('title', '<i class="icon-desktop"></i> ' + title);
+        view.collapsable.set('title', '<i class="fa fa-desktop"></i> ' + title);
         // Render the template.
         view.$el.html(_.template($('#host-template').html(), data));
     },
@@ -126,13 +133,26 @@ StrikeFinder.HostsApp = StrikeFinder.View.extend({
             view.hits_table_view.update_row('uuid', row.uuid, 'tagname', tagname, 0);
             view.hits_details_view.fetch();
         });
-
-        view.fetch(view.model.get('hash'));
-    },
-    fetch: function(am_cert_hash) {
-        var view = this;
-        view.hits_table_view.fetch({
-            am_cert_hash: am_cert_hash
+        view.listenTo(view.hits_details_view, 'create:suppression', function() {
+            // Reload the facets after a suppression is created.
+            view.facets_view.fetch();
         });
+        view.listenTo(view.hits_details_view, 'create:masstag', function() {
+            // Reload the facets after a suppression is created.
+            view.facets_view.fetch();
+        });
+
+        // Hits facets.
+        view.facets_view = new StrikeFinder.HitsFacetsView({
+            el: '#hits-facets-div'
+        });
+
+        // Listen to criteria changes and reload the views.
+        view.listenTo(view.facets_view, 'refresh', function(attributes) {
+            // Reload the hits.
+            view.hits_table_view.fetch(attributes);
+        });
+
+        view.facets_view.fetch({am_cert_hash: view.model.get('hash')});
     }
 });
