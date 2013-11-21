@@ -275,7 +275,8 @@ StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
             {sTitle: "rowitem_type", mData: "rowitem_type", bVisible: false, bSortable: false},
             {sTitle: "Tag", mData: "tagname", bVisible: false, bSortable: false},
             {sTitle: "Summary", mData: "summary1", bSortable: true, sClass: 'wrap'},
-            {sTitle: "Summary2", mData: "summary2", bSortable: true, sClass: 'wrap'}
+            {sTitle: "Summary2", mData: "summary2", bSortable: true, sClass: 'wrap'},
+            {sTitle: "MD5", mData: "md5sum", sClass: 'nowrap', bSortable: true}
         ];
 
         view.options.aaSorting = [[1, 'desc']];

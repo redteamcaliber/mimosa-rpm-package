@@ -26,9 +26,10 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
             {sTitle: "Created", mData: "created", bVisible: true, bSortable: true, sClass: 'nowrap'},
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
             {sTitle: "rowitem_type", mData: "rowitem_type", bVisible: false, bSortable: false},
-            {sTitle: "Tag", mData: "tagname", sWidth: "10%", bSortable: true},
-            {sTitle: "Summary", mData: "summary1", sWidth: "45%", bSortable: true, sClass: 'wrap'},
-            {sTitle: "Summary2", mData: "summary2", sWidth: "45%", bSortable: true, sClass: 'wrap'}
+            {sTitle: "Tag", mData: "tagname", bSortable: true},
+            {sTitle: "Summary", mData: "summary1", bSortable: true, sClass: 'wrap'},
+            {sTitle: "Summary2", mData: "summary2", bSortable: true, sClass: 'wrap'},
+            {sTitle: "MD5", mData: "md5sum", bSortable: true, sClass: 'nowrap'}
         ];
 
         view.options.aaSorting = [[1, 'desc']];

@@ -28,6 +28,8 @@ UAC ToDo
     x - Refactor the hits by tag view for criteria change.
     - Add the ability to remove a facet criteria.
 
+### Change .wrap to .column-wrap
+
 ### Implement hits sorting
     -Add sorting to the hits table on the hits view, host view, suppressions view, and hits by tag view.
 

@@ -6,7 +6,7 @@ VERSION="0.5"
 RELEASE="0"
 
 # The git branch to build.
-BRANCH=facets
+BRANCH=master
 
 # The repo to build.
 REPO=git@github.mandiant.com:amilano/uac-node.git

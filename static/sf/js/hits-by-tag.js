@@ -6,15 +6,15 @@ StrikeFinder.HitsByTagTableView = StrikeFinder.TableView.extend({
 
         view.options['aoColumns'] = [
             {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: false},
-            {sTitle: "Updated", mData: "updated", sClass: 'nowrap', bSortable: true, sWidth: '10%'},
+            {sTitle: "Updated", mData: "updated", sClass: 'nowrap', bSortable: true},
             {sTitle: "Cluster", mData: "cluster_name", bSortable: false},
             {sTitle: "Host", mData: "hostname", bSortable: false},
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false},
             {sTitle: "Item Type", mData: "rowitem_type", bSortable: false, bVisible: false},
             {sTitle: "Tag", mData: "tagname", bVisible: false, bSortable: false},
-            {sTitle: "Summary", mData: "summary1", sClass: 'wrap', sWidth: '30%', bSortable: true},
-            {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', sWidth: '30%', bSortable: true},
-            {sTitle: "MD5sum", mData: "md5sum", bSortable: false, bVisible: false},
+            {sTitle: "Summary", mData: "summary1", sClass: 'wrap', bSortable: true},
+            {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', bSortable: true},
+            {sTitle: "MD5", mData: "md5sum", bSortable: true, bVisible: true, sClass: 'nowrap'},
             {sTitle: "Owner", mData: "username", bSortable: false, bVisible: false}
         ];
 

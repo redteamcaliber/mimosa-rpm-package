@@ -15,12 +15,13 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
 
         view.options['aoColumns'] = [
             {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: false},
-            {sTitle: "Created", mData: "created", bVisible: true, bSortable: true, sWidth: '10%', sClass: 'nowrap'},
-            {sTitle: "Tag", mData: "tagname", bVisible: true, sWidth: '5%', bSortable: true},
+            {sTitle: "Created", mData: "created", bVisible: true, bSortable: true, sClass: 'nowrap'},
+            {sTitle: "Tag", mData: "tagname", bVisible: true, bSortable: true},
             {sTitle: "IOC UUID", mData: "ioc_uuid", bVisible: false, bSortable: false},
-            {sTitle: "IOC Name", mData: "iocname", sWidth: '10%', bSortable: true},
-            {sTitle: "Summary", mData: "summary1", sClass: 'wrap', sWidth: '30%', bSortable: true},
-            {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', sWidth: '30%', bSortable: true},
+            {sTitle: "IOC Name", mData: "iocname", bSortable: true},
+            {sTitle: "Summary", mData: "summary1", sClass: 'wrap', bSortable: true},
+            {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', bSortable: true},
+            {sTitle: "MD5", mData: "md5sum", sClass: 'nowrap', bSortable: true},
             {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false}
         ];
 
