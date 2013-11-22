@@ -41,11 +41,11 @@ UAC ToDo
     - Specify that the default UAC log level should be info.
     - Update the default config files.
 
-### Write up release notes.
-
 ### Look into Grunt build and deployment scripts.
     - http://gruntjs.com/getting-started
     - https://npmjs.org/package/grunt-sed
+
+### Create a UAC settings page.
 
 ### Render hits criteria
     - On the hits view render the details regarding what hits you are viewing.

@@ -28,7 +28,7 @@ body {
  */
 
 #wrap > .container {
-    width: 98%;
+    width: 100%;
     padding: 0px 15px 20px 15px;
 }
 
@@ -125,10 +125,10 @@ table {
     max-height: 600px;
 }
 
-.select2-highlighted {
-    color: #333333 !important;
-    background-color: #f0f0f0 !important;
-}
+/*.select2-highlighted {*/
+    /*color: #333333 !important;*/
+    /*background-color: #f0f0f0 !important;*/
+/*}*/
 
 /*.accordion {*/
 /*background-color: #fbfbfb;*/
