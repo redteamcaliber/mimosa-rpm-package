@@ -19,11 +19,17 @@
 </script>
 
 <script type="text/template" id="ioc-tabs-template">
-    <ul class="nav nav-tabs" id="ioc-tabs" style="margin-bottom: 0px">
+    <ul class="nav nav-tabs" id="ioc-tabs" style="margin-bottom: 0px; border: none">
         <% _.each( items, function( item, index ) { %>
         <li>
             <a name="<%= item.exp_key %>" href="#ioc-tab-<%= index %>" data-toggle="tab">
-                <span style="font-weight: bold"><%= item.name %></span>
+                <span style="font-weight: bold">
+                    <% if (item.suppressed) { %>
+                        <del><%= item.name %></del>
+                    <% } else { %>
+                        <%= item.name %>
+                    <% } %>
+                </span>
             </a>
         </li>
         <% }) %>

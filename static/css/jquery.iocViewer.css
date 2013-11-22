@@ -1,10 +1,10 @@
 div.ioc {
     position: relative;
-    border: 0px solid;
-    border-top: 0px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
+    border: none;
+    /*border-top: 0px;*/
+    /*-webkit-border-radius: 3px;*/
+    /*-moz-border-radius: 3px;*/
+    /*border-radius: 3px;*/
     /*-moz-box-shadow: 0 0 8px rgba(0,0,0,0.2);*/
     /*-webkit-box-shadow: 0 0 8px rgba(0,0,0,0.2);*/
     /*box-shadow: 0 0 8px rgba(0,0,0,0.2);*/

@@ -14,21 +14,9 @@ UAC ToDo
 
 ## Tasks
 
-### Implement Pipelining
-    x - Make the pipelining code be in the TableView to be instance specific.
-    x - The code doesn't seem to be aware of the aaData / sAjaxDataProp setting.
-    x - Add the pipelining code to datatables and allow caching of a much larger result set.
-    x - Change the default hits views to be open and rendering 10 hits.
-    x - Need to refresh the facets on the hosts, hits by tag views after creating a suppression.
-    x - Should we reload the facets after a mass tag operation?
-
-### Implement facets
-    x - Refactor the suppressions view for criteria change.
-    x - Refactor the hosts view for criteria change.
-    x - Refactor the hits by tag view for criteria change.
-    - Add the ability to remove a facet criteria.
-
 ### Change .wrap to .column-wrap
+
+### Pull out the primary color out of a theme on page load.  Use this value for the color of icons (delete suppression).
 
 ### Implement hits sorting
     -Add sorting to the hits table on the hits view, host view, suppressions view, and hits by tag view.
