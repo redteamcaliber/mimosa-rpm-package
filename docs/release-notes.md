@@ -4,6 +4,12 @@ Unified Analyst Console (UAC) Release Notes
 Mandiant-uac-ws-0.5-1 - November 25th, 2013
 ------------------------------------------
 
+### Merge All
+
+- Added the ability to merge all identities into the latest. When viewing the most recent identity for a hit a merge all
+  button is displayed.  Clicking the merge all button merges all identities and comments as well as brings forward the
+  tag with highest precedence.
+
 ### Suppressed/IOCs
 
 - IOC names now display a ~~strikethrough~~ style on the hit review page if the IOC expression is currently suppressed.
@@ -14,6 +20,8 @@ Mandiant-uac-ws-0.5-1 - November 25th, 2013
 ### Fixes
 
 - Resolved issue on acquisitions list where state values of submitted were not being properly rendered.
+- Resolved issue with IOC Name facet not filtering properly.
+- Resolved issue with some tables not staying on the same record after refresh.
 
 
 Mandiant-uac-ws-0.5-0 - November 21st, 2013
