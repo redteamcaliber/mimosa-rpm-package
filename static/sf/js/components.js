@@ -517,7 +517,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         if (value_pair) {
             this._value_pair = value_pair;
         }
-        this.$el.fnDraw(true);
+        this.$el.fnDraw(false);
     },
     destroy: function () {
         // Destroy the old table if it exists.
