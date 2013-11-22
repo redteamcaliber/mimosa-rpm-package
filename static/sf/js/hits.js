@@ -32,7 +32,9 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
             {sTitle: "MD5", mData: "md5sum", bSortable: true, sClass: 'nowrap'}
         ];
 
-        view.options.aaSorting = [[1, 'desc']];
+        view.options.aaSorting = [
+            [1, 'desc']
+        ];
 
         view.options.aoColumnDefs = [
             view.date_formatter(1)
@@ -635,7 +637,7 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
                 // Submitted the task successfully.
                 StrikeFinder.display_success('Submitted task for mass tag: ' + view.model.as_string());
 
-                StrikeFinder.wait_for_task(response.task_id, function(err, completed, response) {
+                StrikeFinder.wait_for_task(response.task_id, function (err, completed, response) {
                     StrikeFinder.unblock(form);
 
                     if (err) {
@@ -816,7 +818,7 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
 
                 StrikeFinder.display_success(submit_message);
 
-                StrikeFinder.wait_for_task(response.task_id, function(err, completed, response) {
+                StrikeFinder.wait_for_task(response.task_id, function (err, completed, response) {
                     // Unblock the UI.
                     StrikeFinder.unblock(form);
 
@@ -1015,7 +1017,7 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
 });
 
 StrikeFinder.CommentsTableView = StrikeFinder.TableView.extend({
-    initialize: function() {
+    initialize: function () {
         var view = this;
         view.options.iDisplayLength = -1;
         view.options.aoColumns = [
@@ -1038,7 +1040,7 @@ StrikeFinder.CommentsTableView = StrikeFinder.TableView.extend({
             sEmptyTable: 'No comments have been entered'
         };
 
-        view.listenTo(view, 'row:created', function(row, data, index) {
+        view.listenTo(view, 'row:created', function (row, data, index) {
             view.escape_cell(row, 1);
         });
 
@@ -1051,7 +1053,7 @@ StrikeFinder.CommentsTableView = StrikeFinder.TableView.extend({
      * Load the comments based on the row item.
      * @param rowitem_uuid - the row item.
      */
-    fetch: function(rowitem_uuid) {
+    fetch: function (rowitem_uuid) {
         var view = this;
 
         if (rowitem_uuid) {
@@ -1129,7 +1131,7 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
                 $("#comment").val("");
                 view.comments_table.fetch();
             },
-            error: function(model, xhr) {
+            error: function (model, xhr) {
                 // Error
                 StrikeFinder.unblock(view.$el);
                 var details = xhr && xhr.responseText ? xhr.responseText : 'Response text not defined.';
@@ -1320,6 +1322,71 @@ StrikeFinder.IdentitiesView = StrikeFinder.View.extend({
     }
 });
 
+StrikeFinder.MergeAllView = StrikeFinder.View.extend({
+    initialize: function () {
+        if (this.model) {
+            this.listenTo(this.model, 'sync', this.render);
+        }
+    },
+    events: {
+        'click': 'on_click'
+    },
+    render: function() {
+        var view = this;
+
+        var current_uuid = view.model.get('uuid');
+        var identical_hits = view.model.get('identical_hits');
+
+        if (identical_hits && identical_hits.length == 1) {
+            // There is only a single identity.
+            view.$el.prop('disabled', true);
+            view.$el.show();
+        }
+        else {
+            // There are multiple identities.
+            if (current_uuid == identical_hits[0].uuid) {
+                // The current identity is the most recent, enable merge all.
+                view.$el.prop('disabled', false);
+                view.$el.show();
+            }
+            else {
+                // The current identity is not the most recent.
+                view.$el.prop('disabled', true);
+                view.$el.hide();
+            }
+        }
+    },
+    /**
+     * Handle the click of the merge all button.
+     * @param ev - the click event.
+     */
+    on_click: function (ev) {
+        var view = this;
+        var uuid = view.model.get('uuid');
+        var merge_model = new Backbone.Model();
+        merge_model.url = '/sf/api/hits/' + uuid + '/mergeall';
+        merge_model.save({}, {
+            success: function (model, response) {
+                try {
+                    log.info(_.sprintf('Merged all identities for uuid: %s', uuid));
+                    StrikeFinder.display_success('Successfully merged all identities.');
+
+                    // Notify that a merge has taken place.
+                    view.trigger('mergeall', uuid, response.uuid);
+                }
+                finally {
+                    StrikeFinder.unblock();
+                }
+            },
+            error: function () {
+                // Error.
+                StrikeFinder.unblock();
+                StrikeFinder.display_error('Error while performing mergeall.');
+            }
+        });
+    }
+});
+
 /**
  * View for displaying the merge button and handling the related actions.
  */
@@ -1338,18 +1405,17 @@ StrikeFinder.MergeView = StrikeFinder.View.extend({
 
         var current_uuid = view.model.get('uuid');
         var identical_hits = view.model.get('identical_hits');
-        var disabled = true;
 
         // Enable the merge option when there are more than one identical hits and the currently selected identity
         // is not the target of the merge operation.
-        if (identical_hits &&
-            identical_hits.length > 1 &&
-            current_uuid != identical_hits[0].uuid) {
-            disabled = false;
+        if (identical_hits && identical_hits.length > 1 && current_uuid != identical_hits[0].uuid) {
+            view.$el.prop('disabled', false);
+            view.$el.show();
         }
-
-        // Enable disable the merge component.
-        view.$el.prop('disabled', disabled);
+        else {
+            view.$el.prop('disabled', true);
+            view.$el.hide();
+        }
     },
     /**
      * Handle the click of the merge button.
@@ -1364,7 +1430,7 @@ StrikeFinder.MergeView = StrikeFinder.View.extend({
         var merge_model = new Backbone.Model();
         merge_model.url = '/sf/api/hits/' + uuid + '/merge';
         merge_model.save({}, {
-            success: function (model, response, options) {
+            success: function (model, response) {
                 try {
                     log.debug('Merged ' + uuid + ' into ' + response.uuid);
 
@@ -1510,19 +1576,33 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 view.fetch(uuid_identity);
             });
 
+            // Merge all button view.
+            view.merge_all_view = new StrikeFinder.MergeAllView({
+                el: '#merge-all',
+                model: view.audit
+            });
+            view.merge_all_view.listenTo(view.merge_all_view, 'mergeall', function(uuid) {
+
+            });
+
             // Merge button view.
             view.merge_view = new StrikeFinder.MergeView({
                 el: '#merge',
                 model: view.audit
             });
-            view.listenTo(view.merge_view, 'merge', function (source_uuid, dest_uuid) {
+
+            /**
+             * Generic method for handling merge and mergeall.
+             * @param uuid - the destination uuid.
+             */
+            function handle_merge(uuid) {
                 // A merge operation has taken place, reload the hits view.
-                if (view.row.uuid == dest_uuid) {
+                if (view.row.uuid == uuid) {
                     // The currently selected row is the merge destination.  Reload the hits and re-select the same
                     // the target row item.
                     view.hits_table_view.refresh({
                         name: 'uuid',
-                        value: dest_uuid
+                        value: uuid
                     });
                 }
                 else {
@@ -1554,6 +1634,13 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                         }
                     }
                 }
+            }
+
+            view.listenTo(view.merge_view, 'merge', function (source_uuid, dest_uuid) {
+                handle_merge(dest_uuid);
+            });
+            view.listenTo(view.merge_all_view, 'mergeall', function(uuid) {
+                handle_merge(uuid);
             });
 
             // Suppression form.
@@ -1673,7 +1760,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                             StrikeFinder.display_success(submit_message);
 
                             // Try and wait for the task result.
-                            StrikeFinder.wait_for_task(response.task_id, function(err, completed, response) {
+                            StrikeFinder.wait_for_task(response.task_id, function (err, completed, response) {
                                 StrikeFinder.unblock();
 
                                 if (err) {
@@ -1780,11 +1867,11 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
             // Refresh the comments.
             view.hits_details_view.fetch();
         });
-        view.listenTo(view.hits_details_view, 'create:suppression', function() {
+        view.listenTo(view.hits_details_view, 'create:suppression', function () {
             // Reload the facets after a suppression is created.
             view.facets_view.fetch();
         });
-        view.listenTo(view.hits_details_view, 'create:masstag', function() {
+        view.listenTo(view.hits_details_view, 'create:masstag', function () {
             // Reload the facets after a suppression is created.
             view.facets_view.fetch();
         });
@@ -1795,7 +1882,7 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
         });
 
         // Listen to criteria changes and reload the views.
-        view.listenTo(view.facets_view, 'refresh', function(attributes) {
+        view.listenTo(view.facets_view, 'refresh', function (attributes) {
             // Reload the hits.
             view.hits_table_view.fetch(attributes);
         });
@@ -1895,7 +1982,7 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
  * View to render hits facets.
  */
 StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
-    initialize: function() {
+    initialize: function () {
         var view = this;
 
         // TODO: move the outwards.
@@ -1952,18 +2039,18 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
             return s;
         }
     },
-    render: function() {
+    render: function () {
         var view = this;
         var attributes = view.model.attributes;
 
         if (attributes.am_cert_hash) {
-            _.each(attributes.am_cert_hash, function(hash, index) {
+            _.each(attributes.am_cert_hash, function (hash, index) {
                 hash.abbrev = view.shorten(hash.value, 8);
             });
         }
 
         if (attributes.md5sum) {
-            _.each(attributes.md5sum, function(md5, index) {
+            _.each(attributes.md5sum, function (md5, index) {
                 md5.abbrev = view.shorten(md5.value, 8);
             });
         }
@@ -1971,21 +2058,21 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
         var data = {
             keys: view.keys,
             facets: attributes,
-            get_facet_values: function(facet) {
+            get_facet_values: function (facet) {
                 return this.facets[facet];
             },
-            get_facet_count: function(facet) {
+            get_facet_count: function (facet) {
                 return this.facets[facet].length;
             },
-            get_facet_title: function(facet) {
+            get_facet_title: function (facet) {
                 var title = view.titles[facet];
                 return title ? title : facet;
             },
-            get_facet_icon: function(facet) {
+            get_facet_icon: function (facet) {
                 var icon = view.icons[facet];
                 return icon ? icon : 'fa-meh';
             },
-            get_visibility: function(facet) {
+            get_visibility: function (facet) {
                 if (view.model.params[facet] && view.model.params[facet].length > 0) {
                     return true;
                 }
@@ -2006,7 +2093,7 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
             'click #refresh-facets': 'refresh_facets'
         });
     },
-    on_click: function(ev) {
+    on_click: function (ev) {
         var view = this;
         var attributes = ev.currentTarget.attributes;
         var facet_type = attributes['data-facet-type'].value;
@@ -2033,7 +2120,7 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
     /**
      * User reset the filter criteria.
      */
-    reset_facets: function() {
+    reset_facets: function () {
         var view = this;
         view.criteria.reset();
 
@@ -2042,13 +2129,13 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
         // Bubble a reset event.
         view.trigger('reset');
     },
-    get_criteria: function() {
+    get_criteria: function () {
         return this.criteria;
     },
     /**
      * Load the hits facets based on the views criteria.
      */
-    load_facets: function() {
+    load_facets: function () {
         var view = this;
         view.model.params = view.criteria.attributes;
         StrikeFinder.block_element(view.$el);
@@ -2056,7 +2143,7 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
 
         view.trigger('refresh', view.criteria.attributes);
     },
-    fetch: function(params) {
+    fetch: function (params) {
         log.info('Reloading the hits facets view...');
 
         if (params) {

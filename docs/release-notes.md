@@ -1,6 +1,21 @@
 Unified Analyst Console (UAC) Release Notes
 ===========================================
 
+Mandiant-uac-ws-0.5-1 - November 25th, 2013
+------------------------------------------
+
+### Suppressed/IOCs
+
+- IOC names now display a ~~strikethrough~~ style on the hit review page if the IOC expression is currently suppressed.
+  This will give the analyst the abilty to view all the related hits but determine which ones are being suppressed.
+  If you click on a suppressed IOC tab the related suppression is in the Suppressions table.  Selecting the suppression
+  from the table will navigate you to the suppression view so you can see the suppressed hits.
+
+### Fixes
+
+- Resolved issue on acquisitions list where state values of submitted were not being properly rendered.
+
+
 Mandiant-uac-ws-0.5-0 - November 21st, 2013
 ------------------------------------------
 

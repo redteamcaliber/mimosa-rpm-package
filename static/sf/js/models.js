@@ -308,8 +308,8 @@ StrikeFinder.HitsFacetsModel = Backbone.Model.extend({
         if (this.params.tagname && this.params.tagname.length > 0) {
             result += '&' + $.param({tagname: this.params.tagname});
         }
-        if (this.params.ioc_name && this.params.ioc_name.length > 0) {
-            result += '&' + $.param({ioc_name: this.params.ioc_name});
+        if (this.params.iocname && this.params.iocname.length > 0) {
+            result += '&' + $.param({iocname: this.params.iocname});
         }
         if (this.params.item_type && this.params.item_type.length > 0) {
             result += '&' + $.param({item_type: this.params.item_type});

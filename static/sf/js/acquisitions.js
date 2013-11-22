@@ -78,16 +78,22 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
                             label_class = 'label-danger';
                         }
                         else if (data == 'cancelled') {
+                            label_class = 'label-warning';
+                        }
+                        else if (data == 'submitted') {
                             label_class = 'label-default';
                         }
                         else if (data == 'started' || data == 'created') {
-                            label_class = 'label-info';
+                            label_class = 'label-primary';
                         }
                         else if (data == 'completed') {
                             label_class = 'label-success';
                         }
                         else if (data == 'unknown') {
                             label_class = 'label-warning';
+                        }
+                        else {
+                            label_class = 'label-default';
                         }
                         return _.sprintf('<span class="label %s error_message" style="text-align: center; width: 100%%">%s</span>', label_class, data);
                     }
@@ -99,7 +105,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
             }
         ];
 
-        view.options.iDisplayLength = 100;
+        view.options.iDisplayLength = 50;
 
         view.options['sDom'] = 'ltip';
 
