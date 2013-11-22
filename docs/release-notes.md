@@ -17,6 +17,10 @@ Mandiant-uac-ws-0.5-1 - November 25th, 2013
   If you click on a suppressed IOC tab the related suppression is in the Suppressions table.  Selecting the suppression
   from the table will navigate you to the suppression view so you can see the suppressed hits.
 
+### Themes
+
+- Added versions of the UAC themes with smaller font sizes.  Will eventually move this to a user preferences/settings area.
+
 ### Fixes
 
 - Resolved issue on acquisitions list where state values of submitted were not being properly rendered.
