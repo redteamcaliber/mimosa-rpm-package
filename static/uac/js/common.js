@@ -1,35 +1,43 @@
 var UAC = UAC || {};
 
+
 /**
- * Attempt to compute a reasonable overlay color or use a default.
+ * Retrieve the UAC specific CSS styles.
  */
-UAC.get_overlay_color = function () {
-    if (!document.body) {
-        // If the document body is not initialized use a default value.
-        return '#cccccc';
-    }
-    else {
-        // The body is available.
-        if (!StrikeFinder.OVERLAY_COLOR) {
-            // Overlay color has not been computed, use the body background color.
-            var style = window.getComputedStyle(document.body);
-            if (style && style.getPropertyValue('background-color')) {
-                StrikeFinder.OVERLAY_COLOR = style.getPropertyValue('background-color');
-            }
-            else {
-                // Unable to compute the overlay color, use a default.
-                StrikeFinder.OVERLAY_COLOR = '#cccccc';
-            }
+UAC.get_styles = function() {
+    if (!UAC._styles) {
+        UAC._styles = {};
+        var body_style = window.getComputedStyle(document.body);
+        if (body_style && body_style.getPropertyValue('background-color')) {
+            UAC._styles.overlay_color =  body_style.getPropertyValue('background-color')
         }
-        return StrikeFinder.OVERLAY_COLOR;
+        else {
+            UAC._styles.overlay_color = '#cccccc';
+        }
+//        var primary_style = window.getComputedStyle(document.getElementById('uac-primary-element'));
+//        if (primary_style) {
+//            if (primary_style.getPropertyValue('color')) {
+//                UAC._styles.primary_color = primary_style.getPropertyValue('color');
+//            }
+//            else {
+//                UAC._styles.primary_color = 'red';
+//            }
+//            if (primary_style.getPropertyValue('background-color')) {
+//                UAC._styles.primary_background_color = primary_style.getPropertyValue('background-color');
+//            }
+//            else {
+//                UAC._styles.primary_background_color = '#ffffff';
+//            }
+//        }
     }
+    return UAC._styles;
 };
 
 /**
- * Clear out the current overlay color.  Will be calculated again on next use.
+ * Clear the UAC CSS styles, will be recalculated on next usage.
  */
-UAC.reset_overlay_color = function () {
-    StrikeFinder.OVERLAY_COLOR = undefined;
+UAC.reset_styles = function() {
+    UAC._styles = undefined;
 };
 
 /**
@@ -56,7 +64,7 @@ UAC.set_theme = function (theme) {
     document.cookie = _.sprintf('theme=%s; expires=%s; path=/', encodeURIComponent(theme), expires.utc());
 
     // Clear the overlay color since the theme has been changed.
-    UAC.reset_overlay_color();
+    UAC.reset_styles();
 };
 
 

@@ -32,7 +32,7 @@
 {% endblock %}
 
 {% block form_menu %}
-    <div id="host-select" class="nav" style="padding-top: 5px; width: 200px"></div>
+    <input id="host-typeahead" type="text" placeholder="Search for Host or IP"/>
 {% endblock %}
 
 {% block tail %}
@@ -46,11 +46,8 @@
 
 <script type="text/javascript">
     // Initialize the host search component.
-    var host_search_view = new StrikeFinder.SelectHostSearchView({
-        el: '#host-select'
-    });
-    host_search_view.listenTo(host_search_view, 'change', function (am_cert_hash) {
-        window.location = _.sprintf('/sf/host/%s/', am_cert_hash);
+    var host_typeahead = new StrikeFinder.HostTypeAheadView({
+        el: '#host-typeahead'
     });
 </script>
 {% endblock %}

@@ -136,7 +136,7 @@ StrikeFinder.get_blockui_options = function (message) {
             backgroundColor: ''
         },
         overlayCSS: {
-            backgroundColor: UAC.get_overlay_color(),
+            backgroundColor: UAC.get_styles().overlay_color,
             opacity: .5
         },
         baseZ: 5000

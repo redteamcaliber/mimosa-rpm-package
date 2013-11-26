@@ -40,6 +40,10 @@
 <!-- Select2 -->
 <script src="/static/js/select2.min.js"></script>
 
+<!-- Typeahead support. -->
+<script src="/static/js/typeahead.min.js"></script>
+<link href="/static/css/typeahead.js-bootstrap.css" rel="stylesheet"/>
+
 <script src="/static/js/bootstrapSwitch.js"></script>
 
 <script src="/static/js/jquery.blockUI.js"></script>
@@ -151,4 +155,10 @@
     </div>
     {% endblock %}
 </div>
+
+<!-- Hidden elements used to compute styles. -->
+<div style="display: none">
+    <button id="uac-primary-element" class="btn btn-primary"></button>
+</div>
+
 {% endblock %}

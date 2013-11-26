@@ -3,23 +3,14 @@ UAC ToDo
 
 ## Questions
 
-### Need to discuss what the usersettings is going to return when a user specifies a namehash.
-    - Can the user even checkout a namehash or is it just for viewing?
-        If checkout is possible then:
-            - How will it be visualized on the shopping view?
-            - How will I know that a user selected a namehash?
-            - Will the exp_key be removed when I checkout a namehash?
-    - Should facets be added to the hits by tag view.  If so we may need to decrease the number of columns.  Which ones
-      can be removed?
+###
+
 
 ## Tasks
 
+### Update the spec file to restart UAC application on upgrade.
+
 ### Change .wrap to .column-wrap
-
-### Pull out the primary color out of a theme on page load.  Use this value for the color of icons (delete suppression).
-
-### Implement hits sorting
-    -Add sorting to the hits table on the hits view, host view, suppressions view, and hits by tag view.
 
 ### Application themes
     - Look into the host search view.
@@ -28,6 +19,7 @@ UAC ToDo
     - Add auditing.
     - Specify that the default UAC log level should be info.
     - Update the default config files.
+    - Implement winston syslog.
 
 ### Look into Grunt build and deployment scripts.
     - http://gruntjs.com/getting-started

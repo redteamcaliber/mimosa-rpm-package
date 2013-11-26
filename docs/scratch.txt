@@ -1,3 +1,6 @@
+SBDT267690,ALG1380
+
+
 https://proxy.mcirt.mandiant.com/SF/hits?
     0=9402af9a-f99b-45c3-8f86-651aa1d87f75&
     1=307c4caf-a778-4410-ae1b-1373a54649f4&

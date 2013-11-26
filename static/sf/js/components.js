@@ -256,7 +256,7 @@ StrikeFinder.get_datatables_settings = function (parent, settings) {
         bSortClasses: false,
         bProcessing: false,
         asStripeClasses: [],
-        fnServerData: function(sSource, aoData, fnCallback) {
+        fnServerData: function (sSource, aoData, fnCallback) {
             parent.pipeline(sSource, aoData, fnCallback);
         },
         fnRowCallback: function (nRow, data, iDisplayIndex, iDisplayIndexFull) {
@@ -742,7 +742,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
     /**
      * Escape a cells contents.
      */
-    escape_cell: function(row, index) {
+    escape_cell: function (row, index) {
         var col = this.get_settings().aoColumns[index];
         var td = $(_.sprintf('td:eq(%s)', index), row);
         if (td) {
@@ -764,7 +764,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         }
         return null;
     },
-    clear_cache: function() {
+    clear_cache: function () {
         if (this.cache) {
             this.cache = undefined;
         }
@@ -872,7 +872,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
 
                 fnCallback(json);
             })
-                .always(function() {
+                .always(function () {
                     // Unblock the UI.
                     StrikeFinder.unblock(view.$el);
                 });
@@ -895,7 +895,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             }
         }
     },
-    date_formatter: function(index) {
+    date_formatter: function (index) {
         return {
             mRender: function (data, type, row) {
                 return StrikeFinder.format_date_string(data);
@@ -973,92 +973,44 @@ StrikeFinder.SelectView = StrikeFinder.View.extend({
     }
 });
 
-StrikeFinder.SelectHostSearchView = StrikeFinder.View.extend({
-    initialize: function (options) {
+StrikeFinder.HostTypeAheadView = StrikeFinder.View.extend({
+    initialize: function () {
         this.render();
     },
-    events: {
-        "change": "item_changed",
-        "select2-highlight": "item_selected"
-    },
-    /**
-     * Tokenize a string based on whitespace and commas.
-     * @param s - the input string.
-     * @return the list of search terms.
-     */
-    parse_search_string: function (s) {
-        var token_list = s.split(/[\s,]+/);
-        var valid_tokens = [];
-        _.each(token_list, function (t) {
-            if (t != '') {
-                valid_tokens.push(t);
-            }
-        });
-        return valid_tokens;
-    },
     render: function () {
-        var view = this;
-        var title = 'Search for a Host or IP';
-        var min_input_length = view.options.min_input_length ? view.options.min_input_length : 5;
-        var max_input_length = view.options.max_input_length ? view.options.max_input_length : 200;
-        view.$el.select2({
-            placeholder: title,
-            minimumInputLength: min_input_length,
-            maximumInputLength: max_input_length,
-            id: function (o) {
-                return o.hash;
-            },
-            ajax: {
-                url: '/sf/api/hosts',
-                dataType: 'json',
-                quietMillis: 500,
-                data: function (term, page) {
-                    if (term.indexOf(' ') != -1 || term.indexOf(',') != -1) {
-                        try {
-                            term = view.parse_search_string(term);
-                            var found_ip = false;
-                            for (var i = 0; i < term.length; i++) {
-                                var t = term[i];
-                                if (t.indexOf('.') != -1) {
-                                    found_ip = true;
-                                }
-                                else {
-                                    if (found_ip) {
-                                        StrikeFinder.display_warn('Mixing hostnames and IP address in the search is ' +
-                                            'not supported.');
-                                    }
-                                }
-                            }
-                        }
-                        catch (e) {
-                            StrikeFinder.display_warn('Unable to parse search term: ' + term);
-                        }
-                    }
-
-                    log.debug('Searching by term: ' + term);
-
-                    return {
-                        hosts: term
-                    };
+        var typeahead = this.$el.typeahead({
+            name: 'hosts',
+            remote: {
+                url: '/sf/api/hosts?hosts=%QUERY',
+                beforeSend: function(jqXhr, settings) {
+                    StrikeFinder.block();
                 },
-                results: function (data, page) {
-                    return {results: data};
+                filter: function(response) {
+                    StrikeFinder.unblock();
+                    if (!response || response.length == 0) {
+                        StrikeFinder.display_info('No matching hosts found.');
+                    }
+                    return response;
                 }
             },
-            formatResult: view.format_item,
-            formatSelection: view.format_item_selection,
-            dropdownAutoWidth: true,
-            dropdownCssClass: 'uac-bigdrop'
+            valueKey: 'hostname',
+            template: '#host-condensed-template',
+            engine: {
+                compile: function (template) {
+                    compiled = _.template($(template).html());
+
+                    return {
+                        render: function (context) {
+                            return compiled(context);
+                        }
+                    }
+                }
+            }
         });
-    },
-    format_item: function (item) {
-        return _.template($("#host-condensed-template").html(), item);
-    },
-    format_item_selection: function (object, container) {
-        return object.hash;
-    },
-    item_changed: function (ev) {
-        this.trigger('change', ev.val);
+
+        typeahead.on('typeahead:selected', function (evt, data) {
+            window.location = _.sprintf('/sf/host/%s/', data.hash);
+        });
     }
 });
 
