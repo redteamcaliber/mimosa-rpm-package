@@ -65,11 +65,7 @@ mkdir -p %{buildroot}/opt/web/apps/uac/logs
 
 %post
 #!/bin/bash
-
-# initial install
-if [ $1 -eq 1 ]; then
-
-elif [ $1 -eq 2 ]; then
+if [ $1 -eq 2 ]; then
     # update
     echo "restarting UAC..."
     restart uac
