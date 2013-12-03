@@ -102,7 +102,7 @@ echo 'OK'
 
 # Create the rpm tar.
 echo "Creating the source tar file: $TAR_FILE from source: $PROJECT_DIR/*"
-tar -czf ${TAR_FILE} --exclude=conf/env.json --exclude=docs/* --exclude=logs/* *
+tar -czf ${TAR_FILE} --exclude=conf/env.json --exclude=docs/* --exclude=.git --exclude=logs/* *
 if [ $? -gt 0 ]; then
     # Error
     echo 'Error creating tar file.'
