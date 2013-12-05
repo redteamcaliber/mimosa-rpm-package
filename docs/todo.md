@@ -8,12 +8,42 @@ UAC ToDo
 
 ## Tasks
 
+### Add customer data to MES.
+
+### Change identity API's.
+
+### Fix space in the file item template.
+
+### UAC hit links.
+
+### Replace the tooltip error message in acquisitions with a popover.
+
 ### Update the spec file to restart UAC application on upgrade.
 
 ### Change .wrap to .column-wrap
 
-### Application themes
-    - Look into the host search view.
+### IOC Selection Enhancements
+    - Add customers to the IOC selection view.
+    - Update the selection components on the IOC selection view to make it easier to select multiple items.
+
+### Usersettings Migration to UAC.
+    - Create tables to store the users ioc selection settings.
+    - Create tables to store statistics regarding users actions from the IOC selection view.
+    - Create and API to store the users IOC selection settings.
+    - Create an API to store and retrieve the users actions on the IOC selection view.
+    - Create an API to retrieve the related user actions for a given view.
+    - Integrate API's with the UAC shopping view.
+    - Integrate view API's with the UAC hits views.
+    - When a user viewed a hit or identity, history of what they did related to an identity.
+
+### View Hits by IOC UUID and IOC Namehash
+    -
+
+### UAC Client/Cluster groups
+    - Create tables and API's related to saving and retrieving client cluster groups.
+    - Create an group management screen within UAC.
+    - Implement the ability to select a group on the IOC selection view.
+    - Implmemnt the ability to select a group on the acquistions view.
 
 ### Implement additional info level auditing.
     - Add auditing.

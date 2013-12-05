@@ -1013,5 +1013,3 @@ StrikeFinder.HostTypeAheadView = StrikeFinder.View.extend({
         });
     }
 });
-
-

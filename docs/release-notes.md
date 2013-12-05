@@ -1,6 +1,22 @@
 Unified Analyst Console (UAC) Release Notes
 ===========================================
 
+Mandiant-uac-ws-0.6-0 - December 4th, 2013
+------------------------------------------
+
+### Sharing Links
+
+- Added sharing links on the hits and suppressions views enabling users to easily grab a link to a specific hit or
+  suppression.
+
+### Host search
+
+- Refactored host search capability to provide a more user friendly look and feel.
+
+### Fixes
+
+- Expanded the content for the acquisition error popups.
+
 Mandiant-uac-ws-0.5-1 - November 25th, 2013
 ------------------------------------------
 

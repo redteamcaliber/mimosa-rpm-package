@@ -9,8 +9,7 @@ StrikeFinder.HitsTableView = StrikeFinder.TableView.extend({
         var view = this;
 
         view.hits_collapsable = new StrikeFinder.CollapsableContentView({
-            el: view.el,
-            title: '&nbsp;'
+            el: view.el
         });
 
         view.options.sAjaxSource = '/sf/api/hits';
@@ -1236,6 +1235,25 @@ StrikeFinder.TagView = StrikeFinder.View.extend({
     }
 });
 
+StrikeFinder.HitsShareView = StrikeFinder.View.extend({
+    initialize: function(options) {
+        if (options.table) {
+            this.listenTo(options.table, 'click', this.render);
+        }
+    },
+    render: function(data) {
+        var link = window.location.protocol + '//' + window.location.hostname +
+            (window.location.port ? ':' + window.location.port : '') + '/sf/hits/' + data.uuid;
+        var html = _.template($("#hits-share-template").html(), {link: link, label: 'Link to Hit'});
+        this.$el.popover('destroy');
+        this.$el.popover({
+            html : true,
+            trigger: 'click',
+            content: html
+        });
+    }
+});
+
 StrikeFinder.IdentitiesView = StrikeFinder.View.extend({
     initialize: function (options) {
         if (this.model) {
@@ -1482,6 +1500,12 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
         view.listenTo(view.hits_table_view, 'empty', function () {
             // Hide all components with the details view class.
             $('.sf-details-view').fadeOut().hide();
+        });
+
+        // Create the share view for displaying hit url links.
+        view.share_view = new StrikeFinder.HitsShareView({
+            el: '#share-button',
+            table: view.hits_table_view
         });
     },
     /**

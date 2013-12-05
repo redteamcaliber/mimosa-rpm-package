@@ -5,7 +5,18 @@ var StrikeFinder = StrikeFinder || {};
  */
 StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
     events: {
-        'click a.destroy': 'on_delete'
+        'click i.destroy': 'on_delete'
+    },
+    initialize: function(options) {
+        var link = window.location.protocol + '//' + window.location.hostname +
+            (window.location.port ? ':' + window.location.port : '') + '/sf/suppressions/' + this.model.get('suppression_id');
+        var html = _.template($("#suppressions-share-template").html(), {link: link});
+
+        this.$el.find('i.share').popover({
+            html : true,
+            trigger: 'click',
+            content: html
+        });
     },
     on_delete: function (ev) {
         var view = this;
@@ -63,6 +74,7 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
     },
     close: function () {
         log.debug('Closing row view...');
+        this.$el.find('i.share').popover('destroy');
         this.remove();
     }
 });
@@ -82,7 +94,6 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
         // Add a collapsable container.
         view.suppressions_collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el,
-            'title': '&nbsp;',
             collapsed: condensed
         });
         var update_title = function () {
@@ -131,10 +142,11 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                         var suppression_name = _.sprintf('<a href="/sf/suppressions/%s">%s</a>',
                             row.suppression_id, formatted);
 
-                        var delete_link = '<a class="btn btn-link destroy" data-toggle="tooltip" ' +
-                            'title="Delete Suppression" style="padding: 0px 0px; border: none"><i class="fa fa-times-circle text-danger"></i></a>';
+                        var delete_link = '<i class="fa fa-times-circle text-default destroy" title="Delete Suppression"></i>';
 
-                        return delete_link + ' ' + suppression_name;
+                        var share_link = ' <i class="fa fa-share text-default share"></i>';
+
+                        return delete_link + ' ' + suppression_name + ' ' + share_link;
                     },
                     aTargets: [1]
                 },
@@ -175,9 +187,9 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                 {
                     // Add an option to the display name to g the row.
                     mRender: function (data, type, row) {
-                        return '<a class="btn btn-link destroy" data-toggle="tooltip" ' +
-                            'title="Delete Suppression" style="padding: 0px 0px; border: none"><i class="fa fa-times-circle text-danger"></i></a> ' +
-                            StrikeFinder.format_suppression(row);
+                        return '<i class="fa fa-times-circle text-default destroy" title="Delete Suppression"></i> ' +
+                            StrikeFinder.format_suppression(row) +
+                            ' <i class="fa fa-share text-default share"></i>';
                     },
                     aTargets: [1]
                 },
