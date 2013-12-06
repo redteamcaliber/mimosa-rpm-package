@@ -419,24 +419,33 @@
 {% endif %}
 
 <div id="portal-formated-data-div" class="collapsable collapsed" collapsable-title="Portal Formatted Data">
-    <textarea title="Click to Highlight"
-              cols="80"
-              rows="10"
-              class="fixed-font"
-              style="width: 95%;"
-              onclick="this.select();">
-File Name:         {{ fileitem.filename }}
+<textarea title="Click to Highlight"
+          cols="80"
+          rows="10"
+          class="fixed-font"
+          style="width: 95%;"
+          onclick="this.select();"
+>
+{% if fileitem.filenamecreated %}File Name:         {{ fileitem.filename }}
 MD5 Hash:          {{ fileitem.md5sum }}
 File Created:      {{ fileitem.created }}
 Last Accessed:     {{ fileitem.accessed }}
 Last Modified:     {{ fileitem.modified }}
 Entry Modified:    {{ fileitem.changed }}
-{% if fileitem.filenamecreated %}Filename Created:  {{ fileitem.filenamecreated }}
+Filename Created:  {{ fileitem.filenamecreated }}
 Filename Accessed: {{ fileitem.filenameaccessed }}
 Filename Modified: {{ fileitem.filenamemodified }}
-Filname: Changed:  {{ fileitem.filenamechanged }}{% endif %}
+Filname: Changed:  {{ fileitem.filenamechanged }}
 File Size:         {{ fileitem.sizeinbytes }}
 File Path:         {% if fileitem.drive %}{{ fileitem.drive }}:\{{ fileitem.filepath }}{% endif %}
 File Owner:        {{ fileitem.username }}
-    </textarea>
+{% else %}File Name:         {{ fileitem.filename }}
+MD5 Hash:          {{ fileitem.md5sum }}
+File Created:      {{ fileitem.created }}
+Last Accessed:     {{ fileitem.accessed }}
+Last Modified:     {{ fileitem.modified }}
+Entry Modified:    {{ fileitem.changed }}
+File Size:         {{ fileitem.sizeinbytes }}
+File Path:         {% if fileitem.drive %}{{ fileitem.drive }}:\{{ fileitem.filepath }}{% endif %}
+File Owner:        {{ fileitem.username }}{% endif %}</textarea>
 </div>

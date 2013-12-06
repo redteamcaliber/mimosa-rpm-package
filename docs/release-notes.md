@@ -16,6 +16,8 @@ Mandiant-uac-ws-0.6-0 - December 4th, 2013
 ### Fixes
 
 - Expanded the content for the acquisition error popups.
+- Removed extra lines in the file item portal formatted data.
+
 
 Mandiant-uac-ws-0.5-1 - November 25th, 2013
 ------------------------------------------

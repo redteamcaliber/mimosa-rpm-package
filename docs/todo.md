@@ -12,13 +12,11 @@ UAC ToDo
 
 ### Change identity API's.
 
-### Fix space in the file item template.
+### Handle Seasick 404 FileItem errors.
+- Talk to JB about deploying changes to devnet.
 
 ### UAC hit links.
-
-### Replace the tooltip error message in acquisitions with a popover.
-
-### Update the spec file to restart UAC application on upgrade.
+- Need to enable being able to pass multiple rowitem_uuid's comma separated to the /hits page.
 
 ### Change .wrap to .column-wrap
 

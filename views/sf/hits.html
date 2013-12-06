@@ -16,13 +16,25 @@
 
 <script text="text/javascript">
     StrikeFinder.tags = {{ tags }};
-    StrikeFinder.usersettings = {{ usersettings }};
+    StrikeFinder.rowitem_uuid = {{ rowitem_uuid if rowitem_uuid else 'undefined'}};
+    StrikeFinder.usersettings = {{ usersettings if usersettings else 'undefined'}};
 
     $(document).ready(function () {
+        var params = {};
+        if (StrikeFinder.rowitem_uuid) {
+            params.rowitem_uuid = StrikeFinder.rowitem_uuid;
+            params.checkout = false;
+        }
+        else {
+            params.services = StrikeFinder.usersettings.services;
+            params.clusters = StrikeFinder.usersettings.clusters;
+            params.exp_key = StrikeFinder.usersettings.exp_key[0];
+            params.usertoken = StrikeFinder.usersettings.usertoken;
+            params.checkout = false;
+        }
+
         var hits_view = new StrikeFinder.HitsView();
-        hits_view.fetch({
-            checkout: false
-        });
+        hits_view.fetch(params);
     });
 </script>
 {% endblock %}

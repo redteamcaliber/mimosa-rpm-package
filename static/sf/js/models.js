@@ -305,6 +305,11 @@ StrikeFinder.HitsFacetsModel = Backbone.Model.extend({
         }
 
         // Facet filters.
+        if (this.params.rowitem_uuid && this.params.rowitem_uuid.length > 0) {
+            _.each(this.params.rowitem_uuid, function(rowitem_uuid) {
+                result += '&' + $.param({rowitem_uuid: rowitem_uuid});
+            });
+        }
         if (this.params.tagname && this.params.tagname.length > 0) {
             result += '&' + $.param({tagname: this.params.tagname});
         }

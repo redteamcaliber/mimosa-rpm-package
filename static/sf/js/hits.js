@@ -1244,7 +1244,7 @@ StrikeFinder.HitsShareView = StrikeFinder.View.extend({
     render: function(data) {
         var link = window.location.protocol + '//' + window.location.hostname +
             (window.location.port ? ':' + window.location.port : '') + '/sf/hits/' + data.uuid;
-        var html = _.template($("#hits-share-template").html(), {link: link, label: 'Link to Hit'});
+        var html = _.template($("#share-template").html(), {link: link, label: 'Link to Hit'});
         this.$el.popover('destroy');
         this.$el.popover({
             html : true,
@@ -1924,31 +1924,16 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
         var is_exp_key_defined = view.params.services && view.params.services.length > 0 && view.params.clusters &&
             view.params.clusters.length > 0 && view.params.exp_key;
 
-        if (!is_exp_key_defined) {
-            // Not enough parameters have been supplied, try loading from the server.
-
-            log.debug('Parameters not satisfied, attempting to load from the server.');
-            view.params = {
-                services: StrikeFinder.usersettings.services,
-                clusters: StrikeFinder.usersettings.clusters,
-                exp_key: StrikeFinder.usersettings.exp_key[0],
-                usertoken: StrikeFinder.usersettings.usertoken
-            };
-
-            log.debug('Loaded user settings: ' + JSON.stringify(view.params));
-
-            if (view.params.services && view.params.services.length > 0 && view.params.clusters &&
-                view.params.clusters.length > 0 && (view.params.exp_key || view.params.usertoken)) {
-
-                // Enough data was found from a previous checkout to display the view.
-                view.fetch_callback();
-            }
-            else {
-                // Not enough data to render the hits view, navigate to the shopping view.
-                // TODO: Disable the hits link for this case instead.
-                alert('You must select shopping criteria before viewing hits.');
-                window.location = '/sf/';
-            }
+        if (view.params.rowitem_uuid) {
+            // Specific row items have been specified.
+            log.debug('Displaying row items: ' + JSON.stringify(view.params));
+            view.fetch_callback();
+        }
+        else if (!is_exp_key_defined) {
+            // Not enough data to render the hits view, navigate to the shopping view.
+            // TODO: Disable the hits link for this case instead.
+            alert('You must select shopping criteria before viewing hits.');
+            window.location = '/sf/';
         }
         else if (view.params.checkout) {
             // Valid params have been supplied to the view and checkout is enabled.
@@ -1975,9 +1960,7 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
         }
         else {
             // Display by the parameters without checkout.
-
             log.debug('Rendering without checking out...');
-
             view.fetch_callback();
         }
     },
@@ -1985,11 +1968,14 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
         var view = this;
         // Update the hits details view with the current selected expression.
 
-        // TODO: Is this being used any more??  Possibly setting the default ioc tab to this?
+        // This should be used to select the IOC expression by default.
         view.hits_details_view.exp_key = view.params.exp_key;
 
         // Update the hits criteria.
-        if (view.params.usertoken) {
+        if (view.params.rowitem_uuid) {
+            view.facets_view.fetch({'rowitem_uuid': [view.params.rowitem_uuid]});
+        }
+        else if (view.params.usertoken) {
             view.facets_view.fetch({'usertoken': [view.params.usertoken]});
         }
         else {

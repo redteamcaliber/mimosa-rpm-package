@@ -10,7 +10,7 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
     initialize: function(options) {
         var link = window.location.protocol + '//' + window.location.hostname +
             (window.location.port ? ':' + window.location.port : '') + '/sf/suppressions/' + this.model.get('suppression_id');
-        var html = _.template($("#suppressions-share-template").html(), {link: link});
+        var html = _.template($("#share-template").html(), {link: link});
 
         this.$el.find('i.share').popover({
             html : true,
