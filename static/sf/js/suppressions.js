@@ -8,14 +8,19 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
         'click i.destroy': 'on_delete'
     },
     initialize: function(options) {
+        var view = this;
         var link = window.location.protocol + '//' + window.location.hostname +
             (window.location.port ? ':' + window.location.port : '') + '/sf/suppressions/' + this.model.get('suppression_id');
         var html = _.template($("#share-template").html(), {link: link});
 
-        this.$el.find('i.share').popover({
+        var button = view.$el.find('i.share');
+        button.popover({
             html : true,
             trigger: 'click',
             content: html
+        });
+        button.on('shown.bs.popover', function () {
+            $('.share-text').select();
         });
     },
     on_delete: function (ev) {

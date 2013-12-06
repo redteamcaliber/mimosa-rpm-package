@@ -1242,14 +1242,18 @@ StrikeFinder.HitsShareView = StrikeFinder.View.extend({
         }
     },
     render: function(data) {
+        var view = this;
         var link = window.location.protocol + '//' + window.location.hostname +
             (window.location.port ? ':' + window.location.port : '') + '/sf/hits/' + data.uuid;
         var html = _.template($("#share-template").html(), {link: link, label: 'Link to Hit'});
-        this.$el.popover('destroy');
-        this.$el.popover({
+        view.$el.popover('destroy');
+        view.$el.popover({
             html : true,
             trigger: 'click',
             content: html
+        });
+        view.$el.on('shown.bs.popover', function () {
+            $('.share-text').select();
         });
     }
 });

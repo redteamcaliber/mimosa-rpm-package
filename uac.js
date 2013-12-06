@@ -60,7 +60,9 @@ route_utils.load_views(app);
 // Add a 404 handler.
 app.use(function (req, res, next) {
     try {
-        log.error(_.sprintf('Requested page: %s was not found.', req.originalUrl));
+        var uid = req.attributes && req.attributes.uid ? req.attributes.uid : 'Unknown';
+        log.error(_.sprintf('404::User: %s requested non-existent page: %s.', uid, req.originalUrl));
+
         if (route_utils.is_html_request(req)) {
             res.render('/uac/404.html');
         }
@@ -139,7 +141,12 @@ process.on('SIGTERM', shutdown);
 process.on('uncaughtException', function (err) {
     // Log any error that crashes the server with the keyword = FATAL.
     log.error('FATAL: Encountered an unhandled server exception.');
-    log.error(err.stack);
+    if (err && err.stack) {
+        log.error(err.stack);
+    }
+    else if (err) {
+        log.error(err);
+    }
 
     // Shut down the server.
     shutdown();

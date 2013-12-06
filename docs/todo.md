@@ -8,6 +8,12 @@ UAC ToDo
 
 ## Tasks
 
+### Look into which IOC is being selected by default.
+
+### Migrate to a better logging API.
+- https://github.com/trentm/node-bunyan
+- https://github.com/trentm/node-bunyan/pull/97/files
+
 ### Add customer data to MES.
 
 ### Change identity API's.
