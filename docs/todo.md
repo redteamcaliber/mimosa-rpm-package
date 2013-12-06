@@ -8,6 +8,7 @@ UAC ToDo
 
 ## Tasks
 
+### Upgrade to Bootstrap3.0.3
 ### Look into which IOC is being selected by default.
 
 ### Migrate to a better logging API.

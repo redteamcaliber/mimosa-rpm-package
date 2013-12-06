@@ -1243,18 +1243,28 @@ StrikeFinder.HitsShareView = StrikeFinder.View.extend({
     },
     render: function(data) {
         var view = this;
+
+        view.close();
+
         var link = window.location.protocol + '//' + window.location.hostname +
             (window.location.port ? ':' + window.location.port : '') + '/sf/hits/' + data.uuid;
         var html = _.template($("#share-template").html(), {link: link, label: 'Link to Hit'});
-        view.$el.popover('destroy');
+
         view.$el.popover({
             html : true,
             trigger: 'click',
-            content: html
+            content: html,
+            container: 'body'
         });
         view.$el.on('shown.bs.popover', function () {
             $('.share-text').select();
         });
+    },
+    close: function() {
+        this.$el.popover('destroy');
+        // TODO: Remove this craziness after Bootstrap fixes there issue.
+        //this.$el.parent().find('.popover').remove();
+        this.$el.off('shown.bs.popover');
     }
 });
 

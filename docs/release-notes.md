@@ -4,6 +4,14 @@ Unified Analyst Console (UAC) Release Notes
 Mandiant-uac-ws-0.6-0 - December 4th, 2013
 ------------------------------------------
 
+### Identity Rollup
+
+- UAC has been updated to support rolling up rowitems based on identities.  You will now only see the newest rowitem for
+  any identity instead of a row for each item with the same identity.
+- Identity rollup applies to the IOC Selection, Hits, and Host views.  The Suppression and hits by tag views are still
+  rendered with each individual row item.
+- To support this change the IOC Name, IOC UUID, and IOC Expression columns were removed from the host view hits table.
+
 ### Sharing Links
 
 - Added sharing links on the hits and suppressions views enabling users to easily grab a link to a specific hit or
