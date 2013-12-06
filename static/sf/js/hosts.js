@@ -17,8 +17,6 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
             {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: false},
             {sTitle: "Created", mData: "created", bVisible: true, bSortable: true, sClass: 'nowrap'},
             {sTitle: "Tag", mData: "tagname", bVisible: true, bSortable: true},
-            {sTitle: "IOC UUID", mData: "ioc_uuid", bVisible: false, bSortable: false},
-            {sTitle: "IOC Name", mData: "iocname", bSortable: true},
             {sTitle: "Summary", mData: "summary1", sClass: 'wrap', bSortable: true},
             {sTitle: "Summary2", mData: "summary2", sClass: 'wrap', bSortable: true},
             {sTitle: "MD5", mData: "md5sum", sClass: 'nowrap', bSortable: true},

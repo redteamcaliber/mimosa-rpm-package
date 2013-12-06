@@ -1973,7 +1973,7 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
         // Update the hits details view with the current selected expression.
 
         // This should be used to select the IOC expression by default.
-        view.hits_details_view.exp_key = view.params.exp_key;
+        view.hits_details_view.default_exp_key = view.params.exp_key;
 
         // Update the hits criteria.
         if (view.params.rowitem_uuid) {
