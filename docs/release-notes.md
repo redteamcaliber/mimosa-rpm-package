@@ -4,7 +4,7 @@ Unified Analyst Console (UAC) Release Notes
 Mandiant-uac-ws-0.6-0 - December 4th, 2013
 ------------------------------------------
 
-### Negate Support for Suppress and Mass Tagging
+### Negate Support for Suppressions and Mass Tagging
 
 - The negate option has been added to the suppression and mass tagging forms.
 

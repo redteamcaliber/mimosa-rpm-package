@@ -41,16 +41,17 @@ div.ioc-metadata {
 
 
 div.ioc-name {
-    padding-top: 10px;
-    text-align: left;
-    font-size: 14px;
-    font-weight: bold;
+    /*padding-top: 10px;*/
+    /*text-align: left;*/
+    /*font-size: 14px;*/
+    /*font-weight: bold;*/
     text-overflow: ellipsis;
-    text-shadow: 0px 1px #fff;
+    /*text-shadow: 0px 1px #fff;*/
 }
+
 div.ioc-uuid {
-    padding-top: 5px;
-    text-align: left;
+    /*padding-top: 5px;*/
+    /*text-align: left;*/
     text-overflow: ellipsis;
 }
 
