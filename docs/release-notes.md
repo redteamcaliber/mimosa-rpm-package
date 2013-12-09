@@ -4,6 +4,10 @@ Unified Analyst Console (UAC) Release Notes
 Mandiant-uac-ws-0.6-0 - December 4th, 2013
 ------------------------------------------
 
+### Negate Support for Suppress and Mass Tagging
+
+- The negate option has been added to the suppression and mass tagging forms.
+
 ### Identity Rollup
 
 - UAC has been updated to support rolling up rowitems based on identities.  You will now only see the newest rowitem for
