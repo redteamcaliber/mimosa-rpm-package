@@ -171,7 +171,9 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                 }
             ];
 
-            view.options.aaSorting = [];
+            view.options.aaSorting = [
+                [8, 'desc']
+            ];
         }
         else {
             view.options.aoColumns = [
@@ -223,7 +225,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
             ];
 
             view.options.aaSorting = [
-                [ 0, "asc" ]
+                [8, 'desc']
             ];
 
             view.options.iDisplayLength = 10;
