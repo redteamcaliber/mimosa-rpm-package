@@ -75,7 +75,8 @@ StrikeFinder.wait_for_task = function(task_id, callback, options) {
 // Suppression Formatting Utilities.
 //
 StrikeFinder.format_suppression = function (s) {
-    return _.sprintf('%s \'%s\' \'%s\' (preservecase=%s)', s.itemkey, s.condition, _.escape(s.itemvalue), s.preservecase);
+    return _.sprintf('%s \'%s\' \'%s\' (preservecase=%s, negate: %s)',
+        s.itemkey, s.condition, _.escape(s.itemvalue), s.preservecase, s.negate);
 };
 
 
