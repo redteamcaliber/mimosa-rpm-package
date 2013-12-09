@@ -1,7 +1,7 @@
 Unified Analyst Console (UAC) Release Notes
 ===========================================
 
-Mandiant-uac-ws-0.6-0 - December 4th, 2013
+Mandiant-uac-ws-0.6-0 - December 11th, 2013
 ------------------------------------------
 
 ### Negate Support for Suppressions and Mass Tagging
@@ -30,6 +30,7 @@ Mandiant-uac-ws-0.6-0 - December 4th, 2013
 - Expanded the content for the acquisition error popups.
 - Removed extra lines in the file item portal formatted data.
 - Fixed issue related to the IOC tab for the currently selected IOC expression not being selected.
+- Merged fix related to issue with IOC viewer displaying XML text rather than the IOC logic tree.
 
 
 Mandiant-uac-ws-0.5-1 - November 25th, 2013
