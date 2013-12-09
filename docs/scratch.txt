@@ -1,3 +1,12 @@
+<OpenIOC xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"
+         xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"
+         xmlns=\"http://openioc.org/schemas/OpenIOC_1.1\"
+         id=\"7012bbd5-ac86-43fc-a26f-408adaf3f1a5\"
+         last-modified=\"2013-06-24T02:54:27Z\"
+         published-date=\"0001-01-01T00:00:00\"
+         xmlns:old='http://schemas.mandiant.com/2010/ioc'>
+
+
 SBDT267690,ALG1380
 
 

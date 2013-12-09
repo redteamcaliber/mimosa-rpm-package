@@ -17,8 +17,7 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
         button.popover({
             html : true,
             trigger: 'manual',
-            content: html,
-            container: 'body'
+            content: html
         });
         button.on('click', function(ev) {
             button.popover('toggle');
@@ -83,6 +82,8 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
     close: function () {
         log.debug('Closing row view...');
         this.$el.find('i.link').popover('destroy');
+        // Manually removing the popover due to -> https://github.com/twbs/bootstrap/issues/10335
+        this.$el.parent().find('.popover').remove();
         this.remove();
     }
 });

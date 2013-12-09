@@ -1254,8 +1254,7 @@ StrikeFinder.HitsLinkView = StrikeFinder.View.extend({
         view.$el.popover({
             html : true,
             trigger: 'click',
-            content: html,
-            container: 'body'
+            content: html
         });
         view.$el.on('shown.bs.popover', function () {
             $('.link-text').select();
@@ -1263,9 +1262,8 @@ StrikeFinder.HitsLinkView = StrikeFinder.View.extend({
     },
     close: function() {
         this.$el.popover('destroy');
-        // TODO: Remove this craziness after Bootstrap fixes there issue.
-        //this.$el.parent().find('.popover').remove();
-        this.$el.off('shown.bs.popover');
+        // Manually removing the popover due to -> https://github.com/twbs/bootstrap/issues/10335
+        this.$el.parent().find('.popover').remove();
     }
 });
 
