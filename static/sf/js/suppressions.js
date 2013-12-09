@@ -11,16 +11,16 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
         var view = this;
         var link = window.location.protocol + '//' + window.location.hostname +
             (window.location.port ? ':' + window.location.port : '') + '/sf/suppressions/' + this.model.get('suppression_id');
-        var html = _.template($("#share-template").html(), {link: link});
+        var html = _.template($("#link-template").html(), {link: link});
 
-        var button = view.$el.find('i.share');
+        var button = view.$el.find('i.link');
         button.popover({
             html : true,
             trigger: 'click',
             content: html
         });
         button.on('shown.bs.popover', function () {
-            $('.share-text').select();
+            $('.link-text').select();
         });
     },
     on_delete: function (ev) {
@@ -79,7 +79,7 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
     },
     close: function () {
         log.debug('Closing row view...');
-        this.$el.find('i.share').popover('destroy');
+        this.$el.find('i.link').popover('destroy');
         this.remove();
     }
 });
@@ -149,9 +149,9 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
 
                         var delete_link = '<i class="fa fa-times-circle text-default destroy" title="Delete Suppression"></i>';
 
-                        var share_link = ' <i class="fa fa-share text-default share"></i>';
+                        var link = ' <i class="fa fa-link text-default link"></i>';
 
-                        return delete_link + ' ' + suppression_name + ' ' + share_link;
+                        return delete_link + ' ' + suppression_name + ' ' + link;
                     },
                     aTargets: [1]
                 },
@@ -194,7 +194,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                     mRender: function (data, type, row) {
                         return '<i class="fa fa-times-circle text-default destroy" title="Delete Suppression"></i> ' +
                             StrikeFinder.format_suppression(row) +
-                            ' <i class="fa fa-share text-default share"></i>';
+                            ' <i class="fa fa-link text-default link"></i>';
                     },
                     aTargets: [1]
                 },

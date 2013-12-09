@@ -593,6 +593,7 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
             view.model.set('tagname', view.$("#tagname").val());
             view.model.set('itemkey', view.$("#itemkey").children(":selected").attr("id"));
             view.model.set('condition', view.$("#condition").val());
+            view.model.set('negate', view.$("#negate").is(":checked"));
             view.model.set('preservecase', view.$("#preservecase").is(":checked"));
             view.model.set('itemvalue', view.$("#itemvalue").val());
             view.model.set('comment', view.$('#comment').val());
@@ -786,7 +787,7 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
             view.model.set('condition', view.$("#condition").val());
             view.model.set('itemkey', view.$("#itemkey").children(":selected").attr("id"));
             view.model.set('itemvalue', view.$("#itemvalue").val());
-            //this.model.set('negate', this.$("#negate").val());
+            view.model.set('negate', view.$("#negate").is(":checked"));
             view.model.set('preservecase', view.$("#preservecase").is(":checked"));
 
             // Check if the suppression is global.
@@ -1235,7 +1236,7 @@ StrikeFinder.TagView = StrikeFinder.View.extend({
     }
 });
 
-StrikeFinder.HitsShareView = StrikeFinder.View.extend({
+StrikeFinder.HitsLinkView = StrikeFinder.View.extend({
     initialize: function(options) {
         if (options.table) {
             this.listenTo(options.table, 'click', this.render);
@@ -1248,7 +1249,7 @@ StrikeFinder.HitsShareView = StrikeFinder.View.extend({
 
         var link = window.location.protocol + '//' + window.location.hostname +
             (window.location.port ? ':' + window.location.port : '') + '/sf/hits/' + data.uuid;
-        var html = _.template($("#share-template").html(), {link: link, label: 'Link to Hit'});
+        var html = _.template($("#link-template").html(), {link: link, label: 'Link to Hit'});
 
         view.$el.popover({
             html : true,
@@ -1257,7 +1258,7 @@ StrikeFinder.HitsShareView = StrikeFinder.View.extend({
             container: 'body'
         });
         view.$el.on('shown.bs.popover', function () {
-            $('.share-text').select();
+            $('.link-text').select();
         });
     },
     close: function() {
@@ -1516,9 +1517,9 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
             $('.sf-details-view').fadeOut().hide();
         });
 
-        // Create the share view for displaying hit url links.
-        view.share_view = new StrikeFinder.HitsShareView({
-            el: '#share-button',
+        // Create the link view for displaying hit url links.
+        view.link_view = new StrikeFinder.HitsLinkView({
+            el: '#link-button',
             table: view.hits_table_view
         });
     },
