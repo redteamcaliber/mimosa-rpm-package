@@ -5,16 +5,13 @@ UAC Backlog Review Notes
 
 ### From last weeks meeting:
 
-#### Need user story related to Request #21053 under Agent Task Management for Work Prioritization.
-- [21053](https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#request/21053)
-
-#### Need user story related to Request #21159 under Agent Task Management for Running Scripts.
-- [21159](https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#request/21159)
-
-#### What do we plan to do with the user settings related user stories from last week?
-- Looks like these user stories may have been created on the backlog.
-
-### Demo of functionality being released this week.  See [release notes](https://github.mandiant.com/amilano/uac-node/blob/master/docs/release-notes.md).
+- Need user story related to Request #21053 under Agent Task Management for Work Prioritization.
+    - [21053](https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#request/21053)
+- Need user story related to Request #21159 under Agent Task Management for Running Scripts.
+    - [21159](https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#request/21159)
+- What do we plan to do with the user settings related user stories from last week?
+    - Looks like these user stories may have been created on the backlog.
+- Demo of functionality being released this week.  See [release notes](https://github.mandiant.com/amilano/uac-node/blob/master/docs/release-notes.md).
 
 ### Discuss Ross's request to cache acquisition passwords.
 - [27912](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#request/27912)
@@ -46,23 +43,23 @@ UAC Backlog Review Notes
 
 ### User Settings Selection Enhancements.  Below is a potential user story grouping.
 
-#### IOC Selection Enhancements
-- Update the selection components on the IOC selection view to make it easier to select multiple items.
-- Simple updates to make the current IOC selection screen easier to use.
+- IOC Selection Enhancements
+    - Update the selection components on the IOC selection view to make it easier to select multiple items.
+    - Simple updates to make the current IOC selection screen easier to use.
 
-#### Usersettings Migration to UAC.
-- Migrate from Clusters to Customers
-- Create tables to store the users ioc selection settings.
-- Create tables to store statistics regarding users actions from the IOC selection view.
-- Create and API to store the users IOC selection settings.
-- Create an API to store and retrieve the users actions on the IOC selection view.
-- Create an API to retrieve the related user actions for a given view.
-- Integrate API's with the UAC shopping view.
-- Integrate view API's with the UAC hits views.
-- When a user viewed a hit or identity, history of what they did related to an identity.
+- Usersettings Migration to UAC.
+    - Migrate from Clusters to Customers
+    - Create tables to store the users ioc selection settings.
+    - Create tables to store statistics regarding users actions from the IOC selection view.
+    - Create and API to store the users IOC selection settings.
+    - Create an API to store and retrieve the users actions on the IOC selection view.
+    - Create an API to retrieve the related user actions for a given view.
+    - Integrate API's with the UAC shopping view.
+    - Integrate view API's with the UAC hits views.
+    - When a user viewed a hit or identity, history of what they did related to an identity.
 
-#### Providing Shopping Groups Support in UAC
-- Provide the ability to create customer groups within UAC.
+- Providing Shopping Groups Support in UAC
+    - Provide the ability to create customer groups within UAC.
 
 ### Need a feature related to centralizing comments within UAC.
 - Ross: Do we need a user story for this?

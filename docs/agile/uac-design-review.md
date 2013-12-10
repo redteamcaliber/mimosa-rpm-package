@@ -10,7 +10,8 @@ UAC Design Review Notes
 
 ### Acquisitions Discussion:
 
-#### We’ll need user stories for the following:
+We’ll need user stories for the following:
+
 - Expose the issues documents (File Issues, Batch Issues)
 - Acquisition Facets
     - Customer
