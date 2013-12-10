@@ -4,8 +4,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
     initialize: function () {
         var view = this;
         view.acquisitions_collapsable = new StrikeFinder.CollapsableContentView({
-            el: view.el,
-            title: '',
+            el: view.el
         });
 
         view.options['sAjaxSource'] = '/sf/api/acquisitions';
@@ -154,7 +153,9 @@ StrikeFinder.AcquisitionsAuditView = StrikeFinder.View.extend({
     },
     render: function () {
         var view = this;
+
         view.$el.html(_.template($("#acquisition-audit-template").html(), view.model.toJSON()));
+        //view.$el.html(_.template($("#acquisition-details-template").html(), view.model.toJSON()));
 
         StrikeFinder.collapse(this.el);
 

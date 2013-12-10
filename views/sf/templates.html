@@ -670,6 +670,49 @@
     </table>
 </script>
 
+<script id="acquisition-details-template" type="text/template">
+    <div id="acqusition-audit-div" class="modal fade" style="overflow: auto" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4>
+                        <icon class="fa fa-file"></icon>
+                        Acquisition Details
+                    </h4>
+                </div>
+                <div class="modal-body" style="width: 1000px; max-height: 800px; overflow: auto">
+                    <div class="container" style="width: 100%">
+                        <div class="row">
+                            <!-- Column 1 -->
+                            <div class="col-sm-6">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <% if (content) { %>
+                                            <%= content %>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Column 2 -->
+                            <div class="col-sm-6">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="close" type="button" class="btn btn-default" data-dismiss="modal">
+                        <icon class="fa fa-times-circle"></icon>
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
 <script id="acquisition-audit-template" type="text/template">
     <div id="acqusition-audit-div" class="modal fade" style="overflow: auto" tabindex="-1">
         <div class="modal-dialog">
@@ -755,3 +798,5 @@
            class="form-control link-text"
            value="<%= link %>"/>
 </script>
+
+

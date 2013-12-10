@@ -20,6 +20,8 @@ Mandiant-uac-ws-0.6-0 - December 11th, 2013
 
 - Added sharing links on the hits and suppressions views enabling users to easily grab a link to a specific hit or
   suppression.
+- Multiple rowitems may by passed on the link.  For example,
+    [https://uac.vm.mandiant.com/sf/hits/e980d2e3-5c7d-4f69-8deb-523045919407,aaaa9da5-18f9-41ed-ac11-cc6c50cf7a21](https://uac.vm.mandiant.com/sf/hits/e980d2e3-5c7d-4f69-8deb-523045919407,aaaa9da5-18f9-41ed-ac11-cc6c50cf7a21)
 
 ### Host search
 
@@ -31,6 +33,7 @@ Mandiant-uac-ws-0.6-0 - December 11th, 2013
 - Removed extra lines in the file item portal formatted data.
 - Fixed issue related to the IOC tab for the currently selected IOC expression not being selected.
 - Merged fix related to issue with IOC viewer displaying XML text rather than the IOC logic tree.
+- Displaying message when there is not a file audit available for an acquisition.
 
 
 Mandiant-uac-ws-0.5-1 - November 25th, 2013

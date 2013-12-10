@@ -9,21 +9,11 @@ UAC ToDo
 ## Tasks
 
 ### Upgrade to Bootstrap3.0.3
-### Look into which IOC is being selected by default.
+- Re-compile the bootswatch templates.
 
 ### Migrate to a better logging API.
 - https://github.com/trentm/node-bunyan
 - https://github.com/trentm/node-bunyan/pull/97/files
-
-### Add customer data to MES.
-
-### Change identity API's.
-
-### Handle Seasick 404 FileItem errors.
-- Talk to JB about deploying changes to devnet.
-
-### UAC hit links.
-- Need to enable being able to pass multiple rowitem_uuid's comma separated to the /hits page.
 
 ### Change .wrap to .column-wrap
 
