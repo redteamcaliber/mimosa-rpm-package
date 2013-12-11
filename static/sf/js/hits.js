@@ -126,8 +126,6 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
     initialize: function (options) {
         var view = this;
 
-        view.el.title = 'Click to toggle filtering on and off.';
-
         if (!view.collection) {
             view.collection = new StrikeFinder.IOCCollection([], {
                 rowitem_uuid: options.rowitem_uuid
@@ -160,13 +158,13 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
         var html = _.template($("#ioc-tabs-template").html(), data);
         view.$el.html(html);
 
-        view.delegateEvents({
-            'click .ioc-definition': 'on_click',
-            'shown.bs.tab a[data-toggle="tab"]': 'on_shown'
-        });
-
         // Run the IOC viewer on all the pre-formatted elements.
         view.$el.find("pre").iocViewer();
+
+        view.delegateEvents({
+            'click #ioc-filter-button': 'on_click',
+            'shown.bs.tab a[data-toggle="tab"]': 'on_shown'
+        });
 
         // Filter by default.
         view.filter();
@@ -189,6 +187,8 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
      */
     filter: function () {
         var view = this;
+
+        view.$el.find('#ioc-filter-button').html('<i class="fa fa-expand"></i> Expand IOC');
 
         // Iterator over the related IOC models and adjust the corresponding tab.
         _.each(view.collection.models, function (model, index, list) {
@@ -242,12 +242,16 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
                     .css({'background': '#FFF79A', 'font-weight': 'bold', color: '#33311e'});
             });
         });
+
+        $('#ioc-filter-button').val('Expand IOC');
     },
     /**
      * Remove any IOC filtering.
      */
     unfilter: function () {
         var view = this;
+
+        view.$el.find('#ioc-filter-button').html('<i class="fa fa-compress"> Collapse IOC</i>');
 
         // Iterator over the related IOC models and adjust the corresponding tab.
         _.each(view.collection.models, function (model, index, list) {

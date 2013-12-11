@@ -29,7 +29,6 @@ div.ioc-metadata {
 
 .ioc-link-label {
     font-weight: bold;
-    padding: 2px;
 }
 
 .ioc-link-value {
@@ -48,10 +47,12 @@ div.ioc-uuid {
 
 div.ioc-definition {
     font-size: 95%;
+    margin-top: 0px;
 }
 
 div.ioc-description {
     margin-top: 10px;
+    margin-bottom: 5px;
     overflow: auto;
 }
 

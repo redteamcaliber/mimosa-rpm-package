@@ -87,7 +87,7 @@
             var match = str.match(/^xmlns:(.*)$/i);
             return (match) ? (match[1] + ':') : '';
         }
-    }
+    };
 
     function parseDocumentV1_1(rootNode, xmlNsPrefix) {
         var node = rootNode, prefix = xmlNsPrefix, iocObject = {}, n;
@@ -384,7 +384,8 @@
 
                 var linkUL = $('<DIV>')
                     .append($('<span id="' + rel.toUpperCase() + '">')
-                        .text(rel.toUpperCase() + 's:')
+                        .text(rel.toUpperCase() + '(s):')
+                        .css('text-decoration', 'underline')
                         .click(function () {
                             $('#' + thisID).toggle('slow');
                         })
@@ -419,7 +420,7 @@
                     str = links['link'][i].text;
                 }
                 LI.append(($li = $('<li>')
-                    .append(($('<A target="IOCNewTarget" href="' + str + '" \ >')
+                    .append(($('<A target="IOCNewTarget" href="' + str + '" />')
                         .html(str)))));
             }
             linksUL.append(LI);
@@ -430,6 +431,15 @@
             .addClass('ioc-description')
             .addClass('well well-sm')
             .html(iocObject.description));
+
+        // Add a div for a toolbar above the logic tree.
+        var toolbar = $('<div class="ioc-definition-toolbar">');
+        //$metadata.append(toolbar);
+        var filter_button = $('<button id="ioc-filter-button">Filter</button>')
+            .addClass('btn btn-link btn-sm pull-right')
+            .css('border', '0');
+
+        $metadata.append($('<div class="container" style="width: 100%">').append($('<div class="row">').append('<div class="col-sm-12">').append(filter_button)));
 
         // Convert the logic tree.
         renderIndicator($criteria, iocObject.definition[0], 0);
