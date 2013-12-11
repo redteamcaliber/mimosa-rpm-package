@@ -27,6 +27,15 @@ Mandiant-uac-ws-0.6-0 - December 11th, 2013
 
 - Refactored host search capability to provide a more user friendly look and feel.
 
+### Suppression Name Changed to Suppression Description
+
+- The suppression name field was modified to allow users to better capture the reason that they are creating the suppression.
+
+### Added link to expand/collapse the IOC content.
+
+- It was requested to include a link to expand the IOC content rather than clicking on the logic tree in order to make
+  copying and pasting easier.
+
 ### Fixes
 
 - Expanded the content for the acquisition error popups.
