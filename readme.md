@@ -1,7 +1,7 @@
 Unified Analyst Console Web Application
 =======================================
 
-- [Release Notes](./wiki/Release-Notes) - Running list of release notes by version.
+- [Release Notes](/amilano/uac-node/wiki/Release-Notes) - Running list of release notes by version.
 
 - [Development Installation Procedures](./docs/development.md) - Instructions for setting up UAC development environment.
 
