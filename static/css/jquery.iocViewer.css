@@ -38,6 +38,7 @@ div.ioc-metadata {
 }
 
 div.ioc-name {
+    margin-top: 5px;
     text-overflow: ellipsis;
 }
 

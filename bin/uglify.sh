@@ -5,7 +5,8 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-PATH=$PATH:/opt/node/node-v0.10.15-linux-x64/bin/
+. /opt/web/apps/uac/bin/env.sh
+
 OPTIONS='-o'
 
 uglifyjs $OPTIONS static/datatables/js/dataTables.bootstrap.js static/datatables/js/dataTables.bootstrap.js

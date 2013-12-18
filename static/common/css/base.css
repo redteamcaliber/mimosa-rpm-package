@@ -139,7 +139,9 @@ table {
 }
 
 .mandiant-red {
-    background-color: #98354a;
+
+    background-color: #822433;
+    color: #b0dadc;
 }
 
 .fixed-font {

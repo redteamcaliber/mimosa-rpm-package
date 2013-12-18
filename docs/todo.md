@@ -8,6 +8,22 @@ UAC ToDo
 
 ## Tasks
 
+### Remove SSLv2 from the nginx configuration.
+
+### Look into changing the hits page into a SPA.
+
+### Grunt stuff
+- contrib-jst - Precompile Underscore templates to JST file.
+- build an RPM using grunt.
+- compress css?
+- JSLint?
+
+### Prevent default on host table links.
+
+### Unregister IOC expand collapse event handler on close.
+
+### Look into updating the UAC version number automatically.
+
 ### Upgrade to Bootstrap3.0.3
 - Re-compile the bootswatch templates.
 
@@ -45,10 +61,6 @@ UAC ToDo
     - Specify that the default UAC log level should be info.
     - Update the default config files.
     - Implement winston syslog.
-
-### Look into Grunt build and deployment scripts.
-    - http://gruntjs.com/getting-started
-    - https://npmjs.org/package/grunt-sed
 
 ### Create a UAC settings page.
 

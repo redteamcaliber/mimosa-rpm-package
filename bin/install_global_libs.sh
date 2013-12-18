@@ -2,9 +2,9 @@
 
 # Install the required development global node libraries.
 
-# Add the node bin directory to the PATH.
-PATH=$PATH:/opt/node/node-v0.10.15-linux-x64/bin/
+. /opt/web/apps/uac/bin/env.sh
 
-npm install supervisor -g
-npm install mocha@"~1.13.0" -g
-npm install uglify-js -g
+npm install -g grunt-cli
+npm install -g supervisor
+npm install -g mocha
+npm install -g uglify-js

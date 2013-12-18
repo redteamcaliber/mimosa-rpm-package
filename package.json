@@ -2,7 +2,7 @@
     "name": "uac-ws",
     "author": "Mandiant",
     "description": "Unified Analyst Console",
-    "version": "0.0.1",
+    "version": "0.6.1",
     "contributors": [
         {
             "name": "Anthony Milano",
@@ -27,6 +27,12 @@
         "xml2js": "~0.2"
     },
     "devDependencies": {
+        "grunt": "~0.4",
+        "grunt-git": "*",
+        "grunt-contrib-jshint": "~0.6",
+        "grunt-contrib-uglify": "~0.2",
+        "grunt-pg-utils": "*",
+        "grunt-prompt": "*",
         "mocha": "~1.13",
         "chai": "~1.8",
         "should": "~2.0"
