@@ -6,8 +6,8 @@
 {{ super() }}
 
 <script type="text/javascript">
-    StrikeFinder.tags = {{ tags }};
-    StrikeFinder.searchable_tags = {{ searchable_tags }};
+    StrikeFinder.tags = {{ tags | safe }};
+    StrikeFinder.searchable_tags = {{ searchable_tags | safe }};
 
     $(document).ready(function () {
         (function () {

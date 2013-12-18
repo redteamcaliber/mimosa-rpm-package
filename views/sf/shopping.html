@@ -6,10 +6,12 @@
     {{ super() }}
 
     <script type="text/javascript">
-        StrikeFinder.services = {{ services }};
-        StrikeFinder.clusters = {{ clusters }};
-        StrikeFinder.usersettings = {{ usersettings }};
-        StrikeFinder.tags = {{ tags }};
+        StrikeFinder.tags = {{ tags | safe }};
+        StrikeFinder.services = {{ services | safe }};
+        StrikeFinder.clusters = {{ clusters | safe }};
+        {% if usersettings %}
+            StrikeFinder.usersettings = {{ usersettings | safe }};
+        {% endif %}
 
         $(document).ready(function () {
             (function () {

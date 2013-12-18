@@ -15,8 +15,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
         (function () {
-            StrikeFinder.usersettings = {{ usersettings }};
-            StrikeFinder.clusters = {{ clusters }};
+            StrikeFinder.usersettings = {{ usersettings | safe }};
+            StrikeFinder.clusters = {{ clusters | safe }};
 
             new StrikeFinder.AcquisitionsView();
         })();

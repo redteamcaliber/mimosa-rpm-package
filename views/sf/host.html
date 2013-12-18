@@ -6,8 +6,8 @@
     {{ super() }}
 
     <script type="text/javascript">
-        StrikeFinder.host = {{ host }};
-        StrikeFinder.tags = {{ tags }};
+        StrikeFinder.host = {{ host | safe }};
+        StrikeFinder.tags = {{ tags | safe }};
 
         $(document).ready(function () {
             (function () {

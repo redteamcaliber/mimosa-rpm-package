@@ -15,9 +15,14 @@
 </style>
 
 <script text="text/javascript">
-    StrikeFinder.tags = {{ tags }};
-    StrikeFinder.rowitem_uuid = {{ rowitem_uuid if rowitem_uuid else 'undefined'}};
-    StrikeFinder.usersettings = {{ usersettings if usersettings else 'undefined'}};
+
+    StrikeFinder.tags = {{ tags | safe }};
+    {% if rowitem_uuid %}
+        StrikeFinder.rowitem_uuid = {{ rowitem_uuid | safe }};
+    {% endif %}
+    {% if usersettings %}
+        StrikeFinder.usersettings = {{ usersettings | safe }};
+    {% endif %}
 
     $(document).ready(function () {
         var params = {};

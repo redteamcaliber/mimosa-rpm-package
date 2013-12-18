@@ -6,7 +6,7 @@
 {{ super() }}
 
 <script type="text/javascript">
-    StrikeFinder.tasks = {{ tasks }};
+    StrikeFinder.tasks = {{ tasks | safe }};
 
     $(document).ready(function () {
         (function () {
