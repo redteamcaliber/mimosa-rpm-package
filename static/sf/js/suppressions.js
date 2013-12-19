@@ -132,7 +132,8 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                 {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false, bSortable: false},
                 {sTitle: "Suppression", mData: 'comment', bVisible: true, bSortable: false, sClass: 'wrap'},
                 {sTitle: "Global", mData: 'cluster_name', bVisible: true, bSortable: false},
-                {sTitle: "Hits", mData: 'suppressed', bVisible: true, bSortable: false}
+                {sTitle: "Hits", mData: 'suppressed', bVisible: true, bSortable: false},
+                {sTitle: "Created", mData: 'created', bSortable: true, sClass: 'nowrap', visible: false}
             ];
 
             view.listenTo(view, 'row:created', function(row) {
@@ -173,7 +174,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
             ];
 
             view.options.aaSorting = [
-                [8, 'desc']
+                [4, 'asc']
             ];
         }
         else {
@@ -226,7 +227,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
             ];
 
             view.options.aaSorting = [
-                [8, 'desc']
+                [8, 'asc']
             ];
 
             view.options.iDisplayLength = 10;

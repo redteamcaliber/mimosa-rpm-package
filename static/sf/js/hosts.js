@@ -149,9 +149,15 @@ StrikeFinder.HostsApp = StrikeFinder.View.extend({
         // Listen to criteria changes and reload the views.
         view.listenTo(view.facets_view, 'refresh', function(attributes) {
             // Reload the hits.
+
+            console.dir(attributes);
+
             view.hits_table_view.fetch(attributes);
         });
 
-        view.facets_view.fetch({am_cert_hash: view.model.get('hash')});
+        view.facets_view.fetch({
+            identity_rollup: true,
+            am_cert_hash: view.model.get('hash')
+        });
     }
 });

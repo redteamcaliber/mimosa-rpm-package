@@ -20,9 +20,8 @@ StrikeFinder.View = Backbone.View.extend({
     },
     render: function () {
         var view = this;
-        var args = arguments;
         if (this.do_render !== undefined) {
-            view.do_render.apply(view, args);
+            view.do_render.apply(view, arguments);
         }
         return view;
     },

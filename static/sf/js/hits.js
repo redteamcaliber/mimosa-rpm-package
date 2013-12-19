@@ -1989,18 +1989,22 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
         view.hits_details_view.default_exp_key = view.params.exp_key;
 
         // Update the hits criteria.
+        var params = {
+            identity_rollup: true
+        };
         if (view.params.rowitem_uuid) {
-            view.facets_view.fetch({'rowitem_uuid': [view.params.rowitem_uuid]});
+            params.rowitem_uuid = [view.params.rowitem_uuid];
+            view.facets_view.fetch(params);
         }
         else if (view.params.usertoken) {
-            view.facets_view.fetch({'usertoken': [view.params.usertoken]});
+            params.usertoken = [view.params.usertoken];
+            view.facets_view.fetch(params);
         }
         else {
-            view.facets_view.fetch({
-                'services': view.params.services,
-                'clusters': view.params.clusters,
-                'exp_key': [view.params.exp_key]
-            });
+            params.services = view.params.services;
+            params.clusters = view.params.clusters;
+            params.exp_key = [view.params.exp_key];
+            view.facets_view.fetch(params);
         }
     }
 });

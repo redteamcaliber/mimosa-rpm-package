@@ -328,6 +328,10 @@ StrikeFinder.HitsFacetsModel = Backbone.Model.extend({
         if (this.params.username && this.params.username.length > 0) {
             result += '&' + $.param({username: this.params.username});
         }
+
+        if (this.params.identity_rollup) {
+            result += '&' + $.param({identity_rollup: true});
+        }
         return result;
     }
 });
