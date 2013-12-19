@@ -18,10 +18,6 @@ UAC ToDo
 - compress css?
 - JSLint?
 
-### Prevent default on host table links.
-
-### Unregister IOC expand collapse event handler on close.
-
 ### Look into updating the UAC version number automatically.
 
 ### Upgrade to Bootstrap3.0.3

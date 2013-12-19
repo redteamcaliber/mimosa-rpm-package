@@ -2,5 +2,235 @@
 
 {% block title %}UAC - {{ super() }}{% endblock %}
 
-{% block body_class %}mandiant-logo{% endblock %}
+{% block content %}
+<div class="jumbotron">
+    <div class="container" style="width:100%">
+        <div class="row">
+            <div class="col-sm-6">
+                <img src="/static/img/mandiant-trans-small.png" class="img-responsive" alt="Responsive image">
+                <h2 class="pull-left">Unified Analyst Console</h2>
+            </div>
+            <div class="col-sm-6">
+
+                <h3>What's Next?</h3>
+                <h4>
+                    <ul class="list-unstyled" style="margin-top: 15px">
+                        <li style="margin-bottom: 15px">
+                            <i class="fa fa-star"></i> Hits by IOC Name and UUID
+                        </li>
+                        <li>
+                            <i class="fa fa-star"></i> Acquisitions Enhancements
+                        </li>
+                    </ul>
+                </h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Example row of columns -->
+    <div class="row">
+        <div class="col-md-4">
+            <h3><i class="fa fa-meh-o"></i> UAC 0.6-1</h3>
+            <dl>
+                <dt>Fixes</dt>
+                <dd>
+                    <ul>
+                        <li>
+                            Addressed hit counts and listings issues that were introduced in the last release.
+                        </li>
+                        <li>
+                            IOC links pages are now displayed in a new window.
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+        </div>
+        <div class="col-md-4">
+            <h3><i class="fa fa-smile-o"></i> UAC 0.6-0</h3>
+                <dl>
+                    <dt>
+                        Negate Support for Suppressions and Mass Tagging
+                    </dt>
+                    <dd>
+                        <ul>
+                            <li>
+                                The negate option has been added to the suppression and mass tagging forms.
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+
+                <dl>
+                    <dt>
+                        Identity Rollup
+                    </dt>
+                    <dd>
+                        <ul>
+                            <li>
+                                UAC has been updated to support rolling up rowitems based on identities.  You will now only see the newest rowitem for
+                                any identity instead of a row for each item with the same identity.
+                            </li>
+                            <li>
+                                Identity rollup applies to the IOC Selection, Hits, and Host views.  The Suppression and hits by tag views are still
+                                rendered with each individual row item.
+                            </li>
+                            <li>
+                                To support this change the IOC Name, IOC UUID, and IOC Expression columns were removed from the host view hits table.
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+
+                <dl>
+                    <dt>Sharing Links</dt>
+                    <dd>
+                        <ul>
+                            <li>
+                                Added sharing links on the hits and suppressions views enabling users to easily grab a link to a specific hit or
+                                suppression.
+                            </li>
+                            <li>
+                                Multiple rowitems may by passed on the link.
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+
+                <dl>
+                    <dt>Host search</dt>
+                    <dd>
+                        <ul>
+                            <li>
+                                Refactored host search capability to provide a more user friendly look and feel.
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+
+                <dl>
+                    <dt>Suppression Name Changed to Suppression Description</dt>
+                    <dd>
+                        <ul>
+                            <li>
+                                The suppression name field was modified to allow users to better capture the reason that they are creating the suppression.
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+
+                <dl>
+                    <dt>Added link to expand/collapse the IOC content.</dt>
+                    <dd>
+                        <ul>
+                            <li>
+                                It was requested to include a link to expand the IOC content rather than clicking on the logic tree in order to make
+                                copying and pasting easier.
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+
+                <dl>
+                    <dt>Fixes</dt>
+                    <dd>
+                        <ul>
+                            <li>
+                                Expanded the content for the acquisition error popups.
+                            </li>
+                            <li>
+                                Removed extra lines in the file item portal formatted data.
+                            </li>
+                            <li>
+                                Fixed issue related to the IOC tab for the currently selected IOC expression not being selected.
+                            </li>
+                            <li>
+                                Merged fix related to issue with IOC viewer displaying XML text rather than the IOC logic tree.
+                            </li>
+                            <li>
+                                Displaying message when there is not a file audit available for an acquisition.
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+        </div>
+        <div class="col-md-4">
+            <h3><i class="fa fa-smile-o"></i> UAC 0.5-1</h3>
+
+            <dl>
+                <dt>Merge All</dt>
+                <dd>
+                    <ul>
+                        <li>
+                            Added the ability to merge all identities into the latest. When viewing the most recent identity for
+                            a hit a merge all button is displayed. Clicking the merge all button merges all identities and
+                            comments as well as brings forward the tag with highest precedence.
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>Suppressed/IOCs</dt>
+                <dd>
+                    <ul>
+                        <li>
+                            IOC names now display a strikethrough style on the hit review page if the IOC expression is
+                            currently suppressed. This will give the analyst the abilty to view all the related hits but
+                            determine which ones are being suppressed. If you click on a suppressed IOC tab the related
+                            suppression is in the Suppressions table. Selecting the suppression from the table will
+                            navigate you to the suppression view so you can see the suppressed hits.
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>Merge All</dt>
+                <dd>
+                    <ul>
+                        <li>
+                            IOC names now display a strikethrough style on the hit review page if the IOC expression is
+                            currently suppressed. This will give the analyst the abilty to view all the related hits but
+                            determine which ones are being suppressed. If you click on a suppressed IOC tab the related
+                            suppression is in the Suppressions table. Selecting the suppression from the table will navigate
+                            you to the suppression view so you can see the suppressed hits.
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>Themes</dt>
+                <dd>
+                    <ul>
+                        <li>
+                            Added versions of the UAC themes with smaller font sizes. Will eventually move this to a user preferences/settings area.
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>Fixes</dt>
+                <dd>
+                    <ul>
+                        <li>
+                            Resolved issue on acquisitions list where state values of submitted were not being properly rendered.
+                        </li>
+                        <li>
+                            Resolved issue with IOC Name facet not filtering properly.
+                        </li>
+                        <li>
+                            Resolved issue with some tables not staying on the same record after refresh.
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
 

@@ -420,7 +420,7 @@
                     str = links['link'][i].text;
                 }
                 LI.append(($li = $('<li>')
-                    .append(($('<A target="IOCNewTarget" href="' + str + '" />')
+                    .append(($('<A target="_blank" href="' + str + '" />')
                         .html(str)))));
             }
             linksUL.append(LI);

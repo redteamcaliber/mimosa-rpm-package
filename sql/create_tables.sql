@@ -29,4 +29,10 @@ CREATE TABLE "user_preferences" (
 );
 CREATE INDEX user_preferences_user ON user_preferences (uid);
 
+CREATE TABLE "content" (
+    uuid        UUID            NOT NULL PRIMARY KEY,
+    created     TIMESTAMP       NOT NULL DEFAULT now(),
+    text        TEXT NOT NULL
+);
+
 END TRANSACTION ;

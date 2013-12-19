@@ -38,7 +38,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
             {
                 mRender: function (data, type, row) {
                     if (data) {
-                        return _.sprintf('<a href="/sf/host/%s">%s</a>', row.agent.hash, data);
+                        return _.sprintf('<a href="/sf/host/%s" onclick="event.stopPropagation()">%s</a>', row.agent.hash, data);
                     }
                     else {
                         return data;
