@@ -31,13 +31,7 @@
             params.checkout = false;
         }
         else {
-            params.services = StrikeFinder.usersettings.services;
-            params.clusters = StrikeFinder.usersettings.clusters;
-            params.exp_key = StrikeFinder.usersettings.exp_key[0];
-            params.iocnamehash = StrikeFinder.usersettings.iocnamehash;
-            params.ioc_uuid= StrikeFinder.usersettings.ioc_uuid;
-            params.usertoken = StrikeFinder.usersettings.usertoken;
-            params.checkout = false;
+            params = StrikeFinder.usersettings;
         }
 
         var hits_view = new StrikeFinder.HitsView();

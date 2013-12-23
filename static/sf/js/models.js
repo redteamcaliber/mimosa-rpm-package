@@ -281,33 +281,31 @@ StrikeFinder.HitsFacetsModel = Backbone.Model.extend({
         var result = '/sf/api/hits/facets?facets=tagname,iocname,item_type,md5sum,am_cert_hash,username';
 
         // Base filters.
-        if (this.params.services && this.params.services.length > 0) {
-            result += '&services=' + this.params.services.join(',');
+        if (this.params.services) {
+            result += '&services=' + this.params.services;
         }
-        if (this.params.clusters && this.params.clusters.length > 0) {
-            result += '&clusters=' + this.params.clusters.join(',');
+        if (this.params.clusters) {
+            result += '&clusters=' + this.params.clusters;
         }
-        if (this.params.exp_key && this.params.exp_key.length > 0) {
+        if (this.params.exp_key) {
             result += '&' + $.param({exp_key: this.params.exp_key});
         }
-        if (this.params.usertoken && this.params.usertoken.length > 0) {
+        if (this.params.usertoken) {
             result += '&' + $.param({usertoken: this.params.usertoken});
         }
-        if (this.params.iocnamehash && this.params.iocnamehash.length > 0) {
+        if (this.params.iocnamehash) {
             result += '&' + $.param({iocnamehash: this.params.iocnamehash});
         }
-        if (this.params.ioc_uuid && this.params.ioc_uuid.length > 0) {
+        if (this.params.ioc_uuid) {
             result += '&' + $.param({ioc_uuid: this.params.ioc_uuid});
         }
-        if (this.params.suppression_id && this.params.suppression_id > 0) {
+        if (this.params.suppression_id) {
             result += '&' + $.param({suppression_id: this.params.suppression_id});
         }
 
         // Facet filters.
-        if (this.params.rowitem_uuid && this.params.rowitem_uuid.length > 0) {
-            _.each(this.params.rowitem_uuid, function(rowitem_uuid) {
-                result += '&' + $.param({rowitem_uuid: rowitem_uuid});
-            });
+        if (this.params.rowitem_uuid) {
+            result += '&' + $.param({rowitem_uuid: this.params.rowitem_uuid});
         }
         if (this.params.tagname && this.params.tagname.length > 0) {
             result += '&' + $.param({tagname: this.params.tagname});

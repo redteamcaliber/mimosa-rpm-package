@@ -8,6 +8,8 @@ UAC ToDo
 
 ## Tasks
 
+### Unselect values from ioc details tables after an expression is selected.
+
 ### Use values instead of id's in the select view.
 
 ### Remove SSLv2 from the nginx configuration.
