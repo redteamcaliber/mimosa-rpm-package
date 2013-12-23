@@ -1,15 +1,15 @@
 <!-- StrikeFinder View Templates -->
 
 <script type="text/template" id="ioc-details-template">
-    <div class="uac-header">
-        <i class="fa fa-list"></i> <span class="uac-header"><%= legend %></span>
-    </div>
+    <h4>
+        <a class="iocnamehash" data-iocnamehash="<%= iocnamehash %>"><i class="fa fa-list"></i> <%= iocname %></a>
+    </h4>
 
     <hr style="margin-top: 5px"/>
 
     <% _.each( items, function( item, index ) { %>
 
-    <h4><%= item.iocuuid %></h4>
+    <h4><a class="ioc_uuid" data-iocu_uid="<%= item.iocuuid %>"><%= item.iocuuid %></a></h4>
 
     <table id="uuid-<%= index %>-table"
            class="table table-striped table-bordered table-hover table-condensed"

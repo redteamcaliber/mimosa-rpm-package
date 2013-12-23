@@ -286,10 +286,10 @@ StrikeFinder.HitsFacetsModel = Backbone.Model.extend({
 
         // Base filters.
         if (this.params.services && this.params.services.length > 0) {
-            result += '&' + $.param({services: this.params.services});
+            result += '&services=' + this.params.services.join(',');
         }
         if (this.params.clusters && this.params.clusters.length > 0) {
-            result += '&' + $.param({clusters: this.params.clusters});
+            result += '&clusters=' + this.params.clusters.join(',');
         }
         if (this.params.exp_key && this.params.exp_key.length > 0) {
             result += '&' + $.param({exp_key: this.params.exp_key});

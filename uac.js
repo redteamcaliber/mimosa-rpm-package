@@ -64,7 +64,7 @@ app.use(function (req, res, next) {
         log.error(_.sprintf('404::User: %s requested non-existent page: %s.', uid, req.originalUrl));
 
         if (route_utils.is_html_request(req)) {
-            res.render('/uac/404.html');
+            route_utils.send404(req, res, next);
         }
         else {
             // Send a 404 response to AJAX clients.
@@ -82,14 +82,24 @@ app.use(function (req, res, next) {
 app.use(function errorHandler(err, req, res, next) {
     var message = 'Global error handler caught exception while rendering %s url: %s (status: %s, uid: %s) \n%s';
     var uid = req.attributes && req.attributes.uid ? req.attributes.uid : 'Unknown';
-    var stack = err.stack ? err.stack : err;
+    //var stack = err.stack ? err.stack : err;
+    var stack;
+    if (err && err.stack) {
+        stack = err.stack;
+    }
+    else if (err) {
+        stack = err;
+    }
+    else {
+        stack = req.body;
+    }
 
     // Log the error message and stack trace.
     log.error(_.sprintf(message, req.method, req.originalUrl, res.statusCode, uid, stack));
 
     if (route_utils.is_html_request(req)) {
         // Display the formatted 500 page.
-        res.render('/uac/500.html');
+        route_utils.send500(req, res, next, stack);
     }
     else {
         // Send a 500 response to AJAX clients.

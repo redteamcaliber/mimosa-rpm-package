@@ -1938,15 +1938,18 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
         log.debug(_.sprintf('Rendering hits view with params: %s', JSON.stringify(view.params)));
 
         // Check whether enough parameters have been passed to render the hits view.
-        var is_exp_key_defined = view.params.services && view.params.services.length > 0 && view.params.clusters &&
-            view.params.clusters.length > 0 && view.params.exp_key;
+        var is_base_defined = view.params.services && view.params.services.length > 0 && view.params.clusters &&
+            view.params.clusters.length > 0;
+        var is_exp_key_defined =  is_base_defined && view.params.exp_key;
+        var is_ioc_uuid_defined = is_base_defined && view.params.ioc_uuid;
+        var is_iocnamehash_defined = is_base_defined && view.params.iocnamehash;
 
         if (view.params.rowitem_uuid) {
             // Specific row items have been specified.
             log.debug('Displaying row items: ' + JSON.stringify(view.params));
             view.fetch_callback();
         }
-        else if (!is_exp_key_defined) {
+        else if (!is_exp_key_defined && !is_ioc_uuid_defined && is_iocnamehash_defined) {
             // Not enough data to render the hits view, navigate to the shopping view.
             // TODO: Disable the hits link for this case instead.
             alert('You must select shopping criteria before viewing hits.');
@@ -2003,7 +2006,15 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
         else {
             params.services = view.params.services;
             params.clusters = view.params.clusters;
-            params.exp_key = [view.params.exp_key];
+            if (params.exp_key) {
+                params.exp_key = [view.params.exp_key];
+            }
+            else if (params.iocnamehash) {
+                params.iocnamehash = view.params.iocnamehash;
+            }
+            else if (params.ioc_uuid) {
+                params.ioc_uuid = view.params.ioc_uuid;
+            }
             view.facets_view.fetch(params);
         }
     }
@@ -2170,7 +2181,13 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
         var view = this;
         view.model.params = view.criteria.attributes;
         StrikeFinder.block_element(view.$el);
-        view.model.fetch();
+        view.model.fetch({
+            error: function (model, response, options) {
+                if (response.statusCode == 404) {
+                    StrikeFinder.display_error('Not hits found for criteria: ' + JSON.stringify(view.criteria.attributes));
+                }
+            }
+        });
 
         view.trigger('refresh', view.criteria.attributes);
     },

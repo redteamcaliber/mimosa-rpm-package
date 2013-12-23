@@ -67,36 +67,42 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
     },
     render: function () {
         var view = this;
-        var data = $.extend({}, view.options);
-        var items = view.collection.toJSON();
-        data.items = items;
+
+        // Clean up any previous view data.
+        view.close();
+
+        //var data = $.extend({}, view.options);
+        //var items = view.collection.toJSON();
+        //data.items = items;
 
         log.debug('Rendering IOC details...');
 
-        if (view.table_views) {
-            _.each(view.table_views, function (table_view) {
-                table_view.close();
-            });
+        var ioc_uuids = view.collection.toJSON();
+        var iocname = 'NA';
+        var iocnamehash = 'NA';
+        if (view.collection.length > 0 && view.collection.at(0).get('expressions').length > 0) {
+            var expresssions = view.collection.at(0).get('expressions');
+            var iocname = expresssions[0].iocname;
+            var iocnamehash = expresssions[0].iocnamehash;
         }
-        view.table_views = [];
 
-        var on_ioc_click = function (ev) {
-            view.trigger('click:iocnamehash', view.params.iocnamehash);
-        };
-
-        // Remove any listeners bound to the IOC name.
-        view.$('#ioc-details-item').off('click', on_ioc_click);
         // Render the template.
-        var template = _.template($("#ioc-details-template").html(), data);
-        view.$el.html(template);
-        // Add a click listener to the IOC name.
-        view.$('#ioc-details-item').on('click', on_ioc_click);
+        view.$el.html(_.template($("#ioc-details-template").html(), {
+            items: ioc_uuids,
+            iocname: iocname,
+            iocnamehash: iocnamehash
+        }));
 
-        // Register click items with the ioc uid table.
-        _.each(items, function (item, index) {
+        // Register events.
+        view.delegateEvents({
+            'click .iocnamehash': 'on_ioc_click',
+            'click .ioc_uuid': 'on_uuid_click'
+        });
+
+        _.each(ioc_uuids, function (ioc_uuid, index) {
             var table = new StrikeFinder.TableView({
                 el: view.$("#uuid-" + index + "-table"),
-                aaData: item.expressions,
+                aaData: ioc_uuid.expressions,
                 aoColumns: [
                     {sTitle: "exp_key", mData: "exp_key", bVisible: false},
                     {sTitle: "Expression", mData: "exp_string", sWidth: '50%', sClass: 'wrap'},
@@ -132,6 +138,12 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
         });
         return view;
     },
+    on_ioc_click: function (ev) {
+        this.trigger('click:iocnamehash', $(ev.currentTarget).attr('data-iocnamehash'));
+    },
+    on_uuid_click: function(ev) {
+        this.trigger('click:ioc_uuid', $(ev.currentTarget).attr('data-ioc_uuid'));
+    },
     fetch: function (params) {
         var view = this;
         view.params = params;
@@ -145,6 +157,16 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
                 StrikeFinder.unblock(view.$el);
             }
         });
+    },
+    close: function() {
+        var view = this;
+        if (view.table_views) {
+            _.each(view.table_views, function (table_view) {
+                table_view.close();
+            });
+        }
+        view.table_views = [];
+        view.undelegateEvents();
     }
 });
 
@@ -304,7 +326,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
         var view = this;
         if (view.model.is_required_params_set()) {
             view.ioc_details_view.show();
-            view.ioc_details_view.options['legend'] = view.model.get('iocname');
+            //view.ioc_details_view.options['legend'] = view.model.get('iocname');
             var params = {
                 services: view.model.get('services').join(','),
                 clusters: view.model.get('clusters').join(','),
