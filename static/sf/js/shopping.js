@@ -128,7 +128,7 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
     on_ioc_click: function (ev) {
         this.trigger('click:iocnamehash', $(ev.currentTarget).attr('data-iocnamehash'));
     },
-    on_uuid_click: function(ev) {
+    on_uuid_click: function (ev) {
         this.trigger('click:ioc_uuid', $(ev.currentTarget).attr('data-ioc_uuid'));
     },
     fetch: function (params) {
@@ -145,7 +145,7 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
             }
         });
     },
-    close: function() {
+    close: function () {
         var view = this;
         if (view.table_views) {
             _.each(view.table_views, function (table_view) {
@@ -239,7 +239,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
                 // Create a user token.
                 var checkout_criteria = new StrikeFinder.UserCriteriaModel(params);
 
-                view.checkout(checkout_criteria, function(err, usertoken) {
+                view.checkout(checkout_criteria, function (err, usertoken) {
                     if (err) {
                         StrikeFinder.display_error(err);
                     }
@@ -264,7 +264,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             };
 
             if (view.get_checkout()) {
-                view.checkout(params, function(err, usertoken) {
+                view.checkout(params, function (err, usertoken) {
                     if (err) {
                         StrikeFinder.display_error(err);
                     }
@@ -289,7 +289,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             };
 
             if (view.get_checkout()) {
-                view.checkout(params, function(err, usertoken) {
+                view.checkout(params, function (err, usertoken) {
                     if (err) {
                         StrikeFinder.display_error(err);
                     }
@@ -311,7 +311,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
      * @param params - the params.
      * @param callback - function(err, usertoken).
      */
-    checkout: function(params, callback) {
+    checkout: function (params, callback) {
         // Create a user token.
         log.info('Checking out usertoken for params: ' + JSON.stringify(params));
 
@@ -335,13 +335,13 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
     set_title: function (title) {
         this.shopping_collapsable.set('title', '<i class="fa fa-search"></i> IOC Selection' + title);
     },
-    get_services: function() {
+    get_services: function () {
         return this.services_view.get_selected();
     },
-    get_clusters: function() {
+    get_clusters: function () {
         return this.clusters_view.get_selected();
     },
-    get_checkout: function() {
+    get_checkout: function () {
         return $("#checkout").is(":checked");
     },
     render_summaries: function () {
@@ -352,12 +352,13 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
 
         var services = view.get_services();
         var clusters = view.get_clusters();
+
         if (services && services.length > 0 && clusters && clusters.length > 0) {
             $('#ioc-summary-div').fadeIn().show();
-            view.ioc_summaries_view.fetch({
+            view.ioc_summaries_view.fetch({data: {
                 services: services.join(','),
                 clusters: clusters.join(',')
-            });
+            }});
         }
         else {
             $("#ioc-summary-div").fadeOut().hide();
