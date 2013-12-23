@@ -1934,7 +1934,7 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
         log.debug(_.sprintf('Rendering hits view with params: %s', JSON.stringify(view.params)));
 
         if (params.exp_key) {
-            view.hits_details_view.default_exp_key = view.params.exp_key;
+            view.hits_details_view.default_exp_key = params.exp_key;
         }
 
         params.identity_rollup = true;
