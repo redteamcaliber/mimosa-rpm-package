@@ -115,7 +115,6 @@ StrikeFinder.IOCDetailsCollection = Backbone.Collection.extend({
  */
 StrikeFinder.UserCriteriaModel = Backbone.Model.extend({
     defaults: {
-        checkout: true,
         services: [],
         clusters: []
     },
@@ -129,19 +128,6 @@ StrikeFinder.UserCriteriaModel = Backbone.Model.extend({
             response['clusters'] = [response['clusters']];
         }
         return response;
-    },
-    initialize: function () {
-        this.listenTo(this, "change", this.on_change);
-    },
-    on_change: function (ev) {
-        if (log.isDebugEnabled()) {
-            log.debug("change::" + JSON.stringify(ev.changedAttributes()));
-        }
-    },
-    is_required_params_set: function () {
-        var selected_services = this.get("services");
-        var selected_clusters = this.get("clusters");
-        return selected_services && selected_services.length > 0 && selected_clusters && selected_clusters.length > 0;
     }
 });
 

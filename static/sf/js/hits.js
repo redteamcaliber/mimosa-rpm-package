@@ -1931,14 +1931,34 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
     fetch: function (params) {
         var view = this;
 
-        log.debug(_.sprintf('Rendering hits view with params: %s', JSON.stringify(view.params)));
+        log.debug(_.sprintf('Rendering hits view with params: %s', JSON.stringify(params)));
 
-        if (params.exp_key) {
-            view.hits_details_view.default_exp_key = params.exp_key;
-        }
+//        var is_rowitem_uuid_defined = params.rowitem_uuid ? true : false;
+//        var is_services_clusters_defined = params.clusters != undefined;
+//        var is_exp_key_defined = is_services_clusters_defined && params.exp_key ? true : false;
+//        var is_iocnamehash_defined = is_services_clusters_defined && params.iocnamehash ? true : false;
+//        var is_ioc_uuid_defined = is_services_clusters_defined && params.ioc_uuid ? true : false;
+//        var is_usertoken_defined = params.usertoken ? true : false;
 
-        params.identity_rollup = true;
-        view.facets_view.fetch(params);
+//        if (!is_usertoken_defined && !is_exp_key_defined && !is_ioc_uuid_defined && !is_iocnamehash_defined &&
+//            !is_rowitem_uuid_defined) {
+//            // Not enough data to display the hits page.  In the future we should remove the link to this view if the
+//            // user has not checked out any hits yet.
+//            view.redirect_to_hits();
+//        }
+//        else {
+            if (params.exp_key) {
+                view.hits_details_view.default_exp_key = params.exp_key;
+            }
+
+            params.identity_rollup = true;
+            view.facets_view.fetch(params);
+        //}
+    },
+    redirect_to_hits: function() {
+        // Not enough data to render the hits view, navigate to the shopping view.
+        alert('You must select shopping criteria before viewing hits.');
+        window.location = '/sf/';
     }
 });
 
