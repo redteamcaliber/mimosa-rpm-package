@@ -117,11 +117,7 @@ StrikeFinder.UserCriteriaModel = Backbone.Model.extend({
     defaults: {
         checkout: true,
         services: [],
-        clusters: [],
-        iocname: '',
-        iocnamehash: '',
-        exp_key: [],
-        usertoken: ''
+        clusters: []
     },
     urlRoot: '/sf/api/usersettings',
     parse: function (response, options) {
@@ -296,6 +292,9 @@ StrikeFinder.HitsFacetsModel = Backbone.Model.extend({
         }
         if (this.params.usertoken && this.params.usertoken.length > 0) {
             result += '&' + $.param({usertoken: this.params.usertoken});
+        }
+        if (this.params.iocnamehash && this.params.iocnamehash.length > 0) {
+            result += '&' + $.param({iocnamehash: this.params.iocnamehash});
         }
         if (this.params.ioc_uuid && this.params.ioc_uuid.length > 0) {
             result += '&' + $.param({ioc_uuid: this.params.ioc_uuid});

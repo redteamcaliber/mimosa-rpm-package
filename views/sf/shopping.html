@@ -11,6 +11,8 @@
         StrikeFinder.clusters = {{ clusters | safe }};
         {% if usersettings %}
             StrikeFinder.usersettings = {{ usersettings | safe }};
+        {% else %}
+            StrikeFinder.usersettings = {};
         {% endif %}
 
         $(document).ready(function () {

@@ -1931,92 +1931,14 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
     fetch: function (params) {
         var view = this;
 
-        if (params) {
-            view.params = params;
-        }
-
         log.debug(_.sprintf('Rendering hits view with params: %s', JSON.stringify(view.params)));
 
-        // Check whether enough parameters have been passed to render the hits view.
-        var is_base_defined = view.params.services && view.params.services.length > 0 && view.params.clusters &&
-            view.params.clusters.length > 0;
-        var is_exp_key_defined =  is_base_defined && view.params.exp_key;
-        var is_ioc_uuid_defined = is_base_defined && view.params.ioc_uuid;
-        var is_iocnamehash_defined = is_base_defined && view.params.iocnamehash;
+        if (params.exp_key) {
+            view.hits_details_view.default_exp_key = view.params.exp_key;
+        }
 
-        if (view.params.rowitem_uuid) {
-            // Specific row items have been specified.
-            log.debug('Displaying row items: ' + JSON.stringify(view.params));
-            view.fetch_callback();
-        }
-        else if (!is_exp_key_defined && !is_ioc_uuid_defined && is_iocnamehash_defined) {
-            // Not enough data to render the hits view, navigate to the shopping view.
-            // TODO: Disable the hits link for this case instead.
-            alert('You must select shopping criteria before viewing hits.');
-            window.location = '/sf/';
-        }
-        else if (view.params.checkout) {
-            // Valid params have been supplied to the view and checkout is enabled.
-
-            log.debug('Checking out hits...');
-
-            var checkout_criteria = new StrikeFinder.UserCriteriaModel({
-                services: view.params.services.join(','),
-                clusters: view.params.clusters.join(','),
-                exp_key: view.params.exp_key
-            });
-            checkout_criteria.save({}, {
-                success: function (model, response, options) {
-                    log.debug('Created user token: ' + response.usertoken);
-                    view.params.usertoken = response.usertoken;
-                    view.fetch_callback();
-                },
-                error: function (model, xhr, options) {
-                    // Error.
-                    StrikeFinder.display_error("Exception while processing checkout of hits.");
-                    console.dir(model);
-                }
-            });
-        }
-        else {
-            // Display by the parameters without checkout.
-            log.debug('Rendering without checking out...');
-            view.fetch_callback();
-        }
-    },
-    fetch_callback: function () {
-        var view = this;
-        // Update the hits details view with the current selected expression.
-
-        // This should be used to select the IOC expression by default.
-        view.hits_details_view.default_exp_key = view.params.exp_key;
-
-        // Update the hits criteria.
-        var params = {
-            identity_rollup: true
-        };
-        if (view.params.rowitem_uuid) {
-            params.rowitem_uuid = [view.params.rowitem_uuid];
-            view.facets_view.fetch(params);
-        }
-        else if (view.params.usertoken) {
-            params.usertoken = [view.params.usertoken];
-            view.facets_view.fetch(params);
-        }
-        else {
-            params.services = view.params.services;
-            params.clusters = view.params.clusters;
-            if (params.exp_key) {
-                params.exp_key = [view.params.exp_key];
-            }
-            else if (params.iocnamehash) {
-                params.iocnamehash = view.params.iocnamehash;
-            }
-            else if (params.ioc_uuid) {
-                params.ioc_uuid = view.params.ioc_uuid;
-            }
-            view.facets_view.fetch(params);
-        }
+        params.identity_rollup = true;
+        view.facets_view.fetch(params);
     }
 });
 

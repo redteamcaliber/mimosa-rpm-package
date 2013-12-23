@@ -1,18 +1,5 @@
 var StrikeFinder = StrikeFinder || {};
 
-StrikeFinder.CheckoutView = StrikeFinder.View.extend({
-    events: {
-        "switch-change": "on_change"
-    },
-    render: function () {
-        // Do nothing.
-        return this;
-    },
-    on_change: function (ev, data) {
-        this.trigger('switch-change', ev, data);
-    }
-});
-
 StrikeFinder.IOCSummaryTableView = StrikeFinder.TableView.extend({
     initialize: function (options) {
         var view = this;
@@ -186,19 +173,6 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
         // Use the default title.
         view.set_title('');
 
-        // Load the model with the users default search criteria.
-        view.model = new StrikeFinder.UserCriteriaModel(StrikeFinder.usersettings);
-        log.debug('Shopping defaults: ' + JSON.stringify(view.model.toJSON()));
-
-        // Initialize the checkout view.
-        view.checkout_view = new StrikeFinder.CheckoutView({
-            el: $("#checkout-switch")
-        });
-        view.checkout_view.on('switch-change', function (ev, data) {
-            view.model.set("checkout", data.value);
-        });
-        view.checkout_view.render();
-
         // Services options.
         view.services = new StrikeFinder.ServicesCollection();
         view.services_view = new StrikeFinder.SelectView({
@@ -206,14 +180,13 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             collection: view.services,
             id_field: "mcirt_service_name",
             value_field: "description",
-            selected: view.model.get('services'),
+            selected: StrikeFinder.usersettings.services,
             width: "100%"
         });
-        view.services_view.on("change", function (services) {
-            // Update the search criteria when values change.
-            view.model.set("services", services);
-        });
         view.services.reset(StrikeFinder.services);
+        view.services_view.on("change", function (services) {
+            view.render_summaries();
+        });
 
         // Clusters options.
         view.clusters = new StrikeFinder.ClustersCollection();
@@ -222,14 +195,13 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             collection: view.clusters,
             id_field: "cluster_uuid",
             value_field: "cluster_name",
-            selected: view.model.get('clusters'),
+            selected: StrikeFinder.usersettings.clusters,
             width: "100%"
         });
-        view.clusters_view.on('change', function (clusters) {
-            // Update the model criteria when values change.
-            view.model.set("clusters", clusters);
-        });
         view.clusters.reset(StrikeFinder.clusters);
+        view.clusters_view.on('change', function (clusters) {
+            view.render_summaries();
+        });
 
         // Initialize the IOC summary view.
         view.ioc_summaries_view = new StrikeFinder.IOCSummaryTableView({
@@ -243,10 +215,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
                 log.debug("iocname: " + iocname + " with iocnamehash: " + iocnamehash + " was selected...");
             }
 
-            view.model.set('iocname', iocname);
-            view.model.set("iocnamehash", iocnamehash);
-
-            view.render_details();
+            view.render_details(iocnamehash);
         });
         view.listenTo(view.ioc_summaries_view, 'row:created', function (row, data, index) {
             // Add the iocnamehash as a class.
@@ -260,79 +229,151 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
         view.listenTo(view.ioc_details_view, "click:exp_key", function (exp_key) {
             log.debug('User selected exp_key: ' + exp_key);
 
-            // User has selected an expression.
-            view.model.set("exp_key", exp_key);
-
             var params = {
-                services: view.model.get('services'),
-                clusters: view.model.get('clusters'),
-                exp_key: view.model.get('exp_key'),
-                checkout: view.model.get('checkout')
+                services: view.get_services().join(),
+                clusters: view.get_clusters().join(),
+                exp_key: exp_key
             };
 
-            view.render_hits(params);
+            if (view.get_checkout()) {
+                // Create a user token.
+                var checkout_criteria = new StrikeFinder.UserCriteriaModel(params);
+
+                view.checkout(checkout_criteria, function(err, usertoken) {
+                    if (err) {
+                        StrikeFinder.display_error(err);
+                    }
+                    else {
+                        view.render_hits({usertoken: usertoken});
+                    }
+                });
+            }
+            else {
+                // Check out is not enabled.
+                view.render_hits(params);
+            }
         });
         view.listenTo(view.ioc_details_view, "click:iocnamehash", function (iocnamehash) {
-            log.debug('User has selected iocnamehash: ' + iocnamehash)
             // User has selected an iocnamehash.
-            view.model.set('iocnamehash', iocnamehash);
+            log.debug('User has selected iocnamehash: ' + iocnamehash);
 
             var params = {
-                services: view.model.get('services'),
-                clusters: view.model.get('clusters'),
-                iocnamehash: view.model.get('iocnamehash'),
-                checkout: view.model.get('checkout')
+                services: view.get_services().join(','),
+                clusters: view.get_clusters().join(','),
+                iocnamehash: iocnamehash
             };
 
-            view.render_hits(params);
-        });
-
-        // Listen for search model criteria changes.
-        view.model.on("change", function (ev) {
-            var changed = ev.changed;
-            if (changed["services"] || changed["clusters"]) {
-                // If the services or clusters have changed then update the summary table.
-                view.render_summaries();
+            if (view.get_checkout()) {
+                view.checkout(params, function(err, usertoken) {
+                    if (err) {
+                        StrikeFinder.display_error(err);
+                    }
+                    else {
+                        view.render_hits({usertoken: usertoken});
+                    }
+                });
             }
-            else if (changed["namehash"]) {
-                // If the namehash has changed then update the details table.
-                view.render_details();
+            else {
+                // Check out is not enabled.
+                view.render_hits(params);
+            }
+        });
+        view.listenTo(view.ioc_details_view, "click:ioc_uuid", function (ioc_uuid) {
+            // User has selected an ioc_uuid.
+            log.debug('User has selected ioc_uuid: ' + ioc_uuid);
+
+            var params = {
+                services: view.get_services().join(','),
+                clusters: view.get_clusters().join(','),
+                ioc_uuid: ioc_uuid
+            };
+
+            if (view.get_checkout()) {
+                view.checkout(params, function(err, usertoken) {
+                    if (err) {
+                        StrikeFinder.display_error(err);
+                    }
+                    else {
+                        view.render_hits({usertoken: usertoken});
+                    }
+                });
+            }
+            else {
+                // Check out is not enabled.
+                view.render_hits(params);
             }
         });
 
         view.render_summaries();
     },
+    /**
+     * Create a usertoken for the supplied parameters.
+     * @param params - the params.
+     * @param callback - function(err, usertoken).
+     */
+    checkout: function(params, callback) {
+        // Create a user token.
+        log.info('Checking out usertoken for params: ' + JSON.stringify(params));
+
+        var checkout_criteria = new StrikeFinder.UserCriteriaModel(params);
+
+        StrikeFinder.block();
+        checkout_criteria.save({}, {
+            success: function (model, response, options) {
+                StrikeFinder.unblock();
+                log.info('Created user token: ' + response.usertoken);
+                callback(null, response.usertoken);
+            },
+            error: function (model, xhr, options) {
+                // Error.
+                StrikeFinder.unblock();
+                var error = xhr && xhr.responseText ? xhr.responseText : 'Response text not defined.';
+                callback("Exception while processing checkout of hits - " + error);
+            }
+        });
+    },
     set_title: function (title) {
         this.shopping_collapsable.set('title', '<i class="fa fa-search"></i> IOC Selection' + title);
     },
+    get_services: function() {
+        return this.services_view.get_selected();
+    },
+    get_clusters: function() {
+        return this.clusters_view.get_selected();
+    },
+    get_checkout: function() {
+        return $("#checkout").is(":checked");
+    },
     render_summaries: function () {
         var view = this;
-        view.ioc_details_view.hide();
-        if (view.model.is_required_params_set()) {
+        if (view.ioc_details_view) {
+            view.ioc_details_view.hide();
+        }
+
+        var services = view.get_services();
+        var clusters = view.get_clusters();
+        if (services && services.length > 0 && clusters && clusters.length > 0) {
             $('#ioc-summary-div').fadeIn().show();
-            var params = {
-                services: view.model.get('services').join(','),
-                clusters: view.model.get('clusters').join(',')
-            };
             view.ioc_summaries_view.fetch({
-                data: params
+                services: services.join(','),
+                clusters: clusters.join(',')
             });
         }
         else {
             $("#ioc-summary-div").fadeOut().hide();
         }
     },
-    render_details: function () {
+    render_details: function (iocnamehash) {
         var view = this;
-        if (view.model.is_required_params_set()) {
-            view.ioc_details_view.show();
-            //view.ioc_details_view.options['legend'] = view.model.get('iocname');
-            var params = {
-                services: view.model.get('services').join(','),
-                clusters: view.model.get('clusters').join(','),
-                iocnamehash: view.model.get('iocnamehash')
-            };
-            view.ioc_details_view.fetch(params);
+        var services = view.get_services();
+        var clusters = view.get_clusters();
+        if (services && services.length > 0 && clusters && clusters.length > 0) {
+            this.ioc_details_view.show();
+            this.ioc_details_view.fetch({
+                services: services.join(','),
+                clusters: clusters.join(','),
+                iocnamehash: iocnamehash
+            });
         }
     },
     render_hits: function (params) {

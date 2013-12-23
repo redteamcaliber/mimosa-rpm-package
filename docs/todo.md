@@ -8,6 +8,8 @@ UAC ToDo
 
 ## Tasks
 
+### Use values instead of id's in the select view.
+
 ### Remove SSLv2 from the nginx configuration.
 
 ### Look into changing the hits page into a SPA.
