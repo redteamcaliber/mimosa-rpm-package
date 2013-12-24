@@ -357,50 +357,38 @@
         var links = iocObject.links;
 
         for (var rel in links) {
-            if (rel == 'mcirt') {
+            if (rel == 'mcirt' || rel == 'threatgroup' || rel == 'threatcategory' || rel == 'grade' || rel == 'link') {
                 continue;
             }
-            if (rel == 'threatgroup') {
-                continue;
-            }
-            if (rel == 'threatcategory') {
-                continue;
-            }
-            if (rel == 'grade') {
-                continue;
-            }
-            if (rel == 'link') {
-                continue;
-            }
-
-            if (links[rel].length == 1) {
-                $metadata.append($('<div>')
-                    .append($('<span>').html(rel.toUpperCase() + ': ').addClass('ioc-metadata-label'))
-                    .append($('<span>').html(links[rel][0].text)).addClass('ioc-metadata-value'));
-            }
-            else {
-
-                var thisID = 'linktype_' + rel + '_' + iocObject.id;
-
-                var linkUL = $('<DIV>')
-                    .append($('<span id="' + rel.toUpperCase() + '">')
-                        .text(rel.toUpperCase() + '(s):')
-                        .css('text-decoration', 'underline')
-                        .click(function () {
-                            $('#' + thisID).toggle('slow');
-                        })
-                        .addClass('ioc-link-label')
-                    );
-                var LI = $('<DIV id="' + thisID + '" >').addClass('ioc_hidden');
-
-                for (i = 0; i < links[rel].length; i++) {
-                    LI.append(($li = $('<li>')
-                        .append(($('<span>').addClass('ioc-link')
-                            .append($('<span>').html(links[rel][i].text).addClass('ioc-link-value'))))));
+            new function (r) {
+                if (links[r].length == 1) {
+                    $metadata.append($('<div>')
+                        .append($('<span>').html(r.toUpperCase() + ': ').addClass('ioc-metadata-label'))
+                        .append($('<span>').html(links[r][0].text)).addClass('ioc-metadata-value'));
                 }
-                linkUL.append(LI);
-                $metadata.append(linkUL);
-            }
+                else {
+                    var thisID = 'linktype_' + r + '_' + iocObject.id;
+
+                    var linkUL = $('<DIV>')
+                        .append($('<span id="' + r.toUpperCase() + '">')
+                            .text(r.toUpperCase() + '(s):')
+                            .css('text-decoration', 'underline')
+                            .click(function () {
+                                $('#' + thisID).toggle('slow');
+                            })
+                            .addClass('ioc-link-label')
+                        );
+                    var LI = $('<DIV id="' + thisID + '" >').addClass('ioc_hidden');
+
+                    for (i = 0; i < links[r].length; i++) {
+                        LI.append(($li = $('<li>')
+                            .append(($('<span>').addClass('ioc-link')
+                                .append($('<span>').html(links[r][i].text).addClass('ioc-link-value'))))));
+                    }
+                    linkUL.append(LI);
+                    $metadata.append(linkUL);
+                }
+            }(rel);
         }
 
         if (links['link']) {
