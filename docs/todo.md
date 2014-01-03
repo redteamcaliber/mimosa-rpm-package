@@ -1,9 +1,36 @@
 UAC ToDo
 ========
 
+## Mandiant-uac-ws-0.7-0.x86_64
+
+## Add an option to be able to clear the local cache.
+## Modify the hits by tag query so that not reviewed is not an option.
+
+## Add the other SSO parameters back into the m-Request calls.
+
+### Hit Review
+
+#### Add Expression Key Facet
+- Add the ability to filter hits by expression key.  This feature is useful when viewing hits by IOC or IOC uuid.  See
+[#27949](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/27949)
+
+### Clean Up Usersettings
+- x-Remove the claimed counts from the shopping view.
+- No longer perform checkout when selecting an IOC expression.
+- Need a way to retain the users services and cluster settings on the client.  Can do this by saving of the parameters
+  from the IOC Summary query.
+- Need a way to retain the users last hit review query.
+- Need to apply the save clusters selections to the acquisitions view.
+- Condense the IOC Selection and Hit Review buttons into on and add a link to the shopping page to view the last hits
+  query that was run.  This would ideally be in the database rather than in a cookie.
+
+### Simplify the IOC Selection Process
+- Add a client selection that filters clusters or replaces clusters.
+- Allow users to quickly select multiple clients/clusters without having to refresh the IOC summary details.
+
+
 ## Questions
 
-###
 
 
 ## Tasks

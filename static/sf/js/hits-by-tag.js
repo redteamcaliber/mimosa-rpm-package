@@ -18,7 +18,9 @@ StrikeFinder.HitsByTagTableView = StrikeFinder.TableView.extend({
             {sTitle: "Owner", mData: "username", bSortable: false, bVisible: false}
         ];
 
-        view.options.aaSorting = [[1, 'desc']];
+        view.options.aaSorting = [
+            [1, 'desc']
+        ];
 
         view.options.aoColumnDefs = [
             view.date_formatter(1)
@@ -40,7 +42,6 @@ StrikeFinder.HitsByTagView = StrikeFinder.View.extend({
     initialize: function () {
         var view = this;
 
-        // Create a tag filter drop down.
         view.tags = new StrikeFinder.TagCollection();
         view.select_tag_view = new StrikeFinder.SelectView({
             el: "#tag-select",
@@ -49,7 +50,7 @@ StrikeFinder.HitsByTagView = StrikeFinder.View.extend({
             value_field: "name",
             width: "200px"
         });
-        view.listenTo(view.select_tag_view, 'change', function(value) {
+        view.listenTo(view.select_tag_view, 'change', function (value) {
             view.tagname = value;
             view.render();
         });
@@ -78,31 +79,45 @@ StrikeFinder.HitsByTagView = StrikeFinder.View.extend({
         });
 
         // Listen to criteria changes and reload the views.
-        view.listenTo(view.facets_view, 'refresh', function(attributes) {
+        view.listenTo(view.facets_view, 'refresh', function (attributes) {
             // Reload the hits.
             view.hits_table_view.fetch(attributes);
         });
 
-        view.listenTo(view.hits_details_view, 'create:suppression', function() {
+        view.listenTo(view.hits_details_view, 'create:suppression', function () {
             // Reload the facets after a suppression is created.
             view.facets_view.fetch();
         });
 
-        view.listenTo(view.hits_details_view, 'create:masstag', function() {
+        view.listenTo(view.hits_details_view, 'create:masstag', function () {
             // Reload the facets after a suppression is created.
             view.facets_view.fetch();
         });
 
-        // Load the searchable tags list.
-        view.tags.reset(StrikeFinder.searchable_tags);
+         StrikeFinder.get_tags(function(err, tags) {
+             if (err) {
+                 // Error.
+                 StrikeFinder.display_error('Exception while loading the hits by tag view - ' + err);
+             }
+             else {
+                 var searchable = [];
+                 _.each(tags.models, function(model) {
+                     if (model.get('name') != 'notreviewed') {
+                         searchable.push(model);
+                     }
+                 });
+
+                 view.tags.reset(searchable);
+             }
+         });
     },
-    render: function() {
+    render: function () {
         var view = this;
         log.debug('Rendering hits for tagname: ' + view.tagname);
 
         view.facets_view.fetch({tagname: view.tagname});
     },
-    set_title: function(title) {
+    set_title: function (title) {
         this.hits_collapsable.set('title', '<i class="fa fa-tag"></i> ' + title);
     }
 });

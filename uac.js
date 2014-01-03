@@ -38,6 +38,8 @@ log.add(log.transports.File, {
 // Initialize the application middleware.
 //
 var app = express();
+app.enable('trust proxy');
+log.info('trust proxy %s ', app.get('trust proxy'));
 app.use(express.compress());
 app.use(express.favicon(__dirname + '/static/img/mandiant.ico'));
 app.use('/static', express.static('static'));
@@ -47,7 +49,8 @@ app.use(express.cookieParser());
 app.use(express.cookieSession({
     key: settings.get('server:session_key'),
     secret: settings.get('server:session_secret'),
-    cookie: { path: '/', httpOnly: true, maxAge: null }
+    proxy: true,
+    cookie: { path: '/', httpOnly: true, secure: true, maxAge: null }
 }));
 app.use(express.csrf());
 app.use(sso.require_authentication(settings.get('sso')));

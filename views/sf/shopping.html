@@ -6,14 +6,8 @@
     {{ super() }}
 
     <script type="text/javascript">
-        StrikeFinder.tags = {{ tags | safe }};
         StrikeFinder.services = {{ services | safe }};
         StrikeFinder.clusters = {{ clusters | safe }};
-        {% if usersettings %}
-            StrikeFinder.usersettings = {{ usersettings | safe }};
-        {% else %}
-            StrikeFinder.usersettings = {};
-        {% endif %}
 
         $(document).ready(function () {
             (function () {
@@ -44,20 +38,6 @@
                                 multiple="true"
                                 placeholder="Select MCIRT Services">
                         </select>
-                    </div>
-                    <div class="col-md-offset-1 col-md-2">
-                        <label>
-                            <i class='fa fa-power-off'></i> Check Out On Select
-                        </label><br/>
-
-                        <div id="checkout-switch"
-                             class="switch"
-                             data-on="primary"
-                             data-on-label="ON"
-                             data-off="muted"
-                             data-off-label="OFF">
-                            <input id="checkout" type="checkbox" checked="checked"/>
-                        </div>
                     </div>
                 </div>
                 <div class="row" style="margin-top: 1%; margin-bottom: 1%">

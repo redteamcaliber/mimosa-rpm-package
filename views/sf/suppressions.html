@@ -6,7 +6,6 @@
 {{ super() }}
 
 <script type="text/javascript">
-    StrikeFinder.tags = {{ tags | safe }};
     {% if single_entity %}
         StrikeFinder.single_entity = {{ single_entity | safe }};
     {% endif %}

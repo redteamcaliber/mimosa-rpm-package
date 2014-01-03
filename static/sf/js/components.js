@@ -921,7 +921,16 @@ StrikeFinder.SelectView = StrikeFinder.View.extend({
 
         var id_field = this.options["id_field"];
         var value_field = this.options["value_field"];
-        var selected = this.options['selected'];
+        var selected;
+        if (Array.isArray(this.options['selected'])) {
+            selected = this.options['selected'];
+        }
+        else if (typeof this.options['selected'] === 'String') {
+            selected = this.options['selected'].split(',');
+        }
+        else {
+            selected = [];
+        }
 
         _.each(this.collection.models, function (model) {
             var id = model.attributes[id_field];

@@ -9,6 +9,8 @@ fi
 
 OPTIONS='-o'
 
+uglifyjs $OPTIONS static/js/async.js static/js/async.js
+
 uglifyjs $OPTIONS static/datatables/js/dataTables.bootstrap.js static/datatables/js/dataTables.bootstrap.js
 
 uglifyjs $OPTIONS static/sf/js/acquisitions.js static/sf/js/acquisitions.js

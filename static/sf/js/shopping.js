@@ -12,20 +12,10 @@ StrikeFinder.IOCSummaryTableView = StrikeFinder.TableView.extend({
             {sTitle: "IOC Name", mData: "iocname"},
             {sTitle: "Hash", mData: "iocnamehash", bVisible: false},
             {sTitle: "Supp", mData: "suppressed"},
-            {sTitle: "Claimed", mData: "checkedoutexpressions"},
             {sTitle: "Total", mData: "totalexpressions", bVisible: false},
             {sTitle: "Open", mData: "open"},
             {sTitle: "In Progress", mData: "inprogress"},
             {sTitle: "Closed", mData: "closed"}
-        ];
-        options.aoColumnDefs = [
-            {
-                mRender: function (data, type, row) {
-                    // Combine the checked out and total into the claimed column.
-                    return row["checkedoutexpressions"] + " of " + row["totalexpressions"];
-                },
-                "aTargets": [3]
-            }
         ];
 
         options.aaSorting = [
@@ -39,6 +29,20 @@ StrikeFinder.IOCSummaryTableView = StrikeFinder.TableView.extend({
         view.options.bScrollCollapse = true;
         view.options.sScrollY = '600px';
         view.options.iScrollLoadGap = 200;
+
+        view.listenTo(view, 'row:created', function(row, data) {
+            $(row).addClass(view._get_class(data.iocnamehash));
+        });
+    },
+    select: function(iocnamehash) {
+        log.info('Selecting iocnamehash: ' + iocnamehash);
+        var row = $('.' + this._get_class(iocnamehash));
+        if (row.length == 1) {
+            this.select_row(row);
+        }
+    },
+    _get_class: function(iocnamehash) {
+        return 'iocnamehash-' + iocnamehash;
     }
 });
 
@@ -94,23 +98,9 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
                     {sTitle: "exp_key", mData: "exp_key", bVisible: false},
                     {sTitle: "Expression", mData: "exp_string", sWidth: '50%', sClass: 'wrap'},
                     {sTitle: "Supp", mData: "suppressed", sWidth: '10%'},
-                    {sTitle: "Claimed", mData: "checkedoutexpressions", sWidth: '10%'},
                     {sTitle: "Open", mData: "open", sWidth: '10%'},
                     {sTitle: "In Progress", mData: "inprogress", sWidth: '10%'},
                     {sTitle: "Closed", mData: "closed", sWidth: '10%'}
-                ],
-                aoColumnDefs: [
-                    {
-                        mRender: function (data, type, row) {
-                            if (row["checkedoutexpressions"] > 0) {
-                                return "Yes";
-                            }
-                            else {
-                                return "No";
-                            }
-                        },
-                        aTargets: [3]
-                    }
                 ],
                 sDom: 't',
                 iDisplayLength: -1
@@ -165,6 +155,8 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
         // ShoppingView reference.
         var view = this;
 
+        var usersettings = UAC.usersettings();
+
         // Add a collapsable around the shopping view.
         view.shopping_collapsable = new StrikeFinder.CollapsableContentView({
             el: '#' + view.el.id
@@ -180,11 +172,14 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             collection: view.services,
             id_field: "mcirt_service_name",
             value_field: "description",
-            selected: StrikeFinder.usersettings.services,
+            selected: usersettings.services,
             width: "100%"
         });
         view.services.reset(StrikeFinder.services);
         view.services_view.on("change", function (services) {
+
+            UAC.usersettings({services: services, iocnamehash: undefined});
+
             view.render_summaries();
         });
 
@@ -195,11 +190,13 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             collection: view.clusters,
             id_field: "cluster_uuid",
             value_field: "cluster_name",
-            selected: StrikeFinder.usersettings.clusters,
+            selected: usersettings.clusters,
             width: "100%"
         });
         view.clusters.reset(StrikeFinder.clusters);
         view.clusters_view.on('change', function (clusters) {
+            UAC.usersettings({clusters: clusters, iocnamehash: undefined});
+
             view.render_summaries();
         });
 
@@ -215,12 +212,15 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
                 log.debug("iocname: " + iocname + " with iocnamehash: " + iocnamehash + " was selected...");
             }
 
+            UAC.usersettings({iocnamehash: iocnamehash});
+
             view.render_details(iocnamehash);
         });
-        view.listenTo(view.ioc_summaries_view, 'row:created', function (row, data, index) {
-            // Add the iocnamehash as a class.
-            $(row).addClass(data['iocnamehash']);
-        });
+        if (usersettings.iocnamehash) {
+            view.listenTo(view.ioc_summaries_view, 'load', function() {
+                view.ioc_summaries_view.select(UAC.usersettings().iocnamehash);
+            });
+        }
 
         // Initialize the IOC details view.
         view.ioc_details_view = new StrikeFinder.IOCDetailsView({
@@ -235,23 +235,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
                 exp_key: exp_key
             };
 
-            if (view.get_checkout()) {
-                // Create a user token.
-                var checkout_criteria = new StrikeFinder.UserCriteriaModel(params);
-
-                view.checkout(checkout_criteria, function (err, usertoken) {
-                    if (err) {
-                        StrikeFinder.display_error(err);
-                    }
-                    else {
-                        view.render_hits({usertoken: usertoken});
-                    }
-                });
-            }
-            else {
-                // Check out is not enabled.
-                view.render_hits(params);
-            }
+            view.render_hits(params);
         });
         view.listenTo(view.ioc_details_view, "click:iocnamehash", function (iocnamehash) {
             // User has selected an iocnamehash.
@@ -263,20 +247,8 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
                 iocnamehash: iocnamehash
             };
 
-            if (view.get_checkout()) {
-                view.checkout(params, function (err, usertoken) {
-                    if (err) {
-                        StrikeFinder.display_error(err);
-                    }
-                    else {
-                        view.render_hits({usertoken: usertoken});
-                    }
-                });
-            }
-            else {
-                // Check out is not enabled.
-                view.render_hits(params);
-            }
+            // Check out is not enabled.
+            view.render_hits(params);
         });
         view.listenTo(view.ioc_details_view, "click:ioc_uuid", function (ioc_uuid) {
             // User has selected an ioc_uuid.
@@ -288,23 +260,11 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
                 ioc_uuid: ioc_uuid
             };
 
-            if (view.get_checkout()) {
-                view.checkout(params, function (err, usertoken) {
-                    if (err) {
-                        StrikeFinder.display_error(err);
-                    }
-                    else {
-                        view.render_hits({usertoken: usertoken});
-                    }
-                });
-            }
-            else {
-                // Check out is not enabled.
-                view.render_hits(params);
-            }
+            view.render_hits(params);
         });
 
-        view.render_summaries();
+        // Display the initial view based on the saved user settings.
+        view.render_summaries(usersettings.iocnamehash);
     },
     /**
      * Create a usertoken for the supplied parameters.
@@ -341,10 +301,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
     get_clusters: function () {
         return this.clusters_view.get_selected();
     },
-    get_checkout: function () {
-        return $("#checkout").is(":checked");
-    },
-    render_summaries: function () {
+    render_summaries: function (iocnamehash) {
         var view = this;
         if (view.ioc_details_view) {
             view.ioc_details_view.hide();
@@ -355,10 +312,12 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
 
         if (services && services.length > 0 && clusters && clusters.length > 0) {
             $('#ioc-summary-div').fadeIn().show();
-            view.ioc_summaries_view.fetch({data: {
-                services: services.join(','),
-                clusters: clusters.join(',')
-            }});
+            view.ioc_summaries_view.fetch({
+                data: {
+                    services: services.join(','),
+                    clusters: clusters.join(',')
+                }
+            });
         }
         else {
             $("#ioc-summary-div").fadeOut().hide();

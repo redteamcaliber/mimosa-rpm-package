@@ -1155,9 +1155,6 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
  */
 StrikeFinder.TagView = StrikeFinder.View.extend({
     initialize: function (options) {
-        // Initialize the list of possible tag values.
-        this.tags = new StrikeFinder.TagCollection(StrikeFinder.tags);
-
         if (this.model) {
             // Re-draw the tags view whenever the model is reloaded.
             this.listenTo(this.model, 'sync', this.render);
@@ -1168,6 +1165,7 @@ StrikeFinder.TagView = StrikeFinder.View.extend({
     },
     render: function () {
         var view = this;
+
         var disabled = view.options.disabled === true;
         var tagname = view.model.get('tagname');
         var selected_value = undefined;
@@ -1177,35 +1175,49 @@ StrikeFinder.TagView = StrikeFinder.View.extend({
         // Remove any child elements.
         menu.empty();
 
-        view.tags.each(function (item) {
-            var item_name = item.get('name');
-            var item_title = item.get('title');
+        async.waterfall([
+            function (callback) {
+                StrikeFinder.get_tags(callback);
+            },
+            function (tags, callback) {
+                tags.each(function (item) {
+                    var item_name = item.get('name');
+                    var item_title = item.get('title');
 
-            if (tagname && tagname == item_name) {
-                // Save off the value to display.
-                selected_value = item_title;
+                    if (tagname && tagname == item_name) {
+                        // Save off the value to display.
+                        selected_value = item_title;
 
-                if (!disabled) {
-                    menu.append(_.sprintf('<li><a name="%s" title="%s">%s &#10004;</a></li>',
-                        item_name, item_name, item_title));
+                        if (!disabled) {
+                            menu.append(_.sprintf('<li><a name="%s" title="%s">%s &#10004;</a></li>',
+                                item_name, item_name, item_title));
+                        }
+                    }
+                    else if (!disabled) {
+                        menu.append(_.sprintf('<li><a name="%s" title="%s">%s</a></li>',
+                            item_name, item_name, item_title));
+                    }
+                });
+
+                if (selected_value) {
+                    view.$('.selected').html(selected_value);
                 }
+
+                if (disabled) {
+                    // Disable the tag component.
+                    view.$el.find('button').prop('disabled', true);
+                }
+
+                callback();
             }
-            else if (!disabled) {
-                menu.append(_.sprintf('<li><a name="%s" title="%s">%s</a></li>',
-                    item_name, item_name, item_title));
-            }
-        });
-
-        if (selected_value) {
-            view.$('.selected').html(selected_value);
-        }
-
-        if (disabled) {
-            // Disable the tag component.
-            view.$el.find('button').prop('disabled', true);
-        }
-
-        return view;
+        ],
+            function (err) {
+                if (err) {
+                    // Error.
+                    StrikeFinder.display_error('Exception while loading tags: ' + err);
+                }
+                return view;
+            });
     },
     on_click: function (ev) {
         StrikeFinder.block();
@@ -1241,12 +1253,12 @@ StrikeFinder.TagView = StrikeFinder.View.extend({
 });
 
 StrikeFinder.HitsLinkView = StrikeFinder.View.extend({
-    initialize: function(options) {
+    initialize: function (options) {
         if (options.table) {
             this.listenTo(options.table, 'click', this.render);
         }
     },
-    render: function(data) {
+    render: function (data) {
         var view = this;
 
         view.close();
@@ -1256,7 +1268,7 @@ StrikeFinder.HitsLinkView = StrikeFinder.View.extend({
         var html = _.template($("#link-template").html(), {link: link, label: 'Link to Hit'});
 
         view.$el.popover({
-            html : true,
+            html: true,
             trigger: 'click',
             content: html
         });
@@ -1264,7 +1276,7 @@ StrikeFinder.HitsLinkView = StrikeFinder.View.extend({
             $('.link-text').select();
         });
     },
-    close: function() {
+    close: function () {
         this.$el.popover('destroy');
         // Manually removing the popover due to -> https://github.com/twbs/bootstrap/issues/10335
         this.$el.parent().find('.popover').remove();
@@ -1366,7 +1378,7 @@ StrikeFinder.MergeAllView = StrikeFinder.View.extend({
     events: {
         'click': 'on_click'
     },
-    render: function() {
+    render: function () {
         var view = this;
 
         var current_uuid = view.model.get('uuid');
@@ -1622,7 +1634,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 el: '#merge-all',
                 model: view.audit
             });
-            view.merge_all_view.listenTo(view.merge_all_view, 'mergeall', function(uuid) {
+            view.merge_all_view.listenTo(view.merge_all_view, 'mergeall', function (uuid) {
 
             });
 
@@ -1680,7 +1692,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
             view.listenTo(view.merge_view, 'merge', function (source_uuid, dest_uuid) {
                 handle_merge(dest_uuid);
             });
-            view.listenTo(view.merge_all_view, 'mergeall', function(uuid) {
+            view.listenTo(view.merge_all_view, 'mergeall', function (uuid) {
                 handle_merge(uuid);
             });
 
@@ -1947,15 +1959,34 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
 //            view.redirect_to_hits();
 //        }
 //        else {
-            if (params.exp_key) {
-                view.hits_details_view.default_exp_key = params.exp_key;
-            }
 
-            params.identity_rollup = true;
-            view.facets_view.fetch(params);
+
+        // Update the recent list.
+        if (params.exp_key) {
+            UAC.recent({name: 'Hit Review: ' + params.exp_key, type: 'checkout', values: params});
+        }
+        else if (params.iocnamehash) {
+            UAC.recent({name: 'Hit Review: ' + params.iocnamehash, type: 'checkout', values: params});
+        }
+        else if (params.ioc_uuid) {
+            UAC.recent({name: 'Hit Review: ' + params.ioc_uuid, type: 'checkout', values: params});
+        }
+
+        if (params.exp_key) {
+            // Use this value when available to select the corresponding IOC tab.
+            view.hits_details_view.default_exp_key = params.exp_key;
+        }
+
+        // Identity rollup is the default for the hits view.
+        params.identity_rollup = true;
+
+        // Render the hits.
+        view.facets_view.fetch(params);
+
+
         //}
     },
-    redirect_to_hits: function() {
+    redirect_to_hits: function () {
         // Not enough data to render the hits view, navigate to the shopping view.
         alert('You must select shopping criteria before viewing hits.');
         window.location = '/sf/';

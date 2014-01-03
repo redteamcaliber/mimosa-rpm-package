@@ -175,6 +175,8 @@ StrikeFinder.AcquisitionsView = StrikeFinder.View.extend({
     initialize: function () {
         var view = this;
 
+        var usersettings = UAC.usersettings();
+
         view.criteria_collapsable = new StrikeFinder.CollapsableContentView({
             el: '#criteria-div',
             title: '<i class="fa fa-search"></i> Acquisitions Search Criteria'
@@ -187,7 +189,7 @@ StrikeFinder.AcquisitionsView = StrikeFinder.View.extend({
             collection: view.clusters,
             id_field: "cluster_uuid",
             value_field: "cluster_name",
-            selected: StrikeFinder.usersettings.clusters,
+            selected: usersettings.clusters,
             width: "100%",
             placeholder: 'Select Clusters'
         });

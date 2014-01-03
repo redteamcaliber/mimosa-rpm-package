@@ -4,6 +4,29 @@ var StrikeFinder = StrikeFinder || {};
 // ----------- Models/Collections ----------
 //
 
+StrikeFinder.get_tags = function(callback) {
+    var tags = UAC.session('strikefinder.tags');
+    var c;
+    if (tags) {
+        c = new StrikeFinder.TagCollection(tags);
+        c.reset(tags);
+        callback(null, c);
+    }
+    else {
+        c = new StrikeFinder.TagCollection();
+        c.fetch({
+            success: function(collection, response, options) {
+                // Cache the tags for later use.
+                UAC.session('strikefinder.tags', c.toJSON());
+                callback(null, c);
+            },
+            error: function(collection, response, options) {
+                callback(response);
+            }
+        });
+    }
+};
+
 /**
  * Base list item class.
  */
@@ -611,6 +634,7 @@ StrikeFinder.TagModel = Backbone.Model.extend({
         image: ''
     }
 });
+
 StrikeFinder.TagCollection = Backbone.Collection.extend({
     initialize: function (models, options) {
         if (options && options.searchable) {
@@ -632,7 +656,26 @@ StrikeFinder.TagCollection = Backbone.Collection.extend({
         else {
             return response;
         }
+    },
+    /**
+     * Override the default fetch to local in sessionStorage before making the remote call.
+     * @param options - the fetch options.
+     * @returns {*}
+     */
+    fetch: function(options) {
+        var tags = UAC.session('strikefinder:tags');
+        if (tags) {
+            this.reset(tags);
+        }
+        else {
+
+        }
+        //do specific pre-processing
+
+        //Call Backbone's fetch
+        return Backbone.Collection.prototype.fetch.call(this, options);
     }
+
 });
 
 StrikeFinder.SetTagModel = Backbone.Model.extend({
