@@ -568,7 +568,6 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
             data['terms'] = [];
         }
 
-        data.tags = StrikeFinder.tags;
         if (params.iocs) {
             data.iocs = params.iocs.toJSON();
         }
@@ -576,12 +575,21 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
             data.iocs = [];
         }
 
-        // Retrieve the related IOC terms.
-        var template = _.template($("#mass-tag-form-template").html(), data);
-        this.$el.html(template);
+        StrikeFinder.get_tags(function(err, tags) {
+            if (err) {
+                // Error
+                StrikeFinder.display_error('Error while loading tags - ' + err);
+            }
+            else {
+                data.tags = tags;
 
-        view.$("#mass-tag-form").modal({
-            backdrop: false
+                var template = _.template($("#mass-tag-form-template").html(), data);
+                view.$el.html(template);
+
+                view.$("#mass-tag-form").modal({
+                    backdrop: false
+                });
+            }
         });
     },
     tag: function () {
@@ -1175,49 +1183,33 @@ StrikeFinder.TagView = StrikeFinder.View.extend({
         // Remove any child elements.
         menu.empty();
 
-        async.waterfall([
-            function (callback) {
-                StrikeFinder.get_tags(callback);
-            },
-            function (tags, callback) {
-                tags.each(function (item) {
-                    var item_name = item.get('name');
-                    var item_title = item.get('title');
+        view.collection.each(function (item) {
+            var item_name = item.get('name');
+            var item_title = item.get('title');
 
-                    if (tagname && tagname == item_name) {
-                        // Save off the value to display.
-                        selected_value = item_title;
+            if (tagname && tagname == item_name) {
+                // Save off the value to display.
+                selected_value = item_title;
 
-                        if (!disabled) {
-                            menu.append(_.sprintf('<li><a name="%s" title="%s">%s &#10004;</a></li>',
-                                item_name, item_name, item_title));
-                        }
-                    }
-                    else if (!disabled) {
-                        menu.append(_.sprintf('<li><a name="%s" title="%s">%s</a></li>',
-                            item_name, item_name, item_title));
-                    }
-                });
-
-                if (selected_value) {
-                    view.$('.selected').html(selected_value);
+                if (!disabled) {
+                    menu.append(_.sprintf('<li><a name="%s" title="%s">%s &#10004;</a></li>',
+                        item_name, item_name, item_title));
                 }
-
-                if (disabled) {
-                    // Disable the tag component.
-                    view.$el.find('button').prop('disabled', true);
-                }
-
-                callback();
             }
-        ],
-            function (err) {
-                if (err) {
-                    // Error.
-                    StrikeFinder.display_error('Exception while loading tags: ' + err);
-                }
-                return view;
-            });
+            else if (!disabled) {
+                menu.append(_.sprintf('<li><a name="%s" title="%s">%s</a></li>',
+                    item_name, item_name, item_title));
+            }
+        });
+
+        if (selected_value) {
+            view.$('.selected').html(selected_value);
+        }
+
+        if (disabled) {
+            // Disable the tag component.
+            view.$el.find('button').prop('disabled', true);
+        }
     },
     on_click: function (ev) {
         StrikeFinder.block();
@@ -1604,9 +1596,11 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
 
             // Initialize the tag view from the audit data.
             var tagging_enabled = !'tag' in view.options || view.options.tag !== false;
+            view.tags = new StrikeFinder.TagCollection();
             // Display the tags view unless explicitly disabled.
             view.tags_view = new StrikeFinder.TagView({
                 el: '#tags',
+                collection: view.tags,
                 model: view.audit,
                 disabled: !tagging_enabled
             });
@@ -1619,6 +1613,15 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                     view.trigger('create:tag', rowitem_uuid, tagname);
                 });
             }
+            StrikeFinder.get_tags(function(err, tags) {
+                if (err) {
+                    // Error.
+                    StrikeFinder.display_error('Exception while loading tags: ' + err);
+                }
+                else {
+                    view.tags.reset(tags);
+                }
+            });
 
             // Initialize the identities view.
             view.identities_view = new StrikeFinder.IdentitiesView({

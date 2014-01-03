@@ -6,19 +6,17 @@ var StrikeFinder = StrikeFinder || {};
 
 StrikeFinder.get_tags = function(callback) {
     var tags = UAC.session('strikefinder.tags');
-    var c;
     if (tags) {
-        c = new StrikeFinder.TagCollection(tags);
-        c.reset(tags);
-        callback(null, c);
+        callback(null, tags);
     }
     else {
         c = new StrikeFinder.TagCollection();
         c.fetch({
             success: function(collection, response, options) {
                 // Cache the tags for later use.
-                UAC.session('strikefinder.tags', c.toJSON());
-                callback(null, c);
+                var tags = c.toJSON();
+                UAC.session('strikefinder.tags', tags);
+                callback(null, tags);
             },
             error: function(collection, response, options) {
                 callback(response);

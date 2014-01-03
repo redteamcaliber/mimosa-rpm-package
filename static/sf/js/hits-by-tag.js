@@ -101,9 +101,9 @@ StrikeFinder.HitsByTagView = StrikeFinder.View.extend({
              }
              else {
                  var searchable = [];
-                 _.each(tags.models, function(model) {
-                     if (model.get('name') != 'notreviewed') {
-                         searchable.push(model);
+                 _.each(tags, function(item) {
+                     if (item.name != 'notreviewed') {
+                         searchable.push(item);
                      }
                  });
 
