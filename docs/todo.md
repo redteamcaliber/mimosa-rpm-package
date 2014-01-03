@@ -1,11 +1,9 @@
 UAC ToDo
 ========
 
-## Mandiant-uac-ws-0.7-0.x86_64
-
+## Remove the listeners from the services and clusters lists and add a
 ## Add an option to be able to clear the local cache.
-## Modify the hits by tag query so that not reviewed is not an option.
-
+## Add the ability to be able to select clients in the selection view as well as clusters.
 ## Add the other SSO parameters back into the m-Request calls.
 
 ### Hit Review
