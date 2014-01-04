@@ -7,6 +7,7 @@
 
     <script type="text/javascript">
         StrikeFinder.services = {{ services | safe }};
+        StrikeFinder.clients = {{ clients | safe }};
         StrikeFinder.clusters = {{ clusters | safe }};
 
         $(document).ready(function () {
@@ -60,7 +61,7 @@
                 </div>
                 <div class="row" style="margin-top: 15px">
                     <div class="col-sm-1">
-                        <button id="search-button"
+                        <button id="submit-button"
                                 type="button"
                                 class="btn btn-default form-control">
                             <i class="fa fa-search"></i> Submit

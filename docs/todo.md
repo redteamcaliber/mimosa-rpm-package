@@ -1,10 +1,11 @@
 UAC ToDo
 ========
 
-## Remove the listeners from the services and clusters lists and add a
-## Add an option to be able to clear the local cache.
-## Add the ability to be able to select clients in the selection view as well as clusters.
+## Make the shopping search view into a component that can be re-used on the clusters view.
+## Integrate the shopping search component with the clusters view.
+## Add an option to be able to clear the local data cache.
 ## Add the other SSO parameters back into the m-Request calls.
+## Filter out clusters from the clusters list for any selected clients.
 
 ### Hit Review
 

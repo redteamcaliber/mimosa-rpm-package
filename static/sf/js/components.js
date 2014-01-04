@@ -922,19 +922,28 @@ StrikeFinder.SelectView = StrikeFinder.View.extend({
         var id_field = this.options["id_field"];
         var value_field = this.options["value_field"];
         var selected;
-        if (Array.isArray(this.options['selected'])) {
-            selected = this.options['selected'];
-        }
-        else if (typeof this.options['selected'] === 'String') {
-            selected = this.options['selected'].split(',');
+        if (view.is_rendered) {
+            // Retain the current selected items during re-render.
+            selected = view.get_selected();
+            // Clear any existing options.
+            view.$el.empty();
         }
         else {
-            selected = [];
+            // Rendering for the first time.
+            if (Array.isArray(this.options['selected'])) {
+                selected = this.options['selected'];
+            }
+            else if (typeof this.options['selected'] === 'String') {
+                selected = this.options['selected'].split(',');
+            }
+            else {
+                selected = [];
+            }
         }
 
         _.each(this.collection.models, function (model) {
             var id = model.attributes[id_field];
-            var option = "<option id=\"" + id + "\"";
+            var option = "<option value=\"" + id + "\"";
 
             if (_.indexOf(selected, id) != -1) {
                 option += " selected=\"true\""
@@ -951,12 +960,14 @@ StrikeFinder.SelectView = StrikeFinder.View.extend({
             width = "100%";
         }
 
-        this.$el.select2({
+        view.$el.select2({
             width: width
         });
 
         // Fire a single change event after loading is complete.
-        this.item_changed(null);
+        view.item_changed(null);
+
+        view.is_rendered = true;
 
         return this;
     },
@@ -967,7 +978,7 @@ StrikeFinder.SelectView = StrikeFinder.View.extend({
         this.$("option").each(function () {
             if ($(this).is(":selected")) {
                 if (isOptionId) {
-                    values.push($(this).attr("id"));
+                    values.push($(this).attr("value"));
                 }
                 else {
                     values.push($(this).val());

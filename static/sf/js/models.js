@@ -803,11 +803,7 @@ StrikeFinder.IdentitiesCollection = Backbone.Collection.extend({
 });
 
 StrikeFinder.ClientModel = Backbone.Model.extend({
-    defaults: {
-        uuid: '',
-        alias: '',
-        name: ''
-    }
+    idAttribute: 'client_uuid'
 });
 StrikeFinder.ClientCollection = Backbone.Collection.extend({
     url: '/sf/api/clients',
