@@ -31,49 +31,14 @@
         <div class="col-md-12">
             <div id="shopping-div">
 
-                <!-- Selection Input Form -->
-                <div class="row">
-                    <div class="col-md-6">
-                        <label>MCIRT Services</label>
-                        <select id="services-select"
-                                multiple="true"
-                                placeholder="Select MCIRT Services">
-                        </select>
-                    </div>
-                </div>
-                <div class="row" style="margin-top: 15px">
-                    <div class="col-md-6">
-                        <label>Clients</label>
-                        <select id="clients-select"
-                                multiple="true"
-                                placeholder="Select Clients">
-                        </select>
-                    </div>
-                </div>
-                <div class="row" style="margin-top: 15px">
-                    <div class="col-md-6">
-                        <label>Clusters</label>
-                        <select id="clusters-select"
-                                multiple="true"
-                                placeholder="Select Clusters">
-                        </select>
-                    </div>
-                </div>
-                <div class="row" style="margin-top: 15px">
-                    <div class="col-sm-1">
-                        <button id="submit-button"
-                                type="button"
-                                class="btn btn-default form-control">
-                            <i class="fa fa-search"></i> Submit
-                        </button>
-                    </div>
+                <div id="cluster-selection-div">
                 </div>
 
                 <!-- Selection Results -->
                 <div class="row" style="margin-top: 30px">
                     <div class="col-md-6">
                         <!-- Column 1, IOC Summary -->
-                        <div id="ioc-summary-div">
+                        <div id="ioc-summary-div" style="display: none">
                             <h4>
                                 <i class="fa fa-list"></i> IOC Summary
                             </h4>
@@ -92,7 +57,7 @@
 
                     <div class="col-md-6">
                         <!-- Column2, IOC Details -->
-                        <div id="ioc-details-div">
+                        <div id="ioc-details-div" style="display: none">
                             <div style="height: 600px"></div>
                         </div>
                     </div>

@@ -148,27 +148,24 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
 });
 
 /**
- * The main shopping view.
+ * Common component for displaying and selecting services, clients, and clusters.
  */
-StrikeFinder.ShoppingView = Backbone.View.extend({
-    events: {
-        'click #submit-button': 'on_submit'
-    },
-    initialize: function () {
-        // ShoppingView reference.
+StrikeFinder.ClusterSelectionView = StrikeFinder.View.extend({
+    /**
+     * Render the selection view.
+     */
+    render: function() {
         var view = this;
+
+        // Remove any existing event listeners.
+        view.close();
+
+        // Create the input form.
+        view.$el.html(_.template($("#cluster-selection-template").html()));
 
         var usersettings = UAC.usersettings();
 
-        // Add a collapsable around the shopping view.
-        view.shopping_collapsable = new StrikeFinder.CollapsableContentView({
-            el: '#' + view.el.id
-        });
-
-        // Use the default title.
-        view.set_title('');
-
-        // Services options.
+        // Render the services.
         view.services = new StrikeFinder.ServicesCollection();
         view.services_view = new StrikeFinder.SelectView({
             el: $("#services-select"),
@@ -184,7 +181,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             view.update_submit();
         });
 
-        // Clients options.
+        // Render the clients.
         view.clients = new StrikeFinder.ClientCollection();
         view.clients_view = new StrikeFinder.SelectView({
             el: $('#clients-select'),
@@ -202,8 +199,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             view.update_submit();
         });
 
-
-        // Clusters options.
+        // Render the clusters.
         view.clusters = new StrikeFinder.ClustersCollection();
         view.clusters_view = new StrikeFinder.SelectView({
             el: $("#clusters-select"),
@@ -217,96 +213,52 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             // Update the submit button.
             view.update_submit();
         });
-
         // Load the initial clusters options based on the clients.
         view.load_clusters();
 
-        // Initialize the IOC summary view.
-        view.ioc_summaries_view = new StrikeFinder.IOCSummaryTableView({
-            el: '#ioc-summary-table'
+        // Register event handlers.
+        view.delegateEvents({
+            'click #submit-button': 'on_submit'
         });
-        view.listenTo(view.ioc_summaries_view, 'click', function (data) {
-            var iocname = data["iocname"];
-            var iocnamehash = data["iocnamehash"];
-
-            if (log.isDebugEnabled()) {
-                log.debug("iocname: " + iocname + " with iocnamehash: " + iocnamehash + " was selected...");
-            }
-
-            UAC.usersettings({iocnamehash: iocnamehash});
-
-            view.render_details(iocnamehash);
-        });
-        if (usersettings.iocnamehash) {
-            view.listenTo(view.ioc_summaries_view, 'load', function() {
-                view.ioc_summaries_view.select(UAC.usersettings().iocnamehash);
-            });
-        }
-
-        // Initialize the IOC details view.
-        view.ioc_details_view = new StrikeFinder.IOCDetailsView({
-            el: "#ioc-details-div"
-        });
-        view.listenTo(view.ioc_details_view, "click:exp_key", function (exp_key) {
-            log.debug('User selected exp_key: ' + exp_key);
-
-            var params = {
-                services: view.get_services().join(),
-                clusters: view.get_clusters().join(),
-                exp_key: exp_key
-            };
-
-            view.render_hits(params);
-        });
-        view.listenTo(view.ioc_details_view, "click:iocnamehash", function (iocnamehash) {
-            // User has selected an iocnamehash.
-            log.debug('User has selected iocnamehash: ' + iocnamehash);
-
-            var params = {
-                services: view.get_services().join(','),
-                clusters: view.get_clusters().join(','),
-                iocnamehash: iocnamehash
-            };
-
-            // Check out is not enabled.
-            view.render_hits(params);
-        });
-        view.listenTo(view.ioc_details_view, "click:ioc_uuid", function (ioc_uuid) {
-            // User has selected an ioc_uuid.
-            log.debug('User has selected ioc_uuid: ' + ioc_uuid);
-
-            var params = {
-                services: view.get_services().join(','),
-                clusters: view.get_clusters().join(','),
-                ioc_uuid: ioc_uuid
-            };
-
-            view.render_hits(params);
-        });
-
-        // Display the initial view based on the saved user settings.
-        view.render_summaries(usersettings.iocnamehash);
     },
-    on_submit: function(ev) {
+    /**
+     * Clean up after this view.
+     */
+    close: function() {
+        this.undelegateEvents();
+    },
+    /**
+     * Load the clusters options based on the current clients selection.  Don't load any clusters that correspond to
+     * a client that is currently selected.
+     */
+    load_clusters: function() {
         var view = this;
+        var clusters = [];
 
-        // Hide the ioc details.
-        view.hide_details();
-
-        // Get the selected parameters.
-        var services = view.get_services();
-        var clients = view.get_clients();
-        var clusters = view.get_clusters();
-
-        // Update the user settings.
-        UAC.usersettings({
-            services: services,
-            clients: clients,
-            clusters: clusters,
-            iocnamehash: undefined,
-            ioc_uuid: undefined,
-            exp_key: undefined
+        // Create a map of the selected client ids.
+        var clients = view.get_selected_clients();
+        var client_map = {};
+        clients.forEach(function(client_uuid) {
+            client_map[client_uuid] = client_uuid;
         });
+
+        // Obtain the list of available clusters.
+        StrikeFinder.clusters.forEach(function(cluster) {
+            if (!(cluster.client_uuid in client_map)) {
+                clusters.push(cluster);
+            }
+        });
+
+        view.clusters.reset(clusters);
+    },
+    /**
+     * Retrieve the set of clusters based on both the clients and clusters selections.
+     */
+    get_clusters: function() {
+        var view = this;
+        var services = view.get_selected_services();
+        var clients = view.get_selected_clients();
+        var clusters = view.get_selected_clusters();
 
         // Consolidate the clusters parameters.  Use the clusters corresponding to all selected clients as well as
         // any individually selected clusters.
@@ -324,65 +276,176 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             }
         });
 
-        // Fetch the data.
-        view.ioc_summaries_view.fetch({
-            data: {
-                services: services.join(','),
-                clusters: _.keys(clusters_map).join(',')
-            }
-        });
-
-        // Display the ioc summary.
-        view.show_summaries();
+        return _.keys(clusters_map);
     },
     /**
-     * Load the clusters options based on the current clients selection.  Don't load any clusters that correspond to
-     * a client that is currently selected.
+     * Get the selected services.
      */
-    load_clusters: function() {
-        var view = this;
-        var clusters = [];
-
-        // Create a map of the selected client ids.
-        var clients = view.get_clients();
-        var client_map = {};
-        clients.forEach(function(client_uuid) {
-            client_map[client_uuid] = client_uuid;
-        });
-
-        // Obtain the list of available clusters.
-        StrikeFinder.clusters.forEach(function(cluster) {
-            if (!(cluster.client_uuid in client_map)) {
-                clusters.push(cluster);
-            }
-        });
-
-        view.clusters.reset(clusters);
-    },
-    set_title: function (title) {
-        this.shopping_collapsable.set('title', '<i class="fa fa-search"></i> IOC Selection' + title);
-    },
-    get_services: function () {
+    get_selected_services: function () {
         return this.services_view.get_selected();
     },
-    get_clients: function() {
+    /**
+     * Get the selected clients.
+     */
+    get_selected_clients: function() {
         return this.clients_view.get_selected();
     },
-    get_clusters: function () {
+    /**
+     * Get the selected clusters, not consolidated.
+     */
+    get_selected_clusters: function () {
         return this.clusters_view.get_selected();
     },
     /**
-     * Enable the submit button if the required parameters are selected.
-     */
-    update_submit: function() {
-        this.enable_submit(this.get_services().length > 0 && (this.get_clients().length > 0 || this.get_clusters().length > 0));
-    },
-    /**
-     * Enable or disable the submit button.
+     * Call this method to enable or disable the submit button.
      * @param enabled - true or false, defaults to true.
      */
     enable_submit: function(enabled) {
         this.$el.find('#submit-button').prop('disabled', enabled === false);
+    },
+    /**
+     * Update the submit button status based on the current form selections.  The button should only be enabled if a
+     * service is selected and a client or clusters is selected.
+     */
+    update_submit: function() {
+        this.enable_submit(this.get_selected_services().length > 0 && (this.get_selected_clients().length > 0 || this.get_selected_clusters().length > 0));
+    },
+    /**
+     * Handle the search submit request.
+     * @param ev - the click event.
+     */
+    on_submit: function(ev) {
+        var view = this;
+
+        // Trigger and event with the current services and merged clusters selections.
+        view.trigger('submit', {
+            services: view.get_selected_services(),
+            clients: view.get_selected_clients(),
+            clusters: view.get_selected_clusters(),
+            merged_clusters: view.get_clusters()
+        });
+    }
+});
+
+/**
+ * The main shopping view.
+ */
+StrikeFinder.ShoppingView = Backbone.View.extend({
+    initialize: function () {
+        // ShoppingView reference.
+        var view = this;
+
+        // Add a collapsable around the shopping view.
+        view.shopping_collapsable = new StrikeFinder.CollapsableContentView({
+            el: '#' + view.el.id
+        });
+
+        // Use the default title.
+        view.set_title('');
+
+        // Create the cluster selection component.
+        view.cluster_selection_view = new StrikeFinder.ClusterSelectionView({
+            el: '#cluster-selection-div'
+        });
+        view.listenTo(view.cluster_selection_view, 'submit', function(params) {
+            // Update the services, clients, and clusters user settings on submit.
+            UAC.usersettings({
+                services: params.services,
+                clients: params.clients,
+                clusters: params.clusters,
+                iocnamehash: undefined,
+                ioc_uuid: undefined,
+                exp_key: undefined
+            });
+
+            // Update the IOC summary view on submit.
+            view.render_summaries({
+                services: params.services,
+                clusters: params.merged_clusters
+            });
+        });
+        view.cluster_selection_view.render();
+
+        // Initialize the IOC summary view.
+        view.ioc_summaries_view = new StrikeFinder.IOCSummaryTableView({
+            el: '#ioc-summary-table'
+        });
+        view.listenTo(view.ioc_summaries_view, 'click', function (data) {
+            // Handle the click of a row on the IOC summary view.  Load the related IOC details.
+            var iocname = data["iocname"];
+            var iocnamehash = data["iocnamehash"];
+
+            if (log.isDebugEnabled()) {
+                log.debug("iocname: " + iocname + " with iocnamehash: " + iocnamehash + " was selected...");
+            }
+
+            UAC.usersettings({iocnamehash: iocnamehash});
+
+            view.render_details(iocnamehash);
+        });
+        // If there is an iocnamehash in the user settings then select it in the summary table.
+        if (UAC.usersettings().iocnamehash) {
+            view.listenTo(view.ioc_summaries_view, 'load', function() {
+                var iocnamehash = UAC.usersettings().iocnamehash;
+                if (iocnamehash) {
+                    view.ioc_summaries_view.select(iocnamehash);
+                }
+            });
+        }
+
+        // Initialize the IOC details view.
+        view.ioc_details_view = new StrikeFinder.IOCDetailsView({
+            el: "#ioc-details-div"
+        });
+        view.listenTo(view.ioc_details_view, "click:exp_key", function (exp_key) {
+            log.info('Selected expression key: ' + exp_key);
+
+            var params = {
+                services: view.services.join(','),
+                clusters: view.clusters.join(),
+                exp_key: exp_key
+            };
+
+            view.render_hits(params);
+        });
+        view.listenTo(view.ioc_details_view, "click:iocnamehash", function (iocnamehash) {
+            // User has selected an iocnamehash.
+            log.info('Selected iocnamehash: ' + iocnamehash);
+
+            var params = {
+                services: view.services.join(','),
+                clusters: view.clusters.join(','),
+                iocnamehash: iocnamehash
+            };
+
+            // Check out is not enabled.
+            view.render_hits(params);
+        });
+        view.listenTo(view.ioc_details_view, "click:ioc_uuid", function (ioc_uuid) {
+            // User has selected an ioc_uuid.
+            log.debug('Selected ioc_uuid: ' + ioc_uuid);
+
+            var params = {
+                services: view.services.join(','),
+                clusters: view.clusters.join(','),
+                ioc_uuid: ioc_uuid
+            };
+
+            view.render_hits(params);
+        });
+
+        // Attempt to display the summary data based on the current user settings.
+        view.render_summaries({
+            services: view.cluster_selection_view.get_selected_services(),
+            clusters: view.cluster_selection_view.get_clusters()
+        });
+    },
+    /**
+     * Set the IOC selection roll up title.
+     * @param title - the title.
+     */
+    set_title: function (title) {
+        this.shopping_collapsable.set('title', '<i class="fa fa-search"></i> IOC Selection' + title);
     },
     /**
      * Hide the IOC summary view.
@@ -390,6 +453,9 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
     hide_summaries: function() {
         $('#ioc-summary-div').fadeOut().hide();
     },
+    /**
+     * Show the IOC summary view.
+     */
     show_summaries: function() {
         $('#ioc-summary-div').fadeIn().show();
     },
@@ -401,41 +467,49 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             this.ioc_details_view.hide();
         }
     },
-    render_summaries: function (iocnamehash) {
+    /**
+     * Retrieve and display the IOC summary data.
+     */
+    render_summaries: function (params) {
         var view = this;
-        if (view.ioc_details_view) {
-            view.ioc_details_view.hide();
-        }
 
-        var services = view.get_services();
-        var clusters = view.get_clusters();
+        view.services = params.services;
+        view.clusters = params.clusters;
 
-        if (services && services.length > 0 && clusters && clusters.length > 0) {
-            $('#ioc-summary-div').fadeIn().show();
+        if (view.services.length > 0 && view.clusters.length > 0) {
+            // Hide the IOC details.
+            view.hide_details();
+
+
+            // Fetch the summary data.
             view.ioc_summaries_view.fetch({
                 data: {
-                    services: services.join(','),
-                    clusters: clusters.join(',')
+                    services: view.services.join(','),
+                    clusters: view.clusters.join(',')
                 }
             });
-        }
-        else {
-            $("#ioc-summary-div").fadeOut().hide();
+
+            // Display the ioc summary.
+            view.show_summaries();
         }
     },
+    /**
+     * Retrieve and display the IOC details data.
+     * @param iocnamehash - the selected IOC name hash value.
+     */
     render_details: function (iocnamehash) {
         var view = this;
-        var services = view.get_services();
-        var clusters = view.get_clusters();
-        if (services && services.length > 0 && clusters && clusters.length > 0) {
-            this.ioc_details_view.show();
-            this.ioc_details_view.fetch({
-                services: services.join(','),
-                clusters: clusters.join(','),
-                iocnamehash: iocnamehash
-            });
-        }
+        view.ioc_details_view.fetch({
+            services: view.services.join(','),
+            clusters: view.clusters.join(','),
+            iocnamehash: iocnamehash
+        });
+        view.ioc_details_view.show();
     },
+    /**
+     * Navigate to the hits view with the specified parameters.
+     * @param params - the parameters (services, clusters, exp_key, iocnamehash, ioc_uuid).
+     */
     render_hits: function (params) {
         var view = this;
 

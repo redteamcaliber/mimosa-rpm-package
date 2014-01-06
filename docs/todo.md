@@ -2,10 +2,12 @@ UAC ToDo
 ========
 
 ## Make the shopping search view into a component that can be re-used on the clusters view.
+## Add a clear button on the cluster selection view.
 ## Integrate the shopping search component with the clusters view.
 ## Add an option to be able to clear the local data cache.
 ## Add the other SSO parameters back into the m-Request calls.
 ## Filter out clusters from the clusters list for any selected clients.
+## Provide a customer message for select2 components when no items are available for selection.
 
 ### Hit Review
 
