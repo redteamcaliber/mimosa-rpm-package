@@ -161,25 +161,27 @@ StrikeFinder.ClusterSelectionView = StrikeFinder.View.extend({
         view.close();
 
         // Create the input form.
-        view.$el.html(_.template($("#cluster-selection-template").html()));
+        view.$el.html(_.template($("#cluster-selection-template").html(), {hide_services: view.options.hide_services}));
 
         var usersettings = UAC.usersettings();
 
-        // Render the services.
-        view.services = new StrikeFinder.ServicesCollection();
-        view.services_view = new StrikeFinder.SelectView({
-            el: $("#services-select"),
-            collection: view.services,
-            id_field: "mcirt_service_name",
-            value_field: "description",
-            selected: usersettings.services,
-            width: "100%"
-        });
-        view.services.reset(StrikeFinder.services);
-        view.services_view.on('change', function() {
-            // Update the submit button.
-            view.update_submit();
-        });
+        if (view.options.hide_services !== true) {
+            // Render the services.
+            view.services = new StrikeFinder.ServicesCollection();
+            view.services_view = new StrikeFinder.SelectView({
+                el: $("#services-select"),
+                collection: view.services,
+                id_field: "mcirt_service_name",
+                value_field: "description",
+                selected: usersettings.services,
+                width: "100%"
+            });
+            view.services.reset(StrikeFinder.services);
+            view.services_view.on('change', function() {
+                // Update the submit button.
+                view.update_options();
+            });
+        }
 
         // Render the clients.
         view.clients = new StrikeFinder.ClientCollection();
@@ -196,7 +198,7 @@ StrikeFinder.ClusterSelectionView = StrikeFinder.View.extend({
             // Reload the clusters based on the selected clients.
             view.load_clusters();
             // Update the submit button.
-            view.update_submit();
+            view.update_options();
         });
 
         // Render the clusters.
@@ -211,14 +213,15 @@ StrikeFinder.ClusterSelectionView = StrikeFinder.View.extend({
         });
         view.clusters_view.on('change', function() {
             // Update the submit button.
-            view.update_submit();
+            view.update_options();
         });
         // Load the initial clusters options based on the clients.
         view.load_clusters();
 
         // Register event handlers.
         view.delegateEvents({
-            'click #submit-button': 'on_submit'
+            'click #submit-button': 'on_submit',
+            'click #clear-button': 'on_clear'
         });
     },
     /**
@@ -282,7 +285,7 @@ StrikeFinder.ClusterSelectionView = StrikeFinder.View.extend({
      * Get the selected services.
      */
     get_selected_services: function () {
-        return this.services_view.get_selected();
+        return this.options.hide_services === true ? [] : this.services_view.get_selected();
     },
     /**
      * Get the selected clients.
@@ -304,17 +307,31 @@ StrikeFinder.ClusterSelectionView = StrikeFinder.View.extend({
         this.$el.find('#submit-button').prop('disabled', enabled === false);
     },
     /**
+     * Call this method to enable or disable the clear button.
+     * @param enabled - true or false, defaults to false.
+     */
+    enable_clear: function(enabled) {
+        this.$el.find('#clear-button').prop('disabled', enabled === false);
+    },
+    /**
      * Update the submit button status based on the current form selections.  The button should only be enabled if a
      * service is selected and a client or clusters is selected.
      */
-    update_submit: function() {
-        this.enable_submit(this.get_selected_services().length > 0 && (this.get_selected_clients().length > 0 || this.get_selected_clusters().length > 0));
+    update_options: function() {
+        var submit_enabled;
+        if (this.options.hide_services) {
+            submit_enabled = this.get_selected_clients().length > 0 || this.get_selected_clusters().length > 0;
+        }
+        else {
+            submit_enabled = this.get_selected_services().length > 0 && (this.get_selected_clients().length > 0 || this.get_selected_clusters().length > 0);
+        }
+        this.enable_submit(submit_enabled);
+        this.enable_clear(submit_enabled);
     },
     /**
      * Handle the search submit request.
-     * @param ev - the click event.
      */
-    on_submit: function(ev) {
+    on_submit: function() {
         var view = this;
 
         // Trigger and event with the current services and merged clusters selections.
@@ -324,6 +341,17 @@ StrikeFinder.ClusterSelectionView = StrikeFinder.View.extend({
             clusters: view.get_selected_clusters(),
             merged_clusters: view.get_clusters()
         });
+    },
+    /**
+     * Handle the clear button click.
+     */
+    on_clear: function() {
+        if (this.options.hide_services !== true) {
+            this.services_view.clear();
+        }
+        this.clients_view.clear();
+        this.clusters_view.clear();
+        this.trigger('clear');
     }
 });
 
@@ -363,6 +391,10 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
                 services: params.services,
                 clusters: params.merged_clusters
             });
+        });
+        view.listenTo(view.cluster_selection_view, 'clear', function() {
+            view.hide_summaries();
+            view.hide_details();
         });
         view.cluster_selection_view.render();
 

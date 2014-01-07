@@ -1034,7 +1034,7 @@ StrikeFinder.CommentsTableView = StrikeFinder.TableView.extend({
         view.options.iDisplayLength = -1;
         view.options.aoColumns = [
             {sTitle: "Created", mData: "created", sWidth: "20%", bSortable: true},
-            {sTitle: "Comment", mData: "comment", sWidth: "60%", bSortable: true},
+            {sTitle: "Comment", mData: "comment", sWidth: "60%", bSortable: true, sClass: 'wrap'},
             {sTitle: "User", mData: "user_uuid", sWidth: "20%", bSortable: true}
         ];
         view.options.aaSorting = [

@@ -919,6 +919,8 @@ StrikeFinder.SelectView = StrikeFinder.View.extend({
     render: function () {
         var view = this;
 
+        view.close();
+
         var id_field = this.options["id_field"];
         var value_field = this.options["value_field"];
         var selected;
@@ -971,6 +973,9 @@ StrikeFinder.SelectView = StrikeFinder.View.extend({
 
         return this;
     },
+    close: function() {
+        this.$el.select2("destroy");
+    },
     get_selected: function () {
         // Loop through all the items and fire a change event.
         var isOptionId = (this.options["isOptionId"] == null);
@@ -989,6 +994,15 @@ StrikeFinder.SelectView = StrikeFinder.View.extend({
     },
     item_changed: function (ev) {
         this.trigger("change", this.get_selected());
+    },
+    /**
+     * Clear any options or selections.
+     */
+    clear: function() {
+        // Clear the select options.
+        this.$el.empty();
+        // Re-render the select.
+        this.render();
     }
 });
 
