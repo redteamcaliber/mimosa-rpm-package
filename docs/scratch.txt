@@ -1,3 +1,10 @@
+
+
+9185678405
+8957153628
+
+Resource interpreted as Document but transferred with MIME type application/zip: "https://proxy.mcirt.mandiant.com/SEASICK/media/acquisitions/f8c70ce998fff73c1460e93f2a202a00f3677c2b06af3667b8a4e705e27853e3/acq_2.zip".
+
 {"uuid":"587f1e12-77d7-11e3-aef2-5254000f6065","file_name":"7433816","state":"submitted","agent":"1b8dbf9ddf36d114d437e1a660e2f68355358ac3d4ea284827d7c10cbe60fa64","method":"raw","cluster":"9402af9a-f99b-45c3-8f86-651aa1d87f75","controller":"93b4052a-6430-4796-927d-071c8a159c02","task_url":"/celery/6e232fbb-6229-479c-a81e-cd5b92cae148/status","ref":"/api/v1/acquisition/587f1e12-77d7-11e3-aef2-5254000f6065/","file_path":"%systemroot%\\system32"}
 
 

@@ -49,7 +49,10 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
             {
                 mRender: function (data, type, row) {
                     if (row.link) {
-                        return _.sprintf('<a href="%s">%s</a>', row.link, data);
+                        var hostname = row.agent.hostname || 'NA';
+                        var filename = data.split('.').pop();
+                        var link = hostname + '-' + filename;
+                        return _.sprintf('<a href="%s" onclick="event.stopPropagation()" download="%s">%s</a>', row.link, link, data);
                     }
                     else {
                         return data

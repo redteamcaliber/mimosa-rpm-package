@@ -4,6 +4,13 @@ var moment = require('moment');
 
 var api = require('sf-api');
 
+var log = require('winston');
+log.remove(log.transports.Console);
+log.add(log.transports.Console, {
+    level: 'debug',
+    colorize: true
+});
+
 
 var ACQUISITION_UUID = 'c57b89b8-0de6-4df5-9a99-0afa1fbf09b4';
 
@@ -57,6 +64,22 @@ describe('sf-api-tests', function() {
             catch (e) {
                 done(e);
             }
+        });
+    });
+
+    describe('#add_host_metadata', function() {
+        it('should add host meta data', function() {
+            var hosts = [
+                {
+                    time_logged: '2014-01-08T07:54:38.405931'
+                }
+            ];
+
+            api.add_host_metadata(hosts);
+
+            hosts.forEach(function(host) {
+                console.dir(host);
+            });
         });
     });
 
