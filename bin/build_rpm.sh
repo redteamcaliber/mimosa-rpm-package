@@ -6,7 +6,7 @@ VERSION="0.7"
 RELEASE="1"
 
 # The git branch to build.
-BRANCH=Mandiant-uac-ws-0.7-1.x86_64
+BRANCH=Mandiant-uac-ws-0.7-0.x86_64
 
 # The repo to build.
 REPO=git@github.mandiant.com:amilano/uac-node.git
