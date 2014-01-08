@@ -4,24 +4,18 @@ var StrikeFinder = StrikeFinder || {};
 // StrikeFinder Utility Methods.
 //
 
-
-//
-// Task Utilities.
-//
-
 /**
- * Wait for a task result to complete polling fn(callback) until done is true.  A callback is passed into fn() to
- * specify that the process is completed invoke callback(true) or callback(false) otherwise.
- * @param task_id - the task to wait for.
- * @param callback - function(err, complete).
- * @param options - delay - optional delay in milliseconds.  Defaults to 2000.
- *                  max_intervals - the maximum number of intervals.  Defaults to 5.
+ * Wait for a task to complete using a poll function to check whether we have reached an exit condition.
+ * @param params - the parameters to send to the poll function.
+ * @param poll_fn - function(params, callback(err, is_complete, result)).
+ * @param completed_fn - function(err, is_complete, result)
+ * @param options - delay=milliseconds in between poll attempts (default=2000), max_intervals=max number of poll attempts (default=5).
  */
-StrikeFinder.wait_for_task = function(task_id, callback, options) {
-    var result = false;
+StrikeFinder.wait_for = function(params, poll_fn, completed_fn, options) {
     var delay = 2000;
     var max_intervals = 5;
 
+    // Override defaults.
     if (options) {
         if (options.delay) {
             delay = options.delay;
@@ -31,41 +25,40 @@ StrikeFinder.wait_for_task = function(task_id, callback, options) {
         }
     }
 
+    // Set up the polling loop.
     var interval_count = 0;
-    var interval = setInterval(function() {
+    var timer_id = setInterval(function() {
         try {
+            // Check for an exit condition.
             if (interval_count >= max_intervals) {
                 // Exceed maximum number of tries.
-                clearInterval(interval);
-                callback(null, false);
+                clearInterval(timer_id);
+                completed_fn(null, false);
             }
             else {
-                var task = new StrikeFinder.Task({id: task_id});
-                task.fetch({
-                    success: function (model, response) {
-                        if (response.state == 'SUCCESS') {
-                            // The task was successful.
-                            clearInterval(interval);
-                            callback(null, true, response);
-                        }
-                        else {
-                            // Increment the interval count.
-                            interval_count = interval_count + 1;
-                        }
-                    },
-                    error: function(model, response) {
-                        // Error while looking up task result.
-                        clearInterval(interval);
-                        callback('Error while checking on task result: ' + task_id);
+                // Invoke the poll function.
+                poll_fn(params, function(err, is_complete, result) {
+                    if (err) {
+                        // Error, exit.
+                        clearInterval(timer_id);
+                        completed_fn(err, false);
+                    }
+                    else if (is_complete) {
+                        // Complete, exit.
+                        clearInterval(timer_id);
+                        completed_fn(null, true, result);
+                    }
+                    else {
+                        // Increment the interval count.
+                        interval_count = interval_count + 1;
                     }
                 });
             }
         }
         catch (e) {
             // Error
-            StrikeFinder.display_error(message);
-            clearInterval(interval);
-            callback(e);
+            clearInterval(timer_id);
+            completed_fn(e.stack ? e.stack : e);
         }
     }, delay);
 };
@@ -289,7 +282,7 @@ $(document).ajaxError(function (collection, response, options) {
     }
 });
 //$.ajaxSetup({
-//    timeout: 180000
+//      timeout: 180000
 //});
 
 

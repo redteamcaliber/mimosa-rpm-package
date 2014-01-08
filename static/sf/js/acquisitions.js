@@ -79,7 +79,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
                         else if (data == 'cancelled') {
                             label_class = 'label-warning';
                         }
-                        else if (data == 'submitted') {
+                        else if (data == 'created') {
                             label_class = 'label-default';
                         }
                         else if (data == 'started' || data == 'created') {

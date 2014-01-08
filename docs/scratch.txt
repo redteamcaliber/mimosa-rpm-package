@@ -1,4 +1,25 @@
+{"uuid":"587f1e12-77d7-11e3-aef2-5254000f6065","file_name":"7433816","state":"submitted","agent":"1b8dbf9ddf36d114d437e1a660e2f68355358ac3d4ea284827d7c10cbe60fa64","method":"raw","cluster":"9402af9a-f99b-45c3-8f86-651aa1d87f75","controller":"93b4052a-6430-4796-927d-071c8a159c02","task_url":"/celery/6e232fbb-6229-479c-a81e-cd5b92cae148/status","ref":"/api/v1/acquisition/587f1e12-77d7-11e3-aef2-5254000f6065/","file_path":"%systemroot%\\system32"}
 
 
-[
-{"name":"Hit Review: a59ae3d44ee4b81ab54aaa463e013db1","type":"checkout","values":{"services":"Standard,Memory,Methodology,Identities","clusters":"5bbac5c0-59b2-11e2-b1ba-52540081012c,9402af9a-f99b-45c3-8f86-651aa1d87f75,307c4caf-a778-4410-ae1b-1373a54649f4","exp_key":"a59ae3d44ee4b81ab54aaa463e013db1"}},{"name":"Hit Review: 09b95fd5e11a1c38ee77cb513593e366","type":"checkout","values":{"services":"Standard,Memory,Methodology,Identities","clusters":"5bbac5c0-59b2-11e2-b1ba-52540081012c,9402af9a-f99b-45c3-8f86-651aa1d87f75,307c4caf-a778-4410-ae1b-1373a54649f4","exp_key":"09b95fd5e11a1c38ee77cb513593e366"}},{"name":"Hit Review: 09b95fd5e11a1c38ee77cb513593e366","type":"checkout","values":{"services":"Standard,Memory,Methodology,Identities","clusters":"5bbac5c0-59b2-11e2-b1ba-52540081012c,9402af9a-f99b-45c3-8f86-651aa1d87f75,307c4caf-a778-4410-ae1b-1373a54649f4","exp_key":"09b95fd5e11a1c38ee77cb513593e366"}},{"name":"Hit Review: 09b95fd5e11a1c38ee77cb513593e366","type":"checkout","values":{"services":"Standard,Memory,Methodology,Identities","clusters":"5bbac5c0-59b2-11e2-b1ba-52540081012c,9402af9a-f99b-45c3-8f86-651aa1d87f75,307c4caf-a778-4410-ae1b-1373a54649f4","exp_key":"09b95fd5e11a1c38ee77cb513593e366"}},{"name":"Hit Review: 09b95fd5e11a1c38ee77cb513593e366","type":"checkout","values":{"services":"Standard,Memory,Methodology,Identities","clusters":"5bbac5c0-59b2-11e2-b1ba-52540081012c,9402af9a-f99b-45c3-8f86-651aa1d87f75,307c4caf-a778-4410-ae1b-1373a54649f4","exp_key":"09b95fd5e11a1c38ee77cb513593e366"}},{"name":"Hit Review: 09b95fd5e11a1c38ee77cb513593e366","type":"checkout","values":{"services":"Standard,Memory,Methodology,Identities","clusters":"5bbac5c0-59b2-11e2-b1ba-52540081012c,9402af9a-f99b-45c3-8f86-651aa1d87f75,307c4caf-a778-4410-ae1b-1373a54649f4","exp_key":"09b95fd5e11a1c38ee77cb513593e366"}},null]
+I have errored, cancelled, submitted, started, completed, unknown right now.
+
+created
+
+if (data == 'errored') {
+                            label_class = 'label-danger';
+                        }
+                        else if (data == 'cancelled') {
+                            label_class = 'label-warning';
+                        }
+                        else if (data == 'submitted') {
+                            label_class = 'label-default';
+                        }
+                        else if (data == 'started' || data == 'created') {
+                            label_class = 'label-primary';
+                        }
+                        else if (data == 'completed') {
+                            label_class = 'label-success';
+                        }
+                        else if (data == 'unknown') {
+                            label_class = 'label-warning';
+                        }

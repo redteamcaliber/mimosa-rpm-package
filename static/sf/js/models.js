@@ -497,6 +497,16 @@ StrikeFinder.AcquireModel = Backbone.Model.extend({
 });
 
 /**
+ * Model for a single acquisisition.
+ */
+StrikeFinder.Acquisition = Backbone.Model.extend({
+    idAttribute: 'uuid',
+    url: function() {
+        return _.sprintf('/sf/api/acquisitions/%s', this.uuid);
+    }
+});
+
+/**
  * Suppressions create/update/delete model.
  */
 StrikeFinder.SuppressionModel = Backbone.Model.extend({

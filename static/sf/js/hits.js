@@ -503,6 +503,44 @@ StrikeFinder.AuditContextMenuView = StrikeFinder.View.extend({
     }
 });
 
+/**
+ * Wait for a task result to complete polling fn(callback) until done is true.  A callback is passed into fn() to
+ * specify that the process is completed invoke callback(true) or callback(false) otherwise.
+ * @param task_id - the task to wait for.
+ * @param callback - function(err, complete, result).
+ */
+StrikeFinder.wait_for_task = function(task_id, callback) {
+    StrikeFinder.wait_for
+    (
+        {task_id: task_id},
+        function(params, callback) {
+            var task = new StrikeFinder.Task({id: task_id});
+            task.fetch({
+                success: function (model, response) {
+                    if (response.state == 'SUCCESS') {
+                        // The task was successful.
+                        callback(null, true, response);
+                    }
+                    else if (response.state == 'FAILURE') {
+                        // The task failed, there is currently no error message to pass along.
+                        callback('There was an error submitting the task.');
+                    }
+                    else {
+                        // Continue polling.
+                        callback(null, false);
+                    }
+                },
+                error: function(model, response) {
+                    // Error while looking up task result.
+                    clearInterval(interval);
+                    callback('Error while checking on task result: ' + task_id);
+                }
+            });
+        },
+        callback
+    );
+};
+
 StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
     events: {
         "click #tag": "tag",
@@ -879,6 +917,45 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
     }
 });
 
+StrikeFinder.wait_for_acquisition = function(acquisition_uuid, callback) {
+    StrikeFinder.wait_for(
+        {acquisition_uuid: acquisition_uuid},
+        function(params, callback) {
+            var acquisition = new StrikeFinder.Acquisition();
+            acquisition.uuid = acquisition_uuid;
+            acquisition.fetch({
+                success: function(model, response) {
+                    if (response.state == 'created' || response.state == 'started') {
+                        // The acquisition request is successful.
+                        callback(null, true, response);
+                    }
+                    else if (response.state == 'errored') {
+                        // The acquisition request failed.
+                        if (response.exc) {
+                            // The acquisition request failed with an exception reported.  Seasick is generally
+                            // putting an exception condition in the 'exc' field.
+                            callback(response.exc, response);
+                        }
+                        else {
+                            // The acquisition request failed though there was no exception information.
+                            callback(response);
+                        }
+                    }
+                    else {
+                        // Continue polling.
+                        callback(null, false);
+                    }
+                },
+                error: function(model, response) {
+                    // Error while looking up task result.
+                    callback('Error while checking on acquisition status: ' + acquisition_uuid);
+                }
+            });
+        },
+        callback
+    );
+};
+
 StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
     events: {
         "click #acquire": "acquire",
@@ -982,29 +1059,37 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
         }
 
         StrikeFinder.block_element(acquire_form, 'Processing...');
+
         view.model.save({}, {
             success: function (model, response, options) {
                 try {
-                    if (!response) {
-                        StrikeFinder.error('Invalid response from server while submitting acquisition.');
-                        return; // **EXIT**
-                    }
-                    else if (response.state != 'submitted') {
-                        StrikeFinder.display_error(_.sprintf('Bad state (%s) while submitting acquisition.',
-                            response.state));
-                        StrikeFinder.display_error(response['error_message']);
-                        return; // **EXIT**
-                    }
+                    // Attempt to wait for a response that the acquisition was sucessfull submitted.
+                    StrikeFinder.wait_for_acquisition(response.uuid, function(err, is_complete) {
+                        // Unblock the UI.
+                        StrikeFinder.unblock(acquire_form);
 
-                    // Hide the dialog.
-                    view.$(acquire_form).modal('hide');
-
-                    StrikeFinder.display_success('Acquisition submitted successfully.');
-
-                    // Notify that a suppression was created.
-                    view.trigger('create', view.model);
+                        if (err) {
+                            // Error.
+                            StrikeFinder.display_error('There was in error submitting the acquisition request: ' + err);
+                        }
+                        else if (is_complete) {
+                            StrikeFinder.display_success('The acquisition request has successfully been submitted.');
+                            // Notify that a suppression was created.
+                            view.trigger('create', view.model);
+                            // Hide the dialog.
+                            view.$(acquire_form).modal('hide');
+                        }
+                        else {
+                            // The request was not complete, view on the suppressions list.
+                            StrikeFinder.display_info('The acqusition request is still being processed, its status ' +
+                                'can be views on the <a href="/sf/acquisitions">Acquisitions List</a>.');
+                            // Hide the dialog.
+                            view.$(acquire_form).modal('hide');
+                        }
+                    });
                 }
-                finally {
+                catch (e) {
+                    // Error, leave the dialog displayed.
                     StrikeFinder.unblock(acquire_form);
                 }
             },
