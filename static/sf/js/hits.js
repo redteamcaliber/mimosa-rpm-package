@@ -931,14 +931,14 @@ StrikeFinder.wait_for_acquisition = function(acquisition_uuid, callback) {
                     }
                     else if (response.state == 'errored') {
                         // The acquisition request failed.
-                        if (response.exc) {
+                        if (response.error_message) {
                             // The acquisition request failed with an exception reported.  Seasick is generally
                             // putting an exception condition in the 'exc' field.
-                            callback(response.exc, response);
+                            callback(response.error_message);
                         }
                         else {
                             // The acquisition request failed though there was no exception information.
-                            callback(response);
+                            callback(JSON.stringify(response));
                         }
                     }
                     else {

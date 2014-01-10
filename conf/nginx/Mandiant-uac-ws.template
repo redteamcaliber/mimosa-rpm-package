@@ -24,5 +24,8 @@ server {
 
         # Used by downstream applications to send secure cookies.
         proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Increase the timeout value.
+        proxy_read_timeout 180s;
     }
 }
