@@ -96,7 +96,7 @@ chmod +x ./bin/*
 echo 'OK'
 
 # Include Node/Grunt support.
-. ${PROJECT_DIR}/bin/env.sh
+. ./bin/env.sh
 
 # Compile the Underscore templates.
 echo
