@@ -31,6 +31,9 @@ StrikeFinder.View = Backbone.View.extend({
      */
     get_listeners: function () {
         return this._listeners ? _.values(this._listeners) : [];
+    },
+    apply_template: function(template, context) {
+        this.$el.html(StrikeFinder.template(template, context));
     }
 });
 
@@ -187,7 +190,7 @@ StrikeFinder.TableViewControls = StrikeFinder.View.extend({
 
         view.run_once('init_template', function () {
             // Only write the template once.
-            view.$el.html(_.template($('#prev-next-template').html()));
+            view.$el.html(StrikeFinder.template('prev-next.html'));
 
             $(document).keyup(function (ev) {
                 if (ev.ctrlKey) {
@@ -1027,14 +1030,12 @@ StrikeFinder.HostTypeAheadView = StrikeFinder.View.extend({
                 }
             },
             valueKey: 'hostname',
-            template: '#host-condensed-template',
+            template: 'host-condensed.html',
             engine: {
                 compile: function (template) {
-                    compiled = _.template($(template).html());
-
                     return {
                         render: function (context) {
-                            return compiled(context);
+                            return StrikeFinder.template(template, context);
                         }
                     }
                 }

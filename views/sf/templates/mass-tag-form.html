@@ -1,0 +1,121 @@
+<div id="mass-tag-form" class="modal fade" tabindex='-1'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4>
+                    <icon class="fa fa-tags"></icon>
+                    Mass Tag
+                </h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label>Tag</label>
+                        <select id="tagname" required="true" class="form-control" style="width: 300px">
+                            <option></option>
+                            <% _.each( tags, function( item, index ) { %>
+                            <option id="<%= item.name %>" title="<%= item.description %>"><%= item.name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Scope</label>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="scope" id="cluster_uuid_option" value="cluster" checked> This Cluster
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="scope" id="am_cert_hash_option" value="agent"> This Agent
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>IOC</label>
+                        <select id="exp_key" required="" class="form-control">
+                            <% _.each( iocs, function( ioc, index ) { %>
+                            <% if (exp_key == ioc.exp_key) { %>
+                            <option id="<%= ioc.exp_key %>" selected><%= ioc.name %> - <%= ioc.uuid %></option>
+                            <% } else { %>
+                            <option id="<%= ioc.exp_key %>"><%= ioc.name %> - <%= ioc.uuid %></option>
+                            <% } %>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Term</label>
+                        <select id="itemkey" required="" class="form-control">
+                            <option></option>
+                            <% _.each( terms, function( item, index ) { %>
+                            <% if (itemkey == item.text) { %>
+                            <option id="<%= item.text %>" selected><%= item.title %></option>
+                            <% } else { %>
+                            <option id="<%= item.text %>"><%= item.title %></option>
+                            <% } %>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Condition</label>
+                        <select id="condition" required="true" class="form-control" style="width: 300px">
+                            <option selected="true">contains</option>
+                            <option>ends-with</option>
+                            <option>greater-than</option>
+                            <option>is</option>
+                            <option>less-than</option>
+                            <option>matches</option>
+                            <option>starts-with</option>
+                        </select>
+                    </div>
+
+                    <div class="checkbox" style="margin-top: 15px; margin-bottom: 15px">
+                        <label>
+                            <input id="negate" type="checkbox" value=""/> Negate
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            Value to Match
+                        </label>
+                        <input id="itemvalue"
+                               type="text"
+                               value="<%= itemvalue %>"
+                               required="true"
+                               class="form-control">
+                    </div>
+
+                    <div class="checkbox">
+                        <label>
+                            <input id="preservecase" type="checkbox" value=""/> Preserve Case
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Comment</label>
+                        <textarea id="comment" style="height: 50px" class="form-control"></textarea>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel" class="btn">
+                    <icon class="fa fa-times-circle"></icon>
+                    Cancel
+                </button>
+                <button id="tag" class="btn btn-primary">
+                    <icon class="fa fa-tags"></icon>
+                    Add Tags
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

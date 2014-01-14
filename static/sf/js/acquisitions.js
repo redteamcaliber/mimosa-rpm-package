@@ -154,8 +154,7 @@ StrikeFinder.AcquisitionsAuditView = StrikeFinder.View.extend({
     render: function () {
         var view = this;
 
-        view.$el.html(_.template($("#acquisition-audit-template").html(), view.model.toJSON()));
-        //view.$el.html(_.template($("#acquisition-details-template").html(), view.model.toJSON()));
+        view.apply_template('acquisition-audit.html', view.model.toJSON());
 
         StrikeFinder.collapse(this.el);
 

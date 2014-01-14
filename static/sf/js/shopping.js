@@ -78,7 +78,7 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
         }
 
         // Render the template.
-        view.$el.html(_.template($("#ioc-details-template").html(), {
+        view.$el.html(StrikeFinder.template('ioc-details.html', {
             items: ioc_uuids,
             iocname: iocname,
             iocnamehash: iocnamehash
@@ -161,7 +161,7 @@ StrikeFinder.ClusterSelectionView = StrikeFinder.View.extend({
         view.close();
 
         // Create the input form.
-        view.$el.html(_.template($("#cluster-selection-template").html(), {hide_services: view.options.hide_services}));
+        view.$el.html(StrikeFinder.template('cluster-selection.html', {hide_services: view.options.hide_services}));
 
         var usersettings = UAC.usersettings();
 

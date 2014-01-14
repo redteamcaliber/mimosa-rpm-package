@@ -1,0 +1,102 @@
+<div id="suppression-form" class="modal fade" tabindex='-1'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-level-down"></i> Create Suppression</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label>Suppression Description:</label>
+                        <textarea id="comment"
+                                  class="form-control"
+                                  required="true"
+                                  placeholder="Why are you creating this suppression?"><%= itemvalue %></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>IOC:</label>
+                        <select id="exp_key" required="true" class="form-control">
+                            <% _.each( iocs, function( ioc, index ) { %>
+                            <% if (exp_key == ioc.exp_key) { %>
+                            <option id="<%= ioc.exp_key %>" selected><%= ioc.name %> - <%= ioc.uuid %></option>
+                            <% } else { %>
+                            <option id="<%= ioc.exp_key %>"><%= ioc.name %> - <%= ioc.uuid %></option>
+                            <% } %>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Term:</label>
+                        <select id="itemkey" required="true" class="form-control">
+                            <option></option>
+                            <% _.each( terms, function( item, index ) { %>
+                            <% if (itemkey == item.text) { %>
+                            <option id="<%= item.text %>" selected><%= item.title %></option>
+                            <% } else { %>
+                            <option id="<%= item.text %>"><%= item.title %></option>
+                            <% } %>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Condition:</label>
+                        <select id="condition" required="true" class="form-control">
+                            <option selected="true">contains</option>
+                            <option>ends-with</option>
+                            <option>greater-than</option>
+                            <option>is</option>
+                            <option>less-than</option>
+                            <option>matches</option>
+                            <option>starts-with</option>
+                        </select>
+                    </div>
+
+                    <div class="checkbox" style="margin-top: 15px; margin-bottom: 15px">
+                        <label>
+                            <input id="negate" type="checkbox" value=""/> Negate
+                        </label>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <icon class="fa fa-file"></icon>
+                            Suppression Text
+                        </label>
+                        <input id="itemvalue"
+                               type="text"
+                               value="<%= itemvalue %>"
+                               required="true"
+                               class="form-control">
+                    </div>
+
+                    <div class="checkbox" style="margin-top: 15px">
+                        <label>
+                            <input id="preservecase" type="checkbox" value=""/> Preserve Case
+                        </label>
+                    </div>
+
+                    <div class="checkbox" style="margin-top: 15px">
+                        <label>
+                            <input id="global" type="checkbox" checked="true"/> Global
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel" class="btn" data-dismiss="modal">
+                    <icon class="fa fa-times-circle"></icon>
+                    Cancel
+                </button>
+                <button id="suppress" class="btn btn-primary">
+                    <icon class="fa fa-level-down"></icon>
+                    Suppress
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

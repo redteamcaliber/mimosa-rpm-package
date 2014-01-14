@@ -1,0 +1,15 @@
+<h4>
+    <a class="iocnamehash" data-iocnamehash="<%= iocnamehash %>"><i class="fa fa-list"></i> <%= iocname %></a>
+</h4>
+
+<hr style="margin-top: 5px"/>
+
+<% _.each( items, function( item, index ) { %>
+
+<h4><a class="ioc_uuid" data-ioc_uuid="<%= item.iocuuid %>"><%= item.iocuuid %></a></h4>
+
+<table id="uuid-<%= index %>-table"
+       class="table table-striped table-bordered table-hover table-condensed"
+       style="margin-bottom: 15px">
+</table>
+<% }) %>

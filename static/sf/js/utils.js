@@ -123,6 +123,7 @@ StrikeFinder.get_blockui_options = function (message) {
     return {
         message: message ? message : '',
         css: {
+            'margin-top': '50%',
             width: '100%',
             border: "0px solid #cccccc",
             padding: '0px',
@@ -315,7 +316,6 @@ StrikeFinder.format_unix_date = function(unix) {
 };
 
 
-
 function format_expression(s) {
     console.log(s);
     s = s.trim();
@@ -327,5 +327,26 @@ function format_expression(s) {
     }
     else {
         return s;
+    }
+}
+
+/**
+ * Invoke a template.
+ * @param template - the template name.
+ * @param context - the template context.
+ * @returns the template result.
+ */
+StrikeFinder.template = function(template, context) {
+    if (!StrikeFinder.templates) {
+        // Error, templates does not exist.
+        log.error('StrikeFinder.templates is not initialized.');
+    }
+    else if (!(template in StrikeFinder.templates)) {
+        // Error, template not found.
+        log.error('StrikeFinder template: ' + template + ' not found.');
+    }
+    else {
+        // Return the template result.
+        return StrikeFinder.templates[template](context);
     }
 }

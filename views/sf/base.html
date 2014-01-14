@@ -5,20 +5,28 @@
 {% block head %}
     {{ super() }}
 
-    <script lang="text/javascript" src="/static/sf/js/utils.js"></script>
-    <script lang="text/javascript" src="/static/sf/js/models.js"></script>
-    <script lang="text/javascript" src="/static/sf/js/components.js"></script>
+    {% if node_env == "prod" %}
+        {# Include the compressed StrikeFinder Javascript file. #}
+        <script lang="text/javascript" src="/static/sf/js/strikefinder.js"></script>
+    {% else %}
+        {# Include the raw StrikeFinder Javascript source files. #}
+        <script lang="text/javascript" src="/static/sf/js/utils.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/models.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/components.js"></script>
 
-    <script lang="text/javascript" src="/static/sf/js/hits.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/hits.js"></script>
 
-    <script lang="text/javascript" src="/static/sf/js/acquisitions.js"></script>
-    <script lang="text/javascript" src="/static/sf/js/hits-by-tag.js"></script>
-    <script lang="text/javascript" src="/static/sf/js/hosts.js"></script>
-    <script lang="text/javascript" src="/static/sf/js/shopping.js"></script>
-    <script lang="text/javascript" src="/static/sf/js/suppressions.js"></script>
-    <script lang="text/javascript" src="/static/sf/js/tasks.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/acquisitions.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/hits-by-tag.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/hosts.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/shopping.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/suppressions.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/tasks.js"></script>
+    {% endif %}
 
-    {% include "/sf/templates.html" %}
+    {# Include the compiled templates. #}
+    <script lang="text/javascript" src="/static/sf/js/templates.js"></script>
+
 {% endblock %}
 
 {% block nav_menu %}

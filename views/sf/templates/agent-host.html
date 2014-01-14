@@ -1,0 +1,59 @@
+<div class="row" style="margin-bottom: 3px">
+    <div class="col-md-12" style="margin-right: 0; padding-right: 0">
+            <span style="font-size: 16px; font-weight: bold">
+                <%= cluster.engagement.client.name %> (<%= cluster.name %>) : <%= domain %> /
+                <a href="/sf/host/<%= hash %>/"><%= hostname %></a>
+            </span>
+</div>
+</div>
+<div class="row" style="margin-bottom: 3px">
+    <div class="col-sm-6">
+    <%= product_name %> <%= os_patch_level %>
+</div>
+<div class="col-sm-3">
+    <a href="/sf/host/<%= hash %>/"><%= ip %></a>
+</div>
+<div class="col-sm-">
+    <%= version %>
+</div>
+</div>
+<div class="row">
+    <div class="col-xs-2">
+        NotReviewed
+    </div>
+    <div class="col-xs-2">
+        <span class="badge"><%= counts.notreviewed %></span>
+    </div>
+    <div class="col-xs-2">
+        Investigating
+    </div>
+    <div class="col-xs-2">
+        <span class="badge"><%= counts.investigating %></span>
+    </div>
+    <div class="col-xs-2">
+        Escalate
+    </div>
+    <div class="col-xs-2">
+        <span class="badge"><%= counts.escalate %></span>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-2">
+        NotReported
+    </div>
+    <div class="col-xs-2">
+        <span class="badge"><%= counts.unreported %></span>
+    </div>
+    <div class="col-xs-2">
+        Reported
+    </div>
+    <div class="col-xs-2">
+        <span class="badge"><%= counts.reported %></span>
+    </div>
+    <div class="col-xs-2">
+        Delete
+    </div>
+    <div class="col-xs-2">
+        <span class="badge"><%= counts.delete %></span>
+    </div>
+</div>

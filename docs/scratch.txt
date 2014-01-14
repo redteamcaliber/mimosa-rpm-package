@@ -1,32 +1,513 @@
-
-
-9185678405
-8957153628
-
-Resource interpreted as Document but transferred with MIME type application/zip: "https://proxy.mcirt.mandiant.com/SEASICK/media/acquisitions/f8c70ce998fff73c1460e93f2a202a00f3677c2b06af3667b8a4e705e27853e3/acq_2.zip".
-
-{"uuid":"587f1e12-77d7-11e3-aef2-5254000f6065","file_name":"7433816","state":"submitted","agent":"1b8dbf9ddf36d114d437e1a660e2f68355358ac3d4ea284827d7c10cbe60fa64","method":"raw","cluster":"9402af9a-f99b-45c3-8f86-651aa1d87f75","controller":"93b4052a-6430-4796-927d-071c8a159c02","task_url":"/celery/6e232fbb-6229-479c-a81e-cd5b92cae148/status","ref":"/api/v1/acquisition/587f1e12-77d7-11e3-aef2-5254000f6065/","file_path":"%systemroot%\\system32"}
-
-
-I have errored, cancelled, submitted, started, completed, unknown right now.
-
-created
-
-if (data == 'errored') {
-                            label_class = 'label-danger';
-                        }
-                        else if (data == 'cancelled') {
-                            label_class = 'label-warning';
-                        }
-                        else if (data == 'submitted') {
-                            label_class = 'label-default';
-                        }
-                        else if (data == 'started' || data == 'created') {
-                            label_class = 'label-primary';
-                        }
-                        else if (data == 'completed') {
-                            label_class = 'label-success';
-                        }
-                        else if (data == 'unknown') {
-                            label_class = 'label-warning';
-                        }
+_update_dt": "2014-01-10T08:33:07",
+            "method": "raw",
+            "mir_acquired_uri": "/workspaces/1/files/1/2014/01/10/243915e8-85bd-4fb0-a612-35c31c3a7ebf",
+            "mir_detail_uri": "/workspaces/1/files/1/2014/01/10/01fb943b-3fba-478c-b7e9-6c5979365087",
+            "mir_job_uri": "/workspaces/1/jobs/all/159512/",
+            "resource_uri": "/api/v1/acquisition/d3d3a7c6-79d1-11e3-b456-90b11c41a495/",
+            "state": "completed",
+            "update_datetime": "2014-01-10T08:52:54.867659",
+            "user": "smiller",
+            "uuid": "d3d3a7c6-79d1-11e3-b456-90b11c41a495",
+            "link": "https://seasick.proxy.mcirt.mandiant.com/media/acquisitions/f06a4bd75d3dac69bda1cc9d14d1e7e6c54cb60f513ad56637d68b3ecd367d87/d3d3a7c6-79d1-11e3-b456-90b11c41a495.zip"
+        },
+        {
+            "acquired_file": "/media/acquisitions/f06a4bd75d3dac69bda1cc9d14d1e7e6c54cb60f513ad56637d68b3ecd367d87/a4309b50-79d1-11e3-b456-90b11c41a495.zip",
+            "agent": {
+                "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICsDCCAZgCCQDNl3ocH7dmDjANBgkqhkiG9w0BAQUFADAaMRgwFgYDVQQDEw9Q\nSEwxN0NESVZSVFMxMDUwHhcNNzAwMTAxMTIwMDAwWhcNMjMwNzE1MjExODQyWjAa\nMRgwFgYDVQQDEw9QSEwxN0NESVZSVFMxMDUwggEiMA0GCSqGSIb3DQEBAQUAA4IB\nDwAwggEKAoIBAQDFRPwA2WmPjCI21TQjO9t/iYr0gXk5BBGwvrFcrvC/Jr14wfyi\nA24JJo8oL4/C8AUyCAnqoLL46MX4uZN3IY/kSjDTnN78Q0TUdqfgMBB+DdftUvcG\nECcpTaleMS+a5uyjnUuaPLwN1jg3E/z9av4sbZAxyrV7Jv/6M330aTCodU6b7GL6\nLvuqg4WMVRS8e+/Rgs8Oc/VGdyZbBrpKTHOajo8YS3mwRIik+RTdWSrX7g2Se2T+\n5I+2a8IBlDR53qP2FIL4hFFAeAD+1w5cZMT9HhoG/1IFipGBty52FZ7w4qkmcphv\nW5UFQ4o+MPwlXaPyfWEJ/WItB60dOa3pr0SFAgMBAAEwDQYJKoZIhvcNAQEFBQAD\nggEBAGFauKuBgVhvIAxEa8iiigvlWhZqYg6+4Cb+/iO0H3/t8OjMKrIl8dcZ6FaH\nNNGw4aYvlHmr1N80fCvN9l4E2/0sHuaj1rTHJzSz6VqhEsyt3WX3KgJI31uSM1gD\nkfvpZDVQvbaILU9a3UzyaE+sM0WLisdYfs1dSZbWSUs+2OkWG+Cogw7oSAC2D+Gp\ns59y6cJYxyDrgpHUxofkZYOeoi14DbarUA2ZI9vGiK8FrDezUhBhx59BxsjDaNKF\noVAjtv6ZXdcKJ4vVD0pFdJwtw85exCh6zeZj54SczAYF4dKlg/ZrHnuAaqoHL9Jj\n6ntBMNKqr/uycBUwKKVYI0HYCmA=\n-----END CERTIFICATE-----\n",
+                "agent_id": null,
+                "cluster": {
+                    "engagement": {
+                        "client": {
+                            "last_updated": "2013-07-08T22:18:02",
+                            "name": "CDI Corp",
+                            "resource_uri": "",
+                            "uuid": "e8d8c921-eb3d-469c-a60e-e38fb7da5a54"
+                        },
+                        "number": "MCIRT13-028",
+                        "resource_uri": "",
+                        "uuid": "c535f1d2-b6a1-4e5d-b9a8-c557173ae784"
+                    },
+                    "name": "CDI001",
+                    "node_band": 10000,
+                    "resource_uri": "/api/v1/cluster/eac0fc75-3746-47d6-9ec8-c17149ab39cb/",
+                    "uuid": "eac0fc75-3746-47d6-9ec8-c17149ab39cb"
+                },
+                "domain": "CDI-WORLDWIDE",
+                "drives": "c:,d:,l:",
+                "gmt_offset": "-PT5H",
+                "hash": "f06a4bd75d3dac69bda1cc9d14d1e7e6c54cb60f513ad56637d68b3ecd367d87",
+                "hostname": "PHL17CDIVRTS105",
+                "ip": "10.10.25.198",
+                "logged_on_user": "CDI-WORLDWIDE\\vsantamauro-d,CDI-WORLDWIDE\\PHL17CDIVRTS105$,CDI-WORLDWIDE\\jkientzler-d,IIS APPPOOL\\DefaultAppPool,IIS APPPOOL\\CDI,NT AUTHORITY\\IUSR,CDI-WORLDWIDE\\recruitmaxcf",
+                "mac_address": "005056b06916",
+                "machine": "PHL17CDIVRTS105",
+                "os_bitness": "64-bit",
+                "os_buildnumber": "7601",
+                "os_patch_level": "Service Pack 1",
+                "port": 22201,
+                "proc_type": "Multiprocessor Free",
+                "processor": "Intel(R) Xeon(R) CPU X5660 @ 2.80GHz",
+                "product_name": "Windows Server 2008 R2 Standard",
+                "resource_uri": "/api/v1/agent/f06a4bd75d3dac69bda1cc9d14d1e7e6c54cb60f513ad56637d68b3ecd367d87/",
+                "revision": "5afca6b4-3029-11e3-8bdd-525400a828bb",
+                "time_logged": "2014-01-10T16:23:20.117005",
+                "time_zone_dst": "Eastern Daylight Time",
+                "time_zone_standard": "Eastern Standard Time",
+                "total_physical_ram": "8589467648",
+                "uuid": "5afca18c-3029-11e3-8bdd-525400a828bb",
+                "version": "2.3.3100"
+            },
+            "cluster": {
+                "engagement": {
+                    "client": {
+                        "last_updated": "2013-07-08T22:18:02",
+                        "name": "CDI Corp",
+                        "resource_uri": "",
+                        "uuid": "e8d8c921-eb3d-469c-a60e-e38fb7da5a54"
+                    },
+                    "number": "MCIRT13-028",
+                    "resource_uri": "",
+                    "uuid": "c535f1d2-b6a1-4e5d-b9a8-c557173ae784"
+                },
+                "name": "CDI001",
+                "node_band": 10000,
+                "resource_uri": "/api/v1/cluster/eac0fc75-3746-47d6-9ec8-c17149ab39cb/",
+                "uuid": "eac0fc75-3746-47d6-9ec8-c17149ab39cb"
+            },
+            "comment": "",
+            "create_datetime": "2014-01-10T08:31:46.102284",
+            "error_message": "",
+            "file_name": "d64.txt",
+            "file_path": "C:\\PerfLogs",
+            "mcic_create_dt": "2014-01-10T08:31:51",
+            "mcic_id": 338,
+            "mcic_state": "Complete",
+            "mcic_status": "Complete",
+            "mcic_update_dt": "2014-01-10T08:31:51",
+            "method": "raw",
+            "mir_acquired_uri": "/workspaces/1/files/1/2014/01/10/ed9bccc6-61c8-432f-b404-7f379304a696",
+            "mir_detail_uri": "/workspaces/1/files/1/2014/01/10/b4ac9dda-fb6d-4574-8a45-f1b6b0aba085",
+            "mir_job_uri": "/workspaces/1/jobs/all/159400/",
+            "resource_uri": "/api/v1/acquisition/a4309b50-79d1-11e3-b456-90b11c41a495/",
+            "state": "completed",
+            "update_datetime": "2014-01-10T08:52:53.632157",
+            "user": "smiller",
+            "uuid": "a4309b50-79d1-11e3-b456-90b11c41a495",
+            "link": "https://seasick.proxy.mcirt.mandiant.com/media/acquisitions/f06a4bd75d3dac69bda1cc9d14d1e7e6c54cb60f513ad56637d68b3ecd367d87/a4309b50-79d1-11e3-b456-90b11c41a495.zip"
+        },
+        {
+            "acquired_file": "/media/acquisitions/f06a4bd75d3dac69bda1cc9d14d1e7e6c54cb60f513ad56637d68b3ecd367d87/90d7ceac-79d1-11e3-b456-90b11c41a495.zip",
+            "agent": {
+                "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICsDCCAZgCCQDNl3ocH7dmDjANBgkqhkiG9w0BAQUFADAaMRgwFgYDVQQDEw9Q\nSEwxN0NESVZSVFMxMDUwHhcNNzAwMTAxMTIwMDAwWhcNMjMwNzE1MjExODQyWjAa\nMRgwFgYDVQQDEw9QSEwxN0NESVZSVFMxMDUwggEiMA0GCSqGSIb3DQEBAQUAA4IB\nDwAwggEKAoIBAQDFRPwA2WmPjCI21TQjO9t/iYr0gXk5BBGwvrFcrvC/Jr14wfyi\nA24JJo8oL4/C8AUyCAnqoLL46MX4uZN3IY/kSjDTnN78Q0TUdqfgMBB+DdftUvcG\nECcpTaleMS+a5uyjnUuaPLwN1jg3E/z9av4sbZAxyrV7Jv/6M330aTCodU6b7GL6\nLvuqg4WMVRS8e+/Rgs8Oc/VGdyZbBrpKTHOajo8YS3mwRIik+RTdWSrX7g2Se2T+\n5I+2a8IBlDR53qP2FIL4hFFAeAD+1w5cZMT9HhoG/1IFipGBty52FZ7w4qkmcphv\nW5UFQ4o+MPwlXaPyfWEJ/WItB60dOa3pr0SFAgMBAAEwDQYJKoZIhvcNAQEFBQAD\nggEBAGFauKuBgVhvIAxEa8iiigvlWhZqYg6+4Cb+/iO0H3/t8OjMKrIl8dcZ6FaH\nNNGw4aYvlHmr1N80fCvN9l4E2/0sHuaj1rTHJzSz6VqhEsyt3WX3KgJI31uSM1gD\nkfvpZDVQvbaILU9a3UzyaE+sM0WLisdYfs1dSZbWSUs+2OkWG+Cogw7oSAC2D+Gp\ns59y6cJYxyDrgpHUxofkZYOeoi14DbarUA2ZI9vGiK8FrDezUhBhx59BxsjDaNKF\noVAjtv6ZXdcKJ4vVD0pFdJwtw85exCh6zeZj54SczAYF4dKlg/ZrHnuAaqoHL9Jj\n6ntBMNKqr/uycBUwKKVYI0HYCmA=\n-----END CERTIFICATE-----\n",
+                "agent_id": null,
+                "cluster": {
+                    "engagement": {
+                        "client": {
+                            "last_updated": "2013-07-08T22:18:02",
+                            "name": "CDI Corp",
+                            "resource_uri": "",
+                            "uuid": "e8d8c921-eb3d-469c-a60e-e38fb7da5a54"
+                        },
+                        "number": "MCIRT13-028",
+                        "resource_uri": "",
+                        "uuid": "c535f1d2-b6a1-4e5d-b9a8-c557173ae784"
+                    },
+                    "name": "CDI001",
+                    "node_band": 10000,
+                    "resource_uri": "/api/v1/cluster/eac0fc75-3746-47d6-9ec8-c17149ab39cb/",
+                    "uuid": "eac0fc75-3746-47d6-9ec8-c17149ab39cb"
+                },
+                "domain": "CDI-WORLDWIDE",
+                "drives": "c:,d:,l:",
+                "gmt_offset": "-PT5H",
+                "hash": "f06a4bd75d3dac69bda1cc9d14d1e7e6c54cb60f513ad56637d68b3ecd367d87",
+                "hostname": "PHL17CDIVRTS105",
+                "ip": "10.10.25.198",
+                "logged_on_user": "CDI-WORLDWIDE\\vsantamauro-d,CDI-WORLDWIDE\\PHL17CDIVRTS105$,CDI-WORLDWIDE\\jkientzler-d,IIS APPPOOL\\DefaultAppPool,IIS APPPOOL\\CDI,NT AUTHORITY\\IUSR,CDI-WORLDWIDE\\recruitmaxcf",
+                "mac_address": "005056b06916",
+                "machine": "PHL17CDIVRTS105",
+                "os_bitness": "64-bit",
+                "os_buildnumber": "7601",
+                "os_patch_level": "Service Pack 1",
+                "port": 22201,
+                "proc_type": "Multiprocessor Free",
+                "processor": "Intel(R) Xeon(R) CPU X5660 @ 2.80GHz",
+                "product_name": "Windows Server 2008 R2 Standard",
+                "resource_uri": "/api/v1/agent/f06a4bd75d3dac69bda1cc9d14d1e7e6c54cb60f513ad56637d68b3ecd367d87/",
+                "revision": "5afca6b4-3029-11e3-8bdd-525400a828bb",
+                "time_logged": "2014-01-10T16:23:20.117005",
+                "time_zone_dst": "Eastern Daylight Time",
+                "time_zone_standard": "Eastern Standard Time",
+                "total_physical_ram": "8589467648",
+                "uuid": "5afca18c-3029-11e3-8bdd-525400a828bb",
+                "version": "2.3.3100"
+            },
+            "cluster": {
+                "engagement": {
+                    "client": {
+                        "last_updated": "2013-07-08T22:18:02",
+                        "name": "CDI Corp",
+                        "resource_uri": "",
+                        "uuid": "e8d8c921-eb3d-469c-a60e-e38fb7da5a54"
+                    },
+                    "number": "MCIRT13-028",
+                    "resource_uri": "",
+                    "uuid": "c535f1d2-b6a1-4e5d-b9a8-c557173ae784"
+                },
+                "name": "CDI001",
+                "node_band": 10000,
+                "resource_uri": "/api/v1/cluster/eac0fc75-3746-47d6-9ec8-c17149ab39cb/",
+                "uuid": "eac0fc75-3746-47d6-9ec8-c17149ab39cb"
+            },
+            "comment": "",
+            "create_datetime": "2014-01-10T08:31:13.643621",
+            "error_message": "",
+            "file_name": "MT.txt",
+            "file_path": "C:\\PerfLogs",
+            "mcic_create_dt": "2014-01-10T08:31:19",
+            "mcic_id": 337,
+            "mcic_state": "Complete",
+            "mcic_status": "Complete",
+            "mcic_update_dt": "2014-01-10T08:31:19",
+            "method": "raw",
+            "mir_acquired_uri": "/workspaces/1/files/1/2014/01/10/5f77fa00-e2bc-4ce9-9c00-da5a24047977",
+            "mir_detail_uri": "/workspaces/1/files/1/2014/01/10/885666ba-de41-40c3-8fcb-917d198ce20c",
+            "mir_job_uri": "/workspaces/1/jobs/all/159325/",
+            "resource_uri": "/api/v1/acquisition/90d7ceac-79d1-11e3-b456-90b11c41a495/",
+            "state": "completed",
+            "update_datetime": "2014-01-10T08:53:02.913060",
+            "user": "smiller",
+            "uuid": "90d7ceac-79d1-11e3-b456-90b11c41a495",
+            "link": "https://seasick.proxy.mcirt.mandiant.com/media/acquisitions/f06a4bd75d3dac69bda1cc9d14d1e7e6c54cb60f513ad56637d68b3ecd367d87/90d7ceac-79d1-11e3-b456-90b11c41a495.zip"
+        },
+        {
+            "acquired_file": "/media/acquisitions/f06a4bd75d3dac69bda1cc9d14d1e7e6c54cb60f513ad56637d68b3ecd367d87/2c358110-79cc-11e3-b456-90b11c41a495.zip",
+            "agent": {
+                "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICsDCCAZgCCQDNl3ocH7dmDjANBgkqhkiG9w0BAQUFADAaMRgwFgYDVQQDEw9Q\nSEwxN0NESVZSVFMxMDUwHhcNNzAwMTAxMTIwMDAwWhcNMjMwNzE1MjExODQyWjAa\nMRgwFgYDVQQDEw9QSEwxN0NESVZSVFMxMDUwggEiMA0GCSqGSIb3DQEBAQUAA4IB\nDwAwggEKAoIBAQDFRPwA2WmPjCI21TQjO9t/iYr0gXk5BBGwvrFcrvC/Jr14wfyi\nA24JJo8oL4/C8AUyCAnqoLL46MX4uZN3IY/kSjDTnN78Q0TUdqfgMBB+DdftUvcG\nECcpTaleMS+a5uyjnUuaPLwN1jg3E/z9av4sbZAxyrV7Jv/6M330aTCodU6b7GL6\nLvuqg4WMVRS8e+/Rgs8Oc/VGdyZbBrpKTHOajo8YS3mwRIik+RTdWSrX7g2Se2T+\n5I+2a8IBlDR53qP2FIL4hFFAeAD+1w5cZMT9HhoG/1IFipGBty52FZ7w4qkmcphv\nW5UFQ4o+MPwlXaPyfWEJ/WItB60dOa3pr0SFAgMBAAEwDQYJKoZIhvcNAQEFBQAD\nggEBAGFauKuBgVhvIAxEa8iiigvlWhZqYg6+4Cb+/iO0H3/t8OjMKrIl8dcZ6FaH\nNNGw4aYvlHmr1N80fCvN9l4E2/0sHuaj1rTHJzSz6VqhEsyt3WX3KgJI31uSM1gD\nkfvpZDVQvbaILU9a3UzyaE+sM0WLisdYfs1dSZbWSUs+2OkWG+Cogw7oSAC2D+Gp\ns59y6cJYxyDrgpHUxofkZYOeoi14DbarUA2ZI9vGiK8FrDezUhBhx59BxsjDaNKF\noVAjtv6ZXdcKJ4vVD0pFdJwtw85exCh6zeZj54SczAYF4dKlg/ZrHnuAaqoHL9Jj\n6ntBMNKqr/uycBUwKKVYI0HYCmA=\n-----END CERTIFICATE-----\n",
+                "agent_id": null,
+                "cluster": {
+                    "engagement": {
+                        "client": {
+                            "last_updated": "2013-07-08T22:18:02",
+                            "name": "CDI Corp",
+                            "resource_uri": "",
+                            "uuid": "e8d8c921-eb3d-469c-a60e-e38fb7da5a54"
+                        },
+                        "number": "MCIRT13-028",
+                        "resource_uri": "",
+                        "uuid": "c535f1d2-b6a1-4e5d-b9a8-c557173ae784"
+                    },
+                    "name": "CDI001",
+                    "node_band": 10000,
+                    "resource_uri": "/api/v1/cluster/eac0fc75-3746-47d6-9ec8-c17149ab39cb/",
+                    "uuid": "eac0fc75-3746-47d6-9ec8-c17149ab39cb"
+                },
+                "domain": "CDI-WORLDWIDE",
+                "drives": "c:,d:,l:",
+                "gmt_offset": "-PT5H",
+                "hash": "f06a4bd75d3dac69bda1cc9d14d1e7e6c54cb60f513ad56637d68b3ecd367d87",
+                "hostname": "PHL17CDIVRTS105",
+                "ip": "10.10.25.198",
+                "logged_on_user": "CDI-WORLDWIDE\\vsantamauro-d,CDI-WORLDWIDE\\PHL17CDIVRTS105$,CDI-WORLDWIDE\\jkientzler-d,IIS APPPOOL\\DefaultAppPool,IIS APPPOOL\\CDI,NT AUTHORITY\\IUSR,CDI-WORLDWIDE\\recruitmaxcf",
+                "mac_address": "005056b06916",
+                "machine": "PHL17CDIVRTS105",
+                "os_bitness": "64-bit",
+                "os_buildnumber": "7601",
+                "os_patch_level": "Service Pack 1",
+                "port": 22201,
+                "proc_type": "Multiprocessor Free",
+                "processor": "Intel(R) Xeon(R) CPU X5660 @ 2.80GHz",
+                "product_name": "Windows Server 2008 R2 Standard",
+                "resource_uri": "/api/v1/agent/f06a4bd75d3dac69bda1cc9d14d1e7e6c54cb60f513ad56637d68b3ecd367d87/",
+                "revision": "5afca6b4-3029-11e3-8bdd-525400a828bb",
+                "time_logged": "2014-01-10T16:23:20.117005",
+                "time_zone_dst": "Eastern Daylight Time",
+                "time_zone_standard": "Eastern Standard Time",
+                "total_physical_ram": "8589467648",
+                "uuid": "5afca18c-3029-11e3-8bdd-525400a828bb",
+                "version": "2.3.3100"
+            },
+            "cluster": {
+                "engagement": {
+                    "client": {
+                        "last_updated": "2013-07-08T22:18:02",
+                        "name": "CDI Corp",
+                        "resource_uri": "",
+                        "uuid": "e8d8c921-eb3d-469c-a60e-e38fb7da5a54"
+                    },
+                    "number": "MCIRT13-028",
+                    "resource_uri": "",
+                    "uuid": "c535f1d2-b6a1-4e5d-b9a8-c557173ae784"
+                },
+                "name": "CDI001",
+                "node_band": 10000,
+                "resource_uri": "/api/v1/cluster/eac0fc75-3746-47d6-9ec8-c17149ab39cb/",
+                "uuid": "eac0fc75-3746-47d6-9ec8-c17149ab39cb"
+            },
+            "comment": "",
+            "create_datetime": "2014-01-10T07:52:37.324142",
+            "error_message": "",
+            "file_name": "svcost.exe",
+            "file_path": "C:\\PerfLogs",
+            "mcic_create_dt": "2014-01-10T07:53:44",
+            "mcic_id": 336,
+            "mcic_state": "Complete",
+            "mcic_status": "Complete",
+            "mcic_update_dt": "2014-01-10T07:53:44",
+            "method": "raw",
+            "mir_acquired_uri": "/workspaces/1/files/1/2014/01/10/3fc39b6b-feac-427e-8392-60d14ed9e19e",
+            "mir_detail_uri": "/workspaces/1/files/1/2014/01/10/ea518f3d-031c-45b9-b4db-4a989852b4d2",
+            "mir_job_uri": "/workspaces/1/jobs/all/158105/",
+            "resource_uri": "/api/v1/acquisition/2c358110-79cc-11e3-b456-90b11c41a495/",
+            "state": "completed",
+            "update_datetime": "2014-01-10T08:24:17.760292",
+            "user": "smiller",
+            "uuid": "2c358110-79cc-11e3-b456-90b11c41a495",
+            "link": "https://seasick.proxy.mcirt.mandiant.com/media/acquisitions/f06a4bd75d3dac69bda1cc9d14d1e7e6c54cb60f513ad56637d68b3ecd367d87/2c358110-79cc-11e3-b456-90b11c41a495.zip"
+        },
+        {
+            "acquired_file": "/media/acquisitions/18e4bc902e8d3e3c9407aa26194dff6dfa4b5ca0aeb9ac7e5a81df3d8d1a47db/8db477f8-796c-11e3-b456-90b11c41a495.zip",
+            "agent": {
+                "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICnjCCAYYCCQDEgLx/5c7fFjANBgkqhkiG9w0BAQUFADARMQ8wDQYDVQQDEwZQ\nQzMwMTkwHhcNNzAwMTAxMTIwMDAwWhcNMjMwNzEwMTIxMjA0WjARMQ8wDQYDVQQD\nEwZQQzMwMTkwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDJmL0hICWF\npZmrbAXpq/2xsJ1JVjQ4v5XAO9IoKWRwI3NYyqqMWg7dVNxPST0rLE5SyCc3vmuL\n6mes1k3j/AoP+qqoT3Wmcuf3Le5VjixtgQMQunsWmNpIzBq188reb4glQ338E1L8\nDoU+pTGuMzsZHgD6sYKhuGbS7gkcmAIyELAdAANKYtRp6MTXj74rAeo4S75oJ4cX\nqcE3t5KLXxCJZOSbglOkaODizL+3pLF7eb3S4w//NdWrUNhRufeJ8IItWo7bK1WN\n9xkn/nPnufKfk+woIftzpHow2+vcVxYlxhTAzC5Iw4KmqhwEQnosBd07dKblolT9\nQjlKPKMRy1FJAgMBAAEwDQYJKoZIhvcNAQEFBQADggEBAHMDQWv8YEOPLdWOho3w\noe5gfodEd8dCKhSv2FWUpKzUwX3Ge44DIlfwvOA+cKwngLdGFNA1Bake3ucM4TCu\nhuoUzEXyOWuwi6X3ZSS8HZc3hirZf7oz5b2gx00UUm90q3xupA55TdJl7PbuxN2i\nPwGF6lIyuzWkbe91Dhq1wdcu1vE8PKqLtBR7DY/r3VC5l843jGWktz/6+PJTSCgO\nkEPHHrWuFEyCWLAt81GnIzLy+FBFyZWhl8nW/iDshkbuXQ/NXRHSCpP01FI2kq4u\n746Z3WK8HGOwgpD5gpT5U/vKl3Rhnlq01lKwtzoBxqArY5Z3LeF1gTX7RA1v6rDl\nu4s=\n-----END CERTIFICATE-----\n",
+                "agent_id": null,
+                "cluster": {
+                    "engagement": {
+                        "client": {
+                            "last_updated": "2013-07-08T22:18:02",
+                            "name": "CDI Corp",
+                            "resource_uri": "",
+                            "uuid": "e8d8c921-eb3d-469c-a60e-e38fb7da5a54"
+                        },
+                        "number": "MCIRT13-028",
+                        "resource_uri": "",
+                        "uuid": "c535f1d2-b6a1-4e5d-b9a8-c557173ae784"
+                    },
+                    "name": "CDI001",
+                    "node_band": 10000,
+                    "resource_uri": "/api/v1/cluster/eac0fc75-3746-47d6-9ec8-c17149ab39cb/",
+                    "uuid": "eac0fc75-3746-47d6-9ec8-c17149ab39cb"
+                },
+                "domain": "CDI",
+                "drives": "c:,d:",
+                "gmt_offset": "PT0H",
+                "hash": "18e4bc902e8d3e3c9407aa26194dff6dfa4b5ca0aeb9ac7e5a81df3d8d1a47db",
+                "hostname": "PC3019",
+                "ip": "172.23.15.69",
+                "logged_on_user": "CDI\\kingni,CDI\\PC3019$",
+                "mac_address": "00ffb0eb630a",
+                "machine": "PC3019",
+                "os_bitness": "64-bit",
+                "os_buildnumber": "7601",
+                "os_patch_level": "Service Pack 1",
+                "port": 22201,
+                "proc_type": "Multiprocessor Free",
+                "processor": "Intel(R) Core(TM) i7-3520M CPU @ 2.90GHz",
+                "product_name": "Windows 7 Enterprise",
+                "resource_uri": "/api/v1/agent/18e4bc902e8d3e3c9407aa26194dff6dfa4b5ca0aeb9ac7e5a81df3d8d1a47db/",
+                "revision": "49570d44-317a-11e3-9bca-d4ae52754ab2",
+                "time_logged": "2014-01-10T16:33:02.171986",
+                "time_zone_dst": "GMT Daylight Time",
+                "time_zone_standard": "GMT Standard Time",
+                "total_physical_ram": "8457191424",
+                "uuid": "49570844-317a-11e3-9bca-d4ae52754ab2",
+                "version": "2.3.3100"
+            },
+            "cluster": {
+                "engagement": {
+                    "client": {
+                        "last_updated": "2013-07-08T22:18:02",
+                        "name": "CDI Corp",
+                        "resource_uri": "",
+                        "uuid": "e8d8c921-eb3d-469c-a60e-e38fb7da5a54"
+                    },
+                    "number": "MCIRT13-028",
+                    "resource_uri": "",
+                    "uuid": "c535f1d2-b6a1-4e5d-b9a8-c557173ae784"
+                },
+                "name": "CDI001",
+                "node_band": 10000,
+                "resource_uri": "/api/v1/cluster/eac0fc75-3746-47d6-9ec8-c17149ab39cb/",
+                "uuid": "eac0fc75-3746-47d6-9ec8-c17149ab39cb"
+            },
+            "comment": "",
+            "create_datetime": "2014-01-09T20:28:09.209166",
+            "error_message": "",
+            "file_name": "syshost.exe",
+            "file_path": "C:\\Windows\\Installer\\{A4D7F221-4095-90CA-03F7-1873E3D9958D}",
+            "mcic_create_dt": "2014-01-09T20:28:10",
+            "mcic_id": 335,
+            "mcic_state": "Complete",
+            "mcic_status": "Complete",
+            "mcic_update_dt": "2014-01-09T20:28:10",
+            "method": "raw",
+            "mir_acquired_uri": "/workspaces/1/files/1/2014/01/10/3063d3c1-a5a6-4039-a75e-5b525948a1fd",
+            "mir_detail_uri": "/workspaces/1/files/1/2014/01/10/c66edde3-14df-4329-a311-5160c4978207",
+            "mir_job_uri": "/workspaces/1/jobs/all/120338/",
+            "resource_uri": "/api/v1/acquisition/8db477f8-796c-11e3-b456-90b11c41a495/",
+            "state": "completed",
+            "update_datetime": "2014-01-10T08:24:16.220743",
+            "user": "awawrow",
+            "uuid": "8db477f8-796c-11e3-b456-90b11c41a495",
+            "link": "https://seasick.proxy.mcirt.mandiant.com/media/acquisitions/18e4bc902e8d3e3c9407aa26194dff6dfa4b5ca0aeb9ac7e5a81df3d8d1a47db/8db477f8-796c-11e3-b456-90b11c41a495.zip"
+        },
+        {
+            "acquired_file": "/media/acquisitions/e55f965bd3684f8e2b0af8be607346403e8782e28edfe2c932890974652f3783/8cd38b69-5780-4b47-92cf-c4fab4c8d98d.zip",
+            "agent": {
+                "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICsDCCAZgCCQCmhPkRxr3LazANBgkqhkiG9w0BAQUFADAaMRgwFgYDVQQDEw9U\nTVAxOUFFUkVEMDU4LU0wHhcNNzAwMTAxMTIwMDAwWhcNMjMwNzEwMTEzNjA1WjAa\nMRgwFgYDVQQDEw9UTVAxOUFFUkVEMDU4LU0wggEiMA0GCSqGSIb3DQEBAQUAA4IB\nDwAwggEKAoIBAQDcsz+9gexuQTTrACSS0J/tI2Kb/65m0vLip69IbUGDh1IOYib1\n4OCP+sMqaw9xGlQX4xfYJ7quX12ZwI/SZz0dUu8i2AQP51UtLlNA8BMs89VN4iRv\nxMCbG0OoccMDkPrFpKVpcuS49Pn2OnorOmsMY7uCEnSq0Y7+JSRa+nyny01TRC1t\ngDHsijqtZ7Jt/tnvRJaTh0H1wpCFK2k6cBJUrmwM1HCQGuWlL8NovLAQBZKjUaPy\nEFxpmm7YDlNYO69M56RUrcjQJfcAHcZFYybkB5RhPrr9c4sHAsPhhJJyY2dkMhmX\nx0ktIdrg4v/8o16mv+8uz2wwpebBI6Nz7RzrAgMBAAEwDQYJKoZIhvcNAQEFBQAD\nggEBAFLXV9BIIzlhM4vPTIqZv4heMPMklphwizEnFSWfPriSsclDQ7blkcLXNt5R\nuRnfM4EuOv2IoiY0JLwOenhL6mJf8X3AVcpvg5ahEhoaB6FRDmPSctuKzPoUQ3E0\nN3L+Ty1Y053uvbwPnajbVM3Yvaosto6npde0QgajzH9pLsAZVZvBh3lYJloCJ542\n2B88+20/FCx9ua3JSKHjlK9dovPhIxpacPdbJkHznaXrEoLRImZ0h1nfs13492pg\nXe2sGVNiQlbPyn4E2o6185c0cFjCghMaGckjTlrGmYssPN7LuJ2R+WPBJJ5gO942\nWGY/A5S17wYeGIhHX/yOIilKnx0=\n-----END CERTIFICATE-----\n",
+                "agent_id": null,
+                "cluster": {
+                    "engagement": {
+                        "client": {
+                            "last_updated": "2013-07-08T22:18:02",
+                            "name": "CDI Corp",
+                            "resource_uri": "",
+                            "uuid": "e8d8c921-eb3d-469c-a60e-e38fb7da5a54"
+                        },
+                        "number": "MCIRT13-028",
+                        "resource_uri": "",
+                        "uuid": "c535f1d2-b6a1-4e5d-b9a8-c557173ae784"
+                    },
+                    "name": "CDI001",
+                    "node_band": 10000,
+                    "resource_uri": "/api/v1/cluster/eac0fc75-3746-47d6-9ec8-c17149ab39cb/",
+                    "uuid": "eac0fc75-3746-47d6-9ec8-c17149ab39cb"
+                },
+                "domain": "CDI",
+                "drives": "c:,d:",
+                "gmt_offset": "-PT7H",
+                "hash": "e55f965bd3684f8e2b0af8be607346403e8782e28edfe2c932890974652f3783",
+                "hostname": "TMP19AERED058-M",
+                "ip": "172.17.64.216",
+                "logged_on_user": "CDI\\wweimer,CDI\\TMP19AERED058-M$",
+                "mac_address": "00059a3c7a00",
+                "machine": "TMP19AERED058-M",
+                "os_bitness": "64-bit",
+                "os_buildnumber": "7601",
+                "os_patch_level": "Service Pack 1",
+                "port": 22201,
+                "proc_type": "Multiprocessor Free",
+                "processor": "Intel(R) Xeon(R) CPU E5504 @ 2.00GHz",
+                "product_name": "Windows 7 Enterprise",
+                "resource_uri": "/api/v1/agent/e55f965bd3684f8e2b0af8be607346403e8782e28edfe2c932890974652f3783/",
+                "revision": "5a5f41b2-3029-11e3-8bdd-525400a828bb",
+                "time_logged": "2014-01-10T16:43:00.920768",
+                "time_zone_dst": "US Mountain Daylight Time",
+                "time_zone_standard": "US Mountain Standard Time",
+                "total_physical_ram": "12882321408",
+                "uuid": "5a5f3fa0-3029-11e3-8bdd-525400a828bb",
+                "version": "2.3.3100"
+            },
+            "cluster": {
+                "engagement": {
+                    "client": {
+                        "last_updated": "2013-07-08T22:18:02",
+                        "name": "CDI Corp",
+                        "resource_uri": "",
+                        "uuid": "e8d8c921-eb3d-469c-a60e-e38fb7da5a54"
+                    },
+                    "number": "MCIRT13-028",
+                    "resource_uri": "",
+                    "uuid": "c535f1d2-b6a1-4e5d-b9a8-c557173ae784"
+                },
+                "name": "CDI001",
+                "node_band": 10000,
+                "resource_uri": "/api/v1/cluster/eac0fc75-3746-47d6-9ec8-c17149ab39cb/",
+                "uuid": "eac0fc75-3746-47d6-9ec8-c17149ab39cb"
+            },
+            "comment": "Could be benign...",
+            "create_datetime": "2014-01-08T19:45:42.174499",
+            "error_message": "",
+            "file_name": "nvUnsupRes.dat",
+            "file_path": "C:\\ProgramData",
+            "mcic_create_dt": "2014-01-08T19:45:41",
+            "mcic_id": 334,
+            "mcic_state": "Complete",
+            "mcic_status": "Complete",
+            "mcic_update_dt": "2014-01-08T19:45:41",
+            "method": "raw",
+            "mir_acquired_uri": "/workspaces/1/files/1/2014/01/08/327190bb-81e3-44e3-880f-935f77d91aa6",
+            "mir_detail_uri": "/workspaces/1/files/1/2014/01/08/2cddf43a-6f0c-4b06-aad4-01c9bf951381",
+            "mir_job_uri": "/workspaces/1/jobs/all/100412/",
+            "resource_uri": "/api/v1/acquisition/8cd38b69-5780-4b47-92cf-c4fab4c8d98d/",
+            "state": "completed",
+            "update_datetime": "2014-01-08T19:54:16.067826",
+            "user": "sbattaglia",
+            "uuid": "8cd38b69-5780-4b47-92cf-c4fab4c8d98d",
+            "link": "https://seasick.proxy.mcirt.mandiant.com/media/acquisitions/e55f965bd3684f8e2b0af8be607346403e8782e28edfe2c932890974652f3783/8cd38b69-5780-4b47-92cf-c4fab4c8d98d.zip"
+        },
+        {
+            "acquired_file": "/media/acquisitions/8f951d771265590a01287cf7b41143e27151c8f9689b2e85d29acec418f989fe/9c0bc6ab-a7eb-4a59-b010-4f4799727c2a.zip",
+            "agent": {
+                "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICojCCAYoCCQDpHmO+HVFKfjANBgkqhkiG9w0BAQUFADATMREwDwYDVQQDEwhC\nVFI3OTY5ODAeFw03MDAxMDExMjAwMDBaFw0yMzA3MTYxNzA0MTVaMBMxETAPBgNV\nBAMTCEJUUjc5Njk4MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy8MQ\nPciLBuOdPX06KRK7OGcYHsIIBSwGKtxneBMSuNIsPseozDLZYoSgsN579ZIOfYNa\nLLQfTXioLpO9++gKoddzZ/P2xDmTlMvjqf5vqgGVfd5xTz9/9+T++hFuMVyHJpNb\n+EtclS5aUARW0HhFxPrM/bzPuptR6+4MyV9kr+6aGdNpguCGq6Ly5I9xD5EQOnLI\niw3fiPog9Y8oaEbIo3qqGekYmErl5pGdPR3+NwQOvLXQ1HHDQV++EAMtCOa65CXn\ndepb+FWBiilJnAIYcWV4n2F0CUG/+Y6n82oAMQUtJJTP8piMvR+fPI99VxyPe/65\nOdes6fmsAHVPD4MrgwIDAQABMA0GCSqGSIb3DQEBBQUAA4IBAQA+fGvaE2/3Y76s\npGDTJLVgB4H83keoF7wjHaTaVZcVINo8I6ihek1FR3qHlvyaoF0ObW/bviV/Fv6T\n3z/xVk/XlQA4sYtebXW6ttT8lEi8Y400FWx2Wuy8nF9pIiCYtabaBbMfja0fJPAW\nVvANFTjV4oKuES5cv4O40r94f4+3A2U5sSyUu+bdHBWInzGqRaHF2OtKXI0gFMvN\novQGTSRaJ25t8UgrEHlp2Liwp5NattOR88S2JrrShrTdgKONJ0cDIZ7pasIVBzs4\nzK85NQcZgLq2NR+nKwHhtoKD+dFobJinfL9BRf8vd2U4mIFWaKTrysbjeZnkReqt\nVkEjwYTS\n-----END CERTIFICATE-----\n",
+                "agent_id": null,
+                "cluster": {
+                    "engagement": {
+                        "client": {
+                            "last_updated": "2013-07-08T22:18:02",
+                            "name": "CDI Corp",
+                            "resource_uri": "",
+                            "uuid": "e8d8c921-eb3d-469c-a60e-e38fb7da5a54"
+                        },
+                        "number": "MCIRT13-028",
+                        "resource_uri": "",
+                        "uuid": "c535f1d2-b6a1-4e5d-b9a8-c557173ae784"
+                    },
+                    "name": "CDI001",
+                    "node_band": 10000,
+                    "resource_uri": "/api/v1/cluster/eac0fc75-3746-47d6-9ec8-c17149ab39cb/",
+                    "uuid": "eac0fc75-3746-47d6-9ec8-c17149ab39cb"
+                },
+                "domain": "CDI",
+                "drives": "c:,d:",
+                "gmt_offset": "-PT6H",
+                "hash": "8f951d771265590a01287cf7b41143e27151c8f9689b2e85d29acec418f989fe",
+                "hostname": "BTR79698",
+                "ip": "172.17.96.215",
+                "logged_on_user": "CDI\\lbanquer,NT AUTHORITY\\IUSR,CDI\\BTR79698$",
+                "mac_address": "00ffe0495007",
+                "machine": "BTR79698",
+                "os_bitness": "64-bit",
+                "os_buildnumber": "7601",
+                "os_patch_level": "Service Pack 1",
+                "port": 22201,
+                "proc_type": "Multiprocessor Free",
+                "processor": "Intel(R) Core(TM) i5-3230M CPU @ 2.60GHz",
+                "product_name": "Windows 7 Enterprise",
+                "resource_uri": "/api/v1/agent/8f951d771265590a01287cf7b41143e27151c8f9689b2e85d29acec418f989fe/",
+                "revision": "5b9d93e4-3029-11e3-8bdd-525400a828bb",
+                "time_logged": "2014-01-10T16:43:00.772236",
+                "time_zone_dst": "Central Daylight Time",
+                "time_zone_standard": "Central Standard Time",
+                "total_physical_ram": "8528449536",
+                "uuid": "5b9d8ed0-3029-11e3-8bdd-525400a828bb",
+                "version": "2.3.3100"
+            },
+            "cluster": {
+                "engagement": {
+                    "client": {
+                        "last_updated": "2013-07-08T22:18:02",
+                        "name": "CDI Corp",
+                        "resource_uri": "",
+                        "uuid": "e8d8c921-eb3d-469c-a60e-e38fb7da5a54"
+                    },
+                    "number": "MCIRT13-028",
+                    "resource_uri": "",
+                    "uuid": "c535f1d2-b6a1-4e5d-b9a8-c557173ae784"
+                },
+                "name": "CDI001",
+                "node_band": 10000,
+                "resource_uri": "/api/v1/cluster/eac0fc75-3746-47d6-9ec8-c17149ab39cb/",
+                "uuid": "eac0fc75-3746-47d6-9ec8-c17149ab39cb"
+            },
+            "comment": "LSA package - making sure this is okay before I suppress",
+            "create_datetime": "2014-01-07T20:23:13.715794",
+            "error_message": "",
+            "file_name": "BtwProximityCP.dll",
+            "file_path": "C:\\Program Files\\WIDCOMM\\Bluetooth Software",
+            "mcic_create_dt": "2014-01-07T20:23:13",
+            "mcic_id": 333,
+            "mcic_state": "Complete",
+            "mcic_status": "Complete",
+            "mcic_update_dt": "2014-01-07T20:23:13",
+            "method": "raw",
+            "mir_acquired_uri": "/workspaces/1/files/1/2014/01/07/5bee3
