@@ -3,7 +3,10 @@ UAC ToDo
 
 ## Pull the code ito master.
 
-## Have the build rpm script as well as the html view look for the version information in the package.json file.
+## Redo the build_rpm script using Grunt.
+- Have the build rpm script as well as the html view look for the version information in the package.json file.
+- Generate the spec file??
+- Build the package using grunt rpm.
 
 ## Look into performance monitoring for express.
 - Look into options.

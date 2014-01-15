@@ -2,8 +2,8 @@
 
 # Version settings.
 NAME="Mandiant-uac-ws"
-VERSION="0.8"
-RELEASE="0"
+VERSION="0.7"
+RELEASE="2"
 
 # The git branch to build.
 BRANCH=Mandiant-uac-ws-0.7-0.x86_64
