@@ -360,7 +360,7 @@
             if (rel == 'mcirt' || rel == 'threatgroup' || rel == 'threatcategory' || rel == 'grade' || rel == 'link') {
                 continue;
             }
-            new function (r) {
+            (function (r) {
                 if (links[r].length == 1) {
                     $metadata.append($('<div>')
                         .append($('<span>').html(r.toUpperCase() + ': ').addClass('ioc-metadata-label'))
@@ -388,7 +388,7 @@
                     linkUL.append(LI);
                     $metadata.append(linkUL);
                 }
-            }(rel);
+            }(rel));
         }
 
         if (links['link']) {

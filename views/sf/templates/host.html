@@ -1,0 +1,49 @@
+<div class="row" style="margin-bottom: 5px">
+    <div class="col-md-6">
+        <%= cluster.engagement.client.name %> (<%= cluster.name %>) : <%= domain %> / <%= hostname %>
+    </div>
+    <div class="col-md-2">
+        <%= time_formatted %>
+    </div>
+    <div class="col-md-1">
+        <span class="label label-<%= time_label %>"><%= time_caption %></span>
+    </div>
+</div>
+<div class="row" style="margin-bottom: 5px">
+    <div class="col-md-2">
+        <span style="font-family: courier"><%= ip %></span>
+    </div>
+    <div class="col-md-3">
+        <%= product_name %> <%= os_patch_level %>
+    </div>
+    <div class="col-md-1">
+        <%= version %>
+    </div>
+    <div class="col-md-2">
+        <%= cluster.engagement.number %>
+    </div>
+</div>
+<div class="row" style="margin-bottom: 5px">
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-2">
+                NotReviewed <span class="badge"><%= counts.notreviewed %></span>
+            </div>
+            <div class="col-md-2">
+                Investigating <span class="badge"><%= counts.investigating %></span>
+            </div>
+            <div class="col-md-2">
+                Escalate <span class="badge"><%= counts.escalate %></span>
+            </div>
+            <div class="col-md-2">
+                NotReported <span class="badge"><%= counts.unreported %></span>
+            </div>
+            <div class="col-md-2">
+                Reported <span class="badge"><%= counts.reported %></span>
+            </div>
+            <div class="col-md-2">
+                Delete <span class="badge"><%= counts.delete %></span>
+            </div>
+        </div>
+    </div>
+</div>

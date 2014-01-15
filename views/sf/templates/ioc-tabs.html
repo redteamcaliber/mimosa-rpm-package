@@ -1,0 +1,41 @@
+<ul class="nav nav-tabs" id="ioc-tabs" style="margin-bottom: 0px; border: none">
+    <% _.each( items, function( item, index ) { %>
+    <li>
+        <a name="<%= item.exp_key %>" href="#ioc-tab-<%= index %>" data-toggle="tab">
+                <span style="font-weight: bold">
+                    <% if (item.suppressed) { %>
+                        <del><%= item.name %></del>
+                    <% } else { %>
+                        <%= item.name %>
+                    <% } %>
+                </span>
+        </a>
+    </li>
+    <% }) %>
+</ul>
+
+<div class="tab-content">
+    <% _.each( items, function( item, index ) { %>
+    <div id="ioc-tab-<%= index %>"
+         class="tab-pane fade <%= get_active_class(index) %> panel panel-default">
+
+        <div class="row">
+            <div class="col-sm-12">
+                    <pre>
+                        <%- item.content %>
+                    </pre>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="suppressions-table-div" style="margin: 10px">
+                    <!-- Suppressions View Template -->
+                    <table id="<%= item.exp_key %>"
+                           class="table table-striped table-bordered table-condensed suppressions-table">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% }) %>
+</div>

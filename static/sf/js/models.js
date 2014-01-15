@@ -4,6 +4,27 @@ var StrikeFinder = StrikeFinder || {};
 // ----------- Models/Collections ----------
 //
 
+StrikeFinder.get_tags = function(callback) {
+    var tags = UAC.session('strikefinder.tags');
+    if (tags) {
+        callback(null, tags);
+    }
+    else {
+        c = new StrikeFinder.TagCollection();
+        c.fetch({
+            success: function(collection, response, options) {
+                // Cache the tags for later use.
+                var tags = c.toJSON();
+                UAC.session('strikefinder.tags', tags);
+                callback(null, tags);
+            },
+            error: function(collection, response, options) {
+                callback(response);
+            }
+        });
+    }
+};
+
 /**
  * Base list item class.
  */
@@ -476,6 +497,16 @@ StrikeFinder.AcquireModel = Backbone.Model.extend({
 });
 
 /**
+ * Model for a single acquisisition.
+ */
+StrikeFinder.Acquisition = Backbone.Model.extend({
+    idAttribute: 'uuid',
+    url: function() {
+        return _.sprintf('/sf/api/acquisitions/%s', this.uuid);
+    }
+});
+
+/**
  * Suppressions create/update/delete model.
  */
 StrikeFinder.SuppressionModel = Backbone.Model.extend({
@@ -611,6 +642,7 @@ StrikeFinder.TagModel = Backbone.Model.extend({
         image: ''
     }
 });
+
 StrikeFinder.TagCollection = Backbone.Collection.extend({
     initialize: function (models, options) {
         if (options && options.searchable) {
@@ -632,7 +664,26 @@ StrikeFinder.TagCollection = Backbone.Collection.extend({
         else {
             return response;
         }
+    },
+    /**
+     * Override the default fetch to local in sessionStorage before making the remote call.
+     * @param options - the fetch options.
+     * @returns {*}
+     */
+    fetch: function(options) {
+        var tags = UAC.session('strikefinder:tags');
+        if (tags) {
+            this.reset(tags);
+        }
+        else {
+
+        }
+        //do specific pre-processing
+
+        //Call Backbone's fetch
+        return Backbone.Collection.prototype.fetch.call(this, options);
     }
+
 });
 
 StrikeFinder.SetTagModel = Backbone.Model.extend({
@@ -762,11 +813,7 @@ StrikeFinder.IdentitiesCollection = Backbone.Collection.extend({
 });
 
 StrikeFinder.ClientModel = Backbone.Model.extend({
-    defaults: {
-        uuid: '',
-        alias: '',
-        name: ''
-    }
+    idAttribute: 'client_uuid'
 });
 StrikeFinder.ClientCollection = Backbone.Collection.extend({
     url: '/sf/api/clients',

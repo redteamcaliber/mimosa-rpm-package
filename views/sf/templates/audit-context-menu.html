@@ -1,0 +1,39 @@
+<ul class="dropdown-menu" style="display: block">
+    <% if (is_suppress) { %>
+    <li>
+        <a id="suppress-item" tabindex="-1">
+            <i class="fa fa-level-down"></i>
+            Suppress...
+        </a>
+    </li>
+    <li>
+        <a id="auto-suppress-item" style="display: none" tabindex="-1">
+            <i class="fa fa-level-down"></i>
+            Auto-Suppress <span id="ioc-term-item"></span>
+        </a>
+    </li>
+    <% } %>
+    <% if (is_acquire) { %>
+    <li>
+        <a id="acquire-item" tabindex="-1">
+            <i class="fa fa-cloud-download"></i>
+            Acquire...
+        </a>
+    </li>
+    <% } %>
+    <% if (is_masstag) { %>
+    <li>
+        <a id="tag-item" tabindex="-1">
+            <i class="fa fa-tags"></i>
+            Mass Tag...
+        </a>
+    </li>
+    <% } %>
+    <li class="divider"></li>
+    <li>
+        <a id="close-item" tabindex="-1">
+            <i class="fa fa-times-circle"></i>
+            Close
+        </a>
+    </li>
+</ul>

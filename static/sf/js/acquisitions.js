@@ -49,7 +49,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
             {
                 mRender: function (data, type, row) {
                     if (row.link) {
-                        return _.sprintf('<a href="%s">%s</a>', row.link, data);
+                        return _.sprintf('<a href="%s" onclick="event.stopPropagation()" download>%s</a>', row.link, data);
                     }
                     else {
                         return data
@@ -79,7 +79,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
                         else if (data == 'cancelled') {
                             label_class = 'label-warning';
                         }
-                        else if (data == 'submitted') {
+                        else if (data == 'created') {
                             label_class = 'label-default';
                         }
                         else if (data == 'started' || data == 'created') {
@@ -154,8 +154,7 @@ StrikeFinder.AcquisitionsAuditView = StrikeFinder.View.extend({
     render: function () {
         var view = this;
 
-        view.$el.html(_.template($("#acquisition-audit-template").html(), view.model.toJSON()));
-        //view.$el.html(_.template($("#acquisition-details-template").html(), view.model.toJSON()));
+        view.apply_template('acquisition-audit.html', view.model.toJSON());
 
         StrikeFinder.collapse(this.el);
 
@@ -176,38 +175,44 @@ StrikeFinder.AcquisitionsView = StrikeFinder.View.extend({
         var view = this;
 
         view.criteria_collapsable = new StrikeFinder.CollapsableContentView({
-            el: '#criteria-div',
+            el: '#collapsable-div',
             title: '<i class="fa fa-search"></i> Acquisitions Search Criteria'
         });
 
-        // Clusters options.
-        view.clusters = new StrikeFinder.ClustersCollection();
-        view.clusters_view = new StrikeFinder.SelectView({
-            el: '#clusters-select',
-            collection: view.clusters,
-            id_field: "cluster_uuid",
-            value_field: "cluster_name",
-            selected: StrikeFinder.usersettings.clusters,
-            width: "100%",
-            placeholder: 'Select Clusters'
+        // Create the cluster selection component.
+        view.cluster_selection_view = new StrikeFinder.ClusterSelectionView({
+            el: '#cluster-selection-div',
+            hide_services: true
         });
-        view.clusters_view.on('change', function (clusters) {
-            // Update the model criteria when values change.
-            view.clusters = clusters;
-            if (view.clusters && view.clusters.length > 0) {
-                view.acquisitions_table.fetch({clusters: view.clusters});
-                $('#results-div').fadeIn().show();
-            }
-            else {
-                $('#results-div').fadeOut().hide();
-            }
+        view.listenTo(view.cluster_selection_view, 'submit', function(params) {
+            view.render_acquisitions({clusters: params.merged_clusters});
         });
+        view.listenTo(view.cluster_selection_view, 'clear', function() {
+            $('#results-div').fadeOut().hide();
+        });
+        view.cluster_selection_view.render();
 
         view.acquisitions_table = new StrikeFinder.AcquisitionsTableView({
             el: '#acquisitions-table'
         });
 
-        view.clusters.reset(StrikeFinder.clusters);
+        // Display the initial selection of acquisitions.
+        view.render_acquisitions({clusters: view.cluster_selection_view.get_clusters()});
+    },
+    render_acquisitions: function(params) {
+        var view = this;
+
+        // TODO: Should load the facets here!
+
+        // Update the model criteria when values change.
+        view.clusters = params.clusters;
+        if (view.clusters && view.clusters.length > 0) {
+            view.acquisitions_table.fetch({clusters: view.clusters});
+            $('#results-div').fadeIn().show();
+        }
+        else {
+            $('#results-div').fadeOut().hide();
+        }
     },
     do_render_hits: function (data) {
         var view = this;

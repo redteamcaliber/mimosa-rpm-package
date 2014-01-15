@@ -15,7 +15,8 @@
 <script type="text/javascript">
     $(document).ready(function () {
         (function () {
-            StrikeFinder.usersettings = {{ usersettings | safe }};
+            StrikeFinder.services = {{ services | safe }};
+            StrikeFinder.clients = {{ clients | safe }};
             StrikeFinder.clusters = {{ clusters | safe }};
 
             new StrikeFinder.AcquisitionsView();
@@ -27,15 +28,12 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
-            <div id="criteria-div">
-                <div class="row" style="margin-bottom: 15px">
-                    <div class="col-lg-6">
-                        <label>Clusters</label>
-                        <select id="clusters-select"
-                                multiple="true"
-                                placeholder="Select Clusters">
-                        </select>
+        <div class="col-sm-12">
+            <div id="collapsable-div">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div id="cluster-selection-div">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -43,8 +41,8 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12">
-            <div id='results-div' class="display: none">
+        <div class="col-sm-12">
+            <div id='results-div' style="display: none">
                 <table id="acquisitions-table"
                        class="table table-striped table-bordered table-condensed">
                 </table>

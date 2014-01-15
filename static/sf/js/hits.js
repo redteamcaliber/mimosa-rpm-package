@@ -85,19 +85,19 @@ StrikeFinder.AgentHostView = StrikeFinder.View.extend({
         var view = this;
         if (view.model.get("hash")) {
             // Display the host template.
-            view.$el.html(_.template($("#agent-host-template").html(), view.model.toJSON()));
+            view.apply_template('agent-host.html', view.model.toJSON());
         }
         else {
             // The host was not found, display alternate message.
             var data = {am_cert_hash: view.model.id};
-            view.$el.html(_.template($("#agent-host-empty-template").html(), data));
+            view.apply_template('agent-host-template.html', data);
         }
 
         return view;
     },
     render_service_down: function () {
         var view = this;
-        view.$el.html(_.template($("#agent-host-error-template").html(), {am_cert_hash: view.model.id}));
+        view.apply_template('agent-host-error.html', {am_cert_hash: view.model.id});
     },
     fetch: function (am_cert_hash) {
         var view = this;
@@ -155,8 +155,7 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
         // Cleanup any existing components the view has created before rendering.
         view.close();
 
-        var html = _.template($("#ioc-tabs-template").html(), data);
-        view.$el.html(html);
+        view.apply_template('ioc-tabs.html', data);
 
         // Run the IOC viewer on all the pre-formatted elements.
         view.$el.find("pre").iocViewer();
@@ -479,8 +478,7 @@ StrikeFinder.AuditContextMenuView = StrikeFinder.View.extend({
             is_masstag: is_masstag
         };
 
-        var template = _.template($("#audit-context-menu-template").html(), data);
-        view.$el.html(template);
+        view.apply_template('audit-context-menu.html', data);
     },
     suppress: function (ev) {
         this.trigger("suppress", this.selection, this.ioc_term);
@@ -502,6 +500,44 @@ StrikeFinder.AuditContextMenuView = StrikeFinder.View.extend({
         this.$el.hide();
     }
 });
+
+/**
+ * Wait for a task result to complete polling fn(callback) until done is true.  A callback is passed into fn() to
+ * specify that the process is completed invoke callback(true) or callback(false) otherwise.
+ * @param task_id - the task to wait for.
+ * @param callback - function(err, complete, result).
+ */
+StrikeFinder.wait_for_task = function(task_id, callback) {
+    StrikeFinder.wait_for
+    (
+        {task_id: task_id},
+        function(params, callback) {
+            var task = new StrikeFinder.Task({id: task_id});
+            task.fetch({
+                success: function (model, response) {
+                    if (response.state == 'SUCCESS') {
+                        // The task was successful.
+                        callback(null, true, response);
+                    }
+                    else if (response.state == 'FAILURE') {
+                        // The task failed, there is currently no error message to pass along.
+                        callback('There was an error submitting the task.');
+                    }
+                    else {
+                        // Continue polling.
+                        callback(null, false);
+                    }
+                },
+                error: function(model, response) {
+                    // Error while looking up task result.
+                    clearInterval(interval);
+                    callback('Error while checking on task result: ' + task_id);
+                }
+            });
+        },
+        callback
+    );
+};
 
 StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
     events: {
@@ -568,7 +604,6 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
             data['terms'] = [];
         }
 
-        data.tags = StrikeFinder.tags;
         if (params.iocs) {
             data.iocs = params.iocs.toJSON();
         }
@@ -576,12 +611,20 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
             data.iocs = [];
         }
 
-        // Retrieve the related IOC terms.
-        var template = _.template($("#mass-tag-form-template").html(), data);
-        this.$el.html(template);
+        StrikeFinder.get_tags(function(err, tags) {
+            if (err) {
+                // Error
+                StrikeFinder.display_error('Error while loading tags - ' + err);
+            }
+            else {
+                data.tags = tags;
 
-        view.$("#mass-tag-form").modal({
-            backdrop: false
+                view.apply_template('mass-tag-form.html', data);
+
+                view.$("#mass-tag-form").modal({
+                    backdrop: false
+                });
+            }
         });
     },
     tag: function () {
@@ -772,8 +815,7 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
         }
 
         // Retrieve the related IOC terms.
-        var template = _.template($("#suppression-form-template").html(), data);
-        this.$el.html(template);
+        view.apply_template('suppression-form.html', data);
 
         view.$("#suppression-form").modal({
             backdrop: false
@@ -871,6 +913,45 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
     }
 });
 
+StrikeFinder.wait_for_acquisition = function(acquisition_uuid, callback) {
+    StrikeFinder.wait_for(
+        {acquisition_uuid: acquisition_uuid},
+        function(params, callback) {
+            var acquisition = new StrikeFinder.Acquisition();
+            acquisition.uuid = acquisition_uuid;
+            acquisition.fetch({
+                success: function(model, response) {
+                    if (response.state == 'created' || response.state == 'started') {
+                        // The acquisition request is successful.
+                        callback(null, true, response);
+                    }
+                    else if (response.state == 'errored') {
+                        // The acquisition request failed.
+                        if (response.error_message) {
+                            // The acquisition request failed with an exception reported.  Seasick is generally
+                            // putting an exception condition in the 'exc' field.
+                            callback(response.error_message);
+                        }
+                        else {
+                            // The acquisition request failed though there was no exception information.
+                            callback(JSON.stringify(response));
+                        }
+                    }
+                    else {
+                        // Continue polling.
+                        callback(null, false);
+                    }
+                },
+                error: function(model, response) {
+                    // Error while looking up task result.
+                    callback('Error while checking on acquisition status: ' + acquisition_uuid);
+                }
+            });
+        },
+        callback
+    );
+};
+
 StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
     events: {
         "click #acquire": "acquire",
@@ -935,8 +1016,7 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
         data['file_name'] = file_name;
 
         // Display the acquire template.
-        var template = _.template($("#acquire-form-template").html(), data);
-        this.$el.html(template);
+        view.apply_template('acquire-form.html', data);
 
         // Display the form to the user.
         view.$('#acquire-form').modal({
@@ -974,29 +1054,37 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
         }
 
         StrikeFinder.block_element(acquire_form, 'Processing...');
+
         view.model.save({}, {
             success: function (model, response, options) {
                 try {
-                    if (!response) {
-                        StrikeFinder.error('Invalid response from server while submitting acquisition.');
-                        return; // **EXIT**
-                    }
-                    else if (response.state != 'submitted') {
-                        StrikeFinder.display_error(_.sprintf('Bad state (%s) while submitting acquisition.',
-                            response.state));
-                        StrikeFinder.display_error(response['error_message']);
-                        return; // **EXIT**
-                    }
+                    // Attempt to wait for a response that the acquisition was sucessfull submitted.
+                    StrikeFinder.wait_for_acquisition(response.uuid, function(err, is_complete) {
+                        // Unblock the UI.
+                        StrikeFinder.unblock(acquire_form);
 
-                    // Hide the dialog.
-                    view.$(acquire_form).modal('hide');
-
-                    StrikeFinder.display_success('Acquisition submitted successfully.');
-
-                    // Notify that a suppression was created.
-                    view.trigger('create', view.model);
+                        if (err) {
+                            // Error.
+                            StrikeFinder.display_error('There was in error submitting the acquisition request: ' + err);
+                        }
+                        else if (is_complete) {
+                            StrikeFinder.display_success('The acquisition request has successfully been submitted.');
+                            // Notify that a suppression was created.
+                            view.trigger('create', view.model);
+                            // Hide the dialog.
+                            view.$(acquire_form).modal('hide');
+                        }
+                        else {
+                            // The request was not complete, view on the suppressions list.
+                            StrikeFinder.display_info('The acqusition request is still being processed, its status ' +
+                                'can be viewed on the <a href="/sf/acquisitions">Acquisitions List</a>.');
+                            // Hide the dialog.
+                            view.$(acquire_form).modal('hide');
+                        }
+                    });
                 }
-                finally {
+                catch (e) {
+                    // Error, leave the dialog displayed.
                     StrikeFinder.unblock(acquire_form);
                 }
             },
@@ -1026,7 +1114,7 @@ StrikeFinder.CommentsTableView = StrikeFinder.TableView.extend({
         view.options.iDisplayLength = -1;
         view.options.aoColumns = [
             {sTitle: "Created", mData: "created", sWidth: "20%", bSortable: true},
-            {sTitle: "Comment", mData: "comment", sWidth: "60%", bSortable: true},
+            {sTitle: "Comment", mData: "comment", sWidth: "60%", bSortable: true, sClass: 'wrap'},
             {sTitle: "User", mData: "user_uuid", sWidth: "20%", bSortable: true}
         ];
         view.options.aaSorting = [
@@ -1155,9 +1243,6 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
  */
 StrikeFinder.TagView = StrikeFinder.View.extend({
     initialize: function (options) {
-        // Initialize the list of possible tag values.
-        this.tags = new StrikeFinder.TagCollection(StrikeFinder.tags);
-
         if (this.model) {
             // Re-draw the tags view whenever the model is reloaded.
             this.listenTo(this.model, 'sync', this.render);
@@ -1168,6 +1253,7 @@ StrikeFinder.TagView = StrikeFinder.View.extend({
     },
     render: function () {
         var view = this;
+
         var disabled = view.options.disabled === true;
         var tagname = view.model.get('tagname');
         var selected_value = undefined;
@@ -1177,7 +1263,7 @@ StrikeFinder.TagView = StrikeFinder.View.extend({
         // Remove any child elements.
         menu.empty();
 
-        view.tags.each(function (item) {
+        view.collection.each(function (item) {
             var item_name = item.get('name');
             var item_title = item.get('title');
 
@@ -1204,8 +1290,6 @@ StrikeFinder.TagView = StrikeFinder.View.extend({
             // Disable the tag component.
             view.$el.find('button').prop('disabled', true);
         }
-
-        return view;
     },
     on_click: function (ev) {
         StrikeFinder.block();
@@ -1241,22 +1325,22 @@ StrikeFinder.TagView = StrikeFinder.View.extend({
 });
 
 StrikeFinder.HitsLinkView = StrikeFinder.View.extend({
-    initialize: function(options) {
+    initialize: function (options) {
         if (options.table) {
             this.listenTo(options.table, 'click', this.render);
         }
     },
-    render: function(data) {
+    render: function (data) {
         var view = this;
 
         view.close();
 
         var link = window.location.protocol + '//' + window.location.hostname +
             (window.location.port ? ':' + window.location.port : '') + '/sf/hits/' + data.uuid;
-        var html = _.template($("#link-template").html(), {link: link, label: 'Link to Hit'});
+        var html = StrikeFinder.template('link.html', {link: link, label: 'Link to Hit'});
 
         view.$el.popover({
-            html : true,
+            html: true,
             trigger: 'click',
             content: html
         });
@@ -1264,7 +1348,7 @@ StrikeFinder.HitsLinkView = StrikeFinder.View.extend({
             $('.link-text').select();
         });
     },
-    close: function() {
+    close: function () {
         this.$el.popover('destroy');
         // Manually removing the popover due to -> https://github.com/twbs/bootstrap/issues/10335
         this.$el.parent().find('.popover').remove();
@@ -1366,7 +1450,7 @@ StrikeFinder.MergeAllView = StrikeFinder.View.extend({
     events: {
         'click': 'on_click'
     },
-    render: function() {
+    render: function () {
         var view = this;
 
         var current_uuid = view.model.get('uuid');
@@ -1592,9 +1676,11 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
 
             // Initialize the tag view from the audit data.
             var tagging_enabled = !'tag' in view.options || view.options.tag !== false;
+            view.tags = new StrikeFinder.TagCollection();
             // Display the tags view unless explicitly disabled.
             view.tags_view = new StrikeFinder.TagView({
                 el: '#tags',
+                collection: view.tags,
                 model: view.audit,
                 disabled: !tagging_enabled
             });
@@ -1607,6 +1693,15 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                     view.trigger('create:tag', rowitem_uuid, tagname);
                 });
             }
+            StrikeFinder.get_tags(function(err, tags) {
+                if (err) {
+                    // Error.
+                    StrikeFinder.display_error('Exception while loading tags: ' + err);
+                }
+                else {
+                    view.tags.reset(tags);
+                }
+            });
 
             // Initialize the identities view.
             view.identities_view = new StrikeFinder.IdentitiesView({
@@ -1622,7 +1717,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                 el: '#merge-all',
                 model: view.audit
             });
-            view.merge_all_view.listenTo(view.merge_all_view, 'mergeall', function(uuid) {
+            view.merge_all_view.listenTo(view.merge_all_view, 'mergeall', function (uuid) {
 
             });
 
@@ -1680,7 +1775,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
             view.listenTo(view.merge_view, 'merge', function (source_uuid, dest_uuid) {
                 handle_merge(dest_uuid);
             });
-            view.listenTo(view.merge_all_view, 'mergeall', function(uuid) {
+            view.listenTo(view.merge_all_view, 'mergeall', function (uuid) {
                 handle_merge(uuid);
             });
 
@@ -1826,7 +1921,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                                 }
                             });
                         },
-                        error: function () {
+                        error: function (model, xhr) {
                             try {
                                 var message = xhr && xhr.responseText ? xhr.responseText : 'Response text not defined.';
                                 StrikeFinder.display_error('Error while submitting auto suppression task - ' + message);
@@ -1947,15 +2042,34 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
 //            view.redirect_to_hits();
 //        }
 //        else {
-            if (params.exp_key) {
-                view.hits_details_view.default_exp_key = params.exp_key;
-            }
 
-            params.identity_rollup = true;
-            view.facets_view.fetch(params);
+
+        // Update the recent list.
+        if (params.exp_key) {
+            UAC.recent({name: 'Hit Review: ' + params.exp_key, type: 'checkout', values: params});
+        }
+        else if (params.iocnamehash) {
+            UAC.recent({name: 'Hit Review: ' + params.iocnamehash, type: 'checkout', values: params});
+        }
+        else if (params.ioc_uuid) {
+            UAC.recent({name: 'Hit Review: ' + params.ioc_uuid, type: 'checkout', values: params});
+        }
+
+        if (params.exp_key) {
+            // Use this value when available to select the corresponding IOC tab.
+            view.hits_details_view.default_exp_key = params.exp_key;
+        }
+
+        // Identity rollup is the default for the hits view.
+        params.identity_rollup = true;
+
+        // Render the hits.
+        view.facets_view.fetch(params);
+
+
         //}
     },
-    redirect_to_hits: function() {
+    redirect_to_hits: function () {
         // Not enough data to render the hits view, navigate to the shopping view.
         alert('You must select shopping criteria before viewing hits.');
         window.location = '/sf/';
@@ -2069,7 +2183,7 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
         view.undelegateEvents();
 
         // Render the template.
-        view.$el.html(_.template($("#hits-facets-template").html(), data));
+        view.apply_template('hits-facets.html', data);
 
         view.delegateEvents({
             'click li a': 'on_click',

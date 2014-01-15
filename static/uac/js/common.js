@@ -57,15 +57,181 @@ UAC.set_theme = function (theme) {
     // Reload the CSS.
     $('#bootstrap').attr('href', url);
 
-    // Clear the old cookie.
-    document.cookie = _.sprintf('theme=; expires=%s; path=/');
-    var expires = moment().add('y', 1);
-    // Set a cookie specifying the current theme.
-    document.cookie = _.sprintf('theme=%s; expires=%s; path=/', encodeURIComponent(theme), expires.utc());
+    UAC.set_cookie({
+        name: 'theme',
+        value: theme,
+        http_only: false,
+        expires: moment().add('y', 1).utc()
+    });
 
     // Clear the overlay color since the theme has been changed.
     UAC.reset_styles();
 };
+
+/**
+ * Set a cookie.  Options available, name, value, path, domain, expires, secure, http_only.  domain defaults to the
+ * server hostname, secure defaults to true, http_only defaults to true, expires defaults to null (session).
+ */
+UAC.set_cookie = function(options) {
+    console.assert(options);
+    console.assert(options.name);
+
+    var name = options.name;
+    var path = options.path || '/';
+    var domain = options.domain || undefined;
+    var expires = options.expires || 'null';
+    var value = options.value || '';
+    var secure = options.secure !== false;
+    var http_only = options.http_only !== false;
+
+    // Clear any old cookies.
+    document.cookie = _.sprintf('%s=; expires=; path=%s; Secure;', name, path);
+
+    // Set the new cookie.
+    var cookie = _.sprintf('%s=%s; expires=%s; path=%s;', name, encodeURIComponent(value), expires, path);
+    if (domain) {
+        cookie += _.sprintf(' Domain=%s;', domain);
+    }
+    if (secure) {
+        cookie += ' Secure;';
+    }
+    if (http_only) {
+        cookie += ' HttpOnly;'
+    }
+
+    document.cookie = cookie;
+};
+
+UAC.get_cookies = function() {
+    var cookie_string = document.cookie;
+    if (cookie_string === '') {
+        return {};
+    }
+    else {
+        var results = {};
+        _.each(cookie_string.split("; "), function(cookie) {
+            var p = cookie.indexOf("=");
+            var name = cookie.substring(0,p);
+            var value = cookie.substring(p+1);
+            value = decodeURIComponent(value);
+            results[name] = value;
+        });
+        return results;
+    }
+};
+
+UAC.storage = function(k, o) {
+    if (!window.localStorage) {
+        log.warn('localStorage not available!');
+        return {};
+    }
+    else if (arguments.length == 1) {
+        var value = window.localStorage.getItem(k);
+        return value ? JSON.parse(value) : undefined;
+    }
+    else if (arguments.length > 1) {
+        if (o) {
+            // Set the object.
+            window.localStorage.setItem(k, JSON.stringify(o));
+        }
+        else {
+            window.localStorage.removeItem(k);
+        }
+        return undefined;
+    }
+    else {
+        var local = window.localStorage;
+        return local ? JSON.parse(local) : {};
+    }
+};
+
+/**
+ * Store or retrieve and item from session storage.
+ * @param k - the key (required).
+ * @param o - the value (optional).
+ * @returns the key value if only a key was specified.
+ */
+UAC.session = function(k, o) {
+    if (!window.sessionStorage) {
+        log.warn('sessionStorage not available!');
+        return {};
+    }
+    else if (arguments.length == 1) {
+        // Retrieve the object.
+        var value = window.sessionStorage.getItem(k);
+        return value ? JSON.parse(value) : undefined;
+    }
+    else if (arguments.length > 1) {
+        if (o) {
+            window.sessionStorage.setItem(k, JSON.stringify(o));
+        }
+        else {
+            window.sessionStorage.removeItem(k);
+        }
+    }
+    else {
+        var session = window.sessionStorage;
+        return session ? JSON.parse(session) : {};
+    }
+};
+
+UAC.usersettings = function(options) {
+    var usersettings = UAC.storage('usersettings');
+    if (!usersettings) {
+        usersettings = {};
+    }
+    if (options) {
+        _.each(_.keys(options), function(key) {
+            var value = options[key];
+            if (value) {
+                usersettings[key] = options[key];
+            }
+            else {
+                delete usersettings[key];
+            }
+        });
+        UAC.storage('usersettings', usersettings);
+    }
+
+    return usersettings ? usersettings : {};
+};
+
+/**
+ *
+ * @param options
+ * @returns {*}
+ */
+UAC.recent = function(options) {
+    // Retrieve the recent values from local storage.
+    var value = UAC.storage('recent');
+    var recent = value || [];
+
+    if (options) {
+        if (!Array.isArray(recent)) {
+            // Recent should be an array.
+            log.warn('Recent value is not of type array: ' + JSON.stringify(recent));
+        }
+        else if (!options.name || !options.type || !options.values) {
+            // Options parameter is not valid.
+            log.warn('Recent option is incomplete: ' + JSON.stringify(options));
+        }
+        else {
+            // Keep track of the recent items.
+            if (recent.length >= 10) {
+                // Start removing the last element.
+                recent.pop();
+            }
+            recent.unshift(options);
+
+            // Update the list of recent values in local storage.
+            UAC.storage('recent', recent);
+        }
+    }
+
+    // Return the recent values.
+    return recent;
+};
+
 
 
 //

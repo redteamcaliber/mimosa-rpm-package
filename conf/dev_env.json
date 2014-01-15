@@ -4,7 +4,7 @@
         "ssl": false,
 
         "ssl_key": "./conf/certs/uac_ws_key.pem",
-        "ssl_cert": "./conf/cert/uac_ws_cert.pem",
+        "ssl_cert": "./conf/certs/uac_ws_cert.pem",
 
         "verify_ssl": false,
 

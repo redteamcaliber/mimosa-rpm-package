@@ -1,3 +1,11 @@
+
+var path = require('path');
+
+/**
+ * Source the UAC environment script before running grunt commands.
+ *
+ * . /opt/web/apps/uac/bin/env.sh
+ */
 module.exports = function (grunt) {
     function get_local_connection() {
         return {
@@ -12,28 +20,78 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+
+        watch: {
+            /**
+             * Watch the underscore templates and re-compile the templates to a JST file.
+             */
+            templates: {
+                files: ['views/sf/templates/*.html'],
+                tasks: ['jst:strikefinder']
+            }
+        },
+
+        /**
+         * Compile underscore templates into a .jst file.
+         */
+        jst: {
+            strikefinder: {
+                options: {
+                    namespace: 'StrikeFinder.templates',
+                    prettify: true,
+                    /**
+                     * Just use the filename, not the entire path.
+                     * @param filename - the filename including path.
+                     * @returns the translated filename.
+                     */
+                    processName: function(filename) {
+                        var last_index = filename.lastIndexOf('/');
+                        if (last_index == -1) {
+                            return filename;
+                        }
+                        else {
+                            return filename.substring(last_index + 1, filename.length);
+                        }
+                    }
+                },
+                files: {
+                    'static/sf/js/templates.js': ['views/sf/templates/*.html']
+                }
+            }
+        },
+
+        /**
+         * Combine and uglify Javascript files.
+         */
         uglify: {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
             default: {
                 files: {
+                    // Async library comes  uncompressed.
+                    'static/js/async.js': 'static/js/async.js',
+
+                    // Datatables bootstrap.
                     'static/datatables/js/dataTables.bootstrap.js': ['static/datatables/js/dataTables.bootstrap.js'],
 
+                    'static/uac/js/uac.js': ['static/uac/js/common.js'],
 
+                    // StrikeFinder client sources.
                     'static/sf/js/strikefinder.js': [
-                        'static/sf/js/acquisitions.js',
+                        'static/sf/js/utils.js',
                         'static/sf/js/components.js',
-                        'hits.js static/sf/js/hits.js',
-                        'hits-by-tag.js',
-                        'hosts.js',
-                        'models.js',
-                        'shopping.js',
-                        'suppressions.js',
-                        'tasks.js',
-                        'utils.js'
+                        'static/sf/js/models.js',
+                        'static/sf/js/hits.js',
+                        'static/sf/js/acquisitions.js',
+                        'static/sf/js/hits-by-tag.js',
+                        'static/sf/js/hosts.js',
+                        'static/sf/js/shopping.js',
+                        'static/sf/js/suppressions.js',
+                        'static/sf/js/tasks.js'
                     ],
 
+                    // IOC Viewer source.
                     'static/js/jquery.iocViewer.js': ['static/js/jquery.iocViewer.js']
                 }
             }
@@ -92,19 +150,23 @@ module.exports = function (grunt) {
                 }
             }
         }
-
     });
 
-    grunt.loadNpmTasks('grunt-git');
+
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-git');
     grunt.loadNpmTasks('grunt-pg-utils');
     grunt.loadNpmTasks('grunt-prompt');
+    grunt.loadNpmTasks('grunt-contrib-jst');
 
+
+    /**
+     * Deploy a local database.
+     *
+     * $ grunt deploy-local-db
+     */
     grunt.registerTask('deploy-local-db', 'Deploy a local database.', function () {
         grunt.task.run('run-sql:create-local-db', 'run-sql:create-local-tables', 'run-sql:create-local-data');
     });
-
-    // Default task(s).
-    //grunt.registerTask('default', ['uglify']);
-
 };

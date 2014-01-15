@@ -35,6 +35,88 @@
     <!-- Example row of columns -->
     <div class="row">
         <div class="col-md-4">
+            <h3><i class="fa fa-smile-o"></i> UAC 0.7-0/1/2/3</h3>
+
+            <dl>
+                <dt>Hit Review</dt>
+                <dd>
+                    <ul>
+                        <li>
+                            Added the ability to select clients as well as clusters. The clusters available to select
+                            are those that are not associated with any of the currently selected clients.
+                        </li>
+                        <li>
+                            IOC summary data no longer refreshes when selecting shopping criteria. Criteria selection
+                            should now be quicker and easier. A submit button is not required to load the IOC summary
+                            data.
+                        </li>
+                        <li>
+                            Removed the claimed counts and checkout option from the IOC selection view. It was reported
+                            these counts were not being used. They will eventually be replaced with a better alternative.
+                        </li>
+                        <li>
+                            Removed existing user settings and replaced it with a lightweight client side alternative.
+                        <li>
+                            IOC Name selection is now persisted across page refreshes.
+                        </li>
+                        <li>
+                            Consolidated the shopping and hit review menu options to a single hit review option.
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>Server Changes</dt>
+                <dd>
+                    <ul>
+                        <li>
+                            Added an additional header to the nginx configuration to support Secure cookies. This is in
+                            support of caching credentials for acquisitions.
+                        </li>
+                        <li>
+                            Forwarding additional SSO parameters on REST calls to Seasick.
+                        </li>
+                        <li>
+                            Updated acquisition related UAC functionality to adhere to Seasick API changes.
+                        </li>
+                        <li>
+                            sfmatcher sends notifications of large (>100mb) audits instead of storing in db.
+                        </li>
+                        <li>
+                            Strikefinder backend statistics are now being collected in graphite.
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>Fixes</dt>
+                <ul>
+                    <li>
+                        Resolved issue that was causing an error message when downloading an acquisition.
+                    </li>
+                    <li>
+                        Resolved issue related to incorrect host time logged status.
+                    </li>
+                    <li>
+                        Resolved issue with suppression links.
+                    </li>
+                </ul>
+            </dl>
+
+            <dl>
+                <dt>Other</dt>
+                <ul>
+                    <li>
+                        Client HTML templates now pre-compiled into a single jst file.
+                    </li>
+                </ul>
+            </dl>
+
+        </div>
+
+        <div class="col-md-4">
             <h3><i class="fa fa-meh-o"></i> UAC 0.6-1</h3>
             <dl>
                 <dt>Hit Review</dt>
@@ -173,81 +255,6 @@
                         </ul>
                     </dd>
                 </dl>
-        </div>
-        <div class="col-md-4">
-            <h3><i class="fa fa-smile-o"></i> UAC 0.5-1</h3>
-
-            <dl>
-                <dt>Merge All</dt>
-                <dd>
-                    <ul>
-                        <li>
-                            Added the ability to merge all identities into the latest. When viewing the most recent identity for
-                            a hit a merge all button is displayed. Clicking the merge all button merges all identities and
-                            comments as well as brings forward the tag with highest precedence.
-                        </li>
-                    </ul>
-                </dd>
-            </dl>
-
-            <dl>
-                <dt>Suppressed/IOCs</dt>
-                <dd>
-                    <ul>
-                        <li>
-                            IOC names now display a strikethrough style on the hit review page if the IOC expression is
-                            currently suppressed. This will give the analyst the abilty to view all the related hits but
-                            determine which ones are being suppressed. If you click on a suppressed IOC tab the related
-                            suppression is in the Suppressions table. Selecting the suppression from the table will
-                            navigate you to the suppression view so you can see the suppressed hits.
-                        </li>
-                    </ul>
-                </dd>
-            </dl>
-
-            <dl>
-                <dt>Merge All</dt>
-                <dd>
-                    <ul>
-                        <li>
-                            IOC names now display a strikethrough style on the hit review page if the IOC expression is
-                            currently suppressed. This will give the analyst the abilty to view all the related hits but
-                            determine which ones are being suppressed. If you click on a suppressed IOC tab the related
-                            suppression is in the Suppressions table. Selecting the suppression from the table will navigate
-                            you to the suppression view so you can see the suppressed hits.
-                        </li>
-                    </ul>
-                </dd>
-            </dl>
-
-            <dl>
-                <dt>Themes</dt>
-                <dd>
-                    <ul>
-                        <li>
-                            Added versions of the UAC themes with smaller font sizes. Will eventually move this to a user preferences/settings area.
-                        </li>
-                    </ul>
-                </dd>
-            </dl>
-
-            <dl>
-                <dt>Fixes</dt>
-                <dd>
-                    <ul>
-                        <li>
-                            Resolved issue on acquisitions list where state values of submitted were not being properly rendered.
-                        </li>
-                        <li>
-                            Resolved issue with IOC Name facet not filtering properly.
-                        </li>
-                        <li>
-                            Resolved issue with some tables not staying on the same record after refresh.
-                        </li>
-                    </ul>
-                </dd>
-            </dl>
-
         </div>
     </div>
 </div>

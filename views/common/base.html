@@ -6,10 +6,6 @@
 {{ super() }}
 
 <link href="/static/common/css/base.css" rel="stylesheet"/>
-<link href="/static/datatables/css/jquery.dataTables.css" rel="stylesheet"/>
-<link href="/static/datatables/css/dataTables.bootstrap.css" rel="stylesheet"/>
-<link href="/static/css/select2.css" rel="stylesheet"/>
-<link href="/static/css/bootstrapSwitch.css" rel="stylesheet"/>
 
 <!-- log4javascript configuration -->
 <script src="/static/js/log4javascript.js"></script>
@@ -33,18 +29,21 @@
 
 <script src="/static/js/jquery.bootstrap-growl.min.js"></script>
 
+<script src="/static/js/async.js"></script>
+
 <!-- Datatables Support -->
+<link href="/static/datatables/css/jquery.dataTables.css" rel="stylesheet"/>
+<link href="/static/datatables/css/dataTables.bootstrap.css" rel="stylesheet"/>
 <script src="/static/datatables/js/jquery.dataTables.min.js"></script>
 <script src="/static/datatables/js/dataTables.bootstrap.js"></script>
 
 <!-- Select2 -->
+<link href="/static/css/select2.css" rel="stylesheet"/>
 <script src="/static/js/select2.min.js"></script>
 
 <!-- Typeahead support. -->
 <script src="/static/js/typeahead.min.js"></script>
 <link href="/static/css/typeahead.js-bootstrap.css" rel="stylesheet"/>
-
-<script src="/static/js/bootstrapSwitch.js"></script>
 
 <script src="/static/js/jquery.blockUI.js"></script>
 
@@ -55,6 +54,14 @@
 
 <script src="/static/js/moment.min.js"></script>
 <script src="/static/js/jquery.scrollTo.min.js"></script>
+
+{% if node_env == "prod" %}
+    {# Include the compressed UAC Javascript file. #}
+    <script lang="text/javascript" src="/static/uac/js/uac.js"></script>
+{% else %}
+    {# Include the raw UAC Javascript source files. #}
+    <script lang="text/javascript" src="/static/uac/js/common.js"></script>
+{% endif %}
 
 <!-- Common UAC support. -->
 <script src="/static/uac/js/common.js"></script>
@@ -150,7 +157,7 @@
     <div class="container">
         <p class="text-muted credit">
             &copy; 2013 Mandiant Corporation. All rights reserved.
-            <span class="pull-right">Version: 0.6.1</span>
+            <span class="pull-right">Version: {{ settings.version }}</span>
         </p>
     </div>
     {% endblock %}

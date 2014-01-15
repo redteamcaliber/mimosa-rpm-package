@@ -5,26 +5,32 @@
 {% block head %}
     {{ super() }}
 
-    <script lang="text/javascript" src="/static/sf/js/utils.js"></script>
-    <script lang="text/javascript" src="/static/sf/js/models.js"></script>
-    <script lang="text/javascript" src="/static/sf/js/components.js"></script>
+    {% if node_env == "prod" %}
+        {# Include the compressed StrikeFinder Javascript file. #}
+        <script lang="text/javascript" src="/static/sf/js/strikefinder.js"></script>
+    {% else %}
+        {# Include the raw StrikeFinder Javascript source files. #}
+        <script lang="text/javascript" src="/static/sf/js/utils.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/models.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/components.js"></script>
 
-    <script lang="text/javascript" src="/static/sf/js/hits.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/hits.js"></script>
 
-    <script lang="text/javascript" src="/static/sf/js/acquisitions.js"></script>
-    <script lang="text/javascript" src="/static/sf/js/hits-by-tag.js"></script>
-    <script lang="text/javascript" src="/static/sf/js/hosts.js"></script>
-    <script lang="text/javascript" src="/static/sf/js/shopping.js"></script>
-    <script lang="text/javascript" src="/static/sf/js/suppressions.js"></script>
-    <script lang="text/javascript" src="/static/sf/js/tasks.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/acquisitions.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/hits-by-tag.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/hosts.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/shopping.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/suppressions.js"></script>
+        <script lang="text/javascript" src="/static/sf/js/tasks.js"></script>
+    {% endif %}
 
+    {# Include the compiled templates. #}
+    <script lang="text/javascript" src="/static/sf/js/templates.js"></script>
 
-    {% include "/sf/templates.html" %}
 {% endblock %}
 
 {% block nav_menu %}
-<li><a href="/sf/shopping/"><i class="fa fa-search"></i> IOC Selection</a></li>
-<li><a href="/sf/hits/"><i class="fa fa-list"></i> Hit Review</a></li>
+<li><a href="/sf/shopping/"><i class="fa fa-list"></i> Hit Review</a></li>
 <li><a href="/sf/suppressions/"><i class="fa fa-level-down"></i> Suppressions</a></li>
 <li><a href="/sf/hits_by_tag/"><i class="fa fa-tags"></i> Hits by Tag</a></li>
 <li><a href="/sf/acquisitions/"><i class="fa fa-cloud-download"></i> Acquisitions</a></li>

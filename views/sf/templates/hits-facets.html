@@ -1,0 +1,51 @@
+<% _.each( keys, function( facet, index ) { %>
+<div class="row" style="margin-bottom: 5px">
+
+    <div class="col-md-12">
+        <!-- A div to represent the collapsable facet content. -->
+        <div id="<%= facet %>-div" class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#<%= facet %>-div" href="#collapse-<%= facet %>">
+                            <i class="fa <%= get_facet_icon(facet) %>"></i>
+                            <%= get_facet_title(facet) %>
+                            <span class="badge pull-right"><%= get_facet_count(facet) %></span>
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse-<%= facet %>" class="panel-collapse collapse <%= get_visibility(facet) ? 'in' : '' %>">
+                    <div class="panel-body" style="max-height: 250px; padding: 10px; overflow: auto">
+                        <ul class="list-group" style="margin-bottom: 0">
+                            <% _.each( get_facet_values(facet), function(value, index) { %>
+                            <li class="list-group-item" style="margin-bottom: 1px">
+                                <a name="<%= value.id %>"
+                                   title="<%= value.value %>"
+                                   data-facet-type="<%= facet %>"
+                                   data-facet-id="<%= value.id %>"
+                                   data-facet-value="<%= value.value %>">
+                                    <%= value.abbrev ? value.abbrev : value.value %>
+                                    <span class="badge pull-right"><%= value.count %></span>
+                                </a>
+                            </li>
+                            <% }) %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<% }); %>
+
+<div class="row" style="margin-bottom: 10px">
+    <div class="col-sm-12">
+        <button id="reset-facets"
+                type="button"
+                class="btn btn-default form-control">
+            <i class="fa fa-undo"></i> Reset
+        </button>
+    </div>
+</div>

@@ -5,7 +5,7 @@
 . /opt/web/apps/uac/bin/env.sh
 
 # Set the development mode configuration.
-export NODE_ENV=production
+export NODE_ENV=prod
 export NODE_PATH=lib
 
 # The node executable.

@@ -2,11 +2,11 @@
 
 # Version settings.
 NAME="Mandiant-uac-ws"
-VERSION="0.6"
-RELEASE="1"
+VERSION="0.7"
+RELEASE="3"
 
 # The git branch to build.
-BRANCH=master
+BRANCH=Mandiant-uac-ws-0.7-0.x86_64
 
 # The repo to build.
 REPO=git@github.mandiant.com:amilano/uac-node.git
@@ -92,13 +92,25 @@ echo 'OK'
 echo 'Installing dependencies...'
 cd $PROJECT_DIR
 chmod +x ./bin/*
-./bin/install_libs.sh --production
+./bin/install_libs.sh
 echo 'OK'
 
-# Uglify the js files.
-echo 'Running uglify...'
-./bin/uglify.sh 'TRUE'
+# Include Node/Grunt support.
+. ./bin/env.sh
+
+# Compile the Underscore templates.
+echo
+echo 'Compiling the underscore templates...'
+grunt jst
 echo 'OK'
+echo
+
+# Uglify the js files.
+echo
+echo 'Running uglify...'
+grunt uglify
+echo 'OK'
+echo
 
 # Create the rpm tar.
 echo "Creating the source tar file: $TAR_FILE from source: $PROJECT_DIR/*"

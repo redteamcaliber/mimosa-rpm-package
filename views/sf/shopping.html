@@ -6,14 +6,9 @@
     {{ super() }}
 
     <script type="text/javascript">
-        StrikeFinder.tags = {{ tags | safe }};
         StrikeFinder.services = {{ services | safe }};
+        StrikeFinder.clients = {{ clients | safe }};
         StrikeFinder.clusters = {{ clusters | safe }};
-        {% if usersettings %}
-            StrikeFinder.usersettings = {{ usersettings | safe }};
-        {% else %}
-            StrikeFinder.usersettings = {};
-        {% endif %}
 
         $(document).ready(function () {
             (function () {
@@ -33,48 +28,20 @@
     <a id="top"></a>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-sm-12">
             <div id="shopping-div">
-
-                <!-- Selection Input Form -->
                 <div class="row">
-                    <div class="col-md-5" style="margin-left: 1%">
-                        <label>MCIRT Services</label>
-                        <select id="services-select"
-                                multiple="true"
-                                placeholder="Select MCIRT Services">
-                        </select>
-                    </div>
-                    <div class="col-md-offset-1 col-md-2">
-                        <label>
-                            <i class='fa fa-power-off'></i> Check Out On Select
-                        </label><br/>
-
-                        <div id="checkout-switch"
-                             class="switch"
-                             data-on="primary"
-                             data-on-label="ON"
-                             data-off="muted"
-                             data-off-label="OFF">
-                            <input id="checkout" type="checkbox" checked="checked"/>
+                    <div class="col-sm-6">
+                        <div id="cluster-selection-div">
                         </div>
-                    </div>
-                </div>
-                <div class="row" style="margin-top: 1%; margin-bottom: 1%">
-                    <div class="col-md-5" style="margin-left: 1%">
-                        <label>Clusters</label>
-                        <select id="clusters-select"
-                                multiple="true"
-                                placeholder="Select Clusters">
-                        </select>
                     </div>
                 </div>
 
                 <!-- Selection Results -->
-                <div class="row">
+                <div class="row" style="margin-top: 30px">
                     <div class="col-md-6">
                         <!-- Column 1, IOC Summary -->
-                        <div id="ioc-summary-div">
+                        <div id="ioc-summary-div" style="display: none">
                             <h4>
                                 <i class="fa fa-list"></i> IOC Summary
                             </h4>
@@ -93,7 +60,7 @@
 
                     <div class="col-md-6">
                         <!-- Column2, IOC Details -->
-                        <div id="ioc-details-div">
+                        <div id="ioc-details-div" style="display: none">
                             <div style="height: 600px"></div>
                         </div>
                     </div>

@@ -1,4 +1,3 @@
-// External requirements.
 var _ = require('underscore.string');
 var fs = require("fs");
 var https = require('https');
@@ -16,13 +15,20 @@ var sf_routes = require('sf-routes');
 
 
 //
-// Setup default Winston logging.
+// Initialize the application middleware.
+//
+var app = express();
+
+
+//
+// Setup console logging.
 //
 log.remove(log.transports.Console);
 log.add(log.transports.Console, {
     level: settings.get('server:log_level'),
     colorize: true
 });
+// Set up file logging.
 log.add(log.transports.File, {
     level: settings.get('server:log_level'),
     colorize: true,
@@ -33,11 +39,19 @@ log.add(log.transports.File, {
     maxfiles: settings.get('server:log_maxfiles')
 });
 
+app.configure('dev', function() {
+    // Set up development specific configuration.
+});
 
-//
-// Initialize the application middleware.
-//
-var app = express();
+app.configure('prod', function() {
+    // Setup production specific configuration.
+
+});
+
+// Enable the proxy support.
+app.enable('trust proxy');
+console.log(_.sprintf('trust proxy enabled: %s', app.get('trust proxy')));
+
 app.use(express.compress());
 app.use(express.favicon(__dirname + '/static/img/mandiant.ico'));
 app.use('/static', express.static('static'));
@@ -47,7 +61,8 @@ app.use(express.cookieParser());
 app.use(express.cookieSession({
     key: settings.get('server:session_key'),
     secret: settings.get('server:session_secret'),
-    cookie: { path: '/', httpOnly: true, maxAge: null }
+    proxy: true,
+    cookie: { path: '/', httpOnly: true, secure: true, maxAge: null }
 }));
 app.use(express.csrf());
 app.use(sso.require_authentication(settings.get('sso')));
@@ -112,13 +127,12 @@ app.use(function errorHandler(err, req, res, next) {
  * Start the UAC application server.
  */
 function startup() {
-    log.info('');
-    log.info('--------------------------');
-    log.info('Starting the UAC server...');
-    log.info('--------------------------');
+    console.log('--------------------------');
+    console.log('Starting the UAC server...');
+    console.log('--------------------------');
 
-    log.info('server:port=%s', settings.get('server:port'));
-    log.info('server:ssl=%s', settings.get('server:ssl'));
+    console.log(_.sprintf('server:port=%s', settings.get('server:port')));
+    console.log(_.sprintf('server:ssl=%s', settings.get('server:ssl')));
 
     if (settings.get('server:ssl') === true) {
         https.createServer({
@@ -130,19 +144,19 @@ function startup() {
         http.createServer(app).listen(settings.get('server:port'));
     }
 
-    log.info('---------------------');
-    log.info('UAC server running...');
-    log.info('---------------------');
+    console.log('---------------------');
+    console.log('UAC server running...');
+    console.log('---------------------');
 }
 
 /**
  * Shut down the UAC application server.
  */
 function shutdown() {
-    log.info('');
-    log.info('-------------------------------');
-    log.info('Shutting down the UAC server...');
-    log.info('-------------------------------');
+    console.log('');
+    console.log('-------------------------------');
+    console.log('Shutting down the UAC server...');
+    console.log('-------------------------------');
     process.exit();
 }
 
