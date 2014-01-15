@@ -1077,7 +1077,7 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
                         else {
                             // The request was not complete, view on the suppressions list.
                             StrikeFinder.display_info('The acqusition request is still being processed, its status ' +
-                                'can be views on the <a href="/sf/acquisitions">Acquisitions List</a>.');
+                                'can be viewed on the <a href="/sf/acquisitions">Acquisitions List</a>.');
                             // Hide the dialog.
                             view.$(acquire_form).modal('hide');
                         }
