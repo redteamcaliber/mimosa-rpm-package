@@ -75,6 +75,8 @@ module.exports = function (grunt) {
                     // Datatables bootstrap.
                     'static/datatables/js/dataTables.bootstrap.js': ['static/datatables/js/dataTables.bootstrap.js'],
 
+                    'static/uac/js/uac.js': ['static/uac/js/common.js'],
+
                     // StrikeFinder client sources.
                     'static/sf/js/strikefinder.js': [
                         'static/sf/js/utils.js',

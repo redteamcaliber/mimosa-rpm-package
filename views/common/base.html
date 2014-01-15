@@ -55,6 +55,14 @@
 <script src="/static/js/moment.min.js"></script>
 <script src="/static/js/jquery.scrollTo.min.js"></script>
 
+{% if node_env == "prod" %}
+    {# Include the compressed UAC Javascript file. #}
+    <script lang="text/javascript" src="/static/uac/js/uac.js"></script>
+{% else %}
+    {# Include the raw UAC Javascript source files. #}
+    <script lang="text/javascript" src="/static/uac/js/common.js"></script>
+{% endif %}
+
 <!-- Common UAC support. -->
 <script src="/static/uac/js/common.js"></script>
 
