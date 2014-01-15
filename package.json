@@ -2,7 +2,7 @@
     "name": "uac-ws",
     "author": "Mandiant",
     "description": "Unified Analyst Console",
-    "version": "0.7.2",
+    "version": "0.7.3",
     "main": "uac.js",
     "contributors": [
         {
