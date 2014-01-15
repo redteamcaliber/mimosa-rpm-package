@@ -1921,7 +1921,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                                 }
                             });
                         },
-                        error: function () {
+                        error: function (model, xhr) {
                             try {
                                 var message = xhr && xhr.responseText ? xhr.responseText : 'Response text not defined.';
                                 StrikeFinder.display_error('Error while submitting auto suppression task - ' + message);
