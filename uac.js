@@ -28,6 +28,16 @@ log.add(log.transports.Console, {
     level: settings.get('server:log_level'),
     colorize: true
 });
+// Set up file logging.
+log.add(log.transports.File, {
+    level: settings.get('server:log_level'),
+    colorize: true,
+    filename: settings.get('server:log_file'),
+    json: false,
+    timestamp: true,
+    maxsize: settings.get('server:log_maxsize'),
+    maxfiles: settings.get('server:log_maxfiles')
+});
 
 app.configure('dev', function() {
     // Set up development specific configuration.
@@ -35,17 +45,6 @@ app.configure('dev', function() {
 
 app.configure('prod', function() {
     // Setup production specific configuration.
-
-    // Set up file logging.
-    log.add(log.transports.File, {
-        level: settings.get('server:log_level'),
-        colorize: true,
-        filename: settings.get('server:log_file'),
-        json: false,
-        timestamp: true,
-        maxsize: settings.get('server:log_maxsize'),
-        maxfiles: settings.get('server:log_maxfiles')
-    });
 
 });
 
