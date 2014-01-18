@@ -38,11 +38,17 @@ UAC ToDo
 
 ## Tasks
 
+### Make the UAC start scripts resilient to the directory that are being run in.  It should not matter.
+
 ### Unselect values from ioc details tables after an expression is selected.
 
 ### Use values instead of id's in the select view.
 
 ### Remove SSLv2 from the nginx configuration.
+
+### Look into Node clustering to use the available memory on the box.
+
+### Remove passwords from the Grunt script.
 
 ### Look into changing the hits page into a SPA.
 
