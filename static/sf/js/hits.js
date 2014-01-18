@@ -2028,22 +2028,6 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
 
         log.debug(_.sprintf('Rendering hits view with params: %s', JSON.stringify(params)));
 
-//        var is_rowitem_uuid_defined = params.rowitem_uuid ? true : false;
-//        var is_services_clusters_defined = params.clusters != undefined;
-//        var is_exp_key_defined = is_services_clusters_defined && params.exp_key ? true : false;
-//        var is_iocnamehash_defined = is_services_clusters_defined && params.iocnamehash ? true : false;
-//        var is_ioc_uuid_defined = is_services_clusters_defined && params.ioc_uuid ? true : false;
-//        var is_usertoken_defined = params.usertoken ? true : false;
-
-//        if (!is_usertoken_defined && !is_exp_key_defined && !is_ioc_uuid_defined && !is_iocnamehash_defined &&
-//            !is_rowitem_uuid_defined) {
-//            // Not enough data to display the hits page.  In the future we should remove the link to this view if the
-//            // user has not checked out any hits yet.
-//            view.redirect_to_hits();
-//        }
-//        else {
-
-
         // Update the recent list.
         if (params.exp_key) {
             UAC.recent({name: 'Hit Review: ' + params.exp_key, type: 'checkout', values: params});
@@ -2090,7 +2074,8 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
             tagname: 'Tag',
             iocname: 'IOC',
             item_type: 'Item Type',
-            am_cert_hash: 'AM Cert Hash'
+            am_cert_hash: 'AM Cert Hash',
+            exp_key: 'Expression'
         };
 
         view.icons = {
@@ -2099,13 +2084,15 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
             tagname: 'fa-tags',
             iocname: 'fa-warning',
             item_type: 'fa-info',
-            am_cert_hash: 'fa-desktop'
+            am_cert_hash: 'fa-desktop',
+            exp_key: 'fa-dot-circle-o'
         };
 
         view.keys = [
             'tagname',
             'iocname',
             'item_type',
+            'exp_key',
             'md5sum',
             'am_cert_hash',
             'username'
@@ -2142,14 +2129,20 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
         var attributes = view.model.attributes;
 
         if (attributes.am_cert_hash) {
-            _.each(attributes.am_cert_hash, function (hash, index) {
+            _.each(attributes.am_cert_hash, function (hash) {
                 hash.abbrev = view.shorten(hash.value, 8);
             });
         }
 
         if (attributes.md5sum) {
-            _.each(attributes.md5sum, function (md5, index) {
+            _.each(attributes.md5sum, function (md5) {
                 md5.abbrev = view.shorten(md5.value, 8);
+            });
+        }
+
+        if (attributes.exp_key) {
+            _.each(attributes.exp_key, function(exp_key) {
+                exp_key.abbrev = view.shorten(exp_key.id, 8);
             });
         }
 
