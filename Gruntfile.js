@@ -1,5 +1,18 @@
-
 var path = require('path');
+
+/**
+ * Convert the filename/path to only use the filename.
+ * @param filename - the filename with the path included.
+ */
+function process_name(filename) {
+    var last_index = filename.lastIndexOf('/');
+    if (last_index == -1) {
+        return filename;
+    }
+    else {
+        return filename.substring(last_index + 1, filename.length);
+    }
+}
 
 /**
  * Source the UAC environment script before running grunt commands.
@@ -26,8 +39,8 @@ module.exports = function (grunt) {
              * Watch the underscore templates and re-compile the templates to a JST file.
              */
             templates: {
-                files: ['views/sf/templates/*.html'],
-                tasks: ['jst:strikefinder']
+                files: ['views/sf/templates/*.html', 'views/nt/templates/*.html'],
+                tasks: ['jst']
             }
         },
 
@@ -35,27 +48,24 @@ module.exports = function (grunt) {
          * Compile underscore templates into a .jst file.
          */
         jst: {
-            strikefinder: {
+            sf: {
                 options: {
                     namespace: 'StrikeFinder.templates',
                     prettify: true,
-                    /**
-                     * Just use the filename, not the entire path.
-                     * @param filename - the filename including path.
-                     * @returns the translated filename.
-                     */
-                    processName: function(filename) {
-                        var last_index = filename.lastIndexOf('/');
-                        if (last_index == -1) {
-                            return filename;
-                        }
-                        else {
-                            return filename.substring(last_index + 1, filename.length);
-                        }
-                    }
+                    processName: process_name
                 },
                 files: {
                     'static/sf/js/templates.js': ['views/sf/templates/*.html']
+                }
+            },
+            nt: {
+                options: {
+                    namespace: 'Network.templates',
+                    prettify: true,
+                    processName: process_name
+                },
+                files: {
+                    'static/nt/js/templates.js': ['views/nt/templates/*.html']
                 }
             }
         },

@@ -12,6 +12,7 @@ var sso = require('sso');
 var route_utils = require('route-utils');
 var uac_routes = require('uac-routes');
 var sf_routes = require('sf-routes');
+var nt_routes = require('nt-routes');
 
 
 //
@@ -69,6 +70,7 @@ app.use(sso.require_authentication(settings.get('sso')));
 app.use(app.router);
 app.use(uac_routes);
 app.use('/sf', sf_routes);
+app.use('/nt', nt_routes);
 
 route_utils.load_views(app);
 

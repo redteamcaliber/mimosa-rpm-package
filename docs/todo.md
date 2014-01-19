@@ -24,6 +24,10 @@ UAC ToDo
 [#27949](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/27949)
 
 ## Look into using RequireJS.
+- Should convert to using Bower at the same time: http://bower.io/
+- There is a grunt plugin: https://github.com/yatskevich/grunt-bower-task
+
+# Add the new Yeti theme.
 
 ## Display recent items somewhere in the application.
 
