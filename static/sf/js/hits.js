@@ -90,7 +90,7 @@ StrikeFinder.AgentHostView = StrikeFinder.View.extend({
         else {
             // The host was not found, display alternate message.
             var data = {am_cert_hash: view.model.id};
-            view.apply_template('agent-host-template.html', data);
+            view.apply_template('agent-host-empty.html', data);
         }
 
         return view;
