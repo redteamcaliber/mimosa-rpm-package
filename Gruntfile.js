@@ -444,9 +444,14 @@ module.exports = function (grunt) {
     ]);
 
     /**
+     * Deploy an existing UAC rpm to devnet.
+     */
+    grunt.registerTask('deploy-devnet', ['scp:devnet', 'sshexec:install-devnet']);
+
+    /**
      * Build the UAC RPM and install it to the devnet environment.
      */
-    grunt.registerTask('deploy-devnet', ['build-rpm', 'scp:devnet', 'sshexec:install-devnet']);
+    grunt.registerTask('build-deploy-devnet', ['build-rpm', 'deploy-devnet']);
 
 
     grunt.loadNpmTasks('grunt-contrib-watch');
