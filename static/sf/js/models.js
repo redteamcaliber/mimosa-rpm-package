@@ -285,7 +285,7 @@ StrikeFinder.HitsFacetsModel = Backbone.Model.extend({
         this.params = {};
     },
     url: function () {
-        var result = '/sf/api/hits/facets?facets=tagname,iocname,item_type,md5sum,am_cert_hash,username';
+        var result = '/sf/api/hits/facets?facets=tagname,iocname,item_type,exp_key,md5sum,am_cert_hash,username';
 
         // Base filters.
         if (this.params.services) {

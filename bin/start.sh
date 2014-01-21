@@ -14,6 +14,6 @@ NODE=node
 # The server.
 SERVER=uac.js
 
-echo "Starting server $SERVER in debug mode..."
+echo "Starting server $SERVER..."
 $NODE $SERVER
 

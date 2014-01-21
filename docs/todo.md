@@ -1,27 +1,20 @@
 UAC ToDo
 ========
 
-## Pull the code ito master.
-
-## Redo the build_rpm script using Grunt.
-- Have the build rpm script as well as the html view look for the version information in the package.json file.
-- Generate the spec file??
-- Build the package using grunt rpm.
+## Add Expression Key Facet
+- Add the ability to filter hits by expression key.  This feature is useful when viewing hits by IOC or IOC uuid.  See
+[#27949](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/27949)
 
 ## Look into performance monitoring for express.
 - Look into options.
 - Can potentially write out performance monitoring data to files and parse it back in to create reports.
 - Can potentially send statistics to Graphite - https://github.com/felixge/node-graphite.
 - https://github.com/sivy/node-statsd
--
 - Need to determine what to measure, round trip minus any server calls that I make vs total request time.
+- Create an admin page that can return the health of the node server.
 
 ## Add an option to be able to clear the local data cache.
 ## Provide a customer message for select2 components when no items are available for selection.
-
-## Add Expression Key Facet
-- Add the ability to filter hits by expression key.  This feature is useful when viewing hits by IOC or IOC uuid.  See
-[#27949](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/27949)
 
 ## Look into using RequireJS.
 - Should convert to using Bower at the same time: http://bower.io/
@@ -42,11 +35,19 @@ UAC ToDo
 
 ## Tasks
 
+### Make the UAC start scripts resilient to the directory that are being run in.  It should not matter.
+
 ### Unselect values from ioc details tables after an expression is selected.
 
 ### Use values instead of id's in the select view.
 
 ### Remove SSLv2 from the nginx configuration.
+
+### Look into Node clustering to use the available memory on the box.
+
+### Grunt
+- Add an sFTP command for publishing a new UAC RPM.
+- Remove passwords from the Grunt script.
 
 ### Look into changing the hits page into a SPA.
 
