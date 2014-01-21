@@ -1,5 +1,5 @@
-
 var path = require('path');
+var assert = require('assert');
 
 
 /**
@@ -81,7 +81,7 @@ module.exports = function (grunt) {
              */
             templates: {
                 files: ['views/sf/templates/*.html', 'views/nt/templates/*.html'],
-                tasks: ['jst']
+                tasks: ['jst-dev']
             }
         },
 
@@ -100,6 +100,26 @@ module.exports = function (grunt) {
                 }
             },
             nt: {
+                options: {
+                    namespace: 'Network.templates',
+                    prettify: true,
+                    processName: process_name
+                },
+                files: {
+                    '<%= build_uac_dir %>static/nt/js/templates.js': ['<%= build_uac_dir %>views/nt/templates/*.html']
+                }
+            },
+            'sf-dev': {
+                options: {
+                    namespace: 'StrikeFinder.templates',
+                    prettify: true,
+                    processName: process_name
+                },
+                files: {
+                    'static/sf/js/templates.js': ['views/sf/templates/*.html']
+                }
+            },
+            'nt-dev': {
                 options: {
                     namespace: 'Network.templates',
                     prettify: true,
@@ -395,6 +415,13 @@ module.exports = function (grunt) {
     grunt.registerTask('deploy-local-db', 'Deploy a local database.', function () {
         grunt.task.run('run-sql:create-local-db', 'run-sql:create-local-tables', 'run-sql:create-local-data');
     });
+
+    grunt.registerTask('jst-dev', ['jst:sf-dev', 'jst:nt-dev']);
+
+    /**
+     * Watch the Javascript templates for changes and recompile them.
+     */
+    grunt.registerTask('watch-templates', 'Watch the templates files for changes and recompile.', ['jst-dev', 'watch']);
 
     /**
      * Delete the build directory if the user confirmed deletion.

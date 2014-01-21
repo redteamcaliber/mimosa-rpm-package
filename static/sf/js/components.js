@@ -32,7 +32,7 @@ StrikeFinder.View = Backbone.View.extend({
     get_listeners: function () {
         return this._listeners ? _.values(this._listeners) : [];
     },
-    apply_template: function(template, context) {
+    apply_template: function (template, context) {
         this.$el.html(StrikeFinder.template(template, context));
     }
 });
@@ -311,6 +311,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
     initialize: function () {
         if (this.collection) {
             this.listenTo(this.collection, 'sync', this.render);
+            this.listenTo(this.collection, 'reset', this.render);
         }
     },
     highlight_row: function (nRow) {
@@ -522,6 +523,9 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         this.$el.fnDraw(false);
     },
     destroy: function () {
+        // Remove any listeners.
+        this.undelegateEvents();
+
         // Destroy the old table if it exists.
         var dom_element = this.get_dom_table();
         if (!dom_element) {
@@ -568,6 +572,9 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
 
         // Destroy the existing table if there is one.
         view.destroy();
+
+        // Keep track of the expanded rows.
+        view._expanded_rows = [];
 
         // Construct the table settings.
         var settings = StrikeFinder.get_datatables_settings(view, view.options);
@@ -667,6 +674,10 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         // Create the table.
         var table = view.$el.dataTable(settings);
 
+        view.delegateEvents({
+            'click tr i.expand': 'on_expand'
+        });
+
         if (view.$el.parent()) {
             // Assign the bootstrap class to the length select.
             var length_selects = $('.dataTables_wrapper select');
@@ -678,6 +689,12 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         }
 
         return view;
+    },
+    on_expand: function(ev) {
+        ev.stopPropagation();
+        var tr = $(ev.currentTarget).closest('tr');
+        this.trigger('expand', tr.get(0));
+        return false;
     },
     fetch: function (params) {
         var view = this;
@@ -904,6 +921,43 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             },
             aTargets: [index]
         }
+    },
+    /**
+     * Return the list of expanded rows.
+     */
+    expanded_rows: function () {
+        return this._expanded_rows;
+    },
+    /**
+     * Expand the contents of a row.
+     * @param tr - the row.
+     * @param details_callback - function(tr, data) - returns the details HTML.
+     */
+    expand__collapse_row: function (tr, details_callback) {
+        var view = this;
+        var expanded = view.expanded_rows();
+        var index = $.inArray(tr, expanded);
+
+        if (index === -1) {
+            var expand_icon = $(tr).find('i.expand');
+            if (expand_icon) {
+                expand_icon.removeClass('fa-plus-circle');
+                expand_icon.addClass('fa-minus-circle');
+            }
+            expanded.push(tr);
+
+            var data = view.get_data(tr);
+            view.get_table().fnOpen(tr, details_callback(data), 'details');
+        }
+        else {
+            var collapse_icon = $(tr).find('i.expand');
+            if (collapse_icon) {
+                collapse_icon.removeClass('fa-minus-circle');
+                collapse_icon.addClass('fa-plus-circle');
+            }
+            expanded.splice(index, 1);
+            view.get_table().fnClose(tr);
+        }
     }
 });
 
@@ -976,7 +1030,7 @@ StrikeFinder.SelectView = StrikeFinder.View.extend({
 
         return this;
     },
-    close: function() {
+    close: function () {
         this.$el.select2("destroy");
     },
     get_selected: function () {
@@ -1001,7 +1055,7 @@ StrikeFinder.SelectView = StrikeFinder.View.extend({
     /**
      * Clear any options or selections.
      */
-    clear: function() {
+    clear: function () {
         // Clear the select options.
         this.$el.empty();
         // Re-render the select.
@@ -1018,10 +1072,10 @@ StrikeFinder.HostTypeAheadView = StrikeFinder.View.extend({
             name: 'hosts',
             remote: {
                 url: '/sf/api/hosts?hosts=%QUERY',
-                beforeSend: function(jqXhr, settings) {
+                beforeSend: function (jqXhr, settings) {
                     StrikeFinder.block();
                 },
-                filter: function(response) {
+                filter: function (response) {
                     StrikeFinder.unblock();
                     if (!response || response.length == 0) {
                         StrikeFinder.display_info('No matching hosts found.');

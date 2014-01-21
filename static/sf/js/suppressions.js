@@ -149,7 +149,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                     mRender: function (data, type, row) {
                         var formatted = StrikeFinder.format_suppression(row);
 
-                        var suppression_name = _.sprintf('<a href="/sf/suppressions/%s">%s</a>',
+                        var suppression_name = _.sprintf('<a href="/sf/suppressions/%s" onclick="ev.stopPropagation()">%s</a>',
                             row.suppression_id, formatted);
 
                         var delete_link = '<i class="fa fa-times-circle text-default destroy" title="Delete Suppression"></i>';

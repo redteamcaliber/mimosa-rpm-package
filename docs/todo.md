@@ -1,6 +1,8 @@
 UAC ToDo
 ========
 
+## Move the partial templates from the views directory to the static files directory.
+
 ## Add Expression Key Facet
 - Add the ability to filter hits by expression key.  This feature is useful when viewing hits by IOC or IOC uuid.  See
 [#27949](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/27949)

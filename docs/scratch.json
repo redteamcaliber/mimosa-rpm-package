@@ -1,35 +1,158 @@
 {
-    "uuid": "587f1e12-77d7-11e3-aef2-5254000f6065",
-    "file_name": "7433816",
-    "state": "submitted",
-    "agent": "1b8dbf9ddf36d114d437e1a660e2f68355358ac3d4ea284827d7c10cbe60fa64",
-    "method": "raw",
-    "cluster": "9402af9a-f99b-45c3-8f86-651aa1d87f75",
-    "controller": "93b4052a-6430-4796-927d-071c8a159c02",
-    "task_url": "/celery/6e232fbb-6229-479c-a81e-cd5b92cae148/status",
-    "ref": "/api/v1/acquisition/587f1e12-77d7-11e3-aef2-5254000f6065/",
-    "file_path": "%systemroot%\\system32"
+    "count": 5580,
+    "alerts": [
+        {
+            "id": 13701787,
+            "identity": "cd5d90d06b49175923b0e06ebff0d906",
+            "first_seen": "2014-01-17 21:01:22",
+            "last_seen": "2014-01-19 15:12:01",
+            "severity": 5,
+            "src": {
+                "ip": "10.50.1.20",
+                "city": null,
+                "region": null,
+                "country": null,
+                "isp": null,
+                "org": null
+            },
+            "dst": {
+                "ip": "10.50.32.32",
+                "city": null,
+                "region": null,
+                "country": null,
+                "isp": null,
+                "org": null
+            },
+            "source": "Email",
+            "type": "aggregate",
+            "signature": {
+                "id": 10011,
+                "name": "malicious_ip_string",
+                "revision": 3,
+                "priority": 5,
+                "classification": "phishing-email-low-confidence"
+            },
+            "sensor": {
+                "id": 1189,
+                "uuid": "4c8e8deb-5574-4bad-a5ed-d5c45f96105b",
+                "name": "rol019"
+            },
+            "engagement": {
+                "uuid": "07ed2d40-f1ef-4360-a67a-3c02ca0b4a65",
+                "name": "MCIRT11-005",
+                "type": "MCIRT"
+            },
+            "client": {
+                "uuid": "e545024c-3560-4192-a8be-aac34c6177d2",
+                "name": "Rolls-Royce"
+            },
+            "unreviewed": 1246,
+            "reviewed": 0,
+            "status": "NOTREVIEWED",
+            "status_updated": "2014-01-17 21:01:53.546747",
+            "user": null
+        },
+        {
+            "id": 13701799,
+            "identity": "7a2b7d55007ef072143e8f4fd674d89e",
+            "first_seen": "2014-01-17 21:01:22",
+            "last_seen": "2014-01-19 15:09:09",
+            "severity": 5,
+            "src": {
+                "ip": "10.50.1.19",
+                "city": null,
+                "region": null,
+                "country": null,
+                "isp": null,
+                "org": null
+            },
+            "dst": {
+                "ip": "10.50.32.32",
+                "city": null,
+                "region": null,
+                "country": null,
+                "isp": null,
+                "org": null
+            },
+            "source": "Email",
+            "type": "aggregate",
+            "signature": {
+                "id": 10011,
+                "name": "malicious_ip_string",
+                "revision": 3,
+                "priority": 5,
+                "classification": "phishing-email-low-confidence"
+            },
+            "sensor": {
+                "id": 1189,
+                "uuid": "4c8e8deb-5574-4bad-a5ed-d5c45f96105b",
+                "name": "rol019"
+            },
+            "engagement": {
+                "uuid": "07ed2d40-f1ef-4360-a67a-3c02ca0b4a65",
+                "name": "MCIRT11-005",
+                "type": "MCIRT"
+            },
+            "client": {
+                "uuid": "e545024c-3560-4192-a8be-aac34c6177d2",
+                "name": "Rolls-Royce"
+            },
+            "unreviewed": 2724,
+            "reviewed": 0,
+            "status": "NOTREVIEWED",
+            "status_updated": "2014-01-17 21:02:48.722424",
+            "user": null
+        },
+        {
+            "id": 13704453,
+            "identity": "d9abf26f0d93664de4305b85d55f403d",
+            "first_seen": "2014-01-18 00:04:07",
+            "last_seen": "2014-01-19 00:03:30",
+            "severity": 3,
+            "src": {
+                "ip": "164.58.153.3",
+                "city": null,
+                "region": null,
+                "country": null,
+                "isp": "Oklahoma State Regents for Higher Education",
+                "org": "McCurtain Co HE-Idabel"
+            },
+            "dst": {
+                "ip": "196.3.56.254",
+                "city": null,
+                "region": null,
+                "country": null,
+                "isp": "Hoffmann LaRoche",
+                "org": "Hoffmann LaRoche"
+            },
+            "source": "Snort",
+            "type": "aggregate",
+            "signature": {
+                "id": 12741,
+                "name": "ZERO ACCESS BEACON [UDP]",
+                "revision": 9,
+                "priority": 3,
+                "classification": "beaconing-medium-confidence"
+            },
+            "sensor": {
+                "id": 185,
+                "uuid": "4c04b0e5-ae05-4bfb-ac0c-875d10882ca4",
+                "name": "roe015"
+            },
+            "engagement": {
+                "uuid": "954c36ad-38d3-4f5b-ac84-b3062908cb9d",
+                "name": "MCIRT12-008",
+                "type": "MCIRT24X7"
+            },
+            "client": {
+                "uuid": "82803db5-8f86-47f4-90d8-aa62d599393f",
+                "name": "Genentech"
+            },
+            "unreviewed": 4,
+            "reviewed": 0,
+            "status": "NOTREVIEWED",
+            "status_updated": "2014-01-18 00:04:53.567901",
+            "user": null
+        }
+    ]
 }
-
-
-{"acquired_file": null, "agent": {"agent_cert": "-----BEGIN CERTIFICATE-----\nMIICpjCCAY4CCQDPPi0OxdCXjDANBgkqhkiG9w0BAQUFADAVMRMwEQYDVQQDEwpO\nVEJLMzAxNjI0MB4XDTcwMDEwMTEyMDAwMFoXDTIyMDgwNDEwNDY0MVowFTETMBEG\nA1UEAxMKTlRCSzMwMTYyNDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEB\nAKMDN9bk7Z4wnJhhPldj+kj2cKsWs9HYhzLf4xrXkLq7Nur8a/dGdTt6Vub3dG3O\niK22W4Fy9xqC/5ffpwUu5EHJ+sLgSuIwIfriYG49C2+VjRnrsBxim9hEeY+oM4Dq\nQ7LMZS/kpG1XXVQjtCSDq4br/kzLxy7iU6DlfKMASnFEFfb+hsfNS4LxoNp/x1Il\n4WJZbIRdutgBqqN2KTTzXz5NGGseOUUm0tAQ1ux4Z19LC0i2neb3zcVDfz5eSTrl\nrdtSUuI0G8eLd6GJDFxsEffIPA7exL/SpbztT2pMtMosH3n3NxF1g244P2yp+Vzp\nJls25mZ80QzEWoiYrlRJJ3MCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEAXp9ZqZXB\nebF14LnIxUCE8e+c6ytCr6YA1xxp2C9I5/sGd2JUH4A22obeOCuTbTskQ5hLjIIC\ngE5vS0gw5osa/V33fHW81xyyf2GPuR+4AltyWdjFzVNL83Egi/0aL2jg6FGnNrjR\nHmF361Y1D+F6rUNHGwDvRlTJHY8bUeLrOoVvWia0BWR27cWO3lE4x9ZOWFZ66B66\nqrwBmdyjDMFWq9kAZ8vGTXvs4a2ZoR0qbnTST3FETquqKWcuQpOtg9MkYg17aVJG\ndWHmk3EHIXct9Nnn29hIZL2LBbGghsnr2cs2eJWU/11wyGk5ru6UKRcH2VrHFMTx\nm05y30/CnWygbA==\n-----END CERTIFICATE-----\n", "agent_id": null, "cluster": {"engagement": {"client": {"last_updated": "2013-06-11T20:33:39", "name": "Swaniawski-Grimes", "resource_uri": "", "uuid": "bcc73285-e021-4356-b2ec-0ecb4f2d8b79"}, "number": "MFR12-022", "resource_uri": "", "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"}, "name": "SCHUPPELTD001", "node_band": 100000, "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/", "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"}, "domain": "HALAMERICA", "drives": "c:,d:", "gmt_offset": "PT5H", "hash": "6ddd9ae0cc9da83a80f56a4a76ad7662978ef2341cd0cdcdcd942bfb8cf4b100", "hostname": "NTBK301624", "ip": "34.157.224.31", "logged_on_user": "HALAMERICA\\hx18801,HALAMERICA\\NTBK301624$", "mac_address": "00ffc0636908", "machine": "NTBK301624", "os_bitness": "64-bit", "os_buildnumber": "7601", "os_patch_level": "Service Pack 1", "port": 22201, "proc_type": "Multiprocessor Free", "processor": "Intel(R) Core(TM) i5-2520M CPU @ 2.50GHz", "product_name": "Windows 7 Enterprise", "resource_uri": "/api/v1/agent/6ddd9ae0cc9da83a80f56a4a76ad7662978ef2341cd0cdcdcd942bfb8cf4b100/", "revision": "1591de04-1884-11e2-ba9a-525400a828bb", "time_logged": "2013-01-30T13:30:52.434734", "time_zone_dst": "West Asia Daylight Time", "time_zone_standard": "West Asia Standard Time", "total_physical_ram": "4200968192", "uuid": "1591d9e0-1884-11e2-ba9a-525400a828bb", "version": "2.2.1500"}, "cluster": {"engagement": {"client": {"last_updated": "2013-06-11T20:33:39", "name": "Swaniawski-Grimes", "resource_uri": "", "uuid": "bcc73285-e021-4356-b2ec-0ecb4f2d8b79"}, "number": "MFR12-022", "resource_uri": "", "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"}, "name": "SCHUPPELTD001", "node_band": 100000, "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/", "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"}, "comment": "sdfsd", "create_datetime": "2014-01-07T23:00:07.340242", "error_message": "HTTPSConnectionPool(host='58.246.4.10', port=443): Max retries exceeded with url: /apps/webclient/index.php (Caused by <class 'socket.error'>: [Errno 110] Connection timed out)", "file_name": "2.exe", "file_path": "C:", "mcic_create_dt": null, "mcic_id": null, "mcic_state": null, "mcic_status": null, "mcic_update_dt": null, "method": "raw", "mir_acquired_uri": null, "mir_detail_uri": null, "mir_job_uri": null, "resource_uri": "/api/v1/acquisition/73b55616-77ef-11e3-95ec-5254000f6065/", "state": "errored", "update_datetime": "2014-01-07T23:01:10.397873", "user": "sdf", "uuid": "73b55616-77ef-11e3-95ec-5254000f6065"}
-
-errored, cancelled, created, started, completed
-if (data) {
-var label_class = '';
-if (data == 'errored') {
-label_class = 'label-danger';
-}
-else if (data == 'cancelled') {
-label_class = 'label-warning';
-}
-else if (data == 'created') {
-label_class = 'label-default';
-}
-else if (data == 'started' || data == 'created') {
-label_class = 'label-primary';
-}
-else if (data == 'completed') {
-label_class = 'label-success';
-}
-else if (data == 'unknown') {

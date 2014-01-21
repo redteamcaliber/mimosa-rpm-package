@@ -4,4 +4,22 @@
 
 {% block head %}
 {{ super() }}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var alerts_view = new NT.AlertsView({
+        });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <table id="alerts-table" class="table table-bordered">
+            </table>
+        </div>
+    </div>
+</div>
 {% endblock %}

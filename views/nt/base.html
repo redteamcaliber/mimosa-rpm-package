@@ -9,6 +9,7 @@
 {% if node_env == "prod" %}
 {# Include the compressed StrikeFinder Javascript file. #}
 <script lang="text/javascript" src="/static/sf/js/strikefinder.js"></script>
+<script lang="text/javascript" src="/static/nt/js/network.js"></script>
 {% else %}
 {# Include the raw StrikeFinder Javascript source files. #}
 <script lang="text/javascript" src="/static/sf/js/utils.js"></script>
@@ -23,14 +24,16 @@
 <script lang="text/javascript" src="/static/sf/js/shopping.js"></script>
 <script lang="text/javascript" src="/static/sf/js/suppressions.js"></script>
 <script lang="text/javascript" src="/static/sf/js/tasks.js"></script>
+
+<script lang="text/javascript" src="/static/sf/js/tasks.js"></script>
 {% endif %}
 
 {# Include the compiled templates. #}
-<script lang="text/javascript" src="/static/nt/js/templates.js"></script>
+<script lang="text/javascript" src="/static/nt/js/alerts.js"></script>
 {% endblock %}
 
 {% block nav_menu %}
-<li><a href="/sf/alerts/"><i class="fa fa-bell"></i> Alerts</a></li>
+<li><a href="/nt/alerts/"><i class="fa fa-bell"></i> Alerts</a></li>
 {% endblock %}
 
 {% block form_menu %}
