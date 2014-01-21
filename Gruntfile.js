@@ -60,7 +60,7 @@ module.exports = function (grunt) {
         uac_repo: 'git@github.mandiant.com:amilano/uac-node.git',
 
         // The UAC git branch.
-        uac_branch: '0-8.0',
+        uac_branch: 'misc',
 
         // UAC package attributes.
         uac_name: pkg.name,
