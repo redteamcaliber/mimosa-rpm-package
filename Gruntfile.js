@@ -1,20 +1,11 @@
 var path = require('path');
 var assert = require('assert');
+var pkg = require('./package.json');
 
-
-/**
- * Convert the filename/path to only use the filename.
- * @param filename - the filename with the path included.
- */
-function process_name(filename) {
-    var last_index = filename.lastIndexOf('/');
-    if (last_index == -1) {
-        return filename;
-    }
-    else {
-        return filename.substring(last_index + 1, filename.length);
-    }
-}
+// Ensure required fields are set.
+assert(pkg);
+assert(pkg['name']);
+assert(pkg['version']);
 
 
 /**
@@ -30,21 +21,7 @@ function process_name(filename) {
  *
  */
 module.exports = function (grunt) {
-    function get_local_connection() {
-        return {
-            user: 'uac_user',
-            password: 'devnet',
-            database: 'uac',
-            host: 'localhost',
-            port: 5432
-        }
-    }
-
-
-    // Read the package data into config.
-    var pkg = grunt.file.readJSON('package.json');
-    assert(pkg);
-    // Assumes version follows the format: ##.##.##
+    // Tokenize the version to strings for use with RPM.  Assumes version follows the format: ##.##.##.
     var tokens = pkg.version.split('.');
     assert(tokens);
     assert(tokens.length == 3);
@@ -56,14 +33,11 @@ module.exports = function (grunt) {
 
     // Project configuration.
     grunt.initConfig({
-        // The UAC git repository.
+        // Github repository information.
         uac_repo: 'git@github.mandiant.com:amilano/uac-node.git',
-
-        // The UAC git branch.
         uac_branch: 'misc',
 
-        // UAC package attributes.
-        uac_name: pkg.name,
+        uac_name: pkg['name'].charAt(0).toUpperCase() + pkg['name'].slice(1),
         uac_version: uac_version,
         uac_release: uac_release,
 
@@ -206,12 +180,12 @@ module.exports = function (grunt) {
              */
             'install-libs': {
                 options: {
-                    //stdout: true,
-                    //stderr: true
+                    stdout: true,
+                    stderr: true
                 },
                 command: [
                     'chmod +x <%= build_uac_dir %>/bin/*',
-                    'npm install <%= build_uac_dir %> --production'
+                    'npm install --production <%= build_uac_dir %>'
                 ].join('&&')
             }
         },
@@ -505,3 +479,30 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jst');
     grunt.loadNpmTasks('grunt-easy-rpm');
 };
+
+/**
+ * Convert the filename/path to only use the filename.
+ * @param filename - the filename with the path included.
+ */
+function process_name(filename) {
+    var last_index = filename.lastIndexOf('/');
+    if (last_index == -1) {
+        return filename;
+    }
+    else {
+        return filename.substring(last_index + 1, filename.length);
+    }
+}
+
+/**
+ * TODO: Replace this.
+ */
+function get_local_connection() {
+    return {
+        user: 'uac_user',
+        password: 'devnet',
+        database: 'uac',
+        host: 'localhost',
+        port: 5432
+    }
+}
