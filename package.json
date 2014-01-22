@@ -44,7 +44,7 @@
         "grunt-shell": "*",
         "grunt-pg-utils": "*",
         "grunt-prompt": "*",
-        "grunt-easy-rpm": "https://github.com/blueshirts/easy-rpm/tarball/e52a2b107fe2e9b57113e6f6ca78eefc2a263acf",
+        "grunt-easy-rpm": "https://github.com/blueshirts/easy-rpm/tarball/c106dc31ee935584a029473db6be3f935fb6b4b9",
         "mocha": "*",
         "chai": "*",
         "should": "*"
