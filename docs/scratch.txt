@@ -1,8 +1,6 @@
-s%3Aj%3A%7B%22_csrfSecret%22%3A%22twfsCHFOiK9HeCcuSIVp8a6l%22%2C%22random%22%3A%220.23455743351951241%22%2C%22acquisition_credentials%22%3A%7B%229402af9a-f99b-45c3-8f86-651aa1d87f75%22%3A%7B%22cluster_uuid%22%3A%229402af9a-f99b-45c3-8f86-651aa1d87f75%22%2C%22user%22%3A%22test12345%22%2C%22password%22%3A%22test12345678%22%7D%7D%7D.bWcwBsMLvMUNMD2qSJD7bOjnEy1aL9N4o6YbXV35xJI
 
 
-s%3Aj%3A%7B%22_csrfSecret%22%3A%22VOKvO4BldJ54ew15wknIwMju%22%2C%22random%22%3A%220.5026611122302711%22%2C%22acquisition_credentials%22%3A%7B%229402af9a-f99b-45c3-8f86-651aa1d87f75%22%3A%7B%22cluster_uuid%22%3A%229402af9a-f99b-45c3-8f86-651aa1d87f75%22%2C%22user%22%3A%22test%22%2C%22password%22%3A%22password1234%22%7D%7D%7D.eh%2Bsqe5dhHoUrWd0V1%2FrlRMkSwvPrqyezkVSKdAUJ6E
+Never mind, it's `session.destroy();`
 
-s%3Aj%3A%7B%22_csrfSecret%22%3A%22aAn5Ldvg8DVaoEw9JoPkb3nL%22%2C%22random%22%3A%220.6021137849893421%22%7D.v51b96PmSSwlAuQaq3aSSrSIGzBfgV13t09eYPs3ClU
+(This is correct for non-cookie based sessions such as Redis, etc.)
 
-s%3Aj%3A%7B%22_csrfSecret%22%3A%22scpiPuUicxPoT0J5v3aSWwx5%22%2C%22random%22%3A%220.13807980273850262%22%2C%22acquisition_credentials%22%3A%7B%229402af9a-f99b-45c3-8f86-651aa1d87f75%22%3A%7B%22cluster_uuid%22%3A%229402af9a-f99b-45c3-8f86-651aa1d87f75%22%2C%22user%22%3A%22test123%22%2C%22password%22%3A%22test%22%7D%7D%7D.D3HNfft%2BTTHPbUwTcD%2BjZd2OZsggdXd4KjFhFAkSCug
