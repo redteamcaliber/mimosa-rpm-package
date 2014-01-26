@@ -197,7 +197,6 @@ module.exports = function (grunt) {
                 version: '<%= uac_version %>',
                 release: '<%= uac_release %>',
                 buildArch: 'x86_64',
-                buildArch: 'x86_64',
                 destination: '<%= build_rpm_dir %>',
                 summary: 'The Mandiant Unified Analyst Console (UAC)',
                 license: 'Commercial',
@@ -220,82 +219,62 @@ module.exports = function (grunt) {
                         // Include the root files.
                         cwd: '<%= build_uac_dir %>',
                         src: '*',
-                        dest: '/opt/web/apps/uac',
-                        owner: 'root',
-                        group: 'root'
+                        dest: '/opt/web/apps/uac'
                     },
                     {
                         // Include the bin scripts, should be executable.
                         cwd: '<%= build_uac_dir %>/bin',
                         src: '**/*',
                         dest: '/opt/web/apps/uac/bin',
-                        owner: 'root',
-                        group: 'root',
                         mode: '755'
                     },
                     {
                         // Include the template conf files.
                         cwd: '<%= build_uac_dir %>/conf',
                         src: ['*_env.json', 'settings.json'],
-                        dest: '/opt/web/apps/uac/conf',
-                        owner: 'root',
-                        group: 'root'
+                        dest: '/opt/web/apps/uac/conf'
                     },
                     {
                         // Include the conf/certs files.
                         cwd: '<%= build_uac_dir %>/conf/certs',
                         src: '**/*',
-                        dest: '/opt/web/apps/uac/conf/certs',
-                        owner: 'root',
-                        group: 'root'
+                        dest: '/opt/web/apps/uac/conf/certs'
                     },
                     {
                         // Include the upstart script.
                         cwd: '<%= build_uac_dir %>/conf/upstart',
                         src: 'uac.conf',
-                        dest: '/etc/init',
-                        owner: 'root',
-                        group: 'root'
+                        dest: '/etc/init'
                     },
                     {
                         // Include the nginx templates.
                         cwd: '<%= build_uac_dir %>/conf/nginx',
                         src: '**',
-                        dest: '/etc/nginx/conf.d',
-                        owner: 'root',
-                        group: 'root'
+                        dest: '/etc/nginx/conf.d'
                     },
                     {
                         // Include the uac source files.
                         cwd: '<%= build_uac_dir %>/lib',
                         src: '**/*',
-                        dest: '/opt/web/apps/uac/lib',
-                        owner: 'root',
-                        group: 'root'
+                        dest: '/opt/web/apps/uac/lib'
                     },
                     {
                         // Include the node modules.
                         cwd: '<%= build_uac_dir %>/node_modules',
                         src: '**/*',
-                        dest: '/opt/web/apps/uac/node_modules',
-                        owner: 'root',
-                        group: 'root'
+                        dest: '/opt/web/apps/uac/node_modules'
                     },
                     {
                         // Include the static files.
                         cwd: '<%= build_uac_dir %>/static',
                         src: '**/*',
-                        dest: '/opt/web/apps/uac/static',
-                        owner: 'root',
-                        group: 'root'
+                        dest: '/opt/web/apps/uac/static'
                     },
                     {
                         // Include the views.
                         cwd: '<%= build_uac_dir %>/views',
                         src: '**/*',
-                        dest: '/opt/web/apps/uac/views',
-                        owner: 'root',
-                        group: 'root'
+                        dest: '/opt/web/apps/uac/views'
                     }
                 ]
             }

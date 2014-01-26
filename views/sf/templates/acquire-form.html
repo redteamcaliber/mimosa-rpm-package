@@ -53,6 +53,13 @@
                         <textarea id="comment" style="height: 50px" class="form-control"></textarea>
                     </div>
 
+                    <% if (credentials_cached) { %>
+                        <p class="text-warning" style="font-weight: bold">
+                            Your credentials for cluster: <%= cluster_name %> is currently cached and is not required.
+                            You may override the cache values by entering a user and password below.
+                        </p>
+                    <% } %>
+
                     <div class="form-group">
                         <label>MCIC User for Cluster - <%= cluster_name %>:</label>
                         <input id="user" type="text" required="true" class="form-control"/>

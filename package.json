@@ -28,6 +28,7 @@
         "request": "~2.25",
         "nunjucks": "~1.0",
         "express": "~3.4",
+        "connect-redis": "~1.4",
         "moment": "~2.4",
         "xml2js": "~0.4"
     },
@@ -44,7 +45,7 @@
         "grunt-shell": "*",
         "grunt-pg-utils": "*",
         "grunt-prompt": "*",
-        "grunt-easy-rpm": "https://github.com/blueshirts/easy-rpm/tarball/c106dc31ee935584a029473db6be3f935fb6b4b9",
+        "grunt-easy-rpm": "https://github.com/blueshirts/easy-rpm/tarball/2acdde084306c8c0d7c1f79c5bfee55ad0e96ca5",
         "mocha": "*",
         "chai": "*",
         "should": "*"

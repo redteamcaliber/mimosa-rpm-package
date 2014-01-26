@@ -1,11 +1,25 @@
 UAC ToDo
 ========
 
-## Move the partial templates from the views directory to the static files directory.
+## Convert to Redis based sessions.
+- x-Programatically set the session timeout based on the sso ticket.
+- Check with JW on using a staticly configured initialization vector vs a random one.  Using a random one has issues on
+  server restart unless it is stored.
+- Write up installation instructions for installing Puppet/Redis into production.
+- Need to document the new uac:encryption_secret setting.
 
-## Add Expression Key Facet
-- Add the ability to filter hits by expression key.  This feature is useful when viewing hits by IOC or IOC uuid.  See
-[#27949](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/27949)
+## Cache cluster credentials.
+- Need to encrypt password values that are being put in the session.
+- Add a checkbox to the acquisition form if the cluster credentials have been cached.  Disable the username and password
+  components if the credentials have been cached.
+
+## Migrate the common StrikeFinder components classes to a common uac.js file.
+- Should have a uac.js, strikefinder.js, and network.js files.
+- uac.js should be included in the top level template.
+- Rename the uac.js server module server.js.
+
+## Move the partial templates from the views directory to the static files directory.
+- Need to update Grunt scripts.
 
 ## Look into performance monitoring for express.
 - Look into options.
@@ -14,6 +28,15 @@ UAC ToDo
 - https://github.com/sivy/node-statsd
 - Need to determine what to measure, round trip minus any server calls that I make vs total request time.
 - Create an admin page that can return the health of the node server.
+
+## Look into WebSockets for keeping track of my items or acquisitions.
+
+## Redis UAC reports???
+- Keep track of hosts/customers that recently had evil hits.
+- Look into the most viewed hits/hosts - http://my.safaribooksonline.com/book/databases/9781617290855/chapter-2dot-anatomy-of-a-redis-web-application/ch02lev1sec5_html
+- Cache hostnames from Seasick - http://my.safaribooksonline.com/book/databases/9781617290855/chapter-2dot-anatomy-of-a-redis-web-application/ch02lev1sec4_html
+
+## Modify the select component on all the StrikeFinder popup dialogs to be a select2 component.
 
 ## Add an option to be able to clear the local data cache.
 ## Provide a customer message for select2 components when no items are available for selection.

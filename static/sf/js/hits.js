@@ -507,11 +507,11 @@ StrikeFinder.AuditContextMenuView = StrikeFinder.View.extend({
  * @param task_id - the task to wait for.
  * @param callback - function(err, complete, result).
  */
-StrikeFinder.wait_for_task = function(task_id, callback) {
+StrikeFinder.wait_for_task = function (task_id, callback) {
     StrikeFinder.wait_for
     (
         {task_id: task_id},
-        function(params, callback) {
+        function (params, callback) {
             var task = new StrikeFinder.Task({id: task_id});
             task.fetch({
                 success: function (model, response) {
@@ -528,7 +528,7 @@ StrikeFinder.wait_for_task = function(task_id, callback) {
                         callback(null, false);
                     }
                 },
-                error: function(model, response) {
+                error: function (model, response) {
                     // Error while looking up task result.
                     clearInterval(interval);
                     callback('Error while checking on task result: ' + task_id);
@@ -611,7 +611,7 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
             data.iocs = [];
         }
 
-        StrikeFinder.get_tags(function(err, tags) {
+        StrikeFinder.get_tags(function (err, tags) {
             if (err) {
                 // Error
                 StrikeFinder.display_error('Error while loading tags - ' + err);
@@ -913,14 +913,14 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
     }
 });
 
-StrikeFinder.wait_for_acquisition = function(acquisition_uuid, callback) {
+StrikeFinder.wait_for_acquisition = function (acquisition_uuid, callback) {
     StrikeFinder.wait_for(
         {acquisition_uuid: acquisition_uuid},
-        function(params, callback) {
+        function (params, callback) {
             var acquisition = new StrikeFinder.Acquisition();
             acquisition.uuid = acquisition_uuid;
             acquisition.fetch({
-                success: function(model, response) {
+                success: function (model, response) {
                     if (response.state == 'created' || response.state == 'started') {
                         // The acquisition request is successful.
                         callback(null, true, response);
@@ -942,7 +942,7 @@ StrikeFinder.wait_for_acquisition = function(acquisition_uuid, callback) {
                         callback(null, false);
                     }
                 },
-                error: function(model, response) {
+                error: function (model, response) {
                     // Error while looking up task result.
                     callback('Error while checking on acquisition status: ' + acquisition_uuid);
                 }
@@ -980,48 +980,79 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
             throw new Error('"cluster_uuid" is undefined.');
         }
 
-        var selection = params['selection'];
-        var file_path = '%systemroot%\\system32';
-        var file_name = '';
-        if (selection) {
-            // Parse out the path and name of the file.
-            selection = _.strip(selection);
+        async.waterfall([
+            function (callback) {
+                // Determine whether credentials exist for this cluster.
+                var credentials = new StrikeFinder.ClusterCredentialsModel({
+                    cluster_uuid: params.cluster_uuid
+                });
+                credentials.fetch({
+                    success: function (model) {
+                        callback(null, model);
+                    },
+                    failure: function (model, response) {
+                        // Error.
+                        callback('Exception while retrieving cached data - ' + JSON.stringify(response));
+                    }
+                })
+            },
+            function (cluster_credentials_model, callback) {
+                view.credentials_cached = cluster_credentials_model.get('found');
 
-            var parts = selection.split("\\");
+                // Display the form.
+                var selection = params['selection'];
+                var file_path = '%systemroot%\\system32';
+                var file_name = '';
+                if (selection) {
+                    // Parse out the path and name of the file.
+                    selection = _.strip(selection);
 
-            if (parts.length <= 1) {
-                file_name = parts.pop();
+                    var parts = selection.split("\\");
+
+                    if (parts.length <= 1) {
+                        file_name = parts.pop();
+                    }
+                    else {
+                        file_name = parts.pop();
+                        file_path = parts.join("\\");
+                    }
+                }
+                else {
+                    // Error
+                    StrikeFinder.error('Nothing selected.');
+                    return;
+                }
+
+                // Create a new model for the acquisition data.
+                view.model = new StrikeFinder.Acquisition({
+                    am_cert_hash: params.am_cert_hash,
+                    cluster_uuid: params.cluster_uuid,
+                    cluster_name: params.cluster_name,
+                    rowitem_uuid: params.rowitem_uuid
+                });
+
+                var data = view.model.toJSON();
+                data['file_path'] = file_path;
+                data['file_name'] = file_name;
+                data['credentials_cached'] = view.credentials_cached;
+
+                // Display the acquire template.
+                view.apply_template('acquire-form.html', data);
+
+                // Display the form to the user.
+                view.$('#acquire-form').modal({
+                    backdrop: false
+                });
+
+                callback();
             }
-            else {
-                file_name = parts.pop();
-                file_path = parts.join("\\");
+        ],
+            function (err) {
+                if (err) {
+                    StrikeFinder.display_error(err);
+                }
             }
-        }
-        else {
-            // Error
-            StrikeFinder.error('Nothing selected.');
-            return;
-        }
-
-        // Create a new model for the acquisition data.
-        view.model = new StrikeFinder.AcquireModel({
-            am_cert_hash: params.am_cert_hash,
-            cluster_uuid: params.cluster_uuid,
-            cluster_name: params.cluster_name,
-            rowitem_uuid: params.rowitem_uuid
-        });
-
-        var data = this.model.toJSON();
-        data['file_path'] = file_path;
-        data['file_name'] = file_name;
-
-        // Display the acquire template.
-        view.apply_template('acquire-form.html', data);
-
-        // Display the form to the user.
-        view.$('#acquire-form').modal({
-            backdrop: false
-        });
+        );
     },
     acquire: function () {
         var view = this;
@@ -1038,6 +1069,7 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
             view.model.set('user', view.$('#user').val());
             view.model.set('password', view.$('#password').val());
             view.model.set('force', view.$("#force").is(":checked"));
+            view.model.set('credentials_cached', view.credentials_cached);
 
             if (!view.model.isValid()) {
                 var errors = view.model.validationError;
@@ -1059,7 +1091,7 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
             success: function (model, response, options) {
                 try {
                     // Attempt to wait for a response that the acquisition was sucessfull submitted.
-                    StrikeFinder.wait_for_acquisition(response.uuid, function(err, is_complete) {
+                    StrikeFinder.wait_for_acquisition(response.uuid, function (err, is_complete) {
                         // Unblock the UI.
                         StrikeFinder.unblock(acquire_form);
 
@@ -1693,7 +1725,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
                     view.trigger('create:tag', rowitem_uuid, tagname);
                 });
             }
-            StrikeFinder.get_tags(function(err, tags) {
+            StrikeFinder.get_tags(function (err, tags) {
                 if (err) {
                     // Error.
                     StrikeFinder.display_error('Exception while loading tags: ' + err);
@@ -2141,7 +2173,7 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
         }
 
         if (attributes.exp_key) {
-            _.each(attributes.exp_key, function(exp_key) {
+            _.each(attributes.exp_key, function (exp_key) {
                 exp_key.abbrev = view.shorten(exp_key.id, 8);
             });
         }

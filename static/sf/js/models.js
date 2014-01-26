@@ -451,7 +451,11 @@ StrikeFinder.SuppressionListItemCollection = Backbone.Collection.extend({
     }
 });
 
-StrikeFinder.AcquireModel = Backbone.Model.extend({
+/**
+ * Model for a single acquisisition.
+ */
+StrikeFinder.Acquisition = Backbone.Model.extend({
+    idAttribute: 'uuid',
     defaults: {
         am_cert_hash: '',
         cluster_uuid: '',
@@ -463,7 +467,14 @@ StrikeFinder.AcquireModel = Backbone.Model.extend({
         password: '',
         force: ''
     },
-    url: '/sf/api/acquire',
+    url: function() {
+        if (this.uuid) {
+            return _.sprintf('/sf/api/acquisitions/%s', this.uuid);
+        }
+        else {
+            return '/sf/api/acquisitions';
+        }
+    },
     validate: function (attr, options) {
         var results = [];
         if (_.isEmpty(attr.am_cert_hash)) {
@@ -475,11 +486,14 @@ StrikeFinder.AcquireModel = Backbone.Model.extend({
         if (_.isEmpty(attr.method)) {
             results.push('"method" is required.');
         }
-        if (_.isEmpty(attr.user)) {
-            results.push('"user" is required.');
-        }
-        if (_.isEmpty(attr.password)) {
-            results.push('"password" is required.');
+        if (!attr.credentials_cached) {
+            // User and password are required if the clusters credentials have not been cached.
+            if (_.isEmpty(attr.user)) {
+                results.push('"user" is required.');
+            }
+            if (_.isEmpty(attr.password)) {
+                results.push('"password" is required.');
+            }
         }
         if (_.isEmpty(attr.file_path)) {
             results.push('"file path" is required.');
@@ -493,16 +507,6 @@ StrikeFinder.AcquireModel = Backbone.Model.extend({
         else {
             return null;
         }
-    }
-});
-
-/**
- * Model for a single acquisisition.
- */
-StrikeFinder.Acquisition = Backbone.Model.extend({
-    idAttribute: 'uuid',
-    url: function() {
-        return _.sprintf('/sf/api/acquisitions/%s', this.uuid);
     }
 });
 
@@ -820,4 +824,13 @@ StrikeFinder.ClientCollection = Backbone.Collection.extend({
     model: StrikeFinder.ClientModel
 });
 
-
+/**
+ * Model to retrieve whether cluster credentials exist.
+ */
+StrikeFinder.ClusterCredentialsModel = Backbone.Model.extend({
+    idAttribute: 'cluster_uuid',
+    urlRoot: '/sf/api/credentials/cluster',
+    defaults: {
+        found: false
+    }
+});
