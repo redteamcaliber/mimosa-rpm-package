@@ -13,6 +13,8 @@ UAC ToDo
 - Add a checkbox to the acquisition form if the cluster credentials have been cached.  Disable the username and password
   components if the credentials have been cached.
 
+## Add the acquisition comment to the hit as well as Seasick.
+
 ## Migrate the common StrikeFinder components classes to a common uac.js file.
 - Should have a uac.js, strikefinder.js, and network.js files.
 - uac.js should be included in the top level template.

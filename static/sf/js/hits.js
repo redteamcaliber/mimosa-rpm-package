@@ -953,12 +953,10 @@ StrikeFinder.wait_for_acquisition = function (acquisition_uuid, callback) {
 };
 
 StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
-    events: {
-        "click #acquire": "acquire",
-        "click #cancel": "cancel"
-    },
     render: function (params) {
         var view = this;
+
+        view.close();
 
         log.debug('Rendering acquire form view...');
         log.debug('params: ' + JSON.stringify(params));
@@ -997,7 +995,9 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
                 })
             },
             function (cluster_credentials_model, callback) {
-                view.credentials_cached = cluster_credentials_model.get('found');
+                var use_cached = cluster_credentials_model.get('found');
+
+                log.debug('Password cached for cluster: ' + params.cluster_name + ': ' + use_cached);
 
                 // Display the form.
                 var selection = params['selection'];
@@ -1034,10 +1034,23 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
                 var data = view.model.toJSON();
                 data['file_path'] = file_path;
                 data['file_name'] = file_name;
-                data['credentials_cached'] = view.credentials_cached;
+                data['use_cached'] = use_cached;
 
                 // Display the acquire template.
                 view.apply_template('acquire-form.html', data);
+
+                // Register events.
+                view.delegateEvents({
+                    'click #acquire': 'acquire',
+                    'click #cancel': 'cancel',
+                    'change #use_cached': 'enable_disable_credentials'
+                });
+
+                if (use_cached) {
+                    // Disable the user and password fields.
+                    view.$('#use_cached').prop('checked', true);
+                    view.enable_disable_credentials()
+                }
 
                 // Display the form to the user.
                 view.$('#acquire-form').modal({
@@ -1049,10 +1062,19 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
         ],
             function (err) {
                 if (err) {
+                    // Error
                     StrikeFinder.display_error(err);
                 }
             }
         );
+    },
+    /**
+     * Enable or disable the user and password field based on the use_cached field.
+     */
+    enable_disable_credentials: function() {
+        var disabled = this.$('#use_cached').is(':checked');
+        this.$('#user').prop('disabled', disabled);
+        this.$('#password').prop('disabled', disabled);
     },
     acquire: function () {
         var view = this;
@@ -1069,7 +1091,8 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
             view.model.set('user', view.$('#user').val());
             view.model.set('password', view.$('#password').val());
             view.model.set('force', view.$("#force").is(":checked"));
-            view.model.set('credentials_cached', view.credentials_cached);
+            // TODO: Rename this on the server.
+            view.model.set('credentials_cached', $('#use_cached').is(':checked'));
 
             if (!view.model.isValid()) {
                 var errors = view.model.validationError;
@@ -1137,6 +1160,11 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
         this.$("#acquire-form").modal("hide");
         // Notify that the dialog was canceled.
         this.trigger('cancel');
+    },
+    close: function() {
+        var view = this;
+        // Remove any listeners.
+        view.undelegateEvents();
     }
 });
 
@@ -1864,6 +1892,8 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
             });
             view.listenTo(view.context_menu, 'acquire', function (selection) {
                 var agent_host_data = view.agenthost_view.attributes();
+
+                // Use the cluster uuid from Seasick.
                 var ss_cluster_uuid = null;
                 if (agent_host_data && agent_host_data.cluster && agent_host_data.cluster.uuid) {
                     ss_cluster_uuid = agent_host_data.cluster.uuid;
