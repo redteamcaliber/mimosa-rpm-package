@@ -1,19 +1,36 @@
 UAC ToDo
 ========
 
-## Convert to Redis based sessions.
-- x-Programatically set the session timeout based on the sso ticket.
-- Check with JW on using a staticly configured initialization vector vs a random one.  Using a random one has issues on
-  server restart unless it is stored.
+## Write up release instructions
 - Write up installation instructions for installing Puppet/Redis into production.
 - Need to document the new uac:encryption_secret setting.
+- Review caching plan?
 
-## Cache cluster credentials.
-- Need to encrypt password values that are being put in the session.
-- Add a checkbox to the acquisition form if the cluster credentials have been cached.  Disable the username and password
-  components if the credentials have been cached.
+## Linkable Acquisitions
+- Make acquisitions linkable.
+- Link the acquisition in the hit comments or make a popup dialog.
 
-## Add the acquisition comment to the hit as well as Seasick.
+## Add a password to the redis server?
+
+## Acquisition comments
+- Allow comment input to be expanded to be multi-line.
+- Page the acquisition comments on the hits view.
+
+## Look through my comments in my notebook for other TODO's.
+
+## My Items View
+- Link acquisition to the identity that it was requested for. (hit vs. identity?)
+- Keep a list of hosts that the user has edited.
+- Allow the user to view the hits for each edited host.
+- Keep a list of hits that have been edited by the user.
+- Allow the user to prioritize hits as Evil, Probably Even, Unknown
+- Default hits list should only display hits that are not in a final state.
+- Default hosts list should only display hosts that have hits that are not in a final state.
+- Allow users to toggle the list to show all hits and hosts that have been edited regardless of tag state.  Need to have
+  a maximum date range.
+
+## Owned customers report.
+- Create a report of customers that currently have hits that are evil or have been marked as evil within the last n days.
 
 ## Migrate the common StrikeFinder components classes to a common uac.js file.
 - Should have a uac.js, strikefinder.js, and network.js files.
