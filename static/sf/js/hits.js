@@ -1200,6 +1200,9 @@ StrikeFinder.CommentsTableView = StrikeFinder.TableView.extend({
             view.collection = new StrikeFinder.CommentsCollection();
         }
         view.listenTo(view.collection, 'sync', view.render);
+
+        view.options.iDisplayLength = 10;
+        view.options.sDom = 'lftip';
     },
     /**
      * Load the comments based on the row item.

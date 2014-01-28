@@ -19,15 +19,21 @@ UAC ToDo
 ## Look through my comments in my notebook for other TODO's.
 
 ## My Items View
-- Link acquisition to the identity that it was requested for. (hit vs. identity?)
-- Keep a list of hosts that the user has edited.
-- Allow the user to view the hits for each edited host.
-- Keep a list of hits that have been edited by the user.
+- The my items functionality will track:
+    - Keep track of any identities that the user has modified.
+    - Keep track of any suppressions that the user has created.
+    - Keep track of any acquisitions that the user has initiated.
+    - Keep track of any hosts that the user has modified.
+    - Keep track of the identity for initiated acquisitions.
+    - Keep track of identities for a host (which gives us acquisitions for a host).
+- Allow users to view hosts they have modified over a time period.
+- Allow users to view identities they have modified over a time period.
+- Allow users to view identities for a modified host.
 - Allow the user to prioritize hits as Evil, Probably Even, Unknown
-- Default hits list should only display hits that are not in a final state.
-- Default hosts list should only display hosts that have hits that are not in a final state.
-- Allow users to toggle the list to show all hits and hosts that have been edited regardless of tag state.  Need to have
-  a maximum date range.
+- Default identities listing should only display hits that are not in a final state.
+- Default hosts listing should only display hosts that have hits that are not in a final state.
+- Allow users to toggle the list to show all hits and hosts that have been edited regardless of tag state.
+- This user story does not address letting users know when initiated acquisitions are complete.
 
 ## Owned customers report.
 - Create a report of customers that currently have hits that are evil or have been marked as evil within the last n days.
@@ -54,6 +60,8 @@ UAC ToDo
 - Keep track of hosts/customers that recently had evil hits.
 - Look into the most viewed hits/hosts - http://my.safaribooksonline.com/book/databases/9781617290855/chapter-2dot-anatomy-of-a-redis-web-application/ch02lev1sec5_html
 - Cache hostnames from Seasick - http://my.safaribooksonline.com/book/databases/9781617290855/chapter-2dot-anatomy-of-a-redis-web-application/ch02lev1sec4_html
+
+## Upgrade the request library to the latest version.
 
 ## Modify the select component on all the StrikeFinder popup dialogs to be a select2 component.
 

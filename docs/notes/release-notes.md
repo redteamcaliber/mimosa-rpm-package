@@ -11,6 +11,7 @@ Mandiant-uac-ws-0.8-0 - January 29th, 2014
 
 ### Hit Review
 - Added expression key facet.  When users view hits by IOC name or uuid the facet will give them an indication of how many unique expressions are present.
+- Row item comments table is now paged.  Client side search is also enabled for this table.
 
 
 Mandiant-uac-ws-0.7-0 - January 8th, 2014
