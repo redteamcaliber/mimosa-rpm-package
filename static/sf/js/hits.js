@@ -1145,7 +1145,24 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
             },
             error: function (model, xhr, options) {
                 try {
-                    StrikeFinder.display_error('Error submitting acquisition request.');
+                    var err;
+                    if (xhr && xhr.responseText) {
+                        try {
+                            var parsed = JSON.parse(xhr.responseText);
+                            if (parsed.error) {
+                                err = parsed.error;
+                            }
+                            else {
+                                err = parsed;
+                            }
+                        }
+                        catch (e) {
+                            // Error parsing the response.
+                            err = xhr.responseText;
+                        }
+                    }
+                    StrikeFinder.display_error('Error submitting acquisition request' +
+                        (err ? ' - ' + err : ''));
                 }
                 finally {
                     StrikeFinder.unblock(acquire_form);
