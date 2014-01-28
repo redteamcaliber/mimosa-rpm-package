@@ -3,7 +3,83 @@ UAC Backlog Review Notes
 
 ## 2014-01-28
 
-###
+### Work Prioritization
+- This is still in a new state, do we have a user story for this?
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/21053
+
+### My Items
+- Triaged request: https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/21053
+- Ross entered this in July.  User story is on the backlog waiting for prioritization.
+- Discussion: Starring vs. What I have Modified
+
+### Acquisition Bug with URI encoding
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/28138
+- Ampersand issue, do we have any action?  Can we close?
+
+### Initiate Acquisitions from Hits Table
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/28559
+- Triaged this request, user story is on the backlog.
+
+### Suppression management when rematching
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/28611&request=eyJnZW5lcmFsVGFiIjoiZGVzY3JpcHRpb24ifQ==
+- Should we create a user story for this?
+
+### Suppressions applying to both notreviewed and investigating
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/28639
+- Did we come to a consensus on this?
+
+### Extinct Customers
+- Triaged this request.  On the backlog awaiting priortization.
+-https://tp.mandiant.com/TargetProcess2/Project/Planning/UserStory/Edit.aspx?RequestID=28794&acid=1CCE9BE1E88DFBE5468210F7D8283E49
+
+### Supressions Not Operator
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/29094
+- Any update on this?
+
+### Prefetch and Portal formatted data
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/29109
+- Any reason NOT to do this?
+
+### Identities and hit tags
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/29563
+- Do we want to add the customer/cluster options to the hits by tag view?
+- If so, what are the defaults?
+
+### ReMatch but not remove
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/30010
+- Triage this?
+
+### Launch Acquisitions on a host without hits
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/30053
+- Is this a legit use case?
+
+### Hide Acquisitions?
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/30055
+- Can we close this request, due to My Items?
+
+### Status Change Delayed
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/30057
+- Triaged this request.
+
+### Hits Not Loading
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/30062
+- Probably due to large audits, need to confirm.
+- What is the plan?
+
+### Acquisition Failure Issue
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/30064
+- Passed to Seasick queue.
+
+### Merge Identity Feature Request
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/30066
+
+### UAC should apply the "investigating" label to all relevant hits
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/30067
+- Up for discussion.
+
+### New Portal Formatted Data
+- https://tp.mandiant.com/TargetProcess2/restui/tpview.aspx?acid=1CCE9BE1E88DFBE5468210F7D8283E49#request/30078
+- Is this a feature request?
 
 ## 2013-12-10
 
