@@ -35,6 +35,8 @@ UAC ToDo
 - Allow users to toggle the list to show all hits and hosts that have been edited regardless of tag state.
 - This user story does not address letting users know when initiated acquisitions are complete.
 
+## Look into the UI feedback email from Cheryl.
+
 ## Owned customers report.
 - Create a report of customers that currently have hits that are evil or have been marked as evil within the last n days.
 

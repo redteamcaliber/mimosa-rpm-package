@@ -11,6 +11,6 @@ Unified Analyst Console (UAC) Web Application
 
 ## Agile Process
 
-- [Backlog Review Notes](https://github.mandiant.com/amilano/uac-node/docs/agile/backlog-review.md)
-- [Design Review Notes](https://github.mandiant.com/amilano/uac-node/docs/agile/design-review.md)
-- [Backlog Review Notes](https://github.mandiant.com/amilano/uac-node/docs/agile/reflections.md)
+- [Backlog Review Notes](https://github.mandiant.com/amilano/uac-node/blob/misc/docs/agile/backlog-review.md)
+- [Design Review Notes](https://github.mandiant.com/amilano/uac-node/blob/misc/docs/agile/design-review.md)
+- [Backlog Review Notes](https://github.mandiant.com/amilano/uac-node/blob/misc/docs/agile/reflections.md)
