@@ -9,9 +9,10 @@ CREATE TABLE identity_acquisitions (
     status              UUID        NOT NULL
 );
 
-CREATE TABLE acquisitions_comments (
+CREATE TABLE comments (
     uuid                UUID        PRIMARY KEY,
-    acquisition_uuid    UUID        NOT NULL,
+    item_uuid           UUID        NOT NULL,
+    type                VARCHAR(10) NOT NULL,
     comment             TEXT        NOT NULL,
     created             TIMESTAMP   NOT NULL
 );

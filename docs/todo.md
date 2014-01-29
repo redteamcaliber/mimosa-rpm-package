@@ -1,35 +1,44 @@
 UAC ToDo
 ========
 
-## Write up release instructions
+### Write up release instructions
 - Write up installation instructions for installing Puppet/Redis into production.
 - Need to document the new uac:encryption_secret setting.
-- Review caching plan?
+- Potentially add a parameter for disabling persistence on Redis
+- Need to restart redis after install.
 
-## Linkable Acquisitions
+### Linkable Acquisitions
 - Make acquisitions linkable.
 - Link the acquisition in the hit comments or make a popup dialog.
 
-## Add a password to the redis server?
-
-## Acquisition comments
+### Acquisition comments
 - Allow comment input to be expanded to be multi-line.
 - Page the acquisition comments on the hits view.
 
-## Look through my comments in my notebook for other TODO's.
+### Look through my comments in my notebook for other TODO's.
 
-## My Items View
-- The my items functionality will track:
-    - Keep track of any identities that the user has modified.
-    - Keep track of any suppressions that the user has created.
-    - Keep track of any acquisitions that the user has initiated.
-    - Keep track of any hosts that the user has modified.
-    - Keep track of the identity for initiated acquisitions.
-    - Keep track of identities for a host (which gives us acquisitions for a host).
+### My Items View
+- Allow users to star/annotate the following:
+    - Identities
+    - Acquisitions
+    - Hosts
+- UAC will need to track the identity related to initiated acquisitions.
+- UAC will need to keep track of the identities for a host (currently does this).
+- Allow the user to star items in order to specify a level of importance.
+- Users should have a quick way to un-star an item.
+- Users should be able to view each others My Items view.
+- Users will be provided a host context view for viewing their items.
+    - The view will be sorted by priority and star date (desc).
+    - If a host is starred it will show up in the list with a link to navigate to the host.
+    - If an identity is starred the identities host will show up in the list.  The host will be expanded to display the identities as children.  Options will be provided to link to the host or the specific identity.
+    - If an acquisition is starred the the acquisitions host will show up in the list.  The host will be expanded to display the identity associated with the acquisition.  The identity will be expanded to display the acquisition.
+- In the future we can potentially add the ability to star an IOC.
+
+My Modified Items
 - Allow users to view hosts they have modified over a time period.
 - Allow users to view identities they have modified over a time period.
 - Allow users to view identities for a modified host.
-- Allow the user to prioritize hits as Evil, Probably Even, Unknown
+- Allow users to view suppressions that were created or deleted.
 - Default identities listing should only display hits that are not in a final state.
 - Default hosts listing should only display hosts that have hits that are not in a final state.
 - Allow users to toggle the list to show all hits and hosts that have been edited regardless of tag state.
@@ -55,6 +64,9 @@ UAC ToDo
 - https://github.com/sivy/node-statsd
 - Need to determine what to measure, round trip minus any server calls that I make vs total request time.
 - Create an admin page that can return the health of the node server.
+
+### Look into using a using a combination of using Redis and WebSockets for notifications.
+- Acquisition notifications.
 
 ## Look into WebSockets for keeping track of my items or acquisitions.
 
