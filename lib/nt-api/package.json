@@ -1,0 +1,5 @@
+{
+    "name": "nt-api",
+    "main": "nt-api.js",
+    "description": "UAC Network API Module"
+}

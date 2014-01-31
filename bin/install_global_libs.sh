@@ -5,6 +5,6 @@
 . /opt/web/apps/uac/bin/env.sh
 
 npm install -g grunt-cli
-#npm install -g supervisor
-npm install -g node-dev
+npm install -g supervisor
 npm install -g mocha
+npm install -g redis-commander

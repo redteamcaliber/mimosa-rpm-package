@@ -3,6 +3,8 @@ var fs = require("fs");
 var https = require('https');
 var http = require('http');
 var express = require('express');
+var RedisStore = require('connect-redis')(express);
+
 var async = require('async');
 var log = require('winston');
 
@@ -12,6 +14,7 @@ var sso = require('sso');
 var route_utils = require('route-utils');
 var uac_routes = require('uac-routes');
 var sf_routes = require('sf-routes');
+var nt_routes = require('nt-routes');
 
 
 //
@@ -39,11 +42,11 @@ log.add(log.transports.File, {
     maxfiles: settings.get('server:log_maxfiles')
 });
 
-app.configure('dev', function() {
+app.configure('dev', function () {
     // Set up development specific configuration.
 });
 
-app.configure('prod', function() {
+app.configure('prod', function () {
     // Setup production specific configuration.
 
 });
@@ -52,23 +55,35 @@ app.configure('prod', function() {
 app.enable('trust proxy');
 console.log(_.sprintf('trust proxy enabled: %s', app.get('trust proxy')));
 
+
 app.use(express.compress());
 app.use(express.favicon(__dirname + '/static/img/mandiant.ico'));
 app.use('/static', express.static('static'));
-app.use(express.query());
-app.use(express.bodyParser());
+
 app.use(express.cookieParser());
-app.use(express.cookieSession({
-    key: settings.get('server:session_key'),
+
+app.use(express.session({
+    key: 'uac.sess',
     secret: settings.get('server:session_secret'),
     proxy: true,
-    cookie: { path: '/', httpOnly: true, secure: true, maxAge: null }
+    cookie: { path: '/', httpOnly: true, secure: true, maxAge: 86400000 },
+    store: new RedisStore({
+        host: '127.0.0.1',
+        port: 6379,
+        db: 0,
+        prefix: 'sess'
+    })
 }));
+
+app.use(express.query());
+app.use(express.bodyParser());
+
 app.use(express.csrf());
 app.use(sso.require_authentication(settings.get('sso')));
 app.use(app.router);
 app.use(uac_routes);
 app.use('/sf', sf_routes);
+app.use('/nt', nt_routes);
 
 route_utils.load_views(app);
 

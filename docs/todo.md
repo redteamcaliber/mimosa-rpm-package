@@ -1,9 +1,50 @@
 UAC ToDo
 ========
 
-## Add Expression Key Facet
-- Add the ability to filter hits by expression key.  This feature is useful when viewing hits by IOC or IOC uuid.  See
-[#27949](https://tp.mandiant.com/TargetProcess2/RestUI/TpView.aspx?acid=B2E5D5E30406CE90CBD2E567654B30BF#userstory/27949)
+### Track Identity Across Acquisitions
+- Link acquisitions to the identity it originated from.
+- Display a list of acquisitions on the identity view.
+- Allow the user to see the acquisitions details for an acquisition in the list.
+
+### Linkable Acquisitions
+- Allow user to create URL links to acquisitions.
+
+### Acquisition Comments
+- Allow users to create comments on acquisitions.
+- The initial comments should be the one entered when initiating the acquisition.
+- Display acquisition comments on the acquisitions view.
+- Display acquisition comments on the hits acquisitions view.
+
+### Comments Enhancements
+- Allow comment input to be expanded to be multi-line.
+
+### Puppetize UAC
+- Need to have nginx installed.
+- Need to lay down the nginx ssl and proxy configs for UAC.
+- Need to lay down the node RPM.
+- Need to lay down the UAC RPM.
+- Need to lay down the UAC env.json config.
+
+### Look through my comments in my notebook for other TODO's.
+
+### Notification Framework for UAC
+- Create a Node web sockets server for pushing content to UAC.
+- Store acquisition request in Redis.
+- Poll Seasick for the status of acquisitions in Redis.
+- Notify UAC users when their acquisitions are ready.
+
+## Look into the UI feedback email from Cheryl.
+
+## Owned customers report.
+- Create a report of customers that currently have hits that are evil or have been marked as evil within the last n days.
+
+## Migrate the common StrikeFinder components classes to a common uac.js file.
+- Should have a uac.js, strikefinder.js, and network.js files.
+- uac.js should be included in the top level template.
+- Rename the uac.js server module server.js.
+
+## Move the partial templates from the views directory to the static files directory.
+- Need to update Grunt scripts.
 
 ## Look into performance monitoring for express.
 - Look into options.
@@ -13,10 +54,26 @@ UAC ToDo
 - Need to determine what to measure, round trip minus any server calls that I make vs total request time.
 - Create an admin page that can return the health of the node server.
 
+### Look into using a using a combination of using Redis and WebSockets for notifications.
+- Acquisition notifications.
+
+## Redis UAC reports???
+- Keep track of hosts/customers that recently had evil hits.
+- Look into the most viewed hits/hosts - http://my.safaribooksonline.com/book/databases/9781617290855/chapter-2dot-anatomy-of-a-redis-web-application/ch02lev1sec5_html
+- Cache hostnames from Seasick - http://my.safaribooksonline.com/book/databases/9781617290855/chapter-2dot-anatomy-of-a-redis-web-application/ch02lev1sec4_html
+
+## Upgrade the request library to the latest version.
+
+## Modify the select component on all the StrikeFinder popup dialogs to be a select2 component.
+
 ## Add an option to be able to clear the local data cache.
 ## Provide a customer message for select2 components when no items are available for selection.
 
 ## Look into using RequireJS.
+- Should convert to using Bower at the same time: http://bower.io/
+- There is a grunt plugin: https://github.com/yatskevich/grunt-bower-task
+
+# Add the new Yeti theme.
 
 ## Display recent items somewhere in the application.
 

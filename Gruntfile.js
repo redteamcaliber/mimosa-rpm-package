@@ -1,5 +1,11 @@
-var assert = require('assert');
 var path = require('path');
+var assert = require('assert');
+var pkg = require('./package.json');
+
+// Ensure required fields are set.
+assert(pkg);
+assert(pkg['name']);
+assert(pkg['version']);
 
 
 /**
@@ -15,21 +21,7 @@ var path = require('path');
  *
  */
 module.exports = function (grunt) {
-    function get_local_connection() {
-        return {
-            user: 'uac_user',
-            password: 'devnet',
-            database: 'uac',
-            host: 'localhost',
-            port: 5432
-        }
-    }
-
-
-    // Read the package data into config.
-    var pkg = grunt.file.readJSON('package.json');
-    assert(pkg);
-    // Assumes version follows the format: ##.##.##
+    // Tokenize the version to strings for use with RPM.  Assumes version follows the format: ##.##.##.
     var tokens = pkg.version.split('.');
     assert(tokens);
     assert(tokens.length == 3);
@@ -41,14 +33,11 @@ module.exports = function (grunt) {
 
     // Project configuration.
     grunt.initConfig({
-        // The UAC git repository.
+        // Github repository information.
         uac_repo: 'git@github.mandiant.com:amilano/uac-node.git',
+        uac_branch: 'misc',
 
-        // The UAC git branch.
-        uac_branch: '0-8.0',
-
-        // UAC package attributes.
-        uac_name: pkg.name,
+        uac_name: pkg['name'].charAt(0).toUpperCase() + pkg['name'].slice(1),
         uac_version: uac_version,
         uac_release: uac_release,
 
@@ -65,8 +54,8 @@ module.exports = function (grunt) {
              * Watch the underscore templates and re-compile the templates to a JST file.
              */
             templates: {
-                files: ['views/sf/templates/*.html'],
-                tasks: ['jst:strikefinder']
+                files: ['views/sf/templates/*.html', 'views/nt/templates/*.html'],
+                tasks: ['jst-dev']
             }
         },
 
@@ -74,27 +63,44 @@ module.exports = function (grunt) {
          * Compile underscore templates into a .jst file.
          */
         jst: {
-            strikefinder: {
+            sf: {
                 options: {
                     namespace: 'StrikeFinder.templates',
                     prettify: true,
-                    /**
-                     * Just use the filename, not the entire path.
-                     * @param filename - the filename including path.
-                     * @returns the translated filename.
-                     */
-                    processName: function(filename) {
-                        var last_index = filename.lastIndexOf('/');
-                        if (last_index == -1) {
-                            return filename;
-                        }
-                        else {
-                            return filename.substring(last_index + 1, filename.length);
-                        }
-                    }
+                    processName: process_name
                 },
                 files: {
                     '<%= build_uac_dir %>/static/sf/js/templates.js': ['<%= build_uac_dir %>/views/sf/templates/*.html']
+                }
+            },
+            nt: {
+                options: {
+                    namespace: 'Network.templates',
+                    prettify: true,
+                    processName: process_name
+                },
+                files: {
+                    '<%= build_uac_dir %>static/nt/js/templates.js': ['<%= build_uac_dir %>views/nt/templates/*.html']
+                }
+            },
+            'sf-dev': {
+                options: {
+                    namespace: 'StrikeFinder.templates',
+                    prettify: true,
+                    processName: process_name
+                },
+                files: {
+                    'static/sf/js/templates.js': ['views/sf/templates/*.html']
+                }
+            },
+            'nt-dev': {
+                options: {
+                    namespace: 'Network.templates',
+                    prettify: true,
+                    processName: process_name
+                },
+                files: {
+                    'static/nt/js/templates.js': ['views/nt/templates/*.html']
                 }
             }
         },
@@ -174,123 +180,103 @@ module.exports = function (grunt) {
              */
             'install-libs': {
                 options: {
-                    //stdout: true,
-                    //stderr: true
+                    stdout: true,
+                    stderr: true
                 },
                 command: [
                     'chmod +x <%= build_uac_dir %>/bin/*',
-                    'npm install <%= build_uac_dir %> --production'
+                    'cd <%= build_uac_dir %>',
+                    'npm install --production'
                 ].join('&&')
             }
         },
 
         easy_rpm: {
-            uac: {
-                options: {
-                    name: '<%= uac_name %>',
-                    version: '<%= uac_version %>',
-                    release: '0',
-                    buildArch: 'x86_64',
-                    destination: '<%= build_rpm_dir %>',
-                    summary: 'The Mandiant Unified Analyst Console (UAC)',
-                    license: 'Commercial',
-                    group: 'Applications/Internet',
-                    vendor: 'Mandiant',
-                    url: 'http://www.mandiant.com',
-                    tempDir: '<%= build_rpm_dir %>',
-                    keepTemp: true,
-                    postInstallScript: [
-                        'mkdir -p /opt/web/apps/uac/logs',
-                        //'if [ $1 -eq 2 ] ; then echo "Restarting UAC" ; restart uac; fi',
-                        'if [ $(pgrep -f "node uac.js") ]; then echo "Restarting UAC..."; restart uac; else echo "Starting UAC..."; start uac; fi',
-                        'status uac'
-                    ]
-                },
-                release: {
-                    files: [
-                        {
-                            // Include the root files.
-                            cwd: '<%= build_uac_dir %>',
-                            src: '*',
-                            dest: '/opt/web/apps/uac',
-                            owner: 'root',
-                            group: 'root'
-                        },
-                        {
-                            // Include the bin scripts, should be executable.
-                            cwd: '<%= build_uac_dir %>/bin',
-                            src: '**/*',
-                            dest: '/opt/web/apps/uac/bin',
-                            owner: 'root',
-                            group: 'root',
-                            mode: '755'
-                        },
-                        {
-                            // Include the template conf files.
-                            cwd: '<%= build_uac_dir %>/conf',
-                            src: ['*_env.json', 'settings.json'],
-                            dest: '/opt/web/apps/uac/conf',
-                            owner: 'root',
-                            group: 'root'
-                        },
-                        {
-                            // Include the conf/certs files.
-                            cwd: '<%= build_uac_dir %>/conf/certs',
-                            src: '**/*',
-                            dest: '/opt/web/apps/uac/conf/certs',
-                            owner: 'root',
-                            group: 'root'
-                        },
-                        {
-                            // Include the upstart script.
-                            cwd: '<%= build_uac_dir %>/conf/upstart',
-                            src: 'uac.conf',
-                            dest: '/etc/init',
-                            owner: 'root',
-                            group: 'root'
-                        },
-                        {
-                            // Include the nginx templates.
-                            cwd: '<%= build_uac_dir %>/conf/nginx',
-                            src: '**',
-                            dest: '/etc/nginx/conf.d',
-                            owner: 'root',
-                            group: 'root'
-                        },
-                        {
-                            // Include the uac source files.
-                            cwd: '<%= build_uac_dir %>/lib',
-                            src: '**/*',
-                            dest: '/opt/web/apps/uac/lib',
-                            owner: 'root',
-                            group: 'root'
-                        },
-                        {
-                            // Include the node modules.
-                            cwd: '<%= build_uac_dir %>/node_modules',
-                            src: '**/*',
-                            dest: '/opt/web/apps/uac/node_modules',
-                            owner: 'root',
-                            group: 'root'
-                        },
-                        {
-                            // Include the static files.
-                            cwd: '<%= build_uac_dir %>/static',
-                            src: '**/*',
-                            dest: '/opt/web/apps/uac/static',
-                            owner: 'root',
-                            group: 'root'
-                        },
-                        {
-                            // Include the views.
-                            cwd: '<%= build_uac_dir %>/views',
-                            src: '**/*',
-                            dest: '/opt/web/apps/uac/views',
-                            owner: 'root',
-                            group: 'root'
-                        }
-                    ]
-                }
+            options: {
+                name: '<%= uac_name %>',
+                version: '<%= uac_version %>',
+                release: '<%= uac_release %>',
+                buildArch: 'x86_64',
+                destination: '<%= build_rpm_dir %>',
+                summary: 'The Mandiant Unified Analyst Console (UAC)',
+                license: 'Commercial',
+                group: 'Applications/Internet',
+                vendor: 'Mandiant',
+                url: 'http://www.mandiant.com',
+                tempDir: '<%= build_rpm_dir %>',
+                keepTemp: true,
+                defattrScript: [
+                    {user: 'root', group: 'root'}
+                ],
+                postInstallScript: [
+                    'mkdir -p /opt/web/apps/uac/logs',
+                    'if [ $(pgrep -f "node uac.js") ]; then echo "Restarting UAC..."; restart uac; else echo "Starting UAC..."; start uac; fi'
+                ]
+            },
+            release: {
+                files: [
+                    {
+                        // Include the root files.
+                        cwd: '<%= build_uac_dir %>',
+                        src: '*',
+                        dest: '/opt/web/apps/uac'
+                    },
+                    {
+                        // Include the bin scripts, should be executable.
+                        cwd: '<%= build_uac_dir %>/bin',
+                        src: '**/*',
+                        dest: '/opt/web/apps/uac/bin',
+                        mode: '755'
+                    },
+                    {
+                        // Include the template conf files.
+                        cwd: '<%= build_uac_dir %>/conf',
+                        src: ['*_env.json', 'settings.json'],
+                        dest: '/opt/web/apps/uac/conf'
+                    },
+                    {
+                        // Include the conf/certs files.
+                        cwd: '<%= build_uac_dir %>/conf/certs',
+                        src: '**/*',
+                        dest: '/opt/web/apps/uac/conf/certs'
+                    },
+                    {
+                        // Include the upstart script.
+                        cwd: '<%= build_uac_dir %>/conf/upstart',
+                        src: 'uac.conf',
+                        dest: '/etc/init'
+                    },
+                    {
+                        // Include the nginx templates.
+                        cwd: '<%= build_uac_dir %>/conf/nginx',
+                        src: '**',
+                        dest: '/etc/nginx/conf.d'
+                    },
+                    {
+                        // Include the uac source files.
+                        cwd: '<%= build_uac_dir %>/lib',
+                        src: '**/*',
+                        dest: '/opt/web/apps/uac/lib'
+                    },
+                    {
+                        // Include the node modules.
+                        cwd: '<%= build_uac_dir %>/node_modules',
+                        src: '**/*',
+                        dest: '/opt/web/apps/uac/node_modules'
+                    },
+                    {
+                        // Include the static files.
+                        cwd: '<%= build_uac_dir %>/static',
+                        src: '**/*',
+                        dest: '/opt/web/apps/uac/static'
+                    },
+                    {
+                        // Include the views.
+                        cwd: '<%= build_uac_dir %>/views',
+                        src: '**/*',
+                        dest: '/opt/web/apps/uac/views'
+                    }
+                ]
             }
         },
 
@@ -384,6 +370,17 @@ module.exports = function (grunt) {
         grunt.task.run('run-sql:create-local-db', 'run-sql:create-local-tables', 'run-sql:create-local-data');
     });
 
+    grunt.registerTask('jst-dev', ['jst:sf-dev', 'jst:nt-dev']);
+
+    /**
+     * Watch the Javascript templates for changes and recompile them.
+     */
+    grunt.registerTask('watch-templates', 'Watch the templates files for changes and recompile.', ['jst-dev', 'watch']);
+
+    grunt.registerTask('dump-config', 'Dump the configuration to console.', function() {
+        console.dir(grunt.config());
+    });
+
     /**
      * Delete the build directory if the user confirmed deletion.
      */
@@ -440,7 +437,7 @@ module.exports = function (grunt) {
         'shell:install-libs',   // Load the dependencies.
         'uglify',               // Compress the JS files.
         'jst',                  // Compile the templates.
-        'easy_rpm:uac'          // Create the RPM.
+        'easy_rpm'          // Create the RPM.
     ]);
 
     /**
@@ -466,3 +463,30 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jst');
     grunt.loadNpmTasks('grunt-easy-rpm');
 };
+
+/**
+ * Convert the filename/path to only use the filename.
+ * @param filename - the filename with the path included.
+ */
+function process_name(filename) {
+    var last_index = filename.lastIndexOf('/');
+    if (last_index == -1) {
+        return filename;
+    }
+    else {
+        return filename.substring(last_index + 1, filename.length);
+    }
+}
+
+/**
+ * TODO: Replace this.
+ */
+function get_local_connection() {
+    return {
+        user: 'uac_user',
+        password: 'devnet',
+        database: 'uac',
+        host: 'localhost',
+        port: 5432
+    }
+}

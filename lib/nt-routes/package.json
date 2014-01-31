@@ -1,0 +1,5 @@
+{
+    "name": "nt-routes",
+    "main": "nt-routes.js",
+    "description": "UAC Network Routes Module"
+}

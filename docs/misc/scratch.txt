@@ -1,0 +1,5 @@
+
+- UAC install from yesterday added Redis to the UAC server.
+- Being used for session store.
+- Should be quick and support UAC clustering in the future.
+-
