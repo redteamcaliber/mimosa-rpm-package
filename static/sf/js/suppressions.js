@@ -231,7 +231,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
             ];
 
             view.options.iDisplayLength = 10;
-            view.options.sDom = 'lf<"sf-table-wrapper"t>ip';
+            view.options.sDom = 'lf<""t>ip';
         }
 
         // Keep track of the row views.

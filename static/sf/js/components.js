@@ -684,6 +684,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             _.each(length_selects, function (length_select) {
                 if (!$(length_select).hasClass('form-control')) {
                     $(length_select).addClass('form-control');
+                    $(length_select).css('min-width', '85px');
                 }
             });
         }

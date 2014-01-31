@@ -1,48 +1,37 @@
 UAC ToDo
 ========
 
-### Write up release instructions
-- Write up installation instructions for installing Puppet/Redis into production.
-- Need to document the new uac:encryption_secret setting.
-- Potentially add a parameter for disabling persistence on Redis
-- Need to restart redis after install.
+### Track Identity Across Acquisitions
+- Link acquisitions to the identity it originated from.
+- Display a list of acquisitions on the identity view.
+- Allow the user to see the acquisitions details for an acquisition in the list.
 
 ### Linkable Acquisitions
-- Make acquisitions linkable.
-- Link the acquisition in the hit comments or make a popup dialog.
+- Allow user to create URL links to acquisitions.
 
-### Acquisition comments
+### Acquisition Comments
+- Allow users to create comments on acquisitions.
+- The initial comments should be the one entered when initiating the acquisition.
+- Display acquisition comments on the acquisitions view.
+- Display acquisition comments on the hits acquisitions view.
+
+### Comments Enhancements
 - Allow comment input to be expanded to be multi-line.
-- Page the acquisition comments on the hits view.
+
+### Puppetize UAC
+- Need to have nginx installed.
+- Need to lay down the nginx ssl and proxy configs for UAC.
+- Need to lay down the node RPM.
+- Need to lay down the UAC RPM.
+- Need to lay down the UAC env.json config.
 
 ### Look through my comments in my notebook for other TODO's.
 
-### My Items View
-- Allow users to star/annotate the following:
-    - Identities
-    - Acquisitions
-    - Hosts
-- UAC will need to track the identity related to initiated acquisitions.
-- UAC will need to keep track of the identities for a host (currently does this).
-- Allow the user to star items in order to specify a level of importance.
-- Users should have a quick way to un-star an item.
-- Users should be able to view each others My Items view.
-- Users will be provided a host context view for viewing their items.
-    - The view will be sorted by priority and star date (desc).
-    - If a host is starred it will show up in the list with a link to navigate to the host.
-    - If an identity is starred the identities host will show up in the list.  The host will be expanded to display the identities as children.  Options will be provided to link to the host or the specific identity.
-    - If an acquisition is starred the the acquisitions host will show up in the list.  The host will be expanded to display the identity associated with the acquisition.  The identity will be expanded to display the acquisition.
-- In the future we can potentially add the ability to star an IOC.
-
-My Modified Items
-- Allow users to view hosts they have modified over a time period.
-- Allow users to view identities they have modified over a time period.
-- Allow users to view identities for a modified host.
-- Allow users to view suppressions that were created or deleted.
-- Default identities listing should only display hits that are not in a final state.
-- Default hosts listing should only display hosts that have hits that are not in a final state.
-- Allow users to toggle the list to show all hits and hosts that have been edited regardless of tag state.
-- This user story does not address letting users know when initiated acquisitions are complete.
+### Notification Framework for UAC
+- Create a Node web sockets server for pushing content to UAC.
+- Store acquisition request in Redis.
+- Poll Seasick for the status of acquisitions in Redis.
+- Notify UAC users when their acquisitions are ready.
 
 ## Look into the UI feedback email from Cheryl.
 
@@ -67,8 +56,6 @@ My Modified Items
 
 ### Look into using a using a combination of using Redis and WebSockets for notifications.
 - Acquisition notifications.
-
-## Look into WebSockets for keeping track of my items or acquisitions.
 
 ## Redis UAC reports???
 - Keep track of hosts/customers that recently had evil hits.

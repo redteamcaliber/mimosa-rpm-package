@@ -1,6 +1,5 @@
 
-
-Never mind, it's `session.destroy();`
-
-(This is correct for non-cookie based sessions such as Redis, etc.)
-
+- UAC install from yesterday added Redis to the UAC server.
+- Being used for session store.
+- Should be quick and support UAC clustering in the future.
+-
