@@ -3,7 +3,7 @@ Unified Analyst Console (UAC) Web Application
 
 ## Release Notes
 
-- [UAC 1.0](https://github.mandiant.com/amilano/uac-node/tree/master/docs/notes)
+- [UAC 1.0](https://github.mandiant.com/amilano/uac-node/tree/master/docs/notes/uac-1.0-release-notes.md)
 
 ## Installation Procedures
 
