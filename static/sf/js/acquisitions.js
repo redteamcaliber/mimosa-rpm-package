@@ -3,110 +3,127 @@ var StrikeFinder = StrikeFinder || {};
 StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
     initialize: function () {
         var view = this;
+
         view.acquisitions_collapsable = new StrikeFinder.CollapsableContentView({
             el: view.el
         });
 
-        view.options['sAjaxSource'] = '/sf/api/acquisitions';
+        // Invoke the super initialize.
+        StrikeFinder.AcquisitionsTableView.__super__.initialize.apply(this);
+
+        if (!view.collection) {
+            view.options['sAjaxSource'] = '/sf/api/acquisitions';
+            view.options['bServerSide'] = true;
+        }
         view.options.sAjaxDataProp = 'results';
-        view.options['bServerSide'] = true;
+
 
         view.options.oLanguage = {
             sEmptyTable: 'No acquisitions were found'
         };
 
-        view.options['aoColumns'] = [
-            {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
-            {sTitle: "Cluster", mData: "cluster.name", bSortable: true},
-            {sTitle: "Host", mData: "agent.hostname", bSortable: true},
-            {sTitle: "File Path", mData: "file_path", bSortable: true, sClass: 'wrap'},
-            {sTitle: "File Name", mData: "file_name", bSortable: true, sClass: 'wrap'},
-            {sTitle: "Created", mData: "create_datetime", bSortable: true, sClass: 'nowrap'},
-            {sTitle: "Updated", mData: "update_datetime", bSortable: true, sClass: 'nowrap'},
-            {sTitle: "User", mData: "user", bSortable: true},
-            {sTitle: "Method", mData: "method", bSortable: true},
-            {sTitle: "State", mData: "state", bSortable: true, sWidth: '75px'},
-            {sTitle: "Error Message", mData: "error_message", bVisible: false, bSortable: false},
-            {sTitle: "Link", mData: "acquired_file", bVisible: false, bSortable: false}
-        ];
+        if (view.options.condensed) {
+            // Display in condensed mode.
+            view.options['aoColumns'] = [
+                {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
+                {sTitle: "Created", mData: "create_datetime", bSortable: true, bVisible: false, sClass: 'nowrap'},
+                {sTitle: "Acquisition", mData: "uuid", bSortable: true},
+                {sTitle: "State", mData: "state", bSortable: true, sWidth: '75px'}
+            ];
 
-        view.options.aaSorting = [
-            [ 5, "desc" ]
-        ];
+            view.options.aaSorting = [
+                [ 1, "desc" ]
+            ];
 
-        view.options['aoColumnDefs'] = [
-            {
-                mRender: function (data, type, row) {
-                    if (data) {
-                        return _.sprintf('<a href="/sf/host/%s" onclick="event.stopPropagation()">%s</a>', row.agent.hash, data);
-                    }
-                    else {
-                        return data;
-                    }
+            view.options['aoColumnDefs'] = [
+                {
+                    mRender: function (data) {
+                        return StrikeFinder.format_date_string(data);
+                    },
+                    aTargets: [1]
                 },
-                aTargets: [2]
-            },
-            {
-                mRender: function (data, type, row) {
-                    if (row.link) {
-                        return _.sprintf('<a href="%s" onclick="event.stopPropagation()" download>%s</a>', row.link, data);
-                    }
-                    else {
-                        return data
-                    }
+                {
+                    mRender: function (data, type, row) {
+                        // TODO: Make this a link???
+                        return StrikeFinder.format_acquisition(row);
+                    },
+                    aTargets: [2]
                 },
-                aTargets: [4]
-            },
-            {
-                mRender: function (data, type, row) {
-                    return StrikeFinder.format_date_string(data);
-                },
-                aTargets: [5]
-            },
-            {
-                mRender: function (data, type, row) {
-                    return StrikeFinder.format_date_string(data);
-                },
-                aTargets: [6]
-            },
-            {
-                mRender: function (data, type, row) {
-                    if (data) {
-                        var label_class = '';
-                        if (data == 'errored') {
-                            label_class = 'label-danger';
-                        }
-                        else if (data == 'cancelled') {
-                            label_class = 'label-warning';
-                        }
-                        else if (data == 'created') {
-                            label_class = 'label-default';
-                        }
-                        else if (data == 'started' || data == 'created') {
-                            label_class = 'label-primary';
-                        }
-                        else if (data == 'completed') {
-                            label_class = 'label-success';
-                        }
-                        else if (data == 'unknown') {
-                            label_class = 'label-warning';
+                {
+                    mRender: view.format_state,
+                    aTargets: [3]
+                }
+            ];
+
+            view.options.iDisplayLength = 10;
+
+            view.options['sDom'] = 'lftip';
+        }
+        else {
+            view.options['aoColumns'] = [
+                {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
+                {sTitle: "Cluster", mData: "cluster.name", bSortable: true},
+                {sTitle: "Host", mData: "agent.hostname", bSortable: true},
+                {sTitle: "File Path", mData: "file_path", bSortable: true, sClass: 'wrap'},
+                {sTitle: "File Name", mData: "file_name", bSortable: true, sClass: 'wrap'},
+                {sTitle: "Created", mData: "create_datetime", bSortable: true, sClass: 'nowrap'},
+                {sTitle: "Updated", mData: "update_datetime", bSortable: true, sClass: 'nowrap'},
+                {sTitle: "User", mData: "user", bSortable: true},
+                {sTitle: "Method", mData: "method", bSortable: true},
+                {sTitle: "State", mData: "state", bSortable: true, sWidth: '75px'},
+                {sTitle: "Error Message", mData: "error_message", bVisible: false, bSortable: false},
+                {sTitle: "Link", mData: "acquired_file", bVisible: false, bSortable: false}
+            ];
+
+            view.options.aaSorting = [
+                [ 5, "desc" ]
+            ];
+
+            view.options['aoColumnDefs'] = [
+                {
+                    mRender: function (data, type, row) {
+                        if (data) {
+                            return _.sprintf('<a href="/sf/host/%s" onclick="event.stopPropagation()">%s</a>', row.agent.hash, data);
                         }
                         else {
-                            label_class = 'label-default';
+                            return data;
                         }
-                        return _.sprintf('<span class="label %s error_message" style="text-align: center; width: 100%%">%s</span>', label_class, data);
-                    }
-                    else {
-                        return '';
-                    }
+                    },
+                    aTargets: [2]
                 },
-                aTargets: [9]
-            }
-        ];
+                {
+                    mRender: function (data, type, row) {
+                        if (row.link) {
+                            return _.sprintf('<a href="%s" onclick="event.stopPropagation()" download>%s</a>', row.link, data);
+                        }
+                        else {
+                            return data
+                        }
+                    },
+                    aTargets: [4]
+                },
+                {
+                    mRender: function (data, type, row) {
+                        return StrikeFinder.format_date_string(data);
+                    },
+                    aTargets: [5]
+                },
+                {
+                    mRender: function (data, type, row) {
+                        return StrikeFinder.format_date_string(data);
+                    },
+                    aTargets: [6]
+                },
+                {
+                    mRender: view.format_state,
+                    aTargets: [9]
+                }
+            ];
 
-        view.options.iDisplayLength = 50;
+            view.options.iDisplayLength = 50;
 
-        view.options['sDom'] = 'ltip';
+            view.options['sDom'] = 'ltip';
+        }
 
         view.listenTo(view, 'row:created', view.on_create_row);
         view.listenTo(view, 'click', view.on_row_click);
@@ -127,6 +144,9 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
     },
     on_row_click: function (data) {
         var view = this;
+
+        console.dir(data);
+
         if (data.link) {
             if (view.audit_dialog) {
                 view.audit_dialog.close();
@@ -135,6 +155,36 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
                 el: '#dialog-div',
                 acquisition_uuid: data.uuid
             });
+        }
+    },
+    format_state: function (data, type, row) {
+        if (data) {
+            var label_class = '';
+            if (data == 'errored') {
+                label_class = 'label-danger';
+            }
+            else if (data == 'cancelled') {
+                label_class = 'label-warning';
+            }
+            else if (data == 'created') {
+                label_class = 'label-default';
+            }
+            else if (data == 'started' || data == 'created') {
+                label_class = 'label-primary';
+            }
+            else if (data == 'completed') {
+                label_class = 'label-success';
+            }
+            else if (data == 'unknown') {
+                label_class = 'label-warning';
+            }
+            else {
+                label_class = 'label-default';
+            }
+            return _.sprintf('<span class="label %s error_message" style="text-align: center; width: 100%%">%s</span>', label_class, data);
+        }
+        else {
+            return '';
         }
     }
 });
@@ -162,7 +212,7 @@ StrikeFinder.AcquisitionsAuditView = StrikeFinder.View.extend({
             backdrop: false
         });
     },
-    on_close: function() {
+    on_close: function () {
         this.$("#acqusition-audit-div").modal("hide");
     },
     close: function () {
@@ -184,10 +234,10 @@ StrikeFinder.AcquisitionsView = StrikeFinder.View.extend({
             el: '#cluster-selection-div',
             hide_services: true
         });
-        view.listenTo(view.cluster_selection_view, 'submit', function(params) {
+        view.listenTo(view.cluster_selection_view, 'submit', function (params) {
             view.render_acquisitions({clusters: params.merged_clusters});
         });
-        view.listenTo(view.cluster_selection_view, 'clear', function() {
+        view.listenTo(view.cluster_selection_view, 'clear', function () {
             $('#results-div').fadeOut().hide();
         });
         view.cluster_selection_view.render();
@@ -199,7 +249,7 @@ StrikeFinder.AcquisitionsView = StrikeFinder.View.extend({
         // Display the initial selection of acquisitions.
         view.render_acquisitions({clusters: view.cluster_selection_view.get_clusters()});
     },
-    render_acquisitions: function(params) {
+    render_acquisitions: function (params) {
         var view = this;
 
         // TODO: Should load the facets here!
@@ -242,5 +292,37 @@ StrikeFinder.AcquisitionsView = StrikeFinder.View.extend({
     render_hits: function (data) {
         var view = this;
         view.do_render_hits(data);
+    }
+});
+
+/**
+ * View to display acquisitions in a condensed format.
+ */
+StrikeFinder.AcquisitionsViewCondensed = StrikeFinder.View.extend({
+    initialize: function () {
+        var view = this;
+
+//        view.criteria_collapsable = new StrikeFinder.CollapsableContentView({
+//            el: view.el,
+//            title: '<i class="fa fa-cloud-download"></i> Acquisitions'
+//        });
+
+        view.acquisitions = new StrikeFinder.AcquisitionCollection();
+
+        view.acqusitions_table = new StrikeFinder.AcquisitionsTableView({
+            el: view.el,
+            collection: view.acquisitions,
+            condensed: true
+        });
+    },
+    fetch: function (identity) {
+        if (!identity) {
+            // Error
+            log.error('Condensed acquisitions view requires an identity!');
+        }
+
+        var view = this;
+        view.acquisitions.identity = identity;
+        view.acquisitions.fetch();
     }
 });

@@ -72,6 +72,11 @@ StrikeFinder.format_suppression = function (s) {
         s.itemkey, s.condition, _.escape(s.itemvalue), s.preservecase, s.negate);
 };
 
+StrikeFinder.format_acquisition = function(a) {
+    return _.sprintf('Acquisition (%s) FilePath: %s FileName: %s',
+        a.uuid, a.file_name, a.file_path);
+};
+
 
 
 //

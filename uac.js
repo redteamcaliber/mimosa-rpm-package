@@ -78,8 +78,8 @@ app.use(express.session({
 app.use(express.query());
 app.use(express.bodyParser());
 
-app.use(express.csrf());
 app.use(sso.require_authentication(settings.get('sso')));
+app.use(express.csrf());
 app.use(app.router);
 app.use(uac_routes);
 app.use('/sf', sf_routes);
@@ -90,7 +90,7 @@ route_utils.load_views(app);
 // Add a 404 handler.
 app.use(function (req, res, next) {
     try {
-        var uid = req.attributes && req.attributes.uid ? req.attributes.uid : 'Unknown';
+        var uid = route_utils.get_uid(req);
         log.error(_.sprintf('404::User: %s requested non-existent page: %s.', uid, req.originalUrl));
 
         if (route_utils.is_html_request(req)) {
@@ -111,7 +111,7 @@ app.use(function (req, res, next) {
 // Add a general error handler.
 app.use(function errorHandler(err, req, res, next) {
     var message = 'Global error handler caught exception while rendering %s url: %s (status: %s, uid: %s) \n%s';
-    var uid = req.attributes && req.attributes.uid ? req.attributes.uid : 'Unknown';
+    var uid = route_utils.get_uid(req);
     //var stack = err.stack ? err.stack : err;
     var stack;
     if (err && err.stack) {

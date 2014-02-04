@@ -1,6 +1,16 @@
 Unified Analyst Console (UAC) 1.0 Release Notes
 ===============================================
 
+Mandiant-uac-ws-1.0-0 - February 5th, 2014
+------------------------------------------
+
+### Acquisitions
+- Acquisitions are now associated with the hit identity from which it was initiated.  The hit identity view now displays
+  related acquisitions as well as their details.  This should improve user ability to location an acquisition.
+- Acquisitions are now linkable by URL.
+-
+
+
 Mandiant-uac-ws-0.8-0 - January 29th, 2014
 ------------------------------------------
 

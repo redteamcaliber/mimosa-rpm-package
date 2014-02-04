@@ -154,6 +154,38 @@ describe('sf-api-tests', function () {
         });
     });
 
+    describe('#get_acquisitions_by_identity()', function() {
+
+        // TODO: Really should have a data fixture for this.
+
+        it('should retrieve all acquisitions for an identity', function(done) {
+            api.get_acqusitions_by_identity('f5d208501f298c13e40ab37aa8907af8', {}, function(err, acquisitions) {
+                try {
+                    should.not.exist(err);
+
+                    should.exist(acquisitions);
+                    should.exist(acquisitions.length);
+
+                    if (acquisitions.length > 0) {
+                        acquisitions.forEach(function(acquisition) {
+
+                            //console.dir(acquisition);
+
+                            should.exist(acquisition.uuid);
+                            should.exist(acquisition.agent);
+                            should.exist(acquisition.agent.hash);
+                        });
+                    }
+
+                    done();
+                }
+                catch (e) {
+                    done(e);
+                }
+            });
+        });
+    });
+
 });
 
 

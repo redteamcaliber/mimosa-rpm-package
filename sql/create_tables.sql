@@ -41,6 +41,17 @@ CREATE TABLE identity_acquisitions (
     CONSTRAINT identity_acquisitions__acquisition_uuid_identity__unique UNIQUE (acquisition_uuid, identity)
 );
 
+-- Track acquisitions by host.
+CREATE TABLE host_acquisitions ()
+    uuid                UUID        PRIMARY KEY,    -- Primary key.
+    agent_uuid          UUID        NOT NULL,       -- The reporting agent/host.
+    acquisition_uuid    UUID        NOT NULL,       -- The acquisition.
+    user_uuid           UUID        NOT NULL,       -- The user that initiated the acquisition.
+    uid                 TEXT        NOT NULL,       -- The users uid that initiated the acquisition.
+    created             TIMESTAMP   NOT NULL DEFAULT now(),
+    CONSTRAINT host_acquisitions__agent_uuid_identity__unique UNIQUE (acquisition_uuid, agent_uuid)
+);
+
 -- UAC Comments.
 CREATE TABLE comments (
     uuid                UUID        PRIMARY KEY,    -- Primary key.

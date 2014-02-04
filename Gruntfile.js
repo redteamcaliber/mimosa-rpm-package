@@ -33,9 +33,11 @@ module.exports = function (grunt) {
 
     // Project configuration.
     grunt.initConfig({
-        // Github repository information.
+        // The Github repository.
         uac_repo: 'git@github.mandiant.com:amilano/uac-node.git',
-        uac_branch: 'misc',
+
+        // The Github Branch.
+        uac_branch: '1.0.0',
 
         uac_name: pkg['name'].charAt(0).toUpperCase() + pkg['name'].slice(1),
         uac_version: uac_version,

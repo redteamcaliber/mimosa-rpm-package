@@ -1028,7 +1028,8 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
                     am_cert_hash: params.am_cert_hash,
                     cluster_uuid: params.cluster_uuid,
                     cluster_name: params.cluster_name,
-                    rowitem_uuid: params.rowitem_uuid
+                    rowitem_uuid: params.rowitem_uuid,
+                    identity: params.identity
                 });
 
                 var data = view.model.toJSON();
@@ -1921,6 +1922,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
 
                 if (ss_cluster_uuid) {
                     view.acquire_form_view.render({
+                        identity: view.row.identity,
                         selection: selection,
                         am_cert_hash: view.row.am_cert_hash,
                         cluster_uuid: ss_cluster_uuid,
@@ -2020,25 +2022,35 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
             view.comments_view = new StrikeFinder.CommentsView({
                 el: '#comments-div'
             });
+
+            // Acquisitions view.
+            view.acquisitions_view = new StrikeFinder.AcquisitionsViewCondensed({
+                el: '#acquisitions-table'
+            });
         });
 
         view.fetch();
     },
-    fetch: function (uuid_identity) {
+    fetch: function (rowitem_uuid) {
         var view = this;
 
         // Update the child views with the current row's parameters.
 
         var uuid;
-        if (uuid_identity) {
-            uuid = uuid_identity;
+        if (rowitem_uuid) {
+            // A specific rowitem was specified.
+            uuid = rowitem_uuid;
         }
         else {
+            // A row item was not specified, use the current selected row.
             uuid = view.row.uuid;
 
-            // Update the host data unless we are just changing to another identity.  Assumes that other identities
-            // are always for the same host.
+            // Update the host data unless we are just changing to date within this identity.  Assumes that all row
+            // item versions for this identity are for the same host.
             view.agenthost_view.fetch(view.row.am_cert_hash);
+
+            // Update the acquisitions.
+            view.acquisitions_view.fetch(view.row.identity);
         }
 
         // Fetch the related audit and update the audit view, tags view, and identity data.
