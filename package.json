@@ -41,6 +41,7 @@
         "grunt-contrib-uglify": "*",
         "grunt-scp": "*",
         "grunt-ssh": "*",
+        "grunt-sftp-deploy": "*",
         "grunt-contrib-jst": "*",
         "grunt-git": "*",
         "grunt-template": "*",

@@ -20,6 +20,10 @@ UAC ToDo
 - Display acquisition comments on the acquisitions view.
 - Display acquisition comments on the hits acquisitions view.
 
+### Counts
+- Add counts to the comments rollup.
+- Add counts to the suppressions rollup.
+
 ### Refactor Messages
 - Transition display messages to the UAC level.
 - Create messages that must be cleared.

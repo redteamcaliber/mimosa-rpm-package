@@ -42,7 +42,7 @@ CREATE TABLE identity_acquisitions (
 );
 
 -- Track acquisitions by host.
-CREATE TABLE host_acquisitions ()
+CREATE TABLE host_acquisitions (
     uuid                UUID        PRIMARY KEY,    -- Primary key.
     agent_uuid          UUID        NOT NULL,       -- The reporting agent/host.
     acquisition_uuid    UUID        NOT NULL,       -- The acquisition.

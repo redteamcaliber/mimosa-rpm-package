@@ -78,8 +78,10 @@ app.use(express.session({
 app.use(express.query());
 app.use(express.bodyParser());
 
-app.use(sso.require_authentication(settings.get('sso')));
 app.use(express.csrf());
+
+app.use(sso.require_authentication(settings.get('sso')));
+
 app.use(app.router);
 app.use(uac_routes);
 app.use('/sf', sf_routes);

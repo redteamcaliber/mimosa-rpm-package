@@ -145,7 +145,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
     on_row_click: function (data) {
         var view = this;
 
-        console.dir(data);
+        //console.dir(data);
 
         if (data.link) {
             if (view.audit_dialog) {

@@ -1085,6 +1085,7 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
             // Immediately block to prevent multiple submissions.
             StrikeFinder.block_element(acquire_form);
 
+            view.model.set('uuid', undefined);
             view.model.set('file_path', view.$('#file_path').val());
             view.model.set('file_name', view.$('#file_name').val());
             view.model.set('method', view.$('#method').val());
