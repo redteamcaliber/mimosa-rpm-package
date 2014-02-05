@@ -120,7 +120,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
                 }
             ];
 
-            view.options.iDisplayLength = 50;
+            view.options.iDisplayLength = 25;
 
             view.options['sDom'] = 'ltip';
         }

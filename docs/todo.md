@@ -4,7 +4,8 @@ UAC ToDo
 ### Track Identity Across Acquisitions
 - x-Link acquisitions to the identity it originated from.
 - x-Display a list of acquisitions on the identity view.
-- Migrate the current acqusitions popup to be a complete dialog including:
+- Refresh the acquisitions list after an acquisition is initiated.
+- Migrate the current acquisitions popup to be a complete dialog including:
     - The acquisitions details.
     - The file audit if applicable.
     - The issues document if applicable.

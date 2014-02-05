@@ -60,6 +60,8 @@ app.use(express.compress());
 app.use(express.favicon(__dirname + '/static/img/mandiant.ico'));
 app.use('/static', express.static('static'));
 
+app.use(express.query());
+app.use(express.bodyParser());
 app.use(express.cookieParser());
 
 app.use(express.session({
@@ -74,9 +76,6 @@ app.use(express.session({
         prefix: 'sess'
     })
 }));
-
-app.use(express.query());
-app.use(express.bodyParser());
 
 app.use(express.csrf());
 

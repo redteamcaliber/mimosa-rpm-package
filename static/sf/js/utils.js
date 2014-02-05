@@ -74,7 +74,7 @@ StrikeFinder.format_suppression = function (s) {
 
 StrikeFinder.format_acquisition = function(a) {
     return _.sprintf('Acquisition (%s) FilePath: %s FileName: %s',
-        a.uuid, a.file_name, a.file_path);
+        a.uuid, a.file_path, a.file_name);
 };
 
 
