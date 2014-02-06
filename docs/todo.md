@@ -1,16 +1,23 @@
 UAC ToDo
 ========
 
-### Track Identity Across Acquisitions
-- x-Link acquisitions to the identity it originated from.
-- x-Display a list of acquisitions on the identity view.
-- Refresh the acquisitions list after an acquisition is initiated.
+### Migrate hits links to use identity rather than rowitem_uuid.
+
+### Release
+- Update the index page.
+- Write up deployment instructions.
+- Create RT ticket.
+
+### Update the IOC Selection title every time something is selected.
+
+### Look into base64 encoded GZipped data in the Strings section.
+- https://uac.mplex.mandiant.com/sf/hits/0a63a2ba-be5e-4151-8ff0-a119387fc0a9
+
+### Acquisition Details
 - Migrate the current acquisitions popup to be a complete dialog including:
     - The acquisitions details.
     - The file audit if applicable.
     - The issues document if applicable.
-- Note: Acquisitions are currently linked to the identity though there is a comment associated with
-  the row item, is that ok?
 
 ### Linkable Acquisitions
 - Allow user to create URL links to acquisitions.

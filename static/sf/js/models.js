@@ -314,6 +314,9 @@ StrikeFinder.HitsFacetsModel = Backbone.Model.extend({
         if (this.params.rowitem_uuid) {
             result += '&' + $.param({rowitem_uuid: this.params.rowitem_uuid});
         }
+        if (this.params.identity) {
+            result += '&' + $.param({identity: this.params.identity});
+        }
         if (this.params.tagname && this.params.tagname.length > 0) {
             result += '&' + $.param({tagname: this.params.tagname});
         }

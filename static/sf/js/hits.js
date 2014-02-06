@@ -1135,6 +1135,9 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
                             // The request was not complete, view on the suppressions list.
                             StrikeFinder.display_info('The acqusition request is still being processed, its status ' +
                                 'can be viewed on the <a href="/sf/acquisitions">Acquisitions List</a>.');
+                            // Notify that a suppression was created.  It has not completed yet though this event should
+                            // be fired to ensure the relevant fields in the UI are updated.
+                            view.trigger('create', view.model);
                             // Hide the dialog.
                             view.$(acquire_form).modal('hide');
                         }
@@ -1255,12 +1258,24 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
         }
 
         view.comments_collapsable = new StrikeFinder.CollapsableContentView({
-            el: view.el,
-            title: '<i class="fa fa-comments"></i> Comments'
+            el: view.el
         });
 
         view.comments_table = new StrikeFinder.CommentsTableView({
             el: view.$("#comments-table")
+        });
+
+        view.listenTo(view.comments_table, 'load', function() {
+            var comments_count = view.comments_table.get_total_rows();
+            view.comments_collapsable.set('title', _.sprintf('<i class="fa fa-comments"></i> Comments (%s)',
+                comments_count));
+            if (comments_count == 0) {
+                // Collapse the comments if there are none.
+                view.comments_collapsable.collapse();
+            }
+            else {
+                view.comments_collapsable.expand();
+            }
         });
     },
     events: {
@@ -1417,8 +1432,8 @@ StrikeFinder.HitsLinkView = StrikeFinder.View.extend({
 
         view.close();
 
-        var link = window.location.protocol + '//' + window.location.hostname +
-            (window.location.port ? ':' + window.location.port : '') + '/sf/hits/' + data.uuid;
+        var link = _.sprintf('%s//%s%s/sf/hits/identity/%s', window.location.protocol,
+            window.location.hostname, (window.location.port ? ':' + window.location.port : ''), data.identity);
         var html = StrikeFinder.template('link.html', {link: link, label: 'Link to Hit'});
 
         view.$el.popover({
@@ -2092,7 +2107,7 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
             // for the relevant row.  This is a shortcut rather than re-loading the entire table.
             view.hits_table_view.update_row('uuid', rowitem_uuid, 'tagname', tagname, 1);
         });
-        view.listenTo(view.hits_details_view, 'create:acquire', function (row, model) {
+        view.listenTo(view.hits_details_view, 'create:acquire', function (row) {
             // An acquisition has been created, update the row's tag value.
             view.hits_table_view.update_row('uuid', row.uuid, 'tagname', 'investigating', 1);
             // Refresh the comments.

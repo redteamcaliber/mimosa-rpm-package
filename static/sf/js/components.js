@@ -171,6 +171,12 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
             $('#' + this.name + '-title').html(value);
         }
     },
+    collapse: function() {
+        $('#collapse-' + this.name).removeClass('in');
+    },
+    expand: function() {
+        $('#collapse-' + this.name).addClass('in');
+    },
     toggle: function () {
         $('#collapse-' + this.el.id).collapse('toggle');
     }

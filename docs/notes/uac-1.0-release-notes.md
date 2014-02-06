@@ -5,10 +5,15 @@ Mandiant-uac-ws-1.0-0 - February 5th, 2014
 ------------------------------------------
 
 ### Acquisitions
-- Acquisitions are now associated with the hit identity from which it was initiated.  The hit identity view now displays
-  related acquisitions as well as their details.  This should improve user ability to location an acquisition.
+- Acquisitions are now associated with the hit identity from which it was initiated.  The hits view now displays
+  acquisitions related to the selected identity.  Completed acquisitions may be clicked on in order to display the
+  corresponding file audit.  This should improve user ability to locate an acquisition.
 - Acquisitions are now linkable by URL.
--
+
+### Issues
+- When initiating an acquisition now showing hits table record to investigating regardless of whether the acquisition
+  was picked up or not.  Previously it was only being updated if the acquisition was picked up.
+- Added spaces in the portal formatted data for registry items.
 
 
 Mandiant-uac-ws-0.8-0 - January 29th, 2014

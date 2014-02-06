@@ -1,5 +1,6 @@
 var StrikeFinder = StrikeFinder || {};
 
+
 StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
     initialize: function () {
         var view = this;
@@ -26,9 +27,10 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
             // Display in condensed mode.
             view.options['aoColumns'] = [
                 {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
-                {sTitle: "Created", mData: "create_datetime", bSortable: true, bVisible: false, sClass: 'nowrap'},
-                {sTitle: "Acquisition", mData: "uuid", bSortable: true},
-                {sTitle: "State", mData: "state", bSortable: true, sWidth: '75px'}
+                {sTitle: "Created", mData: "create_datetime", bSortable: true, sClass: 'nowrap', bVisible: false},
+                {sTitle: "File Path", mData: "file_path", bSortable: true, sClass: 'wrap', sWidth: '65%'},
+                {sTitle: "File Name", mData: "file_name", bSortable: true, sClass: 'wrap', sWidth: '30%'},
+                {sTitle: "State", mData: "state", bSortable: true, sWidth: '5%'}
             ];
 
             view.options.aaSorting = [
@@ -44,14 +46,19 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
                 },
                 {
                     mRender: function (data, type, row) {
-                        // TODO: Make this a link???
-                        return StrikeFinder.format_acquisition(row);
+                        if (row.link) {
+                            return _.sprintf('<a href="%s" onclick="event.stopPropagation()">%s</a>',
+                                row.link, row.file_name);
+                        }
+                        else {
+                            return data;
+                        }
                     },
-                    aTargets: [2]
+                    aTargets: [3]
                 },
                 {
                     mRender: view.format_state,
-                    aTargets: [3]
+                    aTargets: [4]
                 }
             ];
 
@@ -128,8 +135,16 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
         view.listenTo(view, 'row:created', view.on_create_row);
         view.listenTo(view, 'click', view.on_row_click);
         view.listenTo(view, 'load', function () {
+            var acquisitions_count = view.get_total_rows();
             view.acquisitions_collapsable.set('title', _.sprintf('<i class="fa fa-cloud-download"></i> Acquisitions (%s)',
-                view.get_total_rows()));
+                acquisitions_count));
+            if (acquisitions_count == 0) {
+                // Collapse the comments if there are none.
+                view.acquisitions_collapsable.collapse();
+            }
+            else {
+                view.acquisitions_collapsable.expand();
+            }
         });
     },
     on_create_row: function (row, data, index) {
