@@ -464,7 +464,8 @@
                             .append($('<span>').addClass('ioc-negate').text(negate))
                             .append($('<span>').addClass('ioc-term').text(prepTerm(node.term)))
                             .append($('<span>').addClass('ioc-condition').text(node.condition))
-                            .append($('<span>').addClass('ioc-value').text(preservecase + node.value + preservecase)))));
+                            .append($('<span>').addClass('ioc-value').text(preservecase + node.value + preservecase))
+                            .append($('<span>').addClass('ioc-comment').text(node.comment)))));
                     $li.addClass('no-nest').addClass('ioc-guid-' + node.id);
                     if (node.comment) {
                         $rule.attr('title', node.comment);
