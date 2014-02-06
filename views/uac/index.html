@@ -4,6 +4,7 @@
 
 {% block content %}
 <div class="jumbotron">
+
     <div class="container" style="width:100%">
         <div class="row">
             <div class="col-sm-12 col-md-6">
@@ -16,10 +17,10 @@
                 <h4>
                     <ul class="list-unstyled" style="margin-top: 15px">
                         <li style="margin-bottom: 15px">
-                            <i class="fa fa-star"></i> Acquisitions Enhancements
+                            <i class="fa fa-star"></i> Auto Merge
                         </li>
                         <li style="margin-bottom: 15px">
-                            <i class="fa fa-star"></i> Find Evil Button <i class="fa fa-dot-circle-o" style="color: red"></i>
+                            <i class="fa fa-star"></i> Additional Acquisitions Enhancements
                         </li>
                         <li style="margin-bottom: 15px">
                             <i class="fa fa-star"></i> Hit Prioritization
@@ -35,8 +36,61 @@
 </div>
 
 <div class="container">
-    <!-- Example row of columns -->
     <div class="row">
+
+        <div class="col-md-4">
+            <h3><i class="fa fa-smile-o"></i> UAC 1.0-0</h3>
+            <dl>
+                <dt>
+                    Acquisitions
+                </dt>
+                <dd>
+                    <ul>
+                        <li>
+                            Acquisitions are now associated with the hit identity from which it was initiated. The hits
+                            view now displays acquisitions related to the selected identity. Completed acquisitions may
+                            be clicked on in order to display the corresponding file audit. This should improve user
+                            ability to locate an acquisition. Acquisitions are now linkable by URL.
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>
+                    Hit Review
+                </dt>
+                <dd>
+                    <ul>
+                        <li>
+                            Hit links have been updated to use identity rather than row item uuid. This will help when
+                            hits are merged so that links don't become obsolete. If you have any important hit links
+                            that you would like to retain you should grab the new version from UAC before the new
+                            "Merge All" functionality is deployed (next week).
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>
+                    Fixes
+                </dt>
+                <dd>
+                    <ul>
+                        <li>
+                            When initiating an acquisition now showing hits table record to investigating regardless of
+                            whether the acquisition was picked up or not. Previously it was only being updated if the
+                            acquisition was picked up.
+                        </li>
+                        <li>
+                            Added spaces in the portal formatted data for registry items.
+                        </li>
+                    </ul>
+                </dd>
+            </dl>
+        </div>
+
         <div class="col-md-4">
             <h3><i class="fa fa-smile-o"></i> UAC 0.8-0</h3>
             <dl>
@@ -88,6 +142,7 @@
                 </dd>
             </dl>
         </div>
+
         <div class="col-md-4">
             <h3><i class="fa fa-smile-o"></i> UAC 0.7-0/1/2/3</h3>
 
