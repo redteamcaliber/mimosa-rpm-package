@@ -1,6 +1,10 @@
 UAC ToDo
 ========
 
+### Need to look into issues related to CSRF checks and sessions.
+
+### Need to have a way to view and manage the UAC sessions.
+
 ### Migrate hits links to use identity rather than rowitem_uuid.
 
 ### Release

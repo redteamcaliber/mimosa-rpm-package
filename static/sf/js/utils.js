@@ -239,7 +239,7 @@ StrikeFinder.display_error = function (message) {
 //
 
 /**
- * Override the default backbone POST behavior to send the Django CSRF token.
+ * Override the default backbone POST behavior to send the CSRF token.
  */
 var _sync = Backbone.sync;
 Backbone.sync = function (method, model, options) {
