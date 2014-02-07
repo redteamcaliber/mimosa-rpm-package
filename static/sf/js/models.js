@@ -4,7 +4,7 @@ var StrikeFinder = StrikeFinder || {};
 // ----------- Models/Collections ----------
 //
 
-StrikeFinder.get_tags = function(callback) {
+StrikeFinder.get_tags = function (callback) {
     var tags = UAC.session('strikefinder.tags');
     if (tags) {
         callback(null, tags);
@@ -12,13 +12,13 @@ StrikeFinder.get_tags = function(callback) {
     else {
         c = new StrikeFinder.TagCollection();
         c.fetch({
-            success: function(collection, response, options) {
+            success: function (collection, response, options) {
                 // Cache the tags for later use.
                 var tags = c.toJSON();
                 UAC.session('strikefinder.tags', tags);
                 callback(null, tags);
             },
-            error: function(collection, response, options) {
+            error: function (collection, response, options) {
                 callback(response);
             }
         });
@@ -314,6 +314,9 @@ StrikeFinder.HitsFacetsModel = Backbone.Model.extend({
         if (this.params.rowitem_uuid) {
             result += '&' + $.param({rowitem_uuid: this.params.rowitem_uuid});
         }
+        if (this.params.identity) {
+            result += '&' + $.param({identity: this.params.identity});
+        }
         if (this.params.tagname && this.params.tagname.length > 0) {
             result += '&' + $.param({tagname: this.params.tagname});
         }
@@ -467,7 +470,7 @@ StrikeFinder.Acquisition = Backbone.Model.extend({
         password: '',
         force: ''
     },
-    url: function() {
+    url: function () {
         if (this.uuid) {
             return _.sprintf('/sf/api/acquisitions/%s', this.uuid);
         }
@@ -506,6 +509,28 @@ StrikeFinder.Acquisition = Backbone.Model.extend({
         }
         else {
             return null;
+        }
+    },
+    /**
+     * Return a formatted String value for this acquisition.
+     * @returns {String} - a formatted String.
+     */
+    toString: function() {
+        return StrikeFinder.format_acquisition(this.attributes);
+    }
+});
+
+/**
+ * Collection class for acquisitions.
+ */
+StrikeFinder.AcquisitionCollection = Backbone.Collection.extend({
+    model: StrikeFinder.Acquisition,
+    url: function () {
+        if (this.identity) {
+            return _.sprintf('/sf/api/acquisitions/identity/%s', this.identity);
+        }
+        else {
+            return '/sf/api/acquisitions';
         }
     }
 });
@@ -674,7 +699,7 @@ StrikeFinder.TagCollection = Backbone.Collection.extend({
      * @param options - the fetch options.
      * @returns {*}
      */
-    fetch: function(options) {
+    fetch: function (options) {
         var tags = UAC.session('strikefinder:tags');
         if (tags) {
             this.reset(tags);

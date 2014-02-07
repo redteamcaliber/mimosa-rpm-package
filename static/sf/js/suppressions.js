@@ -279,8 +279,7 @@ StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
         var view = this;
 
         view.hits_collapsable = new StrikeFinder.CollapsableContentView({
-            el: view.el,
-            title: '<i class="fa fa-level-down"></i> Suppressed Hits'
+            el: view.el
         });
 
         view.options.oLanguage = {
@@ -312,7 +311,10 @@ StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
 
         view.options.sDom = 'ltip';
         view.listenTo(view, 'load', function () {
-            view.select_row(0)
+            view.select_row(0);
+
+            view.hits_collapsable.set('title', _.sprintf('<i class="fa fa-level-down"></i> Suppressed Hits (%s)',
+                view.get_total_rows()));
         });
     }
 });

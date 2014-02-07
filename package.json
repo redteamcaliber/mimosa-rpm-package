@@ -2,7 +2,7 @@
     "name": "mandiant-uac-ws",
     "author": "Mandiant",
     "description": "Unified Analyst Console",
-    "version": "0.8.0",
+    "version": "1.1.0",
     "main": "uac.js",
     "repository" : {
         "type" : "git",
@@ -41,6 +41,7 @@
         "grunt-contrib-uglify": "*",
         "grunt-scp": "*",
         "grunt-ssh": "*",
+        "grunt-sftp-deploy": "*",
         "grunt-contrib-jst": "*",
         "grunt-git": "*",
         "grunt-template": "*",

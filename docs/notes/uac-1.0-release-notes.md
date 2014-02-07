@@ -1,6 +1,33 @@
 Unified Analyst Console (UAC) 1.0 Release Notes
 ===============================================
 
+Mandiant-uac-ws-1.1-0 - February 12th, 2014
+------------------------------------------
+
+### Fixes
+- Fixed issue with acquisition audit collapsable interfering with the hit audit collapsable.
+
+
+Mandiant-uac-ws-1.0-0 - February 5th, 2014
+------------------------------------------
+
+### Acquisitions
+- Acquisitions are now associated with the hit identity from which it was initiated.  The hits view now displays
+  acquisitions related to the selected identity.  Completed acquisitions may be clicked on in order to display the
+  corresponding file audit.  This should improve user ability to locate an acquisition.
+- Acquisitions are now linkable by URL.
+
+### Hit Review
+- Hit links have been updated to use identity rather than row item uuid.  This will help when hits are merged so that
+  links don't become obsolete.  If you have any important hit links that you would like to retain you should grab the
+  new version from UAC before the new "Merge All" functionality is deployed (next week).
+
+### Fixes
+- When initiating an acquisition now showing hits table record to investigating regardless of whether the acquisition
+  was picked up or not.  Previously it was only being updated if the acquisition was picked up.
+- Added spaces in the portal formatted data for registry items.
+
+
 Mandiant-uac-ws-0.8-0 - January 29th, 2014
 ------------------------------------------
 

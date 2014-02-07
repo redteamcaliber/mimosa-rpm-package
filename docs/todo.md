@@ -1,10 +1,27 @@
 UAC ToDo
 ========
 
-### Track Identity Across Acquisitions
-- Link acquisitions to the identity it originated from.
-- Display a list of acquisitions on the identity view.
-- Allow the user to see the acquisitions details for an acquisition in the list.
+### Need to look into issues related to CSRF checks and sessions.
+
+### Need to have a way to view and manage the UAC sessions.
+
+### Migrate hits links to use identity rather than rowitem_uuid.
+
+### Release
+- Update the index page.
+- Write up deployment instructions.
+- Create RT ticket.
+
+### Update the IOC Selection title every time something is selected.
+
+### Look into base64 encoded GZipped data in the Strings section.
+- https://uac.mplex.mandiant.com/sf/hits/0a63a2ba-be5e-4151-8ff0-a119387fc0a9
+
+### Acquisition Details
+- Migrate the current acquisitions popup to be a complete dialog including:
+    - The acquisitions details.
+    - The file audit if applicable.
+    - The issues document if applicable.
 
 ### Linkable Acquisitions
 - Allow user to create URL links to acquisitions.
@@ -15,8 +32,22 @@ UAC ToDo
 - Display acquisition comments on the acquisitions view.
 - Display acquisition comments on the hits acquisitions view.
 
+### Counts
+- Add counts to the comments rollup.
+- Add counts to the suppressions rollup.
+
+### Refactor Messages
+- Transition display messages to the UAC level.
+- Create messages that must be cleared.
+- Error messages should be displayed so that the user has to clear them.
+- Validation error messages should not need to be cleared.
+
 ### Comments Enhancements
 - Allow comment input to be expanded to be multi-line.
+
+### Client Session Timeout
+- Look into a way to notify users when their session has timed out on the client.
+  Currently you are able to make AJAX calls without knowing your session has expired.
 
 ### Puppetize UAC
 - Need to have nginx installed.
@@ -26,6 +57,8 @@ UAC ToDo
 - Need to lay down the UAC env.json config.
 
 ### Look through my comments in my notebook for other TODO's.
+
+### Look into a notification chat framework for UAC.
 
 ### Notification Framework for UAC
 - Create a Node web sockets server for pushing content to UAC.

@@ -11,7 +11,7 @@ var StrikeFinder = StrikeFinder || {};
  * @param completed_fn - function(err, is_complete, result)
  * @param options - delay=milliseconds in between poll attempts (default=2000), max_intervals=max number of poll attempts (default=5).
  */
-StrikeFinder.wait_for = function(params, poll_fn, completed_fn, options) {
+StrikeFinder.wait_for = function (params, poll_fn, completed_fn, options) {
     var delay = 2000;
     var max_intervals = 5;
 
@@ -27,7 +27,7 @@ StrikeFinder.wait_for = function(params, poll_fn, completed_fn, options) {
 
     // Set up the polling loop.
     var interval_count = 0;
-    var timer_id = setInterval(function() {
+    var timer_id = setInterval(function () {
         try {
             // Check for an exit condition.
             if (interval_count >= max_intervals) {
@@ -37,7 +37,7 @@ StrikeFinder.wait_for = function(params, poll_fn, completed_fn, options) {
             }
             else {
                 // Invoke the poll function.
-                poll_fn(params, function(err, is_complete, result) {
+                poll_fn(params, function (err, is_complete, result) {
                     if (err) {
                         // Error, exit.
                         clearInterval(timer_id);
@@ -72,23 +72,28 @@ StrikeFinder.format_suppression = function (s) {
         s.itemkey, s.condition, _.escape(s.itemvalue), s.preservecase, s.negate);
 };
 
+StrikeFinder.format_acquisition = function (a) {
+    return _.sprintf('Acquisition (%s) FilePath: %s FileName: %s',
+        a.uuid, a.file_path, a.file_name);
+};
 
 
 //
 // Collapsable Utilities.
 //
 
-StrikeFinder.collapse = function(el) {
+StrikeFinder.collapse = function (el) {
     jq_el = $(el);
+
     if (jq_el.hasClass('collapsable-header')) {
         new StrikeFinder.CollapsableContentView({
             el: '#' + jq_el.attr('id'),
             title: jq_el.attr('collapsable-title')
         });
     }
-    _.each(jq_el.find('.collapsable-header'), function(collapsable) {
+    _.each(jq_el.find('.collapsable-header'), function (collapsable) {
         new StrikeFinder.CollapsableContentView({
-            el: '#' + collapsable.id,
+            el: collapsable,
             title: $(collapsable).attr('collapsable-title')
         });
     });
@@ -99,15 +104,14 @@ StrikeFinder.collapse = function(el) {
             display_toggle: false
         });
     }
-    _.each(jq_el.find('.collapsable'), function(collapsable) {
+    _.each(jq_el.find('.collapsable'), function (collapsable) {
         new StrikeFinder.CollapsableContentView({
-            el: '#' + collapsable.id,
+            el: collapsable,
             title: $(collapsable).attr('collapsable-title'),
             display_toggle: false
         });
     });
 };
-
 
 
 //
@@ -123,7 +127,7 @@ StrikeFinder.get_blockui_options = function (message) {
     return {
         message: message ? message : '',
         css: {
-            'margin-top': '30%',
+            'margin-top': '50%',
             width: '100%',
             border: "0px solid #cccccc",
             padding: '0px',
@@ -142,15 +146,15 @@ StrikeFinder.block = function (ev) {
     $.blockUI(StrikeFinder.get_blockui_options());
 };
 
-StrikeFinder.block_element_remove = function(el, message) {
+StrikeFinder.block_element_remove = function (el, message) {
     $(el).block(StrikeFinder.get_blockui_options('<img src="/static/img/ajax-loader.gif">'));
 };
 
-StrikeFinder.block_element = function(el, message) {
+StrikeFinder.block_element = function (el, message) {
     $(el).block(StrikeFinder.get_blockui_options('<img src="/static/img/ajax-loader.gif">'));
 };
 
-StrikeFinder.unblock = function(el) {
+StrikeFinder.unblock = function (el) {
     if (el) {
         $(el).unblock();
     }
@@ -186,7 +190,6 @@ StrikeFinder.show_views = function (views, on) {
         }
     });
 };
-
 
 
 //
@@ -234,7 +237,7 @@ StrikeFinder.display_error = function (message) {
 //
 
 /**
- * Override the default backbone POST behavior to send the Django CSRF token.
+ * Override the default backbone POST behavior to send the CSRF token.
  */
 var _sync = Backbone.sync;
 Backbone.sync = function (method, model, options) {
@@ -244,7 +247,6 @@ Backbone.sync = function (method, model, options) {
     };
     return _sync(method, model, options);
 };
-
 
 
 //
@@ -287,19 +289,17 @@ $(document).ajaxError(function (collection, response, options) {
 //});
 
 
-
-
 //
 // Date Formatting.
 //
 
 StrikeFinder.DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 
-StrikeFinder.format_date_string = function(s) {
+StrikeFinder.format_date_string = function (s) {
     return s ? moment(s, 'YYYY-MM-DDTHH:mm:ss.SSS').format(StrikeFinder.DATE_FORMAT) : '';
 };
 
-StrikeFinder.format_unix_date = function(unix) {
+StrikeFinder.format_unix_date = function (unix) {
     if (unix) {
         var input;
         if (typeof unix == 'string') {
@@ -315,6 +315,19 @@ StrikeFinder.format_unix_date = function(unix) {
     }
 };
 
+function random_string(len) {
+    if (!len) {
+        len = 10;
+    }
+    var result = '';
+    var charset = 'abcdefghijklmnopqrstuvwxyz';
+
+    for (var i = 0; i < len; i++) {
+        result += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+
+    return result;
+}
 
 function format_expression(s) {
     console.log(s);
@@ -336,7 +349,7 @@ function format_expression(s) {
  * @param context - the template context.
  * @returns the template result.
  */
-StrikeFinder.template = function(template, context) {
+StrikeFinder.template = function (template, context) {
     if (!StrikeFinder.templates) {
         // Error, templates does not exist.
         log.error('StrikeFinder.templates is not initialized.');

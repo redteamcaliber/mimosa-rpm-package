@@ -26,7 +26,7 @@ describe('uac-api-tests', function () {
                 try {
                     should.not.exist(err);
                     should.exist(terms);
-                    terms.length.should.be.greaterThan(4);
+                    terms.length.should.equal(4);
                     done();
                 }
                 catch (e) {
@@ -40,7 +40,7 @@ describe('uac-api-tests', function () {
                 try {
                     should.not.exist(err);
                     should.exist(terms);
-                    terms.length.should.be.greaterThan(6);
+                    terms.length.should.equal(6);
                     done();
                 }
                 catch (e) {

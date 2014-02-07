@@ -357,7 +357,7 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
 });
 
 /**
- * File/Info details view.
+ * Audit content details view.
  */
 StrikeFinder.AuditView = StrikeFinder.View.extend({
     initialize: function (options) {
@@ -1028,7 +1028,8 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
                     am_cert_hash: params.am_cert_hash,
                     cluster_uuid: params.cluster_uuid,
                     cluster_name: params.cluster_name,
-                    rowitem_uuid: params.rowitem_uuid
+                    rowitem_uuid: params.rowitem_uuid,
+                    identity: params.identity
                 });
 
                 var data = view.model.toJSON();
@@ -1084,6 +1085,7 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
             // Immediately block to prevent multiple submissions.
             StrikeFinder.block_element(acquire_form);
 
+            view.model.set('uuid', undefined);
             view.model.set('file_path', view.$('#file_path').val());
             view.model.set('file_name', view.$('#file_name').val());
             view.model.set('method', view.$('#method').val());
@@ -1133,6 +1135,9 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
                             // The request was not complete, view on the suppressions list.
                             StrikeFinder.display_info('The acqusition request is still being processed, its status ' +
                                 'can be viewed on the <a href="/sf/acquisitions">Acquisitions List</a>.');
+                            // Notify that a suppression was created.  It has not completed yet though this event should
+                            // be fired to ensure the relevant fields in the UI are updated.
+                            view.trigger('create', view.model);
                             // Hide the dialog.
                             view.$(acquire_form).modal('hide');
                         }
@@ -1253,12 +1258,24 @@ StrikeFinder.CommentsView = StrikeFinder.View.extend({
         }
 
         view.comments_collapsable = new StrikeFinder.CollapsableContentView({
-            el: view.el,
-            title: '<i class="fa fa-comments"></i> Comments'
+            el: view.el
         });
 
         view.comments_table = new StrikeFinder.CommentsTableView({
             el: view.$("#comments-table")
+        });
+
+        view.listenTo(view.comments_table, 'load', function() {
+            var comments_count = view.comments_table.get_total_rows();
+            view.comments_collapsable.set('title', _.sprintf('<i class="fa fa-comments"></i> Comments (%s)',
+                comments_count));
+            if (comments_count == 0) {
+                // Collapse the comments if there are none.
+                view.comments_collapsable.collapse();
+            }
+            else {
+                view.comments_collapsable.expand();
+            }
         });
     },
     events: {
@@ -1415,8 +1432,8 @@ StrikeFinder.HitsLinkView = StrikeFinder.View.extend({
 
         view.close();
 
-        var link = window.location.protocol + '//' + window.location.hostname +
-            (window.location.port ? ':' + window.location.port : '') + '/sf/hits/' + data.uuid;
+        var link = _.sprintf('%s//%s%s/sf/hits/identity/%s', window.location.protocol,
+            window.location.hostname, (window.location.port ? ':' + window.location.port : ''), data.identity);
         var html = StrikeFinder.template('link.html', {link: link, label: 'Link to Hit'});
 
         view.$el.popover({
@@ -1921,6 +1938,7 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
 
                 if (ss_cluster_uuid) {
                     view.acquire_form_view.render({
+                        identity: view.row.identity,
                         selection: selection,
                         am_cert_hash: view.row.am_cert_hash,
                         cluster_uuid: ss_cluster_uuid,
@@ -2020,25 +2038,35 @@ StrikeFinder.HitsDetailsView = StrikeFinder.View.extend({
             view.comments_view = new StrikeFinder.CommentsView({
                 el: '#comments-div'
             });
+
+            // Acquisitions view.
+            view.acquisitions_view = new StrikeFinder.AcquisitionsViewCondensed({
+                el: '#acquisitions-table'
+            });
         });
 
         view.fetch();
     },
-    fetch: function (uuid_identity) {
+    fetch: function (rowitem_uuid) {
         var view = this;
 
         // Update the child views with the current row's parameters.
 
         var uuid;
-        if (uuid_identity) {
-            uuid = uuid_identity;
+        if (rowitem_uuid) {
+            // A specific rowitem was specified.
+            uuid = rowitem_uuid;
         }
         else {
+            // A row item was not specified, use the current selected row.
             uuid = view.row.uuid;
 
-            // Update the host data unless we are just changing to another identity.  Assumes that other identities
-            // are always for the same host.
+            // Update the host data unless we are just changing to date within this identity.  Assumes that all row
+            // item versions for this identity are for the same host.
             view.agenthost_view.fetch(view.row.am_cert_hash);
+
+            // Update the acquisitions.
+            view.acquisitions_view.fetch(view.row.identity);
         }
 
         // Fetch the related audit and update the audit view, tags view, and identity data.
@@ -2079,7 +2107,7 @@ StrikeFinder.HitsView = StrikeFinder.View.extend({
             // for the relevant row.  This is a shortcut rather than re-loading the entire table.
             view.hits_table_view.update_row('uuid', rowitem_uuid, 'tagname', tagname, 1);
         });
-        view.listenTo(view.hits_details_view, 'create:acquire', function (row, model) {
+        view.listenTo(view.hits_details_view, 'create:acquire', function (row) {
             // An acquisition has been created, update the row's tag value.
             view.hits_table_view.update_row('uuid', row.uuid, 'tagname', 'investigating', 1);
             // Refresh the comments.

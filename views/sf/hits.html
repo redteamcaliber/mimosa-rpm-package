@@ -18,6 +18,8 @@
 
     {% if rowitem_uuid %}
         StrikeFinder.rowitem_uuid = "{{ rowitem_uuid }}";
+    {% elif identity %}
+        StrikeFinder.identity = "{{ identity }}";
     {% endif %}
 
     $(document).ready(function () {
@@ -26,6 +28,11 @@
             hits_view.fetch({
                 rowitem_uuid: StrikeFinder.rowitem_uuid
             });
+        }
+        else if (StrikeFinder.identity) {
+            hits_view.fetch({
+                identity: StrikeFinder.identity
+            })
         }
         else {
             hits_view.fetch();

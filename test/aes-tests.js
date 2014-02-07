@@ -59,9 +59,12 @@ describe('aes-tests', function () {
             should.exist(credentials);
 
             // The credentials should match the cluster.
+            should.exist(credentials.cluster_uuid);
             credentials.cluster_uuid.should.equal(cluster);
+
             // User should exist, the value is uniquely encrypted.
             should.exist(credentials.user);
+
             // Password should exist, the value is uniquely encrypted.
             should.exist(credentials.password);
         });
@@ -85,8 +88,11 @@ describe('aes-tests', function () {
                 var credentials = route_utils.get_acquisition_credentials(req, cluster);
 
                 should.exist(credentials);
+                should.exist(credentials.cluster_uuid);
                 credentials.cluster_uuid.should.equal(cluster);
+                should.exist(credentials.user);
                 credentials.user.should.equal(user);
+                should.exist(credentials.password);
                 credentials.password.should.equal(password);
             });
         });

@@ -33,9 +33,11 @@ module.exports = function (grunt) {
 
     // Project configuration.
     grunt.initConfig({
-        // Github repository information.
+        // The Github repository.
         uac_repo: 'git@github.mandiant.com:amilano/uac-node.git',
-        uac_branch: 'misc',
+
+        // The Github Branch.
+        uac_branch: '1.0.0',
 
         uac_name: pkg['name'].charAt(0).toUpperCase() + pkg['name'].slice(1),
         uac_version: uac_version,
@@ -168,6 +170,21 @@ module.exports = function (grunt) {
                             config: 'delete_build_dir',
                             type: 'confirm',
                             message: 'Delete directory: <%= build_dir%>'
+                        }
+                    ]
+                }
+            },
+            'passphrase': {
+                options: {
+                    questions: [
+                        {
+                            config: 'passphrase',
+                            type: 'password',
+                            message: 'Enter passphrase: ',
+                            validate: function (value) {
+                                // return true if valid, error message if invalid
+                                return value ? true : false;
+                            }
                         }
                     ]
                 }
@@ -311,6 +328,22 @@ module.exports = function (grunt) {
             }
         },
 
+        sftp: {
+            prod: {
+                files: {
+                    "/root/build/rpm/RPMS/x86_64": "<%= uac_rpm_file %>"
+                },
+                options: {
+                    path: '/dev_deploy/uac-node',
+                    host: 'nas1.mplex.us2.mcirt.mandiant.com',
+                    username: 'mcirtdev',
+                    privateKey: grunt.file.read("/root/.ssh/id_rsa"),
+                    passphrase: '<%= passphrase %>',
+                    showProgress: true
+                }
+            }
+        },
+
         sshexec: {
             /**
              * Install the UAC RPM to devnet.
@@ -346,7 +379,7 @@ module.exports = function (grunt) {
             'create-local-tables': {
                 src: 'sql/create_tables.sql',
                 options: {
-                    connection: get_local_connection()
+                    connection: get_connection()
                 }
             },
             /**
@@ -355,7 +388,39 @@ module.exports = function (grunt) {
             'create-local-data': {
                 src: 'sql/create_data.sql',
                 options: {
-                    connection: get_local_connection()
+                    connection: get_connection()
+                }
+            },
+            /**
+             * Create a UAC database on devnet.
+             */
+            'create-devnet-db': {
+                src: 'sql/create_database.sql',
+                options: {
+                    connection: {
+                        user: 'postgres',
+                        password: 'devnet',
+                        host: 'uac.dev.mandiant.com',
+                        port: 5432
+                    }
+                }
+            },
+            /**
+             * Create the UAC tables on devnet.
+             */
+            'create-devnet-tables': {
+                src: 'sql/create_tables.sql',
+                options: {
+                    connection: get_connection({host: 'uac.dev.mandiant.com'})
+                }
+            },
+            /**
+             * Create the UAC data on localhost.
+             */
+            'create-devnet-data': {
+                src: 'sql/create_data.sql',
+                options: {
+                    connection: get_connection({host: 'uac.dev.mandiant.com'})
                 }
             }
         }
@@ -370,12 +435,22 @@ module.exports = function (grunt) {
         grunt.task.run('run-sql:create-local-db', 'run-sql:create-local-tables', 'run-sql:create-local-data');
     });
 
+    /**
+     * Deploy a devnet database.
+     *
+     * $ grunt deploy-devnet-db
+     */
+    grunt.registerTask('deploy-devnet-db', 'Deploy a devnet database.', function () {
+        grunt.task.run('run-sql:create-devnet-db', 'run-sql:create-devnet-tables', 'run-sql:create-devnet-data');
+    });
+
     grunt.registerTask('jst-dev', ['jst:sf-dev', 'jst:nt-dev']);
 
     /**
      * Watch the Javascript templates for changes and recompile them.
      */
     grunt.registerTask('watch-templates', 'Watch the templates files for changes and recompile.', ['jst-dev', 'watch']);
+
 
     grunt.registerTask('dump-config', 'Dump the configuration to console.', function() {
         console.dir(grunt.config());
@@ -446,6 +521,13 @@ module.exports = function (grunt) {
     grunt.registerTask('deploy-devnet', ['scp:devnet', 'sshexec:install-devnet']);
 
     /**
+     * Deploy an existing UAC rpm to the FTP site.
+     */
+    grunt.registerTask('deploy-ftp', function() {
+        grunt.task.run(['prompt:passphrase', 'sftp:prod']);
+    });
+
+    /**
      * Build the UAC RPM and install it to the devnet environment.
      */
     grunt.registerTask('build-deploy-devnet', ['build-rpm', 'deploy-devnet']);
@@ -481,12 +563,13 @@ function process_name(filename) {
 /**
  * TODO: Replace this.
  */
-function get_local_connection() {
+function get_connection(options) {
+
     return {
-        user: 'uac_user',
-        password: 'devnet',
-        database: 'uac',
-        host: 'localhost',
-        port: 5432
+        user: options && options.user ? options.user : 'uac_user',
+        password: options && options.password ? options.password : 'devnet',
+        database: options && options.database ? options.database : 'uac',
+        host: options && options.host ? options.host : 'localhost',
+        port: options && options.port ? options.port : 5432
     }
 }

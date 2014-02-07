@@ -1,5 +1,60 @@
 
-- UAC install from yesterday added Redis to the UAC server.
-- Being used for session store.
-- Should be quick and support UAC clustering in the future.
--
+insert into identity_acquisitions (uuid, identity, acquisition_uuid, user_uuid, uid) values ('492cdcea-f283-47db-bf44-b00ea087f270', 'f5d208501f298c13e40ab37aa8907af8', 'c57b89b8-0de6-4df5-9a99-0afa1fbf09b4', '77ad317c-3d68-1032-9384-4d6322ab8729', 'Anthony.Milano@Mandiant.com');
+
+{
+    "agent_cert": "-----BEGIN CERTIFICATE-----\nMIICrDCCAZQCCQCT5hpFUsE6yDANBgkqhkiG9w0BAQUFADAYMRYwFAYDVQQDEw1l\nbmF1czAwMDY2MjkwMB4XDTcwMDEwMTEyMDAwMFoXDTIyMTAyMDE4MDcxNFowGDEW\nMBQGA1UEAxMNZW5hdXMwMDA2NjI5MDCCASIwDQYJKoZIhvcNAQEBBQADggEPADCC\nAQoCggEBALuQ1a+Aexkf48ylgFPWQCbJeFw4tm0fdCA40P1cFfLeMRByxw/fnezL\nY03B+MrIAY3MuvnHSDflve2ipQNWahFFdiE1K4btp+AGvLwbiqQTcJFM29cX+t9K\nsqCMJbNzezJxTVjy+R4AVPqLf93M4s0M8C7wQpdYX4XpnQOReQc+o4kLe3a+kGmc\ncMNatWl5EuDSgRSMqhK7FFfj1g0e2vWsIz4zCYNz4ChSrnkgtBVEH+0ZInzst/vH\nY2vF9DZWWue0WYYMLC+cjoUnZDi/d6pQBYPi4bDOUYxGxQYXdiUuK1cUZPB5nVm2\nb5IT7BPJkEDe/NwgTSBPC4QxbupRPFkCAwEAATANBgkqhkiG9w0BAQUFAAOCAQEA\nN4Ig2dYQvR8UOCIK7YSCdkYD7r2kRtZefFIKxEVd8n6YmplhyOntuoCoMGtrMTLj\n41AKT7Uvl7OTac0xpp6FGIy8Ye/a8IIw7I0fC/YixpMoYnY0uyTky0aNpUKqSVN3\ndKQXcOEVab+0qp8kUsU/ABUeu6ldPVXHRYAfMvEYpFmZs/ymBtaDbNikYQ+N25I3\n+kAlDr2+We3O4O4g+ByGn/+YjczbdeywzTS4BBAR2RjBMbObKBi+0BdM03te3aP8\n5vlt1/vapb63f1dr2qORmhxTqZRjGUvFpUb4YmCYjjKNz9ZBnPe4CYijou+A7Dct\nVuiQUbeGcGhNgGpFVdkzdQ==\n-----END CERTIFICATE-----\n",
+    "agent_id": null,
+    "cluster": {
+        "engagement": {
+            "client": {
+                "last_updated": "2013-06-11T20:33:39",
+                "name": "Swaniawski-Grimes",
+                "resource_uri": "",
+                "uuid": "bcc73285-e021-4356-b2ec-0ecb4f2d8b79"
+            },
+            "number": "MFR12-022",
+            "resource_uri": "",
+            "uuid": "e4b81fdb-47f2-440d-b4d2-4d3b988918b5"
+        },
+        "name": "SCHUPPELTD001",
+        "node_band": 100000,
+        "resource_uri": "/api/v1/cluster/9402af9a-f99b-45c3-8f86-651aa1d87f75/",
+        "uuid": "9402af9a-f99b-45c3-8f86-651aa1d87f75"
+    },
+    "domain": "HALAMERICA",
+    "drives": "c:,d:",
+    "gmt_offset": "-PT6H",
+    "hash": "408535c72c90632143c9785f543c5f525c98ca3c56ea743af7c8af63c212d273",
+    "hostname": "enaus00066290",
+    "ip": "34.52.26.24",
+    "logged_on_user": "HALAMERICA\\ENAUS00066290$",
+    "mac_address": "00216a092958",
+    "machine": "ENAUS00066290",
+    "os_bitness": "32-bit",
+    "os_buildnumber": "2600",
+    "os_patch_level": "Service Pack 3",
+    "port": 22201,
+    "proc_type": "Multiprocessor Free",
+    "processor": "Intel(R) Core(TM)2 Duo CPU T9400 @ 2.53GHz",
+    "product_name": "Microsoft Windows XP",
+    "resource_uri": "/api/v1/agent/408535c72c90632143c9785f543c5f525c98ca3c56ea743af7c8af63c212d273/",
+    "revision": "483781f6-1c76-11e2-ba8e-525400a828bb",
+    "time_logged": "2012-11-13T00:30:12.500691",
+    "time_zone_dst": "Central Daylight Time",
+    "time_zone_standard": "Central Standard Time",
+    "total_physical_ram": "3216183296",
+    "uuid": "48377c60-1c76-11e2-ba8e-525400a828bb",
+    "version": "2.2.1500",
+    "counts": {
+        "notreviewed": 0,
+        "escalate": 0,
+        "reportable": 0,
+        "reported": 0,
+        "unreported": 0,
+        "investigating": 1,
+        "delete": 0
+    },
+    "time_formatted": "2012-11-12 19:30:12",
+    "time_caption": "More Than 48 Hours",
+    "time_label": "danger"
+}

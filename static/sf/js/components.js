@@ -43,15 +43,11 @@ StrikeFinder.View = Backbone.View.extend({
 StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
     initialize: function (options) {
         var view = this;
-        if (options.name) {
-            view.name = options.name;
+
+        if (!view.name) {
+            view.name = _.trim(random_string(5));
         }
-        else if (view.el && view.el.id) {
-            view.name = view.el.id;
-        }
-        else {
-            log.error('"name" or "el.id" is required for collapsable.');
-        }
+
         view.collapsed = options['collapsed'] || $(view.el).hasClass('collapsed');
         if (options.title) {
             view.title = options['title'];
@@ -165,8 +161,14 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
             $('#' + this.name + '-title').html(value);
         }
     },
+    collapse: function() {
+        $('#collapse-' + this.name).removeClass('in');
+    },
+    expand: function() {
+        $('#collapse-' + this.name).addClass('in');
+    },
     toggle: function () {
-        $('#collapse-' + this.el.id).collapse('toggle');
+        $('#collapse-' + this.name).collapse('toggle');
     }
 });
 
