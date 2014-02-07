@@ -44,20 +44,10 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
     initialize: function (options) {
         var view = this;
 
-        if (options.name) {
-            view.name = options.name;
+        if (!view.name) {
+            view.name = _.trim(random_string(5));
         }
-        else if (view.el && typeof view.el == 'String') {
-            view.name = view.el;
-        }
-        else if (view.el && view.el.id) {
-            view.name = view.el.id;
-        }
-        else {
-            // Error
-            log.error('"name" or "el.id" is required for collapsable.');
-            console.dir(view.el);
-        }
+
         view.collapsed = options['collapsed'] || $(view.el).hasClass('collapsed');
         if (options.title) {
             view.title = options['title'];
@@ -178,7 +168,7 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
         $('#collapse-' + this.name).addClass('in');
     },
     toggle: function () {
-        $('#collapse-' + this.el.id).collapse('toggle');
+        $('#collapse-' + this.name).collapse('toggle');
     }
 });
 

@@ -357,7 +357,7 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
 });
 
 /**
- * File/Info details view.
+ * Audit content details view.
  */
 StrikeFinder.AuditView = StrikeFinder.View.extend({
     initialize: function (options) {
