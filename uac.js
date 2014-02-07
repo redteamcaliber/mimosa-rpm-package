@@ -20,6 +20,7 @@ var nt_routes = require('nt-routes');
 //
 var app = express();
 
+
 // Redis session store.
 var RedisStore = require('connect-redis')(express);
 
