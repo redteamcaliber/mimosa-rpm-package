@@ -77,7 +77,7 @@ app.use(express.session({
     })
 }));
 
-app.use(express.csrf());
+//app.use(express.csrf());
 
 app.use(sso.require_authentication(settings.get('sso')));
 
