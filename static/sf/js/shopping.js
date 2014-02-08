@@ -62,10 +62,6 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
         // Clean up any previous view data.
         view.close();
 
-        //var data = $.extend({}, view.options);
-        //var items = view.collection.toJSON();
-        //data.items = items;
-
         log.debug('Rendering IOC details...');
 
         var ioc_uuids = view.collection.toJSON();
@@ -73,8 +69,8 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
         var iocnamehash = 'NA';
         if (view.collection.length > 0 && view.collection.at(0).get('expressions').length > 0) {
             var expresssions = view.collection.at(0).get('expressions');
-            var iocname = expresssions[0].iocname;
-            var iocnamehash = expresssions[0].iocnamehash;
+            iocname = expresssions[0].iocname;
+            iocnamehash = expresssions[0].iocnamehash;
         }
 
         // Render the template.
@@ -91,6 +87,7 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
         });
 
         _.each(ioc_uuids, function (ioc_uuid, index) {
+
             var table = new StrikeFinder.TableView({
                 el: view.$("#uuid-" + index + "-table"),
                 aaData: ioc_uuid.expressions,
@@ -105,21 +102,49 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
                 sDom: 't',
                 iDisplayLength: -1
             });
-            table.on("click", function (data) {
-                var exp_key = data['exp_key'];
-                view.trigger("click:exp_key", exp_key);
-            });
+            view.listenTo(table, 'click', view.on_exp_key_click);
+
             table.render();
 
             view.table_views.push(table);
         });
         return view;
     },
+    on_exp_key_click: function(data) {
+        var view = this;
+        var exp_key = data['exp_key'];
+
+        view.collection.each(function(iocuuid_item) {
+            _.each(iocuuid_item.get('expressions'), function(expression_item) {
+                if (expression_item.exp_key == exp_key) {
+                    view.trigger("click:exp_key", expression_item.iocname, expression_item.iocuuid, exp_key);
+                }
+            });
+        });
+    },
     on_ioc_click: function (ev) {
-        this.trigger('click:iocnamehash', $(ev.currentTarget).attr('data-iocnamehash'));
+        var view = this;
+        var iocnamehash = $(ev.currentTarget).attr('data-iocnamehash');
+
+        view.collection.each(function(iocuuid_item) {
+            _.each(iocuuid_item.get('expressions'), function(expression_item) {
+                if (expression_item.iocnamehash == iocnamehash) {
+                    view.trigger('click:iocnamehash', expression_item.iocname, iocnamehash);
+                }
+            });
+        });
     },
     on_uuid_click: function (ev) {
-        this.trigger('click:ioc_uuid', $(ev.currentTarget).attr('data-ioc_uuid'));
+        var view = this;
+        var iocuuid = $(ev.currentTarget).attr('data-ioc_uuid');
+
+        view.collection.each(function(iocuuid_item) {
+            _.each(iocuuid_item.get('expressions'), function(expression_item) {
+                if (expression_item.iocuuid == iocuuid) {
+                    view.trigger('click:ioc_uuid', expression_item.iocname, iocuuid);
+                }
+            });
+        });
     },
     fetch: function (params) {
         var view = this;
@@ -369,7 +394,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
         });
 
         // Use the default title.
-        view.set_title('');
+        view.set_title();
 
         // Create the cluster selection component.
         view.cluster_selection_view = new StrikeFinder.ClusterSelectionView({
@@ -429,8 +454,10 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
         view.ioc_details_view = new StrikeFinder.IOCDetailsView({
             el: "#ioc-details-div"
         });
-        view.listenTo(view.ioc_details_view, "click:exp_key", function (exp_key) {
+        view.listenTo(view.ioc_details_view, "click:exp_key", function (iocname, iocuuid, exp_key) {
             log.info('Selected expression key: ' + exp_key);
+
+            view.set_title([iocname, iocuuid, exp_key]);
 
             var params = {
                 services: view.services.join(','),
@@ -440,9 +467,11 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
 
             view.render_hits(params);
         });
-        view.listenTo(view.ioc_details_view, "click:iocnamehash", function (iocnamehash) {
+        view.listenTo(view.ioc_details_view, "click:iocnamehash", function (iocname, iocnamehash) {
             // User has selected an iocnamehash.
             log.info('Selected iocnamehash: ' + iocnamehash);
+
+            view.set_title([iocname]);
 
             var params = {
                 services: view.services.join(','),
@@ -453,9 +482,11 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             // Check out is not enabled.
             view.render_hits(params);
         });
-        view.listenTo(view.ioc_details_view, "click:ioc_uuid", function (ioc_uuid) {
+        view.listenTo(view.ioc_details_view, "click:ioc_uuid", function (iocname, ioc_uuid) {
             // User has selected an ioc_uuid.
             log.debug('Selected ioc_uuid: ' + ioc_uuid);
+
+            view.set_title([iocname, ioc_uuid]);
 
             var params = {
                 services: view.services.join(','),
@@ -472,12 +503,21 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             clusters: view.cluster_selection_view.get_clusters()
         });
     },
+    get_selected_ioc_summary_data: function() {
+        return this.ioc_summaries_view.get_selected_data();
+    },
     /**
      * Set the IOC selection roll up title.
      * @param title - the title.
      */
-    set_title: function (title) {
-        this.shopping_collapsable.set('title', '<i class="fa fa-search"></i> IOC Selection' + title);
+    set_title: function (items) {
+        var title = '<i class="fa fa-search"></i> IOC Selection';
+        if (items && items.length > 0) {
+            _.each(items, function(item) {
+                title += ' &nbsp; / &nbsp; ' + item;
+            });
+        }
+        this.shopping_collapsable.set('title', title);
     },
     /**
      * Hide the IOC summary view.

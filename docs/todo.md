@@ -1,21 +1,14 @@
 UAC ToDo
 ========
 
-### Need to look into issues related to CSRF checks and sessions.
-
 ### Need to have a way to view and manage the UAC sessions.
-
-### Migrate hits links to use identity rather than rowitem_uuid.
-
-### Release
-- Update the index page.
-- Write up deployment instructions.
-- Create RT ticket.
 
 ### Update the IOC Selection title every time something is selected.
 
 ### Look into base64 encoded GZipped data in the Strings section.
 - https://uac.mplex.mandiant.com/sf/hits/0a63a2ba-be5e-4151-8ff0-a119387fc0a9
+
+### Unselect values from ioc details tables after an expression is selected.
 
 ### Acquisition Details
 - Migrate the current acquisitions popup to be a complete dialog including:
@@ -35,6 +28,8 @@ UAC ToDo
 ### Counts
 - Add counts to the comments rollup.
 - Add counts to the suppressions rollup.
+
+### Externalize UAC/StrikeFinder components into their own git project.
 
 ### Refactor Messages
 - Transition display messages to the UAC level.
@@ -122,8 +117,6 @@ UAC ToDo
 ## Tasks
 
 ### Make the UAC start scripts resilient to the directory that are being run in.  It should not matter.
-
-### Unselect values from ioc details tables after an expression is selected.
 
 ### Use values instead of id's in the select view.
 

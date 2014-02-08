@@ -4,6 +4,10 @@ Unified Analyst Console (UAC) 1.0 Release Notes
 Mandiant-uac-ws-1.1-0 - February 12th, 2014
 ------------------------------------------
 
+### IOC Selection
+- The IOC selection view now displays the users selections after an IOC Name, IOC UUID, or IOC expression is selected.
+  This will give users context into the hits that they are viewing.
+
 ### Fixes
 - Fixed issue with acquisition audit collapsable interfering with the hit audit collapsable.
 

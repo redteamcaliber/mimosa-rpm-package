@@ -369,6 +369,16 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             return -1;
         }
     },
+    get_selected_data: function() {
+        var selected = this.get_selected();
+        if (selected !== undefined && selected.length == 1) {
+            var pos = this.get_position(selected.get(0));
+            return this.get_data(pos - 1);
+        }
+        else {
+            return undefined;
+        }
+    },
     get_current_page: function () {
         var settings = this.get_settings();
         return Math.ceil(settings._iDisplayStart / settings._iDisplayLength) + 1;
@@ -397,7 +407,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         var selected = this.get_selected();
         if (selected !== undefined && selected.length == 1) {
             var pos = this.get_position(selected.get(0));
-            return this.get_data(pos - 1)
+            return this.get_data(pos - 1);
         }
         // No previous.
         return undefined;
@@ -1102,5 +1112,18 @@ StrikeFinder.HostTypeAheadView = StrikeFinder.View.extend({
         typeahead.on('typeahead:selected', function (evt, data) {
             window.location = _.sprintf('/sf/host/%s/', data.hash);
         });
+    }
+});
+
+/**
+ * Breadcrumb view.
+ */
+StrikeFinder.BreadcrumbView = StrikeFinder.View.extend({
+    render: function() {
+        var context = {
+            items: this.collection.toJSON()
+        };
+        this.$el.html(StrikeFinder.template('breadcrumb-template.html', context));
+        return this;
     }
 });
