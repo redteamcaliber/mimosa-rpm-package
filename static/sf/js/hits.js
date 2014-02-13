@@ -1440,7 +1440,11 @@ StrikeFinder.HitsLinkView = StrikeFinder.View.extend({
             html: true,
             trigger: 'click',
             content: html
-        });
+        })
+            .data('bs.popover')
+            .tip()
+            .addClass('link-popover');
+
         view.$el.on('shown.bs.popover', function () {
             $('.link-text').select();
         });

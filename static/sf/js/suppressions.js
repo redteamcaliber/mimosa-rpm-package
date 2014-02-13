@@ -18,7 +18,10 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
             html : true,
             trigger: 'manual',
             content: html
-        });
+        })
+            .data('bs.popover')
+            .tip()
+            .addClass('link-popover');
         button.on('click', function(ev) {
             button.popover('toggle');
             $('.link-text').select();

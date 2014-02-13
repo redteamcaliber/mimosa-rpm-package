@@ -95,6 +95,16 @@ table {
     min-width: 75px;
 }
 
+.expression-popover {
+    max-width: 1000px;
+    width: auto;
+}
+
+.link-popover {
+    width: 400px;
+    max-width: 600px;
+}
+
 .truncate_100 {
     width: 100px;
     white-space: nowrap;
