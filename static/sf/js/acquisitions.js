@@ -1,6 +1,55 @@
 var StrikeFinder = StrikeFinder || {};
 
 
+StrikeFinder.format_acquisition_state = function(data) {
+    if (data) {
+        var label_class = '';
+        if (data == 'errored') {
+            label_class = 'label-danger';
+        }
+        else if (data == 'cancelled') {
+            label_class = 'label-warning';
+        }
+        else if (data == 'created') {
+            label_class = 'label-default';
+        }
+        else if (data == 'started' || data == 'created') {
+            label_class = 'label-primary';
+        }
+        else if (data == 'completed') {
+            label_class = 'label-success';
+        }
+        else if (data == 'unknown') {
+            label_class = 'label-warning';
+        }
+        else {
+            label_class = 'label-default';
+        }
+        return _.sprintf('<span class="label %s error_message" style="text-align: center; width: 100%%">%s</span>', label_class, data);
+    }
+    else {
+        return '';
+    }
+};
+
+StrikeFinder.format_acquisition_level = function(data) {
+    var result = '';
+    if (data) {
+        var label_class = 'label-default';
+        if (data == 'Fatal' || data == 'Critical' || data == 'Error') {
+            label_class = 'label-danger';
+        }
+        else if (data == 'Warning' || data == 'Alert') {
+            label_class = 'label-warning';
+        }
+        else if (data == 'Notice' || data == 'Info') {
+            label_class = 'label-primary';
+        }
+        result = _.sprintf('<span class="label %s">%s</span>', label_class, data);
+    }
+    return result;
+};
+
 StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
     initialize: function () {
         var view = this;
@@ -57,7 +106,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
                     aTargets: [3]
                 },
                 {
-                    mRender: view.format_state,
+                    mRender: StrikeFinder.format_acquisition_state,
                     aTargets: [4]
                 }
             ];
@@ -122,12 +171,13 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
                     aTargets: [6]
                 },
                 {
-                    mRender: view.format_state,
+                    mRender: StrikeFinder.format_acquisition_state,
                     aTargets: [9]
                 }
             ];
 
             view.options.iDisplayLength = 25;
+            view.options.iPipe = 1; // Disable pipelining.
 
             view.options['sDom'] = 'ltip';
         }
@@ -160,78 +210,15 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
     on_row_click: function (data) {
         var view = this;
 
-        //console.dir(data);
-
-        if (data.link) {
-            if (view.audit_dialog) {
-                view.audit_dialog.close();
-            }
-            view.audit_dialog = new StrikeFinder.AcquisitionsAuditView({
-                el: '#dialog-div',
-                acquisition_uuid: data.uuid
-            });
+        if (view.acquisition_details) {
+            // Clean up the existing view.
+            view.acquisition_details.close();
         }
-    },
-    format_state: function (data, type, row) {
-        if (data) {
-            var label_class = '';
-            if (data == 'errored') {
-                label_class = 'label-danger';
-            }
-            else if (data == 'cancelled') {
-                label_class = 'label-warning';
-            }
-            else if (data == 'created') {
-                label_class = 'label-default';
-            }
-            else if (data == 'started' || data == 'created') {
-                label_class = 'label-primary';
-            }
-            else if (data == 'completed') {
-                label_class = 'label-success';
-            }
-            else if (data == 'unknown') {
-                label_class = 'label-warning';
-            }
-            else {
-                label_class = 'label-default';
-            }
-            return _.sprintf('<span class="label %s error_message" style="text-align: center; width: 100%%">%s</span>', label_class, data);
-        }
-        else {
-            return '';
-        }
-    }
-});
-
-StrikeFinder.AcquisitionsAuditView = StrikeFinder.View.extend({
-    events: {
-        'click #close': 'on_close'
-    },
-    initialize: function () {
-        var view = this;
-        view.model = new StrikeFinder.AcquisitionAuditModel({
-            id: view.options.acquisition_uuid
+        view.acquisition_details = new StrikeFinder.AcquisitionsDetailsView({
+            el: '#dialog-div',
+            model: new StrikeFinder.Acquisition(data)
         });
-        view.listenTo(view.model, 'sync', view.render);
-        view.model.fetch();
-    },
-    render: function () {
-        var view = this;
-
-        view.apply_template('acquisition-audit.html', view.model.toJSON());
-
-        StrikeFinder.collapse(this.el);
-
-        view.$('#acqusition-audit-div').modal({
-            backdrop: false
-        });
-    },
-    on_close: function () {
-        this.$("#acqusition-audit-div").modal("hide");
-    },
-    close: function () {
-        this.stopListening();
+        view.acquisition_details.render();
     }
 });
 
@@ -311,16 +298,11 @@ StrikeFinder.AcquisitionsView = StrikeFinder.View.extend({
 });
 
 /**
- * View to display acquisitions in a condensed format.
+ * View to display the acquisitions list in a condensed format.
  */
 StrikeFinder.AcquisitionsViewCondensed = StrikeFinder.View.extend({
     initialize: function () {
         var view = this;
-
-//        view.criteria_collapsable = new StrikeFinder.CollapsableContentView({
-//            el: view.el,
-//            title: '<i class="fa fa-cloud-download"></i> Acquisitions'
-//        });
 
         view.acquisitions = new StrikeFinder.AcquisitionCollection();
 
@@ -339,5 +321,94 @@ StrikeFinder.AcquisitionsViewCondensed = StrikeFinder.View.extend({
         var view = this;
         view.acquisitions.identity = identity;
         view.acquisitions.fetch();
+    }
+});
+
+StrikeFinder.AcquisitionsAuditView = StrikeFinder.View.extend({
+    events: {
+        'click #close': 'on_close'
+    },
+    initialize: function () {
+        var view = this;
+        view.model = new StrikeFinder.AcquisitionAuditModel({
+            id: view.options.acquisition_uuid
+        });
+        view.listenTo(view.model, 'sync', view.render);
+        view.model.fetch();
+    },
+    render: function () {
+        var view = this;
+
+        view.apply_template('acquisition-audit.ejs', view.model.toJSON());
+
+        StrikeFinder.collapse(this.el);
+
+        view.$('#acqusition-audit-div').modal({
+            backdrop: false
+        });
+    },
+    on_close: function () {
+        this.$("#acqusition-audit-div").modal("hide");
+    },
+    close: function () {
+        this.stopListening();
+    }
+});
+
+/**
+ * Render the details of an acquisition including the file audit and issues.
+ */
+StrikeFinder.AcquisitionsDetailsView = StrikeFinder.View.extend({
+    events: {
+        'click #close': 'on_close'
+    },
+    render: function() {
+        var view = this;
+
+        async.waterfall([
+            function(callback) {
+                // Retrieve the file audit if there is a link defined.
+                if (view.model.get('link')) {
+                    var audit = new StrikeFinder.AcquisitionAuditModel({
+                        id: view.model.get('uuid')
+                    });
+                    audit.fetch({
+                        success: function(model) {
+                            // Ok.
+                            callback(null, model.get('content'));
+                        },
+                        error: function(model, response) {
+                            // Error.
+                            var response_text = response && response.responseText ? response.responseText : 'NA';
+                            callback('Error while retrieving file audit: ' + response_text);
+                        }
+                    });
+                }
+                else {
+                    // There was not a link.
+                    callback(null, undefined);
+                }
+            },
+            function(audit) {
+                // Render the details template.
+                var context = view.model.toJSON();
+                context.is_link = context.link ? true : false;
+                context.is_error = context.error_message ? true : false;
+                context.format_state = StrikeFinder.format_acquisition_state;
+                context.format_level = StrikeFinder.format_acquisition_level;
+                context.audit = audit;
+
+                view.apply_template('acquisition-details.ejs', context);
+
+                StrikeFinder.collapse(view.el);
+
+                view.$('#acquisition-details-div').modal({
+                    backdrop: false
+                });
+            }
+        ]);
+    },
+    close: function () {
+        this.stopListening();
     }
 });

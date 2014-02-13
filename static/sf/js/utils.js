@@ -273,10 +273,7 @@ $(document).ajaxError(function (collection, response, options) {
         else {
             if (!('abort' == response.statusText)) {
                 // Error
-                log.warn("Exception (" + response.statusText + ") while processing request for url: " +
-                    collection.url);
-                log.warn(response.data);
-                StrikeFinder.display_error("An error has occurred while processing your request: " + response.statusText);
+                StrikeFinder.display_error("An error has occurred while processing your request: " + response.responseText);
             }
         }
     }
@@ -360,6 +357,12 @@ StrikeFinder.template = function (template, context) {
     }
     else {
         // Return the template result.
+
+        if (context) {
+            // Add in the view helpers.
+            context.format_date = StrikeFinder.format_date_string;
+        }
+
         return StrikeFinder.templates[template](context);
     }
 }

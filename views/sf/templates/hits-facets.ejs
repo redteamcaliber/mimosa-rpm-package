@@ -1,10 +1,10 @@
 <% _.each( keys, function( facet, index ) { %>
-<div class="row" style="margin-bottom: 5px">
+<div class="row">
 
     <div class="col-md-12">
         <!-- A div to represent the collapsable facet content. -->
-        <div id="<%= facet %>-div" class="panel-group">
-            <div class="panel panel-default">
+        <div id="<%= facet %>-div">
+            <div class="panel panel-default" style="margin-top: 0px; margin-bottom: 5px;">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#<%= facet %>-div" href="#collapse-<%= facet %>">

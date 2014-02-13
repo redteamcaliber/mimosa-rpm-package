@@ -56,7 +56,7 @@ module.exports = function (grunt) {
              * Watch the underscore templates and re-compile the templates to a JST file.
              */
             templates: {
-                files: ['views/sf/templates/*.html', 'views/nt/templates/*.html'],
+                files: ['views/sf/templates/*.ejs', 'views/nt/templates/*.ejs'],
                 tasks: ['jst-dev']
             }
         },
@@ -72,7 +72,7 @@ module.exports = function (grunt) {
                     processName: process_name
                 },
                 files: {
-                    '<%= build_uac_dir %>/static/sf/js/templates.js': ['<%= build_uac_dir %>/views/sf/templates/*.html']
+                    '<%= build_uac_dir %>/static/sf/js/templates.js': ['<%= build_uac_dir %>/views/sf/templates/*.ejs']
                 }
             },
             nt: {
@@ -82,7 +82,7 @@ module.exports = function (grunt) {
                     processName: process_name
                 },
                 files: {
-                    '<%= build_uac_dir %>static/nt/js/templates.js': ['<%= build_uac_dir %>views/nt/templates/*.html']
+                    '<%= build_uac_dir %>static/nt/js/templates.js': ['<%= build_uac_dir %>views/nt/templates/*.ejs']
                 }
             },
             'sf-dev': {
@@ -92,7 +92,7 @@ module.exports = function (grunt) {
                     processName: process_name
                 },
                 files: {
-                    'static/sf/js/templates.js': ['views/sf/templates/*.html']
+                    'static/sf/js/templates.js': ['views/sf/templates/*.ejs']
                 }
             },
             'nt-dev': {
@@ -102,7 +102,7 @@ module.exports = function (grunt) {
                     processName: process_name
                 },
                 files: {
-                    'static/nt/js/templates.js': ['views/nt/templates/*.html']
+                    'static/nt/js/templates.js': ['views/nt/templates/*.ejs']
                 }
             }
         },

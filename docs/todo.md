@@ -3,18 +3,10 @@ UAC ToDo
 
 ### Need to have a way to view and manage the UAC sessions.
 
-### Update the IOC Selection title every time something is selected.
-
 ### Look into base64 encoded GZipped data in the Strings section.
 - https://uac.mplex.mandiant.com/sf/hits/0a63a2ba-be5e-4151-8ff0-a119387fc0a9
 
-### Unselect values from ioc details tables after an expression is selected.
-
-### Acquisition Details
-- Migrate the current acquisitions popup to be a complete dialog including:
-    - The acquisitions details.
-    - The file audit if applicable.
-    - The issues document if applicable.
+### Create a user preferences screen with a StrikeFinder tab.
 
 ### Linkable Acquisitions
 - Allow user to create URL links to acquisitions.
@@ -24,10 +16,6 @@ UAC ToDo
 - The initial comments should be the one entered when initiating the acquisition.
 - Display acquisition comments on the acquisitions view.
 - Display acquisition comments on the hits acquisitions view.
-
-### Counts
-- Add counts to the comments rollup.
-- Add counts to the suppressions rollup.
 
 ### Externalize UAC/StrikeFinder components into their own git project.
 

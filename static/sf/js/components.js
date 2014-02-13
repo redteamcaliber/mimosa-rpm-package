@@ -192,7 +192,7 @@ StrikeFinder.TableViewControls = StrikeFinder.View.extend({
 
         view.run_once('init_template', function () {
             // Only write the template once.
-            view.$el.html(StrikeFinder.template('prev-next.html'));
+            view.$el.html(StrikeFinder.template('prev-next.ejs'));
 
             $(document).keyup(function (ev) {
                 if (ev.ctrlKey) {
@@ -353,6 +353,10 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             $(index_or_node).click();
             return index_or_node;
         }
+        else if (index_or_node === null || index_or_node === undefined) {
+            // Unselect all rows.
+            this.$('tr.active').removeClass('active');
+        }
         else {
             return undefined;
         }
@@ -373,7 +377,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         var selected = this.get_selected();
         if (selected !== undefined && selected.length == 1) {
             var pos = this.get_position(selected.get(0));
-            return this.get_data(pos - 1);
+            return this.get_data(pos);
         }
         else {
             return undefined;
@@ -874,7 +878,13 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         view.cache.lastRequest = aoData.slice();
 
         if (bNeedServer) {
-            var iPipe = 10;
+            var iPipe;
+            if (view.options.iPipe && _.isNumber(view.options.iPipe)) {
+                iPipe = view.options.iPipe;
+            }
+            else {
+                iPipe = 10;
+            }
 
             if (iRequestStart < view.cache.iCacheLower) {
                 iRequestStart = iRequestStart - (iRequestLength * (iPipe - 1));
@@ -1097,7 +1107,7 @@ StrikeFinder.HostTypeAheadView = StrikeFinder.View.extend({
                 }
             },
             valueKey: 'hostname',
-            template: 'host-condensed.html',
+            template: 'host-condensed.ejs',
             engine: {
                 compile: function (template) {
                     return {
@@ -1123,7 +1133,7 @@ StrikeFinder.BreadcrumbView = StrikeFinder.View.extend({
         var context = {
             items: this.collection.toJSON()
         };
-        this.$el.html(StrikeFinder.template('breadcrumb-template.html', context));
+        this.$el.html(StrikeFinder.template('breadcrumb-template.ejs', context));
         return this;
     }
 });

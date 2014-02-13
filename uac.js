@@ -104,7 +104,7 @@ app.use(function (req, res, next) {
         }
         else {
             // Send a 404 response to AJAX clients.
-            res.send(404, {error: req.originalUrl + ' is not available.'})
+            res.send(404, req.originalUrl + ' is not available.');
         }
     }
     catch (e) {
@@ -139,7 +139,7 @@ app.use(function errorHandler(err, req, res, next) {
     }
     else {
         // Send a 500 response to AJAX clients.
-        res.send(500, {error: req.originalUrl + ' is not available.'})
+        res.send(500, 'Exception invoking url: ' + req.originalUrl + ' - ' + stack);
     }
 });
 

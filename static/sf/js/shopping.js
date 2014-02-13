@@ -74,7 +74,7 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
         }
 
         // Render the template.
-        view.$el.html(StrikeFinder.template('ioc-details.html', {
+        view.$el.html(StrikeFinder.template('ioc-details.ejs', {
             items: ioc_uuids,
             iocname: iocname,
             iocnamehash: iocnamehash
@@ -114,12 +114,21 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
         var view = this;
         var exp_key = data['exp_key'];
 
+        // Trigger an event passing the IOC name, IOC UUID, and the IOC expression.
         view.collection.each(function(iocuuid_item) {
             _.each(iocuuid_item.get('expressions'), function(expression_item) {
                 if (expression_item.exp_key == exp_key) {
                     view.trigger("click:exp_key", expression_item.iocname, expression_item.iocuuid, exp_key);
                 }
             });
+        });
+
+        // Remove the selections from any of the other details tables that may already have a previous selection.
+        _.each(view.table_views, function(table) {
+            var selected = table.get_selected_data();
+            if (selected && selected.exp_key != exp_key) {
+                table.select_row(undefined);
+            }
         });
     },
     on_ioc_click: function (ev) {
@@ -186,7 +195,7 @@ StrikeFinder.ClusterSelectionView = StrikeFinder.View.extend({
         view.close();
 
         // Create the input form.
-        view.$el.html(StrikeFinder.template('cluster-selection.html', {hide_services: view.options.hide_services}));
+        view.$el.html(StrikeFinder.template('cluster-selection.ejs', {hide_services: view.options.hide_services}));
 
         var usersettings = UAC.usersettings();
 
