@@ -4,6 +4,10 @@ Unified Analyst Console (UAC) 1.0 Release Notes
 Mandiant-uac-ws-1.1-0 - February 12th, 2014
 ------------------------------------------
 
+### IOC Selection
+- Updated the expression display to the following format itemType(expression).
+- Hovering over the expression displays the expression string.
+
 ### Acqusitions
 - When selecting an acquisition a details dialog is now displayed including any related "issues".
 
