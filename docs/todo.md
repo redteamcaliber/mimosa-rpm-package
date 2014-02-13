@@ -1,6 +1,8 @@
 UAC ToDo
 ========
 
+### Add smaller fonts for all themes.
+
 ### Need to have a way to view and manage the UAC sessions.
 
 ### Look into base64 encoded GZipped data in the Strings section.
@@ -27,6 +29,8 @@ UAC ToDo
 
 ### Comments Enhancements
 - Allow comment input to be expanded to be multi-line.
+
+### Need to add item type into the IOC details call and remove the string parsing logic.
 
 ### Client Session Timeout
 - Look into a way to notify users when their session has timed out on the client.

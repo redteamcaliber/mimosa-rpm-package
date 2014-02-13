@@ -1,7 +1,7 @@
 Unified Analyst Console (UAC) 1.0 Release Notes
 ===============================================
 
-Mandiant-uac-ws-1.1-0 - February 12th, 2014
+Mandiant-uac-ws-1.1-0/1 - February 12th, 2014
 ------------------------------------------
 
 ### IOC Selection
@@ -22,7 +22,7 @@ Mandiant-uac-ws-1.1-0 - February 12th, 2014
 - Fixed issue with acquisition audit collapse interfering with the hit audit collapse.
 - Clear other IOC details tables after an expression is selected.
 - Strings audit sections are expanded by default.
-
+- Resolved issue with displaying errored acquisitions.
 
 Mandiant-uac-ws-1.0-0 - February 5th, 2014
 ------------------------------------------

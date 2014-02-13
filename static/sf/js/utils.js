@@ -258,29 +258,29 @@ Backbone.sync = function (method, model, options) {
  */
 jQuery.ajaxSettings.traditional = true;
 
-$(document).ajaxError(function (collection, response, options) {
-
-    //console.dir(collection);
-    //console.dir(response);
-    //console.dir(options);
-
-    if (response) {
-        if (response.status == 307) {
-            // No session? TODO
-            console.dir('Redirecting to login...');
-            window.location = document.URL;
-        }
-        else {
-            if (!('abort' == response.statusText)) {
-                // Error
-                StrikeFinder.display_error("An error has occurred while processing your request: " + response.responseText);
-            }
-        }
-    }
-    else {
-        log.warning("Error during processing, response is invalid");
-    }
-});
+//$(document).ajaxError(function (collection, response, options) {
+//
+//    //console.dir(collection);
+//    //console.dir(response);
+//    //console.dir(options);
+//
+//    if (response) {
+//        if (response.status == 307) {
+//            // No session? TODO
+//            console.dir('Redirecting to login...');
+//            window.location = document.URL;
+//        }
+//        else {
+//            if (!('abort' == response.statusText) && re) {
+//                // Error
+//                StrikeFinder.display_error("An error has occurred while processing your request: " + response.responseText);
+//            }
+//        }
+//    }
+//    else {
+//        log.warning("Error during processing, response is invalid");
+//    }
+//});
 //$.ajaxSetup({
 //      timeout: 180000
 //});

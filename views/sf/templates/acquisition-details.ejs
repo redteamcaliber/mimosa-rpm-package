@@ -129,9 +129,11 @@
                                         <th>Issue</th>
                                     </tr>
                                     <% _.each (acquisition_issues, function(item) { %>
-                                        <td><%= format_level(item.issue.level) %></td>
-                                        <td><%= item.issue.summary %></td>
-                                        <td><%= item.issue.context %></td>
+                                        <tr>
+                                            <td><%= format_level(item.issue.level) %></td>
+                                            <td class="wrap"><%= item.issue.summary %></td>
+                                            <td class="wrap"><%= item.issue.context %></td>
+                                        </tr>
                                     <% }); %>
                                 </table>
                             <% } %>

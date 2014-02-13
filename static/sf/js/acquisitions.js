@@ -379,8 +379,14 @@ StrikeFinder.AcquisitionsDetailsView = StrikeFinder.View.extend({
                         },
                         error: function(model, response) {
                             // Error.
-                            var response_text = response && response.responseText ? response.responseText : 'NA';
-                            callback('Error while retrieving file audit: ' + response_text);
+                            if (response.status == 404) {
+                                // No audit found.
+                                callback(null, null);
+                            }
+                            else {
+                                var response_text = response && response.responseText ? response.responseText : 'NA';
+                                callback('Error while retrieving file audit: ' + response_text);
+                            }
                         }
                     });
                 }
