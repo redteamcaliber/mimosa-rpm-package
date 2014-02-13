@@ -11,6 +11,9 @@ Mandiant-uac-ws-1.1-0 - February 12th, 2014
 - The IOC selection view now displays the users selections after an IOC Name, IOC UUID, or IOC expression is selected.
   This will give users context into the hits that they are viewing.
 
+### Themes
+- Added Lumen, Superhero, and Yeti themes.
+
 ### Fixes
 - Fixed issue with acquisition audit collapse interfering with the hit audit collapse.
 - Clear other IOC details tables after an expression is selected.
