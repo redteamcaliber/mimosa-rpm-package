@@ -402,6 +402,7 @@ StrikeFinder.AcquisitionsDetailsView = StrikeFinder.View.extend({
                 context.is_error = context.error_message ? true : false;
                 context.format_state = StrikeFinder.format_acquisition_state;
                 context.format_level = StrikeFinder.format_acquisition_level;
+                context.is_audit = audit ? true : false;
                 context.audit = audit;
 
                 view.apply_template('acquisition-details.ejs', context);
