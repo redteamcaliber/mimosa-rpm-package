@@ -227,7 +227,7 @@ module.exports = function (grunt) {
                 ],
                 postInstallScript: [
                     'mkdir -p /opt/web/apps/uac/logs',
-                    'if [ $(pgrep -f "node uac.js") ]; then echo "Restarting UAC..."; restart uac; else echo "Starting UAC..."; start uac; fi'
+                    'if [ $(pgrep -f "node uac-server.js") ]; then echo "Restarting UAC..."; restart uac; else echo "Starting UAC..."; start uac; fi'
                 ]
             },
             release: {

@@ -61,7 +61,6 @@ UAC ToDo
 ## Migrate the common StrikeFinder components classes to a common uac.js file.
 - Should have a uac.js, strikefinder.js, and network.js files.
 - uac.js should be included in the top level template.
-- Rename the uac.js server module server.js.
 
 ## Move the partial templates from the views directory to the static files directory.
 - Need to update Grunt scripts.

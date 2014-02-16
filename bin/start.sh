@@ -12,7 +12,7 @@ export NODE_PATH=lib
 NODE=node
 
 # The server.
-SERVER=uac.js
+SERVER=uac-server.js
 
 echo "Starting server $SERVER..."
 $NODE $SERVER
