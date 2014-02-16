@@ -95,7 +95,7 @@ StrikeFinder.HostView = StrikeFinder.View.extend({
             data.cluster.engagement.client.name, data.cluster.name, data.domain, data.hostname);
         view.collapsable.set('title', '<i class="fa fa-desktop"></i> ' + title);
         // Render the template.
-        view.apply_template('host.html', data);
+        view.apply_template('host.ejs', data);
     },
     fetch: function (am_cert_hash) {
         if (am_cert_hash) {

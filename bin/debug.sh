@@ -16,4 +16,4 @@ DIRECTORIES=.,bin,conf,lib,views
 
 IGNORED=static,views/sf/templates,views/nt/templates
 
-supervisor -e ${EXTENSIONS} -w ${DIRECTORIES} -i ${IGNORED} uac.js
+supervisor -e ${EXTENSIONS} -w ${DIRECTORIES} -i ${IGNORED} uac-server.js

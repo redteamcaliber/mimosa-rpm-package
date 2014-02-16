@@ -178,7 +178,7 @@
     {% endif %}<!-- End PEInfo -->
 
     {% if i.stringlist.string %}
-        <div id="strings-div" class="collapsable collapsed" collapsable-title="Strings">
+        <div id="strings-div" class="collapsable" collapsable-title="Strings">
             <ul>
                 {% for s in get_list(i.stringlist.string) %}
                     <li>{{ s }}</li>

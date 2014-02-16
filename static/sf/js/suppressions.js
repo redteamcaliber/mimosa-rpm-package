@@ -11,14 +11,17 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
         var view = this;
         var link = window.location.protocol + '//' + window.location.hostname +
             (window.location.port ? ':' + window.location.port : '') + '/sf/suppressions/' + this.model.get('suppression_id');
-        var html = StrikeFinder.template('link.html', {link: link});
+        var html = StrikeFinder.template('link.ejs', {link: link});
 
         var button = view.$el.find('i.link');
         button.popover({
             html : true,
             trigger: 'manual',
             content: html
-        });
+        })
+            .data('bs.popover')
+            .tip()
+            .addClass('link-popover');
         button.on('click', function(ev) {
             button.popover('toggle');
             $('.link-text').select();

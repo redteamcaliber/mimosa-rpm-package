@@ -9,6 +9,7 @@
         <div class="row">
             <div class="col-sm-12 col-md-6">
                 <img src="/static/img/mandiant-trans-small.png" class="img-responsive" alt="Responsive image">
+
                 <h2 class="pull-left">Unified Analyst Console</h2>
             </div>
             <div class="col-sm-12 col-md-6">
@@ -36,228 +37,305 @@
 </div>
 
 <div class="container">
-    <div class="row">
+<div class="row">
 
-        <div class="col-md-4">
-            <h3><i class="fa fa-smile-o"></i> UAC 1.0-0</h3>
-            <dl>
-                <dt>
-                    Acquisitions
-                </dt>
-                <dd>
-                    <ul>
-                        <li>
-                            Acquisitions are now associated with the hit identity from which it was initiated. The hits
-                            view now displays acquisitions related to the selected identity. Completed acquisitions may
-                            be clicked on in order to display the corresponding file audit. This should improve user
-                            ability to locate an acquisition. Acquisitions are now linkable by URL.
-                        </li>
-                    </ul>
-                </dd>
-            </dl>
+<div class="col-md-4">
+    <h3><i class="fa fa-smile-o"></i> UAC 1.1-1</h3>
+    <dl>
+        <dt>
+            IOC Selection
+        </dt>
+        <dd>
+            <ul>
+                <li>Updated the expression display to the following format itemType(expression).</li>
+                <li>Hovering over the expression displays the expression string.</li>
+            </ul>
+        </dd>
+    </dl>
+    <dl>
+        <dt>
+            Acquisitions
+        </dt>
+        <dd>
+            <ul>
+                <li>
+                    From the acquisition list, when an acquisition selected, a details dialog is now displayed including any related "issues".
+                </li>
+            </ul>
+        </dd>
+    </dl>
 
-            <dl>
-                <dt>
-                    Hit Review
-                </dt>
-                <dd>
-                    <ul>
-                        <li>
-                            Hit links have been updated to use identity rather than row item uuid. This will help when
-                            hits are merged so that links don't become obsolete. If you have any important hit links
-                            that you would like to retain you should grab the new version from UAC before the new
-                            "Merge All" functionality is deployed (next week).
-                        </li>
-                    </ul>
-                </dd>
-            </dl>
+    <dl>
+        <dt>
+            IOC Selection
+        </dt>
+        <dd>
+            <ul>
+                <li>
+                    The IOC selection view now displays the users selections after an IOC Name, IOC UUID, or IOC expression is selected.
+                    This will give users context into the hits that they are viewing.
+                </li>
+            </ul>
+        </dd>
+    </dl>
 
-            <dl>
-                <dt>
-                    Fixes
-                </dt>
-                <dd>
-                    <ul>
-                        <li>
-                            When initiating an acquisition now showing hits table record to investigating regardless of
-                            whether the acquisition was picked up or not. Previously it was only being updated if the
-                            acquisition was picked up.
-                        </li>
-                        <li>
-                            Added spaces in the portal formatted data for registry items.
-                        </li>
-                    </ul>
-                </dd>
-            </dl>
-        </div>
+    <dl>
+        <dt>Themes</dt>
+        <dl>
+            <ul>
+                <li>Added Lumen, Superhero, and Yeti themes.</li>
+            </ul>
+        </dl>
+    </dl>
 
-        <div class="col-md-4">
-            <h3><i class="fa fa-smile-o"></i> UAC 0.8-0</h3>
-            <dl>
-                <dt>
-                    Acquisitions
-                </dt>
-                <dd>
-                    <ul>
-                        <li>
-                            Credentials for clusters are cached per session.  You should only need to enter credentials for a cluster once per session when making acquisitions.
-                        </li>
-                        <li>
-                            Cached credentials may be overriden on the acquisition form.
-                        </li>
-                        <li>
-                            Acquisition link and comment are not written to the hit in which is was requested from.
-                        </li>
-                    </ul>
-                </dd>
-            </dl>
+    <dl>
+        <dt>
+            Fixes
+        </dt>
+        <dd>
+            <ul>
+                <li>
+                    Fixed issue with acquisition audit collapse interfering with the hit audit collapse.
+                </li>
+                <li>
+                    Clear other IOC details tables after an expression is selected.
+                </li>
+                <li>
+                    Strings audit sections are expanded by default.
+                </li>
+                <li>
 
-            <dl>
-                <dt>
-                    Hit Review
-                </dt>
-                <dd>
-                    <ul>
-                        <li>
-                            Resolved issue with acquisitions error message not displaying detail.
-                        </li>
-                    </ul>
-                </dd>
-            </dl>
+                </li>
+            </ul>
+        </dd>
+    </dl>
+</div>
 
-            <dl>
-                <dt>
-                    Fixes
-                </dt>
-                <dd>
-                    <ul>
-                        <li>
-                            Added sharing links on the hits and suppressions views enabling users to easily grab a link to a specific hit or
-                            suppression.
-                        </li>
-                        <li>
-                            Multiple rowitems may by passed on the link.
-                        </li>
-                    </ul>
-                </dd>
-            </dl>
-        </div>
+<div class="col-md-4">
+    <h3><i class="fa fa-smile-o"></i> UAC 1.0-0</h3>
+    <dl>
+        <dt>
+            Acquisitions
+        </dt>
+        <dd>
+            <ul>
+                <li>
+                    Acquisitions are now associated with the hit identity from which it was initiated. The hits
+                    view now displays acquisitions related to the selected identity. Completed acquisitions may
+                    be clicked on in order to display the corresponding file audit. This should improve user
+                    ability to locate an acquisition. Acquisitions are now linkable by URL.
+                </li>
+            </ul>
+        </dd>
+    </dl>
 
-        <div class="col-md-4">
-            <h3><i class="fa fa-smile-o"></i> UAC 0.7-0/1/2/3</h3>
+    <dl>
+        <dt>
+            Hit Review
+        </dt>
+        <dd>
+            <ul>
+                <li>
+                    Hit links have been updated to use identity rather than row item uuid. This will help when
+                    hits are merged so that links don't become obsolete. If you have any important hit links
+                    that you would like to retain you should grab the new version from UAC before the new
+                    "Merge All" functionality is deployed (next week).
+                </li>
+            </ul>
+        </dd>
+    </dl>
 
-            <dl>
-                <dt>Hit Review</dt>
-                <dd>
-                    <ul>
-                        <li>
-                            Added the ability to select clients as well as clusters. The clusters available to select
-                            are those that are not associated with any of the currently selected clients.
-                        </li>
-                        <li>
-                            IOC summary data no longer refreshes when selecting shopping criteria. Criteria selection
-                            should now be quicker and easier. A submit button is not required to load the IOC summary
-                            data.
-                        </li>
-                        <li>
-                            Removed the claimed counts and checkout option from the IOC selection view. It was reported
-                            these counts were not being used. They will eventually be replaced with a better alternative.
-                        </li>
-                        <li>
-                            Removed existing user settings and replaced it with a lightweight client side alternative.
-                        <li>
-                            IOC Name selection is now persisted across page refreshes.
-                        </li>
-                        <li>
-                            Consolidated the shopping and hit review menu options to a single hit review option.
-                        </li>
-                    </ul>
-                </dd>
-            </dl>
+    <dl>
+        <dt>
+            Fixes
+        </dt>
+        <dd>
+            <ul>
+                <li>
+                    When initiating an acquisition now showing hits table record to investigating regardless of
+                    whether the acquisition was picked up or not. Previously it was only being updated if the
+                    acquisition was picked up.
+                </li>
+                <li>
+                    Added spaces in the portal formatted data for registry items.
+                </li>
+            </ul>
+        </dd>
+    </dl>
+</div>
 
-            <dl>
-                <dt>Server Changes</dt>
-                <dd>
-                    <ul>
-                        <li>
-                            Added an additional header to the nginx configuration to support Secure cookies. This is in
-                            support of caching credentials for acquisitions.
-                        </li>
-                        <li>
-                            Forwarding additional SSO parameters on REST calls to Seasick.
-                        </li>
-                        <li>
-                            Updated acquisition related UAC functionality to adhere to Seasick API changes.
-                        </li>
-                        <li>
-                            sfmatcher sends notifications of large (>100mb) audits instead of storing in db.
-                        </li>
-                        <li>
-                            Strikefinder backend statistics are now being collected in graphite.
-                        </li>
-                    </ul>
-                </dd>
-            </dl>
+<div class="col-md-4">
+    <h3><i class="fa fa-smile-o"></i> UAC 0.8-0</h3>
+    <dl>
+        <dt>
+            Acquisitions
+        </dt>
+        <dd>
+            <ul>
+                <li>
+                    Credentials for clusters are cached per session. You should only need to enter credentials for a
+                    cluster once per session when making acquisitions.
+                </li>
+                <li>
+                    Cached credentials may be overriden on the acquisition form.
+                </li>
+                <li>
+                    Acquisition link and comment are not written to the hit in which is was requested from.
+                </li>
+            </ul>
+        </dd>
+    </dl>
 
-            <dl>
-                <dt>Fixes</dt>
-                <ul>
-                    <li>
-                        Resolved issue that was causing an error message when downloading an acquisition.
-                    </li>
-                    <li>
-                        Resolved issue related to incorrect host time logged status.
-                    </li>
-                    <li>
-                        Resolved issue with suppression links.
-                    </li>
-                </ul>
-            </dl>
+    <dl>
+        <dt>
+            Hit Review
+        </dt>
+        <dd>
+            <ul>
+                <li>
+                    Resolved issue with acquisitions error message not displaying detail.
+                </li>
+            </ul>
+        </dd>
+    </dl>
 
-            <dl>
-                <dt>Other</dt>
-                <ul>
-                    <li>
-                        Client HTML templates now pre-compiled into a single jst file.
-                    </li>
-                </ul>
-            </dl>
+    <dl>
+        <dt>
+            Fixes
+        </dt>
+        <dd>
+            <ul>
+                <li>
+                    Added sharing links on the hits and suppressions views enabling users to easily grab a link to a
+                    specific hit or
+                    suppression.
+                </li>
+                <li>
+                    Multiple rowitems may by passed on the link.
+                </li>
+            </ul>
+        </dd>
+    </dl>
+</div>
 
-        </div>
+</div>
+<div class="row">
 
-        <div class="col-md-4">
-            <h3><i class="fa fa-meh-o"></i> UAC 0.6-1</h3>
-            <dl>
-                <dt>Hit Review</dt>
-                <dd>
-                    <ul>
-                        <li>
-                            Added support for viewing hits by IOC Name and IOC UUID.
-                        </li>
-                    </ul>
-                </dd>
-            </dl>
-            <dl>
-                <dt>Fixes</dt>
-                <dd>
-                    <ul>
-                        <li>
-                            Addressed hit counts and listings issues that were introduced in the last release.
-                        </li>
-                        <li>
-                            IOC links pages are now displayed in a new window.
-                        </li>
-                        <li>
-                            Release notes added to the UAC front page.
-                        </li>
-                        <li>
-                            Improved error pages.
-                        </li>
-                    </ul>
-                </dd>
-            </dl>
-        </div>
-    </div>
+<div class="col-md-4">
+    <h3><i class="fa fa-smile-o"></i> UAC 0.7-0/1/2/3</h3>
+
+    <dl>
+        <dt>Hit Review</dt>
+        <dd>
+            <ul>
+                <li>
+                    Added the ability to select clients as well as clusters. The clusters available to select
+                    are those that are not associated with any of the currently selected clients.
+                </li>
+                <li>
+                    IOC summary data no longer refreshes when selecting shopping criteria. Criteria selection
+                    should now be quicker and easier. A submit button is not required to load the IOC summary
+                    data.
+                </li>
+                <li>
+                    Removed the claimed counts and checkout option from the IOC selection view. It was reported
+                    these counts were not being used. They will eventually be replaced with a better alternative.
+                </li>
+                <li>
+                    Removed existing user settings and replaced it with a lightweight client side alternative.
+                <li>
+                    IOC Name selection is now persisted across page refreshes.
+                </li>
+                <li>
+                    Consolidated the shopping and hit review menu options to a single hit review option.
+                </li>
+            </ul>
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>Server Changes</dt>
+        <dd>
+            <ul>
+                <li>
+                    Added an additional header to the nginx configuration to support Secure cookies. This is in
+                    support of caching credentials for acquisitions.
+                </li>
+                <li>
+                    Forwarding additional SSO parameters on REST calls to Seasick.
+                </li>
+                <li>
+                    Updated acquisition related UAC functionality to adhere to Seasick API changes.
+                </li>
+                <li>
+                    sfmatcher sends notifications of large (>100mb) audits instead of storing in db.
+                </li>
+                <li>
+                    Strikefinder backend statistics are now being collected in graphite.
+                </li>
+            </ul>
+        </dd>
+    </dl>
+
+    <dl>
+        <dt>Fixes</dt>
+        <ul>
+            <li>
+                Resolved issue that was causing an error message when downloading an acquisition.
+            </li>
+            <li>
+                Resolved issue related to incorrect host time logged status.
+            </li>
+            <li>
+                Resolved issue with suppression links.
+            </li>
+        </ul>
+    </dl>
+
+    <dl>
+        <dt>Other</dt>
+        <ul>
+            <li>
+                Client HTML templates now pre-compiled into a single jst file.
+            </li>
+        </ul>
+    </dl>
+
+</div>
+
+<div class="col-md-4">
+    <h3><i class="fa fa-meh-o"></i> UAC 0.6-1</h3>
+    <dl>
+        <dt>Hit Review</dt>
+        <dd>
+            <ul>
+                <li>
+                    Added support for viewing hits by IOC Name and IOC UUID.
+                </li>
+            </ul>
+        </dd>
+    </dl>
+    <dl>
+        <dt>Fixes</dt>
+        <dd>
+            <ul>
+                <li>
+                    Addressed hit counts and listings issues that were introduced in the last release.
+                </li>
+                <li>
+                    IOC links pages are now displayed in a new window.
+                </li>
+                <li>
+                    Release notes added to the UAC front page.
+                </li>
+                <li>
+                    Improved error pages.
+                </li>
+            </ul>
+        </dd>
+    </dl>
+</div>
+</div>
 </div>
 {% endblock %}
 

@@ -258,32 +258,29 @@ Backbone.sync = function (method, model, options) {
  */
 jQuery.ajaxSettings.traditional = true;
 
-$(document).ajaxError(function (collection, response, options) {
-
-    //console.dir(collection);
-    //console.dir(response);
-    //console.dir(options);
-
-    if (response) {
-        if (response.status == 307) {
-            // No session? TODO
-            console.dir('Redirecting to login...');
-            window.location = document.URL;
-        }
-        else {
-            if (!('abort' == response.statusText)) {
-                // Error
-                log.warn("Exception (" + response.statusText + ") while processing request for url: " +
-                    collection.url);
-                log.warn(response.data);
-                StrikeFinder.display_error("An error has occurred while processing your request: " + response.statusText);
-            }
-        }
-    }
-    else {
-        log.warning("Error during processing, response is invalid");
-    }
-});
+//$(document).ajaxError(function (collection, response, options) {
+//
+//    //console.dir(collection);
+//    //console.dir(response);
+//    //console.dir(options);
+//
+//    if (response) {
+//        if (response.status == 307) {
+//            // No session? TODO
+//            console.dir('Redirecting to login...');
+//            window.location = document.URL;
+//        }
+//        else {
+//            if (!('abort' == response.statusText) && re) {
+//                // Error
+//                StrikeFinder.display_error("An error has occurred while processing your request: " + response.responseText);
+//            }
+//        }
+//    }
+//    else {
+//        log.warning("Error during processing, response is invalid");
+//    }
+//});
 //$.ajaxSetup({
 //      timeout: 180000
 //});
@@ -360,6 +357,12 @@ StrikeFinder.template = function (template, context) {
     }
     else {
         // Return the template result.
+
+        if (context) {
+            // Add in the view helpers.
+            context.format_date = StrikeFinder.format_date_string;
+        }
+
         return StrikeFinder.templates[template](context);
     }
 }

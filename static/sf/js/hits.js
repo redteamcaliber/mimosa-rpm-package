@@ -85,19 +85,19 @@ StrikeFinder.AgentHostView = StrikeFinder.View.extend({
         var view = this;
         if (view.model.get("hash")) {
             // Display the host template.
-            view.apply_template('agent-host.html', view.model.toJSON());
+            view.apply_template('agent-host.ejs', view.model.toJSON());
         }
         else {
             // The host was not found, display alternate message.
             var data = {am_cert_hash: view.model.id};
-            view.apply_template('agent-host-empty.html', data);
+            view.apply_template('agent-host-empty.ejs', data);
         }
 
         return view;
     },
     render_service_down: function () {
         var view = this;
-        view.apply_template('agent-host-error.html', {am_cert_hash: view.model.id});
+        view.apply_template('agent-host-error.ejs', {am_cert_hash: view.model.id});
     },
     fetch: function (am_cert_hash) {
         var view = this;
@@ -155,7 +155,7 @@ StrikeFinder.IOCTabsView = StrikeFinder.View.extend({
         // Cleanup any existing components the view has created before rendering.
         view.close();
 
-        view.apply_template('ioc-tabs.html', data);
+        view.apply_template('ioc-tabs.ejs', data);
 
         // Run the IOC viewer on all the pre-formatted elements.
         view.$el.find("pre").iocViewer();
@@ -478,7 +478,7 @@ StrikeFinder.AuditContextMenuView = StrikeFinder.View.extend({
             is_masstag: is_masstag
         };
 
-        view.apply_template('audit-context-menu.html', data);
+        view.apply_template('audit-context-menu.ejs', data);
     },
     suppress: function (ev) {
         this.trigger("suppress", this.selection, this.ioc_term);
@@ -619,7 +619,7 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
             else {
                 data.tags = tags;
 
-                view.apply_template('mass-tag-form.html', data);
+                view.apply_template('mass-tag-form.ejs', data);
 
                 view.$("#mass-tag-form").modal({
                     backdrop: false
@@ -715,10 +715,10 @@ StrikeFinder.MassTagFormView = StrikeFinder.View.extend({
                     }
                 });
             },
-            error: function (model, xhr) {
+            error: function (model, response) {
                 // Error submitting the tag task.
                 try {
-                    var message = xhr && xhr.responseText ? xhr.responseText : 'Response text not defined.';
+                    var message = response && response.responseText ? response.responseText : 'Response text not defined.';
                     StrikeFinder.display_error('Error while submitting mass tag task - ' + message);
                 }
                 finally {
@@ -815,7 +815,7 @@ StrikeFinder.SuppressionFormView = StrikeFinder.View.extend({
         }
 
         // Retrieve the related IOC terms.
-        view.apply_template('suppression-form.html', data);
+        view.apply_template('suppression-form.ejs', data);
 
         view.$("#suppression-form").modal({
             backdrop: false
@@ -1038,7 +1038,7 @@ StrikeFinder.AcquireFormView = StrikeFinder.View.extend({
                 data['use_cached'] = use_cached;
 
                 // Display the acquire template.
-                view.apply_template('acquire-form.html', data);
+                view.apply_template('acquire-form.ejs', data);
 
                 // Register events.
                 view.delegateEvents({
@@ -1434,13 +1434,17 @@ StrikeFinder.HitsLinkView = StrikeFinder.View.extend({
 
         var link = _.sprintf('%s//%s%s/sf/hits/identity/%s', window.location.protocol,
             window.location.hostname, (window.location.port ? ':' + window.location.port : ''), data.identity);
-        var html = StrikeFinder.template('link.html', {link: link, label: 'Link to Hit'});
+        var html = StrikeFinder.template('link.ejs', {link: link, label: 'Link to Hit'});
 
         view.$el.popover({
             html: true,
             trigger: 'click',
             content: html
-        });
+        })
+            .data('bs.popover')
+            .tip()
+            .addClass('link-popover');
+
         view.$el.on('shown.bs.popover', function () {
             $('.link-text').select();
         });
@@ -2286,7 +2290,7 @@ StrikeFinder.HitsFacetsView = StrikeFinder.View.extend({
         view.undelegateEvents();
 
         // Render the template.
-        view.apply_template('hits-facets.html', data);
+        view.apply_template('hits-facets.ejs', data);
 
         view.delegateEvents({
             'click li a': 'on_click',

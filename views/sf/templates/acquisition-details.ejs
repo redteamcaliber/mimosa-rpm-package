@@ -1,0 +1,153 @@
+<div id="acquisition-details-div" class="modal fade" style="overflow: auto" tabindex="-1">
+    <div class="modal-dialog" style="width: 80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4>
+                    <icon class="fa fa-cloud-download"></icon>
+                    Acquisition Details
+                </h4>
+            </div>
+            <div class="modal-body" style="max-height: 700px; overflow: auto">
+                <div class="container" style="width: 100%">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label>Host</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <%= agent.cluster.engagement.client.name %> (<%= agent.cluster.name %>) : <%= agent.domain
+                            %> /
+                            <a href="/sf/host/<%= agent.hash %>/"><%= agent.hostname %></a> / <a
+                                    href="/sf/host/<%= agent.hash %>/"><%= agent.ip %></a>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 15px">
+                        <div class="col-sm-6">
+                            <label>File Path</label>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>File Name</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <%= file_path %>
+                        </div>
+                        <div class="col-sm-6">
+                            <% if (is_link) { %>
+                            <a href="<%= link %>"><%= file_name %></a>
+                            <% } else { %>
+                            <%= file_name %>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <div class="row" style="margin-top: 15px">
+                        <div class="col-sm-2">
+                            <label>User</label>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Method</label>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Created</label>
+                        </div>
+                        <div class="col-sm-3">
+                            <label>Updated</label>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>State</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <%= user %>
+                        </div>
+                        <div class="col-sm-2">
+                            <%= method %>
+                        </div>
+                        <div class="col-sm-3">
+                            <%= format_date(create_datetime) %>
+                        </div>
+                        <div class="col-sm-3">
+                            <%= format_date(update_datetime) %>
+                        </div>
+                        <div class="col-sm-2">
+                            <%= format_state(state) %>
+                        </div>
+                    </div>
+
+                    <% if (is_error) { %>
+                    <div class="row" style="margin-top: 15px">
+                        <div class="col-sm-12">
+                            <label>Error</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <span class="text-danger"><%= error_message %></span>
+                        </div>
+                    </div>
+                    <% } %>
+
+                    <div class="row" style="margin-top: 15px">
+                        <div class="col-sm-6">
+                            <label>
+                                <h4>
+                                    <i class="fa fa-file"></i> FileItem
+                                </h4>
+                            </label>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>
+                                <h4>
+                                    <i class="fa fa-warning"></i> Issues
+                                </h4>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <% if (is_link && is_audit) { %>
+                                <%= audit %>
+                            <% } else { %>
+                                Audit Not Available
+                            <% } %>
+                        </div>
+                        <div class="col-sm-6">
+                            <% if (!has_issues) { %>
+                                There are no issues.
+                            <% } else { %>
+                                <table class="table">
+                                    <tr>
+                                        <th>Level</th>
+                                        <th>Summary</th>
+                                        <th>Issue</th>
+                                    </tr>
+                                    <% _.each (acquisition_issues, function(item) { %>
+                                        <tr>
+                                            <td><%= format_level(item.issue.level) %></td>
+                                            <td class="wrap"><%= item.issue.summary %></td>
+                                            <td class="wrap"><%= item.issue.context %></td>
+                                        </tr>
+                                    <% }); %>
+                                </table>
+                            <% } %>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="close" type="button" class="btn btn-default" data-dismiss="modal">
+                    <icon class="fa fa-times-circle"></icon>
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,8 +2,8 @@
     "name": "mandiant-uac-ws",
     "author": "Mandiant",
     "description": "Unified Analyst Console",
-    "version": "1.1.0",
-    "main": "uac.js",
+    "version": "1.1.1",
+    "main": "uac-server.js",
     "repository" : {
         "type" : "git",
         "url" : "https://github.mandiant.com:amilano/uac-node.git"

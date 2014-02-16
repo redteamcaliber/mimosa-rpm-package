@@ -1,27 +1,14 @@
 UAC ToDo
 ========
 
-### Need to look into issues related to CSRF checks and sessions.
+### Add smaller fonts for all themes.
 
 ### Need to have a way to view and manage the UAC sessions.
-
-### Migrate hits links to use identity rather than rowitem_uuid.
-
-### Release
-- Update the index page.
-- Write up deployment instructions.
-- Create RT ticket.
-
-### Update the IOC Selection title every time something is selected.
 
 ### Look into base64 encoded GZipped data in the Strings section.
 - https://uac.mplex.mandiant.com/sf/hits/0a63a2ba-be5e-4151-8ff0-a119387fc0a9
 
-### Acquisition Details
-- Migrate the current acquisitions popup to be a complete dialog including:
-    - The acquisitions details.
-    - The file audit if applicable.
-    - The issues document if applicable.
+### Create a user preferences screen with a StrikeFinder tab.
 
 ### Linkable Acquisitions
 - Allow user to create URL links to acquisitions.
@@ -32,9 +19,7 @@ UAC ToDo
 - Display acquisition comments on the acquisitions view.
 - Display acquisition comments on the hits acquisitions view.
 
-### Counts
-- Add counts to the comments rollup.
-- Add counts to the suppressions rollup.
+### Externalize UAC/StrikeFinder components into their own git project.
 
 ### Refactor Messages
 - Transition display messages to the UAC level.
@@ -44,6 +29,8 @@ UAC ToDo
 
 ### Comments Enhancements
 - Allow comment input to be expanded to be multi-line.
+
+### Need to add item type into the IOC details call and remove the string parsing logic.
 
 ### Client Session Timeout
 - Look into a way to notify users when their session has timed out on the client.
@@ -74,7 +61,6 @@ UAC ToDo
 ## Migrate the common StrikeFinder components classes to a common uac.js file.
 - Should have a uac.js, strikefinder.js, and network.js files.
 - uac.js should be included in the top level template.
-- Rename the uac.js server module server.js.
 
 ## Move the partial templates from the views directory to the static files directory.
 - Need to update Grunt scripts.
@@ -122,8 +108,6 @@ UAC ToDo
 ## Tasks
 
 ### Make the UAC start scripts resilient to the directory that are being run in.  It should not matter.
-
-### Unselect values from ioc details tables after an expression is selected.
 
 ### Use values instead of id's in the select view.
 

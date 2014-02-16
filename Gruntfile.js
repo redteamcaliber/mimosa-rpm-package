@@ -37,7 +37,7 @@ module.exports = function (grunt) {
         uac_repo: 'git@github.mandiant.com:amilano/uac-node.git',
 
         // The Github Branch.
-        uac_branch: '1.0.0',
+        uac_branch: '1.1.0',
 
         uac_name: pkg['name'].charAt(0).toUpperCase() + pkg['name'].slice(1),
         uac_version: uac_version,
@@ -56,7 +56,7 @@ module.exports = function (grunt) {
              * Watch the underscore templates and re-compile the templates to a JST file.
              */
             templates: {
-                files: ['views/sf/templates/*.html', 'views/nt/templates/*.html'],
+                files: ['views/sf/templates/*.ejs', 'views/nt/templates/*.ejs'],
                 tasks: ['jst-dev']
             }
         },
@@ -72,7 +72,7 @@ module.exports = function (grunt) {
                     processName: process_name
                 },
                 files: {
-                    '<%= build_uac_dir %>/static/sf/js/templates.js': ['<%= build_uac_dir %>/views/sf/templates/*.html']
+                    '<%= build_uac_dir %>/static/sf/js/templates.js': ['<%= build_uac_dir %>/views/sf/templates/*.ejs']
                 }
             },
             nt: {
@@ -82,7 +82,7 @@ module.exports = function (grunt) {
                     processName: process_name
                 },
                 files: {
-                    '<%= build_uac_dir %>static/nt/js/templates.js': ['<%= build_uac_dir %>views/nt/templates/*.html']
+                    '<%= build_uac_dir %>static/nt/js/templates.js': ['<%= build_uac_dir %>views/nt/templates/*.ejs']
                 }
             },
             'sf-dev': {
@@ -92,7 +92,7 @@ module.exports = function (grunt) {
                     processName: process_name
                 },
                 files: {
-                    'static/sf/js/templates.js': ['views/sf/templates/*.html']
+                    'static/sf/js/templates.js': ['views/sf/templates/*.ejs']
                 }
             },
             'nt-dev': {
@@ -102,7 +102,7 @@ module.exports = function (grunt) {
                     processName: process_name
                 },
                 files: {
-                    'static/nt/js/templates.js': ['views/nt/templates/*.html']
+                    'static/nt/js/templates.js': ['views/nt/templates/*.ejs']
                 }
             }
         },
@@ -227,7 +227,7 @@ module.exports = function (grunt) {
                 ],
                 postInstallScript: [
                     'mkdir -p /opt/web/apps/uac/logs',
-                    'if [ $(pgrep -f "node uac.js") ]; then echo "Restarting UAC..."; restart uac; else echo "Starting UAC..."; start uac; fi'
+                    'if [ $(pgrep -f "node uac-server.js") ]; then echo "Restarting UAC..."; restart uac; else echo "Starting UAC..."; start uac; fi'
                 ]
             },
             release: {
