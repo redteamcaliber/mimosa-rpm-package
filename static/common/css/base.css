@@ -120,6 +120,10 @@ table {
     opacity: .3
 }
 
+.uac-tableheader {
+    width: 100%;
+}
+
 .uac-tabledata {
     font-size: 14px;
 }
@@ -149,7 +153,6 @@ table {
 }
 
 .mandiant-red {
-
     background-color: #822433;
     color: #b0dadc;
 }

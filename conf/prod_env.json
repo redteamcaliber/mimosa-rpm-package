@@ -1,6 +1,8 @@
 {
     "server": {
+        "host": "localhost",
         "port": 8000,
+        "workers": 4,
         "ssl": false,
 
         "ssl_key": "./conf/certs/uac_ws_key.pem",

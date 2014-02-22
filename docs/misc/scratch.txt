@@ -1,30 +1,76 @@
-acquired_file: "/media/acquisitions/4b284d8f696fd02e14c0a8c345e9cd478e7ea02d4548e97deb056dad840824fb/47a58b6b-e0d7-4a74-8a56-7002c26e6f26.zip"
-acquisition_issues: Array[1]
-agent: Object
-am_cert_hash: ""
-cluster: Object
-cluster_uuid: ""
-comment: "seasick submitted acquisition"
-create_datetime: "2014-02-05T11:57:39.592445"
-error_message: ""
-file_name: "RunDLL32.exe_"
-file_path: "mydocamints"
-force: ""
-has_issues: true
-link: "https://proxy.mcirt.mandiant.com/SEASICK/media/acquisitions/4b284d8f696fd02e14c0a8c345e9cd478e7ea02d4548e97deb056dad840824fb/47a58b6b-e0d7-4a74-8a56-7002c26e6f26.zip"
-mcic_create_dt: null
-mcic_id: null
-mcic_state: null
-mcic_status: null
-mcic_update_dt: null
-method: ""
-mir_acquired_uri: null
-mir_detail_uri: null
-mir_job_uri: null
-password: ""
-resource_uri: "/api/v1/acquisition/b62f19d6-8e5c-11e3-9cc9-5254000f6065/"
-state: "completed"
-update_datetime: "2014-02-05T11:57:39.615251"
-user: "test"
-uuid: "b62f19d6-8e5c-11e3-9cc9-5254000f6065"
-__proto__: Object
+[[Category:UAC]]
+[[category:MCIRT Dev]] 
+[[category:MCIRT Admin]]
+
+
+== UAC FireEye Alerts Requirements ==
+
+=== Alerts Processing ===
+* As alerts are processed UAC should automatically request any relevant binary data.
+* UAC should automatically submit relevant alert binaries to MTA.
+** We need to discuss whether this should be part of our Q2 mission.
+** How will the submitted sample be visualized within UAC?
+
+=== My Items ===
+* Users should be able to easily track items that they have worked with to ensure they are tracked to completion.
+* Users should be able to view items that others are tracking.
+
+=== Alerting Interface ===
+* Users should be able to view a streaming list of alerts that require work.  The list should filter out items that others are already working to avoid duplication of effort.
+* Users should be able to view the complete list of alerts regardless of whether others are working on them.
+* UAC should give users an indication that others are currently working on an item to avoid duplication of work.
+* UAC should have the ability to display alerts in a prioritized manner.  The specifics of how prioritization is calculated may be a future effort.
+* Users should be able to tag alerts with status values that are the same as StrikeFinder.
+** Values
+*** Investigating
+*** Escalate
+*** Reportable
+*** Reported
+*** Unreportable
+*** Delete
+** The current tags and definitions are stored here.
+* Users should be able to comment on alerts.
+** What else should we track comments for???
+* Users should be able to pivot on an IP address to see related details.
+* UAC should allow users to view the details of a signature.
+* UAC should provide an interface to allow users to view alerts by tag state.
+
+=== Host ===
+* Users should be able to view relevant triage packages within StrikeFinder.
+* Users should be able to pivot from an alert to the relevant StrikeFinder host data.
+
+=== Device Health ===
+* UAC should track device health data.
+* UAC should provide an API interface to device health data.
+
+
+== Future Requirements ==
+
+=== Device Health ===
+* Users should be able to see device health information.
+
+=== UAC Notifications ===
+* UAC should provide real time notifications of the following data to users:
+** UAC should notify OpsLead users when an item has been escalated to them.
+
+
+== Questions == 
+
+* In NAC there is the idea of a list of aggregated alerts.  A single alert can correspond to multiple hits.  Do we need
+  same concept from a FE alerts perspective or are there just alert details.  For instance is there a one to many
+  relationship between an alert and the related host hits.  An alert to hits in StrikeFinder, etc.  Alternatively it
+  could just be represented as details.  An alert is made up of triage packages, PCAPs, etc and these can be render on a
+  details view rather than a parent child alerts -> hits relationship.
+* What information do we need to provide for IP address pivoting.
+* What information needs to be extracted from a user when an alert reaches a final status (resolved?).
+* How is UAC going to deal with triage packages for Q2?  Are we going to pass the raw data along to the user to render in Redline or are we going to process and display it?
+** MRP: My understanding is that we'll pass the raw information to the user to render using redline.
+* In the FE Alerts world should escalate just be a state or targeted to a specific person?  We'll clearly alerts by tag page.
+* Can we line up the UAC tags with Wade's workflow to see if everything works.
+* How much of the escalate workflow should be integrated into UAC?
+* Where can we use facets and what should they be?  Device, signature, severity...  IP's???
+
+== Reference ==
+* [https://cwiki.corp.mandiant.com/bin/view/CWiki/UACStrikeFinder|UAC StrikeFinder Tags]
+* [[MCIRT_FireEyeNotes|MCIRT FireEye Notes]]
+* [https://pwiki.mandiant.com/images/6/64/FireEye_Alert_Notification_Definitions.pdf FireEye Alert Notification Definitions]

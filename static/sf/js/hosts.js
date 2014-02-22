@@ -29,7 +29,7 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
             view.date_formatter(1)
         ];
 
-        view.options.sDom = 'ltip';
+        view.options.sDom = '<"uac-tableheader"l>tip';
 
         view.options.sAjaxSource = '/sf/api/hits';
         view.options.sAjaxDataProp = 'results';
@@ -41,6 +41,21 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
         };
 
         view.listenTo(view, 'load', function () {
+            // Create the CSV link in the table header.
+
+            // The url for the link.
+            var url = '/sf/api/hits?format=csv';
+            if (view.params) {
+                url += '&' + $.param(view.params);
+            }
+            // The download file for the link.
+            var file = 'hits-' + view.params.am_cert_hash + '.csv';
+            // The link.
+            var html = _.sprintf('<div class="pull-right" style="margin-bottom: 10px"><a download="%s" href="%s">Export to CSV</a></div>', file, url);
+            // Add the link the table header.
+            view.$el.parent().find('.uac-tableheader').append(html);
+
+
             // Load the first hit on load of the view.
             view.select_row(0);
         });

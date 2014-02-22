@@ -1,6 +1,26 @@
 UAC ToDo
 ========
 
+### Look into using Satori API in UAC.
+
+### Look into automatically do do an MD5 lookup for hits that contain an MD5.
+
+### Modify UAC so that it does not set the hit to investigating when an acquisition is created.
+
+
+- Move the redis configuration from the server.js file to the settings.
+
+### Implement server clustering.
+- Need to add documentation for setting the number of workers.
+- Add host entry to the env.json docs and in prod.
+- Need to look into how to separate log messages for the cluster workers.
+- Measure performance of using nginx vs native clustering.
+- Move the database pool settings to the env.json file.
+- Ensure the database pool settings are initialized to a reasonable value.
+- Add all new properties to the different environment json templates.
+
+### Look into running UAC as a user other than root.
+
 ### Add smaller fonts for all themes.
 
 ### Need to have a way to view and manage the UAC sessions.
@@ -112,8 +132,6 @@ UAC ToDo
 ### Use values instead of id's in the select view.
 
 ### Remove SSLv2 from the nginx configuration.
-
-### Look into Node clustering to use the available memory on the box.
 
 ### Grunt
 - Add an sFTP command for publishing a new UAC RPM.

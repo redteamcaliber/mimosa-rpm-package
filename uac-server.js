@@ -1,10 +1,14 @@
+/*jslint node: true */
+/*jshint strict:false */
+
 var _ = require('underscore.string');
-var fs = require("fs");
+var os = require('os');
+var fs = require('fs');
+var cluster = require('cluster');
 var https = require('https');
 var http = require('http');
 var express = require('express');
 
-var async = require('async');
 var log = require('winston');
 
 // UAC requirements.
@@ -14,6 +18,7 @@ var route_utils = require('route-utils');
 var uac_routes = require('uac-routes');
 var sf_routes = require('sf-routes');
 var nt_routes = require('nt-routes');
+var test_routes = require('test-routes');
 
 //
 // Initialize the application middleware.
@@ -44,15 +49,6 @@ log.add(log.transports.File, {
     maxfiles: settings.get('server:log_maxfiles')
 });
 
-app.configure('dev', function () {
-    // Set up development specific configuration.
-});
-
-app.configure('prod', function () {
-    // Setup production specific configuration.
-
-});
-
 // Enable the proxy support.
 app.enable('trust proxy');
 console.log(_.sprintf('trust proxy enabled: %s', app.get('trust proxy')));
@@ -69,7 +65,7 @@ app.use(express.session({
     key: 'uac.sess',
     secret: settings.get('server:session_secret'),
     proxy: true,
-    cookie: { path: '/', httpOnly: true, secure: true, maxAge: 86400000 },
+    cookie: { path: '/', httpOnly: true, secure: true },
     store: new RedisStore({
         host: '127.0.0.1',
         port: 6379,
@@ -90,6 +86,12 @@ app.use(app.router);
 app.use(uac_routes);
 app.use('/sf', sf_routes);
 app.use('/nt', nt_routes);
+
+app.configure('dev', function () {
+    // Load development routes.
+    console.log('Loading dev routes...');
+    app.use('/test', test_routes);
+});
 
 route_utils.load_views(app);
 
@@ -143,41 +145,41 @@ app.use(function errorHandler(err, req, res, next) {
     }
 });
 
-
 /**
- * Start the UAC application server.
+ * Create a server instance using the global settings.
  */
-function startup() {
-    console.log('--------------------------');
-    console.log('Starting the UAC server...');
-    console.log('--------------------------');
-
+function create_server() {
     console.log(_.sprintf('server:port=%s', settings.get('server:port')));
     console.log(_.sprintf('server:ssl=%s', settings.get('server:ssl')));
+
+    var host = settings.get('server:host');
+    if (!host) {
+        host = 'localhost';
+    }
 
     if (settings.get('server:ssl') === true) {
         https.createServer({
             key: fs.readFileSync(settings.get('server:ssl_key')),
             cert: fs.readFileSync(settings.get('server:ssl_cert'))
-        }, app).listen(settings.get('server:port'));
+        }, app).listen(settings.get('server:port'), host);
     }
     else {
-        http.createServer(app).listen(settings.get('server:port'));
+        http.createServer(app).listen(settings.get('server:port'), host);
     }
 
-    console.log('---------------------');
-    console.log('UAC server running...');
-    console.log('---------------------');
+    console.log('Creating worker server...');
 }
 
 /**
  * Shut down the UAC application server.
  */
 function shutdown() {
-    console.log('');
-    console.log('-------------------------------');
-    console.log('Shutting down the UAC server...');
-    console.log('-------------------------------');
+    if (cluster.isMaster) {
+        console.log('Shutting down cluster master...');
+    }
+    else {
+        console.log('Shutting down server worker...');
+    }
     process.exit();
 }
 
@@ -197,5 +199,51 @@ process.on('uncaughtException', function (err) {
     shutdown();
 });
 
-// Run the server.
-startup();
+// Start the server.
+var workers = settings.get('server:workers');
+var cpus = os.cpus().length;
+
+// Ensure that the numbers of workers is defined.
+if (!workers) {
+    console.log('WARNING: "server:workers" property is not defined, defaulting to 1');
+    workers = 1;
+}
+
+// Display a warning if the number of workers is greater that the CPU count.
+if (workers > cpus) {
+    console.log('WARNING: "server:workers" property is greater than the hardware CPU count' +
+        ' (' + workers + ' > ' + cpus + ')');
+}
+
+if (workers > 1) {
+    // Cluster mode is enabled.
+    if (cluster.isMaster) {
+        // Configuration for the master node.
+        console.log('Cluster mode is ACTIVE, starting ' + workers + ' workers...');
+        console.log('Hardware has ' + cpus + ' cores available...');
+
+        for (var worker_index = 1; worker_index <= workers; worker_index++) {
+            // Fork a worker.
+            console.log('Forking server worker: ' + worker_index + '...');
+            cluster.fork();
+        }
+
+        cluster.on('listening', function(worker, address) {
+            console.log('Worker (' + worker.id + ') listening on address: ' + address.address + ':' + address.port);
+        });
+
+        cluster.on('exit', function (worker, code) {// Worker is exiting.
+            console.log('Server worker (' + worker.id + ') exiting with code: ' + code + '...');
+            cluster.fork();
+        });
+    }
+    else {
+        // Start the worker server.
+        create_server();
+    }
+}
+else {
+    // Start a single server.
+    console.log('Cluster mode is INACTIVE...');
+    create_server();
+}

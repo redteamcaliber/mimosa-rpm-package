@@ -1,24 +1,26 @@
+/*jslint node: true */
+/*jshint strict:false */
+
 var StrikeFinder = StrikeFinder || {};
 
 
 StrikeFinder.View = Backbone.View.extend({
-    show: function () {
+    show: function() {
         this.$el.fadeIn().show();
     },
-    hide: function () {
+    hide: function() {
         this.$el.fadeOut().hide();
     },
-    run_once: function (key, init_function) {
+    run_once: function(key, init_function) {
         if (!this[key]) {
             this[key] = true;
             init_function();
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     },
-    render: function () {
+    render: function() {
         var view = this;
         if (this.do_render !== undefined) {
             view.do_render.apply(view, arguments);
@@ -26,13 +28,13 @@ StrikeFinder.View = Backbone.View.extend({
         return view;
     },
     /**
-     * Return the list of event listerners.
+     * Return the list of event listeners.
      * @returns {*}
      */
-    get_listeners: function () {
+    get_listeners: function() {
         return this._listeners ? _.values(this._listeners) : [];
     },
-    apply_template: function (template, context) {
+    apply_template: function(template, context) {
         this.$el.html(StrikeFinder.template(template, context));
     }
 });
@@ -41,31 +43,30 @@ StrikeFinder.View = Backbone.View.extend({
  * Wrap an element with a collapsable view.
  */
 StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
-    initialize: function (options) {
+    initialize: function(options) {
         var view = this;
 
         if (!view.name) {
             view.name = _.trim(random_string(5));
         }
 
-        view.collapsed = options['collapsed'] || $(view.el).hasClass('collapsed');
+        view.collapsed = options.collapsed || $(view.el).hasClass('collapsed');
         if (options.title) {
-            view.title = options['title'];
-        }
-        else {
+            view.title = options.title;
+        } else {
             view.title = '&nbsp;';
         }
 
-        this.title_class = options['title_class'];
+        this.title_class = options.title_class;
 
         this.display_toggle = options.display_toggle !== false;
 
         this.render();
     },
-    render: function () {
+    render: function() {
         var view = this;
 
-        view.run_once('init_render', function () {
+        view.run_once('init_render', function() {
             // Create the accordion inner div.
             var panel_body = $(document.createElement('div'));
             panel_body.addClass('panel-body');
@@ -107,9 +108,10 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
                 title_span.html(view.title);
             }
 
+            var icon;
             if (view.display_toggle) {
                 // Create the icon.
-                var icon = $(document.createElement('i'));
+                icon = $(document.createElement('i'));
                 icon.addClass('fa fa-chevron-circle-down');
                 icon.addClass('fa-lg');
                 icon.addClass('pull-right');
@@ -125,7 +127,9 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
             anchor.css('text-decoration', 'none');
 
             anchor.append(title_span);
-            anchor.append(icon);
+            if (icon) {
+                anchor.append(icon);
+            }
 
             // Create the panel header.
             var panel_title = $(document.createElement('h4'));
@@ -142,21 +146,21 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
 
         return this;
     },
-    get_accordion_inner: function () {
+    get_accordion_inner: function() {
         return this.$el.closest('.accordion-inner');
     },
-    get_accordion: function () {
+    get_accordion: function() {
         return this.$el.closest('.accordion');
     },
-    show: function () {
+    show: function() {
         // Show the accordion decorator.
         this.get_accordion().fadeIn().show();
     },
-    hide: function () {
+    hide: function() {
         // Hide the accordion decorator.
         this.get_accordion().fadeOut().hide();
     },
-    set: function (key, value) {
+    set: function(key, value) {
         if (key && key == 'title') {
             $('#' + this.name + '-title').html(value);
         }
@@ -167,15 +171,15 @@ StrikeFinder.CollapsableContentView = StrikeFinder.View.extend({
     expand: function() {
         $('#collapse-' + this.name).addClass('in');
     },
-    toggle: function () {
+    toggle: function() {
         $('#collapse-' + this.name).collapse('toggle');
     }
 });
 
 StrikeFinder.TableViewControls = StrikeFinder.View.extend({
-    initialize: function () {
+    initialize: function() {
         var view = this;
-        view.table = view.options['table'];
+        view.table = view.options.table;
         if (!view.table) {
             log.warn('"table" is undefined.');
         }
@@ -187,19 +191,18 @@ StrikeFinder.TableViewControls = StrikeFinder.View.extend({
         'click a.prev': 'on_prev',
         'click a.next': 'on_next'
     },
-    render: function () {
+    render: function() {
         var view = this;
 
-        view.run_once('init_template', function () {
+        view.run_once('init_template', function() {
             // Only write the template once.
             view.$el.html(StrikeFinder.template('prev-next.ejs'));
 
-            $(document).keyup(function (ev) {
+            $(document).keyup(function(ev) {
                 if (ev.ctrlKey) {
                     if (ev.keyCode == 68 || ev.keyCode == 40) {
                         view.on_next();
-                    }
-                    else if (ev.keyCode == 85 || ev.keyCode == 38) {
+                    } else if (ev.keyCode == 85 || ev.keyCode == 38) {
                         view.on_prev();
                     }
                 }
@@ -209,62 +212,57 @@ StrikeFinder.TableViewControls = StrikeFinder.View.extend({
         if (view.table !== undefined) {
             if (view.table.is_prev() || view.table.is_prev_page()) {
                 view.$('a.prev').removeAttr('disabled');
-            }
-            else {
+            } else {
                 view.$('a.prev').attr('disabled', true);
             }
 
             if (view.table.is_next() || view.table.is_next_page()) {
                 // Enable the next record link.
                 view.$('a.next').removeAttr('disabled');
-            }
-            else {
+            } else {
                 // Disable the next record link.
                 view.$('a.next').attr('disabled', true);
             }
         }
     },
-    on_prev: function () {
+    on_prev: function() {
         if (this.table !== undefined) {
             if (this.table.is_prev()) {
                 this.table.prev();
-            }
-            else if (this.table.is_prev_page()) {
+            } else if (this.table.is_prev_page()) {
                 this.table.prev_page();
             }
         }
     },
-    on_next: function () {
+    on_next: function() {
         if (this.table !== undefined) {
             if (this.table.is_next()) {
                 this.table.next();
-            }
-            else if (this.table.is_next_page()) {
+            } else if (this.table.is_next_page()) {
                 this.table.next_page();
             }
         }
     },
-    close: function () {
+    close: function() {
         this.stopListening();
     }
 });
 
-
-StrikeFinder.get_datatables_settings = function (parent, settings) {
+StrikeFinder.get_datatables_settings = function(parent, settings) {
     var defaults = {
         iDisplayLength: 10,
         aLengthMenu: [10, 25, 50, 100, 200],
-        sDom: "t",
+        sDom: 't',
         bAutoWidth: false,
-        sPaginationType: "bootstrap",
+        sPaginationType: 'bootstrap',
         bSortClasses: false,
         bProcessing: false,
         asStripeClasses: [],
-        fnServerData: function (sSource, aoData, fnCallback) {
+        fnServerData: function(sSource, aoData, fnCallback) {
             parent.pipeline(sSource, aoData, fnCallback);
         },
-        fnRowCallback: function (nRow, data, iDisplayIndex, iDisplayIndexFull) {
-            var click_handler = function (ev) {
+        fnRowCallback: function(nRow, data, iDisplayIndex, iDisplayIndexFull) {
+            var click_handler = function(ev) {
                 // Select the row.
                 $(nRow).addClass('active').siblings().removeClass('active');
                 // Trigger a click event.
@@ -278,15 +276,15 @@ StrikeFinder.get_datatables_settings = function (parent, settings) {
 
             return nRow;
         },
-        fnCreatedRow: function (nRow, data, iDataIndex) {
+        fnCreatedRow: function(nRow, data, iDataIndex) {
             parent.trigger('row:created', nRow, data, iDataIndex);
         },
-        fnInitComplete: function (oSettings, json) {
+        fnInitComplete: function(oSettings, json) {
             parent.trigger('load', oSettings, json);
         },
-        fnDrawCallback: function (oSettings) {
+        fnDrawCallback: function(oSettings) {
             parent.trigger('draw', oSettings);
-            if (parent.length() == 0) {
+            if (parent.length() === 0) {
                 parent.trigger('empty');
             }
         }
@@ -295,11 +293,11 @@ StrikeFinder.get_datatables_settings = function (parent, settings) {
     //return $.extend(true, defaults, settings);
     var results = {};
 
-    _.each(Object.keys(defaults), function (key) {
+    _.each(Object.keys(defaults), function(key) {
         results[key] = defaults[key];
     });
 
-    _.each(Object.keys(settings), function (key) {
+    _.each(Object.keys(settings), function(key) {
         results[key] = settings[key];
     });
 
@@ -310,13 +308,13 @@ StrikeFinder.get_datatables_settings = function (parent, settings) {
  * Generic Backbone table view component.
  */
 StrikeFinder.TableView = StrikeFinder.View.extend({
-    initialize: function () {
+    initialize: function() {
         if (this.collection) {
             this.listenTo(this.collection, 'sync', this.render);
             this.listenTo(this.collection, 'reset', this.render);
         }
     },
-    highlight_row: function (nRow) {
+    highlight_row: function(nRow) {
         $(nRow).addClass('active').siblings().removeClass('active');
     },
     /**
@@ -324,17 +322,15 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
      * @param index_or_node - the row index or row node.
      * @returns the row node or undefined.
      */
-    select_row: function (index_or_node) {
+    select_row: function(index_or_node) {
         if (typeof index_or_node == 'number') {
             var length = this.length();
 
             if (this.length() <= 0) {
                 return undefined;
-            }
-            else if (index_or_node + 1 > length) {
+            } else if (index_or_node + 1 > length) {
                 return undefined;
-            }
-            else {
+            } else {
                 var pos = this.get_selected_position();
                 if (pos != index_or_node) {
                     // Only select if we are not already on the row.
@@ -343,33 +339,28 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                         $(node).click();
                     }
                     return node;
-                }
-                else {
+                } else {
                     return undefined;
                 }
             }
-        }
-        else if (index_or_node) {
+        } else if (index_or_node) {
             $(index_or_node).click();
             return index_or_node;
-        }
-        else if (index_or_node === null || index_or_node === undefined) {
+        } else if (index_or_node === null || index_or_node === undefined) {
             // Unselect all rows.
             this.$('tr.active').removeClass('active');
-        }
-        else {
+        } else {
             return undefined;
         }
     },
-    get_selected: function () {
+    get_selected: function() {
         return this.$('tr.active');
     },
-    get_selected_position: function () {
+    get_selected_position: function() {
         var selected = this.get_selected();
         if (selected !== undefined && selected.length == 1) {
             return this.get_position(selected.get(0));
-        }
-        else {
+        } else {
             return -1;
         }
     },
@@ -378,36 +369,34 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         if (selected !== undefined && selected.length == 1) {
             var pos = this.get_position(selected.get(0));
             return this.get_data(pos);
-        }
-        else {
+        } else {
             return undefined;
         }
     },
-    get_current_page: function () {
+    get_current_page: function() {
         var settings = this.get_settings();
         return Math.ceil(settings._iDisplayStart / settings._iDisplayLength) + 1;
     },
-    get_total_rows: function () {
+    get_total_rows: function() {
         if (this.get_settings().oInit.bServerSide) {
             return this.get_settings()._iRecordsTotal;
-        }
-        else {
+        } else {
             return this.get_nodes().length;
         }
     },
-    get_total_pages: function () {
+    get_total_pages: function() {
         var settings = this.get_settings();
         return Math.ceil(this.get_total_rows() / settings._iDisplayLength);
     },
-    is_prev: function () {
+    is_prev: function() {
         var pos = this.get_selected_position();
         return (pos > 0);
     },
-    is_next: function () {
+    is_next: function() {
         var pos = this.get_selected_position();
         return pos + 1 < this.length();
     },
-    peek_prev_data: function () {
+    peek_prev_data: function() {
         var selected = this.get_selected();
         if (selected !== undefined && selected.length == 1) {
             var pos = this.get_position(selected.get(0));
@@ -416,7 +405,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         // No previous.
         return undefined;
     },
-    peek_next_data: function () {
+    peek_next_data: function() {
         if (this.is_next()) {
             var selected = this.get_selected();
             if (selected !== undefined && selected.length == 1) {
@@ -427,14 +416,14 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         // No next.
         return undefined;
     },
-    prev: function () {
+    prev: function() {
         var selected = this.get_selected();
         if (selected !== undefined && selected.length == 1) {
             var pos = this.get_position(selected.get(0));
             this.select_row(pos - 1);
         }
     },
-    next: function () {
+    next: function() {
         if (this.is_next()) {
             var selected = this.get_selected();
             if (selected !== undefined && selected.length == 1) {
@@ -443,18 +432,18 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             }
         }
     },
-    is_prev_page: function () {
+    is_prev_page: function() {
         return this.get_current_page() != 1;
     },
-    is_next_page: function () {
+    is_next_page: function() {
         return this.get_current_page() < this.get_total_pages();
     },
-    prev_page: function () {
+    prev_page: function() {
         if (this.is_prev_page()) {
             this.set_page(this.get_current_page() - 2); // set page takes an index.
         }
     },
-    next_page: function () {
+    next_page: function() {
         if (this.is_next_page()) {
             this.set_page(this.get_current_page()); // set page takes an index.
         }
@@ -463,53 +452,51 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
      * Set the current page of the table.
      * @param page_index - the zero based page index.
      */
-    set_page: function (page_index) {
+    set_page: function(page_index) {
         var view = this;
         var current_page = view.get_current_page();
         if (page_index + 1 > current_page) {
             view._page_next = true;
-        }
-        else {
+        } else {
             view._page_prev = true;
         }
         this.get_table().fnPageChange(page_index);
     },
-    length: function () {
+    length: function() {
         return this.$el.fnGetData().length;
     },
-    get_dom_table: function () {
+    get_dom_table: function() {
         return this.$el.get(0);
     },
-    get_table: function () {
+    get_table: function() {
         return this.$el.dataTable();
     },
-    get_nodes: function (index) {
+    get_nodes: function(index) {
         return this.$el.fnGetNodes(index);
     },
-    update: function (data, tr_or_index, col_index, redraw, predraw) {
+    update: function(data, tr_or_index, col_index, redraw, predraw) {
         return this.get_table().fnUpdate(data, tr_or_index, col_index, redraw, predraw);
     },
-    draw: function (re) {
+    draw: function(re) {
         this.get_table().fnDraw(re);
     },
-    get_data: function (index_or_node, index) {
+    get_data: function(index_or_node, index) {
         return this.get_table().fnGetData(index_or_node, index);
     },
-    get_position: function (node) {
+    get_position: function(node) {
         return this.$el.fnGetPosition(node);
     },
-    get_absolute_index: function (node) {
+    get_absolute_index: function(node) {
         if (this.get_settings().oInit.bServerSide) {
             return (this.get_current_page() - 1) * this.get_settings()._iDisplayLength + this.get_position(node);
-        }
-        else {
+        } else {
             return this.get_position(node);
         }
     },
-    get_settings: function () {
+    get_settings: function() {
         return this.$el.fnSettings();
     },
-    get_search: function () {
+    get_search: function() {
         var result = '';
         var settings = this.get_settings();
         if (settings.oPreviousSearch && settings.oPreviousSearch.sSearch) {
@@ -517,20 +504,20 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         }
         return result;
     },
-    is_datatable: function () {
+    is_datatable: function() {
         return $.fn.DataTable.fnIsDataTable(this.get_dom_table());
     },
-    is_server_side: function () {
+    is_server_side: function() {
         return this.get_settings().oInit.bServerSide;
     },
-    reload: function (row_index) {
+    reload: function(row_index) {
         this.clear_cache();
         if (row_index !== undefined) {
             this._row_index = row_index;
         }
         this.$el.fnDraw(false);
     },
-    refresh: function (value_pair) {
+    refresh: function(value_pair) {
         this.clear_cache();
 
         if (value_pair) {
@@ -538,7 +525,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         }
         this.$el.fnDraw(false);
     },
-    destroy: function () {
+    destroy: function() {
         // Remove any listeners.
         this.undelegateEvents();
 
@@ -560,8 +547,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             // Destroy the old table.
             table.fnDestroy(false);
             table.empty();
-        }
-        else {
+        } else {
             log.debug(_.sprintf('Element with id: %s is not of type DataTable, skipping...', id));
         }
     },
@@ -574,7 +560,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
      * @param params - the server side ajax parameters.  A map keyed by the name server_params.
      * @returns {*}
      */
-    render: function (params) {
+    render: function(params) {
         var view = this;
 
         if (!view.el) {
@@ -596,36 +582,39 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         var settings = StrikeFinder.get_datatables_settings(view, view.options);
         // Apply any parameters passed to the settings.
         if (params) {
-            if (params['server_params'] != null) {
-                var server_params = params['server_params'];
+            if (params.server_params !== null) {
+                var server_params = params.server_params;
                 if (server_params) {
                     log.debug('Setting server params...');
-                    settings['fnServerParams'] = function (aoData) {
-                        _.each(Object.keys(server_params), function (key) {
+                    settings.fnServerParams = function(aoData) {
+                        _.each(Object.keys(server_params), function(key) {
                             log.debug(_.sprintf('Setting param %s and value %s', key, server_params[key]));
-                            aoData.push({name: key, value: server_params[key]});
+                            aoData.push({
+                                name: key,
+                                value: server_params[key]
+                            });
                         });
-                    }
+                    };
                 }
-            }
-            else if (params['aaData'] != null) {
-                settings['aaData'] = params['aaData'];
+            } 
+            else if (params.aaData !== null) {
+                settings.aaData = params.aaData;
             }
         }
 
         if (view.collection) {
             // If a collection is defined then use the data from the collection.
-            settings['aaData'] = view.collection.toJSON();
+            settings.aaData = view.collection.toJSON();
         }
 
         // The following block is one time initialization for the table view and is specifically placed in the render
         // function to allow sub-classes to define an initialize method without having to worry about calling the
         // superclass initialization.
-        view.run_once('TableView::render::init', function () {
+        view.run_once('TableView::render::init', function() {
             // Listen to draw events to account for the fact that datatables does not fire page change events.  This code
             // makes up for that shortcoming by manually determining when the user has used the previous next component to
             // page through the table.
-            view.listenTo(view, 'draw', function () {
+            view.listenTo(view, 'draw', function() {
                 if (view._page_prev) {
                     // User has iterated through the table to the previous page.
                     view.trigger('page', view.get_current_page());
@@ -633,8 +622,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                     view.select_row(view.length() - 1);
                     // Clear the flag.
                     view._page_prev = false;
-                }
-                else if (view._page_next) {
+                } else if (view._page_next) {
                     // User has iterated to through the table to the next page.
                     view.trigger('page', view.get_current_page());
                     // Select the next record in the view.
@@ -648,8 +636,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                     // the row that corresponds to the index.
                     view.select_row(view._row_index);
                     view._row_index = undefined;
-                }
-                else if (view._value_pair) {
+                } else if (view._value_pair) {
                     // During a refresh/reload operation a value to select has been specified.  Attempt to select the
                     // row that corresponds to the supplied name value pair.
                     log.debug(_.sprintf('Attempting to reselect table row value: name=%s, value=%s',
@@ -697,7 +684,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         if (view.$el.parent()) {
             // Assign the bootstrap class to the length select.
             var length_selects = $('.dataTables_wrapper select');
-            _.each(length_selects, function (length_select) {
+            _.each(length_selects, function(length_select) {
                 if (!$(length_select).hasClass('form-control')) {
                     $(length_select).addClass('form-control');
                     $(length_select).css('min-width', '85px');
@@ -713,53 +700,61 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         this.trigger('expand', tr.get(0));
         return false;
     },
-    fetch: function (params) {
+    fetch: function(params) {
         var view = this;
+
+        if (params) {
+            view.params = params;
+        }
+        else {
+            view.params = undefined;
+        }
+
         if (view.collection) {
             if (params) {
                 // User has supplied options to the fetch call.
                 if (!params.success && !params.error) {
                     // Has not overidden the success and error callbacks, block for them.
-                    params.success = function () {
+                    params.success = function() {
                         StrikeFinder.unblock(view.$el);
                     };
-                    params.error = function () {
+                    params.error = function() {
                         StrikeFinder.unblock(view.$el);
                     };
                     StrikeFinder.block_element(view.$el);
                     view.collection.fetch(params);
-                }
-                else {
+                } else {
                     // Don't do any blocking.
                     view.collection.fetch(params);
                 }
-            }
-            else {
+            } else {
                 // Block the UI before the fetch.
                 StrikeFinder.block_element(view.$el);
                 view.collection.fetch({
-                    success: function () {
+                    success: function() {
                         // Unblock the ui.
                         StrikeFinder.unblock(view.$el);
                     },
-                    error: function () {
+                    error: function() {
                         // Unblock the ui.
                         StrikeFinder.unblock(view.$el);
                     }
                 });
             }
-        }
-        else {
+        } else {
             view.render({
                 'server_params': params
             });
         }
     },
-    close: function () {
+    close: function() {
         this.destroy();
         this.remove();
+
+        // Fire an event after cleaning up.
+        this.trigger('close');
     },
-    update_row: function (row_search_key, row_search_value, row_update_key, row_update_value, row_column_index) {
+    update_row: function(row_search_key, row_search_value, row_update_key, row_update_value, row_column_index) {
         var view = this;
         var nodes = view.get_nodes();
         for (var i = 0; i < nodes.length; i++) {
@@ -778,21 +773,21 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
     /**
      * Escape a cells contents.
      */
-    escape_cell: function (row, index) {
+    escape_cell: function(row, index) {
         var col = this.get_settings().aoColumns[index];
         var td = $(_.sprintf('td:eq(%s)', index), row);
         if (td) {
             td.html(_.escape(td.html()));
         }
     },
-    set_key: function (aoData, sKey, mValue) {
+    set_key: function(aoData, sKey, mValue) {
         for (var i = 0, iLen = aoData.length; i < iLen; i++) {
             if (aoData[i].name == sKey) {
                 aoData[i].value = mValue;
             }
         }
     },
-    get_key: function (aoData, sKey) {
+    get_key: function(aoData, sKey) {
         for (var i = 0, iLen = aoData.length; i < iLen; i++) {
             if (aoData[i].name == sKey) {
                 return aoData[i].value;
@@ -800,12 +795,12 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
         }
         return null;
     },
-    clear_cache: function () {
+    clear_cache: function() {
         if (this.cache) {
             this.cache = undefined;
         }
     },
-    pipeline: function (sSource, aoData, fnCallback) {
+    pipeline: function(sSource, aoData, fnCallback) {
         var view = this;
         var ajax_data_prop = view.get_settings().sAjaxDataProp;
 
@@ -829,13 +824,11 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             iRequestStart < view.cache.iCacheLower ||
             iRequestEnd > view.cache.iCacheUpper) {
             bNeedServer = true;
-        }
-        else if (aoData.length != view.cache.lastRequest.length) {
+        } else if (aoData.length != view.cache.lastRequest.length) {
             // The number of parameters is different between the current request and the last request, assume that
             // going back to the server is necessary.
             bNeedServer = true;
-        }
-        else if (view.cache.lastRequest) {
+        } else if (view.cache.lastRequest) {
             for (var i = 0, iLen = aoData.length; i < iLen; i++) {
                 var param = aoData[i];
                 var last_param = view.cache.lastRequest[i];
@@ -847,8 +840,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                         // The array lengths don't match, assume the server is needed.
                         bNeedServer = true;
                         break; // **EXIT**
-                    }
-                    else {
+                    } else {
                         // Need to compare the actual array contents.
                         for (var param_index = 0; param.length; param_index++) {
                             var p1 = param[param_index];
@@ -859,13 +851,11 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                             }
                         }
                     }
-                }
-                else if (is_param_array && !is_last_param_array || !is_param_array && is_last_param_array) {
+                } else if (is_param_array && !is_last_param_array || !is_param_array && is_last_param_array) {
                     // Parameter type mismatch.
                     bNeedServer = true;
                     break; // **EXIT**
-                }
-                else if (param.name != "iDisplayStart" && param.name != "iDisplayLength" && param.name != "sEcho") {
+                } else if (param.name != "iDisplayStart" && param.name != "iDisplayLength" && param.name != "sEcho") {
                     if (param.value != last_param.value) {
                         bNeedServer = true;
                         break; // **EXIT**
@@ -881,8 +871,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             var iPipe;
             if (view.options.iPipe && _.isNumber(view.options.iPipe)) {
                 iPipe = view.options.iPipe;
-            }
-            else {
+            } else {
                 iPipe = 10;
             }
 
@@ -902,7 +891,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
             // Block the UI before the AJAX call.
             StrikeFinder.block_element(view.$el);
 
-            $.getJSON(sSource, aoData, function (json) {
+            $.getJSON(sSource, aoData, function(json) {
                 /* Callback processing */
                 view.cache.lastJson = jQuery.extend(true, {}, json);
 
@@ -914,15 +903,14 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
 
                 fnCallback(json);
             })
-                .always(function () {
+                .always(function() {
                     // Unblock the UI.
                     StrikeFinder.unblock(view.$el);
                 });
-        }
-        else {
+        } else {
             try {
                 // Block the UI before processing.
-                StrikeFinder.block_element(view.$el)
+                StrikeFinder.block_element(view.$el);
 
                 json = jQuery.extend(true, {}, view.cache.lastJson);
                 json.sEcho = sEcho;
@@ -930,25 +918,24 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
                 json[ajax_data_prop].splice(0, iRequestStart - view.cache.iCacheLower);
                 json[ajax_data_prop].splice(iRequestLength, json[ajax_data_prop].length);
                 fnCallback(json);
-            }
-            finally {
+            } finally {
                 // Unblock the UI.
                 StrikeFinder.unblock(view.$el);
             }
         }
     },
-    date_formatter: function (index) {
+    date_formatter: function(index) {
         return {
-            mRender: function (data, type, row) {
+            mRender: function(data, type, row) {
                 return StrikeFinder.format_date_string(data);
             },
             aTargets: [index]
-        }
+        };
     },
     /**
      * Return the list of expanded rows.
      */
-    expanded_rows: function () {
+    expanded_rows: function() {
         return this._expanded_rows;
     },
     /**
@@ -956,7 +943,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
      * @param tr - the row.
      * @param details_callback - function(tr, data) - returns the details HTML.
      */
-    expand__collapse_row: function (tr, details_callback) {
+    expand__collapse_row: function(tr, details_callback) {
         var view = this;
         var expanded = view.expanded_rows();
         var index = $.inArray(tr, expanded);
@@ -971,8 +958,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
 
             var data = view.get_data(tr);
             view.get_table().fnOpen(tr, details_callback(data), 'details');
-        }
-        else {
+        } else {
             var collapse_icon = $(tr).find('i.expand');
             if (collapse_icon) {
                 collapse_icon.removeClass('fa-minus-circle');
@@ -988,7 +974,7 @@ StrikeFinder.TableView = StrikeFinder.View.extend({
  * View class for the a select item.
  */
 StrikeFinder.SelectView = StrikeFinder.View.extend({
-    initialize: function () {
+    initialize: function() {
         if (this.collection) {
             this.listenTo(this.collection, 'reset', this.render);
         }
@@ -996,39 +982,36 @@ StrikeFinder.SelectView = StrikeFinder.View.extend({
     events: {
         "change": "item_changed"
     },
-    render: function () {
+    render: function() {
         var view = this;
 
         view.close();
 
-        var id_field = this.options["id_field"];
-        var value_field = this.options["value_field"];
+        var id_field = this.options.id_field;
+        var value_field = this.options.value_field;
         var selected;
         if (view.is_rendered) {
             // Retain the current selected items during re-render.
             selected = view.get_selected();
             // Clear any existing options.
             view.$el.empty();
-        }
-        else {
+        } else {
             // Rendering for the first time.
-            if (Array.isArray(this.options['selected'])) {
-                selected = this.options['selected'];
-            }
-            else if (typeof this.options['selected'] === 'String') {
-                selected = this.options['selected'].split(',');
-            }
-            else {
+            if (Array.isArray(this.options.selected)) {
+                selected = this.options.selected;
+            } else if (typeof this.options.selected === 'string') {
+                selected = this.options.selected.split(',');
+            } else {
                 selected = [];
             }
         }
 
-        _.each(this.collection.models, function (model) {
+        _.each(this.collection.models, function(model) {
             var id = model.attributes[id_field];
             var option = "<option value=\"" + id + "\"";
 
             if (_.indexOf(selected, id) != -1) {
-                option += " selected=\"true\""
+                option += " selected=\"true\"";
             }
 
             option += ">";
@@ -1037,7 +1020,7 @@ StrikeFinder.SelectView = StrikeFinder.View.extend({
             view.$el.append(option);
         });
 
-        var width = this.options['width'];
+        var width = this.options.width;
         if (!width) {
             width = "100%";
         }
@@ -1053,32 +1036,31 @@ StrikeFinder.SelectView = StrikeFinder.View.extend({
 
         return this;
     },
-    close: function () {
+    close: function() {
         this.$el.select2("destroy");
     },
-    get_selected: function () {
+    get_selected: function() {
         // Loop through all the items and fire a change event.
-        var isOptionId = (this.options["isOptionId"] == null);
+        var isOptionId = (this.options.isOptionId === null);
         var values = [];
-        this.$("option").each(function () {
+        this.$("option").each(function() {
             if ($(this).is(":selected")) {
                 if (isOptionId) {
                     values.push($(this).attr("value"));
-                }
-                else {
+                } else {
                     values.push($(this).val());
                 }
             }
         });
         return values;
     },
-    item_changed: function (ev) {
+    item_changed: function(ev) {
         this.trigger("change", this.get_selected());
     },
     /**
      * Clear any options or selections.
      */
-    clear: function () {
+    clear: function() {
         // Clear the select options.
         this.$el.empty();
         // Re-render the select.
@@ -1087,20 +1069,20 @@ StrikeFinder.SelectView = StrikeFinder.View.extend({
 });
 
 StrikeFinder.HostTypeAheadView = StrikeFinder.View.extend({
-    initialize: function () {
+    initialize: function() {
         this.render();
     },
-    render: function () {
+    render: function() {
         var typeahead = this.$el.typeahead({
             name: 'hosts',
             remote: {
                 url: '/sf/api/hosts?hosts=%QUERY',
-                beforeSend: function (jqXhr, settings) {
+                beforeSend: function(jqXhr, settings) {
                     StrikeFinder.block();
                 },
-                filter: function (response) {
+                filter: function(response) {
                     StrikeFinder.unblock();
-                    if (!response || response.length == 0) {
+                    if (!response || response.length === 0) {
                         StrikeFinder.display_info('No matching hosts found.');
                     }
                     return response;
@@ -1109,17 +1091,17 @@ StrikeFinder.HostTypeAheadView = StrikeFinder.View.extend({
             valueKey: 'hostname',
             template: 'host-condensed.ejs',
             engine: {
-                compile: function (template) {
+                compile: function(template) {
                     return {
-                        render: function (context) {
+                        render: function(context) {
                             return StrikeFinder.template(template, context);
                         }
-                    }
+                    };
                 }
             }
         });
 
-        typeahead.on('typeahead:selected', function (evt, data) {
+        typeahead.on('typeahead:selected', function(evt, data) {
             window.location = _.sprintf('/sf/host/%s/', data.hash);
         });
     }

@@ -508,6 +508,10 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
         view.listenTo(view.ioc_details_view, "click:exp_key", function (iocname, iocuuid, exp_key) {
             log.info('Selected expression key: ' + exp_key);
 
+            // Update the window title.
+            document.title = _.sprintf('Hits-%s-%s-%s', iocname, iocuuid, exp_key);
+
+            // Update the title of the collapsable.
             view.set_title([iocname, iocuuid, exp_key]);
 
             var params = {
@@ -522,7 +526,11 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             // User has selected an iocnamehash.
             log.info('Selected iocnamehash: ' + iocnamehash);
 
-            view.set_title([iocname]);
+			// Update the window title.
+            document.title = _.sprintf('Hits-%s-%s', iocname, iocnamehash);
+
+            // Update the title of the collapsable.
+            view.set_title([iocname, iocuuid, exp_key]);
 
             var params = {
                 services: view.services.join(','),
@@ -537,7 +545,11 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             // User has selected an ioc_uuid.
             log.debug('Selected ioc_uuid: ' + ioc_uuid);
 
-            view.set_title([iocname, ioc_uuid]);
+            // Update the window title.
+            document.title = _.sprintf('Hits-%s', iocname, iocuuid);
+
+            // Update the title of the collapsable.
+            view.set_title([iocname, iocuuid, exp_key]);
 
             var params = {
                 services: view.services.join(','),
@@ -569,6 +581,8 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             });
         }
         this.shopping_collapsable.set('title', title);
+
+        return title;
     },
     /**
      * Hide the IOC summary view.

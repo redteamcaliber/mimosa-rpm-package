@@ -101,7 +101,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
         view.listenTo(view.collection, 'sync', view.render);
         view.listenTo(view.collection, 'reset', view.render);
 
-        var condensed = view.options['condensed'];
+        var condensed = view.options.condensed;
 
         // Add a collapsable container.
         view.suppressions_collapsable = new StrikeFinder.CollapsableContentView({
@@ -127,9 +127,9 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
         };
 
         if (condensed) {
-            view.options['iDisplayLength'] = -1;
+            view.options.iDisplayLength = -1;
 
-            view.options['sDom'] = 't';
+            view.options.sDom = 't';
 
             view.options['aoColumns'] = [
                 {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false, bSortable: false},
@@ -361,7 +361,7 @@ StrikeFinder.SuppressionsAppView = StrikeFinder.View.extend({
 
         log.debug('Row selected: ' + JSON.stringify(data));
 
-        var suppression_id = data['suppression_id'];
+        var suppression_id = data.suppression_id;
 
         view.run_once('init_hits', function () {
             view.hits_table_view = new StrikeFinder.HitsSuppressionTableView({
