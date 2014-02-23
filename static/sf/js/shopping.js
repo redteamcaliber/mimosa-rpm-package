@@ -68,13 +68,8 @@ StrikeFinder.IOCDetailsTableView = StrikeFinder.TableView.extend({
         view.options.aoColumnDefs = [
             {
                 mRender: function (data, type, row) {
-                    // TODO: Fix this when item type is returned.
-                    var exp = row.exp_string;
-                    if (exp) {
-                        var start_index = _.startsWith(exp, '(') ? 1 : 0;
-                        exp = exp.substring(start_index, exp.indexOf('/'));
-                    }
-                    return _.sprintf('%s (%s)', exp, data);
+                    // Display <rowitem_type> (<exp_key>)
+                    return _.sprintf('%s (%s)', row.rowitem_type, data);
                 },
                 aTargets: [1]
             }
@@ -675,7 +670,6 @@ StrikeFinder.ExpressionView = StrikeFinder.View.extend({
         var view = this;
 
         var exp_string = view.model.get('exp_string');
-
         var tokens = exp_string.split(/(AND)|(OR)/);
 
         var text = '';
@@ -693,7 +687,6 @@ StrikeFinder.ExpressionView = StrikeFinder.View.extend({
 
         view.$el.popover({
             html: true,
-            class: 'test',
             trigger: 'hover',
             content: '<pre style="border: 0; margin: 2px; font-size: 85%; overflow: auto">' + text + '</pre>',
             placement: 'left'
