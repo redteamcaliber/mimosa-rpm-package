@@ -112,4 +112,17 @@ describe('uac-api-tests', function () {
             });
         });
     });
+
+    describe('#get_md5_details()', function() {
+        it('should return MD5 data', function(done) {
+            api.get_md5_details('99017f6eebbac24f351415dd410d522d', function(err, result) {
+                should.not.exist(err);
+                should.exist(result);
+
+                console.dir(result);
+
+                done();
+            });
+        });
+    });
 });
