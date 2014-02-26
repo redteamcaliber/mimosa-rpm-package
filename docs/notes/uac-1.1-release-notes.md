@@ -7,6 +7,10 @@ Mandiant-uac-ws-1.1-2 - February 12th, 2014
 ### Hit Review
 - Added the ability to download hits to CSV file format.  Links have now been added to hit review and host views.
 
+### Other
+- Added web clustering capability to enhance performance.
+- Resolved session related issue that was causing errors after being logged in for extensive periods of time.
+
 
 Mandiant-uac-ws-1.1-0/1 - February 12th, 2014
 ---------------------------------------------
