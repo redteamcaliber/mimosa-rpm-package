@@ -132,7 +132,10 @@ describe('uac-api-tests', function () {
         it('should return null when the MD5 sample does not exist', function (done) {
             api.get_vt_details(UNDETECTED_MD5, function (err, result) {
                 should.not.exist(err);
-                should.not.exist(result);
+                should.exist(result);
+                should.exist(result.md5);
+                should.exist(result.found)
+                result.found.should.equal(false);
                 done();
             });
         });
@@ -213,6 +216,19 @@ describe('uac-api-tests', function () {
 
                 should.not.exist(result.vt);
                 should.not.exist(result.vt_err);
+
+                done();
+            });
+        });
+
+        it('does what?', function(done) {
+            api.get_md5_details('4718d26a8072a7db42c75f588b0ca38f', function (err, result) {
+                should.not.exist(err);
+                should.exist(result);
+
+                should.not.exist(result.vt_err);
+                should.exist(result.vt);
+                assert_vt_details(result.vt, true);
 
                 done();
             });

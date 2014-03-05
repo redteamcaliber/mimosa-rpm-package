@@ -414,18 +414,9 @@ StrikeFinder.IOCTabsView = UAC.View.extend({
 StrikeFinder.AuditView = UAC.View.extend({
     initialize: function(options) {
         var view = this;
-
-        if (options.rowitem_uuid) {
-            view.rowitem_uuid = options.rowitem_uuid;
+        if (view.model) {
+            view.listenTo(view.model, 'sync', view.render);
         }
-
-        if (!view.model) {
-            this.model = new StrikeFinder.AuditModel({
-                id: view.rowitem_uuid
-            });
-        }
-
-        this.listenTo(this.model, 'sync', this.render);
     },
     render: function() {
         var view = this;
@@ -441,17 +432,6 @@ StrikeFinder.AuditView = UAC.View.extend({
 
         return this;
     },
-    fetch: function(rowitem_uuid) {
-        var view = this;
-
-        if (rowitem_uuid) {
-            view.model.id = rowitem_uuid;
-        }
-
-        UAC.block_element(view.$el);
-
-        view.model.fetch();
-    },
     on_click_md5: function(ev) {
         var dlg = new StrikeFinder.MD5View({
             el: '#dialog-div',
@@ -461,9 +441,11 @@ StrikeFinder.AuditView = UAC.View.extend({
 
         return false;
     },
+    block: function() {
+        UAC.block_element(this.$el);
+    },
     close: function() {
         this.undelegateEvents();
-        this.stopListening();
     }
 });
 
@@ -2099,6 +2081,7 @@ StrikeFinder.HitsDetailsView = UAC.View.extend({
         view.audit.set('id', uuid, {
             silent: true
         });
+        view.audit_view.block();
         view.audit.fetch();
 
         // Update the IOC.
