@@ -4,11 +4,11 @@ var StrikeFinder = StrikeFinder || {};
  * Hits table view for display on the host view.
  * @type {*}
  */
-StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
+StrikeFinder.HostHitsTableView = UAC.TableView.extend({
     initialize: function (options) {
         var view = this;
 
-        view.collapsable = new StrikeFinder.CollapsableContentView({
+        view.collapsable = new UAC.CollapsableContentView({
             el: view.el,
             title: '<i class="fa fa-list"></i> Hits'
         });
@@ -80,7 +80,7 @@ StrikeFinder.HostHitsTableView = StrikeFinder.TableView.extend({
  * StrikeFinder view class for displaying a hosts extended details.
  * @type {*}
  */
-StrikeFinder.HostView = StrikeFinder.View.extend({
+StrikeFinder.HostView = UAC.View.extend({
     initialize: function (options) {
         var view = this;
 
@@ -96,7 +96,7 @@ StrikeFinder.HostView = StrikeFinder.View.extend({
             view.listenTo(this.model, 'sync', this.render);
         }
 
-        view.collapsable = new StrikeFinder.CollapsableContentView({
+        view.collapsable = new UAC.CollapsableContentView({
             el: view.el
         });
     },
@@ -110,7 +110,7 @@ StrikeFinder.HostView = StrikeFinder.View.extend({
             data.cluster.engagement.client.name, data.cluster.name, data.domain, data.hostname);
         view.collapsable.set('title', '<i class="fa fa-desktop"></i> ' + title);
         // Render the template.
-        view.apply_template('host.ejs', data);
+        view.apply_template(StrikeFinder, 'host.ejs', data);
     },
     fetch: function (am_cert_hash) {
         if (am_cert_hash) {
@@ -120,7 +120,7 @@ StrikeFinder.HostView = StrikeFinder.View.extend({
     }
 });
 
-StrikeFinder.HostsApp = StrikeFinder.View.extend({
+StrikeFinder.HostsApp = UAC.View.extend({
     initialize: function(options) {
         var view = this;
 
@@ -173,6 +173,45 @@ StrikeFinder.HostsApp = StrikeFinder.View.extend({
         view.facets_view.fetch({
             identity_rollup: true,
             am_cert_hash: view.model.get('hash')
+        });
+    }
+});
+
+StrikeFinder.HostTypeAheadView = UAC.View.extend({
+    initialize: function () {
+        this.render();
+    },
+    render: function () {
+        var typeahead = this.$el.typeahead({
+            name: 'hosts',
+            remote: {
+                url: '/sf/api/hosts?hosts=%QUERY',
+                beforeSend: function (jqXhr, settings) {
+                    UAC.block();
+                },
+                filter: function (response) {
+                    UAC.unblock();
+                    if (!response || response.length === 0) {
+                        UAC.display_info('No matching hosts found.');
+                    }
+                    return response;
+                }
+            },
+            valueKey: 'hostname',
+            template: 'host-condensed.ejs',
+            engine: {
+                compile: function (template) {
+                    return {
+                        render: function (context) {
+                            return StrikeFinder.template(template, context);
+                        }
+                    };
+                }
+            }
+        });
+
+        typeahead.on('typeahead:selected', function (evt, data) {
+            window.location = _.sprintf('/sf/host/%s/', data.hash);
         });
     }
 });

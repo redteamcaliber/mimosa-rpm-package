@@ -3,7 +3,7 @@ var StrikeFinder = StrikeFinder || {};
 /**
  * View representing a row of the suppressions table view.
  */
-StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
+StrikeFinder.SuppressionRowView = UAC.View.extend({
     events: {
         'click i.destroy': 'on_delete'
     },
@@ -39,22 +39,22 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
                     var task_id = response_object.task_id;
 
                     // Block the UI while deleting.
-                    StrikeFinder.block();
+                    UAC.block();
 
-                    StrikeFinder.display_success('Submitted task for delete suppression: ' + view.model.as_string());
+                    UAC.display_success('Submitted task for delete suppression: ' + view.model.as_string());
 
                     // Try and wait for the task to complete.
                     StrikeFinder.wait_for_task(response_object.task_id, function(err, completed, response) {
                         // Unblock the UI.
-                        StrikeFinder.unblock();
+                        UAC.unblock();
 
                         if (err) {
                             // Error checking the task result.
-                            StrikeFinder.display_error(err);
+                            UAC.display_error(err);
                         }
                         else if (completed) {
                             // The task was completed successfully.
-                            StrikeFinder.display_success('Successfully deleted suppression: ' +
+                            UAC.display_success('Successfully deleted suppression: ' +
                                 view.model.as_string());
 
                             // Notify that the suppression was deleted.
@@ -65,7 +65,7 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
                             var task_message = _.sprintf('The task deleting suppression: %s is still running and ' +
                                 'its results can be viewed on the <a href="/sf/tasks">Task List</a>.',
                                 view.model.as_string());
-                            StrikeFinder.display_info(task_message);
+                            UAC.display_info(task_message);
                         }
                     });
                 },
@@ -73,10 +73,10 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
                     // Error submitting the task.
                     try {
                         var message = xhr && xhr.responseText ? xhr.responseText : 'Response text not defined.';
-                        StrikeFinder.display_error('Error while submitting delete suppression task - ' + message);
+                        UAC.display_error('Error while submitting delete suppression task - ' + message);
                     }
                     finally {
-                        StrikeFinder.unblock();
+                        UAC.unblock();
                     }
                 }
             });
@@ -91,7 +91,7 @@ StrikeFinder.SuppressionRowView = StrikeFinder.View.extend({
     }
 });
 
-StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
+StrikeFinder.SuppressionsTableView = UAC.TableView.extend({
     initialize: function () {
         var view = this;
 
@@ -104,7 +104,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
         var condensed = view.options.condensed;
 
         // Add a collapsable container.
-        view.suppressions_collapsable = new StrikeFinder.CollapsableContentView({
+        view.suppressions_collapsable = new UAC.CollapsableContentView({
             el: view.el,
             collapsed: condensed
         });
@@ -223,7 +223,7 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
                 {
                     // Format the created date.
                     mRender: function (data, type, row) {
-                        return StrikeFinder.format_date_string(data);
+                        return UAC.format_date_string(data);
                     },
                     aTargets: [8]
                 }
@@ -277,11 +277,11 @@ StrikeFinder.SuppressionsTableView = StrikeFinder.TableView.extend({
 /**
  * Hits table for a suppression.
  */
-StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
+StrikeFinder.HitsSuppressionTableView = UAC.TableView.extend({
     initialize: function () {
         var view = this;
 
-        view.hits_collapsable = new StrikeFinder.CollapsableContentView({
+        view.hits_collapsable = new UAC.CollapsableContentView({
             el: view.el
         });
 
@@ -322,7 +322,7 @@ StrikeFinder.HitsSuppressionTableView = StrikeFinder.TableView.extend({
     }
 });
 
-StrikeFinder.SuppressionsAppView = StrikeFinder.View.extend({
+StrikeFinder.SuppressionsAppView = UAC.View.extend({
     initialize: function () {
         var view = this;
 
@@ -337,14 +337,14 @@ StrikeFinder.SuppressionsAppView = StrikeFinder.View.extend({
                 view.suppressions.reset([]);
             }
             else {
-                StrikeFinder.block();
+                UAC.block();
                 view.suppressions.fetch({
                     success: function() {
                         view.suppressions_table.select_row(0);
-                        StrikeFinder.unblock();
+                        UAC.unblock();
                     },
                     failure: function() {
-                        StrikeFinder.unblock();
+                        UAC.unblock();
                     }
                 });
             }

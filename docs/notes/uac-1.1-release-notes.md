@@ -1,7 +1,19 @@
 Unified Analyst Console (UAC) 1.0 Release Notes
 ===============================================
 
-Mandiant-uac-ws-1.1-2 - February 12th, 2014
+Mandiant-uac-ws-1.1-3 - February 5th, 2014
+-------------------------------------------
+
+### Hit Review
+- Added VirusTotal lookups to the MD5 values on the File, Persistence, Service audit details.  The count of anti-virus
+  vendors that detected the MD5 is displayed.  Clicking on the on the link will display detailed information about the
+  detected items.  The extended MD5 details are not currently available via API so a link is provided to the VirusTotal
+  web site for the full MD5 details.
+- If the internal VirusTotal service is service is unavailable a message is display stating the details for the item is
+  not available.
+
+
+Mandiant-uac-ws-1.1-2 - February 26th, 2014
 -------------------------------------------
 
 ### Hit Review

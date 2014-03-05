@@ -13,7 +13,7 @@
             content: ''
         }
     });
-    StrikeFinder.AuditTestView = StrikeFinder.View.extend({
+    StrikeFinder.AuditTestView = UAC.View.extend({
         events: {
             'click #submit': 'submit'
         },
@@ -36,7 +36,7 @@
                 success: function (model, response, options) {
                     var output = $('#output');
                     output.html(response.content);
-                    StrikeFinder.collapse(output);
+                    UAC.collapse(output);
                 },
                 error: function (model, xhr, options) {
                     StrikeFinder.display_error('Error while submitting audit xml.');

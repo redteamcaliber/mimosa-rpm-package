@@ -1,0 +1,21 @@
+{% macro md5_field(md5, details, term) %}
+    {% if md5 %}
+        {% if term %}
+            <span class="ioc-term" ioc-term="term">{{ md5 }}</span>
+        {% else %}
+            {{ md5 }}
+        {% endif %}
+
+        {% if details %}
+            <a href="" class="md5-view" data-md5="{{ stringify(details) }}">
+                    <span class="text-danger">
+                        (<i class="fa fa-bug"></i> Detected {{ details.detected_count }} of {{ details.count }})
+                    </span>
+            </a>
+        {% else %}
+            <span class="text-danger">
+                (<i class="fa fa-times-circle"></i> MD5 Details Not Available)
+            </span>
+        {% endif %}
+    {% endif %}
+{% endmacro %}

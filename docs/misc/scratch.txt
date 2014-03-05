@@ -1,4 +1,71 @@
 
+### WEB: Alerts Search Criteria
+- Need to display:
+    - Clients
+    - Tags
+    - Alerts
+
+#### WEB: Alerts Rollup List View
+- Munging in of HX data.
+- API: List of alerts grouped by signature.
+    - Filtered by:
+        - Clients
+        - Tags
+        - Alert Type
+        - Time
+- Display: Priority, signature, status/tag, alert type, device type(s)
+- First seen, last seen
+- Open counts, In Progress Counts.
+- Paging support.
+
+### WEB: Alert Detail List View
+- List of individual alerts.
+- Munging of HX data.
+
+### WEB: Alert Details View
+- Artifacts API
+- Alert API
+- Common, type specific, and generic details.
+- Generic detail viewer.
+- Web traffic, detonation in sandbox details,
+
+### WEB: Alert Details List View Facets
+- Counts, sorting, TBD
+- Munging of HX data.
+
+### WEB: Alert Comments
+- Add and display alert comments.
+
+### WEB: Alert History
+- Display and track alert history.
+
+### WEB: Alert Tagging
+
+### WEB: Alert Bulk Tagging
+
+### WEB: UAC Packaging and Deployment
+
+### WEB: Tiered Service Integration Testing
+
+### WEB: Tiered Service User Acceptance Testing
+
+### Issues:
+- Need to discuss the ramifications merging the HX and NX, EX, FX.  What is this buying us, what are alternatives.
+
+
+
+var list = ['a', 'b', 'c', 'd', 'e'];
+
+for (item in list) {
+    console.log('Item value: ' + item);
+
+    var a = $('<a>' + item + '</a><br/>');
+    $(a).click(function(ev) {
+        alert('You clicked item: ' + item);
+    });
+    $(document.body).append(a);
+}
+
 
 curl https://206.222.190.67/v2/samples/registered_users \
 --header "X-Authentication: 22f1817451ca0520b9efbf9c7397d474d32707e46ef34bbc25a6615a8bfd75c3" -v
@@ -8,6 +75,7 @@ curl https://206.222.190.67/vtapi/v2/file/report?md5=99017f6eebbac24f351415dd410
 
 curl https://206.222.190.67/v2/samples/registered_users \
 --header "X-Authentication: 22f1817451ca0520b9efbf9c7397d474d32707e46ef34bbc25a6615a8bfd75c3" -v
+
 
 
 

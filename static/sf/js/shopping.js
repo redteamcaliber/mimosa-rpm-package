@@ -3,7 +3,7 @@ var StrikeFinder = StrikeFinder || {};
 /**
  * IOC Summary table view.
  */
-StrikeFinder.IOCSummaryTableView = StrikeFinder.TableView.extend({
+StrikeFinder.IOCSummaryTableView = UAC.TableView.extend({
     initialize: function (options) {
         var view = this;
         if (!view.collection) {
@@ -52,7 +52,7 @@ StrikeFinder.IOCSummaryTableView = StrikeFinder.TableView.extend({
 /**
  * IOC details table view.
  */
-StrikeFinder.IOCDetailsTableView = StrikeFinder.TableView.extend({
+StrikeFinder.IOCDetailsTableView = UAC.TableView.extend({
     initialize: function () {
         var view = this;
 
@@ -100,7 +100,7 @@ StrikeFinder.IOCDetailsTableView = StrikeFinder.TableView.extend({
 /**
  * IOC details view of the shopping page.
  */
-StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
+StrikeFinder.IOCDetailsView = UAC.View.extend({
     initialize: function () {
         if (!this.collection) {
             this.collection = new StrikeFinder.IOCDetailsCollection();
@@ -196,14 +196,14 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
     fetch: function (params) {
         var view = this;
         view.params = params;
-        StrikeFinder.block_element(view.$el);
+        UAC.block_element(view.$el);
         view.collection.fetch({
             data: params,
             success: function () {
-                StrikeFinder.unblock(view.$el);
+                UAC.unblock(view.$el);
             },
             error: function () {
-                StrikeFinder.unblock(view.$el);
+                UAC.unblock(view.$el);
             }
         });
     },
@@ -221,7 +221,7 @@ StrikeFinder.IOCDetailsView = StrikeFinder.View.extend({
 /**
  * Common component for displaying and selecting services, clients, and clusters.
  */
-StrikeFinder.ClusterSelectionView = StrikeFinder.View.extend({
+StrikeFinder.ClusterSelectionView = UAC.View.extend({
     /**
      * Render the selection view.
      */
@@ -239,7 +239,7 @@ StrikeFinder.ClusterSelectionView = StrikeFinder.View.extend({
         if (view.options.hide_services !== true) {
             // Render the services.
             view.services = new StrikeFinder.ServicesCollection();
-            view.services_view = new StrikeFinder.SelectView({
+            view.services_view = new UAC.SelectView({
                 el: $("#services-select"),
                 collection: view.services,
                 id_field: "mcirt_service_name",
@@ -256,7 +256,7 @@ StrikeFinder.ClusterSelectionView = StrikeFinder.View.extend({
 
         // Render the clients.
         view.clients = new StrikeFinder.ClientCollection();
-        view.clients_view = new StrikeFinder.SelectView({
+        view.clients_view = new UAC.SelectView({
             el: $('#clients-select'),
             collection: view.clients,
             id_field: 'client_uuid',
@@ -274,7 +274,7 @@ StrikeFinder.ClusterSelectionView = StrikeFinder.View.extend({
 
         // Render the clusters.
         view.clusters = new StrikeFinder.ClustersCollection();
-        view.clusters_view = new StrikeFinder.SelectView({
+        view.clusters_view = new UAC.SelectView({
             el: $("#clusters-select"),
             collection: view.clusters,
             id_field: "cluster_uuid",
@@ -435,7 +435,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
         var view = this;
 
         // Add a collapsable around the shopping view.
-        view.shopping_collapsable = new StrikeFinder.CollapsableContentView({
+        view.shopping_collapsable = new UAC.CollapsableContentView({
             el: '#' + view.el.id
         });
 
@@ -522,10 +522,10 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             log.info('Selected iocnamehash: ' + iocnamehash);
 
 			// Update the window title.
-            document.title = _.sprintf('Hits-%s-%s', iocname, iocnamehash);
+            document.title = _.sprintf('Hits-%s', iocname);
 
             // Update the title of the collapsable.
-            view.set_title([iocname, iocuuid, exp_key]);
+            view.set_title([iocname]);
 
             var params = {
                 services: view.services.join(','),
@@ -541,10 +541,10 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
             log.debug('Selected ioc_uuid: ' + ioc_uuid);
 
             // Update the window title.
-            document.title = _.sprintf('Hits-%s', iocname, iocuuid);
+            document.title = _.sprintf('Hits-%s-%s', iocname, ioc_uuid);
 
             // Update the title of the collapsable.
-            view.set_title([iocname, iocuuid, exp_key]);
+            view.set_title([iocname, ioc_uuid]);
 
             var params = {
                 services: view.services.join(','),
@@ -665,7 +665,7 @@ StrikeFinder.ShoppingView = Backbone.View.extend({
     }
 });
 
-StrikeFinder.ExpressionView = StrikeFinder.View.extend({
+StrikeFinder.ExpressionView = UAC.View.extend({
     render: function () {
         var view = this;
 

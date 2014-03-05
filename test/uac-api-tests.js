@@ -114,12 +114,23 @@ describe('uac-api-tests', function () {
     });
 
     describe('#get_md5_details()', function() {
+        it('should return that the sample does not exist', function(done) {
+            api.get_md5_details('681b80f1ee0eb1531df11c6ae115d711', function(err, result) {
+                should.not.exist(err);
+                should.exist(result);
+
+                console.dir(result);
+
+                done();
+            });
+        });
+
         it('should return MD5 data', function(done) {
             api.get_md5_details('99017f6eebbac24f351415dd410d522d', function(err, result) {
                 should.not.exist(err);
                 should.exist(result);
 
-                console.dir(result);
+                console.log(JSON.stringify(result, null, 4));
 
                 done();
             });

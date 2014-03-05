@@ -1,3 +1,5 @@
+{% include "sf/audit/macros.html" %}
+
 {% set fileitem = content.fileitem %}
 
 <table class="table table-condensed">
@@ -19,7 +21,9 @@
     </tr>
     <tr>
         <th>MD5</th>
-        <td ><span class="ioc-term" ioc-term="FileItem/Md5sum">{{ fileitem.md5sum }}</span></td>
+        <td>
+            {{ md5_field(fileitem.md5sum, fileitem.md5sum_details, "Fileitem/MD5sum") }}
+        </td>
     </tr>
     <tr>
         <th>Owner</th>
@@ -408,9 +412,7 @@
                         </span>
                     </td>
                     <td>
-                        <span class="ioc-term" ioc-term="FileItem/StreamList/Stream/Md5sum">
-                            {{ stream.md5sum }}
-                        </span>
+                        {{ md5_field(stream.md5sum, stream.md5sum_details, "FileItem/StreamList/Stream/Md5sum") }}
                     </td>
                 </tr>
             {% endfor %}

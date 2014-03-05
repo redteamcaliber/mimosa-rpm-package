@@ -2,14 +2,293 @@ var UAC = UAC || {};
 
 
 /**
+ * Wait for a task to complete using a poll function to check whether we have reached an exit condition.
+ * @param params - the parameters to send to the poll function.
+ * @param poll_fn - function(params, callback(err, is_complete, result)).
+ * @param completed_fn - function(err, is_complete, result)
+ * @param options - delay=milliseconds in between poll attempts (default=2000), max_intervals=max number of poll attempts (default=5).
+ */
+UAC.wait_for = function (params, poll_fn, completed_fn, options) {
+    var delay = 2000;
+    var max_intervals = 5;
+
+    // Override defaults.
+    if (options) {
+        if (options.delay) {
+            delay = options.delay;
+        }
+        if (options.max_intervals) {
+            max_intervals = options.max_intervals;
+        }
+    }
+
+    // Set up the polling loop.
+    var interval_count = 0;
+    var timer_id = setInterval(function () {
+        try {
+            // Check for an exit condition.
+            if (interval_count >= max_intervals) {
+                // Exceed maximum number of tries.
+                clearInterval(timer_id);
+                completed_fn(null, false);
+            }
+            else {
+                // Invoke the poll function.
+                poll_fn(params, function (err, is_complete, result) {
+                    if (err) {
+                        // Error, exit.
+                        clearInterval(timer_id);
+                        completed_fn(err, false);
+                    }
+                    else if (is_complete) {
+                        // Complete, exit.
+                        clearInterval(timer_id);
+                        completed_fn(null, true, result);
+                    }
+                    else {
+                        // Increment the interval count.
+                        interval_count = interval_count + 1;
+                    }
+                });
+            }
+        }
+        catch (e) {
+            // Error
+            clearInterval(timer_id);
+            completed_fn(e.stack ? e.stack : e);
+        }
+    }, delay);
+};
+
+
+//
+// Display Blocking Functions.
+//
+
+/**
+ * Retrieve the default block ui options.
+ * @param message - the message to display.
+ * @returns - the default options.
+ */
+UAC.get_blockui_options = function (message) {
+    return {
+        message: message ? message : '',
+        css: {
+            'margin-top': '50%',
+            width: '100%',
+            border: "0px solid #cccccc",
+            padding: '0px',
+            opacity: .8,
+            backgroundColor: ''
+        },
+        overlayCSS: {
+            backgroundColor: UAC.get_styles().overlay_color,
+            opacity: .5
+        },
+        baseZ: 5000
+    }
+};
+
+UAC.block = function (ev) {
+    $.blockUI(UAC.get_blockui_options());
+};
+
+UAC.block_element_remove = function (el, message) {
+    $(el).block(UAC.get_blockui_options('<img src="/static/img/ajax-loader.gif">'));
+};
+
+UAC.block_element = function (el, message) {
+    $(el).block(UAC.get_blockui_options('<img src="/static/img/ajax-loader.gif">'));
+};
+
+UAC.unblock = function (el) {
+    if (el) {
+        $(el).unblock();
+    }
+    else {
+        $.unblockUI();
+    }
+};
+
+//$(document).ajaxStop($.unblockUI);
+
+/**
+ * Block the entire UI and run the function that invokes and AJAX action.  The UI should be unblocked after the AJAX
+ * operation is completed.
+ * @param fn - the function to run.  This function MUST invoke an operation.
+ */
+UAC.run = function (fn) {
+    try {
+        UAC.block();
+        fn();
+    }
+    finally {
+        UAC.unblock();
+    }
+};
+
+UAC.show_views = function (views, on) {
+    _.each(views, function (view) {
+        if (on) {
+            view.show();
+        }
+        else {
+            view.hide();
+        }
+    });
+};
+
+
+//
+// Growl Message Output.
+//
+
+UAC.display_info = function (message) {
+    message = message ? message += '&nbsp;' : message;
+    $.bootstrapGrowl(message, {
+        type: 'info',
+        width: 'auto',
+        delay: 10000
+    });
+};
+
+UAC.display_warn = function (message) {
+    message = message ? message += '&nbsp;' : message;
+    $.bootstrapGrowl(message, {
+        type: 'warn',
+        width: 'auto',
+        delay: 10000
+    });
+};
+
+UAC.display_success = function (message) {
+    message = message ? message += '&nbsp;' : message;
+    $.bootstrapGrowl(message, {
+        type: 'success',
+        width: 'auto',
+        delay: 10000
+    });
+};
+
+UAC.display_error = function (message) {
+    message = message ? message += '&nbsp;' : message;
+    $.bootstrapGrowl(message, {
+        type: 'danger',
+        width: 'auto',
+        delay: 15000
+    });
+};
+
+//
+// Backbone Stuff.
+//
+
+/**
+ * Override the default backbone POST behavior to send the CSRF token.
+ */
+var _sync = Backbone.sync;
+Backbone.sync = function (method, model, options) {
+    options.beforeSend = function (xhr) {
+        var token = $('meta[name="csrf-token"]').attr('content');
+        xhr.setRequestHeader('X-CSRF-Token', token);
+    };
+    return _sync(method, model, options);
+};
+
+
+//
+// JQuery Stuff.
+//
+
+/**
+ * Required to make jQuery drop the subscripts off of array parameters.
+ */
+jQuery.ajaxSettings.traditional = true;
+
+//
+// Date Formatting.
+//
+
+UAC.DATE_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+
+UAC.format_date_string = function (s) {
+    return s ? moment(s, 'YYYY-MM-DDTHH:mm:ss.SSS').format(UAC.DATE_FORMAT) : '';
+};
+
+UAC.format_unix_date = function (unix) {
+    if (unix) {
+        var input;
+        if (typeof unix == 'string') {
+            input = parseFloat(unix);
+        }
+        else {
+            input = unix;
+        }
+        return moment.unix(input).format(UAC.DATE_FORMAT);
+    }
+    else {
+        return '';
+    }
+};
+
+function random_string(len) {
+    if (!len) {
+        len = 10;
+    }
+    var result = '';
+    var charset = 'abcdefghijklmnopqrstuvwxyz';
+
+    for (var i = 0; i < len; i++) {
+        result += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+
+    return result;
+}
+
+/**
+ * Add the default view helpers to the context.
+ * @param context - the context.
+ */
+UAC.default_view_helpers = function(context) {
+    if (context) {
+        context.stringify = JSON.stringify;
+        context.format_date = UAC.format_date_string;
+    }
+};
+
+/**
+ * Invoke a template.
+ * @param template - the template name.
+ * @param context - the template context.
+ * @returns the template result.
+ */
+UAC.template = function(template, context) {
+    if (!UAC.templates) {
+        // Error, templates does not exist.
+        throw 'UAC.templates is not initialized.';
+    }
+    else if (!(template in UAC.templates)) {
+        // Error, template not found.
+        throw 'UAC template: ' + template + ' not found.';
+    }
+    else {
+        // Add the view helpers.
+        UAC.default_view_helpers(context);
+
+        // Return the template result.
+        return UAC.templates[template](context);
+    }
+};
+
+/**
  * Retrieve the UAC specific CSS styles.
  */
-UAC.get_styles = function() {
+UAC.get_styles = function () {
     if (!UAC._styles) {
         UAC._styles = {};
         var body_style = window.getComputedStyle(document.body);
         if (body_style && body_style.getPropertyValue('background-color')) {
-            UAC._styles.overlay_color =  body_style.getPropertyValue('background-color')
+            UAC._styles.overlay_color = body_style.getPropertyValue('background-color')
         }
         else {
             UAC._styles.overlay_color = '#cccccc';
@@ -36,7 +315,7 @@ UAC.get_styles = function() {
 /**
  * Clear the UAC CSS styles, will be recalculated on next usage.
  */
-UAC.reset_styles = function() {
+UAC.reset_styles = function () {
     UAC._styles = undefined;
 };
 
@@ -72,7 +351,7 @@ UAC.set_theme = function (theme) {
  * Set a cookie.  Options available, name, value, path, domain, expires, secure, http_only.  domain defaults to the
  * server hostname, secure defaults to true, http_only defaults to true, expires defaults to null (session).
  */
-UAC.set_cookie = function(options) {
+UAC.set_cookie = function (options) {
     console.assert(options);
     console.assert(options.name);
 
@@ -102,17 +381,17 @@ UAC.set_cookie = function(options) {
     document.cookie = cookie;
 };
 
-UAC.get_cookies = function() {
+UAC.get_cookies = function () {
     var cookie_string = document.cookie;
     if (cookie_string === '') {
         return {};
     }
     else {
         var results = {};
-        _.each(cookie_string.split("; "), function(cookie) {
+        _.each(cookie_string.split("; "), function (cookie) {
             var p = cookie.indexOf("=");
-            var name = cookie.substring(0,p);
-            var value = cookie.substring(p+1);
+            var name = cookie.substring(0, p);
+            var value = cookie.substring(p + 1);
             value = decodeURIComponent(value);
             results[name] = value;
         });
@@ -120,7 +399,7 @@ UAC.get_cookies = function() {
     }
 };
 
-UAC.storage = function(k, o) {
+UAC.storage = function (k, o) {
     if (!window.localStorage) {
         log.warn('localStorage not available!');
         return {};
@@ -151,7 +430,7 @@ UAC.storage = function(k, o) {
  * @param o - the value (optional).
  * @returns the key value if only a key was specified.
  */
-UAC.session = function(k, o) {
+UAC.session = function (k, o) {
     if (!window.sessionStorage) {
         log.warn('sessionStorage not available!');
         return {};
@@ -175,13 +454,13 @@ UAC.session = function(k, o) {
     }
 };
 
-UAC.usersettings = function(options) {
+UAC.usersettings = function (options) {
     var usersettings = UAC.storage('usersettings');
     if (!usersettings) {
         usersettings = {};
     }
     if (options) {
-        _.each(_.keys(options), function(key) {
+        _.each(_.keys(options), function (key) {
             var value = options[key];
             if (value) {
                 usersettings[key] = options[key];
@@ -201,7 +480,7 @@ UAC.usersettings = function(options) {
  * @param options
  * @returns {*}
  */
-UAC.recent = function(options) {
+UAC.recent = function (options) {
     // Retrieve the recent values from local storage.
     var value = UAC.storage('recent');
     var recent = value || [];
@@ -233,15 +512,14 @@ UAC.recent = function(options) {
 };
 
 
-
 //
 // Common views.
 //
 
+/**
+ * View to display and change the UAC theme.
+ */
 UAC.ThemeView = Backbone.View.extend({
-    initialize: function () {
-
-    },
     events: {
         'click a.uac-theme': 'on_theme_click'
     },
@@ -263,9 +541,10 @@ UAC.ThemeView = Backbone.View.extend({
     }
 });
 
-$(document).ready(function () {
+$( document ).ready(function() {
     (function () {
-        var uac_theme_view = new UAC.ThemeView({
+        // Create a theme view and tie it to the menu.
+        new UAC.ThemeView({
             el: '#uac-user-nav'
         });
     })();
