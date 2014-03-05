@@ -43,6 +43,27 @@
             <dd>
                 <ul>
                     <li>
+                        Added VirusTotal lookups to the MD5 values on the File, Persistence, Service audit details.  The count of anti-virus
+                        vendors that detected the MD5 is displayed.  Clicking on the on the link will display detailed information about the
+                        detected items.  The extended MD5 details are not currently available via API so a link is provided to the VirusTotal
+                        web site for the full MD5 details.
+                    </li>
+                    <li>
+                        If the internal VirusTotal service is service is unavailable a message is display stating the details for the item is
+                        not available.
+                    </li>
+                </ul>
+            </dd>
+        </dl>
+    </div>
+
+    <div class="col-md-4">
+        <h3><i class="fa fa-smile-o"></i> UAC 1.1-2</h3>
+        <dl>
+            <dt>Hit Review</dt>
+            <dd>
+                <ul>
+                    <li>
                         Added the ability to download hits to CSV file format.  Links have now been added to hit review
                         and host views.
                     </li>
@@ -138,6 +159,10 @@
         </dl>
     </div>
 
+</div><!-- End row -->
+
+<div class="row">
+
     <div class="col-md-4">
         <h3><i class="fa fa-smile-o"></i> UAC 1.0-0</h3>
         <dl>
@@ -190,10 +215,6 @@
             </dd>
         </dl>
     </div>
-
-</div>
-
-<div class="row">
 
     <div class="col-md-4">
         <h3><i class="fa fa-smile-o"></i> UAC 0.8-0</h3>
@@ -250,120 +271,125 @@
     </div>
 
     <div class="col-md-4">
-    <h3><i class="fa fa-smile-o"></i> UAC 0.7-0/1/2/3</h3>
+        <h3><i class="fa fa-smile-o"></i> UAC 0.7-0/1/2/3</h3>
 
-    <dl>
-        <dt>Hit Review</dt>
-        <dd>
+        <dl>
+            <dt>Hit Review</dt>
+            <dd>
+                <ul>
+                    <li>
+                        Added the ability to select clients as well as clusters. The clusters available to select
+                        are those that are not associated with any of the currently selected clients.
+                    </li>
+                    <li>
+                        IOC summary data no longer refreshes when selecting shopping criteria. Criteria selection
+                        should now be quicker and easier. A submit button is not required to load the IOC summary
+                        data.
+                    </li>
+                    <li>
+                        Removed the claimed counts and checkout option from the IOC selection view. It was reported
+                        these counts were not being used. They will eventually be replaced with a better alternative.
+                    </li>
+                    <li>
+                        Removed existing user settings and replaced it with a lightweight client side alternative.
+                    <li>
+                        IOC Name selection is now persisted across page refreshes.
+                    </li>
+                    <li>
+                        Consolidated the shopping and hit review menu options to a single hit review option.
+                    </li>
+                </ul>
+            </dd>
+        </dl>
+
+        <dl>
+            <dt>Server Changes</dt>
+            <dd>
+                <ul>
+                    <li>
+                        Added an additional header to the nginx configuration to support Secure cookies. This is in
+                        support of caching credentials for acquisitions.
+                    </li>
+                    <li>
+                        Forwarding additional SSO parameters on REST calls to Seasick.
+                    </li>
+                    <li>
+                        Updated acquisition related UAC functionality to adhere to Seasick API changes.
+                    </li>
+                    <li>
+                        sfmatcher sends notifications of large (>100mb) audits instead of storing in db.
+                    </li>
+                    <li>
+                        Strikefinder backend statistics are now being collected in graphite.
+                    </li>
+                </ul>
+            </dd>
+        </dl>
+
+        <dl>
+            <dt>Fixes</dt>
             <ul>
                 <li>
-                    Added the ability to select clients as well as clusters. The clusters available to select
-                    are those that are not associated with any of the currently selected clients.
+                    Resolved issue that was causing an error message when downloading an acquisition.
                 </li>
                 <li>
-                    IOC summary data no longer refreshes when selecting shopping criteria. Criteria selection
-                    should now be quicker and easier. A submit button is not required to load the IOC summary
-                    data.
+                    Resolved issue related to incorrect host time logged status.
                 </li>
                 <li>
-                    Removed the claimed counts and checkout option from the IOC selection view. It was reported
-                    these counts were not being used. They will eventually be replaced with a better alternative.
-                </li>
-                <li>
-                    Removed existing user settings and replaced it with a lightweight client side alternative.
-                <li>
-                    IOC Name selection is now persisted across page refreshes.
-                </li>
-                <li>
-                    Consolidated the shopping and hit review menu options to a single hit review option.
+                    Resolved issue with suppression links.
                 </li>
             </ul>
-        </dd>
-    </dl>
+        </dl>
 
-    <dl>
-        <dt>Server Changes</dt>
-        <dd>
+        <dl>
+            <dt>Other</dt>
             <ul>
                 <li>
-                    Added an additional header to the nginx configuration to support Secure cookies. This is in
-                    support of caching credentials for acquisitions.
-                </li>
-                <li>
-                    Forwarding additional SSO parameters on REST calls to Seasick.
-                </li>
-                <li>
-                    Updated acquisition related UAC functionality to adhere to Seasick API changes.
-                </li>
-                <li>
-                    sfmatcher sends notifications of large (>100mb) audits instead of storing in db.
-                </li>
-                <li>
-                    Strikefinder backend statistics are now being collected in graphite.
+                    Client HTML templates now pre-compiled into a single jst file.
                 </li>
             </ul>
-        </dd>
-    </dl>
+        </dl>
 
-    <dl>
-        <dt>Fixes</dt>
-        <ul>
-            <li>
-                Resolved issue that was causing an error message when downloading an acquisition.
-            </li>
-            <li>
-                Resolved issue related to incorrect host time logged status.
-            </li>
-            <li>
-                Resolved issue with suppression links.
-            </li>
-        </ul>
-    </dl>
+    </div>
 
-    <dl>
-        <dt>Other</dt>
-        <ul>
-            <li>
-                Client HTML templates now pre-compiled into a single jst file.
-            </li>
-        </ul>
-    </dl>
+</div><!-- End row -->
 
+<div class="row">
+    <div class="col-md-4">
+        <h3><i class="fa fa-meh-o"></i> UAC 0.6-1</h3>
+        <dl>
+            <dt>Hit Review</dt>
+            <dd>
+                <ul>
+                    <li>
+                        Added support for viewing hits by IOC Name and IOC UUID.
+                    </li>
+                </ul>
+            </dd>
+        </dl>
+        <dl>
+            <dt>Fixes</dt>
+            <dd>
+                <ul>
+                    <li>
+                        Addressed hit counts and listings issues that were introduced in the last release.
+                    </li>
+                    <li>
+                        IOC links pages are now displayed in a new window.
+                    </li>
+                    <li>
+                        Release notes added to the UAC front page.
+                    </li>
+                    <li>
+                        Improved error pages.
+                    </li>
+                </ul>
+            </dd>
+        </dl>
+    </div>
 </div>
 
-<div class="col-md-4">
-    <h3><i class="fa fa-meh-o"></i> UAC 0.6-1</h3>
-    <dl>
-        <dt>Hit Review</dt>
-        <dd>
-            <ul>
-                <li>
-                    Added support for viewing hits by IOC Name and IOC UUID.
-                </li>
-            </ul>
-        </dd>
-    </dl>
-    <dl>
-        <dt>Fixes</dt>
-        <dd>
-            <ul>
-                <li>
-                    Addressed hit counts and listings issues that were introduced in the last release.
-                </li>
-                <li>
-                    IOC links pages are now displayed in a new window.
-                </li>
-                <li>
-                    Release notes added to the UAC front page.
-                </li>
-                <li>
-                    Improved error pages.
-                </li>
-            </ul>
-        </dd>
-    </dl>
-</div>
-</div>
-</div>
+</div><!-- End container -->
+
 {% endblock %}
 
