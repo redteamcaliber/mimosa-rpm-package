@@ -82,7 +82,7 @@ module.exports = function (grunt) {
                     processName: process_name
                 },
                 files: {
-                    '<%= build_uac_dir %>static/uac/js/templates.js': ['<%= build_uac_dir %>/static/uac/ejs/*.ejs']
+                    '<%= build_uac_dir %>/static/uac/js/templates.js': ['<%= build_uac_dir %>/static/uac/ejs/*.ejs']
                 }
             },
             nt: {
@@ -92,7 +92,7 @@ module.exports = function (grunt) {
                     processName: process_name
                 },
                 files: {
-                    '<%= build_uac_dir %>static/nt/js/templates.js': ['<%= build_uac_dir %>/static/nt/ejs/*.ejs']
+                    '<%= build_uac_dir %>/static/nt/js/templates.js': ['<%= build_uac_dir %>/static/nt/ejs/*.ejs']
                 }
             },
             'uac-dev': {
