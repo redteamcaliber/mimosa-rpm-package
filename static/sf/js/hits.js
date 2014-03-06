@@ -441,9 +441,6 @@ StrikeFinder.AuditView = UAC.View.extend({
 
         return false;
     },
-    block: function() {
-        UAC.block_element(this.$el);
-    },
     close: function() {
         this.undelegateEvents();
     }
@@ -1784,11 +1781,6 @@ StrikeFinder.HitsDetailsView = UAC.View.extend({
                 model: view.audit
             });
 
-            // Update the audit type on the view.
-            view.listenTo(view.audit, 'sync', function() {
-                $('#audit-type').html(view.audit.get('rowitem_type'));
-            });
-
             // Initialize the tag view from the audit data.
             var tagging_enabled = !'tag' in view.options || view.options.tag !== false;
             view.tags = new StrikeFinder.TagCollection();
@@ -1839,6 +1831,14 @@ StrikeFinder.HitsDetailsView = UAC.View.extend({
             view.merge_view = new StrikeFinder.MergeView({
                 el: '#merge',
                 model: view.audit
+            });
+
+            // Update the audit type on the view.
+            view.listenTo(view.audit, 'sync', function() {
+                $('#audit-type').html(view.audit.get('rowitem_type'));
+
+                // Unblock all of the audit dependent views.
+                UAC.unblock($('.audit-content'));
             });
 
             /**
@@ -2081,7 +2081,10 @@ StrikeFinder.HitsDetailsView = UAC.View.extend({
         view.audit.set('id', uuid, {
             silent: true
         });
-        view.audit_view.block();
+
+        // Block the entire audit pane including the menu options.
+        UAC.block_element($('.audit-content'));
+
         view.audit.fetch();
 
         // Update the IOC.

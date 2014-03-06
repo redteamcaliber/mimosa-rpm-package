@@ -43,14 +43,30 @@
             <dd>
                 <ul>
                     <li>
-                        Added VirusTotal lookups to the MD5 values on the File, Persistence, Service audit details.  The count of anti-virus
-                        vendors that detected the MD5 is displayed.  Clicking on the on the link will display detailed information about the
-                        detected items.  The extended MD5 details are not currently available via API so a link is provided to the VirusTotal
-                        web site for the full MD5 details.
+                        Added VirusTotal lookups to the MD5 values in the File, Persistence, and Service audit details.
                     </li>
                     <li>
-                        If the internal VirusTotal service is service is unavailable a message is display stating the details for the item is
-                        not available.
+                        The count of anti-virus vendors that detected the MD5 is displayed.  Clicking on the on the
+                        link will display detailed information about the detected items.
+                    </li>
+                    <li>
+                        The extended MD5 details are not currently available via API so a link (virustotal icon) is
+                        provided to the VirusTotal web site for the full MD5 details.
+                    </li>
+                    <li>
+                        If the internal VirusTotal service is service is unavailable does not return fast enough an
+                        error message is displayed.
+                    </li>
+                </ul>
+            </dd>
+            <dt>
+                Other
+            </dt>
+            <dd>
+                <ul>
+                    <li>
+                        Extended blocking overlay extended over hit review links to prevent accidental editing while
+                        data is loading.
                     </li>
                 </ul>
             </dd>

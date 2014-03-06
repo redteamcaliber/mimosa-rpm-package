@@ -50,6 +50,12 @@ UAC.View = Backbone.View.extend({
      */
     apply_template: function (namespace, template, context) {
         this.$el.html(namespace.template(template, context));
+    },
+    block: function() {
+        UAC.block_element(this.$el);
+    },
+    unblock: function() {
+        UAC.unblock(this.$el);
     }
 });
 
@@ -250,10 +256,10 @@ UAC.TableViewControls = UAC.View.extend({
 
             $(document).keyup(function (ev) {
                 if (ev.ctrlKey) {
-                    if (ev.keyCode == 68 || ev.keyCode == 40) {
+                    if (ev.keyCode == 68 || ev.keyCode == 40 || ev.keyCode == 78) {
                         view.on_next();
                     }
-                    else if (ev.keyCode == 85 || ev.keyCode == 38) {
+                    else if (ev.keyCode == 85 || ev.keyCode == 38 || ev.keyCode == 80) {
                         view.on_prev();
                     }
                 }

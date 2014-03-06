@@ -48,54 +48,57 @@
             </div>
         </div>
 
-        <!-- Toolbar -->
-        <div class="row sf-details-view" style="display: none;">
-            <div class="col-sm-12">
-                <div class="pull-left">
-                    <h4>
-                        <span id="audit-type"></span>
-                    </h4>
+        <div class="audit-content">
+            <!-- Toolbar -->
+            <div class="row sf-details-view" style="display: none;">
+                <div class="col-sm-12">
+                    <div class="pull-left">
+                        <h4>
+                            <span id="audit-type"></span>
+                        </h4>
+                    </div>
+
+                    <div class="pull-right">
+                        <a id="link-button"><i class="fa fa-link"></i> Link</a>
+
+                        <div id="tags" class="btn-group">
+                            <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-tags"></i> Tag: <span class="selected"></span> <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <!-- Tag values. -->
+                            </ul>
+                        </div>
+
+                        <div id="identities" class="btn-group">
+                            <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                                <i class="fa fa-calendar"></i> Identity: <span class="selected"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <!-- Identity values. -->
+                            </ul>
+                        </div>
+
+                        <button id="merge" class="btn btn-link" style="display: none">
+                            <i class="fa fa-collapse-top"></i> Merge
+                        </button>
+                        <button id="merge-all" class="btn btn-link" style="display: none">
+                            <i class="fa fa-collapse-top"></i> Merge All
+                        </button>
+                    </div>
                 </div>
+            </div>
 
-                <div class="pull-right">
-                    <a id="link-button"><i class="fa fa-link"></i> Link</a>
-
-                    <div id="tags" class="btn-group">
-                        <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-tags"></i> Tag: <span class="selected"></span> <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <!-- Tag values. -->
-                        </ul>
+            <!-- Audit View Template -->
+            <div class='row sf-details-view' style="overflow: auto">
+                <div class="col-md-12">
+                    <div id="audit-div">
+                        <div style="width: 100%; height: 300px;"></div>
                     </div>
-
-                    <div id="identities" class="btn-group">
-                        <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-calendar"></i> Identity: <span class="selected"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <!-- Identity values. -->
-                        </ul>
-                    </div>
-
-                    <button id="merge" class="btn btn-link" style="display: none">
-                        <i class="fa fa-collapse-top"></i> Merge
-                    </button>
-                    <button id="merge-all" class="btn btn-link" style="display: none">
-                        <i class="fa fa-collapse-top"></i> Merge All
-                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Audit View Template -->
-        <div class='row sf-details-view' style="overflow: auto">
-            <div class="col-md-12">
-                <div id="audit-div">
-                    <div style="width: 100%; height: 300px;"></div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div class='col-md-6'>
