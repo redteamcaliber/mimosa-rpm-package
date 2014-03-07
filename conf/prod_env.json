@@ -1,6 +1,8 @@
 {
     "server": {
+        "host": "localhost",
         "port": 8000,
+        "workers": 2,
         "ssl": false,
 
         "ssl_key": "./conf/certs/uac_ws_key.pem",
@@ -25,6 +27,10 @@
 
         "sf_api_url": "https://proxy.mcirt.mandiant.com/SF/",
         "ss_api_url": "https://proxy.mcirt.mandiant.com/SEASICK/",
+
+        "mcube_api_url": "https://206.222.190.67/",
+        "mcube_api_key": "<REPLACE>",
+        "mcube_api_timeout": 1000,
 
         "encryption_secret": "<ReplaceThisValueWithAUniquePassPhrase>"
     },

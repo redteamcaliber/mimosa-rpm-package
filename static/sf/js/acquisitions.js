@@ -50,11 +50,11 @@ StrikeFinder.format_acquisition_level = function(data) {
     return result;
 };
 
-StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
+StrikeFinder.AcquisitionsTableView = UAC.TableView.extend({
     initialize: function () {
         var view = this;
 
-        view.acquisitions_collapsable = new StrikeFinder.CollapsableContentView({
+        view.acquisitions_collapsable = new UAC.CollapsableContentView({
             el: view.el
         });
 
@@ -89,7 +89,7 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
             view.options['aoColumnDefs'] = [
                 {
                     mRender: function (data) {
-                        return StrikeFinder.format_date_string(data);
+                        return UAC.format_date_string(data);
                     },
                     aTargets: [1]
                 },
@@ -160,13 +160,13 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
                 },
                 {
                     mRender: function (data, type, row) {
-                        return StrikeFinder.format_date_string(data);
+                        return UAC.format_date_string(data);
                     },
                     aTargets: [5]
                 },
                 {
                     mRender: function (data, type, row) {
-                        return StrikeFinder.format_date_string(data);
+                        return UAC.format_date_string(data);
                     },
                     aTargets: [6]
                 },
@@ -222,11 +222,11 @@ StrikeFinder.AcquisitionsTableView = StrikeFinder.TableView.extend({
     }
 });
 
-StrikeFinder.AcquisitionsView = StrikeFinder.View.extend({
+StrikeFinder.AcquisitionsView = UAC.View.extend({
     initialize: function () {
         var view = this;
 
-        view.criteria_collapsable = new StrikeFinder.CollapsableContentView({
+        view.criteria_collapsable = new UAC.CollapsableContentView({
             el: '#collapsable-div',
             title: '<i class="fa fa-search"></i> Acquisitions Search Criteria'
         });
@@ -300,7 +300,7 @@ StrikeFinder.AcquisitionsView = StrikeFinder.View.extend({
 /**
  * View to display the acquisitions list in a condensed format.
  */
-StrikeFinder.AcquisitionsViewCondensed = StrikeFinder.View.extend({
+StrikeFinder.AcquisitionsViewCondensed = UAC.View.extend({
     initialize: function () {
         var view = this;
 
@@ -324,7 +324,7 @@ StrikeFinder.AcquisitionsViewCondensed = StrikeFinder.View.extend({
     }
 });
 
-StrikeFinder.AcquisitionsAuditView = StrikeFinder.View.extend({
+StrikeFinder.AcquisitionsAuditView = UAC.View.extend({
     events: {
         'click #close': 'on_close'
     },
@@ -339,9 +339,9 @@ StrikeFinder.AcquisitionsAuditView = StrikeFinder.View.extend({
     render: function () {
         var view = this;
 
-        view.apply_template('acquisition-audit.ejs', view.model.toJSON());
+        view.apply_template(StrikeFinder, 'acquisition-audit.ejs', view.model.toJSON());
 
-        StrikeFinder.collapse(this.el);
+        UAC.collapse(this.el);
 
         view.$('#acqusition-audit-div').modal({
             backdrop: false
@@ -358,7 +358,7 @@ StrikeFinder.AcquisitionsAuditView = StrikeFinder.View.extend({
 /**
  * Render the details of an acquisition including the file audit and issues.
  */
-StrikeFinder.AcquisitionsDetailsView = StrikeFinder.View.extend({
+StrikeFinder.AcquisitionsDetailsView = UAC.View.extend({
     events: {
         'click #close': 'on_close'
     },
@@ -405,9 +405,9 @@ StrikeFinder.AcquisitionsDetailsView = StrikeFinder.View.extend({
                 context.is_audit = audit ? true : false;
                 context.audit = audit;
 
-                view.apply_template('acquisition-details.ejs', context);
+                view.apply_template(StrikeFinder, 'acquisition-details.ejs', context);
 
-                StrikeFinder.collapse(view.el);
+                UAC.collapse(view.el);
 
                 view.$('#acquisition-details-div').modal({
                     backdrop: false

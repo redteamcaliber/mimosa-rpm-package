@@ -1,3 +1,4 @@
+{% include "sf/audit/macros.html" %}
 {% set i = content.persistenceitem %}
 
 <table class="table table-condensed table-bordered">
@@ -31,7 +32,7 @@
         </tr>
         <tr>
             <td>{{ fi.sizeinbytes }}</td>
-            <td colspan="2" rowspan="1">{{ fi.md5sum }}</td>
+            <td colspan="2" rowspan="1">{{ md5_field(fi.md5sum, fi.md5sum_details) }}</td>
             <td>{{ fi.username }}</td>
         </tr>
         <tr>
@@ -199,7 +200,7 @@
                 <tr>
                     <td>{{ stream.name }}</td>
                     <td>{{ stream.sizeinbytes }}</td>
-                    <td>{{ stream.md5sum }}</td>
+                    <td>{{ md5_field(stream.md5sum, sream.md5sum_details) }}</td>
                 </tr>
                 {% endfor %}
             </table>
@@ -338,7 +339,7 @@
                 {% if si.pathmd5sum %}
                 <tr>
                     <th>MD5 Sum</th>
-                    <td>{{ si.pathmd5sum }}</td>
+                    <td>{{ md5_field(si.pathmd5sum, si.pathmd5sum_details) }}</td>
                 </tr>
                 {% endif %}
                 {% if si.pathsha1sum %}
@@ -392,7 +393,7 @@
                 {% if si.servicedllmd5sum %}
                 <tr>
                     <th>MD5 Sum</th>
-                    <td>{{ si.servicedllmd5sum }}</td>
+                    <td>{{ md5_field(si.servicedllmd5sum, si.servicedllmd5sum_details) }}</td>
                 </tr>
                 {% endif %}
                 {% if si.servicedllsha1sum %}

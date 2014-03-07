@@ -5,14 +5,14 @@
 . /opt/web/apps/uac/bin/env.sh
 
 # Set the development mode configuration.
-export NODE_ENV=development
+export NODE_ENV=dev
 export NODE_PATH=lib
 
 # The relevant file extensions.
 EXTENSIONS=js,html,json,sh
 
 # The directories to scan.
-DIRECTORIES=.,bin,conf,lib,views
+DIRECTORIES=.,bin,conf,lib,views,test
 
 IGNORED=static,views/sf/templates,views/nt/templates
 

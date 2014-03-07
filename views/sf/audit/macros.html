@@ -1,0 +1,30 @@
+{% macro md5_field(md5, details, term) %}
+    {% if md5 %}
+        {% if term %}
+            <span class="ioc-term" ioc-term="term">{{ md5 }}</span>
+        {% else %}
+            {{ md5 }}
+        {% endif %}
+
+        {% if details %}
+            <!-- MD5 details are available. -->
+            {% if details.vt_err %}
+                <span class="text-danger">
+                    (<i class="fa fa-times-circle"></i> Exception while retrieving MD5 details)
+                </span>
+            {% elif details.vt and details.vt.found %}
+                <a href="" class="md5-view" data-md5="{{ stringify(details) }}">
+                    <span class="{{ "text-danger" if details.vt.is_detected else "text-default" }}">
+                        (<i class="fa fa-bug"></i> {{ details.vt.detected_count }} of {{ details.vt.count }} detected)
+                    </span>
+                </a>
+            {% elif details.vt and not details.vt.found %}
+                <span class="text-danger">
+                    (<i class="fa fa-ban"></i> MD5 Not Found)
+                </span>
+            {% else %}
+                <span class="text-danger">(<i class="fa fa-times-circle"></i> Error Retrieving MD5 Details)</span>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endmacro %}

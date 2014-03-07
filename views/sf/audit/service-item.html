@@ -1,3 +1,4 @@
+{% include "sf/audit/macros.html" %}
 {% set si = content.serviceitem %}
 
 <table class="table table-condensed">
@@ -84,7 +85,7 @@
         {% if si.pathmd5sum %}
             <tr>
                 <th>MD5 Sum</th>
-                <td>{{ si.pathmd5sum }}</td>
+                <td>{{ md5_field(si.pathmd5sum, si.pathmd5sum_details) }}</td>
             </tr>
         {% endif %}
 
@@ -145,7 +146,7 @@
         {% if si.servicedllmd5sum %}
         <tr>
             <th>MD5 Sum</th>
-            <td>{{ si.servicedllmd5sum }}</td>
+            <td>{{ md5_field(si.servicedllmd5sum, si.servicedllmd5sum_details) }}</td>
         </tr>
         {% endif %}
 

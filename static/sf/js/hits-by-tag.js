@@ -1,6 +1,6 @@
 var StrikeFinder = StrikeFinder || {};
 
-StrikeFinder.HitsByTagTableView = StrikeFinder.TableView.extend({
+StrikeFinder.HitsByTagTableView = UAC.TableView.extend({
     initialize: function () {
         var view = this;
 
@@ -38,12 +38,12 @@ StrikeFinder.HitsByTagTableView = StrikeFinder.TableView.extend({
     }
 });
 
-StrikeFinder.HitsByTagView = StrikeFinder.View.extend({
+StrikeFinder.HitsByTagView = UAC.View.extend({
     initialize: function () {
         var view = this;
 
         view.tags = new StrikeFinder.TagCollection();
-        view.select_tag_view = new StrikeFinder.SelectView({
+        view.select_tag_view = new UAC.SelectView({
             el: "#tag-select",
             collection: view.tags,
             id_field: "name",
@@ -55,7 +55,7 @@ StrikeFinder.HitsByTagView = StrikeFinder.View.extend({
             view.render();
         });
 
-        view.hits_collapsable = new StrikeFinder.CollapsableContentView({
+        view.hits_collapsable = new UAC.CollapsableContentView({
             el: '#hits-table'
         });
 
@@ -97,7 +97,7 @@ StrikeFinder.HitsByTagView = StrikeFinder.View.extend({
          StrikeFinder.get_tags(function(err, tags) {
              if (err) {
                  // Error.
-                 StrikeFinder.display_error('Exception while loading the hits by tag view - ' + err);
+                 UAC.display_error('Exception while loading the hits by tag view - ' + err);
              }
              else {
                  var searchable = [];

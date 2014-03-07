@@ -64,9 +64,8 @@
     <script lang="text/javascript" src="/static/uac/js/components.js"></script>
 {% endif %}
 
-<!-- Common UAC support. -->
-<script src="/static/uac/js/common.js"></script>
-
+{# Include the compiled templates. #}
+<script lang="text/javascript" src="/static/uac/js/templates.js"></script>
 
 <style type="text/css">
     .mandiant-logo {
@@ -158,7 +157,7 @@
     <div class="container">
         <p class="text-muted credit">
             &copy; 2013 Mandiant Corporation. All rights reserved.
-            <span class="pull-right">Version: {{ settings.version }}</span>
+            <span class="pull-right">Version: {{ settings.uac.version }}</span>
         </p>
     </div>
     {% endblock %}

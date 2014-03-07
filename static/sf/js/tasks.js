@@ -1,10 +1,10 @@
 var StrikeFinder = StrikeFinder || {};
 
-StrikeFinder.TaskTableView = StrikeFinder.TableView.extend({
+StrikeFinder.TaskTableView = UAC.TableView.extend({
     initialize: function() {
         var view = this;
 
-        view.tasks_collapsable = new StrikeFinder.CollapsableContentView({
+        view.tasks_collapsable = new UAC.CollapsableContentView({
             el: view.el,
             collapsed: false
         });
@@ -77,7 +77,7 @@ StrikeFinder.TaskTableView = StrikeFinder.TableView.extend({
     }
 });
 
-StrikeFinder.TaskAppView = StrikeFinder.View.extend({
+StrikeFinder.TaskAppView = UAC.View.extend({
     initialize: function() {
         var view = this;
 

@@ -1,3 +1,4 @@
+{% include "sf/audit/macros.html" %}
 {% set i = content.taskitem %}
 
 <table class="table table-condensed">
@@ -56,7 +57,7 @@
     {% if i.md5sum %}
     <tr>
         <th>MD5 Sum</th>
-        <td>{{ i.md5sum }}</td>
+        <td>{{ md5_field(i.md5sum, i.md5sum_details) }}</td>
     </tr>
     {% endif %}
     {% if i.sha1sum %}

@@ -7,6 +7,7 @@ var _ = require('underscore');
 _.str = require('underscore.string');
 _.mixin(_.str.exports());
 
+var settings = require('settings');
 var uuid = require('node-uuid');
 var api = require('uac-api');
 
@@ -16,6 +17,13 @@ log.add(log.transports.Console, {
     level: 'debug',
     colorize: true
 });
+
+
+var mcube_timeout = settings.get('uac:mcube_api_timeout');
+
+// An MD5 that is not detected by AV.
+var UNDETECTED_MD5 = '681b80f1ee0eb1531df11c6ae115d711';
+var DETECTED_MD5 = 'c100bde0c1e0d7e77dcbc6e00bc165f3';
 
 
 describe('uac-api-tests', function () {
@@ -99,7 +107,7 @@ describe('uac-api-tests', function () {
 
     describe('#get_identity_acquisitions_by_identity', function () {
         it('should return an empty collection for an invalid identity', function (done) {
-            api.get_identity_acquisitions_by_identity('invalidIdentity', function(err, collection) {
+            api.get_identity_acquisitions_by_identity('invalidIdentity', function (err, collection) {
                 try {
                     should.not.exist(err);
                     should.exist(collection);
@@ -112,4 +120,149 @@ describe('uac-api-tests', function () {
             });
         });
     });
+
+    describe('#get_vt_details()', function () {
+        this.timeout(mcube_timeout);
+
+        var url;
+        before(function() {
+            url = settings.get('uac:mcube_api_url');
+        });
+
+        it('should return null when the MD5 sample does not exist', function (done) {
+            api.get_vt_details(UNDETECTED_MD5, function (err, result) {
+                should.not.exist(err);
+                should.exist(result);
+                should.exist(result.md5);
+                should.exist(result.found)
+                result.found.should.equal(false);
+                done();
+            });
+        });
+
+        it('should return detected details when the sample', function (done) {
+            api.get_vt_details(DETECTED_MD5, function (err, result) {
+                should.not.exist(err);
+                should.exist(result);
+
+                assert_vt_details(result, true);
+
+                done();
+            });
+        });
+
+        it('should return an err when there is a configuration error', function(done) {
+            var invalid_url = 'invalidurl!';
+            settings.set('uac:mcube_api_url', invalid_url);
+            should.equal(invalid_url, settings.get('uac:mcube_api_url'));
+
+            api.get_vt_details(DETECTED_MD5, function (err, result) {
+                should.exist(err);
+                should.not.exist(result);
+
+                done();
+            });
+        });
+
+        afterEach(function() {
+            settings.set('uac:mcube_api_url', url);
+        });
+    });
+
+    describe('#get_md5_details()', function () {
+        this.timeout(3000);
+
+        var url;
+        before(function() {
+            url = settings.get('uac:mcube_api_url');
+        });
+
+        it('should return null vt when the sample does not exist', function (done) {
+            api.get_md5_details(UNDETECTED_MD5, function (err, result) {
+                should.not.exist(err);
+                should.exist(result);
+
+                // vt should be in the result.
+                should.not.exist(result.vt_err);
+                should.equal(true, 'vt' in result);
+
+                // In this case vt should not be defined.
+                should.not.exist(result.vt);
+                done();
+            });
+        });
+
+        it('should return vt detected details for a detected sample', function (done) {
+            api.get_md5_details(DETECTED_MD5, function (err, result) {
+                should.not.exist(err);
+                should.exist(result);
+
+                should.not.exist(result.vt_err);
+                should.exist(result.vt);
+                assert_vt_details(result.vt, true);
+
+                done();
+            });
+        });
+
+        it('should return an empty result when there is no m-cube configuration', function(done) {
+            // Remove m-cube configuration.
+            settings.set('uac:mcube_api_url', undefined);
+            should.equal(undefined, settings.get('uac:mcube_api_url'));
+
+            api.get_md5_details(DETECTED_MD5, function (err, result) {
+                should.not.exist(err);
+                should.exist(result);
+
+                should.not.exist(result.vt);
+                should.not.exist(result.vt_err);
+
+                done();
+            });
+        });
+
+        it('does what?', function(done) {
+            api.get_md5_details('4718d26a8072a7db42c75f588b0ca38f', function (err, result) {
+                should.not.exist(err);
+                should.exist(result);
+
+                should.not.exist(result.vt_err);
+                should.exist(result.vt);
+                assert_vt_details(result.vt, true);
+
+                done();
+            });
+        });
+
+        afterEach(function() {
+            settings.set('uac:mcube_api_url', url);
+        });
+    });
 });
+
+function assert_vt_details(result, is_detected) {
+    // Assert the meta data.
+    should.exist(result.md5);
+    should.exist(result.sha1);
+    should.exist(result.count);
+    result.count.should.be.greaterThan(0);
+
+    // Assert the detected details.
+    should.exist(result.detected);
+    should.exist(result.detected.length);
+    result.detected.length.should.be.greaterThan(0);
+    var found_detected = false;
+    result.detected.forEach(function (detected) {
+        should.exist(detected.detected);
+        // Version can be null.
+        //should.exist(detected.version);
+        should.exist(detected.update);
+        should.exist(detected.antivirus);
+
+        if (detected.detected) {
+            found_detected = true;
+        }
+    });
+    // Should have found at least one item that was detected.
+    found_detected.should.equal(is_detected);
+}

@@ -37,7 +37,7 @@ module.exports = function (grunt) {
         uac_repo: 'git@github.mandiant.com:amilano/uac-node.git',
 
         // The Github Branch.
-        uac_branch: '1.1.0',
+        uac_branch: '1.1.2',
 
         uac_name: pkg['name'].charAt(0).toUpperCase() + pkg['name'].slice(1),
         uac_version: uac_version,
@@ -56,7 +56,7 @@ module.exports = function (grunt) {
              * Watch the underscore templates and re-compile the templates to a JST file.
              */
             templates: {
-                files: ['views/sf/templates/*.ejs', 'views/nt/templates/*.ejs'],
+                files: ['static/uac/*.ejs', 'static/sf/ejs/*.ejs', 'static/nt/templates/*.ejs'],
                 tasks: ['jst-dev']
             }
         },
@@ -72,7 +72,17 @@ module.exports = function (grunt) {
                     processName: process_name
                 },
                 files: {
-                    '<%= build_uac_dir %>/static/sf/js/templates.js': ['<%= build_uac_dir %>/views/sf/templates/*.ejs']
+                    '<%= build_uac_dir %>/static/sf/js/templates.js': ['<%= build_uac_dir %>/static/sf/ejs/*.ejs']
+                }
+            },
+            uac: {
+                options: {
+                    namespace: 'UAC.templates',
+                    prettify: true,
+                    processName: process_name
+                },
+                files: {
+                    '<%= build_uac_dir %>/static/uac/js/templates.js': ['<%= build_uac_dir %>/static/uac/ejs/*.ejs']
                 }
             },
             nt: {
@@ -82,7 +92,17 @@ module.exports = function (grunt) {
                     processName: process_name
                 },
                 files: {
-                    '<%= build_uac_dir %>static/nt/js/templates.js': ['<%= build_uac_dir %>views/nt/templates/*.ejs']
+                    '<%= build_uac_dir %>/static/nt/js/templates.js': ['<%= build_uac_dir %>/static/nt/ejs/*.ejs']
+                }
+            },
+            'uac-dev': {
+                options: {
+                    namespace: 'UAC.templates',
+                    prettify: true,
+                    processName: process_name
+                },
+                files: {
+                    'static/uac/js/templates.js': ['static/uac/ejs/*.ejs']
                 }
             },
             'sf-dev': {
@@ -92,7 +112,7 @@ module.exports = function (grunt) {
                     processName: process_name
                 },
                 files: {
-                    'static/sf/js/templates.js': ['views/sf/templates/*.ejs']
+                    'static/sf/js/templates.js': ['static/sf/ejs/*.ejs']
                 }
             },
             'nt-dev': {
@@ -102,7 +122,7 @@ module.exports = function (grunt) {
                     processName: process_name
                 },
                 files: {
-                    'static/nt/js/templates.js': ['views/nt/templates/*.ejs']
+                    'static/nt/js/templates.js': ['static/nt/ejs/*.ejs']
                 }
             }
         },
@@ -119,12 +139,14 @@ module.exports = function (grunt) {
                     // Datatables bootstrap.
                     '<%= build_uac_dir %>/static/datatables/js/dataTables.bootstrap.js': ['<%= build_uac_dir %>/static/datatables/js/dataTables.bootstrap.js'],
 
-                    '<%= build_uac_dir %>/static/uac/js/uac.js': ['<%= build_uac_dir %>/static/uac/js/common.js'],
+                    '<%= build_uac_dir %>/static/uac/js/uac.js': [
+                        '<%= build_uac_dir %>/static/uac/js/common.js',
+                        '<%= build_uac_dir %>/static/uac/js/components.js'
+                    ],
 
                     // StrikeFinder client sources.
                     '<%= build_uac_dir %>/static/sf/js/strikefinder.js': [
-                        '<%= build_uac_dir %>/static/sf/js/utils.js',
-                        '<%= build_uac_dir %>/static/sf/js/components.js',
+                        '<%= build_uac_dir %>/static/sf/js/common.js',
                         '<%= build_uac_dir %>/static/sf/js/models.js',
                         '<%= build_uac_dir %>/static/sf/js/hits.js',
                         '<%= build_uac_dir %>/static/sf/js/acquisitions.js',
@@ -444,7 +466,7 @@ module.exports = function (grunt) {
         grunt.task.run('run-sql:create-devnet-db', 'run-sql:create-devnet-tables', 'run-sql:create-devnet-data');
     });
 
-    grunt.registerTask('jst-dev', ['jst:sf-dev', 'jst:nt-dev']);
+    grunt.registerTask('jst-dev', ['jst:uac-dev', 'jst:sf-dev', 'jst:nt-dev']);
 
     /**
      * Watch the Javascript templates for changes and recompile them.

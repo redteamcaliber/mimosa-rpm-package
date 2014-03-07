@@ -1,0 +1,5 @@
+{
+    "name": "test-routes",
+    "main": "test-routes.js",
+    "description": "UAC Test Routes Module"
+}
