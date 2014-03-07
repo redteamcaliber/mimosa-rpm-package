@@ -2385,7 +2385,7 @@ StrikeFinder.HitsFacetsView = UAC.View.extend({
 StrikeFinder.MD5View = UAC.DialogView.extend({
     render: function() {
         //console.dir(this.model.toJSON());
-        this.apply_template(StrikeFinder, 'md5.ejs', this.model.toJSON());
+        this.apply_template(StrikeFinder, 'md5-details.ejs', this.model.toJSON());
         this.modal();
     }
 });

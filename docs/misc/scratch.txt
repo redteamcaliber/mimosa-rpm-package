@@ -45,9 +45,9 @@
 
 ### WEB: UAC Packaging and Deployment
 
-### WEB: Tiered Service Integration Testing
+### UAC: Tiered Service Integration Testing
 
-### WEB: Tiered Service User Acceptance Testing
+### UAC: Tiered Service User Acceptance Testing
 
 ### Issues:
 - Need to discuss the ramifications merging the HX and NX, EX, FX.  What is this buying us, what are alternatives.
