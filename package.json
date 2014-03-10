@@ -41,6 +41,8 @@
         "grunt-contrib-watch": "*",
         "grunt-contrib-jshint": "*",
         "grunt-contrib-uglify": "*",
+        "grunt-contrib-coffee": "*",
+        "grunt-bower-task": "*",
         "grunt-scp": "*",
         "grunt-ssh": "*",
         "grunt-sftp-deploy": "*",

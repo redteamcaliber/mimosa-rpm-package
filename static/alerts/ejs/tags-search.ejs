@@ -1,0 +1,14 @@
+<div class="row">
+    <div class="col-sm-3" style="border: 0 solid red;border-right-width: 1px;">
+        <dl>
+            <% _.each (categories, function(category) { %>
+                <dt><%= category.title %></dt>
+                <% _.each(category_map[category.id], function(tag) { %>
+                    <dd>
+                        <input id="tag" type="checkbox" value="<%= tag.id %>"/> <%= tag.title %>
+                    </dd>
+                <% }) %>
+            <% }) %>
+        </dl>
+    </div>
+</div>

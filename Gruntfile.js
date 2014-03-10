@@ -56,8 +56,54 @@ module.exports = function (grunt) {
              * Watch the underscore templates and re-compile the templates to a JST file.
              */
             templates: {
-                files: ['static/uac/*.ejs', 'static/sf/ejs/*.ejs', 'static/nt/templates/*.ejs'],
-                tasks: ['jst-dev']
+                files: ['static/uac/ejs/*.ejs', 'static/alerts/ejs/*.ejs', 'static/sf/ejs/*.ejs'],
+                tasks: ['jst:uac-dev', 'jst:alerts-dev', 'jst:sf-dev', 'jst:nt-dev']
+            },
+            coffee: {
+                files: ['uac-server.coffee', 'lib/**/*.coffee', 'static/**/*.coffee'],
+                tasks: ['coffee']
+            }
+        },
+
+        bower: {
+            install: {
+                options: {
+                    targetDir: 'static/lib',
+                    layout: 'byType',
+                    install: true,
+                    verbose: false,
+                    cleanTargetDir: true,
+                    cleanBowerDir: true,
+                    bowerOptions: {}
+                }
+            }
+        },
+
+        coffee: {
+            'uac-server': {
+                options: {
+                    bare: true
+                },
+                files: {
+                    'uac-server.js': 'uac-server.coffee'
+                }
+            },
+            node: {
+                expand: true,
+                cwd: 'lib',
+                src: ['**/*.coffee'],
+                dest: 'lib',
+                ext: '.js'
+            },
+            alerts: {
+                options: {
+                    sourceMap: true,
+                    join: true,
+                    joinExt: '.src'
+                },
+                files: {
+                    'static/alerts/js/alerts.js': 'static/alerts/js/*.coffee'
+                }
             }
         },
 
@@ -85,6 +131,16 @@ module.exports = function (grunt) {
                     '<%= build_uac_dir %>/static/uac/js/templates.js': ['<%= build_uac_dir %>/static/uac/ejs/*.ejs']
                 }
             },
+            uac: {
+                options: {
+                    namespace: 'Alerts.templates',
+                    prettify: true,
+                    processName: process_name
+                },
+                files: {
+                    '<%= build_uac_dir %>/static/alerts/js/templates.js': ['<%= build_uac_dir %>/static/alerts/ejs/*.ejs']
+                }
+            },
             nt: {
                 options: {
                     namespace: 'Network.templates',
@@ -103,6 +159,16 @@ module.exports = function (grunt) {
                 },
                 files: {
                     'static/uac/js/templates.js': ['static/uac/ejs/*.ejs']
+                }
+            },
+            'alerts-dev': {
+                options: {
+                    namespace: 'Alerts.templates',
+                    prettify: true,
+                    processName: process_name
+                },
+                files: {
+                    'static/alerts/js/templates.js': ['static/alerts/ejs/*.ejs']
                 }
             },
             'sf-dev': {
@@ -466,14 +532,6 @@ module.exports = function (grunt) {
         grunt.task.run('run-sql:create-devnet-db', 'run-sql:create-devnet-tables', 'run-sql:create-devnet-data');
     });
 
-    grunt.registerTask('jst-dev', ['jst:uac-dev', 'jst:sf-dev', 'jst:nt-dev']);
-
-    /**
-     * Watch the Javascript templates for changes and recompile them.
-     */
-    grunt.registerTask('watch-templates', 'Watch the templates files for changes and recompile.', ['jst-dev', 'watch']);
-
-
     grunt.registerTask('dump-config', 'Dump the configuration to console.', function() {
         console.dir(grunt.config());
     });
@@ -566,6 +624,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-prompt');
     grunt.loadNpmTasks('grunt-contrib-jst');
     grunt.loadNpmTasks('grunt-easy-rpm');
+    grunt.loadNpmTasks('grunt-contrib-coffee');
+    grunt.loadNpmTasks('grunt-bower-task');
 };
 
 /**

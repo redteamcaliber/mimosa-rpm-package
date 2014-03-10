@@ -1,7 +1,20 @@
 UAC ToDo
 ========
 
+### Look into using map files rather than including all the js sources in development.
+
+### Alerting
+- Continue to define the Alerts Search view.
+    - Use class names to define the different sections of the alerts page rather than using ids.
+    - Need to make sure that the alerts.js is being compressed for production.
+    - Need to setup the alerts ejs templates.
+- What are the types for HX alerts.  For instance, malware-callback, etc.
+
 ### Update the production mcube timeout to 2000.
+
+### Update the select2 component to the latest
+
+### Update the typeahead component to the latest.
 
 ### Settings Refactoring
 - Update the docs for clustering and host settings.
