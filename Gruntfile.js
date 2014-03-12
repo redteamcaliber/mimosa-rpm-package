@@ -69,12 +69,14 @@ module.exports = function (grunt) {
             install: {
                 options: {
                     targetDir: 'static/lib',
-                    layout: 'byType',
+                    layout: 'byComponent',
                     install: true,
                     verbose: false,
                     cleanTargetDir: true,
-                    cleanBowerDir: true,
-                    bowerOptions: {}
+                    cleanBowerDir: false,
+                    bowerOptions: {
+                        forceLatest: true
+                    }
                 }
             }
         },
@@ -95,15 +97,15 @@ module.exports = function (grunt) {
                 dest: 'lib',
                 ext: '.js'
             },
-            alerts: {
+            web: {
                 options: {
-                    sourceMap: true,
-                    join: true,
-                    joinExt: '.src'
+                    sourceMap: true
                 },
-                files: {
-                    'static/alerts/js/alerts.js': 'static/alerts/js/*.coffee'
-                }
+                expand: true,
+                cwd: 'static',
+                src: ['**/*.coffee'],
+                dest: 'static',
+                ext: '.js'
             }
         },
 
@@ -113,82 +115,62 @@ module.exports = function (grunt) {
         jst: {
             sf: {
                 options: {
-                    namespace: 'StrikeFinder.templates',
                     prettify: true,
-                    processName: process_name
+                    processName: process_name,
+                    amd: true
                 },
                 files: {
-                    '<%= build_uac_dir %>/static/sf/js/templates.js': ['<%= build_uac_dir %>/static/sf/ejs/*.ejs']
+                    '<%= build_uac_dir %>/static/sf/ejs/templates.js': ['<%= build_uac_dir %>/static/sf/ejs/*.ejs']
                 }
             },
             uac: {
                 options: {
-                    namespace: 'UAC.templates',
                     prettify: true,
-                    processName: process_name
+                    processName: process_name,
+                    amd: true
                 },
                 files: {
-                    '<%= build_uac_dir %>/static/uac/js/templates.js': ['<%= build_uac_dir %>/static/uac/ejs/*.ejs']
+                    '<%= build_uac_dir %>/static/uac/ejs/templates.js': ['<%= build_uac_dir %>/static/uac/ejs/*.ejs']
                 }
             },
-            uac: {
+            alerts: {
                 options: {
-                    namespace: 'Alerts.templates',
                     prettify: true,
-                    processName: process_name
+                    processName: process_name,
+                    amd: true
                 },
                 files: {
-                    '<%= build_uac_dir %>/static/alerts/js/templates.js': ['<%= build_uac_dir %>/static/alerts/ejs/*.ejs']
-                }
-            },
-            nt: {
-                options: {
-                    namespace: 'Network.templates',
-                    prettify: true,
-                    processName: process_name
-                },
-                files: {
-                    '<%= build_uac_dir %>/static/nt/js/templates.js': ['<%= build_uac_dir %>/static/nt/ejs/*.ejs']
+                    '<%= build_uac_dir %>/static/alerts/ejs/templates.js': ['<%= build_uac_dir %>/static/alerts/ejs/*.ejs']
                 }
             },
             'uac-dev': {
                 options: {
-                    namespace: 'UAC.templates',
                     prettify: true,
-                    processName: process_name
+                    processName: process_name,
+                    amd: true
                 },
                 files: {
-                    'static/uac/js/templates.js': ['static/uac/ejs/*.ejs']
+                    'static/uac/ejs/templates.js': ['static/uac/ejs/*.ejs']
                 }
             },
             'alerts-dev': {
                 options: {
-                    namespace: 'Alerts.templates',
                     prettify: true,
-                    processName: process_name
+                    processName: process_name,
+                    amd: true
                 },
                 files: {
-                    'static/alerts/js/templates.js': ['static/alerts/ejs/*.ejs']
+                    'static/alerts/ejs/templates.js': ['static/alerts/ejs/*.ejs']
                 }
             },
             'sf-dev': {
                 options: {
-                    namespace: 'StrikeFinder.templates',
                     prettify: true,
-                    processName: process_name
+                    processName: process_name,
+                    amd: true
                 },
                 files: {
-                    'static/sf/js/templates.js': ['static/sf/ejs/*.ejs']
-                }
-            },
-            'nt-dev': {
-                options: {
-                    namespace: 'Network.templates',
-                    prettify: true,
-                    processName: process_name
-                },
-                files: {
-                    'static/nt/js/templates.js': ['static/nt/ejs/*.ejs']
+                    'static/sf/ejs/templates.js': ['static/sf/ejs/*.ejs']
                 }
             }
         },
@@ -625,6 +607,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-jst');
     grunt.loadNpmTasks('grunt-easy-rpm');
     grunt.loadNpmTasks('grunt-contrib-coffee');
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-bower-task');
 };
 

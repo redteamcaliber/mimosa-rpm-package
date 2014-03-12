@@ -1,0 +1,24 @@
+{% extends "/base.html" %}
+
+{% block title %}StrikeFinder - {{ super() }}{% endblock %}
+
+{% block form_menu %}
+    <input id="host-typeahead" type="text" placeholder="Search for Host or IP"/>
+{% endblock %}
+
+{% block tail %}
+{{ super() }}
+
+<div id="context-menu-div" style="display: none">
+</div>
+
+<div id="dialog-div">
+</div>
+
+<script type="text/javascript">
+    // Initialize the host search component.
+    var host_typeahead = new StrikeFinder.HostTypeAheadView({
+        el: '#host-typeahead'
+    });
+</script>
+{% endblock %}

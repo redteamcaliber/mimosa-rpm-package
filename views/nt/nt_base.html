@@ -1,9 +1,11 @@
-{% extends "common/base.html" %}
+{% extends "/base.html" %}
 
 {% block title %}StrikeFinder - {{ super() }}{% endblock %}
 
 {% block head %}
 {{ super() }}
+
+<!-- TODO - This needs to be re-written! -->
 
 <!-- todo: Need to add the appropriate NT files when they are created. -->
 {% if node_env == "prod" %}

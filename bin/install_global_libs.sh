@@ -10,3 +10,4 @@ npm install -g mocha
 npm install -g redis-commander
 npm install -g coffee-script
 npm install -g bower
+npm install -g js2coffee

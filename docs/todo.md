@@ -1,7 +1,32 @@
 UAC ToDo
 ========
 
-### Look into using map files rather than including all the js sources in development.
+### Use bower to pull down web components.
+- Combine uac/components to uac/common.
+- Create sf/apps, etc.
+- Need a way to import UAC common classes using requirejs.
+- Need a way to load underscore templates using requirejs.
+    - https://github.com/ZeeAgency/requirejs-tpl
+- Need to add require.js support into the alerts, sf, uac, etc js code.
+- Minify all js files in the lib
+    - Use the grunt requirejs plugin to create an optimized file.
+    - Need source maps that work.
+- Generate map files for all minimized files.
+    - Once map files are in place look into removing the dev sections of the base templates.
+- Update the theme code to use the bower directory structure.
+    - Figure out what to do with the smaller font themes.
+    - Possibly have a local git project that recompiles the themes to use smaller fonts.
+- Determine whether I am using scrollto.
+    - Potentially look into getting rid of the infinite scrolling if I am using it.
+- Update the IOC viewer project and put a dependency on it?
+- Need to resolve what to do with extra CSS files
+    - Bootstrap Typeahead
+    - Bootstrap Datatables
+- Client side logging
+    - Remove log for Javascript dependency.
+
+### CS Stuff to Fix
+- Fix the this stuff in the TableView.
 
 ### Alerting
 - Continue to define the Alerts Search view.
@@ -20,6 +45,8 @@ UAC ToDo
 - Update the docs for clustering and host settings.
 - Move the database pool settings to the env.json file.
 - Ensure the database pool settings are initialized to a reasonable value.
+
+### Enter Redwood City user stories into TP.
 
 ### MD5 Lookup service
     - Need a service that can return all known details for an MD5.

@@ -2,13 +2,51 @@
     "name": "mandiant-uac-ws",
     "version": "1.1.3",
     "dependencies": {
-        "jquery": "1.9.x"
+        "async": "0.2.x",
+        "backbone": "1.0.x",
+        "blockui": "https://github.com/malsup/blockui/tarball/35c4a7acf5eff9ddfc631f488741b77d23fff041",
+        "bootstrap": "3.1.x",
+        "bootstrap-growl": "1.1.x",
+        "bootswatch": "3.1.x",
+        "datatables": "1.9.x",
+        "font-awesome": "4.0.x",
+        "highlighter": "https://github.com/huffpostlabs/highlighter.js/tarball/5e742ea702d9c1a3b54ddb5461bd72ce4eaf2083",
+        "jquery": "1.9.x",
+        "moment": "2.4.x",
+        "requirejs": "2.1.x",
+        "select2": "3.4.x",
+        "typeahead.js": "0.9.x",
+        "underscore": "1.6.x",
+        "underscore.string": "2.3.x"
     },
     "exportsOverride": {
+        "async": {
+            "/": "lib/async.js"
+        },
+        "backbone": {
+            "/": "backbone.js"
+        },
+        "blockui": {
+            "/": "jquery.blockUI.js"
+        },
+        "bootstrap-growl": {
+            "/": "jquery.bootstrap-growl.js"
+        },
+        "font-awesome": {
+            "css": "css/*",
+            "fonts": "fonts/*"
+        },
+        "highlighter": {
+            "/": "jQuery.highlighter.js"
+        },
         "jquery": {
-            "js": "js/*.js",
-            "css": "css/*.css",
-            "img": "img/*.png"
+            "/": "dist/jquery.js"
+        },
+        "require-cs": {
+            "/": "cs.js"
+        },
+        "underscore.string": {
+            "/": "lib/underscore.string.js"
         }
     },
     "private": true

@@ -1,17 +1,12 @@
-{% extends "alerts/base.html" %}
+{% extends "/base.html" %}
+
+{% block title %}APT Alerts - {{ super() }}{% endblock %}
 
 {% block head %}
 {{ super() }}
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        (function () {
-            var alerts_view = new Alerts.AlertsView();
-            alerts_view.render();
-        })();
-    });
-</script>
 {% endblock %}
+
+{% block data_main %}alerts/apps/app{% endblock %}
 
 {% block content %}
 <div class="container">

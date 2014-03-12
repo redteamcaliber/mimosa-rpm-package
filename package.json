@@ -42,6 +42,7 @@
         "grunt-contrib-jshint": "*",
         "grunt-contrib-uglify": "*",
         "grunt-contrib-coffee": "*",
+        "grunt-contrib-requirejs": "*",
         "grunt-bower-task": "*",
         "grunt-scp": "*",
         "grunt-ssh": "*",
@@ -55,7 +56,8 @@
         "grunt-easy-rpm": "https://github.com/blueshirts/easy-rpm/tarball/2acdde084306c8c0d7c1f79c5bfee55ad0e96ca5",
         "mocha": "*",
         "chai": "*",
-        "should": "*"
+        "should": "*",
+        "js2coffee": "*"
     },
     "license": "Commercial"
 }
