@@ -1,12 +1,12 @@
 define (require) ->
-    UAC = require 'UAC'
+    View = require 'uac/common/View'
     SearchView = require 'alerts/views/SearchView'
 
 
     ###
         Alerts application view.
     ###
-    class AlertsView extends UAC.View
+    class AlertsView extends View
         initialize: ->
             @alerts_view = new SearchView()
 

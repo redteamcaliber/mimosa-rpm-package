@@ -1,5 +1,6 @@
 define (require) ->
-    UAC = require 'UAC'
+    View = require 'uac/common/View'
+    CollapsableContentView = require('uac/common/CollapsableContentView')
     TagCollection = require 'alerts/models/TagCollection'
     TagsSearchView = require 'alerts/views/TagSearchView'
 
@@ -7,12 +8,12 @@ define (require) ->
     ###
         View for displaying alerts search criteria.
     ###
-    class SearchView extends UAC.View
+    class SearchView extends View
         el: '#alerts-search'
 
         initialize: ->
             # Add a collapsable around the search view.
-            @collapsable_view = new UAC.CollapsableContentView
+            @collapsable_view = new CollapsableContentView
                 el: @el
                 title: '<i class="fa fa-filter"></i> Filters'
 

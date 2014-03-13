@@ -1,6 +1,6 @@
 define (require) ->
 
-    View = require 'uac/components/View'
+    View = require 'uac/common/View'
     templates = require 'uac/ejs/templates'
     prev_next_template = templates['prev-next.ejs']
 

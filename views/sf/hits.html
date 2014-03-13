@@ -8,19 +8,10 @@
     {{ super() }}
 
     <script type="text/javascript">
+        StrikeFinder = window.StrikeFinder || {};
         StrikeFinder.services = {{ services | safe }};
         StrikeFinder.clients = {{ clients | safe }};
         StrikeFinder.clusters = {{ clusters | safe }};
-
-        $(document).ready(function () {
-            (function () {
-                var shopping_view = new StrikeFinder.ShoppingView({
-                    el: '#shopping-div',
-                    standalone: false
-                });
-                shopping_view.render();
-            })();
-        });
     </script>
 {% endblock %}
 

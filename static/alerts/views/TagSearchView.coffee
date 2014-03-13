@@ -1,15 +1,14 @@
 define (require) ->
 
-    UAC = require 'UAC'
+    View = require 'uac/common/View'
     templates = require 'alerts/ejs/templates'
-    tags_search_template = templates['tags-search.ejs']
 
     #TagCollection = require 'alerts/models/TagCollection'
 
     ###
         View to display tags search criteria.
     ###
-    class TagsSearchView extends UAC.View
+    class TagsSearchView extends View
         el: '#alerts-search'
 
         initialize: ->
@@ -31,7 +30,7 @@ define (require) ->
                     context.category_map[tag.category] = []
                 context.category_map[tag.category].push tag
 
-            @$el.html(tags_search_template(context))
+            @apply_template(templates, 'tags-search.ejs', context)
 
         fetch: ->
             if @collection

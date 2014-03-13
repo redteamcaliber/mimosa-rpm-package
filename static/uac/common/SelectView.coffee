@@ -1,6 +1,6 @@
 define (require) ->
     _ = require 'underscore'
-    View = require 'uac/components/View'
+    View = require 'uac/common/View'
 
     class SelectView extends View
         initialize: ->

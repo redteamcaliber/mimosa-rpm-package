@@ -42,11 +42,30 @@ define (require) ->
                 template - the template.
                 context - the context.
         ###
-        apply_template: (namespace, template, context) ->
-            @.$el.html namespace.template(template, context)
+        apply_template: (templates, template, context) ->
+            tpl = templates[template]
+            @.$el.html tpl(utils.default_view_helpers(context))
 
         block: ->
             utils.block_element @.$el
 
+        block_element: (el, message) ->
+            utils.block_element(el, message)
+
         unblock: ->
             utils.unblock @.$el
+
+        collapse: ->
+            utils.collapse(@el)
+
+        display_info: ->
+            utils.display_info()
+
+        display_warn: ->
+            utils.display_warn()
+
+        display_error: ->
+            utils.display_error()
+
+        display_success: ->
+            utils.display_success()

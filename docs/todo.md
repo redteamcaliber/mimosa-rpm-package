@@ -22,6 +22,8 @@ UAC ToDo
 - Need to resolve what to do with extra CSS files
     - Bootstrap Typeahead
     - Bootstrap Datatables
+- Break out components into the views package.
+- Theme view is not loading from uac/common/utils.
 - Client side logging
     - Remove log for Javascript dependency.
 

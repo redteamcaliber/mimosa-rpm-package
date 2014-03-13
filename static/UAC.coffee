@@ -36,13 +36,13 @@ define (require) ->
     result = require 'uac/common/utils'
     result.collapse = collapse
 
-    result.Model = require 'uac/components/Model'
-    result.Collection = require 'uac/components/Collection'
-    result.View = require 'uac/components/View'
+    result.Model = require 'uac/common/Model'
+    result.Collection = require 'uac/common/Collection'
+    result.View = require 'uac/common/View'
 
-    result.SelectView = require 'uac/components/SelectView'
-    #result.TableView = require 'uac/components/TableView'
-    result.TableViewControls = require 'uac/components/TableViewControls'
-    result.CollapsableContentView = require 'uac/components/CollapsableContentView'
+    result.SelectView = require 'uac/common/SelectView'
+    #result.TableView = require 'uac/common/TableView'
+    result.TableViewControls = require 'uac/common/TableViewControls'
+    result.CollapsableContentView = require 'uac/common/CollapsableContentView'
 
     result

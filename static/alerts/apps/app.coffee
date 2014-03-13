@@ -9,5 +9,4 @@ define (require) ->
     alerts_view = new AlertsView()
     alerts_view.render();
 
-    result = ->
-        alert('Initializing app.coffee!')
+return

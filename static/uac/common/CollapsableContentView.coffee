@@ -2,7 +2,7 @@ define (require) ->
 
     $ = require 'jquery'
     utils = require 'uac/common/utils'
-    View = require 'uac/components/View'
+    View = require 'uac/common/View'
 
     ###
         Wrap an element with a collapsable view.

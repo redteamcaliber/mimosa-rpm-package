@@ -1,5 +1,5 @@
 define (require) ->
-    View = require 'uac/components/View'
+    View = require 'uac/common/View'
 
     get_datatables_settings = (parent, settings) ->
         defaults =
