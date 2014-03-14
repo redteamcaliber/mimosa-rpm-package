@@ -1,7 +1,7 @@
 define(function(require) {
-    var TableView = require('uac/common/TableView');
+    var TableView = require('uac/views/TableView');
     var utils = require('uac/common/utils');
-
+    var CommentsCollection = require('sf/models/CommentsCollection');
 
     CommentsTableView = TableView.extend({
         initialize: function() {
@@ -42,7 +42,7 @@ define(function(require) {
             });
 
             if (!view.collection) {
-                view.collection = new StrikeFinder.CommentsCollection();
+                view.collection = new CommentsCollection();
             }
             view.listenTo(view.collection, 'sync', view.render);
 
@@ -71,5 +71,5 @@ define(function(require) {
         }
     });
 
-    return TableView;
+    return CommentsTableView
 });

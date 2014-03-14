@@ -3,7 +3,8 @@
     margin-bottom: 0;
 }
 
-.tt-dropdown-menu {
+/* Don't use the original style class so it matches themes. */
+.tt-dropdown-menu-original {
     min-width: 160px;
     margin-top: 2px;
     padding: 5px 0;

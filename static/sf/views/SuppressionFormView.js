@@ -1,5 +1,5 @@
 define(function(require) {
-    var View = require('uac/common/View');
+    var View = require('uac/views/View');
     var utils = require('sf/common/utils');
     var SuppressionModel = require('sf/models/SuppressionModel');
     var IOCTermsCollection = require('sf/models/IOCTermsCollection');
@@ -22,7 +22,7 @@ define(function(require) {
             var exp_key = params.exp_key;
             var cluster_uuid = params.cluster_uuid;
 
-            log.debug('Creating suppression for exp_key: ' + exp_key);
+            console.log('Creating suppression for exp_key: ' + exp_key);
             if (!params) {
                 // Error, params are required.
                 throw new Error('"params" is undefined.');
@@ -40,7 +40,7 @@ define(function(require) {
                 throw new Error('"cluster_uuid" is undefined.');
             }
 
-            log.debug('Rendering suppression form view...');
+            console.log('Rendering suppression form view...');
 
             // Create a new suppression model and associated it with the form.
             view.model = new SuppressionModel({
@@ -65,7 +65,7 @@ define(function(require) {
             });
 
             if (terms) {
-                log.debug('Retrieved ' + terms.length + ' terms...');
+                console.log('Retrieved ' + terms.length + ' terms...');
                 data.terms = terms.toJSON();
             } else {
                 log.warning('Terms was invalid');

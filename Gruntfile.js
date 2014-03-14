@@ -75,7 +75,7 @@ module.exports = function (grunt) {
                     cleanTargetDir: true,
                     cleanBowerDir: false,
                     bowerOptions: {
-                        forceLatest: true
+                        forceLatest: false
                     }
                 }
             }

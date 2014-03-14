@@ -2,12 +2,7 @@ UAC ToDo
 ========
 
 ### Use bower to pull down web components.
-- Combine uac/components to uac/common.
-- Create sf/apps, etc.
-- Need a way to import UAC common classes using requirejs.
-- Need a way to load underscore templates using requirejs.
-    - https://github.com/ZeeAgency/requirejs-tpl
-- Need to add require.js support into the alerts, sf, uac, etc js code.
+- Migrate hosts, hits by tag, suppression?, tasks.
 - Minify all js files in the lib
     - Use the grunt requirejs plugin to create an optimized file.
     - Need source maps that work.
@@ -16,18 +11,10 @@ UAC ToDo
 - Update the theme code to use the bower directory structure.
     - Figure out what to do with the smaller font themes.
     - Possibly have a local git project that recompiles the themes to use smaller fonts.
-- Determine whether I am using scrollto.
-    - Potentially look into getting rid of the infinite scrolling if I am using it.
+    - Bootstrap got upgraded in the process, need to update the CSS files.
 - Update the IOC viewer project and put a dependency on it?
-- Need to resolve what to do with extra CSS files
-    - Bootstrap Typeahead
-    - Bootstrap Datatables
-- Break out components into the views package.
-- Theme view is not loading from uac/common/utils.
-- Client side logging
-    - Remove log for Javascript dependency.
-
-### CS Stuff to Fix
+- Delete old js files, css, and static js.
+- Hits page links are broken, check suppressions, acquisitions?
 - Fix the this stuff in the TableView.
 
 ### Alerting
@@ -36,8 +23,6 @@ UAC ToDo
     - Need to make sure that the alerts.js is being compressed for production.
     - Need to setup the alerts ejs templates.
 - What are the types for HX alerts.  For instance, malware-callback, etc.
-
-### Update the production mcube timeout to 2000.
 
 ### Update the select2 component to the latest
 

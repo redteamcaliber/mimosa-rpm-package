@@ -1,5 +1,8 @@
 define(function (require) {
-    var View = require('uac/common/View');
+    var View = require('uac/views/View');
+    var IOCDetailsTableView = require('sf/views/IOCDetailsTableView');
+    var IOCDetailsCollection = require('sf/models/IOCDetailsCollection');
+    var templates = require('sf/ejs/templates')
 
     /**
      * IOC details view of the shopping page.
@@ -7,7 +10,7 @@ define(function (require) {
     var IOCDetailsView = View.extend({
         initialize: function () {
             if (!this.collection) {
-                this.collection = new StrikeFinder.IOCDetailsCollection();
+                this.collection = new IOCDetailsCollection();
             }
             this.listenTo(this.collection, 'sync', this.render);
         },
@@ -17,7 +20,7 @@ define(function (require) {
             // Clean up any previous view data.
             view.close();
 
-            log.debug('Rendering IOC details...');
+            console.log('Rendering IOC details...');
 
             var ioc_uuids = view.collection.toJSON();
             var iocname = 'NA';
@@ -29,11 +32,11 @@ define(function (require) {
             }
 
             // Render the template.
-            view.$el.html(StrikeFinder.template('ioc-details.ejs', {
+            view.apply_template(templates, 'ioc-details.ejs', {
                 items: ioc_uuids,
                 iocname: iocname,
                 iocnamehash: iocnamehash
-            }));
+            });
 
             // Register events.
             view.delegateEvents({
@@ -43,7 +46,7 @@ define(function (require) {
 
             _.each(ioc_uuids, function (ioc_uuid, index) {
 
-                var table = new StrikeFinder.IOCDetailsTableView({
+                var table = new IOCDetailsTableView({
                     el: view.$("#uuid-" + index + "-table"),
                     aaData: ioc_uuid.expressions
                 });
@@ -100,14 +103,14 @@ define(function (require) {
         fetch: function (params) {
             var view = this;
             view.params = params;
-            UAC.block_element(view.$el);
+            view.block_element(view.$el);
             view.collection.fetch({
                 data: params,
                 success: function () {
-                    UAC.unblock(view.$el);
+                    view.unblock(view.$el);
                 },
                 error: function () {
-                    UAC.unblock(view.$el);
+                    view.unblock(view.$el);
                 }
             });
         },

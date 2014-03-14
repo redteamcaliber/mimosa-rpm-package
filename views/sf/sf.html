@@ -6,6 +6,11 @@
     <input id="host-typeahead" type="text" placeholder="Search for Host or IP"/>
 {% endblock %}
 
+{% block head %}
+    {{ super() }}
+    <link href="/static/css/jquery.iocViewer.css" rel="stylesheet"/>
+{% endblock %}
+
 {% block tail %}
 {{ super() }}
 

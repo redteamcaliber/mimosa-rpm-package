@@ -1,5 +1,9 @@
 define(function (require) {
-    var TableView = require('uac/common/TableView');
+    var $ = require('jquery');
+    var datatables = require('datatables');
+    var TableView = require('uac/views/TableView');
+    var IOCSummaryCollection = require('sf/models/IOCSummaryCollection');
+
 
     /**
      * IOC Summary table view.
@@ -8,7 +12,7 @@ define(function (require) {
         initialize: function (options) {
             var view = this;
             if (!view.collection) {
-                view.collection = new StrikeFinder.IOCSummaryCollection();
+                view.collection = new IOCSummaryCollection();
                 view.listenTo(view.collection, 'sync', view.render);
             }
 
@@ -39,7 +43,7 @@ define(function (require) {
             });
         },
         select: function (iocnamehash) {
-            log.info('Selecting iocnamehash: ' + iocnamehash);
+            console.log('Selecting iocnamehash: ' + iocnamehash);
             var row = $('.' + this._get_class(iocnamehash));
             if (row.length == 1) {
                 this.select_row(row);

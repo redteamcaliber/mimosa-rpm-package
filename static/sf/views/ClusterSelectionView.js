@@ -1,7 +1,12 @@
 define(function (require) {
-    var View = require('uac/common/View');
-    var SelectView = require('uac/common/SelectView');
+    var View = require('uac/views/View');
+    var SelectView = require('uac/views/SelectView');
     var utils = require('uac/common/utils');
+    var templates = require('sf/ejs/templates');
+
+    var ServicesCollection = require('sf/models/ServicesCollection');
+    var ClientCollection = require('sf/models/ClientCollection');
+    var ClustersCollection = require('sf/models/ClustersCollection');
 
     /**
      * Common component for displaying and selecting services, clients, and clusters.
@@ -17,22 +22,29 @@ define(function (require) {
             view.close();
 
             // Create the input form.
-            view.$el.html(StrikeFinder.template('cluster-selection.ejs', {hide_services: view.options.hide_services}));
+            view.apply_template(templates, 'cluster-selection.ejs', {hide_services: view.options.hide_services});
 
             var usersettings = utils.usersettings();
 
             if (view.options.hide_services !== true) {
                 // Render the services.
-                view.services = new StrikeFinder.ServicesCollection();
+                view.services = new ServicesCollection();
                 view.services_view = new SelectView({
                     el: $("#services-select"),
                     collection: view.services,
                     id_field: "mcirt_service_name",
                     value_field: "description",
-                    selected: utils.usersettings.services,
+                    selected: usersettings.services,
                     width: "100%"
                 });
-                view.services.reset(StrikeFinder.services);
+
+                try {
+                    view.services.reset(StrikeFinder.services);
+                }
+                catch (e) {
+                    console.dir(e.stack);
+                }
+
                 view.services_view.on('change', function () {
                     // Update the submit button.
                     view.update_options();
@@ -40,13 +52,13 @@ define(function (require) {
             }
 
             // Render the clients.
-            view.clients = new StrikeFinder.ClientCollection();
+            view.clients = new ClientCollection();
             view.clients_view = new SelectView({
                 el: $('#clients-select'),
                 collection: view.clients,
                 id_field: 'client_uuid',
                 value_field: 'client_name',
-                selected: utils.usersettings.clients,
+                selected: usersettings.clients,
                 width: '100%'
             });
             view.clients.reset(StrikeFinder.clients);
@@ -58,13 +70,13 @@ define(function (require) {
             });
 
             // Render the clusters.
-            view.clusters = new StrikeFinder.ClustersCollection();
+            view.clusters = new ClustersCollection();
             view.clusters_view = new SelectView({
                 el: $("#clusters-select"),
                 collection: view.clusters,
                 id_field: "cluster_uuid",
                 value_field: "cluster_name",
-                selected: utils.usersettings.clusters,
+                selected: usersettings.clusters,
                 width: "100%"
             });
             view.clusters_view.on('change', function () {

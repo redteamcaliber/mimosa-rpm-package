@@ -5,7 +5,7 @@
         "async": "0.2.x",
         "backbone": "1.0.x",
         "blockui": "https://github.com/malsup/blockui/tarball/35c4a7acf5eff9ddfc631f488741b77d23fff041",
-        "bootstrap": "3.1.x",
+        "bootstrap": "3.1.0",
         "bootstrap-growl": "1.1.x",
         "bootswatch": "3.1.x",
         "datatables": "1.9.x",

@@ -1,8 +1,8 @@
 define(function(require) {
-    var View = require('uac/common/View');
+    var View = require('uac/views/View');
     var CollapsableContentView = require('uac/views/CollapsableContentView');
-    var CommentsTableView = require('uac/views/CommentsTableView');
-    var CommentsModel = require('uac/models/CommentsModel');
+    var CommentsTableView = require('sf/views/CommentsTableView');
+    var CommentsModel = require('sf/models/CommentsModel');
 
     /**
      * View to display and create comments.
@@ -58,14 +58,14 @@ define(function(require) {
                 return;
             }
 
-            log.debug("Creating comment for rowitem_uuid: " + view.rowitem_uuid);
+            console.log("Creating comment for rowitem_uuid: " + view.rowitem_uuid);
 
             var new_comment = new CommentsModel({
                 comment: comment,
                 rowitem_uuid: view.rowitem_uuid
             });
 
-            log.debug('Comment rowitem_uuid: ' + new_comment.get('rowitem_uuid'));
+            console.log('Comment rowitem_uuid: ' + new_comment.get('rowitem_uuid'));
 
             view.block_element(view.$el);
             new_comment.save([], {

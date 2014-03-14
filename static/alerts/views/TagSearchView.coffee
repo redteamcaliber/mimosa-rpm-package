@@ -1,6 +1,6 @@
 define (require) ->
 
-    View = require 'uac/common/View'
+    View = require 'uac/views/View'
     templates = require 'alerts/ejs/templates'
 
     #TagCollection = require 'alerts/models/TagCollection'

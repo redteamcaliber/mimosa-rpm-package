@@ -1,6 +1,6 @@
 define(function (require) {
-    var TableView = require('uac/common/TableView');
-    var CollapsableContentView = require('uac/common/CollapsableContentView');
+    var TableView = require('uac/views/TableView');
+    var CollapsableContentView = require('uac/views/CollapsableContentView');
 
     /**
      * Hits table view.

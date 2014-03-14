@@ -17,7 +17,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     {# Core UAC styles and overrides. #}
-    <link href="/static/common/css/base.css" rel="stylesheet"/>
+    <link href="/static/css/base.css" rel="stylesheet"/>
 
     {# Include the appropriate bootstrap theme. #}
     {% if not current_theme %}
@@ -29,11 +29,21 @@
     {# Font Awesome #}
     <link href="/static/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
 
+    {# Select2 #}
+    <link href="/static/lib/select2/select2.css" rel="stylesheet"/>
+
+    {# Bootstrap Typeahead #}
+    <link href="/static/css/typeahead.js-bootstrap.css" rel="stylesheet"/>
+
+    {# Bootstrap Datatables #}
+    <link href="/static/lib/datatables/jquery.dataTables.css" rel="stylesheet"/>
+    <link href="/static/css/datatables.css" rel="stylesheet"/>
+
     {# RequireJS configuration #}
     <script src="/static/config.js"></script>
 
     <!-- Include require.js support. -->
-    <script src="/static/lib/requirejs/require.js" data-main="{% block data_main %}main{% endblock %}"></script>
+    <script src="/static/lib/requirejs/require.js" data-main="{% block data_main %}{% endblock %}"></script>
 
     {% block head %}{% endblock %}
 </head>

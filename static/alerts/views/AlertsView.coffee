@@ -1,5 +1,5 @@
 define (require) ->
-    View = require 'uac/common/View'
+    View = require 'uac/views/View'
     SearchView = require 'alerts/views/SearchView'
 
 

@@ -1,7 +1,8 @@
 define(function (require) {
+    var $ = require('jquery');
     var Backbone = require('backbone');
 
-    var CollapsableContentView = require('uac/common/CollapsableContentView');
+    var CollapsableContentView = require('uac/views/CollapsableContentView');
     var IOCSummaryTableView = require('sf/views/IOCSummaryTableView');
     var ClusterSelectionView = require('sf/views/ClusterSelectionView');
     var IOCDetailsView = require('sf/views/IOCDetailsView');
@@ -61,14 +62,13 @@ define(function (require) {
                 var iocname = data["iocname"];
                 var iocnamehash = data["iocnamehash"];
 
-                if (log.isDebugEnabled()) {
-                    log.debug("iocname: " + iocname + " with iocnamehash: " + iocnamehash + " was selected...");
-                }
+                console.log("iocname: " + iocname + " with iocnamehash: " + iocnamehash + " was selected...");
 
                 uac_utils.usersettings({iocnamehash: iocnamehash});
 
                 view.render_details(iocnamehash);
             });
+
             // If there is an iocnamehash in the user settings then select it in the summary table.
             if (uac_utils.usersettings().iocnamehash) {
                 view.listenTo(view.ioc_summaries_view, 'load', function () {
@@ -84,7 +84,7 @@ define(function (require) {
                 el: "#ioc-details-div"
             });
             view.listenTo(view.ioc_details_view, "click:exp_key", function (iocname, iocuuid, exp_key) {
-                log.info('Selected expression key: ' + exp_key);
+                console.log('Selected expression key: ' + exp_key);
 
                 // Update the window title.
                 document.title = _.sprintf('Hits-%s-%s-%s', iocname, iocuuid, exp_key);
@@ -102,7 +102,7 @@ define(function (require) {
             });
             view.listenTo(view.ioc_details_view, "click:iocnamehash", function (iocname, iocnamehash) {
                 // User has selected an iocnamehash.
-                log.info('Selected iocnamehash: ' + iocnamehash);
+                console.log('Selected iocnamehash: ' + iocnamehash);
 
                 // Update the window title.
                 document.title = _.sprintf('Hits-%s', iocname);
@@ -121,7 +121,7 @@ define(function (require) {
             });
             view.listenTo(view.ioc_details_view, "click:ioc_uuid", function (iocname, ioc_uuid) {
                 // User has selected an ioc_uuid.
-                log.debug('Selected ioc_uuid: ' + ioc_uuid);
+                console.log('Selected ioc_uuid: ' + ioc_uuid);
 
                 // Update the window title.
                 document.title = _.sprintf('Hits-%s-%s', iocname, ioc_uuid);

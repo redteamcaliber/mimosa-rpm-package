@@ -1,7 +1,7 @@
 define(function (require) {
     var Backbone = require('backbone');
-    var uac_utils = requir('uac/common/utils');
     var TagModel = require('sf/models/TagModel');
+    var utils = require('uac/common/utils');
 
     TagCollection = Backbone.Collection.extend({
         initialize: function (models, options) {
@@ -9,7 +9,7 @@ define(function (require) {
                 this.searchable = true;
             }
         },
-        model: StrikeFinder.TagModel,
+        model: TagModel,
         url: '/sf/api/tags',
         parse: function (response, options) {
             if (this.searchable) {

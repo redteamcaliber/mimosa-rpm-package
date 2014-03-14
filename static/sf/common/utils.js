@@ -1,6 +1,5 @@
 define(function(require) {
     var utils = require('uac/common/utils');
-    var session = require('uac/common/session');
     var TagCollection = require('sf/models/TagCollection');
 
     /**
@@ -8,7 +7,7 @@ define(function(require) {
      * @param callback - function(err, tags).
      */
     get_tags = function (callback) {
-        var tags = session('strikefinder.tags');
+        var tags = utils.session('strikefinder.tags');
         if (tags) {
             callback(null, tags);
         }
@@ -18,7 +17,7 @@ define(function(require) {
                 success: function (collection, response, options) {
                     // Cache the tags for later use.
                     var tags = c.toJSON();
-                    session('strikefinder.tags', tags);
+                    utils.session('strikefinder.tags', tags);
                     callback(null, tags);
                 },
                 error: function (collection, response, options) {
@@ -36,6 +35,37 @@ define(function(require) {
     format_acquisition = function (a) {
         return _.sprintf('Acquisition (%s) FilePath: %s FileName: %s',
             a.uuid, a.file_path, a.file_name);
+    };
+
+    format_acquisition_state = function(data) {
+        if (data) {
+            var label_class = '';
+            if (data == 'errored') {
+                label_class = 'label-danger';
+            }
+            else if (data == 'cancelled') {
+                label_class = 'label-warning';
+            }
+            else if (data == 'created') {
+                label_class = 'label-default';
+            }
+            else if (data == 'started' || data == 'created') {
+                label_class = 'label-primary';
+            }
+            else if (data == 'completed') {
+                label_class = 'label-success';
+            }
+            else if (data == 'unknown') {
+                label_class = 'label-warning';
+            }
+            else {
+                label_class = 'label-default';
+            }
+            return _.sprintf('<span class="label %s error_message" style="text-align: center; width: 100%%">%s</span>', label_class, data);
+        }
+        else {
+            return '';
+        }
     };
 
     /**
@@ -113,10 +143,30 @@ define(function(require) {
         );
     };
 
+    format_acquisition_level = function(data) {
+        var result = '';
+        if (data) {
+            var label_class = 'label-default';
+            if (data == 'Fatal' || data == 'Critical' || data == 'Error') {
+                label_class = 'label-danger';
+            }
+            else if (data == 'Warning' || data == 'Alert') {
+                label_class = 'label-warning';
+            }
+            else if (data == 'Notice' || data == 'Info') {
+                label_class = 'label-primary';
+            }
+            result = _.sprintf('<span class="label %s">%s</span>', label_class, data);
+        }
+        return result;
+    };
+
     return {
         get_tags: get_tags,
         format_suppression: format_suppression,
         format_acquisition: format_acquisition,
+        format_acquisition_state: format_acquisition_state,
+        format_acquisition_level: format_acquisition_level,
         wait_for_task: wait_for_task,
         wait_for_acquisition: wait_for_acquisition
     }

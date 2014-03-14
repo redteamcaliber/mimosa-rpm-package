@@ -1,5 +1,6 @@
 define(function(require) {
-    var View = require('uac/common/View');
+    var iocviewer = require('iocviewer');
+    var View = require('uac/views/View');
     var utils = require('uac/common/utils');
     var templates = require('sf/ejs/templates');
 
@@ -85,7 +86,7 @@ define(function(require) {
                 // Find the root IOC definition.
                 var ioc_definition_list = ioc_tab_element.find('.ioc-definition');
                 if (ioc_definition_list.length != 1) {
-                    log.error('Unable to find IOC definition: ' + ioc_definition_list.length);
+                    console.error('Unable to find IOC definition: ' + ioc_definition_list.length);
                     //console.dir(ioc_definition_list);
                 }
                 var ioc_definition_element = ioc_definition_list;
@@ -108,7 +109,7 @@ define(function(require) {
                     var selected_id_selector = '.ioc-guid-' + selected_id;
                     var selected_element = ioc_definition_element.find(selected_id_selector);
                     if (!selected_element) {
-                        log.error('Unable to find selected element for selector: ' + selected_id_selector);
+                        console.error('Unable to find selected element for selector: ' + selected_id_selector);
                     }
 
                     // Retrieve the full path of the element to the root.
@@ -143,13 +144,13 @@ define(function(require) {
             // Iterator over the related IOC models and adjust the corresponding tab.
             _.each(view.collection.models, function(model, index, list) {
                 var ioc_tab_selector = '#ioc-tab-' + index;
-                log.debug('ioc_tab_selection: ' + ioc_tab_selector);
+                console.log('ioc_tab_selection: ' + ioc_tab_selector);
                 var ioc_tab_element = view.$el.find(ioc_tab_selector);
 
                 // Find the root IOC definition.
                 var ioc_definition_list = ioc_tab_element.find('.ioc-definition');
                 if (ioc_definition_list.length != 1) {
-                    log.error('Unable to find IOC definition.');
+                    console.error('Unable to find IOC definition.');
                 }
                 // Display the children and remove any previous formatting.
                 ioc_definition_list.find('*').show();
@@ -164,13 +165,13 @@ define(function(require) {
             var view = this;
             var exp_key = ev.target.name;
 
-            log.debug('Selected IOC with exp_key: ' + exp_key);
+            console.log('Selected IOC with exp_key: ' + exp_key);
             view.trigger('ioc:selected', exp_key);
 
             if (!_.has(view.suppressions_table_map, exp_key)) {
                 // Initialize the suppressions table for the expression.
 
-                log.debug('Initializing suppressions table for exp_key: ' + exp_key);
+                console.log('Initializing suppressions table for exp_key: ' + exp_key);
 
                 var suppressions_table = new SuppressionsTableView({
                     el: view.$el.find(_.sprintf('table#%s.suppressions-table', exp_key)),
@@ -213,7 +214,7 @@ define(function(require) {
                 path = ' ' + eleSelector + path;
             }
             // Debug, print the path.
-            //log.debug('Path: ' + path);
+            //console.log('Path: ' + path);
             return results;
         },
         fetch: function(rowitem_uuid) {
@@ -229,9 +230,9 @@ define(function(require) {
 
             // Clean up any of the existing tables and rows.
             if (view.suppressions_table_map) {
-                log.debug('Closing ' + Object.keys(view.suppressions_table_map).length + ' suppression tables...');
+                console.log('Closing ' + Object.keys(view.suppressions_table_map).length + ' suppression tables...');
                 _.each(_.values(view.suppressions_table_map), function(table) {
-                    log.debug('Cleaning up table: ' + table.el.id);
+                    console.log('Cleaning up table: ' + table.el.id);
                     view.stopListening(table);
                     table.close();
                 });

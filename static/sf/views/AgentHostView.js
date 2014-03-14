@@ -1,7 +1,9 @@
 define(function(require) {
-    var View = require('uac/common/View');
+    var View = require('uac/views/View');
     var utils = require('uac/common/utils');
     var templates = require('sf/ejs/templates');
+    var AgentHostModel = require('sf/models/AgentHostModel');
+
 
     /**
      * Agent host view.
@@ -14,7 +16,7 @@ define(function(require) {
                 if (options && options.am_cert_hash) {
                     attr.id = options.am_cert_hash;
                 }
-                this.model = new StrikeFinder.AgentHostModel(attr);
+                this.model = new AgentHostModel(attr);
             }
             this.listenTo(this.model, 'sync', this.render);
         },

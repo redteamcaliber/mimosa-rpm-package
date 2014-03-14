@@ -1,5 +1,5 @@
 define(function(require) {
-    var View = require('uac/common/View');
+    var View = require('uac/views/View');
     var MassTagModel = require('sf/models/MassTagModel');
     var IOCTermsCollection = require('sf/models/IOCTermsCollection');
     var utils = require('sf/common/utils');
@@ -58,7 +58,7 @@ define(function(require) {
                 async: false
             });
             if (terms) {
-                log.debug('Retrieved ' + terms.length + ' terms...');
+                console.log('Retrieved ' + terms.length + ' terms...');
                 data.terms = terms.toJSON();
             } else {
                 log.warning('Terms was invalid');

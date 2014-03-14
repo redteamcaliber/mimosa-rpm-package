@@ -1,5 +1,7 @@
 define(function(require) {
-    var View = require('uac/common/View');
+    var View = require('uac/views/View');
+    var MD5View = require('sf/views/MD5View');
+
 
     /**
      * Audit content details view.
@@ -27,7 +29,7 @@ define(function(require) {
             return this;
         },
         on_click_md5: function(ev) {
-            var dlg = new StrikeFinder.MD5View({
+            var dlg = new MD5View({
                 el: '#dialog-div',
                 model: new Backbone.Model($(ev.currentTarget).data().md5)
             });

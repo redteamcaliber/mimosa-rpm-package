@@ -1,6 +1,6 @@
 define(function(require) {
     var async = require('async');
-    var View = require('uac/common/View');
+    var View = require('uac/views/View');
 
     var utils = require('sf/common/utils');
     var templates = require('sf/ejs/templates');
@@ -14,8 +14,8 @@ define(function(require) {
 
             view.close();
 
-            log.debug('Rendering acquire form view...');
-            log.debug('params: ' + JSON.stringify(params));
+            console.log('Rendering acquire form view...');
+            console.log('params: ' + JSON.stringify(params));
 
             if (!params) {
                 // Error, params are required.
@@ -51,7 +51,7 @@ define(function(require) {
                 function(cluster_credentials_model, callback) {
                     var use_cached = cluster_credentials_model.get('found');
 
-                    log.debug('Password cached for cluster: ' + params.cluster_name + ': ' + use_cached);
+                    console.log('Password cached for cluster: ' + params.cluster_name + ': ' + use_cached);
 
                     // Display the form.
                     var selection = params['selection'];

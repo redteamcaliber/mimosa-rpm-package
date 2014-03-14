@@ -1,6 +1,6 @@
 define (require) ->
-    View = require 'uac/common/View'
-    CollapsableContentView = require('uac/common/CollapsableContentView')
+    View = require 'uac/views/View'
+    CollapsableContentView = require('uac/views/CollapsableContentView')
     TagCollection = require 'alerts/models/TagCollection'
     TagsSearchView = require 'alerts/views/TagSearchView'
 

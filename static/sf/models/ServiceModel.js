@@ -1,5 +1,4 @@
 define(function(require) {
-    var Backbone = require('backbone');
     var ListItemModel = require('sf/models/ListItemModel');
 
     /**
@@ -11,4 +10,6 @@ define(function(require) {
             name: ""
         }
     });
+
+    return ServiceModel;
 });

@@ -1,5 +1,8 @@
 define (require) ->
-    $ = require 'jquery'
+    require 'blockui'
+    Backbone = require 'backbone'
+    moment = require('moment')
+
 
     ###
         Retrieve the default block ui options.
@@ -64,15 +67,6 @@ define (require) ->
         return result.trim()
 
 
-    # Export functions.
-    return (
-        block: block
-        unblock: unblock
-        block_element: block_element
-        random_string: random_string
-    )
-
-
     ###
     Wait for a task to complete using a poll function to check whether we have reached an exit condition.
 
@@ -93,9 +87,9 @@ define (require) ->
 
         # Set up the polling loop.
         interval_count = 0
-        timer_id = setInterval( ->
+        timer_id = setInterval(->
             try
-                # Check for an exit condition.
+            # Check for an exit condition.
                 if interval_count >= max_intervals
 
                     # Exceed maximum number of tries.
@@ -117,13 +111,12 @@ define (require) ->
                             interval_count = interval_count + 1
                         return
             catch e
-                # Error
+            # Error
                 clearInterval timer_id
                 completed_fn (if e.stack then e.stack else e)
             return
         , delay)
         return
-
 
     display_info = (message) ->
         message = (if message then message += "&nbsp;" else message)
@@ -217,14 +210,22 @@ define (require) ->
             context = {}
         context.stringify = JSON.stringify
         context.format_date = format_date_string
-        return
+        context
 
     ###
     Render a template.
     ###
-    render_template = (templates, template_name, context) ->
-        template = templates[template_name]
-        template(default_view_helpers(context))
+    run_template = (templates, template_name, context) ->
+        if templates
+            template = templates[template_name]
+            if template
+                return template(default_view_helpers(context))
+            else
+                console.error "Unable to load template: #{template_name}"
+                return
+        else
+            console.error "Unable to load template: #{template_name}, templates is undefined."
+            return
 
     ###
     Retrieve the UAC specific CSS styles.
@@ -292,13 +293,16 @@ define (require) ->
         http_only = options.http_only isnt false
 
         # Clear any old cookies.
-        document.cookie = _.sprintf("%s=; expires=; path=%s; Secure;", name, path)
+        document.cookie = "#{name}=; expires=; path=#{path}; Secure;"
 
         # Set the new cookie.
-        cookie = _.sprintf("%s=%s; expires=%s; path=%s;", name, encodeURIComponent(value), expires, path)
-        cookie += _.sprintf(" Domain=%s;", domain)    if domain
-        cookie += " Secure;"    if secure
-        cookie += " HttpOnly;"    if http_only
+        cookie = "#{name}=#{encodeURIComponent(value)}; expires=#{expires}{; path=#{path};"
+        if domain
+            cookie += " Domain=#{domain};"
+        if secure
+            cookie += " Secure;"
+        if http_only
+            cookie += " HttpOnly;"
         document.cookie = cookie
         return
 
@@ -321,10 +325,10 @@ define (require) ->
         unless window.localStorage
             log.warn "localStorage not available!"
             {}
-        else if arguments_.length is 1
+        else if arguments.length is 1
             value = window.localStorage.getItem(k)
             (if value then JSON.parse(value) else `undefined`)
-        else if arguments_.length > 1
+        else if arguments.length > 1
             if o
 
                 # Set the object.
@@ -347,12 +351,12 @@ define (require) ->
         unless window.sessionStorage
             log.warn "sessionStorage not available!"
             {}
-        else if arguments_.length is 1
+        else if arguments.length is 1
 
             # Retrieve the object.
             value = window.sessionStorage.getItem(k)
             (if value then JSON.parse(value) else `undefined`)
-        else if arguments_.length > 1
+        else if arguments.length > 1
             if o
                 window.sessionStorage.setItem k, JSON.stringify(o)
             else
@@ -411,50 +415,19 @@ define (require) ->
         # Return the recent values.
         recent
 
-
-    #
-    # Common views.
-    #
-
-    ###
-    View to display and change the UAC theme.
-    ###
-    ThemeView = Backbone.View.extend(
-        events:
-            "click a.uac-theme": "on_theme_click"
-
-        on_theme_click: (ev) ->
-            view = this
-            attr = ev.currentTarget.attributes
-            theme_attr = attr["data-uac-theme"]
-            if theme_attr
-
-                # Update the current theme.
-                log.info "Setting UAC theme: " + theme_attr.value
-                set_theme theme_attr.value
-                view.$el.find("a.uac-theme").parent().removeClass "disabled"
-                view.$el.find(_.sprintf("a.uac-theme[data-uac-theme=%s]", theme_attr.value)).parent().addClass "disabled"
-            else
-
-                # Error
-                log.error "Unable to located theme attribute: " + JSON.stringify(attr)
-            return
-    )
-
-    $(document).ready ->
-        # Create a theme view and tie it to the menu.
-        new ThemeView(el: "#uac-user-nav")
-        return
-
     (
         block: block
         unblock: unblock
         block_element: block_element
-        random_string: random_string()
-        render_template: render_template,
-
-        display_info: display_info,
-        display_error: display_error,
-        display_warn: display_warn,
+        random_string: random_string
+        format_date_string: format_date_string
+        run_template: run_template
+        display_info: display_info
+        display_error: display_error
+        display_warn: display_warn
         display_success: display_success
+        usersettings: usersettings
+        session: session
+        recent: recent
+        set_theme: set_theme
     )
