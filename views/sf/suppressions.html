@@ -1,24 +1,21 @@
-{% extends "sf/base.html" %}
+{% extends "sf/sf.html" %}
 
 {% block title %}Suppressions - {{ super() }}{% endblock %}
 
+{% block data_main %}sf/main/SuppressionsMain{% endblock %}
+
 {% block head %}
-{{ super() }}
+    {{ super() }}
 
-<script type="text/javascript">
-    {% if single_entity %}
-        StrikeFinder.single_entity = {{ single_entity | safe }};
-    {% endif %}
-    {% if suppressions %}
-        StrikeFinder.suppressions = {{ suppressions | safe }};
-    {% endif %}
-
-    $(document).ready(function () {
-        (function () {
-            new StrikeFinder.SuppressionsAppView();
-        })();
-    });
-</script>
+    <script type="text/javascript">
+        StrikeFinder = window.StrikeFinder || {};
+        {% if single_entity %}
+            StrikeFinder.single_entity = {{ single_entity | safe }};
+        {% endif %}
+        {% if suppressions %}
+            StrikeFinder.suppressions = {{ suppressions | safe }};
+        {% endif %}
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -40,6 +37,5 @@
     </div>
 
     {% include "sf/hits-template.html" %}
-
 </div>
 {% endblock %}

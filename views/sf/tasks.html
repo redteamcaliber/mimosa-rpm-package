@@ -1,20 +1,15 @@
-{% extends "sf/base.html" %}
+{% extends "sf/sf.html" %}
 
 {% block title %}Tasks - {{ super() }}{% endblock %}
+
+{% block data_main %}sf/main/TasksMain{% endblock %}
 
 {% block head %}
 {{ super() }}
 
 <script type="text/javascript">
+    StrikeFinder = window.StrikeFinder || {};
     StrikeFinder.tasks = {{ tasks | safe }};
-
-    $(document).ready(function () {
-        (function () {
-            new StrikeFinder.TaskAppView({
-                el: '#tasks-div'
-            });
-        })();
-    });
 </script>
 {% endblock %}
 

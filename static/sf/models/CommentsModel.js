@@ -4,7 +4,7 @@ define(function (require) {
     /**
      * Comment model.
      */
-    CommentsModel = Backbone.Model.extend({
+    var CommentsModel = Backbone.Model.extend({
         defaults: {
             comment: "",
             created: "",

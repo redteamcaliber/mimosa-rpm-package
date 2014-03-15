@@ -139,7 +139,7 @@ default_context = (req) ->
         # Theme is valid.
         context.current_theme = cookie_theme
     else
-        context.current_theme = 'default'
+        context.current_theme = 'flatly'
 
     context
 

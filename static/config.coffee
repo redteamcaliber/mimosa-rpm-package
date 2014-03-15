@@ -3,48 +3,35 @@ window.require =
     paths:
         async: 'lib/async/async'
         backbone: 'lib/backbone/backbone'
-        bootstrap: 'lib/bootstrap/bootstrap'
+        bootstrap: 'lib/bootstrap/js/bootstrap'
         blockui: 'lib/blockui/jquery.blockUI'
         datatables: 'lib/datatables/jquery.dataTables'
         datatables_bootstrap: 'js/datatables'
-        highlighter: 'lib/highlighter/jQuery.highlighter'
+        highlighter: 'js/jQuery.highlighter'
         iocviewer: 'js/jquery.iocViewer'
         jquery: 'lib/jquery/jquery'
         moment: 'lib/moment/moment'
         select2: 'lib/select2/select2'
         typeahead: 'lib/typeahead.js/typeahead'
         underscore: 'lib/underscore/underscore'
-        underscore_string: 'lib/underscore.string/underscore.string'
-        uac_init: 'uac/common/init'
+        'underscore.string': 'lib/underscore.string/underscore.string'
     shim:
-        'bootstrap': (
-            deps: ['jquery']
-            exports: 'Bootstrap'
+        jquery: (
+            exports: '$'
         )
-        'backbone': (
+        backbone: (
             deps: ['underscore', 'jquery'],
             exports: 'Backbone'
-        ),
-        datatables: (
+        )
+        bootstrap: (
             deps: ['jquery']
-            exports: 'DataTable'
+            exports: 'bootstrap'
         )
-        datatables_bootstrap: (
-            deps: ['datatables']
-        )
-        'jquery': (
-            exports: '$'
-        ),
-        'typeahead': (
+        typeahead: (
             deps: ['jquery']
+            exports: 'typeahead'
         )
-        'underscore': (
+        underscore: (
             exports: '_'
         )
-        underscore_string : (
-            deps: ['underscore']
-        )
-    deps: ['bootstrap', 'underscore_string', 'backbone', 'datatables_bootstrap', 'typeahead', 'uac/common/init', 'sf/common/init']
-    callback: ->
-        # Setup underscore.string.
-        _.mixin(_.str.exports())
+    enforceDefine: false

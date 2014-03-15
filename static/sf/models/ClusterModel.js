@@ -4,7 +4,7 @@ define(function(require) {
     /**
      * Model to represent a cluster.
      */
-    ClusterModel = ListItemModel.extend({
+    var ClusterModel = ListItemModel.extend({
         defaults: {
             client_uuid: "",
             client_name: "",

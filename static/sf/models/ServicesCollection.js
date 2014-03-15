@@ -5,7 +5,7 @@ define(function(require) {
     /**
      * Collection of services.
      */
-    ServicesCollection = Backbone.Collection.extend({
+    var ServicesCollection = Backbone.Collection.extend({
         model: ServiceModel,
         url: '/sf/api/services'
     });

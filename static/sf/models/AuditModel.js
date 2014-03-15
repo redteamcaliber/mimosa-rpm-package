@@ -4,7 +4,7 @@ define(function(require) {
     /**
      * Audit Details Model.
      */
-    AuditModel = Backbone.Model.extend({
+    var AuditModel = Backbone.Model.extend({
         defaults: {
             html: ""
         },

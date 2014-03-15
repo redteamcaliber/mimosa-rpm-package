@@ -4,7 +4,7 @@ define(function(require) {
     /**
      * Model to represent an MCIRT service.
      */
-    ServiceModel = ListItemModel.extend({
+    var ServiceModel = ListItemModel.extend({
         defaults: {
             id: "",
             name: ""

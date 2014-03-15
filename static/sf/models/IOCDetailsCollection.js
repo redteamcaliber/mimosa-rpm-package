@@ -2,7 +2,7 @@ define(function(require) {
     var Backbone = require('backbone');
     var IOCDetailsModel = require('sf/models/IOCDetailsModel');
 
-    IOCDetailsCollection = Backbone.Collection.extend({
+    var IOCDetailsCollection = Backbone.Collection.extend({
         url: '/sf/api/ioc-summary',
         model: IOCDetailsModel,
         parse: function (response, options) {

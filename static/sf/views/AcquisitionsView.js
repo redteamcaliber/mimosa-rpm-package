@@ -1,12 +1,17 @@
 define(function (require) {
     var View = require('uac/views/View');
     var CollapsableContentView = require('uac/views/CollapsableContentView');
+
+    var AcquisitionAuditModel = require('sf/models/AcquisitionAuditModel');
+
     var ClusterSelectionView = require('sf/views/ClusterSelectionView');
     var AcquisitionsTableView = require('sf/views/AcquisitionsTableView');
-    var HitsSuppressionTableView = require('sf/views/HitsSuppressionTableView');
     var HitsDetailsView = require('sf/views/HitsDetailsView');
 
-    AcquisitionsView = View.extend({
+    var templates = require('sf/ejs/templates');
+
+
+    var AcquisitionsView = View.extend({
         initialize: function () {
             var view = this;
 
@@ -49,35 +54,6 @@ define(function (require) {
             else {
                 $('#results-div').fadeOut().hide();
             }
-        },
-        do_render_hits: function (data) {
-            var view = this;
-
-            console.log('Row selected: ' + JSON.stringify(data));
-
-            var suppression_id = data['suppression_id'];
-
-            view.run_once('init_hits', function () {
-                view.hits_table_view = new HitsSuppressionTableView({
-                    el: '#hits-table'
-                });
-
-                view.hits_details_view = new HitsDetailsView({
-                    el: '#hits-details-view',
-                    hits_table_view: view.hits_table_view,
-                    tag: false,
-                    suppress: false,
-                    masstag: false
-                });
-            });
-
-            view.hits_table_view.fetch(suppression_id);
-
-            $('.hits-view').fadeIn().show();
-        },
-        render_hits: function (data) {
-            var view = this;
-            view.do_render_hits(data);
         }
     });
 

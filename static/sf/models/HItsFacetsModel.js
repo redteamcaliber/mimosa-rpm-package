@@ -4,7 +4,7 @@ define(function(require) {
     /**
      * Model to retrieve hits facets.
      */
-    HitsFacetsModel = Backbone.Model.extend({
+    var HitsFacetsModel = Backbone.Model.extend({
         initialize: function () {
             this.params = {};
         },

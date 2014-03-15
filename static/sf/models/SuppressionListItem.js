@@ -6,7 +6,7 @@ define(function (require) {
      * Model representing a suppression list item.  Currently the suppression list API returns different results than the
      * create/edit API.
      */
-    SuppressionListItem = Backbone.Model.extend({
+    var SuppressionListItem = Backbone.Model.extend({
         defaults: {
             suppression_id: 0,
             suppressed: 0,

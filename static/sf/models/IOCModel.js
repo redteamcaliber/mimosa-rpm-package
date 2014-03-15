@@ -4,7 +4,7 @@ define(function(require) {
     /**
      * Model that represents and IOC information object.
      */
-    IOCModel = Backbone.Model.extend({
+    var IOCModel = Backbone.Model.extend({
         defaults: {
             ioc_md5sum: "",
             name: "",

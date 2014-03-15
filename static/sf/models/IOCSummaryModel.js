@@ -1,7 +1,7 @@
 define(function(require) {
     var Backbone = require('backbone');
 
-    IOCSummaryModel = Backbone.Model.extend({
+    var IOCSummaryModel = Backbone.Model.extend({
         defaults: {
             suppressed: 0,
             totalexpressions: 0,

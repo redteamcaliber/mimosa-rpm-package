@@ -4,7 +4,7 @@ define(function (require) {
     /**
      * Model to retrieve whether cluster credentials exist.
      */
-    ClusterCredentialsModel = Backbone.Model.extend({
+    var ClusterCredentialsModel = Backbone.Model.extend({
         idAttribute: 'cluster_uuid',
         urlRoot: '/sf/api/credentials/cluster',
         defaults: {

@@ -2,20 +2,17 @@ UAC ToDo
 ========
 
 ### Use bower to pull down web components.
-- Migrate hosts, hits by tag, suppression?, tasks.
+- Need to recompile the small fonts themes and find a place for them in the static directory.
+- Should we be checking in the library dependencies, if so where?
 - Minify all js files in the lib
     - Use the grunt requirejs plugin to create an optimized file.
     - Need source maps that work.
 - Generate map files for all minimized files.
     - Once map files are in place look into removing the dev sections of the base templates.
-- Update the theme code to use the bower directory structure.
-    - Figure out what to do with the smaller font themes.
-    - Possibly have a local git project that recompiles the themes to use smaller fonts.
-    - Bootstrap got upgraded in the process, need to update the CSS files.
 - Update the IOC viewer project and put a dependency on it?
-- Delete old js files, css, and static js.
-- Hits page links are broken, check suppressions, acquisitions?
 - Fix the this stuff in the TableView.
+- usersettings aren't being updated after a user selects an expression.
+- Suppressions links it to small.
 
 ### Alerting
 - Continue to define the Alerts Search view.
@@ -23,6 +20,8 @@ UAC ToDo
     - Need to make sure that the alerts.js is being compressed for production.
     - Need to setup the alerts ejs templates.
 - What are the types for HX alerts.  For instance, malware-callback, etc.
+
+### Change the default theme to Flatly.
 
 ### Update the select2 component to the latest
 

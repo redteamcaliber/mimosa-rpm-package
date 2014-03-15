@@ -2,6 +2,7 @@ define (require) ->
 
     View = require 'uac/views/View'
     templates = require 'alerts/ejs/templates'
+    uac_utils = require 'uac/common/utils'
 
     #TagCollection = require 'alerts/models/TagCollection'
 
@@ -18,6 +19,7 @@ define (require) ->
 
         render: ->
             context = {
+                shaded_color: uac_utils.get_styles().shaded_color
                 categories: [
                     (id: 'new', title: 'New')
                     (id: 'in_progress', title: 'In Progress')

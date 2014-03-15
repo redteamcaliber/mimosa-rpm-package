@@ -2,7 +2,7 @@ define(function (require) {
     var Backbone = require('backbone');
     var IOCTermsModel = require('sf/models/IOCTermsModel');
 
-    IOCTermsCollection = Backbone.Collection.extend({
+    var IOCTermsCollection = Backbone.Collection.extend({
         initialize: function (models, options) {
             this.rowitem_type = options["rowitem_type"];
         },

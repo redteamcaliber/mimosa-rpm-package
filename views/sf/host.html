@@ -1,21 +1,15 @@
-{% extends "sf/base.html" %}
+{% extends "/sf/sf.html" %}
 
 {% block title %}Host - {{ super() }}{% endblock %}
+
+{% block data_main %}sf/main/HostsMain{% endblock %}
 
 {% block head %}
     {{ super() }}
 
     <script type="text/javascript">
+        StrikeFinder = window.StrikeFinder || {};
         StrikeFinder.host = {{ host | safe }};
-
-        $(document).ready(function () {
-            (function () {
-                // Create an app instance.
-                var hosts_app = new StrikeFinder.HostsApp({
-                    el: $(document.body)
-                });
-            })();
-        });
     </script>
 {% endblock %}
 

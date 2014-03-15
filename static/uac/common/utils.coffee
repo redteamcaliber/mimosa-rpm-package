@@ -1,6 +1,6 @@
 define (require) ->
+    Backbone = require('backbone')
     require 'blockui'
-    Backbone = require 'backbone'
     moment = require('moment')
 
 
@@ -238,6 +238,16 @@ define (require) ->
                 this._styles.overlay_color = body_style.getPropertyValue("background-color")
             else
                 this._styles.overlay_color = "#cccccc"
+
+            # Get the well color of the theme.
+            well_el = $('#uac-well-element');
+            well_style = if well_el then window.getComputedStyle(well_el.get(0)) else undefined
+            if well_el && well_style
+                well_style = window.getComputedStyle(well_el.get(0))
+                this._styles.shaded_color = well_style.getPropertyValue('background-color')
+            else
+                this._styles.shaded_color = '#cccccc'
+
         this._styles
 
     ###
@@ -254,14 +264,13 @@ define (require) ->
     ###
     set_theme = (theme) ->
         url = undefined
-        unless theme
-
+        if not theme || theme == 'default'
             # Use the default.
-            url = "/static/bootstrap/css/bootstrap-default.min.css"
+            url = "/static/lib/bootstrap/css/bootstrap.min.css"
         else
 
             # Generate the theme url.
-            url = "/static/bootstrap/css/bootstrap.min-#{theme}.css"
+            url = "/static/lib/bootswatch/#{theme}/bootstrap.min.css"
 
         # Reload the CSS.
         $("#bootstrap").attr "href", url
@@ -430,4 +439,5 @@ define (require) ->
         session: session
         recent: recent
         set_theme: set_theme
+        get_styles: get_styles
     )

@@ -5,7 +5,7 @@ define(function (require) {
     var templates = require('sf/ejs/templates');
     var typeahead = require('typeahead');
 
-    HostTypeAheadView = View.extend({
+    var HostTypeAheadView = View.extend({
         initialize: function () {
             this.render();
         },

@@ -2,7 +2,7 @@ define(function (require) {
     var Backbone = require('backbone');
     var CommentsModel = require('sf/models/CommentsModel');
 
-    CommentsCollection = Backbone.Collection.extend({
+    var CommentsCollection = Backbone.Collection.extend({
         model: CommentsModel,
         initialize: function (models, options) {
             if (options && options.rowitem_uuid) {

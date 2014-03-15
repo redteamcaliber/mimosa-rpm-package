@@ -2,7 +2,7 @@ define(function(require) {
     var Backbone = require('backbone');
     var IOCModel = require('sf/models/IOCModel');
 
-    IOCCollection = Backbone.Collection.extend({
+    var IOCCollection = Backbone.Collection.extend({
         initialize: function (models, options) {
             if (options) {
                 this.rowitem_uuid = options.rowitem_uuid;

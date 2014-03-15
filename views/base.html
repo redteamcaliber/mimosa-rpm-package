@@ -16,14 +16,17 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+    {# RequireJS configuration #}
+    <script src="/static/config.js"></script>
+
     {# Core UAC styles and overrides. #}
     <link href="/static/css/base.css" rel="stylesheet"/>
 
     {# Include the appropriate bootstrap theme. #}
-    {% if not current_theme %}
-        <link id="bootstrap" href="/static/bootstrap/css/bootstrap.min-default.css" rel="stylesheet"/>
+    {% if current_theme == 'default' %}
+        <link id="bootstrap" href="/static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
     {% else %}
-        <link id="bootstrap" href="/static/bootstrap/css/bootstrap.min-{{ current_theme }}.css" rel="stylesheet"/>
+        <link id="bootstrap" href="/static/lib/bootswatch/{{ current_theme }}/bootstrap.min.css" rel="stylesheet"/>
     {% endif %}
 
     {# Font Awesome #}
@@ -39,11 +42,19 @@
     <link href="/static/lib/datatables/jquery.dataTables.css" rel="stylesheet"/>
     <link href="/static/css/datatables.css" rel="stylesheet"/>
 
-    {# RequireJS configuration #}
-    <script src="/static/config.js"></script>
-
     <!-- Include require.js support. -->
     <script src="/static/lib/requirejs/require.js" data-main="{% block data_main %}{% endblock %}"></script>
+
+    <script type="text/javascript">
+        require(['jquery', 'bootstrap', 'backbone', 'uac/views/ThemeView'], function($, bs, Backbone, ThemeView) {
+            $(function() {
+                // Load common UAC views.
+                new ThemeView({
+                    el: '#uac-user-nav'
+                });
+            });
+        });
+    </script>
 
     {% block head %}{% endblock %}
 </head>
@@ -148,6 +159,7 @@
 {# Hidden elements used to compute styles. #}
 <div style="display: none">
     <button id="uac-primary-element" class="btn btn-primary"></button>
+    <div id="uac-well-element" class="well"></div>
 </div>
 
 {% endblock %}

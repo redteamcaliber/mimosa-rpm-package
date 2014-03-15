@@ -4,7 +4,7 @@ define(function(require) {
     /**
      * Generic model to store hits criteria.  This model currently transient and does not connect to the server.
      */
-    HitsCriteria = Backbone.Model.extend({
+    var HitsCriteria = Backbone.Model.extend({
         _defaults: {
             services: [],
             clusters: [],

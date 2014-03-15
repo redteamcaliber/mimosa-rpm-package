@@ -4,7 +4,7 @@ define(function(require) {
     /**
      * Base list item class.
      */
-    ListItemModel = Backbone.Model.extend({
+    var ListItemModel = Backbone.Model.extend({
         defaults: {
             selected: false
         }

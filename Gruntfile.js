@@ -71,11 +71,11 @@ module.exports = function (grunt) {
                     targetDir: 'static/lib',
                     layout: 'byComponent',
                     install: true,
-                    verbose: false,
+                    verbose: true,
                     cleanTargetDir: true,
                     cleanBowerDir: false,
                     bowerOptions: {
-                        forceLatest: false
+                        forceLatest: true
                     }
                 }
             }

@@ -1,5 +1,4 @@
 define (require) ->
-    $ = require 'jquery'
     View = require 'uac/views/View'
     uac_utils = require 'uac/common/utils'
 

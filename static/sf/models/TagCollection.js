@@ -3,7 +3,7 @@ define(function (require) {
     var TagModel = require('sf/models/TagModel');
     var utils = require('uac/common/utils');
 
-    TagCollection = Backbone.Collection.extend({
+    var TagCollection = Backbone.Collection.extend({
         initialize: function (models, options) {
             if (options && options.searchable) {
                 this.searchable = true;

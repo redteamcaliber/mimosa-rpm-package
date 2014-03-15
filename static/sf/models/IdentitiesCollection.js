@@ -2,7 +2,7 @@ define(function (require) {
     var Backbone = require('backbone');
     var Identity = require('sf/models/Identity');
 
-    IdentitiesCollection = Backbone.Collection.extend({
+    var IdentitiesCollection = Backbone.Collection.extend({
         model: Identity
     });
 

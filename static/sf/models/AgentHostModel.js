@@ -1,7 +1,7 @@
 define(function (require) {
     var Backbone = require('backbone');
 
-    AgentHostModel = Backbone.Model.extend({
+    var AgentHostModel = Backbone.Model.extend({
         defaults: {
             cluster: {
                 name: ''

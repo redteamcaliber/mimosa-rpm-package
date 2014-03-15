@@ -2,7 +2,7 @@ define(function (require) {
     var Backbone = require('backbone');
     var SuppressionListItem = require('sf/models/SuppressionListItem');
 
-    SuppressionListItemCollection = Backbone.Collection.extend({
+    var SuppressionListItemCollection = Backbone.Collection.extend({
         model: SuppressionListItem,
         initialize: function (models, options) {
             if (options) {

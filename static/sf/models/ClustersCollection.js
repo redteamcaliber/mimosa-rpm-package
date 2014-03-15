@@ -5,7 +5,7 @@ define(function(require) {
     /**
      * Collection of clusters.
      */
-    ClustersCollection = Backbone.Collection.extend({
+    var ClustersCollection = Backbone.Collection.extend({
         model: ClusterModel,
         url: '/sf/api/clusters'
     });

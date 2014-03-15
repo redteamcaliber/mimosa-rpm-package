@@ -9,7 +9,7 @@ define(function (require) {
     /**
      * View to render hits facets.
      */
-    HitsFacetsView = View.extend({
+    var HitsFacetsView = View.extend({
         initialize: function () {
             var view = this;
 

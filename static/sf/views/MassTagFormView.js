@@ -6,7 +6,7 @@ define(function(require) {
 
     var templates = require('sf/ejs/templates');
 
-    MassTagFormView = View.extend({
+    var MassTagFormView = View.extend({
         events: {
             "click #tag": "tag",
             "click #cancel": "cancel"

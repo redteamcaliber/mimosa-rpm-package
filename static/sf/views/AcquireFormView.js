@@ -8,7 +8,10 @@ define(function(require) {
     var ClusterCredentialsModel = require('sf/models/ClusterCredentialsModel');
     var Acquisition = require('sf/models/Acquisition');
 
-    AcquireFormView = View.extend({
+    /**
+     * Acquisition input form.
+     */
+    var AcquireFormView = View.extend({
         render: function(params) {
             var view = this;
 

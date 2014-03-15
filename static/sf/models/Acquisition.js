@@ -5,7 +5,7 @@ define(function (require) {
     /**
      * Model for a single acquisisition.
      */
-    Acquisition = Backbone.Model.extend({
+    var Acquisition = Backbone.Model.extend({
         idAttribute: 'uuid',
         defaults: {
             am_cert_hash: '',

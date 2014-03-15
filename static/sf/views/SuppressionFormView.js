@@ -9,7 +9,7 @@ define(function(require) {
     /**
      * Form view for creating a suppression.
      */
-    SuppressionFormView = View.extend({
+    var SuppressionFormView = View.extend({
         events: {
             "click #suppress": "suppress",
             "click #cancel": "cancel"
@@ -53,6 +53,8 @@ define(function(require) {
             if (params.itemkey) {
                 view.model.set('itemkey', params.itemkey);
             }
+
+            console.log('Loading suppression form using params: ' + JSON.stringify(view.model.attributes));
 
             // Deep copy the model values.
             var data = view.model.toJSON();

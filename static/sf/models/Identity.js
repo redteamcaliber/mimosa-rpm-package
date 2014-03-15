@@ -1,7 +1,9 @@
 define(function (require) {
     var Backbone = require('backbone');
 
-    StrikeFinder.Identity = Backbone.Model.extend({
+    var Identity = Backbone.Model.extend({
     });
+
+    return Identity;
 });
 

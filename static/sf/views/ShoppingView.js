@@ -1,14 +1,276 @@
+/**
+ * View to select an IOC name, expression, or UUID.
+ */
 define(function (require) {
-    var $ = require('jquery');
-    var Backbone = require('backbone');
-
+    var uac_utils = require('uac/common/utils');
     var CollapsableContentView = require('uac/views/CollapsableContentView');
-    var IOCSummaryTableView = require('sf/views/IOCSummaryTableView');
-    var ClusterSelectionView = require('sf/views/ClusterSelectionView');
-    var IOCDetailsView = require('sf/views/IOCDetailsView');
-    var HitsView = require('sf/views/HitsView');
+    var View = require('uac/views/View');
+    var TableView = require('uac/views/TableView');
 
-    uac_utils = require('uac/common/utils');
+    var IOCSummaryCollection = require('sf/models/IOCSummaryCollection');
+    var IOCDetailsCollection = require('sf/models/IOCDetailsCollection');
+
+    var ClusterSelectionView = require('sf/views/ClusterSelectionView');
+    var HitsView = require('sf/views/HitsView');
+    var templates = require('sf/ejs/templates')
+
+
+    var ExpressionView = View.extend({
+        render: function () {
+            var view = this;
+
+            var exp_string = view.model.get('exp_string');
+            var tokens = exp_string.split(/(AND)|(OR)/);
+
+            var text = '';
+            _.each(tokens, function (token) {
+                if (!token) {
+
+                }
+                else if (token == 'AND' || token == 'OR') {
+                    text += token + '\n';
+                }
+                else {
+                    text += token;
+                }
+            });
+
+            view.$el.popover({
+                html: true,
+                trigger: 'hover',
+                content: '<pre style="border: 0; margin: 2px; font-size: 85%; overflow: auto">' + text + '</pre>',
+                placement: 'left'
+            })
+                .data('bs.popover')
+                .tip()
+                .addClass('expression-popover');
+        },
+        close: function () {
+            this.stopListening();
+            this.$el.popover('destroy');
+            // Manually removing the popover due to -> https://github.com/twbs/bootstrap/issues/10335
+            this.$el.parent().find('.popover').remove();
+        }
+    });
+
+    /**
+     * IOC Summary table view.
+     */
+    var IOCSummaryTableView = TableView.extend({
+        initialize: function (options) {
+            var view = this;
+            if (!view.collection) {
+                view.collection = new IOCSummaryCollection();
+                view.listenTo(view.collection, 'sync', view.render);
+            }
+
+            options.aoColumns = [
+                {sTitle: "IOC Name", mData: "iocname"},
+                {sTitle: "Hash", mData: "iocnamehash", bVisible: false},
+                {sTitle: "Supp", mData: "suppressed"},
+                {sTitle: "Total", mData: "totalexpressions", bVisible: false},
+                {sTitle: "Open", mData: "open"},
+                {sTitle: "In Progress", mData: "inprogress"},
+                {sTitle: "Closed", mData: "closed"}
+            ];
+
+            options.aaSorting = [
+                [ 0, "asc" ]
+            ];
+
+            options.sDom = 'ftiS';
+
+            view.options.iDisplayLength = 200;
+            view.options.bScrollInfinite = true;
+            view.options.bScrollCollapse = true;
+            view.options.sScrollY = '600px';
+            view.options.iScrollLoadGap = 200;
+
+            view.listenTo(view, 'row:created', function (row, data) {
+                $(row).addClass(view._get_class(data.iocnamehash));
+            });
+        },
+        select: function (iocnamehash) {
+            console.log('Selecting iocnamehash: ' + iocnamehash);
+            var row = $('.' + this._get_class(iocnamehash));
+            if (row.length == 1) {
+                this.select_row(row);
+            }
+        },
+        _get_class: function (iocnamehash) {
+            return 'iocnamehash-' + iocnamehash;
+        }
+    });
+
+    /**
+     * IOC details table view.
+     */
+    IOCDetailsTableView = TableView.extend({
+        initialize: function () {
+            var view = this;
+
+            view.options.aoColumns = [
+                {sTitle: "exp_key", mData: "exp_key", bVisible: false},
+                {sTitle: "Expression", mData: "exp_key", sWidth: '50%'},
+                {sTitle: "Supp", mData: "suppressed", sWidth: '10%'},
+                {sTitle: "Open", mData: "open", sWidth: '10%'},
+                {sTitle: "In Progress", mData: "inprogress", sWidth: '10%'},
+                {sTitle: "Closed", mData: "closed", sWidth: '10%'}
+            ];
+
+            view.options.aoColumnDefs = [
+                {
+                    mRender: function (data, type, row) {
+                        // Display <rowitem_type> (<exp_key>)
+                        return _.sprintf('%s (%s)', row.rowitem_type, data);
+                    },
+                    aTargets: [1]
+                }
+            ];
+
+            view.options.sDom = 't';
+            view.options.iDisplayLength = -1;
+
+            view.expression_views = [];
+
+            view.listenTo(view, 'row:created', function (row, data) {
+                var expression_view = new ExpressionView({
+                    el: $(row),
+                    model: new Backbone.Model(data)
+                });
+                expression_view.render();
+                view.expression_views.push(expression_view);
+            });
+        },
+        close: function () {
+            this.stopListening();
+            _.each(this.expression_views, function(ev) {
+                ev.close();
+            });
+        }
+    });
+
+
+    /**
+     * IOC details view of the shopping page.
+     */
+    var IOCDetailsView = View.extend({
+        initialize: function () {
+            if (!this.collection) {
+                this.collection = new IOCDetailsCollection();
+            }
+            this.listenTo(this.collection, 'sync', this.render);
+        },
+        render: function () {
+            var view = this;
+
+            // Clean up any previous view data.
+            view.close();
+
+            console.log('Rendering IOC details...');
+
+            var ioc_uuids = view.collection.toJSON();
+            var iocname = 'NA';
+            var iocnamehash = 'NA';
+            if (view.collection.length > 0 && view.collection.at(0).get('expressions').length > 0) {
+                var expresssions = view.collection.at(0).get('expressions');
+                iocname = expresssions[0].iocname;
+                iocnamehash = expresssions[0].iocnamehash;
+            }
+
+            // Render the template.
+            view.apply_template(templates, 'ioc-details.ejs', {
+                items: ioc_uuids,
+                iocname: iocname,
+                iocnamehash: iocnamehash
+            });
+
+            // Register events.
+            view.delegateEvents({
+                'click .iocnamehash': 'on_ioc_click',
+                'click .ioc_uuid': 'on_uuid_click'
+            });
+
+            _.each(ioc_uuids, function (ioc_uuid, index) {
+
+                var table = new IOCDetailsTableView({
+                    el: view.$("#uuid-" + index + "-table"),
+                    aaData: ioc_uuid.expressions
+                });
+
+                table.listenTo(table, 'click', function (data) {
+                    var exp_key = data['exp_key'];
+
+                    // Trigger an event passing the IOC name, IOC UUID, and the IOC expression.
+                    view.collection.each(function (iocuuid_item) {
+                        _.each(iocuuid_item.get('expressions'), function (expression_item) {
+                            if (expression_item.exp_key == exp_key) {
+                                view.trigger("click:exp_key", expression_item.iocname, expression_item.iocuuid, exp_key);
+                            }
+                        });
+                    });
+                    // Remove the selections from any of the other details tables that may already have a previous selection.
+                    _.each(view.table_views, function (table) {
+                        var selected = table.get_selected_data();
+                        if (selected && selected.exp_key != exp_key) {
+                            table.select_row(undefined);
+                        }
+                    });
+                });
+                table.render();
+
+                view.table_views.push(table);
+            });
+            return view;
+        },
+        on_ioc_click: function (ev) {
+            var view = this;
+            var iocnamehash = $(ev.currentTarget).attr('data-iocnamehash');
+
+            view.collection.each(function (iocuuid_item) {
+                _.each(iocuuid_item.get('expressions'), function (expression_item) {
+                    if (expression_item.iocnamehash == iocnamehash) {
+                        view.trigger('click:iocnamehash', expression_item.iocname, iocnamehash);
+                    }
+                });
+            });
+        },
+        on_uuid_click: function (ev) {
+            var view = this;
+            var iocuuid = $(ev.currentTarget).attr('data-ioc_uuid');
+
+            view.collection.each(function (iocuuid_item) {
+                _.each(iocuuid_item.get('expressions'), function (expression_item) {
+                    if (expression_item.iocuuid == iocuuid) {
+                        view.trigger('click:ioc_uuid', expression_item.iocname, iocuuid);
+                    }
+                });
+            });
+        },
+        fetch: function (params) {
+            var view = this;
+            view.params = params;
+            view.block_element(view.$el);
+            view.collection.fetch({
+                data: params,
+                success: function () {
+                    view.unblock(view.$el);
+                },
+                error: function () {
+                    view.unblock(view.$el);
+                }
+            });
+        },
+        close: function () {
+            var view = this;
+            if (view.table_views) {
+                _.each(view.table_views, function (table_view) {
+                    table_view.close();
+                });
+            }
+            view.table_views = [];
+        }
+    });
 
     /**
      * The main shopping view.

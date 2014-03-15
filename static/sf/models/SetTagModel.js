@@ -1,7 +1,7 @@
 define(function (require) {
     var Backbone = require('backbone');
 
-    SetTagModel = Backbone.Model.extend({
+    var SetTagModel = Backbone.Model.extend({
         defaults: {
             rowitem_uuid: '',
             tagname: ''

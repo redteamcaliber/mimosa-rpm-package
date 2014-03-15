@@ -4,7 +4,7 @@ define(function (require) {
     /**
      * Mass Tagging Model
      */
-    MassTagModel = Backbone.Model.extend({
+    var MassTagModel = Backbone.Model.extend({
         defaults: {
             tagname: '',
             am_cert_hash: '',

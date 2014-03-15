@@ -4,7 +4,7 @@ define(function(require) {
     /**
      * Model that represents an IOC details item on the shopping view.
      */
-    IOCDetailsModel = Backbone.Model.extend({
+    var IOCDetailsModel = Backbone.Model.extend({
         defaults: {
             iocuid: "",
             expressions: []

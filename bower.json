@@ -10,7 +10,6 @@
         "bootswatch": "3.1.x",
         "datatables": "1.9.x",
         "font-awesome": "4.0.x",
-        "highlighter": "https://github.com/huffpostlabs/highlighter.js/tarball/5e742ea702d9c1a3b54ddb5461bd72ce4eaf2083",
         "jquery": "1.9.x",
         "moment": "2.4.x",
         "requirejs": "2.1.x",
@@ -28,6 +27,27 @@
         },
         "blockui": {
             "/": "jquery.blockUI.js"
+        },
+        "bootstrap": {
+            "css": "dist/css/*",
+            "fonts": "dist/fonts/*",
+            "js": "dist/js/*"
+        },
+        "bootswatch": {
+            "amelia": "amelia",
+            "cerulean": "cerulean",
+            "cosmo": "cosmo",
+            "cupid": "cupid",
+            "cyborg": "cyborg",
+            "flatly": "flatly",
+            "journal": "journal",
+            "lumen": "lumen",
+            "simplex": "simplex",
+            "slate": "slate",
+            "spacelab": "spacelab",
+            "superhero": "superhero",
+            "united": "united",
+            "yeti": "yeti"
         },
         "bootstrap-growl": {
             "/": "jquery.bootstrap-growl.js"

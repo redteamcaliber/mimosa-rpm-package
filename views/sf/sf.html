@@ -8,19 +8,28 @@
 
 {% block head %}
     {{ super() }}
+
     <link href="/static/css/jquery.iocViewer.css" rel="stylesheet"/>
+
+    <script type="text/javascript">
+        require(['jquery', 'bootstrap', 'backbone', 'sf/views/HostTypeAheadView'],
+                function($, bs, Backbone, HostTypeAheadView) {
+            // Load common StrikeFinder views.
+            $(function() {
+                new HostTypeAheadView({
+                    el: '#host-typeahead'
+                });
+            });
+        });
+    </script>
 {% endblock %}
 
 {% block tail %}
-{{ super() }}
+    {{ super() }}
 
-<div id="context-menu-div" style="display: none">
-</div>
+    <div id="context-menu-div" style="display: none">
+    </div>
 
-<div id="dialog-div">
-</div>
-
-<script type="text/javascript">
-
-</script>
+    <div id="dialog-div">
+    </div>
 {% endblock %}

@@ -5,7 +5,7 @@ define(function (require) {
     /**
      * Suppressions create/update/delete model.
      */
-    SuppressionModel = Backbone.Model.extend({
+    var SuppressionModel = Backbone.Model.extend({
         defaults: {
             exp_key: '',
             itemkey: '',

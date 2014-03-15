@@ -5,7 +5,7 @@ define(function (require) {
     /**
      * Collection class for acquisitions.
      */
-    AcquisitionCollection = Backbone.Collection.extend({
+    var AcquisitionCollection = Backbone.Collection.extend({
         model: Acquisition,
         url: function () {
             if (this.identity) {

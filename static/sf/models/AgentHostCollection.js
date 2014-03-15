@@ -2,7 +2,7 @@ define(function (require) {
     var Backbone = require('backbone');
     var AgentHostModel = require('sf/models/AgentHostModel');
 
-    AgentHostCollection = Backbone.Collection.extend({
+    var AgentHostCollection = Backbone.Collection.extend({
         initialize: function (models, options) {
             if (this.options) {
                 if (options.am_cert_hash) {
