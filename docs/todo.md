@@ -1,36 +1,70 @@
 UAC ToDo
 ========
 
-### Use bower to pull down web components.
-- Need to recompile the small fonts themes and find a place for them in the static directory.
-- Should we be checking in the library dependencies, if so where?
-- Minify all js files in the lib
-    - Use the grunt requirejs plugin to create an optimized file.
-    - Need source maps that work.
-- Generate map files for all minimized files.
-    - Once map files are in place look into removing the dev sections of the base templates.
-- Update the IOC viewer project and put a dependency on it?
-- Fix the this stuff in the TableView.
+### Alerts Search View
+- Alerts-API
+    - Create CV api url settings in UAC.
+    - Create alerts-api module to pull clients and types from CV API.
+    - Create alerts-routes module to create UAC alerting API end points.
+    - Unit tests for alerts API and REST.
+- Search View
+    - Create base search view HTML template.
+    - Need to store the last used search criteria in local storage
+        - Load the last settings from local storage on page load.
+    - Implement the reset function to call reset all sub-views to their default options.
+- Tags
+    - Create tags view HTML template.
+    - Create function to get the selected tags.
+    - Allow selected values to be specified.
+        - If none are supplied select the default tags.
+    - Implement a reset function.
+- Clients
+    - Create clients view HTML template.
+    - Create a function to get the selected clients.
+    - Implement select all/none options.
+    - Allow for selected clients to be specified.
+        - Default should be all.
+    - Implement a reset function.
+-Time Frame
+    - Create time frame view HTML template.
+    - Create a function to get the selected time frame.  Result should be in the format of start and end date.
+    - Allow for defaults to be specified.
+        - Last 24 hours should be the default if none are specified.
+    - Enable/disable the from/to date/time fields based on whether custom is selected.
+    - Look into using date picker: https://github.com/Eonasdan/bootstrap-datetimepicker
+- Types
+    - Create types view HTML template.
+    - Create a function to get the selected types.
+        - Need to also return whether to include HX alerts.
+    - Allow for defaults to be specified.
+        - Default is to select all.
+
+
+
+### Refactoring and Fixes
 - usersettings aren't being updated after a user selects an expression.
+- Fix the this stuff in the TableView.
 - Suppressions links it to small.
 
-### Alerting
-- Continue to define the Alerts Search view.
-    - Use class names to define the different sections of the alerts page rather than using ids.
-    - Need to make sure that the alerts.js is being compressed for production.
-    - Need to setup the alerts ejs templates.
-- What are the types for HX alerts.  For instance, malware-callback, etc.
-
-### Change the default theme to Flatly.
+### Alerting Deployment
+- Update the IOC viewer project and put a dependency on it.
+- Need to recompile the small fonts themes and find a place for them in the static directory.
+- Should we be checking in the library dependencies, if so where?
+- Update scripts to optimize js files.
+    - Make sure source maps are being generated.
+- Update scripts to optimize css files.
+- Update documentation for new URL configuration.
+    - Update template json files.
+- Update the docs for clustering and host settings.
+- Move the database pool settings to the env.json file.
+- Ensure the database pool settings are initialized to a reasonable value.
 
 ### Update the select2 component to the latest
 
 ### Update the typeahead component to the latest.
 
 ### Settings Refactoring
-- Update the docs for clustering and host settings.
-- Move the database pool settings to the env.json file.
-- Ensure the database pool settings are initialized to a reasonable value.
+
 
 ### Enter Redwood City user stories into TP.
 

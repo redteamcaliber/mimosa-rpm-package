@@ -1,4 +1,5 @@
 define (require) ->
+    $ = require 'jquery'
     utils = require 'uac/common/utils'
 
     ###
@@ -34,7 +35,7 @@ define (require) ->
             panel_collapse.attr('id', 'collapse-' + @name)
             panel_collapse.addClass('panel-collapse')
             panel_collapse.addClass('collapse')
-            if not @collapsed
+            unless @collapsed
                 panel_collapse.addClass('in')
             panel_body.wrap(panel_collapse)
             panel_collapse = panel_body.parent()
@@ -49,7 +50,7 @@ define (require) ->
 
             # Create the accordion div.
             panel_group = $(document.createElement('div'))
-            panel_group.attr('id', @name + '-accordion')
+            panel_group.attr('id', "accordion-#{@name}")
             panel_group.addClass('panel-group')
             panel.wrap(panel_group)
 
@@ -65,7 +66,10 @@ define (require) ->
             if @display_toggle
                 # Create the icon.
                 icon = $(document.createElement('i'))
-                icon.addClass('fa fa-chevron-circle-down')
+                if @collapsed
+                    icon.addClass('fa fa-plus-square')
+                else
+                    icon.addClass('fa fa-minus-square')
                 icon.addClass('fa-lg')
                 icon.addClass('pull-right')
 
@@ -94,13 +98,21 @@ define (require) ->
 
             panel.prepend(panel_heading)
 
+            @get_collapse().on 'hide.bs.collapse',  =>
+                el = @get_accordion().find('.fa-minus-square')
+                el.removeClass('fa-minus-square')
+                el.addClass('fa-plus-square')
+
+            @get_collapse().on 'show.bs.collapse', =>
+                el = @get_accordion().find('.fa-plus-square')
+                el.removeClass('fa-plus-square')
+                el.addClass('fa-minus-square')
+
             return @
 
-        get_accordion_inner: ->
-            @$el.closest('.accordion-inner')
-
         get_accordion: ->
-            @$el.closest('.accordion')
+            id = "#accordion-#{@name}"
+            $(id)
 
         show: ->
             # Show the accordion decorator.
@@ -112,15 +124,26 @@ define (require) ->
 
         set: (key, value) ->
             if key && key == 'title'
-                $('#' + @name + '-title').html(value)
+                id = "##{@name}-title"
+                $(id).html(value)
+
+        get_collapse: ->
+            id = "#collapse-#{@name}"
+            $(id)
+
+        collapsed: ->
+            @get_collapse().hasClass('in')
+
         collapse: ->
-            $('#collapse-' + @name).removeClass('in')
+            @get_collapse().removeClass('in')
 
         expand: ->
-            $('#collapse-' + @name).addClass('in')
+            @get_collapse().addClass('in')
 
         toggle: ->
-            $('#collapse-' + @name).collapse('toggle')
+            @get_collapse().collapse('toggle')
 
+        close: ->
+            @get_collapse().off()
 
     return CollapsableContentView

@@ -1,12 +1,8 @@
 define (require) ->
+
     _  = require 'underscore'
     _s = require 'underscore.string'
     _.mixin(_s.exports())
-
-    datatables = require 'datatables'
-    require 'datatables_bootstrap'
-
-    bootstrap = require 'bootstrap'
 
     TaskCollection = require 'sf/models/TaskCollection'
     TasksTableView = require 'sf/views/TasksTableView'

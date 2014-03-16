@@ -1,5 +1,7 @@
 define(function (require) {
     var async = require('async');
+    var iocviewer = require('iocviewer');
+    var highlighter = require('highlighter');
     var View = require('uac/views/View');
     var TableView = require('uac/views/TableView');
     var CollapsableContentView = require('uac/views/CollapsableContentView');

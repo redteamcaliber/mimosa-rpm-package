@@ -15,23 +15,36 @@ window.require =
         typeahead: 'lib/typeahead.js/typeahead'
         underscore: 'lib/underscore/underscore'
         'underscore.string': 'lib/underscore.string/underscore.string'
-    shim:
-        jquery: (
+    shim: {
+        jquery: {
             exports: '$'
-        )
-        backbone: (
-            deps: ['underscore', 'jquery'],
+        }
+        backbone: {
+            deps: ['underscore', 'jquery']
             exports: 'Backbone'
-        )
-        bootstrap: (
+        }
+        bootstrap: {
             deps: ['jquery']
             exports: 'bootstrap'
-        )
-        typeahead: (
+        }
+        highlighter: {
             deps: ['jquery']
-            exports: 'typeahead'
-        )
-        underscore: (
+            exports: '$.fn.highlighter'
+        }
+        iocviewer: {
+            deps: ['jquery']
+            exports: '$.fn.iocViewer'
+        }
+        select2: {
+            deps: ['jquery'],
+            exports: 'Select2'
+        }
+        typeahead: {
+            deps: ['jquery']
+            exports: 'jQuery.fn.typeahead'
+        }
+        underscore: {
             exports: '_'
-        )
-    enforceDefine: false
+        }
+    }
+    enforceDefine: true

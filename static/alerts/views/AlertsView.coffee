@@ -8,10 +8,11 @@ define (require) ->
     ###
     class AlertsView extends View
         initialize: ->
-            @alerts_view = new SearchView()
+            @search_view = new SearchView()
 
-    render: ->
-        console.log 'AlertsSearchView:render()'
+        render: ->
+            @search_view.fetch()
+
 
     return AlertsView
 

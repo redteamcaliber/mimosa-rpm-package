@@ -41,7 +41,7 @@ define (require) ->
                 context - the context.
         ###
         apply_template: (templates, template, context) ->
-            @.$el.html uac_utils.run_template(templates, template, context)
+            @$el.html uac_utils.run_template(templates, template, context)
 
         block: ->
             uac_utils.block_element @$el

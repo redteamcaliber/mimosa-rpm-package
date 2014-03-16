@@ -8,6 +8,7 @@ log.add log.transports.Console,
     level: 'debug'
     colorize: true
 
+utils = require './test-utils'
 request = require 'm-request'
 
 URL = 'https://uac.vm.mandiant.com'
@@ -24,14 +25,26 @@ describe 'alerts-rest-tests', ->
                     should.exist body.length
                     body.length.should.be.greaterThan 0
 
-                    required_keys = ['id', 'title', 'description', 'category']
-                    for tag in body
-                        for required in required_keys
-                            should.exist tag[required]
+                    utils.should_have_keys body, ['id', 'title', 'description', 'category']
 
                     done()
             catch e
                 done(e)
+
+    describe '/alerts/api/clients', ->
+        it 'should return all client values', (done) ->
+            get '/alerts/api/clients', {}, (err, response, body) ->
+                try
+                    should.not.exist err
+                    should.exist body
+                    should.exist body.length
+                    body.length.should.be.greaterThan 0
+
+                    # TODO: Check fields...
+
+                    done()
+                catch e
+                    done e
 
 ###
     Send a GET request.

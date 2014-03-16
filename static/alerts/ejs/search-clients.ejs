@@ -1,0 +1,11 @@
+<div class="form-group">
+    <label for="clients-select" title="(ctrl + click, or shift click for multiple)">Clients</label>
+    <select id="clients-select"
+            class="form-control"
+            multiple
+            size="12">
+        <% _.each (clients, function(client) { %>
+        <option><%= client.name %></option>
+        <% }) %>
+    </select>
+</div>

@@ -24,7 +24,7 @@ define (require) ->
                 backgroundColor: ''
             ),
             overlayCSS: (
-                backgroundColor: get_styles().overlay_color,
+                backgroundColor: get_styles().body_color,
                 opacity: .5
             ),
             baseZ: 5000
@@ -227,36 +227,78 @@ define (require) ->
             console.error "Unable to load template: #{template_name}, templates is undefined."
             return
 
+    reset_styles = ->
+        this._styles = undefined
+
     ###
     Retrieve the UAC specific CSS styles.
     ###
-    get_styles = ->
-        unless this._styles
+    get_styles = (reset) ->
+        if reset or not this._styles
             this._styles = {}
-            body_style = window.getComputedStyle(document.body)
-            if body_style and body_style.getPropertyValue("background-color")
-                this._styles.overlay_color = body_style.getPropertyValue("background-color")
-            else
-                this._styles.overlay_color = "#cccccc"
 
-            # Get the well color of the theme.
-            well_el = $('#uac-well-element');
+            source_el = $ '#uac-style-div'
+
+            # Get the style element.
+            if style_el and style_el.length > 0
+                # Clear the existing style element.
+                style_el.prop("type", "text/css").html('')
+            else
+                # Create a new style element.
+                style_el = $ '<style id="uac-theme-style">'
+                # Add the style section to the head of the document.
+                style_el.appendTo("head")
+
+            # Obtain the style properties.
+
+            # Get the shaded color from a well element.
+            well_el = source_el.find('.well')
             well_style = if well_el then window.getComputedStyle(well_el.get(0)) else undefined
             if well_el && well_style
                 well_style = window.getComputedStyle(well_el.get(0))
-                this._styles.shaded_color = well_style.getPropertyValue('background-color')
+                well_color = well_style.getPropertyValue('background-color')
             else
-                this._styles.shaded_color = '#cccccc'
+                well_color = '#cccccc'
+            # Get the body color from the body element.
+            body_style = window.getComputedStyle(document.body)
+            if body_style and body_style.getPropertyValue("background-color")
+                body_color = body_style.getPropertyValue("background-color")
+            else
+                body_color = "#cccccc"
+            # Get the primary color from the primary element.
+            primary_el = source_el.find('.btn-primary')
+            primary_style = if primary_el then window.getComputedStyle(primary_el.get(0)) else undefined
+            if primary_el and primary_style
+                primary_color = primary_style.getPropertyValue("background-color")
+            else
+                primary_color = "#2a9fd6"
+
+            # The html to add.
+            html = '\n'
+
+            # Generate the style sheet.
+
+            # The uac-theme-shaded class.
+            #border: 1px solid rgb(236, 240, 241);
+            html += ".uac-theme-well-background { background-color: #{well_color} }\n"
+            html += ".uac-theme-primary-background { background-color: #{primary_color} }\n"
+            # The uac-theme-body class.
+            html += ".uac-theme-background { background-color: #{body_color} }\n"
+            # The uac-theme-border classes.
+            html += ".uac-theme-border { border: 1px solid #{well_color}; }"
+            html += ".uac-theme-border-right { border-right: 1px solid #{well_color}; }"
+            html += ".uac-theme-border-left { border-left: 1px solid #{well_color}; }"
+            html += ".uac-theme-border-top { border-top: 1px solid #{well_color}; }"
+            html += ".uac-theme-border-bottom { border-bottom: 1px solid #{well_color}; }"
+
+            # Add the classes to the style section.
+            style_el.prop("type", "text/css").html(html)
+
+            this._styles.well_color = well_color
+            this._styles.body_color = body_color
+            this._styles.primary_color = primary_color
 
         this._styles
-
-    ###
-    Clear the UAC CSS styles, will be recalculated on next usage.
-    ###
-    reset_styles = ->
-        this._styles = `undefined`
-        return
-
 
     ###
     Change the current UAC theme.
@@ -274,15 +316,16 @@ define (require) ->
 
         # Reload the CSS.
         $("#bootstrap").attr "href", url
-        set_cookie
-            name: "theme"
-            value: theme
-            http_only: false
-            expires: moment().add("y", 1).utc()
 
+        # Update the theme cookie.
+        set_cookie(name: "theme", value: theme, http_only: false, expires: moment().add("y", 1).utc())
 
-        # Clear the overlay color since the theme has been changed.
-        reset_styles()
+        setTimeout ( ->
+            # Clear the overlay color since the theme has been changed.  This needs to be on a slight delay to allow the
+            # style shee to finish loading.
+            get_styles(true)
+        ), 100
+
         return
 
     ###
@@ -295,7 +338,7 @@ define (require) ->
 
         name = options.name
         path = options.path or "/"
-        domain = options.domain or `undefined`
+        domain = options.domain or undefined
         expires = options.expires or "null"
         value = options.value or ""
         secure = options.secure isnt false
@@ -336,7 +379,7 @@ define (require) ->
             {}
         else if arguments.length is 1
             value = window.localStorage.getItem(k)
-            (if value then JSON.parse(value) else `undefined`)
+            (if value then JSON.parse(value) else undefined)
         else if arguments.length > 1
             if o
 
@@ -344,7 +387,7 @@ define (require) ->
                 window.localStorage.setItem k, JSON.stringify(o)
             else
                 window.localStorage.removeItem k
-            `undefined`
+            undefined
         else
             local = window.localStorage
             (if local then JSON.parse(local) else {})
@@ -364,7 +407,7 @@ define (require) ->
 
             # Retrieve the object.
             value = window.sessionStorage.getItem(k)
-            (if value then JSON.parse(value) else `undefined`)
+            (if value then JSON.parse(value) else undefined)
         else if arguments.length > 1
             if o
                 window.sessionStorage.setItem k, JSON.stringify(o)

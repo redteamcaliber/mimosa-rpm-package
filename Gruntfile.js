@@ -57,7 +57,7 @@ module.exports = function (grunt) {
              */
             templates: {
                 files: ['static/uac/ejs/*.ejs', 'static/alerts/ejs/*.ejs', 'static/sf/ejs/*.ejs'],
-                tasks: ['jst:uac-dev', 'jst:alerts-dev', 'jst:sf-dev', 'jst:nt-dev']
+                tasks: ['jst-dev']
             },
             coffee: {
                 files: ['uac-server.coffee', 'lib/**/*.coffee', 'static/**/*.coffee'],
@@ -576,6 +576,16 @@ module.exports = function (grunt) {
         'jst',                  // Compile the templates.
         'easy_rpm'          // Create the RPM.
     ]);
+
+    /**
+     * Compile the JST templates for development.
+     */
+    grunt.registerTask('jst-dev', ['jst:uac-dev', 'jst:alerts-dev', 'jst:sf-dev']);
+
+    /**
+     * Compile the JST templates, coffeescript files, and watch for changes.
+     */
+    grunt.registerTask('compile-watch', ['jst-dev', 'coffee', 'watch']);
 
     /**
      * Deploy an existing UAC rpm to devnet.

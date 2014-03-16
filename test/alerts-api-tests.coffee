@@ -7,6 +7,7 @@ _ = require 'underscore'
 _.str = require 'underscore.string'
 _.mixin _.str.exports()
 
+utils = require './test-utils'
 api = require 'alerts-api'
 
 log = require 'winston'
@@ -21,35 +22,45 @@ describe 'alerts-api-tests', ->
     describe '#get_tags()', ->
         it 'should return all tag values', (done) ->
             api.get_tags (err, tags) ->
-                should.not.exist err
-                should.exist tags
-                should.exist tags.length
-                tags.length.should.be.greaterThan 0
-                done()
+                try
+                    should.not.exist err
+                    should.exist tags
+                    should.exist tags.length
+                    tags.length.should.be.greaterThan 0
+
+                    utils.should_have_keys body, ['id', 'title', 'description', 'category']
+
+                    done()
+                catch e
+                    done e
 
     describe '#get_clients()', ->
         it 'should return all clients', (done) ->
-            api.get_clients (err, clients) ->
-                should.not.exist err
-                should.exist clients
-                should.exist clients.length
-                clients.length.should.be.greaterThan 0
-                for client in clients
-                    should.exist client.uuid
-                    should.exist client.name
-                done()
+            api.get_clients {}, (err, clients) ->
+                try
+                    should.not.exist err
+                    should.exist clients
+                    should.exist clients.length
+                    clients.length.should.be.greaterThan 0
+
+                    utils.should_have_keys(clients, ['alias', 'name', 'uuid'])
+
+                    done()
+                catch e
+                    done e
 
     describe '#get_alert_types()', ->
         it 'should return all alert types', (done) ->
             api.get_alert_types (err, types) ->
-                should.not.exist err
-                should.exist types
-                should.exist types.length
-                types.length.should.be.greaterThan 0
-                for type in types
-                    should.exist type.uuid
-                    should.exist type.title
-                done()
+                try
+                    should.not.exist err
+                    should.exist types
+                    should.exist types.length
+                    types.length.should.be.greaterThan 0
+
+                    done()
+                catch e
+                    done e
 
     describe '#get_timeframes()', ->
         it 'should return all timeframe options', ->

@@ -31,6 +31,18 @@ app.get '/', (req, res, next) ->
 #
 # API Routes.
 #
+
 app.get '/api/tags', (req, res) ->
     alerts_api.get_tags (err, tags) ->
-        route_utils.send(res, tags)
+        route_utils.send res, tags
+
+app.get '/api/clients', (req, res) ->
+    alerts_api.get_clients req.attributes, (err, clients) ->
+        route_utils.send res, clients
+
+app.get '/api/timeframes', (req, res) ->
+    route_utils.send res, alerts_api.get_timeframes()
+
+app.get '/api/types', (req, res) ->
+    alerts_api.get_alert_types req.attributes, (err, types) ->
+        route_utils.send res, types

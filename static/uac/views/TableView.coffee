@@ -2,6 +2,8 @@ define (require) ->
     $ = require 'jquery'
     View = require 'uac/views/View'
     utils = require 'uac/common/utils'
+    datatables = require 'datatables'
+    datatables_bootstrap = require 'datatables_bootstrap'
 
     get_datatables_settings = (parent, settings) ->
         defaults =

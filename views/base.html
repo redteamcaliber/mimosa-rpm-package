@@ -46,12 +46,11 @@
     <script src="/static/lib/requirejs/require.js" data-main="{% block data_main %}{% endblock %}"></script>
 
     <script type="text/javascript">
-        require(['jquery', 'bootstrap', 'backbone', 'uac/views/ThemeView'], function($, bs, Backbone, ThemeView) {
+        require(['jquery', 'bootstrap', 'backbone', 'uac/views/ThemeView'],
+                function($, bs, Backbone, ThemeView) {
             $(function() {
                 // Load common UAC views.
-                new ThemeView({
-                    el: '#uac-user-nav'
-                });
+                new ThemeView({ el: '#uac-user-nav' });
             });
         });
     </script>
@@ -157,8 +156,8 @@
 </div>
 
 {# Hidden elements used to compute styles. #}
-<div style="display: none">
-    <button id="uac-primary-element" class="btn btn-primary"></button>
+<div id="uac-style-div" style="display: none">
+    <button id="uac-btn-primary" class="btn btn-primary"></button>
     <div id="uac-well-element" class="well"></div>
 </div>
 

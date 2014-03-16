@@ -1,0 +1,411 @@
+{"readable": false, "domain": null, "_maxListeners": 10, "httpVersion": "1.1", "complete": true, "_pendingIndex": 0, "url": "", "method": null, "statusCode": 200, "_consuming": true, "_dumped": false, "httpVersionMajor": 1, "httpVersionMinor": 1, "upgrade": false, "_readableState": {
+    "highWaterMark": 16384,
+    "length": 0,
+    "pipes": null,
+    "pipesCount": 0,
+    "flowing": false,
+    "ended": true,
+    "endEmitted": true,
+    "reading": false,
+    "calledRead": true,
+    "sync": false,
+    "needReadable": true,
+    "emittedReadable": false,
+    "readableListening": false,
+    "objectMode": false,
+    "defaultEncoding": "utf8",
+    "ranOut": false,
+    "awaitDrain": 0,
+    "readingMore": false,
+    "decoder": null,
+    "encoding": null,
+    "buffer": []
+}, "_events": {
+    "end": [
+        {},
+        {},
+        {}
+    ],
+    "readable": {},
+    "close": [
+        {},
+        {}
+    ],
+    "data": {}
+}, "socket": {
+    "_connecting": false,
+    "_handle": null,
+    "readable": false,
+    "domain": null,
+    "_maxListeners": 10,
+    "writable": false,
+    "allowHalfOpen": false,
+    "onend": null,
+    "destroyed": true,
+    "errorEmitted": false,
+    "bytesRead": 402,
+    "_bytesDispatched": 547,
+    "_pendingData": null,
+    "_pendingEncoding": "",
+    "parser": null,
+    "ondata": null,
+    "_idleNext": null,
+    "_idlePrev": null,
+    "_idleTimeout": -1,
+    "_readableState": {
+        "highWaterMark": 16384,
+        "length": 0,
+        "pipes": null,
+        "pipesCount": 0,
+        "flowing": false,
+        "ended": false,
+        "endEmitted": false,
+        "reading": true,
+        "calledRead": true,
+        "sync": false,
+        "needReadable": true,
+        "emittedReadable": false,
+        "readableListening": false,
+        "objectMode": false,
+        "defaultEncoding": "utf8",
+        "ranOut": false,
+        "awaitDrain": 0,
+        "readingMore": false,
+        "decoder": null,
+        "encoding": null,
+        "buffer": []
+    },
+    "_events": {
+        "end": {
+            "listener": {}
+        },
+        "finish": {},
+        "_socketEnd": {},
+        "free": {},
+        "close": [
+            {},
+            {}
+        ],
+        "agentRemove": {},
+        "drain": {},
+        "error": [
+            {}
+        ]
+    },
+    "_writableState": {
+        "highWaterMark": 16384,
+        "objectMode": false,
+        "needDrain": false,
+        "ending": true,
+        "ended": true,
+        "finished": true,
+        "decodeStrings": false,
+        "defaultEncoding": "utf8",
+        "length": 0,
+        "writing": false,
+        "sync": false,
+        "bufferProcessing": false,
+        "writecb": null,
+        "writelen": 0,
+        "onwrite": {},
+        "buffer": []
+    }
+}, "connection": {
+    "_connecting": false,
+    "_handle": null,
+    "readable": false,
+    "domain": null,
+    "_maxListeners": 10,
+    "writable": false,
+    "allowHalfOpen": false,
+    "onend": null,
+    "destroyed": true,
+    "errorEmitted": false,
+    "bytesRead": 402,
+    "_bytesDispatched": 547,
+    "_pendingData": null,
+    "_pendingEncoding": "",
+    "parser": null,
+    "ondata": null,
+    "_idleNext": null,
+    "_idlePrev": null,
+    "_idleTimeout": -1
+}, "headers": {
+    "server": "gunicorn/18.0",
+    "date": "Sun, 16 Mar 2014 05:57:56 GMT",
+    "connection": "close",
+    "content-type": "application/json",
+    "content-length": "251"
+}, "trailers": {}, "_pendings": [], "client": {
+    "_connecting": false,
+    "_handle": null,
+    "readable": false,
+    "domain": null,
+    "_maxListeners": 10,
+    "writable": false,
+    "allowHalfOpen": false,
+    "onend": null,
+    "destroyed": true,
+    "errorEmitted": false,
+    "bytesRead": 402,
+    "_bytesDispatched": 547,
+    "_pendingData": null,
+    "_pendingEncoding": "",
+    "parser": null,
+    "ondata": null,
+    "_idleNext": null,
+    "_idlePrev": null,
+    "_idleTimeout": -1
+}, "req": {
+    "domain": null,
+    "_maxListeners": 10,
+    "writable": true,
+    "_last": true,
+    "chunkedEncoding": false,
+    "shouldKeepAlive": false,
+    "useChunkedEncodingByDefault": false,
+    "sendDate": false,
+    "_hasBody": true,
+    "_trailer": "",
+    "finished": true,
+    "_hangupClose": false,
+    "method": "GET",
+    "path": "/api/v1/clients/",
+    "_header": "GET /api/v1/clients/ HTTP/1.1\r\nhost: candyvan.dev.mandiant.com:9001\r\ncookie: m_login_staging=uid%3Dapp.uac%3Bvaliduntil%3D1394978276%3Btokens%3D1%2CSU%2CUAC%2CA%3Budata%3DeyJ1dWlkIjoiYThjNGM5ODYtNTkwMi0xMDMyLThhMTAtMGY3MjYzZTA5Y2E0IiwidmFsaWRlbmQiOjEzOTQ5OTI2NzZ9%3Bgraceperiod%3D1394953076%3Bsig%3De9eL2P8FyG5iDgQeVSdiUlZULRHUhsLn951z8i2ZjzCLJuZ%2B1KpjP%2B%2FVGOuVnzGSZ1DZR73qVo%2BPY%2BrHJdkJF%2FQLs2uZZMrHLUSRrN8%2Ba%2FDMUkKOQweFNHoYvQ%2BXAigScFAONCj1IhSwu31RxcnrkSf%2FphVNJYNq2etBOvSRxcU%3D\r\naccept: application/json\r\nConnection: keep-alive\r\n\r\n",
+    "_headerSent": true,
+    "parser": null,
+    "_events": {
+        "error": {},
+        "drain": {}
+    },
+    "output": [],
+    "outputEncodings": [],
+    "agent": {
+        "domain": null,
+        "_maxListeners": 10,
+        "maxSockets": 5,
+        "_events": {
+            "free": {}
+        },
+        "options": {},
+        "requests": {},
+        "sockets": {
+            "candyvan.dev.mandiant.com:9001": []
+        },
+        "createConnection": {}
+    },
+    "_headers": {
+        "host": "candyvan.dev.mandiant.com:9001",
+        "cookie": "m_login_staging=uid%3Dapp.uac%3Bvaliduntil%3D1394978276%3Btokens%3D1%2CSU%2CUAC%2CA%3Budata%3DeyJ1dWlkIjoiYThjNGM5ODYtNTkwMi0xMDMyLThhMTAtMGY3MjYzZTA5Y2E0IiwidmFsaWRlbmQiOjEzOTQ5OTI2NzZ9%3Bgraceperiod%3D1394953076%3Bsig%3De9eL2P8FyG5iDgQeVSdiUlZULRHUhsLn951z8i2ZjzCLJuZ%2B1KpjP%2B%2FVGOuVnzGSZ1DZR73qVo%2BPY%2BrHJdkJF%2FQLs2uZZMrHLUSRrN8%2Ba%2FDMUkKOQweFNHoYvQ%2BXAigScFAONCj1IhSwu31RxcnrkSf%2FphVNJYNq2etBOvSRxcU%3D",
+        "accept": "application/json"
+    },
+    "_headerNames": {
+        "host": "host",
+        "cookie": "cookie",
+        "accept": "accept"
+    }
+}, "pipe": {}, "addListener": {}, "on": {}, "pause": {}, "resume": {}, "read": {}, "request": {
+    "domain": null,
+    "_maxListeners": 10,
+    "readable": true,
+    "writable": true,
+    "method": "GET",
+    "followRedirect": false,
+    "explicitMethod": true,
+    "__isRequestRequest": true,
+    "_redirectsFollowed": 0,
+    "maxRedirects": 10,
+    "followAllRedirects": false,
+    "setHost": true,
+    "port": "9001",
+    "host": "candyvan.dev.mandiant.com",
+    "path": "/api/v1/clients/",
+    "_json": true,
+    "_started": true,
+    "href": "http://candyvan.dev.mandiant.com:9001/api/v1/clients/",
+    "ntick": true,
+    "_destdata": true,
+    "_ended": true,
+    "_callbackCalled": true,
+    "_events": {
+        "error": {},
+        "complete": {},
+        "pipe": {},
+        "end": [
+            {},
+            {}
+        ],
+        "data": {}
+    },
+    "params": {},
+    "headers": {
+        "cookie": "m_login_staging=uid%3Dapp.uac%3Bvaliduntil%3D1394978276%3Btokens%3D1%2CSU%2CUAC%2CA%3Budata%3DeyJ1dWlkIjoiYThjNGM5ODYtNTkwMi0xMDMyLThhMTAtMGY3MjYzZTA5Y2E0IiwidmFsaWRlbmQiOjEzOTQ5OTI2NzZ9%3Bgraceperiod%3D1394953076%3Bsig%3De9eL2P8FyG5iDgQeVSdiUlZULRHUhsLn951z8i2ZjzCLJuZ%2B1KpjP%2B%2FVGOuVnzGSZ1DZR73qVo%2BPY%2BrHJdkJF%2FQLs2uZZMrHLUSRrN8%2Ba%2FDMUkKOQweFNHoYvQ%2BXAigScFAONCj1IhSwu31RxcnrkSf%2FphVNJYNq2etBOvSRxcU%3D",
+        "accept": "application/json"
+    },
+    "callback": {},
+    "pool": {
+        "https:false": {
+            "domain": null,
+            "_maxListeners": 10,
+            "maxSockets": 5,
+            "_events": {
+                "free": {}
+            },
+            "options": {
+                "rejectUnauthorized": false
+            },
+            "requests": {},
+            "sockets": {},
+            "createConnection": {}
+        }
+    },
+    "dests": [],
+    "_callback": {},
+    "uri": {
+        "protocol": "http:",
+        "slashes": true,
+        "auth": null,
+        "host": "candyvan.dev.mandiant.com:9001",
+        "port": "9001",
+        "hostname": "candyvan.dev.mandiant.com",
+        "hash": null,
+        "search": null,
+        "query": null,
+        "pathname": "/api/v1/clients/",
+        "path": "/api/v1/clients/",
+        "href": "http://candyvan.dev.mandiant.com:9001/api/v1/clients/"
+    },
+    "_jar": {
+        "cookies": [
+            {
+                "str": "m_login_staging=uid%3Dapp.uac%3Bvaliduntil%3D1394978276%3Btokens%3D1%2CSU%2CUAC%2CA%3Budata%3DeyJ1dWlkIjoiYThjNGM5ODYtNTkwMi0xMDMyLThhMTAtMGY3MjYzZTA5Y2E0IiwidmFsaWRlbmQiOjEzOTQ5OTI2NzZ9%3Bgraceperiod%3D1394953076%3Bsig%3De9eL2P8FyG5iDgQeVSdiUlZULRHUhsLn951z8i2ZjzCLJuZ%2B1KpjP%2B%2FVGOuVnzGSZ1DZR73qVo%2BPY%2BrHJdkJF%2FQLs2uZZMrHLUSRrN8%2Ba%2FDMUkKOQweFNHoYvQ%2BXAigScFAONCj1IhSwu31RxcnrkSf%2FphVNJYNq2etBOvSRxcU%3D",
+                "name": "m_login_staging",
+                "value": "uid%3Dapp.uac%3Bvaliduntil%3D1394978276%3Btokens%3D1%2CSU%2CUAC%2CA%3Budata%3DeyJ1dWlkIjoiYThjNGM5ODYtNTkwMi0xMDMyLThhMTAtMGY3MjYzZTA5Y2E0IiwidmFsaWRlbmQiOjEzOTQ5OTI2NzZ9%3Bgraceperiod%3D1394953076%3Bsig%3De9eL2P8FyG5iDgQeVSdiUlZULRHUhsLn951z8i2ZjzCLJuZ%2B1KpjP%2B%2FVGOuVnzGSZ1DZR73qVo%2BPY%2BrHJdkJF%2FQLs2uZZMrHLUSRrN8%2Ba%2FDMUkKOQweFNHoYvQ%2BXAigScFAONCj1IhSwu31RxcnrkSf%2FphVNJYNq2etBOvSRxcU%3D",
+                "expires": null,
+                "path": "/"
+            }
+        ]
+    },
+    "_parserErrorHandler": {},
+    "httpModule": {
+        "parsers": {
+            "name": "parsers",
+            "max": 1000,
+            "constructor": {},
+            "list": [
+                {
+                    "_url": "",
+                    "socket": null,
+                    "incoming": null,
+                    "maxHeaderPairs": 2000,
+                    "onIncoming": null,
+                    "_headers": [],
+                    "onHeaders": {},
+                    "onHeadersComplete": {},
+                    "onBody": {},
+                    "onMessageComplete": {}
+                }
+            ]
+        },
+        "STATUS_CODES": {
+            "100": "Continue",
+            "101": "Switching Protocols",
+            "102": "Processing",
+            "200": "OK",
+            "201": "Created",
+            "202": "Accepted",
+            "203": "Non-Authoritative Information",
+            "204": "No Content",
+            "205": "Reset Content",
+            "206": "Partial Content",
+            "207": "Multi-Status",
+            "300": "Multiple Choices",
+            "301": "Moved Permanently",
+            "302": "Moved Temporarily",
+            "303": "See Other",
+            "304": "Not Modified",
+            "305": "Use Proxy",
+            "307": "Temporary Redirect",
+            "400": "Bad Request",
+            "401": "Unauthorized",
+            "402": "Payment Required",
+            "403": "Forbidden",
+            "404": "Not Found",
+            "405": "Method Not Allowed",
+            "406": "Not Acceptable",
+            "407": "Proxy Authentication Required",
+            "408": "Request Time-out",
+            "409": "Conflict",
+            "410": "Gone",
+            "411": "Length Required",
+            "412": "Precondition Failed",
+            "413": "Request Entity Too Large",
+            "414": "Request-URI Too Large",
+            "415": "Unsupported Media Type",
+            "416": "Requested Range Not Satisfiable",
+            "417": "Expectation Failed",
+            "418": "I'm a teapot",
+            "422": "Unprocessable Entity",
+            "423": "Locked",
+            "424": "Failed Dependency",
+            "425": "Unordered Collection",
+            "426": "Upgrade Required",
+            "428": "Precondition Required",
+            "429": "Too Many Requests",
+            "431": "Request Header Fields Too Large",
+            "500": "Internal Server Error",
+            "501": "Not Implemented",
+            "502": "Bad Gateway",
+            "503": "Service Unavailable",
+            "504": "Gateway Time-out",
+            "505": "HTTP Version Not Supported",
+            "506": "Variant Also Negotiates",
+            "507": "Insufficient Storage",
+            "509": "Bandwidth Limit Exceeded",
+            "510": "Not Extended",
+            "511": "Network Authentication Required"
+        },
+        "IncomingMessage": {
+            "super_": {
+                "ReadableState": {},
+                "super_": {
+                    "super_": {
+                        "listenerCount": {}
+                    },
+                    "Writable": {
+                        "WritableState": {}
+                    },
+                    "Duplex": {},
+                    "Transform": {},
+                    "PassThrough": {}
+                },
+                "_fromList": {}
+            }
+        },
+        "OutgoingMessage": {},
+        "ServerResponse": {},
+        "ClientRequest": {},
+        "request": {},
+        "get": {},
+        "Server": {
+            "super_": {}
+        },
+        "createServer": {},
+        "_connectionListener": {},
+        "Client": {},
+        "createClient": {}
+    },
+    "agentClass": {
+        "defaultMaxSockets": 5
+    }
+}, "toJSON": {}, "body": {
+    "url": "http://candyvan.dev.mandiant.com:9001/api/v1/clients/",
+    "version": "0.0-4",
+    "response": [
+        {
+            "alias": "SWANIAWSKI-GRIMES",
+            "name": "Swaniawski-Grimes",
+            "uuid": "bcc73285-e021-4356-b2ec-0ecb4f2d8b79"
+        }
+    ]
+}}
