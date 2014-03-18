@@ -40,8 +40,8 @@ app.get '/api/clients', (req, res) ->
     alerts_api.get_clients req.attributes, (err, clients) ->
         route_utils.send res, clients
 
-app.get '/api/timeframes', (req, res) ->
-    route_utils.send res, alerts_api.get_timeframes()
+app.get '/api/times', (req, res) ->
+    route_utils.send res, alerts_api.get_times()
 
 app.get '/api/types', (req, res) ->
     alerts_api.get_alert_types req.attributes, (err, types) ->

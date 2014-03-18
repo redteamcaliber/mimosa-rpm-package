@@ -1,11 +1,11 @@
 <div class="form-group">
-    <label for="clients-select" title="(ctrl + click, or shift click for multiple)">Clients</label>
-    <select id="clients-select"
+    <label for="search-clients-select" title="(ctrl + click, or shift click for multiple)">Clients</label>
+    <select id="serach-lients-select"
             class="form-control"
             multiple
             size="12">
         <% _.each (clients, function(client) { %>
-        <option><%= client.name %></option>
+        <option value="<%= client.uuid %>"><%= client.name %></option>
         <% }) %>
     </select>
 </div>

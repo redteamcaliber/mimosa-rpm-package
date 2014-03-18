@@ -36,15 +36,16 @@ DELETE_DESCRIPTION = 'Everything else.'
 # Return the collection of tag values.
 #
 get_tags = (callback) ->
-    callback null, [
-        {id: 'notreviewied', title: 'Not Reviewed', description: NOTREVIEWED_DESCRIPTION, category: 'new'}
-        {id: 'investigating', title: 'Investigating', description: INVESTIGATING_DESCRIPTION, category: 'in_progress'}
-        {id: 'escalate', title: 'Escalate', description: ESCALATE_DESCRIPTION, category: 'in_progress'}
-        {id: 'reportable', title: 'Reportable', description: REPORTABLE_DESCRIPTION, category: 'in_progress'}
+    tags = [
+        {id: 'notreviewed', title: 'Not Reviewed', description: NOTREVIEWED_DESCRIPTION, category: 'new'}
+        {id: 'investigating', title: 'Investigating', description: INVESTIGATING_DESCRIPTION, category: 'open'}
+        {id: 'escalate', title: 'Escalate', description: ESCALATE_DESCRIPTION, category: 'open'}
+        {id: 'reportable', title: 'Reportable', description: REPORTABLE_DESCRIPTION, category: 'open'}
         {id: 'reported', title: 'Reported', description: REPORTED_DESCRIPTION, category: 'closed'}
-        {id: 'unreportable', title: 'Unreportable', description: UNREPORTABLE_DESCRIPTION, category: 'closed'}
+        {id: 'unreported', title: 'Unreported', description: UNREPORTABLE_DESCRIPTION, category: 'closed'}
         {id: 'delete', title: 'Delete', description: DELETE_DESCRIPTION, category: 'closed'}
     ]
+    callback null, tags
 
 #
 # Return the list of clients.
@@ -62,9 +63,9 @@ get_alert_types = (attributes, callback) ->
         process_response(err, response, body, callback)
 
 #
-# Return the timeframe options.
+# Return the time frame options.
 #
-get_timeframes = ->
+get_times = ->
     [
         {id: 'hours_1', title: 'Last Hour', unit: 'hours', unit_value: 1}
         {id: 'hours_10', title: 'Last 10 Hours', unit: 'hours', unit_value: 10}
@@ -84,8 +85,10 @@ get_cv_url = (relative_url) ->
 # Process the CV server response.
 #
 process_response = (err, response, body, callback) ->
-    console.dir callback
-    if err
+    if not callback
+        # Error
+        log.error "\"callback\" parameter is undefined in call to: #{response.href}"
+    else if err
         callback(err)
     else if body
         if body.response
@@ -94,6 +97,7 @@ process_response = (err, response, body, callback) ->
             callback("Error: body did not contain a response in call to #{response.href}")
     else
         callback("Error: body was not defined in call to #{response.href}")
+    return
 
 
 #
@@ -102,4 +106,4 @@ process_response = (err, response, body, callback) ->
 exports.get_tags = get_tags
 exports.get_clients = get_clients
 exports.get_alert_types = get_alert_types
-exports.get_timeframes = get_timeframes
+exports.get_times = get_times

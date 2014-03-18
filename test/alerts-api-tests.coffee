@@ -28,7 +28,7 @@ describe 'alerts-api-tests', ->
                     should.exist tags.length
                     tags.length.should.be.greaterThan 0
 
-                    utils.should_have_keys body, ['id', 'title', 'description', 'category']
+                    utils.should_have_keys tags, ['id', 'title', 'description', 'category']
 
                     done()
                 catch e
@@ -51,7 +51,7 @@ describe 'alerts-api-tests', ->
 
     describe '#get_alert_types()', ->
         it 'should return all alert types', (done) ->
-            api.get_alert_types (err, types) ->
+            api.get_alert_types {}, (err, types) ->
                 try
                     should.not.exist err
                     should.exist types
@@ -62,11 +62,11 @@ describe 'alerts-api-tests', ->
                 catch e
                     done e
 
-    describe '#get_timeframes()', ->
-        it 'should return all timeframe options', ->
-            timeframes = api.get_timeframes()
-            should.exist timeframes
-            should.exist timeframes.length
-            timeframes.length.should.be.greaterThan 0
-            for t in timeframes
+    describe '#get_times()', ->
+        it 'should return all time frame options', ->
+            times = api.get_times()
+            should.exist times
+            should.exist times.length
+            times.length.should.be.greaterThan 0
+            for t in times
                 should.exist t.id

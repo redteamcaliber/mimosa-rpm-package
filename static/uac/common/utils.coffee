@@ -2,7 +2,7 @@ define (require) ->
     Backbone = require('backbone')
     require 'blockui'
     moment = require('moment')
-
+    require('bootstrap_growl')
 
     ###
         Retrieve the default block ui options.
@@ -121,10 +121,9 @@ define (require) ->
     display_info = (message) ->
         message = (if message then message += "&nbsp;" else message)
         $.bootstrapGrowl message,
-            type: "info"
+            type: 'info'
             width: "auto"
             delay: 10000
-
         return
 
     display_warn = (message) ->
@@ -133,7 +132,6 @@ define (require) ->
             type: "warn"
             width: "auto"
             delay: 10000
-
         return
 
     display_success = (message) ->
@@ -142,7 +140,6 @@ define (require) ->
             type: "success"
             width: "auto"
             delay: 10000
-
         return
 
     display_error = (message) ->
@@ -151,7 +148,6 @@ define (require) ->
             type: "danger"
             width: "auto"
             delay: 15000
-
         return
 
 
@@ -373,18 +369,22 @@ define (require) ->
                 return
             results
 
-    storage = (k, o) ->
+    #
+    # Utility for storing and retrieving Javascript objects from browser local storage.  This function serializes and
+    # deserialized the object values as necessary.
+    #
+    storage = (k, v) ->
         unless window.localStorage
-            log.warn "localStorage not available!"
+            console.warn "localStorage not available!"
             {}
         else if arguments.length is 1
             value = window.localStorage.getItem(k)
             (if value then JSON.parse(value) else undefined)
         else if arguments.length > 1
-            if o
+            if v
 
                 # Set the object.
-                window.localStorage.setItem k, JSON.stringify(o)
+                window.localStorage.setItem k, JSON.stringify(v)
             else
                 window.localStorage.removeItem k
             undefined
@@ -401,7 +401,7 @@ define (require) ->
     ###
     session = (k, o) ->
         unless window.sessionStorage
-            log.warn "sessionStorage not available!"
+            console.warn "sessionStorage not available!"
             {}
         else if arguments.length is 1
 
@@ -448,11 +448,11 @@ define (require) ->
             unless Array.isArray(recent)
 
                 # Recent should be an array.
-                log.warn "Recent value is not of type array: " + JSON.stringify(recent)
+                console.warn "Recent value is not of type array: " + JSON.stringify(recent)
             else if not options.name or not options.type or not options.values
 
                 # Options parameter is not valid.
-                log.warn "Recent option is incomplete: " + JSON.stringify(options)
+                console.warn "Recent option is incomplete: " + JSON.stringify(options)
             else
 
                 # Keep track of the recent items.
@@ -480,6 +480,7 @@ define (require) ->
         display_success: display_success
         usersettings: usersettings
         session: session
+        storage: storage
         recent: recent
         set_theme: set_theme
         get_styles: get_styles

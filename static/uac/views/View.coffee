@@ -77,14 +77,14 @@ define (require) ->
                 )
             return
 
-        display_info: ->
-            uac_utils.display_info()
+        display_info: (message) ->
+            uac_utils.display_info(message)
 
-        display_warn: ->
-            uac_utils.display_warn()
+        display_warn: (message) ->
+            uac_utils.display_warn(message)
 
-        display_error: ->
-            uac_utils.display_error()
+        display_error: (message) ->
+            uac_utils.display_error(message)
 
-        display_success: ->
-            uac_utils.display_success()
+        display_success: (message) ->
+            uac_utils.display_success(message)

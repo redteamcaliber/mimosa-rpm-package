@@ -1,45 +1,9 @@
+c8f7),?+26N4K]q
+
 UAC ToDo
 ========
 
-### Alerts Search View
-- Alerts-API
-    - Create CV api url settings in UAC.
-    - Create alerts-api module to pull clients and types from CV API.
-    - Create alerts-routes module to create UAC alerting API end points.
-    - Unit tests for alerts API and REST.
-- Search View
-    - Create base search view HTML template.
-    - Need to store the last used search criteria in local storage
-        - Load the last settings from local storage on page load.
-    - Implement the reset function to call reset all sub-views to their default options.
-- Tags
-    - Create tags view HTML template.
-    - Create function to get the selected tags.
-    - Allow selected values to be specified.
-        - If none are supplied select the default tags.
-    - Implement a reset function.
-- Clients
-    - Create clients view HTML template.
-    - Create a function to get the selected clients.
-    - Implement select all/none options.
-    - Allow for selected clients to be specified.
-        - Default should be all.
-    - Implement a reset function.
--Time Frame
-    - Create time frame view HTML template.
-    - Create a function to get the selected time frame.  Result should be in the format of start and end date.
-    - Allow for defaults to be specified.
-        - Last 24 hours should be the default if none are specified.
-    - Enable/disable the from/to date/time fields based on whether custom is selected.
-    - Look into using date picker: https://github.com/Eonasdan/bootstrap-datetimepicker
-- Types
-    - Create types view HTML template.
-    - Create a function to get the selected types.
-        - Need to also return whether to include HX alerts.
-    - Allow for defaults to be specified.
-        - Default is to select all.
-
-
+### Suppression and mass tag on MD5 does not pre select the IOC term.
 
 ### Refactoring and Fixes
 - usersettings aren't being updated after a user selects an expression.

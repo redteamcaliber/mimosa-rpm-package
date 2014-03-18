@@ -1,13 +1,12 @@
-<label>Type of Alert</label>
+<label for="type">Type of Alert</label>
 <ul class="list-unstyled">
     <% _.each (types, function(type) { %>
     <li>
-        <input id="type" type="checkbox" value="<%= type.id %>"/> <%= type.id %>
+        <div class="checkbox">
+            <label>
+                <input id="type" type="checkbox" value="<%= type.id %>"/> <%= type.id %>
+            </label>
+        </div>
     </li>
     <% }) %>
 </ul>
-
-
-<hr/>
-
-<input id="include_hx" type="checkbox" value=""/> <label>Include HX</label>

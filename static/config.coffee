@@ -4,6 +4,7 @@ window.require =
         async: 'lib/async/async'
         backbone: 'lib/backbone/backbone'
         bootstrap: 'lib/bootstrap/js/bootstrap'
+        bootstrap_growl: 'lib/bootstrap-growl/jquery.bootstrap-growl'
         blockui: 'lib/blockui/jquery.blockUI'
         datatables: 'lib/datatables/jquery.dataTables'
         datatables_bootstrap: 'js/datatables'
@@ -26,6 +27,10 @@ window.require =
         bootstrap: {
             deps: ['jquery']
             exports: 'bootstrap'
+        }
+        bootstrap_growl: {
+            deps: ['jquery']
+            exports: '$.bootstrapGrowl'
         }
         highlighter: {
             deps: ['jquery']
