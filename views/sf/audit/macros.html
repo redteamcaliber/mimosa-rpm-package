@@ -1,7 +1,7 @@
 {% macro md5_field(md5, details, term) %}
     {% if md5 %}
         {% if term %}
-            <span class="ioc-term" ioc-term="term">{{ md5 }}</span>
+            <span class="ioc-term" ioc-term="{{ term }}">{{ md5 }}</span>
         {% else %}
             {{ md5 }}
         {% endif %}
