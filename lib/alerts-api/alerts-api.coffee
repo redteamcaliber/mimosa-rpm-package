@@ -46,6 +46,7 @@ get_tags = (callback) ->
         {id: 'delete', title: 'Delete', description: DELETE_DESCRIPTION, category: 'closed'}
     ]
     callback null, tags
+    return
 
 #
 # Return the list of clients.
@@ -53,7 +54,7 @@ get_tags = (callback) ->
 get_clients = (attributes, callback) ->
     request.json_get get_cv_url('/clients/'), undefined, attributes, (err, response, body) ->
         process_response(err, response, body, callback)
-
+    return
 
 #
 # Return the list of alert types.
@@ -61,6 +62,7 @@ get_clients = (attributes, callback) ->
 get_alert_types = (attributes, callback) ->
     request.json_get get_cv_url('/alert-types/'), undefined, attributes, (err, response, body) ->
         process_response(err, response, body, callback)
+    return
 
 #
 # Return the time frame options.
@@ -74,6 +76,14 @@ get_times = ->
         {id: 'days_4', title: 'Last 4 Days', unit: 'days', unit_value: 4}
         {id: 'weeks_1', title: 'Last Week', unit: 'weeks', unit_value: 1}
     ]
+
+#
+# Retrieve the signature summary rollup list.
+#
+get_signature_summary = (params, attributes, callback) ->
+    request.json_get get_cv_url('/signature-summary/'), params, attributes, (err, response, body) ->
+        process_response(err, response, body, callback)
+    return
 
 #
 # Construct a candyvan url from the relative url parameter.
@@ -107,3 +117,4 @@ exports.get_tags = get_tags
 exports.get_clients = get_clients
 exports.get_alert_types = get_alert_types
 exports.get_times = get_times
+exports.get_signature_summary = get_signature_summary

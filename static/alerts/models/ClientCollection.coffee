@@ -1,5 +1,5 @@
 define (require) ->
-
+    Backbone = require 'backbone'
     ClientModel = require 'alerts/models/ClientModel'
 
     ###

@@ -20,10 +20,10 @@ window.require =
         jquery: {
             exports: '$'
         }
-        backbone: {
-            deps: ['underscore', 'jquery']
-            exports: 'Backbone'
-        }
+#        backbone: {
+#            deps: ['underscore', 'jquery']
+#            exports: 'Backbone'
+#        }
         bootstrap: {
             deps: ['jquery']
             exports: 'bootstrap'

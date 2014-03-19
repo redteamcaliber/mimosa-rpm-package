@@ -8,7 +8,9 @@ define (require) ->
     TasksTableView = require 'sf/views/TasksTableView'
 
     tasks = new TaskCollection()
-    new TasksTableView(el: '#tasks-table', collection: tasks)
+    new TasksTableView
+        el: '#tasks-table'
+        collection: tasks
     tasks.reset(StrikeFinder.tasks)
 
     return

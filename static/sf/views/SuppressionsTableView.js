@@ -17,6 +17,8 @@ define(function(require) {
         },
         initialize: function(options) {
             var view = this;
+            view.options = options;
+
             var link = window.location.protocol + '//' + window.location.hostname +
                 (window.location.port ? ':' + window.location.port : '') + '/sf/suppressions/' + this.model.get('suppression_id');
             var html = uac_utils.run_template(templates, 'link.ejs', {link: link});
@@ -100,8 +102,11 @@ define(function(require) {
     });
 
     var SuppressionsTableView = TableView.extend({
-        initialize: function () {
+        initialize: function (options) {
             var view = this;
+
+            // Call the super initialize.
+            view.constructor.__super__.initialize.apply(this, arguments);
 
             if (!view.collection) {
                 view.collection = new SuppressionListItemCollection();
@@ -109,7 +114,7 @@ define(function(require) {
             view.listenTo(view.collection, 'sync', view.render);
             view.listenTo(view.collection, 'reset', view.render);
 
-            var condensed = view.options.condensed;
+            var condensed = options.condensed;
 
             // Add a collapsable container.
             view.suppressions_collapsable = new CollapsableContentView({
@@ -129,17 +134,17 @@ define(function(require) {
                 view.select_row(0);
             });
 
-            view.options.oLanguage = {
+            options.oLanguage = {
                 sEmptyTable: 'No suppressions were found',
                 sZeroRecords: 'No matching suppressions found'
             };
 
             if (condensed) {
-                view.options.iDisplayLength = -1;
+                options.iDisplayLength = -1;
 
-                view.options.sDom = 't';
+                options.sDom = 't';
 
-                view.options['aoColumns'] = [
+                options['aoColumns'] = [
                     {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false, bSortable: false},
                     {sTitle: "Suppression", mData: 'comment', bVisible: true, bSortable: false, sClass: 'wrap'},
                     {sTitle: "Global", mData: 'cluster_name', bVisible: true, bSortable: false},
@@ -152,7 +157,7 @@ define(function(require) {
                     view.escape_cell(row, 1);
                 });
 
-                view.options['aoColumnDefs'] = [
+                options['aoColumnDefs'] = [
                     {
                         // `data` refers to the data for the cell (defined by `mData`, which
                         // defaults to the column being worked with, in this case is the first
@@ -184,12 +189,12 @@ define(function(require) {
                     }
                 ];
 
-                view.options.aaSorting = [
+                options.aaSorting = [
                     [4, 'asc']
                 ];
             }
             else {
-                view.options.aoColumns = [
+                options.aoColumns = [
                     {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false},
                     {sTitle: "Rule", mData: 'comment', bSortable: true, sWidth: '25%', sClass: 'wrap'},
                     {sTitle: "Description", mData: 'comment', bSortable: true, sWidth: '25%', sClass: 'wrap'},
@@ -206,7 +211,7 @@ define(function(require) {
                     view.escape_cell(row, 1);
                 });
 
-                view.options.aoColumnDefs = [
+                options.aoColumnDefs = [
                     {
                         // Add an option to the display name to g the row.
                         mRender: function (data, type, row) {
@@ -237,12 +242,12 @@ define(function(require) {
                     }
                 ];
 
-                view.options.aaSorting = [
+                options.aaSorting = [
                     [8, 'asc']
                 ];
 
-                view.options.iDisplayLength = 10;
-                view.options.sDom = 'lf<""t>ip';
+                options.iDisplayLength = 10;
+                options.sDom = 'lf<""t>ip';
             }
 
             // Keep track of the row views.

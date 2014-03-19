@@ -6,7 +6,6 @@ define (require) ->
         Extend the Backbone view class.
     ###
     class View extends Backbone.View
-
         show: ->
             @$el.fadeIn().show()
 
@@ -42,6 +41,12 @@ define (require) ->
         ###
         apply_template: (templates, template, context) ->
             @$el.html uac_utils.run_template(templates, template, context)
+
+        #
+        # Run the html template.
+        #
+        run_template: (templates, template, context) ->
+            return uac_utils.run_template(templates, template, context)
 
         block: ->
             uac_utils.block_element @$el

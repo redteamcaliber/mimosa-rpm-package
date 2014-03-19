@@ -10,11 +10,10 @@ NT.AlertsCollection = UAC.Collection.extend({
 
 NT.AlertsTableView = StrikeFinder.TableView.extend({
     initialize: function(options) {
-        var view = this;
-
         // Invoke the super initialize function.
-        StrikeFinder.TableView.prototype.initialize.apply(this, [options]);
+        view.constructor.__super__.initialize.apply(this, arguments);
 
+        var view = this;
         view.options['iDisplayLength'] = -1;
 
         view.options['sDom'] = 't';

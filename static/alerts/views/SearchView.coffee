@@ -1,9 +1,9 @@
 define (require) ->
     moment = require('moment')
     View = require 'uac/views/View'
+    CollapsableContentView = require('uac/views/CollapsableContentView')
     uac_utils = require 'uac/common/utils'
 
-    CollapsableContentView = require('uac/views/CollapsableContentView')
     TagCollection = require 'alerts/models/TagCollection'
     ClientCollection = require 'alerts/models/ClientCollection'
     TimeCollection = require 'alerts/models/TimeCollection'
@@ -19,7 +19,7 @@ define (require) ->
         initialize: (options) ->
             unless @collection
                 @collection = new TagCollection()
-            @listenTo(@collection, 'sync', @render)
+            @listenTo @collection, 'sync', @render
 
             if options and options.selected
                 @selected = options.selected
@@ -48,7 +48,7 @@ define (require) ->
             else
                 @reset_selected()
 
-            return@
+            return @
 
         #
         # Return the selected tag id's.
@@ -102,7 +102,7 @@ define (require) ->
             @apply_template(templates, 'search-clients.ejs', context)
 
             if @selected
-                @set_selected @options.selected
+                @set_selected @selected
             else
                 @reset_selected()
 
@@ -158,11 +158,11 @@ define (require) ->
 
             # Save the specified options for use in render.
             if options.selected
-                @selected = @options.selected
+                @selected = options.selected
             if options.from
-                @from = @options.from
+                @from = options.from
             if options.to
-                @to = @options.to
+                @to = options.to
             return
 
         render: ->
@@ -291,7 +291,7 @@ define (require) ->
             @listenTo @collection, 'sync', @render
 
             if options.selected
-                @selected = @options.selected
+                @selected = options.selected
             return
 
         render: ->
@@ -333,14 +333,13 @@ define (require) ->
     #
     class IncludeHXView extends View
         initialize: (options) ->
-            if options.selected
-                @selected = options.selected
+            @selected = options.selected
             @render()
             return
 
         render: ->
             context = {
-                selected: @selected ? true
+                selected: if @selected? and @selected is false then false else true
             }
             @apply_template templates, 'search-hx.ejs', context
             return
@@ -361,19 +360,16 @@ define (require) ->
     # View for displaying alerts search criteria.
     #
     class SearchView extends View
-        el: '#alerts-search'
-
         events:
             'click #search-button': 'on_search'
             'click #reset-button': 'on_reset'
-            'click #remove-button': 'on_remove'
 
         initialize: ->
             @render()
 
             # Add a collapsable around the search view.
             @collapsable_view = new CollapsableContentView
-                el: @el
+                el: @$el
                 title: '<i class="fa fa-filter"></i> Filters'
 
             # Retrieve any previous selections.
@@ -381,15 +377,18 @@ define (require) ->
             if selected
                 console.debug "Found existing alerts search selections: #{JSON.stringify(selected)}"
 
+
             # Initialize the sub views.
 
             tags = if selected and selected.tags then selected.tags else undefined
             @tags_view = new TagsSearchView
-                el: '#search-tags', selected: tags
+                el: @$ '#search-tags'
+                selected: tags
 
             clients = if selected and selected.clients then selected.clients else undefined
             @clients_view = new ClientsSearchView
-                el: '#search-clients', selected: clients
+                el: @$ '#search-clients'
+                selected: clients
 
             time = if selected and selected.time then selected.time else undefined
             if time == 'custom'
@@ -397,19 +396,19 @@ define (require) ->
                 from = if selected and selected.from then selected.from else undefined
                 to = if selected and selected.to then selected.to else undefined
             @times_view = new TimeSearchView
-                el: '#search-time'
+                el: @$ '#search-time'
                 selected: time
                 from: from
                 to: to
 
             types = if selected and selected.types then selected.types else undefined
             @types_view = new TypesSearchView
-                el: '#search-types'
+                el: @$ '#search-types'
                 selected: types
 
-            include_hx = if selected and selected.include_hx then selected.include_hx else undefined
+            include_hx = if selected? then selected.include_hx else undefined
             @hx_view = new IncludeHXView
-                el: '#search-hx'
+                el: @$ '#search-hx'
                 selected: include_hx
 
             return
@@ -440,11 +439,9 @@ define (require) ->
             @clients_view.remove()
             @times_view.remove()
             @types_view.remove()
+            @hx_view.remove()
 
-            # Clear any events.
-            @stopListening
-            # Empty the element.
-            @$el.empty()
+            @remove()
 
             @trigger 'close'
             return
@@ -498,13 +495,6 @@ define (require) ->
 
             # Clear the current search selections in local storage.
             @trigger 'reset'
-            return
-
-        #
-        # This callback is for testing only.
-        #
-        on_remove: ->
-            @close()
             return
 
     return SearchView

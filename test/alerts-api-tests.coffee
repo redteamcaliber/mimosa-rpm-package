@@ -70,3 +70,16 @@ describe 'alerts-api-tests', ->
             times.length.should.be.greaterThan 0
             for t in times
                 should.exist t.id
+
+    describe '#get_signature_summary()', ->
+        it 'should return all signature summary records', (done) ->
+            api.get_signature_summary {}, {}, (err, list) ->
+                try
+                    should.not.exist err
+                    should.exist list
+                    should.exist list.length
+                    list.length.should.be.greaterThan 0
+
+                    done()
+                catch e
+                    done e

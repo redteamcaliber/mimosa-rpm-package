@@ -13,6 +13,7 @@ define(function (require) {
 
     var AcquisitionsView = View.extend({
         initialize: function () {
+
             var view = this;
 
             view.criteria_collapsable = new CollapsableContentView({
@@ -42,8 +43,6 @@ define(function (require) {
         },
         render_acquisitions: function (params) {
             var view = this;
-
-            // TODO: Should load the facets here!
 
             // Update the model criteria when values change.
             view.clusters = params.clusters;

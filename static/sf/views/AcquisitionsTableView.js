@@ -5,6 +5,7 @@ define(function (require) {
     var CollapsableContentView = require('uac/views/CollapsableContentView');
 
     var Acquisition = require('sf/models/Acquisition');
+    var AcquisitionAuditModel = require('sf/models/AcquisitionAuditModel');
 
     var templates = require('sf/ejs/templates');
     var uac_utils = require('uac/common/utils');
@@ -14,6 +15,9 @@ define(function (require) {
      * Render the details of an acquisition including the file audit and issues.
      */
     var AcquisitionsDetailsView = View.extend({
+        initialize: function(options) {
+            this.options = options;
+        },
         events: {
             'click #close': 'on_close'
         },
@@ -76,30 +80,30 @@ define(function (require) {
     });
 
     var AcquisitionsTableView = TableView.extend({
-        initialize: function () {
+        initialize: function (options) {
             var view = this;
+
+            // Call the super initialize.
+            view.constructor.__super__.initialize.apply(this, arguments);
 
             view.acquisitions_collapsable = new CollapsableContentView({
                 el: view.el
             });
 
-            // Invoke the super initialize.
-            AcquisitionsTableView.__super__.initialize.apply(this);
-
             if (!view.collection) {
-                view.options['sAjaxSource'] = '/sf/api/acquisitions';
-                view.options['bServerSide'] = true;
+                options['sAjaxSource'] = '/sf/api/acquisitions';
+                options['bServerSide'] = true;
             }
-            view.options.sAjaxDataProp = 'results';
+            options.sAjaxDataProp = 'results';
 
 
-            view.options.oLanguage = {
+            options.oLanguage = {
                 sEmptyTable: 'No acquisitions were found'
             };
 
-            if (view.options.condensed) {
+            if (options.condensed) {
                 // Display in condensed mode.
-                view.options['aoColumns'] = [
+                options['aoColumns'] = [
                     {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
                     {sTitle: "Created", mData: "create_datetime", bSortable: true, sClass: 'nowrap', bVisible: false},
                     {sTitle: "File Path", mData: "file_path", bSortable: true, sClass: 'wrap', sWidth: '65%'},
@@ -107,11 +111,11 @@ define(function (require) {
                     {sTitle: "State", mData: "state", bSortable: true, sWidth: '5%'}
                 ];
 
-                view.options.aaSorting = [
+                options.aaSorting = [
                     [ 1, "desc" ]
                 ];
 
-                view.options['aoColumnDefs'] = [
+                options['aoColumnDefs'] = [
                     {
                         mRender: function (data) {
                             return uac_utils.format_date_string(data);
@@ -136,12 +140,12 @@ define(function (require) {
                     }
                 ];
 
-                view.options.iDisplayLength = 10;
+                options.iDisplayLength = 10;
 
-                view.options['sDom'] = 'lftip';
+                options['sDom'] = 'lftip';
             }
             else {
-                view.options['aoColumns'] = [
+                options['aoColumns'] = [
                     {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
                     {sTitle: "Cluster", mData: "cluster.name", bSortable: true},
                     {sTitle: "Host", mData: "agent.hostname", bSortable: true},
@@ -156,11 +160,11 @@ define(function (require) {
                     {sTitle: "Link", mData: "acquired_file", bVisible: false, bSortable: false}
                 ];
 
-                view.options.aaSorting = [
+                options.aaSorting = [
                     [ 5, "desc" ]
                 ];
 
-                view.options['aoColumnDefs'] = [
+                options['aoColumnDefs'] = [
                     {
                         mRender: function (data, type, row) {
                             if (data) {
@@ -201,10 +205,10 @@ define(function (require) {
                     }
                 ];
 
-                view.options.iDisplayLength = 25;
-                view.options.iPipe = 1; // Disable pipelining.
+                options.iDisplayLength = 25;
+                options.iPipe = 1; // Disable pipelining.
 
-                view.options['sDom'] = 'ltip';
+                options['sDom'] = 'ltip';
             }
 
             view.listenTo(view, 'row:created', view.on_create_row);

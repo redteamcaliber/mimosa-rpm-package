@@ -212,6 +212,35 @@ send500 = (req, res, next, error) ->
         context.error = error
     render_template(res, '/uac/500.html', context, next)
 
+#
+# Display HTML foramtted REST data.
+#
+send_rest = (req, res, next, o) ->
+    if arguments.length != 4
+        throw "Illegal number of arguments to send_rest: #{arguments}"
+    else if is_html_request req
+        try
+            headers = []
+            for k, v of req.headers
+                headers.push {name: k, value: v}
+            query = []
+            for k, v of req.query
+                query.push {name: k, value: v}
+            context = default_context(req)
+            context.method = req.method
+            context.headers = headers
+            context.query = query
+            context.url = req.url
+            context.rest = stringify o
+            render_template res, '/uac/rest.html', context, next
+        catch e
+            next e
+    else
+        try
+            res.send JSON.stringify o
+        catch e
+            next e
+    return
 
 ###
   Return the object as JSON.
@@ -219,15 +248,17 @@ send500 = (req, res, next, error) ->
 stringify = (o) ->
     JSON.stringify o, null, 4
 
-
-###
- If there is not an error then send the JSON stringified version of the object to the response.
- @param res - the response.
- @param o - the object to send.
- @returns {*}
-###
+#
+# If there is not an error then send the JSON stringified version of the object to the response.
+# Params:
+#   req - the request.
+#   res - the response
+#   o - the object to send.
+# Returns:
+#   The JSON stringified response.
+#
 send = (res, o) ->
-    res.send stringify o
+    res.send JSON.stringify o
     return
 
 ###
@@ -331,6 +362,7 @@ exports.load_views = load_views
 exports.stringify = stringify
 exports.send = send
 exports.send_csv = send_csv
+exports.send_rest = send_rest
 exports.get_dt_request_params = get_dt_request_params
 exports.get_dt_response_params = get_dt_response_params
 exports.validate_input = validate_input

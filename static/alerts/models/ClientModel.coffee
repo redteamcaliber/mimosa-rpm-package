@@ -1,4 +1,5 @@
 define (require) ->
+    Backbone = require 'backbone'
 
     ###
         Client model class.

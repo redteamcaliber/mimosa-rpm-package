@@ -40,11 +40,19 @@ describe 'alerts-rest-tests', ->
                     should.exist body.length
                     body.length.should.be.greaterThan 0
 
-                    # TODO: Check fields...
-
                     done()
                 catch e
                     done e
+
+    describe '/alerts/api/rollups', ->
+        it 'should return an unfiltered list of rollups', (done) ->
+            get '/alerts/api/rollups', {}, (err, response, body) ->
+                try
+                    utils.should_be_list body, true
+                    done()
+                catch e
+                    done e
+
 
 ###
     Send a GET request.
@@ -79,3 +87,4 @@ post = (path, body, callback) ->
 ###
 del = (path, uuid, callback) ->
     request.json_delete(URL + path + '/' + uuid, {}, callback)
+

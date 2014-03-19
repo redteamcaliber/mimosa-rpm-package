@@ -472,7 +472,8 @@ define (require) ->
         unblock: unblock
         block_element: block_element
         random_string: random_string
-        format_date_string: format_date_string
+        format_date_string: format_date_string,
+        format_unix_date: format_unix_date,
         run_template: run_template
         display_info: display_info
         display_error: display_error

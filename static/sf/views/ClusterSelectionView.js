@@ -12,6 +12,9 @@ define(function (require) {
      * Common component for displaying and selecting services, clients, and clusters.
      */
     var ClusterSelectionView = View.extend({
+        initialize: function(options) {
+            this.options = options;
+        },
         /**
          * Render the selection view.
          */

@@ -32,6 +32,7 @@ define(function (require) {
      */
     var HitsLinkView = View.extend({
         initialize: function (options) {
+            this.options = options;
             if (options.table) {
                 this.listenTo(options.table, 'click', this.render);
             }
@@ -73,6 +74,7 @@ define(function (require) {
      */
     var TagView = View.extend({
         initialize: function (options) {
+            this.options = options;
             if (this.model) {
                 // Re-draw the tags view whenever the model is reloaded.
                 this.listenTo(this.model, 'sync', this.render);
@@ -157,6 +159,7 @@ define(function (require) {
 
     var IdentitiesView = View.extend({
         initialize: function(options) {
+            this.options = options;
             if (this.model) {
                 // Re-draw the view whenever the model is reloaded.
                 this.listenTo(this.model, 'sync', this.render);
@@ -243,6 +246,7 @@ define(function (require) {
      */
     var MergeView = View.extend({
         initialize: function(options) {
+            this.options = options;
             if (this.model) {
                 // Re-draw the view whenever the model is reloaded.
                 this.listenTo(this.model, 'sync', this.render);
@@ -302,7 +306,8 @@ define(function (require) {
     });
 
     var MergeAllView = View.extend({
-        initialize: function() {
+        initialize: function(options) {
+            this.options = options;
             if (this.model) {
                 this.listenTo(this.model, 'sync', this.render);
             }
@@ -368,11 +373,12 @@ define(function (require) {
      */
     var AgentHostView = View.extend({
         initialize: function(options) {
+            this.options = options;
             var am_cert_hash = options['am_cert_hash'];
             if (!this.model) {
                 var attr = {};
                 if (options && options.am_cert_hash) {
-                    attr.id = options.am_cert_hash;
+                    attr.hash = options.am_cert_hash;
                 }
                 this.model = new AgentHostModel(attr);
             }
@@ -380,13 +386,14 @@ define(function (require) {
         },
         render: function() {
             var view = this;
+            console.dir(view.model);
             if (view.model.get("hash")) {
                 // Display the host template.
                 view.apply_template(templates, 'agent-host.ejs', view.model.toJSON());
             } else {
                 // The host was not found, display alternate message.
                 var data = {
-                    am_cert_hash: view.model.id
+                    am_cert_hash: view.model.get('hash')
                 };
                 view.apply_template(templates, 'agent-host-empty.ejs', data);
             }
@@ -403,13 +410,13 @@ define(function (require) {
             var view = this;
             view.model.clear();
             if (am_cert_hash) {
-                view.model.id = am_cert_hash;
+                view.model.set('hash', am_cert_hash);
             }
 
             uac_utils.block_element(view.$el);
 
             view.model.fetch({
-                error: function(model, response, options) {
+                error: function() {
                     view.render_service_down();
                 }
             });
@@ -423,7 +430,8 @@ define(function (require) {
      * View for displaying context menu in the audit view.
      */
     var AuditContextMenuView = View.extend({
-        initialize: function() {
+        initialize: function(options) {
+            this.options = options;
             this.render();
         },
         events: {
@@ -526,6 +534,7 @@ define(function (require) {
     var AuditView = View.extend({
         initialize: function(options) {
             var view = this;
+            view.options = options;
             if (view.model) {
                 view.listenTo(view.model, 'sync', view.render);
             }
@@ -565,7 +574,7 @@ define(function (require) {
     var IOCTabsView = View.extend({
         initialize: function(options) {
             var view = this;
-
+            view.options = options;
             if (!view.collection) {
                 view.collection = new IOCCollection([], {
                     rowitem_uuid: options.rowitem_uuid
@@ -797,10 +806,14 @@ define(function (require) {
     });
 
     var CommentsTableView = TableView.extend({
-        initialize: function() {
+        initialize: function(options) {
             var view = this;
-            view.options.iDisplayLength = -1;
-            view.options.aoColumns = [{
+
+            // Call the super initialize.
+            view.constructor.__super__.initialize.apply(this, arguments);
+
+            options.iDisplayLength = -1;
+            options.aoColumns = [{
                 sTitle: "Created",
                 mData: "created",
                 sWidth: "20%",
@@ -817,20 +830,20 @@ define(function (require) {
                 sWidth: "20%",
                 bSortable: true
             }];
-            view.options.aaSorting = [
+            options.aaSorting = [
                 [0, "desc"]
             ];
-            view.options.aoColumnDefs = [{
+            options.aoColumnDefs = [{
                 mRender: function(data, type, row) {
                     return uac_utils.format_date_string(data);
                 },
                 aTargets: [0]
             }];
-            view.options.oLanguage = {
+            options.oLanguage = {
                 sEmptyTable: 'No comments have been entered'
             };
 
-            view.listenTo(view, 'row:created', function(row, data, index) {
+            view.listenTo(view, 'row:created', function(row) {
                 view.escape_cell(row, 1);
             });
 
@@ -839,8 +852,8 @@ define(function (require) {
             }
             view.listenTo(view.collection, 'sync', view.render);
 
-            view.options.iDisplayLength = 10;
-            view.options.sDom = 'lftip';
+            options.iDisplayLength = 10;
+            options.sDom = 'lftip';
         },
         /**
          * Load the comments based on the row item.
@@ -870,6 +883,7 @@ define(function (require) {
     var CommentsView = View.extend({
         initialize: function(options) {
             var view = this;
+            view.options = options;
             if (options.rowitem_uuid) {
                 view.rowitem_uuid = options.rowitem_uuid;
             }
@@ -955,9 +969,9 @@ define(function (require) {
      * View to display the acquisitions list in a condensed format.
      */
     var AcquisitionsViewCondensed = View.extend({
-        initialize: function () {
+        initialize: function (options) {
             var view = this;
-
+            view.options = options;
             view.acquisitions = new AcquisitionCollection();
 
             view.acqusitions_table = new AcquisitionsTableView({
@@ -992,6 +1006,7 @@ define(function (require) {
     var HitsDetailsView = View.extend({
         initialize: function(options) {
             var view = this;
+            view.options = options;
 
             if (!options.hits_table_view) {
                 // Error, hits_table_view is required.

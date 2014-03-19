@@ -18,12 +18,15 @@ define(function(require) {
         initialize: function (options) {
             var view = this;
 
+            // Call the super initialize.
+            view.constructor.__super__.initialize.apply(this, arguments);
+
             view.collapsable = new CollapsableContentView({
                 el: view.el,
                 title: '<i class="fa fa-list"></i> Hits'
             });
 
-            view.options['aoColumns'] = [
+            options['aoColumns'] = [
                 {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: false},
                 {sTitle: "Created", mData: "created", bVisible: true, bSortable: true, sClass: 'nowrap'},
                 {sTitle: "Tag", mData: "tagname", bVisible: true, bSortable: true},
@@ -33,19 +36,19 @@ define(function(require) {
                 {sTitle: "am_cert_hash", mData: "am_cert_hash", bVisible: false, bSortable: false}
             ];
 
-            view.options['aaSorting'] = [[1, 'desc']];
+            options['aaSorting'] = [[1, 'desc']];
 
-            view.options.aoColumnDefs = [
+            options.aoColumnDefs = [
                 view.date_formatter(1)
             ];
 
-            view.options.sDom = '<"uac-tableheader"l>tip';
+            options.sDom = '<"uac-tableheader"l>tip';
 
-            view.options.sAjaxSource = '/sf/api/hits';
-            view.options.sAjaxDataProp = 'results';
-            view.options.bServerSide = true;
+            options.sAjaxSource = '/sf/api/hits';
+            options.sAjaxDataProp = 'results';
+            options.bServerSide = true;
 
-            view.options.oLanguage = {
+            options.oLanguage = {
                 sEmptyTable: 'This host does not have any hits.',
                 sZeroRecords: 'No matching hits found'
             };
@@ -98,7 +101,7 @@ define(function(require) {
                 if (!view.model) {
                     var attr = {};
                     if (options && options.am_cert_hash) {
-                        attr.id = options.am_cert_hash;
+                        attr.hash = options.am_cert_hash;
                     }
                     view.model = new AgentHostModel(attr);
                 }

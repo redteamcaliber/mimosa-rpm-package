@@ -59,9 +59,17 @@ module.exports = function (grunt) {
                 files: ['static/uac/ejs/*.ejs', 'static/alerts/ejs/*.ejs', 'static/sf/ejs/*.ejs'],
                 tasks: ['jst-dev']
             },
-            coffee: {
-                files: ['uac-server.coffee', 'lib/**/*.coffee', 'static/**/*.coffee'],
-                tasks: ['coffee']
+            'grunt': {
+                files: ['Gruntfile.js'],
+                tasks: ['jst-dev', 'coffee']
+            },
+            'node-coffee': {
+                files: ['uac-server.coffee', 'lib/**/*.coffee'],
+                tasks: ['coffee:node', 'coffee:uac-server']
+            },
+            'web-coffee': {
+                files: ['static/**/*.coffee'],
+                tasks: ['coffee:web']
             }
         },
 
@@ -84,13 +92,17 @@ module.exports = function (grunt) {
         coffee: {
             'uac-server': {
                 options: {
-                    bare: true
+                    bare: true,
+                    sourceMap: true
                 },
                 files: {
                     'uac-server.js': 'uac-server.coffee'
                 }
             },
             node: {
+                options: {
+                    sourceMap: true
+                },
                 expand: true,
                 cwd: 'lib',
                 src: ['**/*.coffee'],

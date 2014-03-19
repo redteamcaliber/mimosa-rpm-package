@@ -59,18 +59,38 @@ define (require) ->
 
         #return $.extend(true, defaults, settings);
         results = {}
-        _.each Object.keys(defaults), (key) ->
-            results[key] = defaults[key]
-            return
 
-        _.each Object.keys(settings), (key) ->
-            results[key] = settings[key]
-            return
+        for k, v of defaults
+            results[k] = v
+
+        for k, v of settings
+            results[k] = v
 
         results
 
+    #
+    # Base table view class.  Extend this class and provide a configure function to setup your table.
+    #
+    # Example usage:
+    #
+    #     # Specify the settings via inheritance.
+    #     class MyTable extends TableView
+    #         configure: (options) ->
+    #              # Add DataTables settings to the options.
+    #              options.iDisplayLength = 100
+    #     my_table = new MyTable()
+    #     my_table.render()
+    #
+    # or
+    #    # Pass in the datatables settings.
+    #    settings = {...}
+    #    my_table = new TableView({settings: settings})
+    #
     class TableView extends View
-        initialize: ->
+        initialize: (options) ->
+            unless @options
+                @options = options
+
             if @collection
                 @listenTo(@collection, "sync", @render)
                 @listenTo(@collection, "reset", @render)
@@ -90,9 +110,9 @@ define (require) ->
             if typeof index_or_node is "number"
                 length = @length()
                 if @length() <= 0
-                    `undefined`
+                    undefined
                 else if index_or_node + 1 > length
-                    `undefined`
+                    undefined
                 else
                     pos = @get_selected_position()
                     unless pos is index_or_node
@@ -102,16 +122,16 @@ define (require) ->
                         $(node).click()  if node
                         node
                     else
-                        `undefined`
+                        undefined
             else if index_or_node
                 $(index_or_node).click()
                 index_or_node
-            else if index_or_node is null or index_or_node is `undefined`
+            else if index_or_node is null or index_or_node is undefined
 
                 # Unselect all rows.
                 @$("tr.active").removeClass "active"
             else
-                `undefined`
+                undefined
             return
 
         get_selected: ->
@@ -119,18 +139,18 @@ define (require) ->
 
         get_selected_position: ->
             selected = @get_selected()
-            if selected isnt `undefined` and selected.length is 1
+            if selected isnt undefined and selected.length is 1
                 @get_position selected.get(0)
             else
                 -1
 
         get_selected_data: ->
             selected = @get_selected()
-            if selected isnt `undefined` and selected.length is 1
+            if selected isnt undefined and selected.length is 1
                 pos = @get_position(selected.get(0))
                 @get_data pos
             else
-                `undefined`
+                undefined
 
         get_current_page: ->
             settings = @get_settings()
@@ -156,26 +176,26 @@ define (require) ->
 
         peek_prev_data: ->
             selected = @get_selected()
-            if selected isnt `undefined` and selected.length is 1
+            if selected isnt undefined and selected.length is 1
                 pos = @get_position(selected.get(0))
                 return @get_data(pos - 1)
 
             # No previous.
-            `undefined`
+            undefined
 
         peek_next_data: ->
             if @is_next()
                 selected = @get_selected()
-                if selected isnt `undefined` and selected.length is 1
+                if selected isnt undefined and selected.length is 1
                     pos = @get_position(selected.get(0))
                     return @get_data(pos + 1)
 
             # No next.
-            `undefined`
+            undefined
 
         prev: ->
             selected = @get_selected()
-            if selected isnt `undefined` and selected.length is 1
+            if selected isnt undefined and selected.length is 1
                 pos = @get_position(selected.get(0))
                 @select_row pos - 1
             return
@@ -183,7 +203,7 @@ define (require) ->
         next: ->
             if @is_next()
                 selected = @get_selected()
-                if selected isnt `undefined` and selected.length is 1
+                if selected isnt undefined and selected.length is 1
                     pos = @get_position(selected.get(0))
                     @select_row pos + 1
             return
@@ -266,7 +286,7 @@ define (require) ->
 
         reload: (row_index) ->
             @clear_cache()
-            @_row_index = row_index  if row_index isnt `undefined`
+            @_row_index = row_index  if row_index isnt undefined
             @$el.fnDraw false
             return
 
@@ -326,7 +346,7 @@ define (require) ->
             # Keep track of the expanded rows.
             view._expanded_rows = []
 
-            # Construct the table settings.
+            # Construct the table settings based on the supplied settings.
             settings = get_datatables_settings(view, view.options)
 
             # Apply any parameters passed to the settings.
@@ -379,12 +399,12 @@ define (require) ->
 
                         # Clear the flag.
                         view._page_next = false
-                    if view._row_index isnt `undefined`
+                    if view._row_index isnt undefined
 
                         # During a refresh reload operation a row index to select has been specified.  Attempt to select
                         # the row that corresponds to the index.
                         view.select_row view._row_index
-                        view._row_index = `undefined`
+                        view._row_index = undefined
                     else if view._value_pair
 
                         # During a refresh/reload operation a value to select has been specified.  Attempt to select the
@@ -412,7 +432,7 @@ define (require) ->
                         @select_row 0  unless found
 
                         # Clear the value pair.
-                        view._value_pair = `undefined`
+                        view._value_pair = undefined
                     return
 
                 return
@@ -444,7 +464,7 @@ define (require) ->
             if params
                 view.params = params
             else
-                view.params = `undefined`
+                view.params = undefined
 
             if view.collection
                 if params

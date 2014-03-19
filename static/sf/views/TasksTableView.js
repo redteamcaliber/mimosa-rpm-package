@@ -4,15 +4,18 @@ define(function(require) {
     var uac_utils = require('uac/common/utils');
 
     var TasksTableView = TableView.extend({
-        initialize: function() {
+        initialize: function(options) {
             var view = this;
+
+            // Call the super initialize.
+            view.constructor.__super__.initialize.apply(this, arguments);
 
             view.tasks_collapsable = new CollapsableContentView({
                 el: view.el,
                 collapsed: false
             });
 
-            view.options.aoColumns = [
+            options.aoColumns = [
                 {sTitle: 'id', mData: 'id', bVisible: false, bSortable: true},
                 {sTitle: "Description", mData: 'description', bVisible: true, bSortable: true, sWidth: '70%'},
                 {sTitle: "Started", mData: 'started', bVisible: true, bSortable: true, sDefaultContent: ''},
@@ -20,15 +23,15 @@ define(function(require) {
                 {sTitle: "State", mData: 'state', bVisible: true, bSortable: true}
             ];
 
-            view.options.aaSorting = [
+            options.aaSorting = [
                 [ 2, "desc" ]
             ];
 
-            view.options.oLanguage = {
+            options.oLanguage = {
                 sEmptyTable: 'No tasks were found'
             };
 
-            view.options['aoColumnDefs'] = [
+            options['aoColumnDefs'] = [
                 {
                     mRender: function (data, type, row) {
                         return uac_utils.format_unix_date(data);
@@ -67,8 +70,8 @@ define(function(require) {
                 }
             ];
 
-            view.options.sDom = 'ltip';
-            view.options.iDisplayLength = 100;
+            options.sDom = 'ltip';
+            options.iDisplayLength = 100;
 
             if (view.collection) {
                 view.listenTo(view.collection, 'reset', view.render);

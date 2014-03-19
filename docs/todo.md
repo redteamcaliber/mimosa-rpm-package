@@ -3,12 +3,16 @@ c8f7),?+26N4K]q
 UAC ToDo
 ========
 
-### Suppression and mass tag on MD5 does not pre select the IOC term.
+### MD5 Stuff
+- Update md5 to use new API
+- Switch to prod configuration.
+- Create a linkable MD5 end point.
+- Create a MD5 api endpoint.
 
 ### Refactoring and Fixes
 - usersettings aren't being updated after a user selects an expression.
-- Fix the this stuff in the TableView.
-- Suppressions links it to small.
+- Fix the "this" stuff in the TableView.
+- Suppressions links is to small.
 
 ### Alerting Deployment
 - Update the IOC viewer project and put a dependency on it.
@@ -23,12 +27,15 @@ UAC ToDo
 - Move the database pool settings to the env.json file.
 - Ensure the database pool settings are initialized to a reasonable value.
 
+### Seasick related unit tests are failing.
+
+### Update uac/sf-routes to use send_rest rather than send.
+
 ### Update the select2 component to the latest
 
 ### Update the typeahead component to the latest.
 
 ### Settings Refactoring
-
 
 ### Enter Redwood City user stories into TP.
 

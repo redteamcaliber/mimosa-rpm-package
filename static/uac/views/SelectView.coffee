@@ -4,7 +4,8 @@ define (require) ->
     select2 = require 'select2'
 
     class SelectView extends View
-        initialize: ->
+        initialize: (options) ->
+            this.options = options;
             @listenTo @collection, "reset", @render  if @collection
             return
 

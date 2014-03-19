@@ -7,11 +7,19 @@ define (require) ->
         Alerts application view.
     ###
     class AlertsView extends View
+
         initialize: ->
+            # The view to display alert search criteria.
             @search_view = new SearchView()
 
-        render: ->
+            # For debugging purposes only.
+            $('#remove-button').on 'click', =>
+                @search_view.close()
+                return
+
+            # Load the search view.
             @search_view.fetch()
+            $('#alerts-search').append(@search_view.el)
 
 
     return AlertsView

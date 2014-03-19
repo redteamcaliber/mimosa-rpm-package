@@ -11,22 +11,25 @@ define(function (require) {
      * Hits table view.
      */
     var HitsTableView = TableView.extend({
-        initialize: function() {
+        initialize: function(options) {
             var view = this;
+
+            // Call the super initialize.
+            view.constructor.__super__.initialize.apply(this, arguments);
 
             view.hits_collapsable = new CollapsableContentView({
                 el: view.el
             });
 
-            view.options.sAjaxSource = '/sf/api/hits';
-            view.options.sAjaxDataProp = 'results';
-            view.options.bServerSide = true;
+            options.sAjaxSource = '/sf/api/hits';
+            options.sAjaxDataProp = 'results';
+            options.bServerSide = true;
 
-            view.options.oLanguage = {
+            options.oLanguage = {
                 sEmptyTable: 'No hits were found'
             };
 
-            view.options.aoColumns = [{
+            options.aoColumns = [{
                 sTitle: 'uuid',
                 mData: 'uuid',
                 bVisible: false,
@@ -68,11 +71,11 @@ define(function (require) {
                 sClass: 'nowrap'
             }];
 
-            view.options.aaSorting = [
+            options.aaSorting = [
                 [1, 'desc']
             ];
 
-            view.options.aoColumnDefs = [
+            options.aoColumnDefs = [
                 view.date_formatter(1)
             ];
 
@@ -112,10 +115,10 @@ define(function (require) {
                 view.hits_collapsable.set('title', title);
             });
 
-            //view.options.sDom = 'lTtip';
+            //options.sDom = 'lTtip';
             // Add the tableheader div to the table.
-            view.options.sDom = '<"uac-tableheader"l>tip';
-            view.options.iDisplayLength = 10;
+            options.sDom = '<"uac-tableheader"l>tip';
+            options.iDisplayLength = 10;
         }
     });
 

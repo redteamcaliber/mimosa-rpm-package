@@ -5,45 +5,45 @@ define (require) ->
     prev_next_template = templates['prev-next.ejs']
 
     class TableViewControls extends View
-        initialize: ->
-            view = this
-            view.table = view.options.table
-            log.warn "\"table\" is undefined."  unless view.table
-            view.listenTo view.table, "click", view.render  if view.table isnt `undefined`
+        initialize: (options) ->
+            @options = options
+            @table = @options.table
+
+            log.warn "\"table\" is undefined."  unless @table
+            @listenTo @table, "click", @render  if @table isnt undefined
             return
 
         events:
             "click a.prev": "on_prev"
             "click a.next": "on_next"
 
-        render: ->
-            view = this
-            view.run_once "init_template", ->
+        render: =>
+            @run_once "init_template", =>
 
                 # Only write the template once.
-                view.$el.html(prev_next_template)
-                $(document).keyup (ev) ->
+                @$el.html(prev_next_template)
+                $(document).keyup (ev) =>
                     if ev.ctrlKey
                         if ev.keyCode is 68 or ev.keyCode is 40 or ev.keyCode is 78
-                            view.on_next()
-                        else view.on_prev()  if ev.keyCode is 85 or ev.keyCode is 38 or ev.keyCode is 80
+                            @on_next()
+                        else @on_prev()  if ev.keyCode is 85 or ev.keyCode is 38 or ev.keyCode is 80
                     return
 
                 return
 
-            if view.table isnt `undefined`
-                if view.table.is_prev() or view.table.is_prev_page()
-                    view.$("a.prev").removeAttr "disabled"
+            if @table isnt undefined
+                if @table.is_prev() or @table.is_prev_page()
+                    @$("a.prev").removeAttr "disabled"
                 else
-                    view.$("a.prev").attr "disabled", true
-                if view.table.is_next() or view.table.is_next_page()
+                    @$("a.prev").attr "disabled", true
+                if @table.is_next() or @table.is_next_page()
 
                     # Enable the next record link.
-                    view.$("a.next").removeAttr "disabled"
+                    @$("a.next").removeAttr "disabled"
                 else
 
                     # Disable the next record link.
-                    view.$("a.next").attr "disabled", true
+                    @$("a.next").attr "disabled", true
             return
 
         on_prev: ->

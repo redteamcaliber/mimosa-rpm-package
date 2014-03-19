@@ -1,4 +1,5 @@
 define (require) ->
+    Backbone = require 'backbone'
 
     ###
         Alert type model class.

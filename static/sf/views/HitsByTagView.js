@@ -11,10 +11,13 @@ define(function(require) {
     var sf_utils = require('sf/common/utils');
 
     var HitsByTagTableView = TableView.extend({
-        initialize: function () {
+        initialize: function (options) {
             var view = this;
 
-            view.options['aoColumns'] = [
+            // Call the super initialize.
+            view.constructor.__super__.initialize.apply(this, arguments);
+
+            options['aoColumns'] = [
                 {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: false},
                 {sTitle: "Updated", mData: "updated", sClass: 'nowrap', bSortable: true},
                 {sTitle: "Cluster", mData: "cluster_name", bSortable: false},
@@ -28,23 +31,23 @@ define(function(require) {
                 {sTitle: "Owner", mData: "username", bSortable: false, bVisible: false}
             ];
 
-            view.options.aaSorting = [
+            options.aaSorting = [
                 [1, 'desc']
             ];
 
-            view.options.aoColumnDefs = [
+            options.aoColumnDefs = [
                 view.date_formatter(1)
             ];
 
-            view.options.oLanguage = {
+            options.oLanguage = {
                 sEmptyTable: 'No hits were found for the specified tag'
             };
 
-            view.options.sDom = 'l<"<sf-table-wrapper"t>ip';
+            options.sDom = 'l<"<sf-table-wrapper"t>ip';
 
-            view.options.sAjaxSource = '/sf/api/hits';
-            view.options.sAjaxDataProp = 'results';
-            view.options.bServerSide = true;
+            options.sAjaxSource = '/sf/api/hits';
+            options.sAjaxDataProp = 'results';
+            options.bServerSide = true;
         }
     });
 

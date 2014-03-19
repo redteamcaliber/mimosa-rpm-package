@@ -59,6 +59,10 @@ define(function (require) {
     var IOCSummaryTableView = TableView.extend({
         initialize: function (options) {
             var view = this;
+
+            // Call the super initialize.
+            view.constructor.__super__.initialize.apply(this, arguments);
+
             if (!view.collection) {
                 view.collection = new IOCSummaryCollection();
                 view.listenTo(view.collection, 'sync', view.render);
@@ -80,11 +84,11 @@ define(function (require) {
 
             options.sDom = 'ftiS';
 
-            view.options.iDisplayLength = 200;
-            view.options.bScrollInfinite = true;
-            view.options.bScrollCollapse = true;
-            view.options.sScrollY = '600px';
-            view.options.iScrollLoadGap = 200;
+            options.iDisplayLength = 200;
+            options.bScrollInfinite = true;
+            options.bScrollCollapse = true;
+            options.sScrollY = '600px';
+            options.iScrollLoadGap = 200;
 
             view.listenTo(view, 'row:created', function (row, data) {
                 $(row).addClass(view._get_class(data.iocnamehash));
@@ -106,10 +110,13 @@ define(function (require) {
      * IOC details table view.
      */
     IOCDetailsTableView = TableView.extend({
-        initialize: function () {
+        initialize: function (options) {
             var view = this;
 
-            view.options.aoColumns = [
+            // Call the super initialize.
+            view.constructor.__super__.initialize.apply(this, arguments);
+
+            options.aoColumns = [
                 {sTitle: "exp_key", mData: "exp_key", bVisible: false},
                 {sTitle: "Expression", mData: "exp_key", sWidth: '50%'},
                 {sTitle: "Supp", mData: "suppressed", sWidth: '10%'},
@@ -118,7 +125,7 @@ define(function (require) {
                 {sTitle: "Closed", mData: "closed", sWidth: '10%'}
             ];
 
-            view.options.aoColumnDefs = [
+            options.aoColumnDefs = [
                 {
                     mRender: function (data, type, row) {
                         // Display <rowitem_type> (<exp_key>)
@@ -128,8 +135,8 @@ define(function (require) {
                 }
             ];
 
-            view.options.sDom = 't';
-            view.options.iDisplayLength = -1;
+            options.sDom = 't';
+            options.iDisplayLength = -1;
 
             view.expression_views = [];
 
@@ -155,7 +162,9 @@ define(function (require) {
      * IOC details view of the shopping page.
      */
     var IOCDetailsView = View.extend({
-        initialize: function () {
+        initialize: function (options) {
+            this.options = options;
+
             if (!this.collection) {
                 this.collection = new IOCDetailsCollection();
             }
@@ -276,9 +285,10 @@ define(function (require) {
      * The main shopping view.
      */
     var ShoppingView = Backbone.View.extend({
-        initialize: function () {
+        initialize: function (options) {
             // ShoppingView reference.
             var view = this;
+            view.options = options;
 
             // Add a collapsable around the shopping view.
             view.shopping_collapsable = new CollapsableContentView({
