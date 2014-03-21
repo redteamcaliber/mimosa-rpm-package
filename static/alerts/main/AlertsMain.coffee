@@ -5,6 +5,6 @@ define (require) ->
     _.mixin(_s.exports())
 
     AlertsView = require 'alerts/views/AlertsView'
-    view = new AlertsView()
+    new AlertsView().render()
 
     return

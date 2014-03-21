@@ -55,6 +55,6 @@ app.get '/api/types', (req, res, next) ->
     alerts_api.get_alert_types req.attributes, (err, types) ->
         route_utils.send_rest req, res, next, types
 
-app.get '/api/rollups', (req, res, next) ->
+app.get '/api/summary', (req, res, next) ->
     alerts_api.get_signature_summary req.params, req.attributes, (err, list) ->
         route_utils.send_rest req, res, next, list

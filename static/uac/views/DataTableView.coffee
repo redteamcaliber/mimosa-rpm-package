@@ -1,6 +1,3 @@
-#
-# NOTE: This class is DEPRECATED.  Use the DataTableView instead.
-#
 define (require) ->
     $ = require 'jquery'
     View = require 'uac/views/View'
@@ -8,6 +5,9 @@ define (require) ->
     datatables = require 'datatables'
     datatables_bootstrap = require 'datatables_bootstrap'
 
+    #
+    # Retrieve the base data tables settings.
+    #
     get_datatables_settings = (parent, settings) ->
         defaults =
             iDisplayLength: 10
@@ -89,26 +89,121 @@ define (require) ->
     #    settings = {...}
     #    my_table = new TableView({settings: settings})
     #
-    class TableView extends View
+    class DataTableView extends View
+        #
+        # Initialize the table.
+        #
         initialize: (options) ->
-            unless @options
-                @options = options
+            console.log 'Initializing DataTableView...'
 
+            # If a collection is passed, listen to the collection.
             if @collection
                 @listenTo(@collection, "sync", @render)
                 @listenTo(@collection, "reset", @render)
+
+            custom_settings = {}
+            @configure options, custom_settings
+
+            # Construct the datatables settings from the defaults.
+            @settings = get_datatables_settings @, custom_settings
+
+            if options and options.classes
+                # Use the specified classes.
+                @classes = options.classes
+            else
+                # Default table classes.
+                @classes = ['table', 'table-bordered', 'table-condensed']
+
+            # Create the table element.
+            @table_el = $('<table>')
+
+            # Add the CSS classes to the table element.
+            for c in @classes
+                @table_el.addClass c
+
+            # Append the the table element to cached element.
+            @$el.append(@table_el)
+
+            # Listen to draw events to account for the fact that datatables does not fire page change events.  This code
+            # makes up for that shortcoming by manually determining when the user has used the previous next component
+            # to page through the table.
+            @listenTo @, "draw", =>
+                if @_page_prev
+
+                    # User has iterated through the table to the previous page.
+                    @trigger "page", view.get_current_page()
+
+                    # Select the last record in the current view.
+                    @select_row @length() - 1
+
+                    # Clear the flag.
+                    @_page_prev = false
+                else if @_page_next
+
+                    # User has iterated to through the table to the next page.
+                    @trigger "page", view.get_current_page()
+
+                    # Select the next record in the view.
+                    @select_row 0
+
+                    # Clear the flag.
+                    @_page_next = false
+                if @_row_index isnt undefined
+
+                    # During a refresh reload operation a row index to select has been specified.  Attempt to select
+                    # the row that corresponds to the index.
+                    @select_row view._row_index
+                    @_row_index = undefined
+                else if @_value_pair
+
+                    # During a refresh/reload operation a value to select has been specified.  Attempt to select the
+                    # row that corresponds to the supplied name value pair.
+                    console.log "Attempting to reselect table row value: name=#{view._value_pair.name}, value=#{view._value_pair.value}"
+
+                    # Attempt to select the row related to the value pair after a draw event.
+                    found = false
+                    nodes = @get_nodes()
+                    i = 0
+
+                    while i < nodes.length
+                        node = nodes[i]
+                        data = @get_data(node)
+                        if @_value_pair.name and @_value_pair.value and data[@_value_pair.name] is @_value_pair.value
+                            # Select the node.
+                            @select_row node
+                            found = true
+                            break
+                        i++
+
+                    # If the matching row was not found it is assumed that it was deleted, select the first row instead.
+                    unless found
+                        @select_row 0
+
+                    # Clear the value pair.
+                    @._value_pair = undefined
+                return # @ end @listenTo...
+
             return
 
+        #
+        # Default configure method, sub-classes should override.
+        #
+        configure: (options, settings) ->
+            return
+
+        #
+        # Highlight a table row.
+        #
         highlight_row: (nRow) ->
             $(nRow).addClass("active").siblings().removeClass "active"
             return
 
-
-        ###
-        Initiate a click event on a row.
-        @param index_or_node - the row index or row node.
-        @returns the row node or undefined.
-        ###
+        #
+        # Initiate a click event on a row.
+        #
+        # Params:
+        #     index_or_node - the row index or row node.
+        #
         select_row: (index_or_node) ->
             if typeof index_or_node is "number"
                 length = @length()
@@ -242,13 +337,13 @@ define (require) ->
             @get_table().fnPageChange page_index
 
         length: ->
-            @$el.fnGetData().length
+            @table_el.fnGetData().length
 
         get_dom_table: ->
             @$el.get 0
 
         get_table: ->
-            @$el.dataTable()
+            $(@table_el).dataTable()
 
         get_nodes: (index) ->
             @$el.fnGetNodes index
@@ -299,58 +394,47 @@ define (require) ->
             @$el.fnDraw false
             return
 
+        #
+        # Destroy the data table.
+        #
         destroy: ->
-
-            # Remove any listeners.
+            # Remove any event listeners.
             @undelegateEvents()
 
-            # Destroy the old table if it exists.
-            dom_element = @get_dom_table()
-            unless dom_element
-                console.error "dom element is null."
-                return
-            id = null
-            id = dom_element.id  if _.has(dom_element, "id")
-            if $.fn.DataTable.fnIsDataTable(dom_element)
-                console.log "Destroying DataTable with id: " + id
-                table = @$el.dataTable()
+            # Check if the table has been initialized.
+            if $.fn.DataTable.fnIsDataTable(@table_el.get(0))
+                console.log 'Destroying datatable...'
+
+                # Get a handle to the data table.
+                table = @table_el.dataTable()
+
+                # Trigger and event that the table is being destroyed.
                 @trigger "destroy", table
 
-                # Destroy the old table.
+                # Destroy the data table.
                 table.fnDestroy false
+
+                # Empty the table element.
                 table.empty()
-            else
-                console.log "Element with id: #{id} is not of type DataTable, skipping..."
             return
 
-
-        ###
-        Render the table.  If you are obtaining data from a collection then don't invoke this method, call fetch()
-        instead.  If obtaining data via server side ajax then this method can be called with server side parameters.
-
-        table.render({server_params: {suppression_id: suppression_id}});
-
-        @param params - the server side ajax parameters.  A map keyed by the name server_params.
-        @returns {*}
-        ###
+        #
+        # Render the table.  If you are obtaining data from a collection then don't invoke this method, call fetch()
+        # instead.  If obtaining data via server side ajax then this method can be called with server side parameters.
+        #
+        # table.render({server_params: {suppression_id: suppression_id}});
+        #
+        # @param params - the server side ajax parameters.  A map keyed by the name server_params.
+        # @returns {*}
+        #
         render: (params) ->
-            view = @
-            unless view.el
-                # Error
-                alert "Error: Undefined \"el\" in TableView"
-                return
+            console.log 'Rendering DataTableView...'
 
             # Clear the cache before re-destroying the table.
-            view.clear_cache()
+            @clear_cache()
 
             # Destroy the existing table if there is one.
-            view.destroy()
-
-            # Keep track of the expanded rows.
-            view._expanded_rows = []
-
-            # Construct the table settings based on the supplied settings.
-            settings = get_datatables_settings(view, view.options)
+            @destroy()
 
             # Apply any parameters passed to the settings.
             if params
@@ -358,7 +442,7 @@ define (require) ->
                     server_params = params.server_params
                     if server_params
                         console.log "Setting server params..."
-                        settings.fnServerParams = (aoData) ->
+                        @settings.fnServerParams = (aoData) ->
                             _.each Object.keys(server_params), (key) ->
                                 console.log "Setting param #{key} and value #{server_params[key]}"
                                 aoData.push
@@ -368,93 +452,26 @@ define (require) ->
                                 return
 
                             return
-                else settings.aaData = params.aaData  if params.aaData isnt null
+                else @settings.aaData = params.aaData  if params.aaData isnt null
 
-            # If a collection is defined then use the data from the collection.
-            settings.aaData = view.collection.toJSON()  if view.collection
-
-            # The following block is one time initialization for the table view and is specifically placed in the render
-            # function to allow sub-classes to define an initialize method without having to worry about calling the
-            # superclass initialization.
-            view.run_once "TableView::render::init", ->
-
-                # Listen to draw events to account for the fact that datatables does not fire page change events.  This code
-                # makes up for that shortcoming by manually determining when the user has used the previous next component to
-                # page through the table.
-                view.listenTo view, "draw", ->
-                    if view._page_prev
-
-                        # User has iterated through the table to the previous page.
-                        view.trigger "page", view.get_current_page()
-
-                        # Select the last record in the current view.
-                        view.select_row view.length() - 1
-
-                        # Clear the flag.
-                        view._page_prev = false
-                    else if view._page_next
-
-                        # User has iterated to through the table to the next page.
-                        view.trigger "page", view.get_current_page()
-
-                        # Select the next record in the view.
-                        view.select_row 0
-
-                        # Clear the flag.
-                        view._page_next = false
-                    if view._row_index isnt undefined
-
-                        # During a refresh reload operation a row index to select has been specified.  Attempt to select
-                        # the row that corresponds to the index.
-                        view.select_row view._row_index
-                        view._row_index = undefined
-                    else if view._value_pair
-
-                        # During a refresh/reload operation a value to select has been specified.  Attempt to select the
-                        # row that corresponds to the supplied name value pair.
-                        console.log "Attempting to reselect table row value: name=#{view._value_pair.name}, value=#{view._value_pair.value}"
-
-                        # Attempt to select the row related to the value pair after a draw event.
-                        found = false
-                        nodes = @get_nodes()
-                        i = 0
-
-                        while i < nodes.length
-                            node = nodes[i]
-                            data = @get_data(node)
-                            if view._value_pair.name and view._value_pair.value and data[view._value_pair.name] is view._value_pair.value
-
-                                # Select the node.
-                                @select_row node
-                                found = true
-                                break
-                            i++
-
-                        # If the matching row was not found it is assumed that it was deleted, select the first
-                        # row instead.
-                        @select_row 0  unless found
-
-                        # Clear the value pair.
-                        view._value_pair = undefined
-                    return
-
-                return
-
+            if @collection
+                # If a collection is defined then use the data from the collection.
+                @settings.aaData = @collection.toJSON()
 
             # Create the table.
-            table = view.$el.dataTable(settings)
-            view.delegateEvents "click tr i.expand": "on_expand"
+            @table_el.dataTable(@settings)
 
-            if view.$el.parent()
+            @.delegateEvents "click tr i.expand": "on_expand"
+
+            if @table_el.parent()
                 # Assign the bootstrap class to the length select.
                 length_selects = $(".dataTables_wrapper select")
                 for length_select in length_selects
                     unless $(length_select).hasClass("form-control")
                         $(length_select).addClass "form-control"
                         $(length_select).css "min-width", "85px"
-                    return
 
-            view
+            @
 
         on_expand: (ev) ->
             ev.stopPropagation()
@@ -506,14 +523,21 @@ define (require) ->
             return
 
 
+        #
+        # Clean up and remove this view.
+        #
         close: ->
+            # Destroy the datatable.
             @destroy()
+            # Remove the element from the DOM.
             @remove()
-
             # Fire an event after cleaning up.
             @trigger "close"
             return
 
+        #
+        #
+        #
         update_row: (row_search_key, row_search_value, row_update_key, row_update_value, row_column_index) ->
             view = this
             nodes = view.get_nodes()
@@ -535,13 +559,13 @@ define (require) ->
             return
 
 
-        ###
-        Escape a cells contents.
-        ###
+        #
+        # Escape a cells contents.
+        #
         escape_cell: (row, index) ->
-            col = @get_settings().aoColumns[index]
             td = $("td:eq(#{index})", row)
-            td.html _.escape(td.html())  if td
+            if td
+                td.html _.escape(td.html())
             return
 
         set_key: (aoData, sKey, mValue) ->
@@ -690,19 +714,11 @@ define (require) ->
 
             aTargets: [index]
 
-
-        ###
-        Return the list of expanded rows.
-        ###
-        expanded_rows: ->
-            @_expanded_rows
-
-
-        ###
-        Expand the contents of a row.
-        @param tr - the row.
-        @param details_callback - function(tr, data) - returns the details HTML.
-        ###
+        #
+        # Expand the contents of a row.
+        # @param tr - the row.
+        # @param details_callback - function(tr, data) - returns the details HTML.
+        #
         expand__collapse_row: (tr, details_callback) ->
             expanded = @expanded_rows()
             index = $.inArray(tr, expanded)
@@ -724,4 +740,4 @@ define (require) ->
             return
 
 
-    TableView
+    DataTableView

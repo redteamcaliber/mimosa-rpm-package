@@ -93,3 +93,4 @@ define (require) ->
 
         display_success: (message) ->
             uac_utils.display_success(message)
+

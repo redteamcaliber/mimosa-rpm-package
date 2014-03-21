@@ -1,7 +1,6 @@
 define (require) ->
     moment = require('moment')
     View = require 'uac/views/View'
-    CollapsableContentView = require('uac/views/CollapsableContentView')
     uac_utils = require 'uac/common/utils'
 
     TagCollection = require 'alerts/models/TagCollection'
@@ -10,7 +9,6 @@ define (require) ->
     AlertTypeCollection = require 'alerts/models/AlertTypeCollection'
 
     templates = require 'alerts/ejs/templates'
-
 
     #
     # View to display tags search criteria.
@@ -63,8 +61,8 @@ define (require) ->
         # Set the selected tags.
         #
         set_selected: (selected) ->
-            for el in @$ '#tag:checkbox'
-                is_checked = $(el).val() in selected
+            for el in @$('#tag:checkbox')
+                is_checked = el.value in selected
                 $(el).prop 'checked', is_checked
             return
 
@@ -357,26 +355,22 @@ define (require) ->
             return
 
     #
-    # View for displaying alerts search criteria.
+    # View for displaying alerts search criteria.  This view emits "search" events when a user clicks the search button.
+    # The search criteria is passed along with the event.
     #
-    class SearchView extends View
+    class AlertsSearchView extends View
         events:
             'click #search-button': 'on_search'
             'click #reset-button': 'on_reset'
 
         initialize: ->
-            @render()
-
-            # Add a collapsable around the search view.
-            @collapsable_view = new CollapsableContentView
-                el: @$el
-                title: '<i class="fa fa-filter"></i> Filters'
-
             # Retrieve any previous selections.
             selected = uac_utils.storage 'alerts:search'
             if selected
                 console.debug "Found existing alerts search selections: #{JSON.stringify(selected)}"
 
+            # Create the layout.
+            @apply_template templates, 'search-template.ejs'
 
             # Initialize the sub views.
 
@@ -417,29 +411,31 @@ define (require) ->
         # Render the base template.
         #
         render: ->
-            @apply_template templates, 'search-template.ejs'
-            return @
-
-        #
-        # Fetch all the sub view data.
-        #
-        fetch: ->
             @tags_view.fetch()
             @clients_view.fetch()
             @times_view.fetch()
             @types_view.fetch()
-            return
+            return @
 
         #
         # Clear any listeners and remove the views elements from the DOM.
         #
         close: ->
-            # Remove the child views.
+            # Clean up the child views.
             @tags_view.remove()
+            @tags_view = null
+
             @clients_view.remove()
+            @clients_view = null
+
             @times_view.remove()
+            @times_view = null
+
             @types_view.remove()
+            @types_view = null;
+
             @hx_view.remove()
+            @hx_view = null
 
             @remove()
 
@@ -497,4 +493,4 @@ define (require) ->
             @trigger 'reset'
             return
 
-    return SearchView
+    return AlertsSearchView

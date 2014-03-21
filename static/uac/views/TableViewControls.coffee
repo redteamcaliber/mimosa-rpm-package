@@ -2,7 +2,7 @@ define (require) ->
 
     View = require 'uac/views/View'
     templates = require 'uac/ejs/templates'
-    prev_next_template = templates['prev-next.ejs']
+
 
     class TableViewControls extends View
         initialize: (options) ->
@@ -21,7 +21,7 @@ define (require) ->
             @run_once "init_template", =>
 
                 # Only write the template once.
-                @$el.html(prev_next_template)
+                @apply_template(templates, 'prev-next.ejs')
                 $(document).keyup (ev) =>
                     if ev.ctrlKey
                         if ev.keyCode is 68 or ev.keyCode is 40 or ev.keyCode is 78

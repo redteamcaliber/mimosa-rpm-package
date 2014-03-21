@@ -6,26 +6,28 @@
 {{ super() }}
 
 <script type="text/javascript">
-    require(['jquery', 'bootstrap', 'backbone', 'alerts/views/SearchView'],
-        function ($, bs, Backbone, SearchView) {
+    require(['jquery', 'bootstrap', 'backbone', 'alerts/views/SearchView1'],
+        function ($, bs, Backbone, TagsSearchView) {
             $(function () {
-                //search_view = new SearchView({ el: '#test-div' });
-//                search_view = new SearchView.TagsSearchView({ el: '#test-div' });
-//                search_view.fetch();
-//
-//                $('#remove-button').on('click', function() {
-//                    search_view.close();
-//                    delete search_view;
-//                });
+                $.expr.cacheLength = 1;
+
+                var TestView = Backbone.View.extend({
+                    render: function() {
+                        this.$el.html('<div class="zombie">This is a potential zombie!</div>');
+                        this.$('.zombie');
+                    }
+                });
+
+                var test_view = new TestView();
 
 
-                var tags_view = new SearchView.TagsSearchView({ el: '#test-div' });
-
-                $('#fetch-button').on('click', function() {
-                    tags_view.fetch();
+                $('#render-button').on('click', function() {
+                    test_view.render();
+                    $('#test-div').append(test_view.el);
                 });
                 $('#remove-button').on('click', function() {
-                    tags_view.close();
+                    test_view.remove();
+                    //test_view = null;
                 });
             });
         });
@@ -42,7 +44,7 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <button id="fetch-button"class="btn btn-primary">Fetch</button>
+            <button id="render-button"class="btn btn-primary">Render</button>
             <button id="remove-button"class="btn btn-danger">Remove</button>
         </div>
     </div>

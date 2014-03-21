@@ -2,9 +2,12 @@ define (require) ->
     $ = require 'jquery'
     utils = require 'uac/common/utils'
 
-    ###
-        Wrap an element with a collapsable view.
-    ###
+    #
+    #
+    # Wrap an element with a collapsable view.
+    #
+    # NOTE: This class is DEPRECATED, use the uac/views/CollapsableView instead.
+    #
     class CollapsableContentView extends Backbone.View
         initialize: (options) ->
             if not @name
