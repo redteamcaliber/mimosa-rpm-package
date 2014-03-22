@@ -420,20 +420,17 @@ define (require) ->
 
     usersettings = (options) ->
         usersettings = storage("usersettings")
-        usersettings = {}    unless usersettings
+        if not usersettings
+            usersettings = {}
         if options
-            #_.each _.keys(options), (key) ->
-            for key in options
-                value = options[key]
+            for key, value of options
                 if value
                     usersettings[key] = options[key]
                 else
                     delete usersettings[key]
-                return
 
             storage "usersettings", usersettings
-        (if usersettings then usersettings else {})
-
+        usersettings
 
     ###
     Params:

@@ -386,7 +386,6 @@ define(function (require) {
         },
         render: function() {
             var view = this;
-            console.dir(view.model);
             if (view.model.get("hash")) {
                 // Display the host template.
                 view.apply_template(templates, 'agent-host.ejs', view.model.toJSON());

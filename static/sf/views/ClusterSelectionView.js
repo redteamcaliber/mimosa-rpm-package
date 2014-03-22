@@ -13,7 +13,7 @@ define(function (require) {
      */
     var ClusterSelectionView = View.extend({
         initialize: function(options) {
-            this.options = options;
+            this.options = options || {};
         },
         /**
          * Render the selection view.
@@ -33,7 +33,7 @@ define(function (require) {
                 // Render the services.
                 view.services = new ServicesCollection();
                 view.services_view = new SelectView({
-                    el: $("#services-select"),
+                    el: view.$("#services-select"),
                     collection: view.services,
                     id_field: "mcirt_service_name",
                     value_field: "description",
@@ -57,7 +57,7 @@ define(function (require) {
             // Render the clients.
             view.clients = new ClientCollection();
             view.clients_view = new SelectView({
-                el: $('#clients-select'),
+                el: view.$('#clients-select'),
                 collection: view.clients,
                 id_field: 'client_uuid',
                 value_field: 'client_name',
@@ -75,7 +75,7 @@ define(function (require) {
             // Render the clusters.
             view.clusters = new ClustersCollection();
             view.clusters_view = new SelectView({
-                el: $("#clusters-select"),
+                el: view.$("#clusters-select"),
                 collection: view.clusters,
                 id_field: "cluster_uuid",
                 value_field: "cluster_name",
@@ -94,6 +94,8 @@ define(function (require) {
                 'click #submit-button': 'on_submit',
                 'click #clear-button': 'on_clear'
             });
+
+            return this;
         },
         /**
          * Clean up after this view.

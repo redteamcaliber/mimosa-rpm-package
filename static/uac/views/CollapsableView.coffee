@@ -20,15 +20,12 @@ define (require) ->
     #
     class CollapsableView extends View
         initialize: (options) ->
-            if options
-                @name = options.name ? utils.random_string(10)
-                @accordion_id = "#accordion-#{@name}"
-                @collapse_id = "#collapse-#{@name}"
-                @title = options.title ? undefined
-                @collapsed = options.collapsed ? false
-            else
-                # Generate a unique name for this view.
-                @name = utils.random_string(10)
+            @name = if options and options.name then options.name else utils.random_string(10)
+            @accordion_id = "#accordion-#{@name}"
+            @collapse_id = "#collapse-#{@name}"
+            @title = if options and options.title then options.title else undefined
+            @collapsed = if options and options.collapsed then options.collapsed else false
+
             return
 
         #
@@ -43,6 +40,7 @@ define (require) ->
                 name: @name
                 title: @title
                 collapsed: @collapsed
+
             @apply_template templates, 'collapsable.ejs', context
 
             # Listen for collapse events.
@@ -51,6 +49,7 @@ define (require) ->
                 el.removeClass('fa-minus-square')
                 el.addClass('fa-plus-square')
                 @trigger 'collapsed'
+                return
 
             # Listen for expand events.
             @get_collapse().on 'show.bs.collapse', =>
@@ -58,6 +57,7 @@ define (require) ->
                 el.removeClass('fa-plus-square')
                 el.addClass('fa-minus-square')
                 @trigger 'expanded'
+                return
 
             return @
 
@@ -98,7 +98,7 @@ define (require) ->
         # Return whether the view is collapsed.
         #
         is_collapsed: ->
-            @get_collapse().hasClass('in')
+            not @get_collapse().hasClass('in')
 
         #
         # Collapse the view.

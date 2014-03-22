@@ -3,18 +3,21 @@
  */
 define(function (require) {
     var uac_utils = require('uac/common/utils');
-    var CollapsableContentView = require('uac/views/CollapsableContentView');
     var View = require('uac/views/View');
     var TableView = require('uac/views/TableView');
+    var DataTableView = require('uac/views/DataTableView');
 
     var IOCSummaryCollection = require('sf/models/IOCSummaryCollection');
     var IOCDetailsCollection = require('sf/models/IOCDetailsCollection');
 
     var ClusterSelectionView = require('sf/views/ClusterSelectionView');
     var HitsView = require('sf/views/HitsView');
-    var templates = require('sf/ejs/templates')
+    var templates = require('sf/ejs/templates');
 
 
+    //
+    // View class to display a textual representation of the IOC expression.
+    //
     var ExpressionView = View.extend({
         render: function () {
             var view = this;
@@ -53,9 +56,9 @@ define(function (require) {
         }
     });
 
-    /**
-     * IOC Summary table view.
-     */
+    //
+    // IOC Summary table view.
+    //
     var IOCSummaryTableView = TableView.extend({
         initialize: function (options) {
             var view = this;
@@ -284,24 +287,17 @@ define(function (require) {
     /**
      * The main shopping view.
      */
-    var ShoppingView = Backbone.View.extend({
+    var ShoppingView = View.extend({
         initialize: function (options) {
             // ShoppingView reference.
             var view = this;
             view.options = options;
 
-            // Add a collapsable around the shopping view.
-            view.shopping_collapsable = new CollapsableContentView({
-                el: '#' + view.el.id
-            });
-
-            // Use the default title.
-            view.set_title();
+            // Render the shopping template.
+            view.apply_template(templates, 'shopping-layout.ejs');
 
             // Create the cluster selection component.
-            view.cluster_selection_view = new ClusterSelectionView({
-                el: '#cluster-selection-div'
-            });
+            view.cluster_selection_view = new ClusterSelectionView();
             view.listenTo(view.cluster_selection_view, 'submit', function (params) {
                 // Update the services, clients, and clusters user settings on submit.
                 uac_utils.usersettings({
@@ -323,12 +319,17 @@ define(function (require) {
                 view.hide_summaries();
                 view.hide_details();
             });
-            view.cluster_selection_view.render();
+            view.$('#cluster-selection').append(view.cluster_selection_view.render().el);
 
             // Initialize the IOC summary view.
+            view.summaries = new IOCSummaryCollection();
             view.ioc_summaries_view = new IOCSummaryTableView({
-                el: '#ioc-summary-table'
+                id: 'ioc-summary-table',
+                collection: view.summaries
             });
+            view.ioc_summaries_view.$el.addClass('table').addClass('table-bordered');
+            view.$('#ioc-summary').append(view.ioc_summaries_view.el);
+
             view.listenTo(view.ioc_summaries_view, 'click', function (data) {
                 // Handle the click of a row on the IOC summary view.  Load the related IOC details.
                 var iocname = data["iocname"];
@@ -353,16 +354,10 @@ define(function (require) {
 
             // Initialize the IOC details view.
             view.ioc_details_view = new IOCDetailsView({
-                el: "#ioc-details-div"
+                el: view.$('#ioc-details-div')
             });
             view.listenTo(view.ioc_details_view, "click:exp_key", function (iocname, iocuuid, exp_key) {
                 console.log('Selected expression key: ' + exp_key);
-
-                // Update the window title.
-                document.title = _.sprintf('Hits-%s-%s-%s', iocname, iocuuid, exp_key);
-
-                // Update the title of the collapsable.
-                view.set_title([iocname, iocuuid, exp_key]);
 
                 var params = {
                     services: view.services.join(','),
@@ -371,16 +366,12 @@ define(function (require) {
                 };
 
                 view.render_hits(params);
+
+                view.trigger('render:hits', [iocname, iocuuid, exp_key]);
             });
             view.listenTo(view.ioc_details_view, "click:iocnamehash", function (iocname, iocnamehash) {
                 // User has selected an iocnamehash.
                 console.log('Selected iocnamehash: ' + iocnamehash);
-
-                // Update the window title.
-                document.title = _.sprintf('Hits-%s', iocname);
-
-                // Update the title of the collapsable.
-                view.set_title([iocname]);
 
                 var params = {
                     services: view.services.join(','),
@@ -390,16 +381,12 @@ define(function (require) {
 
                 // Check out is not enabled.
                 view.render_hits(params);
+
+                view.trigger('render:hits', [iocname]);
             });
             view.listenTo(view.ioc_details_view, "click:ioc_uuid", function (iocname, ioc_uuid) {
                 // User has selected an ioc_uuid.
                 console.log('Selected ioc_uuid: ' + ioc_uuid);
-
-                // Update the window title.
-                document.title = _.sprintf('Hits-%s-%s', iocname, ioc_uuid);
-
-                // Update the title of the collapsable.
-                view.set_title([iocname, ioc_uuid]);
 
                 var params = {
                     services: view.services.join(','),
@@ -407,7 +394,7 @@ define(function (require) {
                     ioc_uuid: ioc_uuid
                 };
 
-                view.render_hits(params);
+                view.render_hits([iocname, ioc_uuid]);
             });
 
             // Attempt to display the summary data based on the current user settings.
@@ -429,7 +416,6 @@ define(function (require) {
                     title += ' &nbsp; / &nbsp; ' + item;
                 });
             }
-            this.shopping_collapsable.set('title', title);
 
             return title;
         },
@@ -437,13 +423,13 @@ define(function (require) {
          * Hide the IOC summary view.
          */
         hide_summaries: function () {
-            $('#ioc-summary-div').fadeOut().hide();
+            this.$('#ioc-summary-div').fadeOut().hide();
         },
         /**
          * Show the IOC summary view.
          */
         show_summaries: function () {
-            $('#ioc-summary-div').fadeIn().show();
+            this.$('#ioc-summary-div').fadeIn().show();
         },
         /**
          * Hide the IOC details view.
@@ -508,11 +494,6 @@ define(function (require) {
 
             // Fetch the hits data.
             view.hits_view.fetch(params);
-
-            if (view.shopping_collapsable) {
-                // Toggle the shopping collapsable.
-                view.shopping_collapsable.toggle();
-            }
 
             // Display the hits view.
             view.hits_view.show();

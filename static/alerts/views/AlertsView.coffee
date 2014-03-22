@@ -13,7 +13,7 @@ define (require) ->
     class AlertsView extends View
         initialize: ->
             # Enable for memory testing.  The following line limits the jQuery sizzle cache to a single element.
-            $.expr.cacheLength = 1
+            #$.expr.cacheLength = 1
 
             # TODO: Remove this. The follow code is for memory profiling the view.
             $('#remove-button').on 'click', =>

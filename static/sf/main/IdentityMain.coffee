@@ -4,7 +4,6 @@ define (require) ->
     _s = require 'underscore.string'
     _.mixin(_s.exports())
 
-
     HitsView = require 'sf/views/HitsView'
     hits_view = new HitsView()
 

@@ -1,5 +1,5 @@
 #
-# NOTE: This class is DEPRECATED.  Use the DataTableView instead.
+# Backbone dataTables view base class.
 #
 define (require) ->
     $ = require 'jquery'
@@ -7,69 +7,6 @@ define (require) ->
     utils = require 'uac/common/utils'
     datatables = require 'datatables'
     datatables_bootstrap = require 'datatables_bootstrap'
-
-    get_datatables_settings = (parent, settings) ->
-        defaults =
-            iDisplayLength: 10
-            aLengthMenu: [
-                10
-                25
-                50
-                100
-                200
-            ]
-            sDom: "t"
-            bAutoWidth: false
-            sPaginationType: 'bs_full'
-            bSortClasses: false
-            bProcessing: false
-            asStripeClasses: []
-            fnServerData: (sSource, aoData, fnCallback) ->
-                parent.pipeline sSource, aoData, fnCallback
-                return
-
-            fnRowCallback: (nRow, data, iDisplayIndex, iDisplayIndexFull) ->
-                click_handler = (ev) ->
-
-                    # Select the row.
-                    $(nRow).addClass("active").siblings().removeClass "active"
-
-                    # Trigger a click event.
-                    parent.trigger "click", parent.get_data(ev.currentTarget), ev
-                    return
-
-
-                # Remove any existing click events for the row.
-                $(nRow).unbind "click", click_handler
-
-                # Bind a click event to the row.
-                $(nRow).bind "click", click_handler
-                nRow
-
-            fnCreatedRow: (nRow, data, iDataIndex) ->
-                parent.trigger "row:created", nRow, data, iDataIndex
-                return
-
-            fnInitComplete: (oSettings, json) ->
-                parent.trigger "load", oSettings, json
-                return
-
-            fnDrawCallback: (oSettings) ->
-                parent.trigger "draw", oSettings
-                parent.trigger "empty"  if parent.length() is 0
-                return
-
-
-        #return $.extend(true, defaults, settings);
-        results = {}
-
-        for k, v of defaults
-            results[k] = v
-
-        for k, v of settings
-            results[k] = v
-
-        results
 
     #
     # Base table view class.  Extend this class and provide a configure function to setup your table.
@@ -90,25 +27,94 @@ define (require) ->
     #    my_table = new TableView({settings: settings})
     #
     class TableView extends View
+        # The element must be a table.
+        tagName: 'table'
+
+        #
+        # Initialize the table the defaults.
+        #
         initialize: (options) ->
             unless @options
+                # Make sure the instance has an options bound to it.  Prior to Backbone 1.0.x were guarenteed to have an
+                # options instance where as later versions removed this
                 @options = options
 
+            unless @options.id
+                # Ensure there is an id attribute.
+                @options.id = utils.random_string(10)
+
             if @collection
+                # If a collectoin is supplied then redraw the view any time it refreshes.
                 @listenTo(@collection, "sync", @render)
                 @listenTo(@collection, "reset", @render)
-            return
 
+                # Listen to draw events to account for the fact that datatables does not fire page change events.  This code
+                # makes up for that shortcoming by manually determining when the user has used the previous next component to
+                # page through the table.
+                @listenTo @, "draw", =>
+                    if @_page_prev
+                        # User has iterated through the table to the previous page.
+                        @trigger "page", view.get_current_page()
+
+                        # Select the last record in the current view.
+                        @select_row view.length() - 1
+
+                        # Clear the flag.
+                        @_page_prev = false
+                    else if @_page_next
+                        # User has iterated to through the table to the next page.
+                        @trigger "page", @.get_current_page()
+
+                        # Select the next record in the view.
+                        @select_row 0
+
+                        # Clear the flag.
+                        @_page_next = false
+
+                    if @_row_index isnt undefined
+
+                        # During a refresh reload operation a row index to select has been specified.  Attempt to select
+                        # the row that corresponds to the index.
+                        @select_row view._row_index
+                        @_row_index = undefined
+                    else if @_value_pair
+
+                        # During a refresh/reload operation a value to select has been specified.  Attempt to select the
+                        # row that corresponds to the supplied name value pair.
+                        console.log "Attempting to reselect table row value: name=#{@_value_pair.name}, value=#{@_value_pair.value}"
+
+                        # Attempt to select the row related to the value pair after a draw event.
+                        found = false
+                        for node in @get_nodes()
+                            data = @get_data node
+                            if @_value_pair.name and @_value_pair.value and data[@_value_pair.name] is @_value_pair.value
+                                # Select the node.
+                                @select_row node
+                                found = true
+                                break
+
+                        # If the matching row was not found it is assumed that it was deleted, select the first
+                        # row instead.
+                        @select_row 0  unless found
+
+                        # Clear the value pair.
+                        @_value_pair = undefined
+
+                return # End @listenTo @, "draw", =>
+
+
+        #
+        # Visually highlight the row.
+        #
         highlight_row: (nRow) ->
             $(nRow).addClass("active").siblings().removeClass "active"
             return
 
-
-        ###
-        Initiate a click event on a row.
-        @param index_or_node - the row index or row node.
-        @returns the row node or undefined.
-        ###
+        #
+        # Initiate a click event on a row.
+        # @param index_or_node - the row index or row node.
+        # @returns the row node or undefined.
+        #
         select_row: (index_or_node) ->
             if typeof index_or_node is "number"
                 length = @length()
@@ -137,9 +143,15 @@ define (require) ->
                 undefined
             return
 
+        #
+        # Retrieve the selected table row.
+        #
         get_selected: ->
             @$ "tr.active"
 
+        #
+        # Return the position of the selected item.
+        #
         get_selected_position: ->
             selected = @get_selected()
             if selected isnt undefined and selected.length is 1
@@ -147,6 +159,9 @@ define (require) ->
             else
                 -1
 
+        #
+        # Return the data for the selected row.
+        #
         get_selected_data: ->
             selected = @get_selected()
             if selected isnt undefined and selected.length is 1
@@ -155,28 +170,46 @@ define (require) ->
             else
                 undefined
 
+        #
+        # Return the current page number.
+        #
         get_current_page: ->
             settings = @get_settings()
             Math.ceil(settings._iDisplayStart / settings._iDisplayLength) + 1
 
+        #
+        # Retrieve the row count.
+        #
         get_total_rows: ->
             if @get_settings().oInit.bServerSide
                 @get_settings()._iRecordsTotal
             else
                 @get_nodes().length
 
+        #
+        # Retrieve the page count.
+        #
         get_total_pages: ->
             settings = @get_settings()
             Math.ceil @get_total_rows() / settings._iDisplayLength
 
+        #
+        # Return whether there is a previous record to navigate to.
+        #
         is_prev: ->
             pos = @get_selected_position()
             pos > 0
 
+        #
+        # Return whether there is a next record to navigate to.
+        #
         is_next: ->
             pos = @get_selected_position()
             pos + 1 < @length()
 
+        #
+        # Return the previous rows data or undefined.
+        #
         peek_prev_data: ->
             selected = @get_selected()
             if selected isnt undefined and selected.length is 1
@@ -186,6 +219,9 @@ define (require) ->
             # No previous.
             undefined
 
+        #
+        # Return the next rows data or undefined.
+        #
         peek_next_data: ->
             if @is_next()
                 selected = @get_selected()
@@ -196,6 +232,9 @@ define (require) ->
             # No next.
             undefined
 
+        #
+        # Navigate to the previous row.
+        #
         prev: ->
             selected = @get_selected()
             if selected isnt undefined and selected.length is 1
@@ -203,6 +242,9 @@ define (require) ->
                 @select_row pos - 1
             return
 
+        #
+        # Navigate to the next row.
+        #
         next: ->
             if @is_next()
                 selected = @get_selected()
@@ -211,28 +253,40 @@ define (require) ->
                     @select_row pos + 1
             return
 
+        #
+        # Return whether there is a previous page to navigate to.
+        #
         is_prev_page: ->
             @get_current_page() isnt 1
 
+        #
+        # Return whether there is a next page to navigate to.
+        #
         is_next_page: ->
             @get_current_page() < @get_total_pages()
 
+        #
+        # Navigate to the previous page.
+        #
         prev_page: ->
             if @is_prev_page()
                 # set page takes an index.
                 @set_page(@get_current_page())
             return
 
+        #
+        # Navigate to the next page.
+        #
         next_page: ->
             if @is_next_page()
                 # set page takes an index.
                 @set_page(@get_current_page())
             return
 
-        ###
-        Set the current page of the table.
-        @param page_index - the zero based page index.
-        ###
+        #
+        # Set the current page of the table.
+        # @param page_index - the zero based page index.
+        #
         set_page: (page_index) ->
             current_page = @get_current_page()
             if page_index + 1 > current_page
@@ -241,64 +295,112 @@ define (require) ->
                 @_page_prev = true
             @get_table().fnPageChange page_index
 
+        #
+        # Return the lenth of the data.
+        #
         length: ->
             @$el.fnGetData().length
 
+        #
+        # Retrieve the original HTML DOM table element.
+        #
         get_dom_table: ->
             @$el.get 0
 
+        #
+        # Return the dataTable.
+        #
         get_table: ->
             @$el.dataTable()
 
+        #
+        # Retrieve the table nodes or the node corresponding to index.
+        #
         get_nodes: (index) ->
             @$el.fnGetNodes index
 
+        #
+        # Update a row and column with the specified data.
+        #
         update: (data, tr_or_index, col_index, redraw, predraw) ->
             @get_table().fnUpdate data, tr_or_index, col_index, redraw, predraw
 
+        #
+        # Draw the dataTable.
+        #
         draw: (re) ->
             @get_table().fnDraw re
             return
 
+        #
+        # Retrieve the table data.
+        #
         get_data: (index_or_node, index) ->
             @get_table().fnGetData index_or_node, index
 
+        #
+        # Return the posotion of the node.
+        #
         get_position: (node) ->
             @$el.fnGetPosition node
 
+        #
+        # Retrieve the index of the node relative to the entire result set.
+        #
         get_absolute_index: (node) ->
             if @get_settings().oInit.bServerSide
                 (@get_current_page() - 1) * @get_settings()._iDisplayLength + @get_position(node)
             else
                 @get_position node
 
+        #
+        # Retrieve the dataTable settings.
+        #
         get_settings: ->
             @$el.fnSettings()
 
+        #
+        # Retrieve the current search term.
+        #
         get_search: ->
             result = ""
             settings = @get_settings()
             result = settings.oPreviousSearch.sSearch  if settings.oPreviousSearch and settings.oPreviousSearch.sSearch
             result
 
+        #
+        # Retrieve whether the current element contains an initialized dataTable.
+        #
         is_datatable: ->
             $.fn.DataTable.fnIsDataTable @get_dom_table()
 
+        #
+        # Retrieve whether server side processing is currently enabled.
+        #
         is_server_side: ->
             @get_settings().oInit.bServerSide
 
+        #
+        # Reload the table.
+        #
         reload: (row_index) ->
             @clear_cache()
             @_row_index = row_index  if row_index isnt undefined
             @$el.fnDraw false
             return
 
+        #
+        # Refresh the table.
+        #
         refresh: (value_pair) ->
             @clear_cache()
             @_value_pair = value_pair  if value_pair
             @$el.fnDraw false
             return
 
+        #
+        # Destroy the DataTable and empty the table element..
+        #
         destroy: ->
 
             # Remove any listeners.
@@ -324,15 +426,14 @@ define (require) ->
             return
 
 
-        ###
-        Render the table.  If you are obtaining data from a collection then don't invoke this method, call fetch()
-        instead.  If obtaining data via server side ajax then this method can be called with server side parameters.
-
-        table.render({server_params: {suppression_id: suppression_id}});
-
-        @param params - the server side ajax parameters.  A map keyed by the name server_params.
-        @returns {*}
-        ###
+        #
+        # Render the table.  If you are obtaining data from a collection then don't invoke this method, call fetch()
+        # instead.  If obtaining data via server side ajax then this method can be called with server side parameters.
+        #
+        # @param params - the server side ajax parameters.  A map keyed by the name server_params.
+        #
+        #     table.render({server_params: {suppression_id: suppression_id}});
+        #
         render: (params) ->
             view = @
             unless view.el
@@ -378,69 +479,6 @@ define (require) ->
             # superclass initialization.
             view.run_once "TableView::render::init", ->
 
-                # Listen to draw events to account for the fact that datatables does not fire page change events.  This code
-                # makes up for that shortcoming by manually determining when the user has used the previous next component to
-                # page through the table.
-                view.listenTo view, "draw", ->
-                    if view._page_prev
-
-                        # User has iterated through the table to the previous page.
-                        view.trigger "page", view.get_current_page()
-
-                        # Select the last record in the current view.
-                        view.select_row view.length() - 1
-
-                        # Clear the flag.
-                        view._page_prev = false
-                    else if view._page_next
-
-                        # User has iterated to through the table to the next page.
-                        view.trigger "page", view.get_current_page()
-
-                        # Select the next record in the view.
-                        view.select_row 0
-
-                        # Clear the flag.
-                        view._page_next = false
-                    if view._row_index isnt undefined
-
-                        # During a refresh reload operation a row index to select has been specified.  Attempt to select
-                        # the row that corresponds to the index.
-                        view.select_row view._row_index
-                        view._row_index = undefined
-                    else if view._value_pair
-
-                        # During a refresh/reload operation a value to select has been specified.  Attempt to select the
-                        # row that corresponds to the supplied name value pair.
-                        console.log "Attempting to reselect table row value: name=#{view._value_pair.name}, value=#{view._value_pair.value}"
-
-                        # Attempt to select the row related to the value pair after a draw event.
-                        found = false
-                        nodes = @get_nodes()
-                        i = 0
-
-                        while i < nodes.length
-                            node = nodes[i]
-                            data = @get_data(node)
-                            if view._value_pair.name and view._value_pair.value and data[view._value_pair.name] is view._value_pair.value
-
-                                # Select the node.
-                                @select_row node
-                                found = true
-                                break
-                            i++
-
-                        # If the matching row was not found it is assumed that it was deleted, select the first
-                        # row instead.
-                        @select_row 0  unless found
-
-                        # Clear the value pair.
-                        view._value_pair = undefined
-                    return
-
-                return
-
-
             # Create the table.
             table = view.$el.dataTable(settings)
             view.delegateEvents "click tr i.expand": "on_expand"
@@ -462,6 +500,9 @@ define (require) ->
             @trigger "expand", tr.get(0)
             false
 
+        #
+        # Fetch the collection or retrieve the server side table data.
+        #
         fetch: (params) ->
             view = this
             if params
@@ -505,7 +546,9 @@ define (require) ->
 
             return
 
-
+        #
+        # Clean up and remove the table.
+        #
         close: ->
             @destroy()
             @remove()
@@ -514,13 +557,15 @@ define (require) ->
             @trigger "close"
             return
 
+        #
+        # Update a client row instance.
+        #
         update_row: (row_search_key, row_search_value, row_update_key, row_update_value, row_column_index) ->
             view = this
             nodes = view.get_nodes()
             i = 0
 
-            while i < nodes.length
-                node = nodes[i]
+            for node, i in nodes
                 data = view.get_data(i)
                 if row_search_value is data[row_search_key]
 
@@ -535,14 +580,15 @@ define (require) ->
             return
 
 
-        ###
-        Escape a cells contents.
-        ###
+        #
+        # Escape a cells contents.
+        #
         escape_cell: (row, index) ->
             col = @get_settings().aoColumns[index]
             td = $("td:eq(#{index})", row)
             td.html _.escape(td.html())  if td
             return
+
 
         set_key: (aoData, sKey, mValue) ->
             i = 0
@@ -562,11 +608,17 @@ define (require) ->
                 i++
             null
 
+        #
+        # Clear the pipeline cache.
+        #
         clear_cache: ->
             if @cache
                 @cache = undefined
             return
 
+        #
+        # DataTables pipelining support.
+        #
         pipeline: (sSource, aoData, fnCallback) ->
             view = this
             ajax_data_prop = view.get_settings().sAjaxDataProp
@@ -684,16 +736,19 @@ define (require) ->
                     view.unblock view.$el
             return
 
+        #
+        # Date formatter instance.
+        #
         date_formatter: (index) ->
-            mRender: (data, type, row) ->
-                utils.format_date_string data
+            {
+                mRender: (data, type, row) ->
+                    utils.format_date_string data
+                aTargets: [index]
+            }
 
-            aTargets: [index]
-
-
-        ###
-        Return the list of expanded rows.
-        ###
+        #
+        # Return the list of expanded rows.
+        #
         expanded_rows: ->
             @_expanded_rows
 
@@ -723,5 +778,71 @@ define (require) ->
                 @get_table().fnClose tr
             return
 
+    #
+    # Retrieve the default dataTables settings.
+    #
+    get_datatables_settings = (parent, settings) ->
+        defaults =
+            iDisplayLength: 10
+            aLengthMenu: [
+                10
+                25
+                50
+                100
+                200
+            ]
+            sDom: "t"
+            bAutoWidth: false
+            sPaginationType: 'bs_full'
+            bSortClasses: false
+            bProcessing: false
+            asStripeClasses: []
+            fnServerData: (sSource, aoData, fnCallback) ->
+                parent.pipeline sSource, aoData, fnCallback
+                return
 
+            fnRowCallback: (row, data, display_index, display_index_full) ->
+                parent.trigger 'row:callback', row, data, display_index, display_index_full
+
+                click_handler = (ev) ->
+
+                    # Select the row.
+                    $(row).addClass("active").siblings().removeClass "active"
+
+                    # Trigger a click event.
+                    parent.trigger "click", parent.get_data(ev.currentTarget), ev
+                    return
+
+
+                # Remove any existing click events for the row.
+                $(row).unbind "click", click_handler
+
+                # Bind a click event to the row.
+                $(row).bind "click", click_handler
+                row
+
+            fnCreatedRow: (nRow, data, iDataIndex) ->
+                parent.trigger "row:created", nRow, data, iDataIndex
+                return
+
+            fnInitComplete: (oSettings, json) ->
+                parent.trigger "load", oSettings, json
+                return
+
+            fnDrawCallback: (oSettings) ->
+                parent.trigger "draw", oSettings
+                parent.trigger "empty"  if parent.length() is 0
+                return
+
+        results = {}
+
+        for k, v of defaults
+            results[k] = v
+
+        for k, v of settings
+            results[k] = v
+
+        results
+
+    # Export the table class.
     TableView

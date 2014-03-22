@@ -370,7 +370,7 @@ define (require) ->
                 console.debug "Found existing alerts search selections: #{JSON.stringify(selected)}"
 
             # Create the layout.
-            @apply_template templates, 'search-template.ejs'
+            @apply_template templates, 'search-layout.ejs'
 
             # Initialize the sub views.
 
