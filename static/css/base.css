@@ -116,6 +116,10 @@ table {
     word-break: break-all !important;
 }
 
+td.center {
+    text-align: center;
+}
+
 .uac-opaque {
     opacity: .3
 }

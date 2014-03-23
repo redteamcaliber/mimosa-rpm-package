@@ -1,0 +1,13 @@
+<ol class="breadcrumb">
+    <% _.each (items, function(item, index, list) { %>
+    <li>
+        <% if (item.href) { %>
+        <a href="<%= item.href %>" <% item.index == list.length - 1 ? print('class="active"') : print('') %>>
+        <% } %>
+            <%= item.title %>
+        <% if (item.href) { %>
+        </a>
+        <% } %>
+    </li>
+    <% }) %>
+</ol>

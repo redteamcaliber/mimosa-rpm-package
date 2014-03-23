@@ -523,7 +523,7 @@ define (require) ->
                             view.unblock view.$el
                             return
 
-                        view.block_element view.$el
+                        view.block view.$el
                         view.collection.fetch params
                     else
                         # Don't do any blocking.
@@ -531,7 +531,7 @@ define (require) ->
                 else
 
                     # Block the UI before the fetch.
-                    view.block_element view.$el
+                    view.block view.$el
                     view.collection.fetch
                         success: ->
                             # Unblock the ui.

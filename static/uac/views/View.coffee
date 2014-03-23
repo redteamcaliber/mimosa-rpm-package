@@ -10,7 +10,7 @@ define (require) ->
             @$el.fadeIn().show()
 
         hide: ->
-            @.$el.fadeOut().hide()
+            @$el.fadeOut().hide()
 
         run_once: (key, init_function) ->
             if not this[key]
@@ -48,14 +48,22 @@ define (require) ->
         run_template: (templates, template, context) ->
             return uac_utils.run_template(templates, template, context)
 
-        block: ->
-            uac_utils.block_element @$el
+        #
+        # Block the UI, optionally pass an element to block.
+        #
+        block: (el, message) ->
+            if el and message
+                uac_utils.block_element el, message
+            else if el
+                uac_utils.block_element el
+            else
+                uac_utils.block()
 
         block_element: (el, message) ->
             uac_utils.block_element(el, message)
 
         unblock: (el) ->
-            if el then uac_utils.unblock el else uac_utils.unblock @.$el
+            if el then uac_utils.unblock el else uac_utils.unblock()
 
         collapse: (el) ->
             if @$el.hasClass 'collapsable-header'
@@ -94,3 +102,9 @@ define (require) ->
         display_success: (message) ->
             uac_utils.display_success(message)
 
+        #
+        # Display a message with the error from the response.
+        #
+        display_response_error: (message, response) ->
+            error = if response && response.responseText then response.responseText else 'Response text not defined.'
+            @display_error "#{message} - #{error}"

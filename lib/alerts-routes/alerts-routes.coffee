@@ -42,19 +42,31 @@ app.get '/test', (req, res, next) ->
 
 app.get '/api/tags', (req, res, next) ->
     alerts_api.get_tags (err, tags) ->
-        route_utils.send_rest req, res, next, tags
+        if err
+            next err
+        else
+            route_utils.send_rest req, res, next, tags
 
 app.get '/api/clients', (req, res, next) ->
     alerts_api.get_clients req.attributes, (err, clients) ->
-        route_utils.send_rest req, res, next, clients
+        if err
+            next err
+        else
+            route_utils.send_rest req, res, next, clients
 
 app.get '/api/times', (req, res, next) ->
     route_utils.send_rest req, res, next, alerts_api.get_times()
 
 app.get '/api/types', (req, res, next) ->
     alerts_api.get_alert_types req.attributes, (err, types) ->
-        route_utils.send_rest req, res, next, types
+        if err
+            next err
+        else
+            route_utils.send_rest req, res, next, types
 
 app.get '/api/summary', (req, res, next) ->
-    alerts_api.get_signature_summary req.params, req.attributes, (err, list) ->
-        route_utils.send_rest req, res, next, list
+    alerts_api.get_signature_summary req.query, req.attributes, (err, list) ->
+        if err
+            next err
+        else
+            route_utils.send_rest req, res, next, list

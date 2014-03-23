@@ -16,7 +16,7 @@ define(function (require) {
                 remote: {
                     url: '/sf/api/hosts?hosts=%QUERY',
                     beforeSend: function (jqXhr, settings) {
-                        utils.block();
+                        view.block();
                     },
                     filter: function (response) {
                         utils.unblock();

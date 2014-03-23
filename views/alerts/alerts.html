@@ -1,15 +1,30 @@
 {% extends "/base.html" %}
 
-{% block title %}APT Alerts - {{ super() }}{% endblock %}
+{% block title %}Alerts - {{ super() }}{% endblock %}
 
 {% block head %}
 {{ super() }}
+<style>
+    a.shield {
+        width: 100%;
+        margin: 0;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        cursor: default;
+        border-radius: 0;
+    }
+</style>
 {% endblock %}
 
 {% block data_main %}alerts/main/AlertsMain{% endblock %}
 
 {% block content %}
 <div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="alerts-breadcrumb"></div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-12">
             <div id="alerts-search"></div>

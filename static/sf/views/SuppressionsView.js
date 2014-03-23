@@ -77,14 +77,14 @@ define(function(require) {
                     view.suppressions.reset([]);
                 }
                 else {
-                    uac_utils.block();
+                    view.block()
                     view.suppressions.fetch({
                         success: function() {
                             view.suppressions_table.select_row(0);
-                            uac_utils.unblock();
+                            view.unblock();
                         },
                         failure: function() {
-                            uac_utils.unblock();
+                            view.unblock();
                         }
                     });
                 }
@@ -94,7 +94,13 @@ define(function(require) {
                 $('.details-view').fadeOut().hide();
             });
 
-            view.suppressions.reset(StrikeFinder.suppressions);
+            try {
+                view.block();
+                view.suppressions.reset(StrikeFinder.suppressions);
+            }
+            finally {
+                view.unblock();
+            }
         },
         render_hits: function (data) {
             var view = this;

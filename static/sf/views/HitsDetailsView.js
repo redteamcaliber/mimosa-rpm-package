@@ -347,6 +347,8 @@ define(function (require) {
             var uuid = view.model.get('uuid');
             var merge_model = new Backbone.Model();
             merge_model.url = '/sf/api/hits/' + uuid + '/mergeall';
+
+            view.block();
             merge_model.save({}, {
                 success: function(model, response) {
                     try {
@@ -412,7 +414,7 @@ define(function (require) {
                 view.model.set('hash', am_cert_hash);
             }
 
-            uac_utils.block_element(view.$el);
+            view.block_element(view.$el);
 
             view.model.fetch({
                 error: function() {
@@ -778,12 +780,20 @@ define(function (require) {
             return results;
         },
         fetch: function(rowitem_uuid) {
+            var view = this;
             if (rowitem_uuid) {
-                this.collection.rowitem_uuid = rowitem_uuid;
+                view.collection.rowitem_uuid = rowitem_uuid;
             }
 
-            this.block();
-            this.collection.fetch();
+            view.block(view.$el);
+            view.collection.fetch({
+                success: function() {
+                    view.unblock(view.$el);
+                },
+                error: function() {
+                    view.unblock(view.$el);
+                }
+            });
         },
         close: function() {
             var view = this;
