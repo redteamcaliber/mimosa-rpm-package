@@ -473,7 +473,7 @@ define (require) ->
                 uac_utils.storage('alerts:search', selected)
                 # Trigger the search.
                 console.debug "Searching for alerts using filters: #{JSON.stringify(selected)}"
-                @trigger 'search', selected
+                @trigger 'search:summary', selected
             return
 
         #

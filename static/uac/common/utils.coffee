@@ -226,9 +226,9 @@ define (require) ->
     reset_styles = ->
         this._styles = undefined
 
-    ###
-    Retrieve the UAC specific CSS styles.
-    ###
+    #
+    # Retrieve the UAC specific CSS styles.
+    #
     get_styles = (reset) ->
         if reset or not this._styles
             this._styles = {}

@@ -3,7 +3,7 @@
     <select id="serach-lients-select"
             class="form-control"
             multiple
-            size="12">
+            size="14">
         <% _.each (clients, function(client) { %>
         <option value="<%= client.uuid %>"><%= client.name %></option>
         <% }) %>

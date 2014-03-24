@@ -1,11 +1,13 @@
 <ol class="breadcrumb">
     <% _.each (items, function(item, index, list) { %>
     <li>
-        <% if (item.href) { %>
-        <a href="<%= item.href %>" <% item.index == list.length - 1 ? print('class="active"') : print('') %>>
+        <% var is_last = index == list.length - 1 %>
+        <% var is_linkable = ((!is_last) && item.value) %>
+        <% if (is_linkable) { %>
+        <a <%  is_last ? print('class="active"') : print('') %> data-value="<%= item.value %>">
         <% } %>
             <%= item.title %>
-        <% if (item.href) { %>
+        <% if (is_linkable) { %>
         </a>
         <% } %>
     </li>

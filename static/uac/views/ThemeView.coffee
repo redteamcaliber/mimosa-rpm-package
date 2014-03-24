@@ -15,7 +15,6 @@ define (require) ->
             attr = ev.currentTarget.attributes
             theme_attr = attr["data-uac-theme"]
             if theme_attr
-
                 # Update the current theme.
                 console.log "Setting UAC theme: " + theme_attr.value
                 uac_utils.set_theme theme_attr.value

@@ -8,22 +8,35 @@ define (require) ->
     # View for displaying a breadcrumb list.
     #
     class BreadcrumbView extends View
-        initialize: (options) ->
+        initialize: ->
             unless @collection
                 @collection = new Backbone.Collection []
             return
 
         render: ->
             context =
-                items: @.collection.toJSON()
+                items: @collection.toJSON()
             @apply_template templates, 'breadcrumbs.ejs', context
-
+            @delegateEvents
+                'click a': 'on_click'
             return@
 
-        push: (title, href) ->
-            @.collection.push
+        push: (title, value) ->
+            @collection.push
                 title: title
-                href: href
+                value: value
+            return @
+
+        pop: ->
+            @collection.pop()
+            return @
+
+        on_click: (ev) ->
+            @trigger "breadcrumb:#{$(ev.currentTarget).data 'value'}", ev
+            return @
+
+        close: ->
+            @remove()
             return @
 
     BreadcrumbView
