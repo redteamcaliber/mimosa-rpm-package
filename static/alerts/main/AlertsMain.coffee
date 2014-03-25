@@ -53,8 +53,8 @@ define (require) ->
                 console.log 'Creating summary list view...'
                 @alerts_summary_collection = new AlertsSummaryCollection()
                 @summary_list_view = new AlertsSummaryTableView
+                    id: 'alerts-summary-table'
                     collection: @alerts_summary_collection
-                options.region.show @summary_list_view
 
             data = {}
             data.tag = options.params.tags if options.params.tags
@@ -62,8 +62,13 @@ define (require) ->
             data.alert_type = options.params.types if options.params.types and options.params.types.length > 0
             data.begin = moment(options.params.from).unix() if options.params.from
             data.end = moment(options.params.to).unix() if options.params.to
-            @alerts_summaries.fetch
+            @alerts_summary_collection.fetch
                 data: data
+
+            try
+                options.region.show @summary_list_view
+            catch e
+                console.error e.stack
 
         hide_filters: ->
             $(AlertsApp.regions.filters).fadeOut('slow').hide()

@@ -441,6 +441,9 @@ define (require) ->
                 alert "Error: Undefined \"el\" in TableView"
                 return
 
+            # Destroy the existing dataTable.
+            view.destroy()
+
             # Clear the cache before re-destroying the table.
             view.clear_cache()
 
@@ -474,13 +477,8 @@ define (require) ->
             # If a collection is defined then use the data from the collection.
             settings.aaData = view.collection.toJSON()  if view.collection
 
-            # The following block is one time initialization for the table view and is specifically placed in the render
-            # function to allow sub-classes to define an initialize method without having to worry about calling the
-            # superclass initialization.
-            view.run_once "TableView::render::init", ->
-
             # Create the table.
-            table = view.$el.dataTable(settings)
+            view.$el.dataTable(settings)
             view.delegateEvents "click tr i.expand": "on_expand"
 
             if view.$el.parent()
