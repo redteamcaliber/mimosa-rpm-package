@@ -468,6 +468,7 @@ define (require) ->
         block: block
         unblock: unblock
         block_element: block_element
+        default_view_helpers: default_view_helpers,
         random_string: random_string
         format_date_string: format_date_string,
         format_unix_date: format_unix_date,

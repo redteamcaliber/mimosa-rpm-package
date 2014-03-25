@@ -11,6 +11,7 @@
         "datatables": "1.9.x",
         "font-awesome": "4.0.x",
         "jquery": "1.9.x",
+        "marionette": "1.7.x",
         "moment": "2.4.x",
         "requirejs": "2.1.x",
         "select2": "3.4.x",
@@ -24,6 +25,12 @@
         },
         "backbone": {
             "/": "backbone.js"
+        },
+        "backbone.babysitter": {
+            "/": "lib/amd/backbone.babysitter.js"
+        },
+        "backbone.wreqr": {
+            "/": "lib/amd/backbone.wreqr.js"
         },
         "blockui": {
             "/": "jquery.blockUI.js"
@@ -61,6 +68,9 @@
         },
         "jquery": {
             "/": "dist/jquery.js"
+        },
+        "marionette": {
+            "/": "lib/core/amd/backbone.marionette.js"
         },
         "require-cs": {
             "/": "cs.js"

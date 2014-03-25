@@ -5,7 +5,7 @@ define (require) ->
     AlertsBreadcrumbView = require 'alerts/views/AlertsBreadcrumbView'
 
     AlertsSearchView = require 'alerts/views/AlertsSearchView'
-    AlertsListView = require 'alerts/views/AlertsListView'
+    AlertsSummaryListView = require 'alerts/views/AlertsSummaryListView'
 
 
     #
@@ -88,7 +88,7 @@ define (require) ->
 
                 if not @list_view
                     # Create the alerts list view.
-                    @list_view = new AlertsListView()
+                    @list_view = new AlertsSummaryListView()
                     @list_collapsable_view.append(@list_view.el)
 
                 # Run the alert summary search.

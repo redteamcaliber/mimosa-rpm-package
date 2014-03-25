@@ -1,6 +1,10 @@
 UAC ToDo
 ========
 
+# Alerts
+- Look into the default sort order of the lists calls.
+- Where are the tasks for munging in the StrikeFinder data into the alerts lists?
+
 ### MD5 Stuff
 - Update md5 to use new API
 - Switch to prod configuration.

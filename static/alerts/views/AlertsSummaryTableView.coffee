@@ -1,12 +1,7 @@
 define (require) ->
-    moment = require 'moment'
-    View = require 'uac/views/View'
+
     TableView = require 'uac/views/TableView'
     CellRenderer = require 'uac/views/CellRenderer'
-    AlertsSummaryCollection = require 'alerts/models/AlertSummaryCollection'
-
-    templates = require 'alerts/ejs/templates'
-
 
     priority_renderer = (index) ->
         mRender: (data) ->
@@ -69,9 +64,9 @@ define (require) ->
                 CellRenderer.date_time_multiline(5)
             ]
 
-#            @listenTo @, 'row:callback', (row) ->
-#                $('td:eq(2)', row).addClass('well')
-#                $('td:eq(3)', row).addClass('well')
+            #            @listenTo @, 'row:callback', (row) ->
+            #                $('td:eq(2)', row).addClass('well')
+            #                $('td:eq(3)', row).addClass('well')
 
             options.aaSorting = [
                 [0, "asc"]
@@ -87,6 +82,9 @@ define (require) ->
             @$el.addClass 'table'
             @$el.addClass 'table-bordered'
             @$el.addClass 'table-condensed'
+            @$el.addClass 'table-hover'
+
+            @listenTo(@, 'click', @on_click)
             return
 
         #
@@ -95,57 +93,3 @@ define (require) ->
         on_click: (data) ->
             # Emit a signature:selected event passing the signature uuid upstream.
             @trigger 'signature:selected', data.uuid
-
-    #
-    # View to display a table of alerts.
-    #
-#    class AlertsDetailsTableView extends TableView
-#        # TODO:
-#        return
-
-    #
-    # View to display a list of alert rollups and individual alerts.
-    #
-    class AlertsListView extends View
-        initialize: ->
-            # Create the layout.
-            @apply_template templates, 'list-layout.ejs'
-
-            # The alert summary table.
-            @alerts_summaries = new AlertsSummaryCollection()
-            @alerts_summaries_table = new AlertsSummaryTableView
-                id: 'alerts-summary-table'
-                collection: @alerts_summaries
-            @$('#alerts-summary').append @alerts_summaries_table.el
-            @listenTo @alerts_summaries_table, 'click', =>
-                @trigger 'click'
-
-        #
-        # Render the alert summary data.
-        #
-        render_summary: (params) ->
-            @block()
-            data = {}
-            data.tag = params.tags if params.tags
-            data.client_uuid = params.clients if params.clients and params.clients.length > 0
-            data.alert_type = params.types if params.types and params.types.length > 0
-            data.begin = moment(params.from).unix() if params.from
-            data.end = moment(params.to).unix() if params.to
-
-            @alerts_summaries.fetch
-                data: data
-                success: =>
-                    @unblock()
-                error: (collection, response) =>
-                    @unblock()
-                    @display_response_error 'Error retrieving alert summaries.', response
-
-        #
-        # Clean up after the view.
-        #
-        close: ->
-            # TODO:
-            @alerts_summaries_table.close()
-            @alerts_summaries_table = null
-
-    AlertsListView

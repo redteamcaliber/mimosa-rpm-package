@@ -1,7 +1,8 @@
 define (require) ->
     moment = require('moment')
     View = require 'uac/views/View'
-    uac_utils = require 'uac/common/utils'
+    utils = require 'uac/common/utils'
+    vent = require 'uac/common/vent'
 
     TagCollection = require 'alerts/models/TagCollection'
     ClientCollection = require 'alerts/models/ClientCollection'
@@ -365,7 +366,7 @@ define (require) ->
 
         initialize: ->
             # Retrieve any previous selections.
-            selected = uac_utils.storage 'alerts:search'
+            selected = utils.storage 'alerts:search'
             if selected
                 console.debug "Found existing alerts search selections: #{JSON.stringify(selected)}"
 
@@ -376,8 +377,8 @@ define (require) ->
 
             tags = if selected and selected.tags then selected.tags else undefined
             @tags_view = new TagsSearchView
-                el: @$ '#search-tags'
                 selected: tags
+                el: @$ '#search-tags'
 
             clients = if selected and selected.clients then selected.clients else undefined
             @clients_view = new ClientsSearchView
@@ -470,10 +471,11 @@ define (require) ->
                 @display_error '"To" is not valid: #{selected.to}'
             if is_from_valid and is_to_valid
                 # Save the current search selections to local storage.
-                uac_utils.storage('alerts:search', selected)
+                utils.storage('alerts:search', selected)
                 # Trigger the search.
                 console.debug "Searching for alerts using filters: #{JSON.stringify(selected)}"
-                @trigger 'search:summary', selected
+                @trigger 'alerts:search:summary', selected
+                vent.trigger 'alerts:search:summary', selected
             return
 
         #
@@ -487,7 +489,7 @@ define (require) ->
             @hx_view.reset_selected()
 
             # Clear any current selections.
-            uac_utils.storage 'alerts:search', undefined
+            utils.storage 'alerts:search', undefined
 
             # Clear the current search selections in local storage.
             @trigger 'reset'

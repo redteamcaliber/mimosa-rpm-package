@@ -3,6 +3,8 @@ window.require =
     paths:
         async: 'lib/async/async'
         backbone: 'lib/backbone/backbone'
+        'backbone.babysitter': 'lib/backbone.babysitter/backbone.babysitter'
+        'backbone.wreqr': 'lib/backbone.wreqr/backbone.wreqr'
         bootstrap: 'lib/bootstrap/js/bootstrap'
         bootstrap_growl: 'lib/bootstrap-growl/jquery.bootstrap-growl'
         blockui: 'lib/blockui/jquery.blockUI'
@@ -11,6 +13,7 @@ window.require =
         highlighter: 'js/jQuery.highlighter'
         iocviewer: 'js/jquery.iocViewer'
         jquery: 'lib/jquery/jquery'
+        marionette: 'lib/marionette/backbone.marionette'
         moment: 'lib/moment/moment'
         select2: 'lib/select2/select2'
         typeahead: 'lib/typeahead.js/typeahead'
@@ -20,10 +23,6 @@ window.require =
         jquery: {
             exports: '$'
         }
-#        backbone: {
-#            deps: ['underscore', 'jquery']
-#            exports: 'Backbone'
-#        }
         bootstrap: {
             deps: ['jquery']
             exports: 'bootstrap'
