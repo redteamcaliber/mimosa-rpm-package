@@ -5,7 +5,6 @@ define(function (require) {
     var uac_utils = require('uac/common/utils');
     var View = require('uac/views/View');
     var TableView = require('uac/views/TableView');
-    var DataTableView = require('uac/views/DataTableView');
 
     var IOCSummaryCollection = require('sf/models/IOCSummaryCollection');
     var IOCDetailsCollection = require('sf/models/IOCDetailsCollection');
@@ -96,6 +95,8 @@ define(function (require) {
             view.listenTo(view, 'row:created', function (row, data) {
                 $(row).addClass(view._get_class(data.iocnamehash));
             });
+
+            view.$('table').addClass('table').addClass('table-bordered').addClass('table-condensed').addClass('table-hover')
         },
         select: function (iocnamehash) {
             console.log('Selecting iocnamehash: ' + iocnamehash);

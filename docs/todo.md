@@ -1,9 +1,16 @@
 UAC ToDo
 ========
 
+# Look into using global initializers instead of having requireJS script blocks in the templates.
+
 # Alerts
+- Need to properly calculate the In Progress totals on the summary list view.
 - Look into the default sort order of the lists calls.
 - Where are the tasks for munging in the StrikeFinder data into the alerts lists?
+- Remove the Include HX in favor of a specific check box for host.
+- Look into using TableView.render() rather than TableView.fetch() because it's non-standard.
+- Convert to using layouts and ItemView's in the AlertsSearchView.
+- Convert the table view to and ItemView, need to override the default close function.
 
 ### MD5 Stuff
 - Update md5 to use new API

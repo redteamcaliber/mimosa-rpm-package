@@ -27,9 +27,6 @@ define (require) ->
     #    my_table = new TableView({settings: settings})
     #
     class TableView extends View
-        # The element must be a table.
-        tagName: 'table'
-
         #
         # Initialize the table the defaults.
         #
@@ -39,9 +36,15 @@ define (require) ->
                 # options instance where as later versions removed this
                 @options = options
 
-            unless @options.id
-                # Ensure there is an id attribute.
-                @options.id = utils.random_string(10)
+#            unless @options.id
+#                # Ensure there is an id attribute.
+#                @options.id = utils.random_string(10)
+
+            if @$el.is 'table'
+                @table_el = @$el
+            else
+                @table_el = $ '<table>'
+                @$el.append @table_el
 
             if @collection
                 # If a collectoin is supplied then redraw the view any time it refreshes.
@@ -81,7 +84,7 @@ define (require) ->
 
                         # During a refresh/reload operation a value to select has been specified.  Attempt to select the
                         # row that corresponds to the supplied name value pair.
-                        console.log "Attempting to reselect table row value: name=#{@_value_pair.name}, value=#{@_value_pair.value}"
+                        console.debug "Attempting to reselect table row value: name=#{@_value_pair.name}, value=#{@_value_pair.value}"
 
                         # Attempt to select the row related to the value pair after a draw event.
                         found = false
@@ -293,13 +296,13 @@ define (require) ->
                 @_page_next = true
             else
                 @_page_prev = true
-            @get_table().fnPageChange page_index
+            @table_el.fnPageChange page_index
 
         #
         # Return the lenth of the data.
         #
         length: ->
-            @$el.fnGetData().length
+            @table_el.fnGetData().length
 
         #
         # Retrieve the original HTML DOM table element.
@@ -311,7 +314,7 @@ define (require) ->
         # Return the dataTable.
         #
         get_table: ->
-            @$el.dataTable()
+            @table_el
 
         #
         # Retrieve the table nodes or the node corresponding to index.
@@ -323,20 +326,20 @@ define (require) ->
         # Update a row and column with the specified data.
         #
         update: (data, tr_or_index, col_index, redraw, predraw) ->
-            @get_table().fnUpdate data, tr_or_index, col_index, redraw, predraw
+            @table_el.fnUpdate data, tr_or_index, col_index, redraw, predraw
 
         #
         # Draw the dataTable.
         #
         draw: (re) ->
-            @get_table().fnDraw re
+            @table_el.fnDraw re
             return
 
         #
         # Retrieve the table data.
         #
         get_data: (index_or_node, index) ->
-            @get_table().fnGetData index_or_node, index
+            @table_el.fnGetData index_or_node, index
 
         #
         # Return the posotion of the node.
@@ -406,23 +409,17 @@ define (require) ->
             # Remove any listeners.
             @undelegateEvents()
 
-            # Destroy the old table if it exists.
-            dom_element = @get_dom_table()
-            unless dom_element
-                console.error "dom element is null."
-                return
-            id = null
-            id = dom_element.id  if _.has(dom_element, "id")
-            if $.fn.DataTable.fnIsDataTable(dom_element)
-                console.log "Destroying DataTable with id: " + id
-                table = @$el.dataTable()
-                @trigger "destroy", table
+            if $.fn.DataTable.fnIsDataTable(@table_el.get(0))
+                console.debug "Destroying DataTable with id: #{@table_el.attr 'id'}'"
 
                 # Destroy the old table.
-                table.fnDestroy false
-                table.empty()
+                @table_el.fnDestroy false
+                @table_el.empty()
+
+                @trigger "destroy", @table_el
             else
-                console.log "Element with id: #{id} is not of type DataTable, skipping..."
+                console.debug "Element with id: #{@table_el.attr 'id' } is not of type DataTable, skipping..."
+
             return
 
 
@@ -435,14 +432,13 @@ define (require) ->
         #     table.render({server_params: {suppression_id: suppression_id}});
         #
         render: (params) ->
+            #console.trace()
+
             view = @
             unless view.el
                 # Error
                 alert "Error: Undefined \"el\" in TableView"
                 return
-
-            # Destroy the existing dataTable.
-            view.destroy()
 
             # Clear the cache before re-destroying the table.
             view.clear_cache()
@@ -461,10 +457,10 @@ define (require) ->
                 if params.server_params isnt null
                     server_params = params.server_params
                     if server_params
-                        console.log "Setting server params..."
+                        console.debug "Setting server params..."
                         settings.fnServerParams = (aoData) ->
                             _.each Object.keys(server_params), (key) ->
-                                console.log "Setting param #{key} and value #{server_params[key]}"
+                                console.debug "Setting param #{key} and value #{server_params[key]}"
                                 aoData.push
                                     name: key
                                     value: server_params[key]
@@ -478,7 +474,8 @@ define (require) ->
             settings.aaData = view.collection.toJSON()  if view.collection
 
             # Create the table.
-            view.$el.dataTable(settings)
+            @table_el.dataTable(settings)
+
             view.delegateEvents "click tr i.expand": "on_expand"
 
             if view.$el.parent()
@@ -773,7 +770,7 @@ define (require) ->
                     collapse_icon.removeClass "fa-minus-circle"
                     collapse_icon.addClass "fa-plus-circle"
                 expanded.splice index, 1
-                @get_table().fnClose tr
+                @table_el.fnClose tr
             return
 
     #

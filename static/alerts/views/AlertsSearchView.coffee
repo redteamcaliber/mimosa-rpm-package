@@ -474,8 +474,8 @@ define (require) ->
                 utils.storage('alerts:search', selected)
                 # Trigger the search.
                 console.debug "Searching for alerts using filters: #{JSON.stringify(selected)}"
-                @trigger 'alerts:search:summary', selected
-                vent.trigger 'alerts:search:summary', selected
+                @trigger 'alerts:search', selected
+                vent.trigger 'alerts:search', selected
             return
 
         #

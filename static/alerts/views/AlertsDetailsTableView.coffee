@@ -3,46 +3,7 @@ define (require) ->
     TableView = require 'uac/views/TableView'
     CellRenderer = require 'uac/views/CellRenderer'
 
-    priority_renderer = (index) ->
-        mRender: (data) ->
-            classes = undefined
-            if data == 1
-                classes = 'btn btn-danger'
-            else if data == 2
-                classes = 'btn-btn-warning'
-            else if data == 3
-                classes = 'btn btn-success'
-            else if data == 4
-                classes = 'btn btn-primary'
-            else
-                classes = 'btn btn-default'
-
-            if classes
-                "<a class='#{classes} shield'> #{data} </a>"
-            else
-                data
-        aTargets: [index]
-
-    alert_renderer = (index) ->
-        mRender: (data, type, row) ->
-            alert_types = row.alert_types.join(', ')
-            device_types = row.device_types.join(', ')
-            return "<span style='font-weight: bold'>#{row.name}</span><br>#{device_types}<br>#{alert_types}"
-        aTargets: [index]
-
-    count_renderer = (index) ->
-        mRender: (data) ->
-            if data
-                "<a class='btn btn-default shield'> #{data} </a>"
-            else
-                data
-        aTargets: [index]
-
-
-    #
-    # Alerts summary table view.
-    #
-    class AlertsSummaryTableView extends TableView
+    class AlertsDetailsTableView extends TableView
         initialize: (options) ->
             super options
 
@@ -84,9 +45,5 @@ define (require) ->
             @listenTo(@, 'click', @on_click)
             return
 
-        #
-        # Handle a row click.
-        #
-        on_click: (data) ->
-            # Emit a signature:selected event passing the signature uuid upstream.
-            @trigger 'signature:selected', data.uuid
+
+    AlertsDetailsTableView

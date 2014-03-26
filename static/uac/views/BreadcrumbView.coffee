@@ -1,22 +1,22 @@
 define (require) ->
 
-    View = require 'uac/views/View'
+    vent = require 'uac/common/vent'
+    Marionette = require 'marionette'
 
     templates = require 'uac/ejs/templates'
 
     #
     # View for displaying a breadcrumb list.
     #
-    class BreadcrumbView extends View
+    class BreadcrumbView extends Marionette.ItemView
+        template: templates['breadcrumbs.ejs']
         initialize: ->
             unless @collection
                 @collection = new Backbone.Collection []
+            super
             return
 
-        render: ->
-            context =
-                items: @collection.toJSON()
-            @apply_template templates, 'breadcrumbs.ejs', context
+        onRender: ->
             @delegateEvents
                 'click a': 'on_click'
             return@
@@ -28,15 +28,13 @@ define (require) ->
             return @
 
         pop: ->
-            @collection.pop()
-            return @
+            return @collection.pop()
 
+        #
+        # Emit a global event
+        #
         on_click: (ev) ->
-            @trigger "breadcrumb:#{$(ev.currentTarget).data 'value'}", ev
-            return @
-
-        close: ->
-            @remove()
+            vent.trigger "breadcrumb:#{$(ev.currentTarget).data 'value'}", ev
             return @
 
     BreadcrumbView
