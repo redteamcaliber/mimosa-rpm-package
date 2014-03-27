@@ -1,27 +1,8 @@
 define (require) ->
-
+    vent = require 'uac/common/vent'
     TableView = require 'uac/views/TableView'
-    CellRenderer = require 'uac/views/CellRenderer'
+    renderers = require 'uac/views/renderers'
 
-    priority_renderer = (index) ->
-        mRender: (data) ->
-            classes = undefined
-            if data == 1
-                classes = 'btn btn-danger'
-            else if data == 2
-                classes = 'btn-btn-warning'
-            else if data == 3
-                classes = 'btn btn-success'
-            else if data == 4
-                classes = 'btn btn-primary'
-            else
-                classes = 'btn btn-default'
-
-            if classes
-                "<a class='#{classes} shield'> #{data} </a>"
-            else
-                data
-        aTargets: [index]
 
     alert_renderer = (index) ->
         mRender: (data, type, row) ->
@@ -38,6 +19,12 @@ define (require) ->
                 data
         aTargets: [index]
 
+    in_progress_renderer = (index) ->
+        mRender: (data, type, row) ->
+            count = row.tags.investigating + row.tags.escalate + row.tags.reportable
+            "<a class='btn btn-default shield'> #{count} </a>"
+        aTargets: [index]
+
 
     #
     # Alerts summary table view.
@@ -47,21 +34,21 @@ define (require) ->
             super options
 
             options.aoColumns = [
-                {sTitle: 'Pri', mData: 'highest_priority', sWidth: '5%', sClass: 'priority'}
+                {sTitle: 'Pri', mData: 'highest_priority', sWidth: '5%', sClass: 'priority', sType: 'int-html'}
                 {sTitle: 'Name, Type, Device(s)', mData: 'name'}
-                {sTitle: 'Open', mData: 'tags.notreviewed', sClass: 'center', sWidth: '10%'}
-                {sTitle: 'In Prog', mData: 'tags.notreviewed', sClass: 'center', sWidth: '10%'}
+                {sTitle: 'Open', mData: 'tags.notreviewed', sClass: 'center', sWidth: '10%', sType: 'int-html'}
+                {sTitle: 'In Prog', mData: 'tags.notreviewed', sClass: 'center', sWidth: '10%', sType: 'int-html'}
                 {sTitle: 'First Seen', mData: 'first_seen'}
                 {sTitle: 'Last Seen', mData: 'last_seen'}
             ]
 
             options.aoColumnDefs = [
-                priority_renderer(0)
+                renderers.priority(0, 'shield')
                 alert_renderer(1)
                 count_renderer(2)
-                count_renderer(3)
-                CellRenderer.date_time_multiline(4)
-                CellRenderer.date_time_multiline(5)
+                in_progress_renderer(3)
+                renderers.date_time_multiline(4)
+                renderers.date_time_multiline(5)
             ]
 
             #            @listenTo @, 'row:callback', (row) ->
@@ -88,5 +75,4 @@ define (require) ->
         # Handle a row click.
         #
         on_click: (data) ->
-            # Emit a signature:selected event passing the signature uuid upstream.
-            @trigger 'signature:selected', data.uuid
+            vent.trigger 'alerts:summary_selected', data

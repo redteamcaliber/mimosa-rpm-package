@@ -14,9 +14,12 @@ define (require) ->
     AlertsBreadcrumbView = require 'alerts/views/AlertsBreadcrumbView'
     AlertsSearchView = require 'alerts/views/AlertsSearchView'
 
-    AlertsSummaryCollection = require 'alerts/models/AlertSummaryCollection'
+    AlertSummaryCollection = require 'alerts/models/AlertSummaryCollection'
     AlertsSummaryTableView = require 'alerts/views/AlertsSummaryTableView'
     AlertsSummaryListView = require 'alerts/views/AlertsSummaryListView'
+
+    AlertCollection = require 'alerts/models/AlertCollection'
+    AlertsTableView = require 'alerts/views/AlertsTableView'
 
 
     #
@@ -41,7 +44,7 @@ define (require) ->
             vent.on 'alerts:search', =>
                 @show_alerts_selection()
 
-            vent.on 'alerts:select_alert', =>
+            vent.on 'alerts:select_summary', =>
                 @show_alerts_details()
 
             vent.on 'breadcrumb:alerts_filters', =>
@@ -110,12 +113,12 @@ define (require) ->
 
         # Handle searching for alerts summaries.
         vent.on 'alerts:search', (params) =>
-            # Create the summary list table.
             unless @summary_list_view
-                @alerts_summary_collection = new AlertsSummaryCollection()
+                # Create the summary list table.
+                @summaries = new AlertSummaryCollection()
                 @summary_list_view = new AlertsSummaryTableView
                     id: 'alerts-summary-table'
-                    collection: @alerts_summary_collection
+                    collection: @summaries
                 @layout.summary_list_region.show @summary_list_view
 
             # Fetch the summary list data.
@@ -125,8 +128,23 @@ define (require) ->
             data.alert_type = params.types if params.types and params.types.length > 0
             data.begin = moment(params.from).unix() if params.from
             data.end = moment(params.to).unix() if params.to
-            @alerts_summary_collection.fetch
+            @summary_list_view.fetch
                 data: data
+
+        vent.on 'alerts:summary_selected', (data) =>
+            unless @details_list_view
+                # Create the details list view.
+                @alerts = new AlertCollection()
+                @details_list_view = new AlertsTableView
+                    id: 'alerts-details-table'
+                    collection: @alerts
+                @layout.details_list_region.show @details_list_view
+
+            @details_list_view.fetch {
+                data: {
+                    signature_uuid: data.uuid
+                }
+            }
 
 
     # Export the alerts application.

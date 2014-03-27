@@ -8,6 +8,6 @@ define (require) ->
 
     AlertsApp = require('alerts/apps/AlertsApp')
 
-    new AlertsApp().start()
+    AlertsApp.start()
 
     return

@@ -8,6 +8,18 @@ define (require) ->
     datatables = require 'datatables'
     datatables_bootstrap = require 'datatables_bootstrap'
 
+    $.extend $.fn.dataTableExt.oSort, {
+        "int-html-pre": (a) ->
+            x = String(a).replace(/<[\s\S]*?>/g, "")
+            return parseInt x
+        ,
+        "int-html-asc": ( a, b ) ->
+            return (if a < b then -1 else (if a > b then 1 else 0))
+        ,
+        "int-html-desc": ( a, b ) ->
+            return (if a < b then 1 else (if a > b then -1 else 0))
+    }
+
     #
     # Base table view class.  Extend this class and provide a configure function to setup your table.
     #
@@ -478,14 +490,15 @@ define (require) ->
 
             view.delegateEvents "click tr i.expand": "on_expand"
 
-            if view.$el.parent()
-                # Assign the bootstrap class to the length select.
+            # Assign the bootstrap class to the length select.
+            if @$el.is 'table'
                 length_selects = $(".dataTables_wrapper select")
-                for length_select in length_selects
-                    unless $(length_select).hasClass("form-control")
-                        $(length_select).addClass "form-control"
-                        $(length_select).css "min-width", "85px"
-                    return
+            else
+                length_selects = @$ '.dataTables_wrapper select'
+            for length_select in length_selects
+                unless $(length_select).hasClass("form-control")
+                    $(length_select).addClass "form-control"
+                    $(length_select).css "min-width", "85px"
 
             view
 

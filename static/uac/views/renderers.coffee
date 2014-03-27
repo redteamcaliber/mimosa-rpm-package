@@ -28,6 +28,26 @@ define (require) ->
             format_date data, ' YYYY-MM-DD<br/> HH:mm:ss'
         aTargets: [index]
 
+    priority_renderer = (index, style_class) ->
+        mRender: (data) ->
+            classes = undefined
+            if data == 1
+                classes = 'btn btn-danger'
+            else if data == 2
+                classes = 'btn-btn-warning'
+            else if data == 3
+                classes = 'btn btn-success'
+            else if data == 4
+                classes = 'btn btn-primary'
+            else
+                classes = 'btn btn-default'
+
+            if classes
+                "<a class='#{classes} #{style_class}'> #{data} </a>"
+            else
+                data
+        aTargets: [index]
 
     date_time: date_time_renderer
     date_time_multiline: date_time_multiline_renderer
+    priority: priority_renderer
