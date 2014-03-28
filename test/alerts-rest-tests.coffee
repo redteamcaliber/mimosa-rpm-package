@@ -29,7 +29,7 @@ describe 'alerts-rest-tests', ->
 
                     done()
             catch e
-                done(e)
+                done e
 
     describe '/alerts/api/clients', ->
         it 'should return all client values', (done) ->
@@ -44,10 +44,21 @@ describe 'alerts-rest-tests', ->
                 catch e
                     done e
 
-    describe '/alerts/api/rollups', ->
+    describe '/alerts/api/summary', ->
         it 'should return an unfiltered list of rollups', (done) ->
-            get '/alerts/api/rollups', {}, (err, response, body) ->
+            get '/alerts/api/summary', {}, (err, response, body) ->
                 try
+                    should.not.exist err
+                    utils.should_be_list body, true
+                    done()
+                catch e
+                    done e
+
+    describe '/alerts/api/alerts', ->
+        it 'should return an unfiltered list of alerts', (done) ->
+            get '/alerts/api/alerts', {}, (err, response, body) ->
+                try
+                    should.not.exist err
                     utils.should_be_list body, true
                     done()
                 catch e

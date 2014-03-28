@@ -83,3 +83,16 @@ describe 'alerts-api-tests', ->
                     done()
                 catch e
                     done e
+
+    describe '#get_alerts()', ->
+        it 'should return all alerts', (done) ->
+            api.get_alerts {}, {}, (err, list) ->
+                try
+                    should.not.exist err
+                    should.exist list
+                    should.exist list.length
+                    list.length.should.be.greaterThan 0
+
+                    done()
+                catch e
+                    done e

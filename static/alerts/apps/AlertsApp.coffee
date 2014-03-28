@@ -42,10 +42,10 @@ define (require) ->
         #
         initialize: ->
             vent.on 'alerts:search', =>
-                @show_alerts_selection()
+                @show_alerts_summary_list()
 
-            vent.on 'alerts:select_summary', =>
-                @show_alerts_details()
+            vent.on 'alerts:summary_selected', =>
+                @show_alerts_details_list()
 
             vent.on 'breadcrumb:alerts_filters', =>
                 @show_alerts_filters()
@@ -65,12 +65,17 @@ define (require) ->
             $(@filters_region.el).fadeIn('slow').show()
 
         #
-        # Bring the alerts selection lists to focus.
+        # Bring the alerts selection view into focus with the alerts details list hidden.
         #
-        show_alerts_selection: ->
+        show_alerts_summary_list: ->
             $(@filters_region.el).fadeOut(0).hide()
             $(@details_region.el).fadeOut(0).hide()
+            $(@details_list_region.el).fadeOut(0).hide()
             $(@list_region.el).fadeIn('slow').show()
+
+        show_alerts_details_list: ->
+            alert 'sdfsd'
+            $(@details_list_region.el).fadeIn('slow').show()
 
         #
         # Bring the alerts details into focus.

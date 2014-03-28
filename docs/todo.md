@@ -4,6 +4,8 @@ UAC ToDo
 # Look into using global initializers instead of having requireJS script blocks in the templates.
 
 # Alerts
+- Table view is not putting form-element class on the page drop down on the alerts table.
+- Clean up the names for AlertsTableView, etc...
 - Need to properly calculate the In Progress totals on the summary list view.
 - Look into the default sort order of the lists calls.
 - Where are the tasks for munging in the StrikeFinder data into the alerts lists?

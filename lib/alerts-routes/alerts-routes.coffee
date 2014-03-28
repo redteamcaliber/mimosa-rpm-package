@@ -70,3 +70,10 @@ app.get '/api/summary', (req, res, next) ->
             next err
         else
             route_utils.send_rest req, res, next, list
+
+app.get '/api/alerts', (req, res, next) ->
+    alerts_api.get_alerts req.query, req.attributes, (err, list) ->
+        if  err
+            next err
+        else
+            route_utils.send_rest req, res, next, list

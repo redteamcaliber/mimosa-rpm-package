@@ -328,34 +328,6 @@ define (require) ->
             return
 
     #
-    # View for displaying HX toggle.
-    #
-    class IncludeHXView extends View
-        initialize: (options) ->
-            @selected = options.selected
-            @render()
-            return
-
-        render: ->
-            context = {
-                selected: if @selected? and @selected is false then false else true
-            }
-            @apply_template templates, 'search-hx.ejs', context
-            return
-
-        get_selected: ->
-            return @$('#include_hx:checkbox').prop 'checked'
-
-        set_selected: (selected) ->
-            @$('#include_hx:checkbox').prop 'checked', selected
-            return
-
-        reset_selected: ->
-            # Include HX by default.
-            @set_selected true
-            return
-
-    #
     # View for displaying alerts search criteria.  This view emits "search" events when a user clicks the search button.
     # The search criteria is passed along with the event.
     #
@@ -401,11 +373,6 @@ define (require) ->
                 el: @$ '#search-types'
                 selected: types
 
-            include_hx = if selected? then selected.include_hx else undefined
-            @hx_view = new IncludeHXView
-                el: @$ '#search-hx'
-                selected: include_hx
-
             return
 
         #
@@ -435,9 +402,6 @@ define (require) ->
             @types_view.remove()
             @types_view = null;
 
-            @hx_view.remove()
-            @hx_view = null
-
             @remove()
 
             @trigger 'close'
@@ -461,7 +425,6 @@ define (require) ->
             if is_to_valid
                 selected.to = @times_view.get_to_date()
             selected.types = @types_view.get_selected()
-            selected.include_hx = @hx_view.get_selected() is true
 
             if not is_from_valid
                 # From date is not valid.
@@ -486,7 +449,6 @@ define (require) ->
             @clients_view.reset_selected()
             @times_view.reset_selected()
             @types_view.reset_selected()
-            @hx_view.reset_selected()
 
             # Clear any current selections.
             utils.storage 'alerts:search', undefined

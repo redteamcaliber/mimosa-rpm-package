@@ -61,6 +61,7 @@ get_clients = (attributes, callback) ->
 #
 get_alert_types = (attributes, callback) ->
     request.json_get get_cv_url('/alert-types/'), undefined, attributes, (err, response, body) ->
+        body.response.push 'endpoint-match'
         process_response(err, response, body, callback)
     return
 
@@ -82,6 +83,14 @@ get_times = ->
 #
 get_signature_summary = (params, attributes, callback) ->
     request.json_get get_cv_url('/signature-summary/'), params, attributes, (err, response, body) ->
+        process_response(err, response, body, callback)
+    return
+
+#
+# Retrive alerts.
+#
+get_alerts = (params, attributes, callback) ->
+    request.json_get get_cv_url('/alerts/'), params, attributes, (err, response, body) ->
         process_response(err, response, body, callback)
     return
 
@@ -118,3 +127,4 @@ exports.get_clients = get_clients
 exports.get_alert_types = get_alert_types
 exports.get_times = get_times
 exports.get_signature_summary = get_signature_summary
+exports.get_alerts = get_alerts

@@ -1,11 +1,11 @@
 define (require) ->
-
+    vent = require 'uac/common/vent'
     TableView = require 'uac/views/TableView'
     renderers = require 'uac/views/renderers'
 
 
     #
-    # TODO:
+    # Table view to display a list of alerts.
     #
     class AlertsTableView extends TableView
         initialize: (options) ->
@@ -45,7 +45,13 @@ define (require) ->
 
             @$('table').addClass('table').addClass('table-bordered').addClass('table-condensed').addClass('table-hover')
 
+            @listenTo(@, 'click', @on_click)
             return
 
+        #
+        # Handle a row click.
+        #
+        on_click: (data) ->
+            vent.trigger 'alerts:alert_selected', data
 
     AlertsTableView
