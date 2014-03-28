@@ -1,6 +1,15 @@
 Unified Analyst Console (UAC) 1.0 Release Notes
 ===============================================
 
+Mandiant-uac-ws-1.1-4 - March 31st, 2014
+-------------------------------------------
+
+### MD5 Lookups
+- Resolved issue related to auto-suppress not working correctly with MD5's.
+- Resolved issue where the IOC term was not being pre-populated on some forms.
+- Changes added related to cutting over to the production M-Cube service.
+
+
 Mandiant-uac-ws-1.1-3 - February 5th, 2014
 -------------------------------------------
 

@@ -186,8 +186,9 @@ describe('uac-api-tests', function () {
                 should.not.exist(result.vt_err);
                 should.equal(true, 'vt' in result);
 
-                // In this case vt should not be defined.
-                should.not.exist(result.vt);
+                // Should be reported that the item was not found.
+                result.vt.found.should.equal(false);
+
                 done();
             });
         });
@@ -200,22 +201,6 @@ describe('uac-api-tests', function () {
                 should.not.exist(result.vt_err);
                 should.exist(result.vt);
                 assert_vt_details(result.vt, true);
-
-                done();
-            });
-        });
-
-        it('should return an empty result when there is no m-cube configuration', function(done) {
-            // Remove m-cube configuration.
-            settings.set('uac:mcube_api_url', undefined);
-            should.equal(undefined, settings.get('uac:mcube_api_url'));
-
-            api.get_md5_details(DETECTED_MD5, function (err, result) {
-                should.not.exist(err);
-                should.exist(result);
-
-                should.not.exist(result.vt);
-                should.not.exist(result.vt_err);
 
                 done();
             });
