@@ -94,6 +94,13 @@ get_ioc_summary = (params, attributes, callback) ->
         callback(err, body)
 
 #
+# Retrieve the IOC summaries in the FE alerting format.
+#
+get_ioc_summary_v2 = (params, attributes, callback) ->
+    request.json_get get_sf_url('/v2/ioc-summary'), params, attributes, (err, response, body) ->
+        callback err, body
+
+#
 # Retrieve hits based on the params.
 # @param params
 # @param attributes
@@ -679,6 +686,7 @@ exports.post_tag = post_tag
 
 # IOC Summary.
 exports.get_ioc_summary = get_ioc_summary
+exports.get_ioc_summary_v2 = get_ioc_summary_v2
 
 # Hits.
 exports.get_hits = get_hits

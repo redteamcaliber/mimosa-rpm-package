@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="vm.mandiant.com" autoUploadExternalChanges="true">
+  <component name="PublishConfigData" autoUpload="Always" serverName="uac.vm.mandiant.com" autoUploadExternalChanges="true">
     <serverData>
-      <paths name="vm.mandiant.com">
+      <paths name="uac.vm.mandiant.com">
         <serverdata>
           <mappings>
-            <mapping deploy="/opt/web/apps/uac" local="$PROJECT_DIR$" />
+            <mapping deploy="/opt/web/apps/uac" local="$PROJECT_DIR$" web="/" />
           </mappings>
-          <excludedPaths>
-            <excludedPath path="/opt/web/apps/uac/node_modules" />
-          </excludedPaths>
         </serverdata>
       </paths>
     </serverData>

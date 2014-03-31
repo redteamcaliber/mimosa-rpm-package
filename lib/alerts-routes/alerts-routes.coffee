@@ -1,5 +1,6 @@
 express = require 'express'
 nunjucks = require 'nunjucks'
+async = require 'async'
 
 # Setup underscore.
 _ = require 'underscore';
@@ -64,8 +65,11 @@ app.get '/api/types', (req, res, next) ->
         else
             route_utils.send_rest req, res, next, types
 
+#
+# Retrieve the alerts signature summary data.
+#
 app.get '/api/summary', (req, res, next) ->
-    alerts_api.get_signature_summary req.query, req.attributes, (err, list) ->
+    alerts_api.get_consolidated_signature_summary req.query, req.attributes, (err, list) ->
         if err
             next err
         else

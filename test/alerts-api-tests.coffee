@@ -84,6 +84,72 @@ describe 'alerts-api-tests', ->
                 catch e
                     done e
 
+    describe '#get_consolidated_signature_summary()', ->
+        it 'should return ALL alert summary data', (done) ->
+            api.get_consolidated_signature_summary {}, {}, (err, list) ->
+                try
+                    should.not.exist err
+                    utils.should_be_list list, true
+
+                    alert_types = []
+                    device_types = []
+                    for item in list
+                        alert_types = _.union alert_types, item.alert_types
+                        device_types = _.union device_types, item.device_types
+
+                    console.dir alert_types
+                    console.dir device_types
+
+                    ('endpoint-match' in alert_types).should.be.true
+                    ('HX' in device_types).should.be.true
+                    ('NX' in device_types).should.be.true
+
+                    done()
+                catch e
+                    done e
+
+        it 'should return only endpoint-match data', (done) ->
+            api.get_consolidated_signature_summary {alert_type: 'endpoint-match'}, {}, (err, list) ->
+                try
+                    should.not.exist err
+                    utils.should_be_list list, true
+
+                    for item in list
+                        # Only endpoint-match records should be returned.
+                        item.alert_types.length.should.equal 1
+                        item.alert_types[0].should.equal 'endpoint-match'
+                        # Only HX records should be returned.
+                        item.device_types.length.should.equal 1
+                        item.device_types[0].should.equal 'HX'
+                    done()
+                catch e
+                    done e
+
+        it 'should return only malware-callback data', (done) ->
+            api.get_consolidated_signature_summary {alert_type: 'malware-callback'}, {}, (err, list) ->
+                try
+                    should.not.exist err
+                    utils.should_be_list list, true
+
+                    for item in list
+                        item.alert_types.length.should.equal 1
+                        ('malware-callback' in item.alert_types).should.be.true
+                    done()
+                catch e
+                    done e
+
+        it 'should return both endpoint-match and malware-callback data', (done) ->
+            api.get_consolidated_signature_summary {alert_type: ['endpoint-match', 'malware-callback']}, {}, (err, list) ->
+                try
+                    should.not.exist err
+                    utils.should_be_list list, true
+
+                    for item in list
+                        ('endpoint-match' in item.alert_types or 'malware-callback' in item.alert_types).should.be.true
+                    done()
+                catch e
+                    done e
+
     describe '#get_alerts()', ->
         it 'should return all alerts', (done) ->
             api.get_alerts {}, {}, (err, list) ->

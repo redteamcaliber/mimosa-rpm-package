@@ -3,8 +3,11 @@
 #
 define (require) ->
     $ = require 'jquery'
+    ChildViewContainer = require 'backbone.babysitter'
+
     View = require 'uac/views/View'
     utils = require 'uac/common/utils'
+
     datatables = require 'datatables'
     datatables_bootstrap = require 'datatables_bootstrap'
 
@@ -43,6 +46,9 @@ define (require) ->
         # Initialize the table the defaults.
         #
         initialize: (options) ->
+            # Create a container for managing child views.  The container will be closed and emptied on destroy.
+            @container = new ChildViewContainer()
+
             unless @options
                 # Make sure the instance has an options bound to it.  Prior to Backbone 1.0.x were guarenteed to have an
                 # options instance where as later versions removed this
@@ -424,6 +430,16 @@ define (require) ->
             if $.fn.DataTable.fnIsDataTable(@table_el.get(0))
                 console.debug "Destroying DataTable with id: #{@table_el.attr 'id'}'"
 
+                # Close any child views.
+                console.debug "Closing #{@container.length} TableView child views..."
+                @container.forEach (child) ->
+                    if child.close
+                        child.close()
+                    else if child.remove
+                        child.remove
+                    else
+                        console.warn "Warning: Child view without close or remove function defined: #{child.id}"
+
                 # Destroy the old table.
                 @table_el.fnDestroy false
                 @table_el.empty()
@@ -527,8 +543,9 @@ define (require) ->
                             view.unblock view.$el
                             return
 
-                        params.error = ->
+                        params.error = (collection, response) ->
                             view.unblock view.$el
+                            utils.display_response_error('Exception while retrieving table data', response)
                             return
 
                         view.block view.$el
@@ -545,9 +562,9 @@ define (require) ->
                             # Unblock the ui.
                             view.unblock view.$el
                             return
-                        error: ->
-                            # Unblock the ui.
+                        error: (collection, response) ->
                             view.unblock view.$el
+                            utils.display_response_error('Exception while retrieving table data', response)
                             return
             else
                 view.render server_params: params

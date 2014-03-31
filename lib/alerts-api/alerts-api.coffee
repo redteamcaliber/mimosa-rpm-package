@@ -11,6 +11,12 @@ settings = require 'settings'
 log = require 'winston'
 api_utils = require 'api-utils'
 
+sf_api = require 'sf-api'
+
+#
+# HX alert type.
+#
+ENDPOINT_MATCH = 'endpoint-match'
 
 #
 # Tag descriptions.
@@ -61,7 +67,8 @@ get_clients = (attributes, callback) ->
 #
 get_alert_types = (attributes, callback) ->
     request.json_get get_cv_url('/alert-types/'), undefined, attributes, (err, response, body) ->
-        body.response.push 'endpoint-match'
+        if body.response
+            body.response.push ENDPOINT_MATCH
         process_response(err, response, body, callback)
     return
 
@@ -87,11 +94,78 @@ get_signature_summary = (params, attributes, callback) ->
     return
 
 #
-# Retrive alerts.
+# Retrieve the consolidated signature summary rollup list.
+#
+get_consolidated_signature_summary = (params, attributes, callback) ->
+    if params and params.alert_type
+        if Array.isArray(params.alert_type)
+            alert_types = params.alert_type
+        else
+            alert_types = [params.alert_type]
+    else
+        alert_types = []
+
+    async.parallel [
+            (callback) ->
+                if not params or alert_types.length == 0 or ENDPOINT_MATCH in alert_types
+                    # Retrieve the endpoint related summary data.
+                    p = _.clone(params)
+                    delete p.alert_type
+                    sf_api.get_ioc_summary_v2 p, attributes, callback
+                else
+                    callback null, []
+                return
+            (callback) ->
+                if not params or alert_types.length > 1 or not (ENDPOINT_MATCH in alert_types)
+                    # Retrieve the CV summary data.
+                    p = _.clone(params)
+                    p.alert_type = _.without alert_types, ENDPOINT_MATCH
+                    get_signature_summary p, attributes, callback
+                else
+                    callback null, []
+                return
+        ],
+    (err, results) ->
+        if err
+            callback err
+        else
+            results[0].forEach (item) ->
+                item.alert_types = ['endpoint-match']
+                item.device_types = ['HX']
+
+            callback null, results[0].concat(results[1])
+        return
+
+#
+# Retrieve alerts.
 #
 get_alerts = (params, attributes, callback) ->
-    request.json_get get_cv_url('/alerts/'), params, attributes, (err, response, body) ->
-        process_response(err, response, body, callback)
+    console.dir params
+    if params.signature_uuid
+        # Retrieve the CV alerts.
+        request.json_get get_cv_url('/alerts/'), params, attributes, (err, response, body) ->
+            process_response(err, response, body, callback)
+            return
+    else if params.iocnamehash
+        # Retrieve all StrikeFinder alerts.
+        params.limit = 0
+        sf_api.get_hits params, attributes, (err, result) ->
+            alerts = []
+            for hit in result.results
+                alerts.push
+                    device:
+                        client:
+                            name: hit.client_name
+                        type: 'HX'
+                    summary: hit.summary1
+                    tag: hit.tagname
+                    occurred: hit.created
+                    priority: 3
+                    type: ENDPOINT_MATCH
+                    uuid: hit.rowitem_uuid
+            callback null, alerts
+    else
+        callback "Error: Required parameters not met: #{JSON.stringify(params)}"
     return
 
 #
@@ -127,4 +201,5 @@ exports.get_clients = get_clients
 exports.get_alert_types = get_alert_types
 exports.get_times = get_times
 exports.get_signature_summary = get_signature_summary
+exports.get_consolidated_signature_summary = get_consolidated_signature_summary
 exports.get_alerts = get_alerts

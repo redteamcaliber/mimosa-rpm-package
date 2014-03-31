@@ -92,19 +92,23 @@ define (require) ->
 
         display_info: (message) ->
             uac_utils.display_info(message)
+            return
 
         display_warn: (message) ->
             uac_utils.display_warn(message)
+            return
 
         display_error: (message) ->
             uac_utils.display_error(message)
+            return
 
         display_success: (message) ->
             uac_utils.display_success(message)
+            return
 
         #
         # Display a message with the error from the response.
         #
         display_response_error: (message, response) ->
-            error = if response && response.responseText then response.responseText else 'Response text not defined.'
-            @display_error "#{message} - #{error}"
+            uac_utils.display_response_error(message, response)
+            return

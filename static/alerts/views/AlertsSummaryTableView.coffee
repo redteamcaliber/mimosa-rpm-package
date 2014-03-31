@@ -8,15 +8,15 @@ define (require) ->
         mRender: (data, type, row) ->
             alert_types = row.alert_types.join(', ')
             device_types = row.device_types.join(', ')
-            return "<span style='font-weight: bold'>#{row.name}</span><br>#{device_types}<br>#{alert_types}"
+            return "<span style='font-weight: bold'>#{row.name}</span><br>#{alert_types}<br>#{device_types}"
         aTargets: [index]
 
     count_renderer = (index) ->
         mRender: (data) ->
-            if data
-                "<a class='btn btn-default shield'> #{data} </a>"
-            else
+            if data is undefined or data is null
                 data
+            else
+                "<a class='btn btn-default shield'> #{data} </a>"
         aTargets: [index]
 
     in_progress_renderer = (index) ->
@@ -56,7 +56,7 @@ define (require) ->
             #                $('td:eq(3)', row).addClass('well')
 
             options.aaSorting = [
-                [0, "asc"]
+                [1, "asc"]
             ]
 
             options.oLanguage = {
