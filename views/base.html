@@ -42,8 +42,16 @@
     <link href="/static/lib/datatables/jquery.dataTables.css" rel="stylesheet"/>
     <link href="/static/css/datatables.css" rel="stylesheet"/>
 
-    <!-- Include require.js support. -->
-    <script src="/static/lib/requirejs/require.js" data-main="{% block data_main %}{% endblock %}"></script>
+    {% if node_env == 'prod' %}
+        <script src="/static/lib/requirejs/require.js"></script>
+        <script src="/static/release/js/main.js"></script>
+        <script type="text/javascript">
+            require(["{% block data_main %}{% endblock %}"], function(){});
+        </script>
+    {% else %}
+        <!-- Include require.js support. -->
+        <script src="/static/lib/requirejs/require.js" data-main="{% block data_main %}{% endblock %}"></script>
+    {% endif %}
 
     <script type="text/javascript">
         require(['jquery', 'bootstrap', 'backbone', 'uac/views/ThemeView'],

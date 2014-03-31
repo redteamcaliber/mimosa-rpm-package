@@ -505,9 +505,121 @@ module.exports = function (grunt) {
                     connection: get_connection({host: 'uac.dev.mandiant.com'})
                 }
             }
+        },
+        clean: {
+            build: 'static/.tmp'
+        },
+        cssmin: {
+          combine:{
+              files: {
+                  "static/release/css/main.css": [
+                      'static/css/base.css',
+                      'static/lib/font-awesome/css/font-awesome.min.css',
+                      'static/lib/select2/select2.css',
+                      'static/css/typeahead.js-bootstrap.css',
+                      'static/lib/datatables/jquery.dataTables.css',
+                      'static/css/datatables.css'
+                  ]
+              }
+          }
+        },
+        requirejs: {
+            dist: {
+                options: {
+                    optimize: 'none',
+                    appDir: "static",
+                    baseUrl: ".",
+                    keepBuildDir: true,
+                    paths: {
+                        async: 'lib/async/async',
+                        backbone: 'lib/backbone/backbone',
+                        'backbone.babysitter': 'lib/backbone.babysitter/backbone.babysitter',
+                        'backbone.wreqr': 'lib/backbone.wreqr/backbone.wreqr',
+                        bootstrap: 'lib/bootstrap/js/bootstrap',
+                        bootstrap_growl: 'lib/bootstrap-growl/jquery.bootstrap-growl',
+                        blockui: 'lib/blockui/jquery.blockUI',
+                        datatables: 'lib/datatables/jquery.dataTables',
+                        datatables_bootstrap: 'js/datatables',
+                        highlighter: 'js/jQuery.highlighter',
+                        iocviewer: 'js/jquery.iocViewer',
+                        jquery: 'lib/jquery/jquery',
+                        marionette: 'lib/marionette/backbone.marionette',
+                        moment: 'lib/moment/moment',
+                        select2: 'lib/select2/select2',
+                        typeahead: 'lib/typeahead.js/typeahead',
+                        underscore: 'lib/underscore/underscore',
+                        'underscore.string': 'lib/underscore.string/underscore.string'
+                    },
+                    shim: {
+                        jquery: {
+                            exports: '$'
+                        },
+                        bootstrap: {
+                            deps: ['jquery'],
+                            exports: 'bootstrap'
+                        },
+                        bootstrap_growl: {
+                            deps: ['jquery'],
+                            exports: '$.bootstrapGrowl'
+                        },
+                        highlighter: {
+                            deps: ['jquery'],
+                            exports: '$.fn.highlighter'
+                        },
+                        iocviewer: {
+                            deps: ['jquery'],
+                            exports: '$.fn.iocViewer'
+                        },
+                        select2: {
+                            deps: ['jquery'],
+                            exports: 'Select2'
+                        },
+                        typeahead: {
+                            deps: ['jquery'],
+                            exports: 'jQuery.fn.typeahead'
+                        },
+                        underscore: {
+                            exports: '_'
+                        }
+                    },
+                    dir: "static/.tmp/build",
+                    modules: [
+                        {
+                            name: "../../release/js/main",
+                            create: true,
+                            include: [
+                                //strike finder stuff
+                                "sf/main/AcquisitionsMain",
+                                "sf/main/HitReviewMain",
+                                "sf/main/HitsByTagMain",
+                                "sf/main/HostsMain",
+                                "sf/main/IdentityMain",
+                                "sf/main/SuppressionsMain",
+                                "sf/main/TasksMain",
+
+                                //uac stuff
+                                "sf/views/HostTypeAheadView",
+                                "uac/views/ThemeView",
+
+                                //addl deps
+                                "bootstrap"
+                            ]
+                        }
+                    ]
+                }
+            }
         }
     });
-
+    grunt.registerTask('build', [
+        'clean:build',
+        'bower:install',
+        'jst:uac-dev',
+        'jst:alerts-dev',
+        'jst:sf-dev',
+        'coffee',
+        'requirejs:dist',
+        'cssmin:combine'
+    ]);
     /**
      * Deploy a local database.
      *
@@ -631,6 +743,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-coffee');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-bower-task');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
 };
 
 /**
