@@ -410,21 +410,21 @@ module.exports = function (grunt) {
             }
         },
 
-        sftp: {
-            prod: {
-                files: {
-                    "/root/build/rpm/RPMS/x86_64": "<%= uac_rpm_file %>"
-                },
-                options: {
-                    path: '/dev_deploy/uac-node',
-                    host: 'nas1.mplex.us2.mcirt.mandiant.com',
-                    username: 'mcirtdev',
-                    privateKey: grunt.file.read("/root/.ssh/id_rsa"),
-                    passphrase: '<%= passphrase %>',
-                    showProgress: true
-                }
-            }
-        },
+//        sftp: {
+//            prod: {
+//                files: {
+//                    "/root/build/rpm/RPMS/x86_64": "<%= uac_rpm_file %>"
+//                },
+//                options: {
+//                    path: '/dev_deploy/uac-node',
+//                    host: 'nas1.mplex.us2.mcirt.mandiant.com',
+//                    username: 'mcirtdev',
+//                    privateKey: grunt.file.read("/root/.ssh/id_rsa"),
+//                    passphrase: '<%= passphrase %>',
+//                    showProgress: true
+//                }
+//            }
+//        },
 
         sshexec: {
             /**
