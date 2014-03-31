@@ -150,6 +150,13 @@ define (require) ->
             delay: 15000
         return
 
+    #
+    # Display a message with the error from the response.
+    #
+    display_response_error = (message, response) ->
+        error = if response && response.responseText then response.responseText else 'Response text not defined.'
+        display_error "#{message} - #{error}"
+        return
 
     #
     # Backbone Overrides.
@@ -468,13 +475,14 @@ define (require) ->
         block: block
         unblock: unblock
         block_element: block_element
-        default_view_helpers: default_view_helpers,
+        default_view_helpers: default_view_helpers
         random_string: random_string
-        format_date_string: format_date_string,
-        format_unix_date: format_unix_date,
+        format_date_string: format_date_string
+        format_unix_date: format_unix_date
         run_template: run_template
         display_info: display_info
         display_error: display_error
+        display_response_error: display_response_error
         display_warn: display_warn
         display_success: display_success
         usersettings: usersettings

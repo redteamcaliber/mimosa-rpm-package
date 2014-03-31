@@ -1,5 +1,8 @@
 assert = require 'assert'
 should = require 'should'
+request = require 'm-request'
+
+URL = 'https://uac.vm.mandiant.com'
 
 #
 # Make sure the object (o) has all keys specified in the list (keys).
@@ -25,7 +28,29 @@ should_be_list = (list, should_contain_items) ->
     return
 
 #
+# Send a GET request.
+#
+get = (path, params, callback) ->
+    request.json_get(URL + path, params, null, callback)
+
+#
+# Send a POST request.
+#
+post = (path, body, callback) ->
+    request.json_post(URL + path, {}, body, callback)
+
+
+#
+# Send a DELETE request.
+#
+del = (path, uuid, callback) ->
+    request.json_delete(URL + path + '/' + uuid, {}, callback)
+
+#
 # Exports
 #
 exports.should_have_keys = should_have_keys
 exports.should_be_list = should_be_list
+exports.get = get
+exports.post = post
+exports.del = del

@@ -16,7 +16,6 @@ define (require) ->
 
     AlertSummaryCollection = require 'alerts/models/AlertSummaryCollection'
     AlertsSummaryTableView = require 'alerts/views/AlertsSummaryTableView'
-    AlertsSummaryListView = require 'alerts/views/AlertsSummaryListView'
 
     AlertCollection = require 'alerts/models/AlertCollection'
     AlertsTableView = require 'alerts/views/AlertsTableView'
@@ -131,8 +130,10 @@ define (require) ->
             data.tag = params.tags if params.tags
             data.client_uuid = params.clients if params.clients and params.clients.length > 0
             data.alert_type = params.types if params.types and params.types.length > 0
+            data.is_endpoint_match = params.is_endpoint_match is true
             data.begin = moment(params.from).unix() if params.from
             data.end = moment(params.to).unix() if params.to
+
             @summary_list_view.fetch
                 data: data
 
@@ -145,10 +146,15 @@ define (require) ->
                     collection: @alerts
                 @layout.details_list_region.show @details_list_view
 
-            @details_list_view.fetch {
-                data: {
+            if 'endpoint-match' in data.alert_types
+                data =
+                    iocnamehash: data.namehash
+            else
+                data =
                     signature_uuid: data.uuid
-                }
+
+            @details_list_view.fetch {
+                data: data
             }
 
 

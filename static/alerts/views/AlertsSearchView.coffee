@@ -7,9 +7,11 @@ define (require) ->
     TagCollection = require 'alerts/models/TagCollection'
     ClientCollection = require 'alerts/models/ClientCollection'
     TimeCollection = require 'alerts/models/TimeCollection'
+    AlertTypeModel = require 'alerts/models/AlertTypeModel'
     AlertTypeCollection = require 'alerts/models/AlertTypeCollection'
 
     templates = require 'alerts/ejs/templates'
+
 
     #
     # View to display tags search criteria.
@@ -294,10 +296,9 @@ define (require) ->
             return
 
         render: ->
-            context = {
+            @apply_template templates, 'search-types.ejs', {
                 types: @collection.toJSON()
             }
-            @apply_template templates, 'search-types.ejs', context
 
             if @selected
                 @set_selected @selected
@@ -319,12 +320,12 @@ define (require) ->
 
         reset_selected: ->
             # Default selections to none in order to return all.
-            @set_selected([])
+            @set_selected([], false)
             return
 
-        fetch: (params) ->
+        fetch: () ->
             if @collection
-                @collection.fetch(params)
+                @collection.fetch()
             return
 
     #

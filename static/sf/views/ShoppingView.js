@@ -41,7 +41,8 @@ define(function (require) {
                 html: true,
                 trigger: 'hover',
                 content: '<pre style="border: 0; margin: 2px; font-size: 85%; overflow: auto">' + text + '</pre>',
-                placement: 'left'
+                placement: 'left',
+                container: 'body'
             })
                 .data('bs.popover')
                 .tip()
@@ -49,9 +50,6 @@ define(function (require) {
         },
         close: function () {
             this.stopListening();
-            this.$el.popover('destroy');
-            // Manually removing the popover due to -> https://github.com/twbs/bootstrap/issues/10335
-            this.$el.parent().find('.popover').remove();
         }
     });
 

@@ -3,16 +3,25 @@ UAC ToDo
 
 # Look into using global initializers instead of having requireJS script blocks in the templates.
 
-# Alerts
-- Table view is not putting form-element class on the page drop down on the alerts table.
-- Clean up the names for AlertsTableView, etc...
-- Need to properly calculate the In Progress totals on the summary list view.
-- Look into the default sort order of the lists calls.
-- Where are the tasks for munging in the StrikeFinder data into the alerts lists?
-- Remove the Include HX in favor of a specific check box for host.
+### StrikeFinder
+- The MD5 popup no longer works.
+- General testing.
+- Need to merge in the MD5 changes from master.
+
+### Alerts
+- Seasick host data.
+    - Mixin the seasick host data with the alerts/hits calls.
+    - Create an API to retrieve a list of host data.
+    - Cache host data in Redis and have the lookup function check the cache before calling Seasick.
+    - Look into the cache settings for Redis.  No need to store to disk.
+- Pass parameters to the details list on click.
+- Munge in SF data to the details list calls.
+- Look into the default sort order of the details list.
 - Look into using TableView.render() rather than TableView.fetch() because it's non-standard.
+    -Re-rendering of a table is currently broken in the IOCSummaryView.
 - Convert to using layouts and ItemView's in the AlertsSearchView.
 - Convert the table view to and ItemView, need to override the default close function.
+- Display the tag text descriptions in the summary and details table.
 
 ### MD5 Stuff
 - Update md5 to use new API
