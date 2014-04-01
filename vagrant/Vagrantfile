@@ -64,8 +64,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.host_name = "uac.vm.mandiant.com"
   config.vm.network "private_network", ip: "10.1.1.128"
-  config.vm.box = "CentOS-6.4-x86_64-v20130731"
-  config.vm.box_url = "http://developer.nrel.gov/downloads/vagrant-boxes/CentOS-6.4-x86_64-v20130731.box"
+  config.vm.box = "centos-65-x64-virtualbox-puppet.box"
+  config.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/centos-65-x64-virtualbox-puppet.box"
 
   config.vm.synced_folder SRC_LOCAL_PATH, '/opt/web/apps/uac', :nfs => true
   config.vm.synced_folder PUPPET_HIERA_DIR, '/etc/puppet/hieradata'
