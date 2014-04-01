@@ -542,6 +542,7 @@ module.exports = function (grunt) {
                 options: {
                     optimize: 'none',
                     appDir: "static",
+                    keepBuildDir: true,
                     baseUrl: ".",
                     paths: {
                         async: 'lib/async/async',
@@ -723,7 +724,7 @@ module.exports = function (grunt) {
     /**
      * Compile the JST templates, coffeescript files, and watch for changes.
      */
-    grunt.registerTask('compile-watch', ['jst-dev', 'coffee', 'watch']);
+    grunt.registerTask('build-watch', ['build', 'watch']);
 
     /**
      * Deploy an existing UAC rpm to devnet.

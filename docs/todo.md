@@ -2,13 +2,14 @@ UAC ToDo
 ========
 
 ### Completed
-- Completed the details list view.
+- Alerts summary list vi
 - Added in the StrikeFinder API data with the summary and details list.
+- Completed the details list view.
 - Continued the refactoring effort of UAC with the help of Drew.
     - Now have a Vagrant script to generate a UAC VM.
     - Have puppet scripts to configure the VM with the UAC software for development.
     - Still need to tweak the puppet scripts for production and test.
-- UAC release to update to the productoin mcube service.  Small API change.
+- UAC release to update to the production mcube service.  Small API change.
 
 ### StrikeFinder
 - The MD5 popup no longer works.

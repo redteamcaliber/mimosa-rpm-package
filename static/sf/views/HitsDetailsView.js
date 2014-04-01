@@ -12,8 +12,9 @@ define(function (require) {
     var MassTagFormView = require('sf/views/MassTagFormView');
     var SuppressionsTableView = require('sf/views/SuppressionsTableView');
     var AcquisitionsTableView = require('sf/views/AcquisitionsTableView');
-    var AcquisitionCollection = require('sf/models/AcquisitionCollection');
+    var MD5View = require('sf/views/MD5View');
 
+    var AcquisitionCollection = require('sf/models/AcquisitionCollection');
     var IOCCollection = require('sf/models/IOCCollection');
     var AgentHostModel = require('sf/models/AgentHostModel');
     var AuditModel = require('sf/models/AuditModel');
@@ -556,6 +557,8 @@ define(function (require) {
             return this;
         },
         on_click_md5: function(ev) {
+            ev.preventDefault();
+
             var dlg = new MD5View({
                 el: '#dialog-div',
                 model: new Backbone.Model($(ev.currentTarget).data().md5)
