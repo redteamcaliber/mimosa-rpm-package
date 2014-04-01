@@ -17,40 +17,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     {# RequireJS configuration #}
-    <script src="/static/.tmp/build/config.js"></script>
+    <script src="/static/client/js/raw/config.js"></script>
 
     {# Core UAC styles and overrides. #}
-    <link href="/static/css/base.css" rel="stylesheet"/>
+    <link href="/static/client/css/main.css" rel="stylesheet"/>
 
     {# Include the appropriate bootstrap theme. #}
     {% if current_theme == 'default' %}
-        <link id="bootstrap" href="/static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+        <link id="bootstrap" href="/static/client/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
     {% else %}
-        <link id="bootstrap" href="/static/lib/bootswatch/{{ current_theme }}/bootstrap.min.css" rel="stylesheet"/>
+        <link id="bootstrap" href="/static/client/css/bootswatch/{{ current_theme }}/bootstrap.min.css" rel="stylesheet"/>
     {% endif %}
 
     {# Font Awesome #}
-    <link href="/static/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>
+    <!--<link href="/static/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet"/>-->
 
     {# Select2 #}
-    <link href="/static/lib/select2/select2.css" rel="stylesheet"/>
+    <!--<link href="/static/lib/select2/select2.css" rel="stylesheet"/>-->
 
     {# Bootstrap Typeahead #}
-    <link href="/static/css/typeahead.js-bootstrap.css" rel="stylesheet"/>
+    <!--<link href="/static/css/typeahead.js-bootstrap.css" rel="stylesheet"/>-->
 
     {# Bootstrap Datatables #}
-    <link href="/static/lib/datatables/jquery.dataTables.css" rel="stylesheet"/>
-    <link href="/static/css/datatables.css" rel="stylesheet"/>
+    <!--<link href="/static/lib/datatables/jquery.dataTables.css" rel="stylesheet"/>-->
+    <!--<link href="/static/css/datatables.css" rel="stylesheet"/>-->
 
     {% if node_env == 'prod' %}
-        <script src="/static/lib/requirejs/require.js"></script>
-        <script src="/static/release/js/main.js"></script>
+        <script src="/static/client/js/raw/lib/requirejs/require.js"></script>
+        <script src="/static/client/js/modules/main.js"></script>
         <script type="text/javascript">
             require(["{% block data_main %}{% endblock %}"], function(){});
         </script>
     {% else %}
         <!-- Include require.js support. -->
-        <script src="/static/lib/requirejs/require.js" data-main="{% block data_main %}{% endblock %}"></script>
+        <script src="/static/client/js/raw/lib/requirejs/require.js" data-main="{% block data_main %}{% endblock %}"></script>
     {% endif %}
 
     <script type="text/javascript">
@@ -81,7 +81,7 @@
                 </button>
                 <a class="navbar-brand" href="/">
                     <img style="width: auto; height: 18px; vertical-align: top; border: solid 1px"
-                         src="/static/img/mandiant-bw.ico"> UAC
+                         src="/static/client/css/img/mandiant-bw.ico"> UAC
                 </a>
             </div>
             <div class="collapse navbar-collapse">

@@ -2,7 +2,7 @@ var nconf = require('nconf');
 
 
 // Add the package version to the defaults.
-var pkg = require('../../package.json');
+var pkg = require('../../../../package.json');
 var version = pkg.version;
 nconf.defaults({
     uac: {

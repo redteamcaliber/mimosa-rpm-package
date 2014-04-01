@@ -67,7 +67,7 @@
       "/": "jQuery.highlighter.js"
     },
     "jquery": {
-      "/": "dist/jquery.js"
+      "/": "jquery.js"
     },
     "marionette": {
       "/": "lib/core/amd/backbone.marionette.js"

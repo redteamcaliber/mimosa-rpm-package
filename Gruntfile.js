@@ -83,7 +83,7 @@ module.exports = function (grunt) {
         bower: {
             install: {
                 options: {
-                    targetDir: 'static/.tmp/build/lib',
+                    targetDir: '.tmp/lib',
                     layout: 'byComponent',
                     install: true,
                     verbose: true,
@@ -111,9 +111,9 @@ module.exports = function (grunt) {
                     sourceMap: true
                 },
                 expand: true,
-                cwd: 'lib',
+                cwd: 'src/server/js',
                 src: ['**/*.coffee'],
-                dest: 'lib',
+                dest: 'static/server/js',
                 ext: '.js'
             },
             web: {
@@ -121,9 +121,9 @@ module.exports = function (grunt) {
                     sourceMap: true
                 },
                 expand: true,
-                cwd: 'static',
+                cwd: 'src/client/js',
                 src: ['**/*.coffee'],
-                dest: 'static/.tmp/build',
+                dest: '.tmp',
                 ext: '.js'
             }
         },
@@ -169,7 +169,7 @@ module.exports = function (grunt) {
                     amd: true
                 },
                 files: {
-                    'static/uac/ejs/templates.js': ['static/uac/ejs/*.ejs']
+                    '.tmp/uac/ejs/templates.js': ['src/client/js/uac/ejs/*.ejs']
                 }
             },
             'alerts-dev': {
@@ -179,7 +179,7 @@ module.exports = function (grunt) {
                     amd: true
                 },
                 files: {
-                    'static/alerts/ejs/templates.js': ['static/alerts/ejs/*.ejs']
+                    '.tmp/alerts/ejs/templates.js': ['src/client/js/alerts/ejs/*.ejs']
                 }
             },
             'sf-dev': {
@@ -189,7 +189,7 @@ module.exports = function (grunt) {
                     amd: true
                 },
                 files: {
-                    'static/sf/ejs/templates.js': ['static/sf/ejs/*.ejs']
+                    '.tmp/sf/ejs/templates.js': ['src/client/js/sf/ejs/*.ejs']
                 }
             }
         },
@@ -514,36 +514,54 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            build: ['static/.tmp', 'static/release']
+            preBuild: ['.tmp', 'static'],
+            postBuild: ['.tmp']
         },
         copy: {
-            main: {
+            preBuild: {
                 files: [
-                    {expand: true, src: ['static/**/*.js'], dest: 'static/.tmp/build', filter: 'isFile'}
+                    {expand: true, cwd: 'src/client/js', src: ['**/*.js'], dest: '.tmp', filter: 'isFile'}
+                ]
+            },
+            cssResources: {
+                files: [
+                    {expand: true, cwd: '.tmp/lib/font-awesome/fonts', src: ['**/*'], dest: 'static/client/fonts', filter: 'isFile'},
+                    {expand: true, cwd: '.tmp/lib/select2', src: ['select2.png'], dest: 'static/client/css', filter: 'isFile'},
+                    {expand: true, cwd: '.tmp/lib/bootstrap/css', src: ['bootstrap.min.css'], dest: 'static/client/css/bootstrap', filter: 'isFile'},
+                    {expand: true, cwd: '.tmp/lib/bootswatch', src: ['**/*.css'], dest: 'static/client/css/bootswatch', filter: 'isFile'},
+                    {expand: true, cwd: 'src/client/css/img', src: ['**/*'], dest: 'static/client/css/img', filter: 'isFile'},
+                    {expand: true, cwd: 'src/client/css/img', src: ['sort_*.png'], dest: 'static/client/img', filter: 'isFile'}
+
+                ]
+            },
+            unconvertedNode:{
+                files: [
+                    {expand: true, cwd: 'src/server', src: ['**/*.js', '**/*.json', '**/*.html'], dest: 'static/server', filter: 'isFile'}
                 ]
             }
         },
         cssmin: {
-          combine:{
-              files: {
-                  "static/release/css/main.css": [
-                      'static/css/base.css',
-                      'static/lib/font-awesome/css/font-awesome.min.css',
-                      'static/lib/select2/select2.css',
-                      'static/css/typeahead.js-bootstrap.css',
-                      'static/lib/datatables/jquery.dataTables.css',
-                      'static/css/datatables.css'
-                  ]
-              }
-          }
+            combine:{
+                files: {
+                    "static/client/css/main.css": [
+                        'src/client/css/base.css',
+                        '.tmp/lib/font-awesome/css/font-awesome.min.css',
+                        '.tmp/lib/select2/select2.css',
+                        'src/client/css/typeahead.js-bootstrap.css',
+                        '.tmp/lib/datatables/jquery.dataTables.css',
+                        'src/client/css/datatables.css',
+                        'src/client/css/jquery.iocViewer.css'
+                    ]
+                }
+            }
         },
         requirejs: {
             dist: {
                 options: {
                     optimize: 'none',
-                    appDir: "static",
-                    keepBuildDir: true,
+                    appDir: ".tmp",
                     baseUrl: ".",
+                    keepBuildDir: true,
                     paths: {
                         async: 'lib/async/async',
                         backbone: 'lib/backbone/backbone',
@@ -596,10 +614,10 @@ module.exports = function (grunt) {
                             exports: '_'
                         }
                     },
-                    dir: "static/.tmp/build",
+                    dir: "static/client/js/raw",
                     modules: [
                         {
-                            name: "../../release/js/main",
+                            name: "../modules/main",
                             create: true,
                             include: [
                                 //strike finder stuff
@@ -625,15 +643,23 @@ module.exports = function (grunt) {
         }
     });
     grunt.registerTask('build', [
-        'clean:build',
+        'clean:preBuild',
+
+        //build client
         'jst:uac-dev',
         'jst:alerts-dev',
         'jst:sf-dev',
-        'copy:main',
-        'bower:install',
         'coffee',
+        'copy:preBuild',
+        'bower:install',
         'requirejs:dist',
-        'cssmin:combine'
+        'cssmin:combine',
+        'copy:cssResources',
+        'clean:postBuild',
+
+        //build server
+        'coffee:node',
+        'copy:unconvertedNode'
     ]);
     /**
      * Deploy a local database.
@@ -724,7 +750,7 @@ module.exports = function (grunt) {
     /**
      * Compile the JST templates, coffeescript files, and watch for changes.
      */
-    grunt.registerTask('build-watch', ['build', 'watch']);
+    grunt.registerTask('compile-watch', ['jst-dev', 'coffee', 'watch']);
 
     /**
      * Deploy an existing UAC rpm to devnet.

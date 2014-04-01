@@ -37,10 +37,10 @@ define (require) ->
         TODO: Is this being used???
     ###
     block_element_remove = (el, message) ->
-        $(el).block(get_blockui_options('<img src="/static/img/ajax-loader.gif">'))
+        $(el).block(get_blockui_options('<img src="/static/client/css/img/ajax-loader.gif">'))
 
     block_element = (el, message) ->
-        $(el).block(get_blockui_options('<img src="/static/img/ajax-loader.gif">'))
+        $(el).block(get_blockui_options('<img src="/static/client/css/img/ajax-loader.gif">'))
 
     unblock = (el) ->
         if el
