@@ -83,7 +83,7 @@ module.exports = function (grunt) {
         bower: {
             install: {
                 options: {
-                    targetDir: 'static/lib',
+                    targetDir: 'static/.tmp/build/lib',
                     layout: 'byComponent',
                     install: true,
                     verbose: true,
@@ -123,7 +123,7 @@ module.exports = function (grunt) {
                 expand: true,
                 cwd: 'static',
                 src: ['**/*.coffee'],
-                dest: 'static',
+                dest: 'static/.tmp/build',
                 ext: '.js'
             }
         },
@@ -514,7 +514,14 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            build: 'static/.tmp'
+            build: ['static/.tmp', 'static/release']
+        },
+        copy: {
+            main: {
+                files: [
+                    {expand: true, src: ['static/**/*.js'], dest: 'static/.tmp/build', filter: 'isFile'}
+                ]
+            }
         },
         cssmin: {
           combine:{
@@ -536,7 +543,6 @@ module.exports = function (grunt) {
                     optimize: 'none',
                     appDir: "static",
                     baseUrl: ".",
-                    keepBuildDir: true,
                     paths: {
                         async: 'lib/async/async',
                         backbone: 'lib/backbone/backbone',
@@ -619,10 +625,11 @@ module.exports = function (grunt) {
     });
     grunt.registerTask('build', [
         'clean:build',
-        'bower:install',
         'jst:uac-dev',
         'jst:alerts-dev',
         'jst:sf-dev',
+        'copy:main',
+        'bower:install',
         'coffee',
         'requirejs:dist',
         'cssmin:combine'
