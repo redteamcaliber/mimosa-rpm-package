@@ -11,12 +11,17 @@ define (require) ->
             return "<span style='font-weight: bold'>#{row.name}</span><br>#{alert_types}<br>#{device_types}"
         aTargets: [index]
 
-    count_renderer = (index) ->
+    new_renderer = (index) ->
         mRender: (data) ->
             if data is undefined or data is null
                 data
             else
                 "<a class='btn btn-default shield'> #{data} </a>"
+        aTargets: [index]
+
+    in_progress_renderer = (index) ->
+        mRender: (data, type, row) ->
+            "<a class='btn btn-default shield'> #{row.investigating + row.escalate + row.reportable} </a>"
         aTargets: [index]
 
     in_progress_renderer = (index) ->
@@ -36,7 +41,7 @@ define (require) ->
             options.aoColumns = [
                 {sTitle: 'Pri', mData: 'highest_priority', sWidth: '5%', sClass: 'priority', sType: 'int-html'}
                 {sTitle: 'Name, Type, Device(s)', mData: 'name'}
-                {sTitle: 'Open', mData: 'tags.notreviewed', sClass: 'center', sWidth: '10%', sType: 'int-html'}
+                {sTitle: 'New', mData: 'tags.notreviewed', sClass: 'center', sWidth: '10%', sType: 'int-html'}
                 {sTitle: 'In Prog', mData: 'tags.notreviewed', sClass: 'center', sWidth: '10%', sType: 'int-html'}
                 {sTitle: 'First Seen', mData: 'first_seen'}
                 {sTitle: 'Last Seen', mData: 'last_seen'}
@@ -45,7 +50,7 @@ define (require) ->
             options.aoColumnDefs = [
                 renderers.priority(0, 'shield')
                 alert_renderer(1)
-                count_renderer(2)
+                new_renderer(2)
                 in_progress_renderer(3)
                 renderers.date_time_multiline(4)
                 renderers.date_time_multiline(5)

@@ -73,6 +73,13 @@ module.exports = function (grunt) {
             }
         },
 
+        touch: {
+            options: {
+                nocreate: true
+            },
+            'server': ['uac-server.js']
+        },
+
         bower: {
             install: {
                 options: {
@@ -753,6 +760,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-touch');
 };
 
 /**

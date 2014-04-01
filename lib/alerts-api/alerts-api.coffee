@@ -136,6 +136,7 @@ get_consolidated_signature_summary = (params, attributes, callback) ->
             callback null, results[0].concat(results[1])
         return
 
+
 #
 # Retrieve alerts.
 #

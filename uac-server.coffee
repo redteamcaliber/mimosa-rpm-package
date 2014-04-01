@@ -191,26 +191,28 @@ if  workers > cpus
 if workers > 1
     # Cluster mode is enabled.
     if cluster.isMaster
+        console.dir workers
         # Configuration for the master node.
         console.log "Cluster mode is ACTIVE, starting #{workers} workers..."
         console.log "Hardware has #{cpus} cores available..."
 
         cluster.on 'listening', (worker, address) ->
-        console.log "Worker (#{worker.id}) listening on address: #{address.address}:#{address.port}"
+            console.log "Worker (#{worker.id}) listening on address: #{address.address}:#{address.port}"
 
         cluster.on 'exit', (worker, code) ->
             # Worker is exiting.
             console.log "Server worker (#{worker.id}) exiting with code: #{code}..."
             cluster.fork()
 
-        for worker in workers
+        worker_index = 1
+        while worker_index <= workers
             # Fork a worker
-            console.log "Forking server worker: #{worker.id}..."
             cluster.fork()
+            worker_index += 1
     else
         # Start the worker server.
         create_server()
 else
     # Start a single server.
-    console.log 'Cluster mode is INACTIVE...'
     create_server()
+    console.log 'UAC is running...'
