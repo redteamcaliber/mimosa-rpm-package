@@ -12,7 +12,7 @@ window.require =
         datatables_bootstrap: 'js/datatables'
         highlighter: 'js/jQuery.highlighter'
         iocviewer: 'js/jquery.iocViewer'
-        jquery: 'lib/jquery/jquery'
+        jquery: 'js/jquery-1.9.1'
         marionette: 'lib/marionette/backbone.marionette'
         moment: 'lib/moment/moment'
         select2: 'lib/select2/select2'
