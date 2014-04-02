@@ -1,5 +1,8 @@
 node 'uac.vm.mandiant.com' {
   class { 'uac':
-    # put your overrides here!
+    installProxy         => true,
+    installKeystore      => true,
+    installDatabase      => true,
+    targetEnvironment    => "development",
   }
 }
