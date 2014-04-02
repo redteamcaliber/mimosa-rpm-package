@@ -6,7 +6,7 @@
 
 # Set the development mode configuration.
 export NODE_ENV=prod
-export NODE_PATH=lib
+export NODE_PATH=static/server/js
 
 # The node executable.
 NODE=node

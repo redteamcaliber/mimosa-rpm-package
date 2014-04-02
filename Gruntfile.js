@@ -51,27 +51,7 @@ module.exports = function (grunt) {
         // The UAC RPM file name.
         'uac_rpm_file': '<%= uac_name %>-<%= uac_version %>-<%= uac_release %>.x86_64.rpm',
 
-        watch: {
-            /**
-             * Watch the underscore templates and re-compile the templates to a JST file.
-             */
-            templates: {
-                files: ['static/uac/ejs/*.ejs', 'static/alerts/ejs/*.ejs', 'static/sf/ejs/*.ejs'],
-                tasks: ['jst-dev']
-            },
-            'grunt': {
-                files: ['Gruntfile.js'],
-                tasks: ['jst-dev', 'coffee']
-            },
-            'node-coffee': {
-                files: ['uac-server.coffee', 'lib/**/*.coffee'],
-                tasks: ['coffee:node', 'coffee:uac-server']
-            },
-            'web-coffee': {
-                files: ['static/**/*.coffee'],
-                tasks: ['coffee:web']
-            }
-        },
+
 
         touch: {
             options: {
@@ -128,71 +108,7 @@ module.exports = function (grunt) {
             }
         },
 
-        /**
-         * Compile underscore templates into a .jst file.
-         */
-        jst: {
-            sf: {
-                options: {
-                    prettify: true,
-                    processName: process_name,
-                    amd: true
-                },
-                files: {
-                    '<%= build_uac_dir %>/static/sf/ejs/templates.js': ['<%= build_uac_dir %>/static/sf/ejs/*.ejs']
-                }
-            },
-            uac: {
-                options: {
-                    prettify: true,
-                    processName: process_name,
-                    amd: true
-                },
-                files: {
-                    '<%= build_uac_dir %>/static/uac/ejs/templates.js': ['<%= build_uac_dir %>/static/uac/ejs/*.ejs']
-                }
-            },
-            alerts: {
-                options: {
-                    prettify: true,
-                    processName: process_name,
-                    amd: true
-                },
-                files: {
-                    '<%= build_uac_dir %>/static/alerts/ejs/templates.js': ['<%= build_uac_dir %>/static/alerts/ejs/*.ejs']
-                }
-            },
-            'uac-dev': {
-                options: {
-                    prettify: true,
-                    processName: process_name,
-                    amd: true
-                },
-                files: {
-                    '.tmp/uac/ejs/templates.js': ['src/client/js/uac/ejs/*.ejs']
-                }
-            },
-            'alerts-dev': {
-                options: {
-                    prettify: true,
-                    processName: process_name,
-                    amd: true
-                },
-                files: {
-                    '.tmp/alerts/ejs/templates.js': ['src/client/js/alerts/ejs/*.ejs']
-                }
-            },
-            'sf-dev': {
-                options: {
-                    prettify: true,
-                    processName: process_name,
-                    amd: true
-                },
-                files: {
-                    '.tmp/sf/ejs/templates.js': ['src/client/js/sf/ejs/*.ejs']
-                }
-            }
-        },
+
 
         /**
          * Combine and uglify Javascript files.
@@ -513,6 +429,137 @@ module.exports = function (grunt) {
                 }
             }
         },
+        //TODO: the output file dir should be a var
+        coffee: {
+            'uac-server': {
+                options: {
+                    bare: true,
+                    sourceMap: true
+                },
+                files: {
+                    'uac-server.js': 'uac-server.coffee'
+                }
+            },
+            node: {
+                options: {
+                    sourceMap: true
+                },
+                expand: true,
+                cwd: 'src/server/js',
+                src: ['**/*.coffee'],
+                dest: 'static/server/js',
+                ext: '.js'
+            },
+            web: {
+                options: {
+                    sourceMap: true
+                },
+                expand: true,
+                cwd: 'src/client/js',
+                src: ['**/*.coffee'],
+                dest: '.tmp',
+                ext: '.js'
+            },
+            'web-dev': {
+                options: {
+                    sourceMap: true
+                },
+                expand: true,
+                cwd: 'src/client/js',
+                src: ['**/*.coffee'],
+                dest: 'static/client/js/raw',
+                ext: '.js'
+            }
+        },
+        /**
+         * Compile underscore templates into a .jst file.
+         */
+        //TODO: the output file dir should be a var
+        jst: {
+            //should copy into .tmp
+            uac: {
+                options: {
+                    prettify: true,
+                    processName: process_name,
+                    amd: true
+                },
+                files: {
+                    '.tmp/uac/ejs/templates.js': ['src/client/js/uac/ejs/*.ejs']
+                }
+            },
+            sf: {
+                options: {
+                    prettify: true,
+                    processName: process_name,
+                    amd: true
+                },
+                files: {
+                    '.tmp/sf/ejs/templates.js': ['src/client/js/sf/ejs/*.ejs']
+                }
+            },
+            alerts: {
+                options: {
+                    prettify: true,
+                    processName: process_name,
+                    amd: true
+                },
+                files: {
+                    '.tmp/alerts/ejs/templates.js': ['src/client/js/alerts/ejs/*.ejs']
+                }
+            },
+            //these should copy into static
+            'uac-dev': {
+                options: {
+                    prettify: true,
+                    processName: process_name,
+                    amd: true
+                },
+                files: {
+                    'static/client/js/raw/uac/ejs/templates.js': ['src/client/js/uac/ejs/*.ejs']
+                }
+            },
+            'sf-dev': {
+                options: {
+                    prettify: true,
+                    processName: process_name,
+                    amd: true
+                },
+                files: {
+                    'static/client/js/raw/sf/ejs/templates.js': ['src/client/js/sf/ejs/*.ejs']
+                }
+            },
+            'alerts-dev': {
+                options: {
+                    prettify: true,
+                    processName: process_name,
+                    amd: true
+                },
+                files: {
+                    'static/client/js/raw/alerts/ejs/templates.js': ['src/client/js/alerts/ejs/*.ejs']
+                }
+            }
+        },
+        watch: {
+            /**
+             * Watch the underscore templates and re-compile the templates to a JST file.
+             */
+            templates: {
+                files: ['src/client/js/uac/ejs/*.ejs', 'src/client/js/alerts/ejs/*.ejs', 'src/client/js/sf/ejs/*.ejs'],
+                tasks: ['jst-dev']//should copy directly into static
+            },
+            'grunt': {
+                files: ['Gruntfile.js'],
+                tasks: ['build']
+            },
+            'node-coffee': {
+                files: ['uac-server.coffee', 'src/server/js/**/*.coffee'],
+                tasks: ['coffee:node', 'coffee:uac-server']
+            },
+            'web-coffee': {
+                files: ['src/client/js/**/*.coffee'],
+                tasks: ['coffee:web-dev']
+            }
+        },
         clean: {
             preBuild: ['.tmp', 'static'],
             postBuild: ['.tmp']
@@ -526,7 +573,7 @@ module.exports = function (grunt) {
             cssResources: {
                 files: [
                     {expand: true, cwd: '.tmp/lib/font-awesome/fonts', src: ['**/*'], dest: 'static/client/fonts', filter: 'isFile'},
-                    {expand: true, cwd: '.tmp/lib/select2', src: ['select2.png'], dest: 'static/client/css', filter: 'isFile'},
+                    {expand: true, cwd: '.tmp/lib/select2', src: ['*.png'], dest: 'static/client/css', filter: 'isFile'},
                     {expand: true, cwd: '.tmp/lib/bootstrap/css', src: ['bootstrap.min.css'], dest: 'static/client/css/bootstrap', filter: 'isFile'},
                     {expand: true, cwd: '.tmp/lib/bootswatch', src: ['**/*.css'], dest: 'static/client/css/bootswatch', filter: 'isFile'},
                     {expand: true, cwd: 'src/client/css/img', src: ['**/*'], dest: 'static/client/css/img', filter: 'isFile'},
@@ -646,9 +693,9 @@ module.exports = function (grunt) {
         'clean:preBuild',
 
         //build client
-        'jst:uac-dev',
-        'jst:alerts-dev',
-        'jst:sf-dev',
+        'jst:uac',
+        'jst:alerts',
+        'jst:sf',
         'coffee',
         'copy:preBuild',
         'bower:install',
