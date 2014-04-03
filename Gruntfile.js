@@ -63,7 +63,7 @@ module.exports = function (grunt) {
         bower: {
             install: {
                 options: {
-                    targetDir: '.tmp/lib',
+                    targetDir: 'static/client/js/raw/lib',
                     layout: 'byComponent',
                     install: true,
                     verbose: true,
@@ -103,7 +103,7 @@ module.exports = function (grunt) {
                 expand: true,
                 cwd: 'src/client/js',
                 src: ['**/*.coffee'],
-                dest: '.tmp',
+                dest: 'static/client/js/raw',
                 ext: '.js'
             }
         },
@@ -457,7 +457,7 @@ module.exports = function (grunt) {
                 expand: true,
                 cwd: 'src/client/js',
                 src: ['**/*.coffee'],
-                dest: '.tmp',
+                dest: 'static/client/js/raw',
                 ext: '.js'
             },
             'web-dev': {
@@ -476,7 +476,6 @@ module.exports = function (grunt) {
          */
         //TODO: the output file dir should be a var
         jst: {
-            //should copy into .tmp
             uac: {
                 options: {
                     prettify: true,
@@ -484,7 +483,7 @@ module.exports = function (grunt) {
                     amd: true
                 },
                 files: {
-                    '.tmp/uac/ejs/templates.js': ['src/client/js/uac/ejs/*.ejs']
+                    'static/client/js/raw/uac/ejs/templates.js': ['src/client/js/uac/ejs/*.ejs']
                 }
             },
             sf: {
@@ -494,7 +493,7 @@ module.exports = function (grunt) {
                     amd: true
                 },
                 files: {
-                    '.tmp/sf/ejs/templates.js': ['src/client/js/sf/ejs/*.ejs']
+                    'static/client/js/raw/sf/ejs/templates.js': ['src/client/js/sf/ejs/*.ejs']
                 }
             },
             alerts: {
@@ -504,7 +503,7 @@ module.exports = function (grunt) {
                     amd: true
                 },
                 files: {
-                    '.tmp/alerts/ejs/templates.js': ['src/client/js/alerts/ejs/*.ejs']
+                    'static/client/js/raw/alerts/ejs/templates.js': ['src/client/js/alerts/ejs/*.ejs']
                 }
             },
             //these should copy into static
@@ -565,21 +564,21 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            preBuild: ['.tmp', 'static'],
-            postBuild: ['.tmp']
+            preBuild: ['static'],
+            postBuild: ["static/client/js/.tmp"]
         },
         copy: {
             preBuild: {
                 files: [
-                    {expand: true, cwd: 'src/client/js', src: ['**/*.js'], dest: '.tmp', filter: 'isFile'}
+                    {expand: true, cwd: 'src/client/js', src: ['**/*.js'], dest: 'static/client/js/raw', filter: 'isFile'}
                 ]
             },
             cssResources: {
                 files: [
-                    {expand: true, cwd: '.tmp/lib/font-awesome/fonts', src: ['**/*'], dest: 'static/client/fonts', filter: 'isFile'},
-                    {expand: true, cwd: '.tmp/lib/select2', src: ['*.png'], dest: 'static/client/css', filter: 'isFile'},
-                    {expand: true, cwd: '.tmp/lib/bootstrap/css', src: ['bootstrap.min.css'], dest: 'static/client/css/bootstrap', filter: 'isFile'},
-                    {expand: true, cwd: '.tmp/lib/bootswatch', src: ['**/*.css'], dest: 'static/client/css/bootswatch', filter: 'isFile'},
+                    {expand: true, cwd: 'static/client/js/raw/lib/font-awesome/fonts', src: ['**/*'], dest: 'static/client/fonts', filter: 'isFile'},
+                    {expand: true, cwd: 'static/client/js/raw/lib/select2', src: ['*.png'], dest: 'static/client/css', filter: 'isFile'},
+                    {expand: true, cwd: 'static/client/js/raw/lib/bootstrap/css', src: ['bootstrap.min.css'], dest: 'static/client/css/bootstrap', filter: 'isFile'},
+                    {expand: true, cwd: 'static/client/js/raw/lib/bootswatch', src: ['**/*.css'], dest: 'static/client/css/bootswatch', filter: 'isFile'},
                     {expand: true, cwd: 'src/client/css/img', src: ['**/*'], dest: 'static/client/css/img', filter: 'isFile'},
                     {expand: true, cwd: 'src/client/css/img', src: ['sort_*.png'], dest: 'static/client/img', filter: 'isFile'}
 
@@ -596,10 +595,10 @@ module.exports = function (grunt) {
                 files: {
                     "static/client/css/main.css": [
                         'src/client/css/base.css',
-                        '.tmp/lib/font-awesome/css/font-awesome.min.css',
-                        '.tmp/lib/select2/select2.css',
+                        'static/client/js/raw/lib/font-awesome/css/font-awesome.min.css',
+                        'static/client/js/raw/lib/select2/select2.css',
                         'src/client/css/typeahead.js-bootstrap.css',
-                        '.tmp/lib/datatables/jquery.dataTables.css',
+                        'static/client/js/raw/lib/datatables/jquery.dataTables.css',
                         'src/client/css/datatables.css',
                         'src/client/css/jquery.iocViewer.css'
                     ]
@@ -610,9 +609,10 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     optimize: 'none',
-                    appDir: ".tmp",
+                    appDir: "static/client/js/raw",
                     baseUrl: ".",
                     keepBuildDir: true,
+                    allowSourceOverwrites: true,
                     paths: {
                         async: 'lib/async/async',
                         backbone: 'lib/backbone/backbone',
@@ -665,7 +665,7 @@ module.exports = function (grunt) {
                             exports: '_'
                         }
                     },
-                    dir: "static/client/js/raw",
+                    dir: "static/client/js/.tmp",
                     modules: [
                         {
                             name: "../modules/main",
