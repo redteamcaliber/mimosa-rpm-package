@@ -1,3 +1,4 @@
+
 define (require) ->
     vent = require 'uac/common/vent'
     TableView = require 'uac/views/TableView'
@@ -40,9 +41,9 @@ define (require) ->
 
             options.aoColumns = [
                 {sTitle: 'Pri', mData: 'highest_priority', sWidth: '5%', sClass: 'priority', sType: 'int-html'}
-                {sTitle: 'Name, Type, Device(s)', mData: 'name'}
-                {sTitle: 'New', mData: 'tags.notreviewed', sClass: 'center', sWidth: '10%', sType: 'int-html'}
-                {sTitle: 'In Prog', mData: 'tags.notreviewed', sClass: 'center', sWidth: '10%', sType: 'int-html'}
+                {sTitle: 'Name, Type(s), Device(s)', mData: 'name'}
+                {sTitle: 'New', mData: 'tags.notreviewed', sClass: 'center', sWidth: '12%', sType: 'int-html'}
+                {sTitle: 'In Prog', mData: 'tags.notreviewed', sClass: 'center', sWidth: '12%', sType: 'int-html'}
                 {sTitle: 'First Seen', mData: 'first_seen'}
                 {sTitle: 'Last Seen', mData: 'last_seen'}
             ]

@@ -73,8 +73,9 @@ define (require) ->
             $(@list_region.el).fadeIn('slow').show()
 
         show_alerts_details_list: ->
-            alert 'sdfsd'
             $(@details_list_region.el).fadeIn('slow').show()
+            $('html,body').animate
+                scrollTop: $(@details_list_region.el).offset().top
 
         #
         # Bring the alerts details into focus.
@@ -126,18 +127,18 @@ define (require) ->
                 @layout.summary_list_region.show @summary_list_view
 
             # Fetch the summary list data.
-            data = {}
-            data.tag = params.tags if params.tags
-            data.client_uuid = params.clients if params.clients and params.clients.length > 0
-            data.alert_type = params.types if params.types and params.types.length > 0
-            data.is_endpoint_match = params.is_endpoint_match is true
-            data.begin = moment(params.from).unix() if params.from
-            data.end = moment(params.to).unix() if params.to
+            @data = {}
+            @data.tag = params.tags if params.tags
+            @data.client_uuid = params.clients if params.clients and params.clients.length > 0
+            @data.alert_type = params.types if params.types and params.types.length > 0
+            @data.is_endpoint_match = params.is_endpoint_match is true
+            @data.begin = moment(params.from).unix() if params.from
+            @data.end = moment(params.to).unix() if params.to
 
             @summary_list_view.fetch
-                data: data
+                data: @data
 
-        vent.on 'alerts:summary_selected', (data) =>
+        vent.on 'alerts:summary_selected', (row_data) =>
             unless @details_list_view
                 # Create the details list view.
                 @alerts = new AlertCollection()
@@ -146,12 +147,12 @@ define (require) ->
                     collection: @alerts
                 @layout.details_list_region.show @details_list_view
 
-            if 'endpoint-match' in data.alert_types
-                data =
-                    iocnamehash: data.namehash
+            if 'endpoint-match' in row_data.alert_types
+                data = _.clone @data
+                data.iocnamehash = row_data.namehash
             else
-                data =
-                    signature_uuid: data.uuid
+                data = _.clone @data
+                data.signature_uuid = row_data.uuid
 
             @details_list_view.fetch {
                 data: data
