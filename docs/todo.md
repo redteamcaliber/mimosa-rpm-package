@@ -18,6 +18,7 @@ UAC ToDo
 - Look into using TableView.render() rather than TableView.fetch() because it's non-standard.
     -Re-rendering of a table is currently broken in the IOCSummaryView.
     - Convert the table view to and ItemView, need to override the default close function.
+    - When render is called the first time the table displays the message that no records are found.
 - MD5 Stuff
     - Create a linkable MD5 end point.
     - Create a MD5 api endpoint.
@@ -28,10 +29,13 @@ UAC ToDo
     - Create an API to retrieve a list of host data.
     - Cache host data in Redis and have the lookup function check the cache before calling Seasick.
     - Look into the cache settings for Redis.  No need to store to disk.
+- When there is a search error the old table is brought into focus with stale data.
 - Wire up the New and In Progress count buttons on the summary list view.
 - Look into the default sort order of the details list.
 - Convert to using layouts and ItemView's in the AlertsSearchView.
 - Display the tag text descriptions in the summary and details table.
+- Summary items from SF include items with only suppressed hits.
+- Client search parameters are not working in the back end API's.
 
 ### FE Alerts Details View
 -

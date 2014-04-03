@@ -311,11 +311,10 @@ define (require) ->
         url = undefined
         if not theme || theme == 'default'
             # Use the default.
-            url = "/static/lib/bootstrap/css/bootstrap.min.css"
+            url = "static/client/css/bootstrap/bootstrap.min.css"
         else
-
             # Generate the theme url.
-            url = "/static/lib/bootswatch/#{theme}/bootstrap.min.css"
+            url = "/static/client/css/bootswatch/#{theme}/bootstrap.min.css"
 
         # Reload the CSS.
         $("#bootstrap").attr "href", url

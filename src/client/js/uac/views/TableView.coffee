@@ -450,7 +450,6 @@ define (require) ->
 
             return
 
-
         #
         # Render the table.  If you are obtaining data from a collection then don't invoke this method, call fetch()
         # instead.  If obtaining data via server side ajax then this method can be called with server side parameters.
@@ -829,22 +828,18 @@ define (require) ->
             fnRowCallback: (row, data, display_index, display_index_full) ->
                 parent.trigger 'row:callback', row, data, display_index, display_index_full
 
-                click_handler = (ev) ->
+                # Remove any existing click events for the row.
+                $(row).unbind 'click'
 
+                # Bind a click event to the row.
+                $(row).bind "click", (ev) ->
                     # Select the row.
                     $(row).addClass("active").siblings().removeClass "active"
 
                     # Trigger a click event.
                     parent.trigger "click", parent.get_data(ev.currentTarget), ev
                     return
-
-
-                # Remove any existing click events for the row.
-                $(row).unbind "click", click_handler
-
-                # Bind a click event to the row.
-                $(row).bind "click", click_handler
-                row
+                return
 
             fnCreatedRow: (nRow, data, iDataIndex) ->
                 parent.trigger "row:created", nRow, data, iDataIndex

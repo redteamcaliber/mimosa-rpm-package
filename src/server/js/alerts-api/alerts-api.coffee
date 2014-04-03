@@ -150,7 +150,14 @@ get_alerts = (params, attributes, callback) ->
     else if params.iocnamehash
         # Retrieve all StrikeFinder alerts.
         params.limit = 0
-        sf_api.get_hits params, attributes, (err, result) ->
+        sf_params = {}
+        if params.tag then sf_params.tagname = params.tag
+        if params.client_uuid then sf_params.clients = params.clients
+        if params.iocnamehash then sf_params.iocnamehash = params.iocnamehash
+        if params.begin then sf_params.begin = params.begin
+        if params.end then sf_params.end = params.end
+
+        sf_api.get_hits sf_params, attributes, (err, result) ->
             alerts = []
             for hit in result.results
                 alerts.push
@@ -159,6 +166,8 @@ get_alerts = (params, attributes, callback) ->
                             name: hit.client_name
                         type: 'HX'
                     summary: hit.summary1
+                    src: null
+                    dst: null
                     tag: hit.tagname
                     occurred: hit.created
                     priority: 3

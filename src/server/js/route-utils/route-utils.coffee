@@ -49,15 +49,15 @@ THEMES =
     cosmo13:
         id: 'cosmo13'
         name: 'Cosmo13'
-    cupid:
-        id: 'cupid'
-        name: 'Cupid'
     cyborg:
         id: 'cyborg'
         name: 'Cyborg'
     cyborg12:
         id: 'cyborg12'
         name: 'Cyborg12'
+    darkly:
+        id: 'darkly'
+        name: 'Darkly'
     flatly:
         id: 'flatly'
         name: 'Flatly'
