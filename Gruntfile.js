@@ -519,7 +519,7 @@ module.exports = function (grunt) {
                 tasks: ['copy:unconvertedNode']
             },
             'web-coffee': {
-                files: ['src/client/js/**/*.coffee'],
+                files: ['src/client/js/**/*.coffee', 'src/client/js/**/*.js'],
                 tasks: ['copy:preBuild','coffee:web']
             }
         },
