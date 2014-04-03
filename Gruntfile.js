@@ -76,37 +76,7 @@ module.exports = function (grunt) {
             }
         },
 
-        coffee: {
-            'uac-server': {
-                options: {
-                    bare: true,
-                    sourceMap: true
-                },
-                files: {
-                    'uac-server.js': 'uac-server.coffee'
-                }
-            },
-            node: {
-                options: {
-                    sourceMap: true
-                },
-                expand: true,
-                cwd: 'src/server/js',
-                src: ['**/*.coffee'],
-                dest: 'static/server/js',
-                ext: '.js'
-            },
-            web: {
-                options: {
-                    sourceMap: true
-                },
-                expand: true,
-                cwd: 'src/client/js',
-                src: ['**/*.coffee'],
-                dest: 'static/client/js/raw',
-                ext: '.js'
-            }
-        },
+
 
 
 
@@ -455,17 +425,7 @@ module.exports = function (grunt) {
                     sourceMap: true
                 },
                 expand: true,
-                cwd: 'src/client/js',
-                src: ['**/*.coffee'],
-                dest: 'static/client/js/raw',
-                ext: '.js'
-            },
-            'web-dev': {
-                options: {
-                    sourceMap: true
-                },
-                expand: true,
-                cwd: 'src/client/js',
+                cwd: 'static/client/js/raw',
                 src: ['**/*.coffee'],
                 dest: 'static/client/js/raw',
                 ext: '.js'
@@ -560,7 +520,7 @@ module.exports = function (grunt) {
             },
             'web-coffee': {
                 files: ['src/client/js/**/*.coffee'],
-                tasks: ['coffee:web-dev']
+                tasks: ['copy:preBuild','coffee:web']
             }
         },
         clean: {
@@ -570,7 +530,7 @@ module.exports = function (grunt) {
         copy: {
             preBuild: {
                 files: [
-                    {expand: true, cwd: 'src/client/js', src: ['**/*.js'], dest: 'static/client/js/raw', filter: 'isFile'}
+                    {expand: true, cwd: 'src/client/js', src: ['**/*.js','**/*.coffee'], dest: 'static/client/js/raw', filter: 'isFile'}
                 ]
             },
             cssResources: {
@@ -700,8 +660,8 @@ module.exports = function (grunt) {
         'jst:uac',
         'jst:alerts',
         'jst:sf',
-        'coffee',
         'copy:preBuild',
+        'coffee',
         'bower:install',
         'requirejs:dist',
         'cssmin:combine',
