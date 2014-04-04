@@ -85,6 +85,7 @@ get_ioc_terms = function (type, callback) {
  * @param identity - the identity.
  * @param acquisition_uuid - the acquisition.
  * @param user_uuid - the user.
+ * @param uid - the user uid.
  * @param callback - function(err, model).
  */
 function create_identity_acquisition(identity, acquisition_uuid, user_uuid, uid, callback) {
@@ -142,7 +143,7 @@ function get_vt_details(md5, callback) {
     var auth_key = settings.get('uac:mcube_api_key');
     var timeout  = settings.get('uac:mcube_api_timeout');
 
-    var url = api_utils.combine_urls(url_base, _.sprintf('/vtapi/v2/file/report?md5=%s', md5));
+    var url = api_utils.combine_urls(url_base, _.sprintf('/vtapi/v2/file/report?hashes=%s', md5));
     // Request settings.
     var options = {
         url: url,

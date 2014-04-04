@@ -738,10 +738,12 @@ define(function (require) {
 
                 console.log('Initializing suppressions table for exp_key: ' + exp_key);
 
+
                 var suppressions_table = new SuppressionsTableView({
-                    el: view.$el.find(_.sprintf('table#%s.suppressions-table', exp_key)),
+                    el: $(_.sprintf('#suppressions-list-%s', exp_key)),
                     condensed: true
                 });
+
                 view.listenTo(suppressions_table, 'delete', function() {
                     // Trigger a higher level event when a suppression has been deleted.
                     view.trigger('suppression:deleted');
@@ -821,11 +823,16 @@ define(function (require) {
         initialize: function(options) {
             var view = this;
 
+            if (!view.collection) {
+                view.collection = new CommentsCollection();
+            }
+            view.listenTo(view.collection, 'sync', view.render);
+
             // Call the super initialize.
             view.constructor.__super__.initialize.apply(this, arguments);
 
-            options.iDisplayLength = -1;
-            options.aoColumns = [{
+            view.options.iDisplayLength = -1;
+            view.options.aoColumns = [{
                 sTitle: "Created",
                 mData: "created",
                 sWidth: "20%",
@@ -842,16 +849,16 @@ define(function (require) {
                 sWidth: "20%",
                 bSortable: true
             }];
-            options.aaSorting = [
+            view.options.aaSorting = [
                 [0, "desc"]
             ];
-            options.aoColumnDefs = [{
+            view.options.aoColumnDefs = [{
                 mRender: function(data, type, row) {
                     return uac_utils.format_date_string(data);
                 },
                 aTargets: [0]
             }];
-            options.oLanguage = {
+            view.options.oLanguage = {
                 sEmptyTable: 'No comments have been entered'
             };
 
@@ -859,13 +866,8 @@ define(function (require) {
                 view.escape_cell(row, 1);
             });
 
-            if (!view.collection) {
-                view.collection = new CommentsCollection();
-            }
-            view.listenTo(view.collection, 'sync', view.render);
-
-            options.iDisplayLength = 10;
-            options.sDom = 'lftip';
+            view.options.iDisplayLength = 10;
+            view.options.sDom = 'lftip';
         },
         /**
          * Load the comments based on the row item.
@@ -904,9 +906,8 @@ define(function (require) {
                 el: view.el
             });
 
-            view.comments_table = new CommentsTableView({
-                el: view.$("#comments-table")
-            });
+            view.comments_table = new CommentsTableView();
+            view.$('#comments-table').append(view.comments_table.render().el);
 
             view.listenTo(view.comments_table, 'load', function() {
                 var comments_count = view.comments_table.get_total_rows();

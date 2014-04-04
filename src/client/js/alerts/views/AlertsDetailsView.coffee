@@ -1,6 +1,13 @@
 define (require) ->
 
-    class AlertsDetailsView extends ItemView
+    Marionette = require 'marionette'
+
+    templates = require 'alerts/ejs/templates'
+
+
+    class AlertsDetailsView extends Marionette.ItemView
+        template: templates['details-layout.ejs']
+
         initialize: (options) ->
             return
 

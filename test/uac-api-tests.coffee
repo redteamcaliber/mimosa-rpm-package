@@ -58,7 +58,7 @@ describe 'uac-api-tests', ->
         uid = 'Anthony.Milano@Mandiant.com'
 
         it 'should create an identity acquisition record', (done) ->
-            api.create_idenity_acquisition(
+            api.create_identity_acquisition(
                 'TestIdentity',
                 acquisition_uuid,
                 user_uuid,
@@ -174,22 +174,6 @@ describe 'uac-api-tests', ->
 
                 done()
             )
-
-# This test needs to be against the route, not against the API.
-#        it 'should return an empty result when there is no m-cube configuration', (done) ->
-#            # Remove m-cube configuration.
-#            settings.set 'uac:mcube_api_url', undefined
-#            should.equal undefined, settings.get 'uac:mcube_api_url'
-#
-#            api.get_md5_details(DETECTED_MD5, (err, result) ->
-#                should.not.exist(err)
-#                should.exist(result)
-#
-#                should.not.exist(result.vt)
-#                should.not.exist(result.vt_err)
-#
-#                done()
-#            )
 
         it 'does-what?', (done) ->
             api.get_md5_details '4718d26a8072a7db42c75f588b0ca38f', (err, result) ->

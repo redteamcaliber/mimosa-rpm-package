@@ -20,6 +20,9 @@ define (require) ->
     AlertCollection = require 'alerts/models/AlertCollection'
     AlertsTableView = require 'alerts/views/AlertsTableView'
 
+    AlertsDetailsView = require 'alerts/views/AlertsDetailsView'
+
+
 
     #
     # Layout for displaying the main alert template.
@@ -45,6 +48,9 @@ define (require) ->
 
             vent.on 'alerts:summary_selected', =>
                 @show_alerts_details_list()
+
+            vent.on 'alerts:alert_selected', =>
+                @show_alerts_details()
 
             vent.on 'breadcrumb:alerts_filters', =>
                 @show_alerts_filters()
@@ -135,7 +141,7 @@ define (require) ->
             @data.begin = moment(params.from).unix() if params.from
             @data.end = moment(params.to).unix() if params.to
 
-            @summary_list_view.fetch
+            @summaries.fetch
                 data: @data
 
         vent.on 'alerts:summary_selected', (row_data) =>
@@ -157,6 +163,11 @@ define (require) ->
             @details_list_view.fetch {
                 data: data
             }
+
+        vent.on 'alerts:alert_selected', (row_data) =>
+            unless @details_view
+                @details_view = new AlertsDetailsView()
+                @layout.details_content_region.show @details_view
 
 
     # Export the alerts application.

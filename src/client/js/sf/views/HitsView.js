@@ -14,22 +14,22 @@ define(function (require) {
         initialize: function(options) {
             var view = this;
 
-            // Call the super initialize.
+                // Call the super initialize.
             view.constructor.__super__.initialize.apply(this, arguments);
 
             view.hits_collapsable = new CollapsableContentView({
                 el: view.el
             });
 
-            options.sAjaxSource = '/sf/api/hits';
-            options.sAjaxDataProp = 'results';
-            options.bServerSide = true;
+            view.options.sAjaxSource = '/sf/api/hits';
+            view.options.sAjaxDataProp = 'results';
+            view.options.bServerSide = true;
 
-            options.oLanguage = {
+            view.options.oLanguage = {
                 sEmptyTable: 'No hits were found'
             };
 
-            options.aoColumns = [{
+            view.options.aoColumns = [{
                 sTitle: 'uuid',
                 mData: 'uuid',
                 bVisible: false,
@@ -71,11 +71,11 @@ define(function (require) {
                 sClass: 'nowrap'
             }];
 
-            options.aaSorting = [
+            view.options.aaSorting = [
                 [1, 'desc']
             ];
 
-            options.aoColumnDefs = [
+            view.options.aoColumnDefs = [
                 view.date_formatter(1)
             ];
 
@@ -117,8 +117,8 @@ define(function (require) {
 
             //options.sDom = 'lTtip';
             // Add the tableheader div to the table.
-            options.sDom = '<"uac-tableheader"l>tip';
-            options.iDisplayLength = 10;
+            view.options.sDom = '<"uac-tableheader"l>tip';
+            view.options.iDisplayLength = 10;
         }
     });
 
@@ -132,9 +132,8 @@ define(function (require) {
             view.params = {};
 
             // Hits.
-            view.hits_table_view = new HitsTableView({
-                el: '#hits-table'
-            });
+            view.hits_table_view = new HitsTableView();
+            view.$('#hits-table').append(view.hits_table_view.render().el);
 
             // Initialize the hits details view.
             view.hits_details_view = new HitsDetailsView({
