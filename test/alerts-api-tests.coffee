@@ -162,3 +162,14 @@ describe 'alerts-api-tests', ->
                     done()
                 catch e
                     done e
+
+    describe '#get_alert()', ->
+        it 'should return an alert for the specified uuid', (done) ->
+            api.get_alert 'c4662926-2cae-45e1-b408-3f22d174724e', {}, (err, alert) ->
+                try
+                    should.not.exist err
+                    should.exist alert
+                    done()
+
+                catch e
+                    done e

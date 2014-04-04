@@ -170,6 +170,7 @@ define(function (require) {
             if (!this.collection) {
                 this.collection = new IOCDetailsCollection();
             }
+
             this.listenTo(this.collection, 'sync', this.render);
         },
         render: function () {
@@ -205,9 +206,10 @@ define(function (require) {
             _.each(ioc_uuids, function (ioc_uuid, index) {
 
                 var table = new IOCDetailsTableView({
-                    el: view.$("#uuid-" + index + "-table"),
                     aaData: ioc_uuid.expressions
                 });
+
+                view.$("#uuid-" + index + "-table").append(table.render().el);
 
                 table.listenTo(table, 'click', function (data) {
                     var exp_key = data['exp_key'];
@@ -228,7 +230,9 @@ define(function (require) {
                         }
                     });
                 });
-                table.render();
+
+
+                table.fetch();
 
                 view.table_views.push(table);
             });
@@ -326,8 +330,7 @@ define(function (require) {
                 id: 'ioc-summary-table',
                 collection: view.summaries
             });
-            view.ioc_summaries_view.$el.addClass('table').addClass('table-bordered');
-            view.$('#ioc-summary').append(view.ioc_summaries_view.el);
+            view.$('#ioc-summary').append(view.ioc_summaries_view.render().el);
 
             view.listenTo(view.ioc_summaries_view, 'click', function (data) {
                 // Handle the click of a row on the IOC summary view.  Load the related IOC details.

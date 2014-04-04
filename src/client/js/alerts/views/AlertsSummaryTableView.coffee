@@ -37,8 +37,6 @@ define (require) ->
     #
     class AlertsSummaryTableView extends TableView
         initialize: (options) ->
-            super options
-
             options.aoColumns = [
                 {sTitle: 'Pri', mData: 'highest_priority', sWidth: '5%', sClass: 'priority', sType: 'int-html'}
                 {sTitle: 'Name, Type(s), Device(s)', mData: 'name'}
@@ -72,9 +70,10 @@ define (require) ->
             options.iDisplayLength = 25;
             options.sDom = 'lftip'
 
-            @$('table').addClass('table').addClass('table-bordered').addClass('table-condensed').addClass('table-hover')
-
             @listenTo(@, 'click', @on_click)
+
+            super options
+
             return
 
         #

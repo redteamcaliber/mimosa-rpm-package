@@ -1,18 +1,7 @@
 UAC ToDo
 ========
 
-### Completed
-- Alerts summary list vi
-- Added in the StrikeFinder API data with the summary and details list.
-- Completed the details list view.
-- Continued the refactoring effort of UAC with the help of Drew.
-    - Now have a Vagrant script to generate a UAC VM.
-    - Have puppet scripts to configure the VM with the UAC software for development.
-    - Still need to tweak the puppet scripts for production and test.
-- UAC release to update to the production mcube service.  Small API change.
-
 ### StrikeFinder
-- The MD5 popup no longer works.
 - General testing.
 - Need to merge in the MD5 changes from master.
 - Look into using TableView.render() rather than TableView.fetch() because it's non-standard.
@@ -24,13 +13,6 @@ UAC ToDo
     - Create a MD5 api endpoint.
 
 ### Alerts Lists Views
-- Seasick host data.
-    - Mixin the seasick host data with the alerts/hits calls.
-    - Create an API to retrieve a list of host data.
-    - Cache host data in Redis and have the lookup function check the cache before calling Seasick.
-    - Look into the cache settings for Redis.  No need to store to disk.
-- When there is a search error the old table is brought into focus with stale data.
-- Wire up the New and In Progress count buttons on the summary list view.
 - Look into the default sort order of the details list.
 - Convert to using layouts and ItemView's in the AlertsSearchView.
 - Display the tag text descriptions in the summary and details table.

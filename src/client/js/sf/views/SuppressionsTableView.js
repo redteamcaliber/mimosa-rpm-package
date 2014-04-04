@@ -105,14 +105,12 @@ define(function(require) {
         initialize: function (options) {
             var view = this;
 
-            // Call the super initialize.
-            view.constructor.__super__.initialize.apply(this, arguments);
-
             if (!view.collection) {
                 view.collection = new SuppressionListItemCollection();
             }
-            view.listenTo(view.collection, 'sync', view.render);
-            view.listenTo(view.collection, 'reset', view.render);
+
+            // Call the super initialize.
+            view.constructor.__super__.initialize.apply(this, arguments);
 
             var condensed = options.condensed;
 

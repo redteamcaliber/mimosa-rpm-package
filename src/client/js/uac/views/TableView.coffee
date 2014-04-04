@@ -3,6 +3,7 @@
 #
 define (require) ->
     $ = require 'jquery'
+    Marionette = require 'marionette'
     ChildViewContainer = require 'backbone.babysitter'
 
     View = require 'uac/views/View'
@@ -46,28 +47,24 @@ define (require) ->
         # Initialize the table the defaults.
         #
         initialize: (options) ->
+            super options
+
             # Create a container for managing child views.  The container will be closed and emptied on destroy.
             @container = new ChildViewContainer()
 
-            unless @options
-                # Make sure the instance has an options bound to it.  Prior to Backbone 1.0.x were guarenteed to have an
-                # options instance where as later versions removed this
+            if options
                 @options = options
+            else
+                @options = {}
 
 #            unless @options.id
 #                # Ensure there is an id attribute.
 #                @options.id = utils.random_string(10)
 
-            if @$el.is 'table'
-                @table_el = @$el
-            else
-                @table_el = $ '<table>'
-                @$el.append @table_el
-
             if @collection
                 # If a collectoin is supplied then redraw the view any time it refreshes.
-                @listenTo(@collection, "sync", @render)
-                @listenTo(@collection, "reset", @render)
+                @listenTo(@collection, "sync", @render_table)
+                @listenTo(@collection, "reset", @render_table)
 
                 # Listen to draw events to account for the fact that datatables does not fire page change events.  This code
                 # makes up for that shortcoming by manually determining when the user has used the previous next component to
@@ -122,7 +119,6 @@ define (require) ->
                         @_value_pair = undefined
 
                 return # End @listenTo @, "draw", =>
-
 
         #
         # Visually highlight the row.
@@ -326,7 +322,7 @@ define (require) ->
         # Retrieve the original HTML DOM table element.
         #
         get_dom_table: ->
-            @$el.get 0
+            @table_el.get 0
 
         #
         # Return the dataTable.
@@ -338,7 +334,7 @@ define (require) ->
         # Retrieve the table nodes or the node corresponding to index.
         #
         get_nodes: (index) ->
-            @$el.fnGetNodes index
+            @table_el.fnGetNodes index
 
         #
         # Update a row and column with the specified data.
@@ -363,7 +359,7 @@ define (require) ->
         # Return the posotion of the node.
         #
         get_position: (node) ->
-            @$el.fnGetPosition node
+            @table_el.fnGetPosition node
 
         #
         # Retrieve the index of the node relative to the entire result set.
@@ -378,7 +374,7 @@ define (require) ->
         # Retrieve the dataTable settings.
         #
         get_settings: ->
-            @$el.fnSettings()
+            @table_el.fnSettings()
 
         #
         # Retrieve the current search term.
@@ -407,7 +403,7 @@ define (require) ->
         reload: (row_index) ->
             @clear_cache()
             @_row_index = row_index  if row_index isnt undefined
-            @$el.fnDraw false
+            @table_el.fnDraw false
             return
 
         #
@@ -416,7 +412,7 @@ define (require) ->
         refresh: (value_pair) ->
             @clear_cache()
             @_value_pair = value_pair  if value_pair
-            @$el.fnDraw false
+            @table_el.fnDraw false
             return
 
         #
@@ -427,7 +423,7 @@ define (require) ->
             # Remove any listeners.
             @undelegateEvents()
 
-            if $.fn.DataTable.fnIsDataTable(@table_el.get(0))
+            if @table_el and $.fn.DataTable.fnIsDataTable(@table_el.get(0))
                 console.debug "Destroying DataTable with id: #{@table_el.attr 'id'}'"
 
                 # Close any child views.
@@ -441,14 +437,16 @@ define (require) ->
                         console.warn "Warning: Child view without close or remove function defined: #{child.id}"
 
                 # Destroy the old table.
-                @table_el.fnDestroy false
-                @table_el.empty()
+                @table_el.fnDestroy true
 
                 @trigger "destroy", @table_el
-            else
-                console.debug "Element with id: #{@table_el.attr 'id' } is not of type DataTable, skipping..."
 
             return
+
+        render: (params) ->
+            console.debug "TableView.render()"
+
+            return @
 
         #
         # Render the table.  If you are obtaining data from a collection then don't invoke this method, call fetch()
@@ -458,20 +456,21 @@ define (require) ->
         #
         #     table.render({server_params: {suppression_id: suppression_id}});
         #
-        render: (params) ->
-            #console.trace()
-
+        render_table: (params) ->
+            console.debug "TableView.render_table(#{params})"
             view = @
-            unless view.el
-                # Error
-                alert "Error: Undefined \"el\" in TableView"
-                return
 
             # Clear the cache before re-destroying the table.
             view.clear_cache()
 
             # Destroy the existing table if there is one.
             view.destroy()
+
+            # Create a table element to attach to.
+            @table_el = $ '<table>'
+            @$el.append @table_el
+            @table_el.addClass('table').addClass('table-hover').addClass('table-condensed').addClass('table-bordered').addClass('table-striped')
+
 
             # Keep track of the expanded rows.
             view._expanded_rows = []
@@ -506,14 +505,13 @@ define (require) ->
             view.delegateEvents "click tr i.expand": "on_expand"
 
             # Assign the bootstrap class to the length select.
-            if @$el.is 'table'
-                length_selects = $(".dataTables_wrapper select")
-            else
-                length_selects = @$ '.dataTables_wrapper select'
+            length_selects = @$('.dataTables_wrapper select')
+            search_labels = @$('.dataTables_wrapper label')
             for length_select in length_selects
                 unless $(length_select).hasClass("form-control")
-                    $(length_select).addClass "form-control"
-                    $(length_select).css "min-width", "85px"
+                    $(length_select).addClass('form-control')
+            for label in search_labels
+                $(label).css('margin-top', '5px').css('margin-right', '5px')
 
             view
 
@@ -527,7 +525,10 @@ define (require) ->
         # Fetch the collection or retrieve the server side table data.
         #
         fetch: (params) ->
-            view = this
+            view = @
+
+            console.debug "TableView.fetch(#{params})"
+
             if params
                 view.params = params
             else
@@ -537,17 +538,18 @@ define (require) ->
                 if params
                     # User has supplied options to the fetch call.
                     if not params.success and not params.error
+
                         # Has not overidden the success and error callbacks, block for them.
-                        params.success = ->
-                            view.unblock view.$el
+                        params.success = =>
+                            utils.unblock @$el
                             return
 
-                        params.error = (collection, response) ->
-                            view.unblock view.$el
+                        params.error = (collection, response) =>
+                            utils.unblock @$el
                             utils.display_response_error('Exception while retrieving table data', response)
                             return
 
-                        view.block view.$el
+                        utils.block_element @$el
                         view.collection.fetch params
                     else
                         # Don't do any blocking.
@@ -555,18 +557,18 @@ define (require) ->
                 else
 
                     # Block the UI before the fetch.
-                    view.block view.$el
+                    utils.block_element @$el
                     view.collection.fetch
                         success: ->
                             # Unblock the ui.
-                            view.unblock view.$el
+                            utils.unblock @$el
                             return
                         error: (collection, response) ->
-                            view.unblock view.$el
+                            utils.unblock @$el
                             utils.display_response_error('Exception while retrieving table data', response)
                             return
             else
-                view.render server_params: params
+                view.render_table server_params: params
 
             return
 
@@ -574,6 +576,7 @@ define (require) ->
         # Clean up and remove the table.
         #
         close: ->
+            alert 'Closing!'
             @destroy()
             @remove()
 
@@ -728,7 +731,7 @@ define (require) ->
                 view.set_key aoData, "iDisplayLength", iRequestLength * iPipe
 
                 # Block the UI before the AJAX call.
-                view.block_element view.$el
+                utils.block_element @$el
 
                 # Callback processing
                 $.getJSON(sSource, aoData,(json) ->
@@ -737,17 +740,16 @@ define (require) ->
                     json[ajax_data_prop].splice view.cache.iDisplayLength, json[ajax_data_prop].length
                     fnCallback json
                     return
-                ).always ->
-
+                ).always =>
                     # Unblock the UI.
-                    view.unblock view.$el
+                    utils.unblock @$el
                     return
 
             else
                 try
 
                 # Block the UI before processing.
-                    view.block_element view.$el
+                    utils.block_element @$el
                     json = jQuery.extend(true, {}, view.cache.lastJson)
                     json.sEcho = sEcho
 
@@ -756,8 +758,8 @@ define (require) ->
                     json[ajax_data_prop].splice iRequestLength, json[ajax_data_prop].length
                     fnCallback json
                 finally
-                # Unblock the UI.
-                    view.unblock view.$el
+                    # Unblock the UI.
+                    utils.unblock @$el
             return
 
         #

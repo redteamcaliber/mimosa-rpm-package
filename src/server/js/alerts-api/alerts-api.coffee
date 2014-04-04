@@ -141,7 +141,6 @@ get_consolidated_signature_summary = (params, attributes, callback) ->
 # Retrieve alerts.
 #
 get_alerts = (params, attributes, callback) ->
-    console.dir params
     if params.signature_uuid
         # Retrieve the CV alerts.
         request.json_get get_cv_url('/alerts/'), params, attributes, (err, response, body) ->
@@ -151,8 +150,8 @@ get_alerts = (params, attributes, callback) ->
         # Retrieve all StrikeFinder alerts.
         params.limit = 0
         sf_params = {}
-        if params.tag then sf_params.tagname = params.tag
-        if params.client_uuid then sf_params.clients = params.clients
+        if params.tag then sf_params.tagname = get_list_param(params.tag).join()
+        if params.client_uuid then sf_params.clients = get_list_param(params.client_uuid).join()
         if params.iocnamehash then sf_params.iocnamehash = params.iocnamehash
         if params.begin then sf_params.begin = params.begin
         if params.end then sf_params.end = params.end
@@ -177,6 +176,13 @@ get_alerts = (params, attributes, callback) ->
     else
         callback "Error: Required parameters not met: #{JSON.stringify(params)}"
     return
+
+#
+# Retrieve an alert.
+#
+get_alert = (uuid, attributes, callback) ->
+    request.json_get get_cv_url("/alert/#{uuid}"), {}, attributes, (err, response, body) ->
+        process_response err, response, body, callback
 
 #
 # Construct a candyvan url from the relative url parameter.
@@ -204,6 +210,16 @@ process_response = (err, response, body, callback) ->
 
 
 #
+# Return the parameter as a list.
+#
+get_list_param = (param) ->
+    if not param
+        []
+    else if Array.isArray param
+        param
+    else
+        [param]
+#
 # Exports
 #
 exports.get_tags = get_tags
@@ -213,3 +229,4 @@ exports.get_times = get_times
 exports.get_signature_summary = get_signature_summary
 exports.get_consolidated_signature_summary = get_consolidated_signature_summary
 exports.get_alerts = get_alerts
+exports.get_alert = get_alert
