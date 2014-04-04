@@ -61,7 +61,7 @@ app.get '/api/md5/:hash',  (req, res) ->
       if err
         next err
       else
-        route_utils.send res, result
+        route_utils.send_rest res, result
 
 
 #
