@@ -643,6 +643,7 @@ module.exports = function (grunt) {
                                 //uac stuff
                                 "sf/views/HostTypeAheadView",
                                 "uac/views/ThemeView",
+                                "uac/main/MD5Main",
 
                                 //addl deps
                                 "bootstrap"

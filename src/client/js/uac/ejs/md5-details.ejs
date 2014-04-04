@@ -1,0 +1,51 @@
+<div class="container" style="width: 100%">
+  <div class="row">
+    <div class="col-sm-8">
+      <h5>
+        <label>MD5:</label> <%= vt.md5 %><br/>
+        <label>SHA1: </label> <%= vt.sha1 %><br/>
+        <label>Updated: </label> <%= vt.updated %><br/>
+        <br/>
+        This signature was detected by <%= vt.detected_count %> of <%= vt.count %> anti-virus vendors.<br/>
+      </h5>
+    </div>
+    <div class="col-lg-4">
+      <div class="pull-right">
+        <a target="_blank"
+           title="View VirusTotal Details"
+           href="https://www.virustotal.com/intelligence/search/?query=<%= vt.md5 %>">
+          <img src="/static/client/css/img/vt.png" alt="VirusTotal Details"></a><br/>
+      </div>
+    </div>
+  </div>
+  <div class="row" style="margin-top: 15px">
+    <div class="col-sm-12">
+      <table class="table table-condensed table-bordered">
+        <tr>
+          <th>Antivirus</th>
+          <th>Result</th>
+          <th>Update</th>
+          <th>Version</th>
+        </tr>
+        <% _.each(vt.detected, function(item) { %>
+        <tr>
+          <td><%= item.antivirus %></td>
+          <td>
+            <% if (item.detected) { %>
+            <span class="text-danger">
+                                                <i class="fa fa-bug"></i> <%= item.result %>
+                                            </span>
+            <% } else { %>
+            <span class="text-success">
+                                                <i class="fa fa-check-circle"></i> File Not Detected
+                                            </span>
+            <% } %>
+          </td>
+          <td><%= item.update %></td>
+          <td><%= item.version %></td>
+        </tr>
+        <% }) %>
+      </table>
+    </div>
+  </div>
+</div>

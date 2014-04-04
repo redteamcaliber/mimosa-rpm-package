@@ -33,6 +33,38 @@ app.get '/logout',  (req, res) ->
     return
 
 #
+# MD5 lookup route.
+#
+app.get '/md5/:hash',  (req, res) ->
+  hash = req.params.hash
+  if not hash
+    # Error, type is required.
+    res.send 400, '"hash" is required.'
+
+  else
+    context = route_utils.default_context req
+    context.hash = hash
+    res.render '/uac/md5.html', context
+
+
+#
+# MD5 API lookup route.
+#
+app.get '/api/md5/:hash',  (req, res) ->
+  hash = req.params.hash
+  if not hash
+    # Error, type is required.
+    res.send 400, '"hash" is required.'
+
+  else
+    uac_api.get_md5_details hash, (err, result)->
+      if err
+        next err
+      else
+        route_utils.send res, result
+
+
+#
 # Retrieve the list of IOC terms by type.
 #
 app.get '/api/iocterms/:type', (req, res, next) ->
