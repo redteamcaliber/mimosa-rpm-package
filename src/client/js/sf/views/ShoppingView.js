@@ -209,7 +209,7 @@ define(function (require) {
                     aaData: ioc_uuid.expressions
                 });
 
-                view.$("#uuid-" + index + "-table").append(table.render().el);
+                view.$("#uuid-" + index + "-table").append(table.el);
 
                 table.listenTo(table, 'click', function (data) {
                     var exp_key = data['exp_key'];
@@ -330,7 +330,7 @@ define(function (require) {
                 id: 'ioc-summary-table',
                 collection: view.summaries
             });
-            view.$('#ioc-summary').append(view.ioc_summaries_view.render().el);
+            view.$('#ioc-summary').append(view.ioc_summaries_view.el);
 
             view.listenTo(view.ioc_summaries_view, 'click', function (data) {
                 // Handle the click of a row on the IOC summary view.  Load the related IOC details.

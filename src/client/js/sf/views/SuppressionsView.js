@@ -97,6 +97,7 @@ define(function(require) {
             try {
                 view.block();
                 view.suppressions.reset(StrikeFinder.suppressions);
+                view.suppressions_table.render();
             }
             finally {
                 view.unblock();

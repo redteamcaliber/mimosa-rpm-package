@@ -1,6 +1,5 @@
 define (require) ->
 
-    Backbone = require 'backbone'
     Marionette = require 'marionette'
     vent = require 'uac/common/vent'
 
@@ -21,13 +20,13 @@ define (require) ->
     AlertsTableView = require 'alerts/views/AlertsTableView'
 
     AlertsDetailsView = require 'alerts/views/AlertsDetailsView'
-
+    AlertFullModel = require 'alerts/models/AlertFullModel'
 
 
     #
     # Layout for displaying the main alert template.
     #
-    class AlertsLayout extends Backbone.Marionette.Layout
+    class AlertsLayout extends Marionette.Layout
         template: templates['alerts-layout.ejs'],
         regions:
             breadcrumbs_region: '#alerts-breadcrumbs'
@@ -56,7 +55,7 @@ define (require) ->
                 @show_alerts_filters()
 
             vent.on 'breadcrumb:alerts_selection', =>
-                @show_alerts_selection()
+                @show_alerts_details_list()
 
             vent.on 'breadcrumb:alerts_details', =>
                 @show_alerts_details()
@@ -79,7 +78,10 @@ define (require) ->
             $(@list_region.el).fadeIn('slow').show()
 
         show_alerts_details_list: ->
-            $(@details_list_region.el).fadeIn('slow').show()
+            $(@filters_region.el).fadeOut(0).hide()
+            $(@details_region.el).fadeOut(0).hide()
+            $(@details_list_region.el).show()
+            $(@list_region.el).fadeIn('slow').show()
             $('html,body').animate
                 scrollTop: $(@details_list_region.el).offset().top
 
@@ -95,7 +97,7 @@ define (require) ->
     #
     # Alerts application instance.
     #
-    AlertsApp = new Backbone.Marionette.Application()
+    AlertsApp = new Marionette.Application()
 
     #
     # The main region.
@@ -130,7 +132,8 @@ define (require) ->
                 @summary_list_view = new AlertsSummaryTableView
                     id: 'alerts-summary-table'
                     collection: @summaries
-                @layout.summary_list_region.show @summary_list_view
+                @.listenTo @summaries, 'sync', ->
+                    @layout.summary_list_region.show @summary_list_view
 
             # Fetch the summary list data.
             @data = {}
@@ -151,7 +154,8 @@ define (require) ->
                 @details_list_view = new AlertsTableView
                     id: 'alerts-details-table'
                     collection: @alerts
-                @layout.details_list_region.show @details_list_view
+                @listenTo @alerts, 'sync', ->
+                    @layout.details_list_region.show @details_list_view
 
             if 'endpoint-match' in row_data.alert_types
                 data = _.clone @data
@@ -165,9 +169,18 @@ define (require) ->
             }
 
         vent.on 'alerts:alert_selected', (row_data) =>
-            unless @details_view
-                @details_view = new AlertsDetailsView()
+            if @details_view
+                @details_view.close()
+            @alert = new AlertFullModel()
+            @alert.uuid = row_data.uuid
+
+            @details_view = new AlertsDetailsView
+                model: @alert
+
+            @listenTo @alert, 'sync', ->
                 @layout.details_content_region.show @details_view
+
+            @alert.fetch()
 
 
     # Export the alerts application.

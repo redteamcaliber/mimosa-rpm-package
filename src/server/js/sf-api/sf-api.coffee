@@ -327,7 +327,6 @@ get_full_host_by_hash = (hash, attributes, callback) ->
                 get_host_by_hash(hash, attributes, callback)
             ,
             (host, callback) ->
-                log.error(JSON.stringify(host))
                 # Mix in the ioc summary counts.
                 if host then process_hosts([host], attributes, callback) else callback(null, [])
         ],

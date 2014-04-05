@@ -17,7 +17,7 @@ define (require) ->
             @render_alerts_filters()
 
             vent.on 'alerts:search', @render_alerts_selection
-            vent.on 'alerts:select_summary', @render_alerts_details
+            vent.on 'alerts:alert_selected', @render_alerts_details
             vent.on "breadcrumb:#{ALERTS_FILTERS}", @render_alerts_filters
             vent.on "breadcrumb:#{ALERTS_SELECTION}", @render_alerts_selection
             vent.on "breadcrumb:#{ALERTS_DETAILS}", @render_alerts_details
@@ -36,7 +36,7 @@ define (require) ->
             return @
 
         push_alerts_details: ->
-            @push '<i class="fa fa-list"></i> Alert Details', ALERTS_DETAILS
+            @push '<i class="fa fa-edit"></i> Alert Details', ALERTS_DETAILS
             return
 
         render_alerts_filters: =>

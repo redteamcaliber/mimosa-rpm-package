@@ -738,7 +738,6 @@ define(function (require) {
 
                 console.log('Initializing suppressions table for exp_key: ' + exp_key);
 
-
                 var suppressions_table = new SuppressionsTableView({
                     el: $(_.sprintf('#suppressions-list-%s', exp_key)),
                     condensed: true
@@ -751,7 +750,8 @@ define(function (require) {
 
                 view.suppressions_table_map[exp_key] = suppressions_table;
 
-                suppressions_table.fetch(exp_key);
+                suppressions_table.collection.exp_key = exp_key;
+                suppressions_table.fetch();
             }
         },
         on_click: function() {
@@ -907,7 +907,7 @@ define(function (require) {
             });
 
             view.comments_table = new CommentsTableView();
-            view.$('#comments-table').append(view.comments_table.render().el);
+            view.$('#comments-table').append(view.comments_table.el);
 
             view.listenTo(view.comments_table, 'load', function() {
                 var comments_count = view.comments_table.get_total_rows();
@@ -1001,7 +1001,7 @@ define(function (require) {
 
             var view = this;
             view.acquisitions.identity = identity;
-            view.acquisitions.fetch();
+            view.acqusitions_table.fetch();
         }
     });
 

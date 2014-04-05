@@ -151,14 +151,19 @@ describe 'alerts-api-tests', ->
                     done e
 
     describe '#get_alerts()', ->
-        it 'should return all alerts', (done) ->
-            api.get_alerts {}, {}, (err, list) ->
+        it 'should return all alerts for a signature', (done) ->
+            api.get_alerts {signature_uuid: '18917a41-6975-47b6-99a2-839ec3911b9b'}, {}, (err, list) ->
                 try
                     should.not.exist err
-                    should.exist list
-                    should.exist list.length
-                    list.length.should.be.greaterThan 0
-
+                    utils.should_be_list list
+                    done()
+                catch e
+                    done e
+        it 'should return all alerts for a iocnamehash', (done) ->
+            api.get_alerts {iocnamehash: 'c5b06f2432c11bcf48a36cc057a018a7'}, {}, (err, list) ->
+                try
+                    should.not.exist err
+                    utils.should_be_list list
                     done()
                 catch e
                     done e
@@ -170,6 +175,15 @@ describe 'alerts-api-tests', ->
                     should.not.exist err
                     should.exist alert
                     done()
+                catch e
+                    done e
 
+    describe '#get_alert_content()', ->
+        it 'should return alert content for the specified uuid', (done) ->
+            api.get_alert_content 'c4662926-2cae-45e1-b408-3f22d174724e', {}, (err, content) ->
+                try
+                    should.not.exist err
+                    should.exist content
+                    done()
                 catch e
                     done e

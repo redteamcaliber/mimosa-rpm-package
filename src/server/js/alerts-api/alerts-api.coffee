@@ -181,8 +181,16 @@ get_alerts = (params, attributes, callback) ->
 # Retrieve an alert.
 #
 get_alert = (uuid, attributes, callback) ->
-    request.json_get get_cv_url("/alert/#{uuid}"), {}, attributes, (err, response, body) ->
+    request.json_get get_cv_url("/alerts/#{uuid}"), {}, attributes, (err, response, body) ->
         process_response err, response, body, callback
+
+#
+# Retrieve an alerts content.
+#
+get_alert_content = (uuid, attributes, callback) ->
+    request.json_get get_cv_url("/alerts/#{uuid}/content"), {}, attributes, (err, response, body) ->
+        callback err, body
+
 
 #
 # Construct a candyvan url from the relative url parameter.
@@ -230,3 +238,4 @@ exports.get_signature_summary = get_signature_summary
 exports.get_consolidated_signature_summary = get_consolidated_signature_summary
 exports.get_alerts = get_alerts
 exports.get_alert = get_alert
+exports.get_alert_content = get_alert_content

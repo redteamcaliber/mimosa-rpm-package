@@ -4,12 +4,15 @@ define (require) ->
     templates = require 'uac/ejs/templates'
 
 
+    #
+    # View class to display previous and next controls for a TableView.
+    #
     class TableViewControls extends View
         initialize: (options) ->
             @options = options
             @table = @options.table
 
-            log.warn "\"table\" is undefined."  unless @table
+            console.warn "\"table\" is undefined."  unless @table
             @listenTo @table, "click", @render  if @table isnt undefined
             return
 
@@ -47,14 +50,14 @@ define (require) ->
             return
 
         on_prev: ->
-            if @table isnt `undefined`
+            if @table isnt undefined
                 if @table.is_prev()
                     @table.prev()
                 else @table.prev_page()  if @table.is_prev_page()
             return
 
         on_next: ->
-            if @table isnt `undefined`
+            if @table isnt undefined
                 if @table.is_next()
                     @table.next()
                 else @table.next_page()  if @table.is_next_page()

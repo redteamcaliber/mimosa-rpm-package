@@ -50,7 +50,7 @@ app.get '/md5/:hash',  (req, res) ->
 #
 # MD5 API lookup route.
 #
-app.get '/api/md5/:hash',  (req, res) ->
+app.get '/api/md5/:hash',  (req, res, next) ->
   hash = req.params.hash
   if not hash
     # Error, type is required.
@@ -61,7 +61,7 @@ app.get '/api/md5/:hash',  (req, res) ->
       if err
         next err
       else
-        route_utils.send_rest res, result
+        route_utils.send_rest req, res, next, result
 
 
 #

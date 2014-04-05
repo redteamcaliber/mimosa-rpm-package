@@ -62,10 +62,6 @@ define (require) ->
 #                @options.id = utils.random_string(10)
 
             if @collection
-                # If a collectoin is supplied then redraw the view any time it refreshes.
-                @listenTo(@collection, "sync", @render_table)
-                @listenTo(@collection, "reset", @render_table)
-
                 # Listen to draw events to account for the fact that datatables does not fire page change events.  This code
                 # makes up for that shortcoming by manually determining when the user has used the previous next component to
                 # page through the table.
@@ -443,11 +439,6 @@ define (require) ->
 
             return
 
-        render: (params) ->
-            console.debug "TableView.render()"
-
-            return @
-
         #
         # Render the table.  If you are obtaining data from a collection then don't invoke this method, call fetch()
         # instead.  If obtaining data via server side ajax then this method can be called with server side parameters.
@@ -456,15 +447,14 @@ define (require) ->
         #
         #     table.render({server_params: {suppression_id: suppression_id}});
         #
-        render_table: (params) ->
-            console.debug "TableView.render_table(#{params})"
-            view = @
+        render: (params) ->
+            console.debug "TableView.render(#{params})"
 
             # Clear the cache before re-destroying the table.
-            view.clear_cache()
+            @.clear_cache()
 
             # Destroy the existing table if there is one.
-            view.destroy()
+            @.destroy()
 
             # Create a table element to attach to.
             @table_el = $ '<table>'
@@ -473,10 +463,10 @@ define (require) ->
 
 
             # Keep track of the expanded rows.
-            view._expanded_rows = []
+            @._expanded_rows = []
 
             # Construct the table settings based on the supplied settings.
-            settings = get_datatables_settings(view, view.options)
+            settings = get_datatables_settings(@, @.options)
 
             # Apply any parameters passed to the settings.
             if params
@@ -497,12 +487,12 @@ define (require) ->
                 else settings.aaData = params.aaData  if params.aaData isnt null
 
             # If a collection is defined then use the data from the collection.
-            settings.aaData = view.collection.toJSON()  if view.collection
+            settings.aaData = @collection.toJSON()  if @collection
 
             # Create the table.
             @table_el.dataTable(settings)
 
-            view.delegateEvents "click tr i.expand": "on_expand"
+            @.delegateEvents "click tr i.expand": "on_expand"
 
             # Assign the bootstrap class to the length select.
             length_selects = @$('.dataTables_wrapper select')
@@ -513,7 +503,7 @@ define (require) ->
             for label in search_labels
                 $(label).css('margin-top', '5px').css('margin-right', '5px')
 
-            view
+            @
 
         on_expand: (ev) ->
             ev.stopPropagation()
@@ -541,6 +531,7 @@ define (require) ->
 
                         # Has not overidden the success and error callbacks, block for them.
                         params.success = =>
+                            @render()
                             utils.unblock @$el
                             return
 
@@ -559,8 +550,9 @@ define (require) ->
                     # Block the UI before the fetch.
                     utils.block_element @$el
                     view.collection.fetch
-                        success: ->
+                        success: =>
                             # Unblock the ui.
+                            @render()
                             utils.unblock @$el
                             return
                         error: (collection, response) ->
@@ -568,7 +560,7 @@ define (require) ->
                             utils.display_response_error('Exception while retrieving table data', response)
                             return
             else
-                view.render_table server_params: params
+                view.render server_params: params
 
             return
 
@@ -743,6 +735,7 @@ define (require) ->
                 ).always =>
                     # Unblock the UI.
                     utils.unblock @$el
+                    @trigger 'sync'
                     return
 
             else

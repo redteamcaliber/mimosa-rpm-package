@@ -144,10 +144,10 @@ define(function(require) {
 
                 options['aoColumns'] = [
                     {sTitle: "Suppression Id", mData: 'suppression_id', bVisible: false, bSortable: false},
-                    {sTitle: "Suppression", mData: 'comment', bVisible: true, bSortable: false, sClass: 'wrap'},
-                    {sTitle: "Global", mData: 'cluster_name', bVisible: true, bSortable: false},
-                    {sTitle: "Hits", mData: 'suppressed', bVisible: true, bSortable: false},
-                    {sTitle: "Created", mData: 'created', bSortable: true, sClass: 'nowrap', visible: false}
+                    {sTitle: "Suppression", mData: 'comment', bVisible: true, bSortable: false, sClass: 'wrap', sWidth: '80%'},
+                    {sTitle: "Global", mData: 'cluster_name', bVisible: true, bSortable: false, sWidth: '10%'},
+                    {sTitle: "Hits", mData: 'suppressed', bVisible: true, bSortable: false, sWidth: '10%'},
+                    {sTitle: "Created", mData: 'created', bSortable: true, sClass: 'nowrap', bVisible: false}
                 ];
 
                 view.listenTo(view, 'row:created', function (row) {
@@ -261,12 +261,6 @@ define(function(require) {
                 });
                 view.suppression_row_views.push(suppression_row);
             });
-        },
-        fetch: function (exp_key) {
-            if (exp_key) {
-                this.collection.exp_key = exp_key;
-            }
-            this.collection.fetch();
         },
         close: function () {
             console.log('Closing suppression table: ' + this.el.id + ' with ' + this.suppression_row_views.length + ' rows.');

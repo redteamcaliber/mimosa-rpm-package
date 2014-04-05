@@ -311,14 +311,14 @@ get_dt_response_params = (results, count, offset, echo) ->
     sEcho: echo
 
 
-###
-  Validate that all the properties specified are found in the list of values.  If validation fails send a HTTP 400
-  response and return false.
-  @param props - an array of property strings.
-  @param values - the dictionary of values.
-  @param res - the response.
-  @returns {{ok: boolean, message: string}}
-###
+#
+#  Validate that all the properties specified are found in the list of values.  If validation fails send a HTTP 400
+#  response and return false.
+#  @param props - an array of property strings.
+#  @param values - the dictionary of values.
+#  @param res - the response.
+#  @returns {{ok: boolean, message: string}}
+#
 validate_input = (props, values, res) ->
     ok = true
 

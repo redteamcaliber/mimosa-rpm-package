@@ -133,7 +133,7 @@ define(function (require) {
 
             // Hits.
             view.hits_table_view = new HitsTableView();
-            view.$('#hits-table').append(view.hits_table_view.render().el);
+            $('#hits-table').append(view.hits_table_view.el);
 
             // Initialize the hits details view.
             view.hits_details_view = new HitsDetailsView({

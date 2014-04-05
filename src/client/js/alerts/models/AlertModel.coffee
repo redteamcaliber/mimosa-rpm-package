@@ -6,5 +6,6 @@ define (require) ->
     #
     class AlertModel extends Backbone.Model
         idAttribute: 'uuid'
+        urlRoot: '/alerts/api/alerts'
 
     AlertModel
