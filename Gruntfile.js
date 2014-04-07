@@ -44,7 +44,7 @@ module.exports = function (grunt) {
         uac_release: uac_release,
 
         // Set the build directory.
-        'build_dir': '/root/build',
+        'build_dir': '/tmp/build',
         'build_uac_dir': '<%= build_dir %>/uac',
         'build_rpm_dir': '<%= build_dir %>/rpm',
 
@@ -350,21 +350,21 @@ module.exports = function (grunt) {
             }
         },
 
-        sftp: {
-            prod: {
-                files: {
-                    "/root/build/rpm/RPMS/x86_64": "<%= uac_rpm_file %>"
-                },
-                options: {
-                    path: '/dev_deploy/uac-node',
-                    host: 'nas1.mplex.us2.mcirt.mandiant.com',
-                    username: 'mcirtdev',
-                    privateKey: grunt.file.read("/root/.ssh/id_rsa"),
-                    passphrase: '<%= passphrase %>',
-                    showProgress: true
-                }
-            }
-        },
+//        sftp: {
+//            prod: {
+//                files: {
+//                    "/root/build/rpm/RPMS/x86_64": "<%= uac_rpm_file %>"
+//                },
+//                options: {
+//                    path: '/dev_deploy/uac-node',
+//                    host: 'nas1.mplex.us2.mcirt.mandiant.com',
+//                    username: 'mcirtdev',
+//                    privateKey: grunt.file.read("/root/.ssh/id_rsa"),
+//                    passphrase: '<%= passphrase %>',
+//                    showProgress: true
+//                }
+//            }
+//        },
 
         sshexec: {
             /**
