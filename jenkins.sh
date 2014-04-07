@@ -6,4 +6,4 @@ cd $DIR
 sudo /opt/node/node-v0.10.15-linux-x64/bin/npm update -g
 npm install grunt-cli --save-dev
 npm install
-./node_modules/.bin/grunt build-rpm
+./node_modules/.bin/grunt build easy_rpm
