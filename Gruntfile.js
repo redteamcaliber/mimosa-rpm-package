@@ -44,7 +44,7 @@ module.exports = function (grunt) {
         uac_release: uac_release,
 
         // Set the build directory.
-        'build_dir': '/root/build',
+        'build_dir': '/tmp/build',
         'build_uac_dir': '<%= build_dir %>/uac',
         'build_rpm_dir': '<%= build_dir %>/rpm',
 
