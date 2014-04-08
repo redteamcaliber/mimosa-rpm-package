@@ -12,8 +12,8 @@ export NODE_PATH=static/server/js
 EXTENSIONS=js,html,json,sh
 
 # The directories to scan.
-DIRECTORIES=bin,conf,static/server/js,views,test
+DIRECTORIES=bin,conf,dist/server
 
-IGNORED=static/client
+IGNORED=
 
-supervisor -e ${EXTENSIONS} -w ${DIRECTORIES} -i ${IGNORED} uac-server.js
+supervisor -e ${EXTENSIONS} -w ${DIRECTORIES} uac-server.js

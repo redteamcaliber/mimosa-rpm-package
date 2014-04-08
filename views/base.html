@@ -17,16 +17,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     {# RequireJS configuration #}
-    <script src="/static/client/js/raw/config.js"></script>
+    <script src="/static/js/raw/config.js"></script>
 
     {# Core UAC styles and overrides. #}
-    <link href="/static/client/css/main.css" rel="stylesheet"/>
+    <link href="/static/css/main.css" rel="stylesheet"/>
 
     {# Include the appropriate bootstrap theme. #}
     {% if current_theme == 'default' %}
-        <link id="bootstrap" href="/static/client/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
+        <link id="bootstrap" href="/static/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
     {% else %}
-        <link id="bootstrap" href="/static/client/css/bootswatch/{{ current_theme }}/bootstrap.min.css" rel="stylesheet"/>
+        <link id="bootstrap" href="/static/css/bootswatch/{{ current_theme }}/bootstrap.min.css" rel="stylesheet"/>
     {% endif %}
 
     {# Font Awesome #}
@@ -43,14 +43,14 @@
     <!--<link href="/static/css/datatables.css" rel="stylesheet"/>-->
 
     {% if node_env == 'prod' %}
-        <script src="/static/client/js/raw/lib/requirejs/require.js"></script>
-        <script src="/static/client/js/modules/main.js"></script>
+        <script src="/static/js/raw/lib/requirejs/require.js"></script>
+        <script src="/static/js/modules/main.js"></script>
         <script type="text/javascript">
             require(["{% block data_main %}{% endblock %}"], function(){});
         </script>
     {% else %}
         <!-- Include require.js support. -->
-        <script src="/static/client/js/raw/lib/requirejs/require.js" data-main="{% block data_main %}{% endblock %}"></script>
+        <script src="/static/js/raw/lib/requirejs/require.js" data-main="{% block data_main %}{% endblock %}"></script>
     {% endif %}
 
     <script type="text/javascript">
@@ -81,7 +81,7 @@
                 </button>
                 <a class="navbar-brand" href="/">
                     <img style="width: auto; height: 18px; vertical-align: top; border: solid 1px"
-                         src="/static/client/css/img/mandiant-bw.ico"> UAC
+                         src="/static/css/img/mandiant-bw.ico"> UAC
                 </a>
             </div>
             <div class="collapse navbar-collapse">

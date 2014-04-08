@@ -3,6 +3,7 @@ node 'uac.vm.mandiant.com' {
     installProxy         => true,
     installKeystore      => true,
     installDatabase      => true,
+    useDevSshConfig      => true,
     targetEnvironment    => "development",
   }
 }
