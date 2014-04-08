@@ -5,5 +5,6 @@ node 'uac.vm.mandiant.com' {
     installDatabase      => true,
     useDevSshConfig      => true,
     targetEnvironment    => "development",
+    proxyStaticFolder    => "/opt/web/apps/uac/dist/client",
   }
 }
