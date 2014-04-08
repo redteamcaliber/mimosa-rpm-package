@@ -1,0 +1,54 @@
+<% if (alert.services && alert.services.length > 0) { %>
+<div class="row">
+    <div class="col-sm-12">
+        <% _.each(alert.services, function(service) { %>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-phone"></i> Callback Communication from Infected Host
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label>Server</label>
+                    </div>
+                    <div class="col-sm-10">
+                        <%= service.server %>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label>Protocol</label>
+                    </div>
+                    <div class="col-sm-10">
+                        <%= service.protocol %>
+                    </div>
+                </div>
+                <% if (service.location) { %>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label>Location</label>
+                    </div>
+                    <div class="col-sm-10">
+                        <%= service.location %>
+                    </div>
+                </div>
+                <% } %>
+                <div class="row">
+                    <div class="col-sm-12" style="overflow: auto">
+                        <hr/>
+                        <code>
+                            <%= service.request %>
+                        </code><br/>
+                        <% _.each(service.headers, function(header) { %>
+                        <code>
+                            <%= header %>
+                        </code><br/>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+    </div>
+</div>
+<% } %>

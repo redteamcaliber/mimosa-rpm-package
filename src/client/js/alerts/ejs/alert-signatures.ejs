@@ -1,0 +1,139 @@
+<div style="margin-bottom: 25px">
+    <ul class="nav nav-tabs" style="border-bottom: 0">
+        <% _.each (unique_signatures, function(signature, index) { %>
+        <li class="<%= signature.active %>">
+            <a href="#tab-<%= index %>" data-toggle="tab">
+                <%= signature.name %>
+            </a>
+        </li>
+        <% }) %>
+    </ul>
+
+    <div class="tab-content">
+        <% _.each (unique_signatures, function(unique_signature, index) { %>
+        <div class="tab-pane <%= unique_signature.active %>"
+             id="tab-<%= index %>">
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <% var signatures = signature_map[unique_signature.name] %>
+                    <% _.each (signatures, function(signature, index) { %>
+
+                    <% if (signatures.length == 1) { %>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            Name
+                        </div>
+                        <div class="col-sm-10">
+                            <%= signature.name %>
+                        </div>
+                    </div>
+                    <% } %>
+
+                    <% if (signature.original) { %>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            Original
+                        </div>
+                        <div class="col-sm-10">
+                            <%= signature.original %>
+                        </div>
+                    </div>
+                    <% } %>
+
+                    <% if (signature.stype ) { %>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            Type
+                        </div>
+                        <div class="col-sm-10">
+                            <%= signature.stype %>
+                        </div>
+                    </div>
+                    <% } %>
+
+                    <% if (signature['downloaded-at']) { %>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            Downloaded At
+                        </div>
+                        <div class="col-sm-10">
+                            <%= signature['downloaded-at'] %>
+                        </div>
+                    </div>
+                    <% } %>
+
+                    <% if (signature['executed-at']) { %>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            Executed At
+                        </div>
+                        <div class="col-sm-10">
+                            <%= signature['executed-at'] %>
+                        </div>
+                    </div>
+                    <% } %>
+
+                    <% if (signature.type) { %>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            File Type
+                        </div>
+                        <div class="col-sm-10">
+                            <%= signature.type %>
+                        </div>
+                    </div>
+                    <% } %>
+
+                    <% if (signature.md5sum) { %>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            MD5
+                        </div>
+                        <div class="col-sm-10">
+                            <code><%= signature.md5sum %></code>
+                        </div>
+                    </div>
+                    <% } %>
+
+                    <% if (signature.url) { %>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            Url
+                        </div>
+                        <div class="col-sm-10">
+                            <code><%= signature.url %></code>
+                        </div>
+                    </div>
+                    <% } %>
+
+                    <% if (signature.objurl) { %>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            Object Url
+                        </div>
+                        <div class="col-sm-10">
+                            <code><%= signature.objurl %></code>
+                        </div>
+                    </div>
+                    <% } %>
+
+                    <% if (signatures.length > 0 && index < signatures.length - 1) { %>
+                    <hr/>
+                    <% } %>
+
+                    <% }) %>
+
+                    <div class="row">
+                        <div class="cols-sm-12">
+                            <div class="well" style="margin: 15px 15px 5px 15px">
+                                This is a description of the <%= unique_signature.name %> signature.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }) %>
+    </div>
+</div>

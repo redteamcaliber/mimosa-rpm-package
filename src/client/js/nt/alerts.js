@@ -90,7 +90,7 @@ NT.AlertsView = UAC.View.extend({
                 priority: 1,
                 alerts: 3,
                 clients: 5,
-                signatures: 1,
+                unique_signatures: 1,
                 hits: 32304
             },
             {
@@ -98,7 +98,7 @@ NT.AlertsView = UAC.View.extend({
                 priority: 2,
                 alerts: 6,
                 clients: 2,
-                signatures: 2,
+                unique_signatures: 2,
                 hits: 22222
             },
             {
@@ -106,7 +106,7 @@ NT.AlertsView = UAC.View.extend({
                 priority: 3,
                 alerts: 6,
                 clients: 1,
-                signatures: 78,
+                unique_signatures: 78,
                 hits: 11111
             },
             {
@@ -114,7 +114,7 @@ NT.AlertsView = UAC.View.extend({
                 priority: 4,
                 alerts: 34,
                 clients: 17,
-                signatures: 43,
+                unique_signatures: 43,
                 hits: 2345
             }
         ]);

@@ -1,9 +1,11 @@
 define (require) ->
+    async = require 'async'
     moment = require('moment')
     View = require 'uac/views/View'
     utils = require 'uac/common/utils'
     vent = require 'uac/common/vent'
 
+    Events = require 'alerts/common/Events'
     TagCollection = require 'alerts/models/TagCollection'
     ClientCollection = require 'alerts/models/ClientCollection'
     TimeCollection = require 'alerts/models/TimeCollection'
@@ -323,9 +325,9 @@ define (require) ->
             @set_selected([], false)
             return
 
-        fetch: () ->
+        fetch: (params) ->
             if @collection
-                @collection.fetch()
+                @collection.fetch(params)
             return
 
     #
@@ -339,7 +341,7 @@ define (require) ->
 
         initialize: ->
             # Retrieve any previous selections.
-            selected = utils.storage 'alerts:search'
+            selected = utils.storage Events.ALERTS_SEARCH
             if selected
                 console.debug "Found existing alerts search selections: #{JSON.stringify(selected)}"
 
@@ -380,10 +382,37 @@ define (require) ->
         # Render the base template.
         #
         render: ->
-            @tags_view.fetch()
-            @clients_view.fetch()
-            @times_view.fetch()
-            @types_view.fetch()
+            utils.block()
+            async.parallel [
+                (callback) =>
+                    @tags_view.fetch
+                        success: ->
+                            callback()
+                        error: ->
+                            callback()
+                (callback) =>
+                    @clients_view.fetch
+                        success: ->
+                            callback()
+                        error: ->
+                            callaback()
+                (callback) =>
+                    @times_view.fetch
+                        success: ->
+                            callback()
+                        error: ->
+                            callback()
+                (callback) =>
+                    @types_view.fetch
+                        success: ->
+                            callback()
+                        error: ->
+                            callback()
+            ],
+                (err) =>
+                    utils.unblock()
+                    if err
+                        utils.display_error("Error while loading alerts search view: #{err}")
             return @
 
         #
@@ -435,11 +464,11 @@ define (require) ->
                 @display_error '"To" is not valid: #{selected.to}'
             if is_from_valid and is_to_valid
                 # Save the current search selections to local storage.
-                utils.storage('alerts:search', selected)
+                utils.storage(Events.ALERTS_SEARCH, selected)
                 # Trigger the search.
                 console.debug "Searching for alerts using filters: #{JSON.stringify(selected)}"
-                @trigger 'alerts:search', selected
-                vent.trigger 'alerts:search', selected
+                @trigger Events.ALERTS_SEARCH, selected
+                vent.trigger Events.ALERTS_SEARCH, selected
             return
 
         #
@@ -452,7 +481,7 @@ define (require) ->
             @types_view.reset_selected()
 
             # Clear any current selections.
-            utils.storage 'alerts:search', undefined
+            utils.storage Events.ALERTS_SEARCH, undefined
 
             # Clear the current search selections in local storage.
             @trigger 'reset'

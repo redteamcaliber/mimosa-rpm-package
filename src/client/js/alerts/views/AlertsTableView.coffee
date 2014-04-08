@@ -5,6 +5,7 @@ define (require) ->
     TableView = require 'uac/views/TableView'
     renderers = require 'uac/views/renderers'
 
+    Events = require 'alerts/common/Events'
 
     class SummaryPopoverView extends Marionette.ItemView
         initialize: (options) ->
@@ -71,7 +72,7 @@ define (require) ->
         # Handle a row click.
         #
         on_click: (data) ->
-            vent.trigger 'alerts:alert_selected', data
+            vent.trigger Events.ALERTS_ALERT_SELECTED, data
 
         #
         # Create a summary popover for each row.

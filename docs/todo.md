@@ -2,22 +2,38 @@ UAC ToDo
 ========
 
 ### StrikeFinder
-- General testing.
-- Need to merge in the MD5 changes from master.
 - Look into using TableView.render() rather than TableView.fetch() because it's non-standard.
     -Re-rendering of a table is currently broken in the IOCSummaryView.
     - Convert the table view to and ItemView, need to override the default close function.
     - When render is called the first time the table displays the message that no records are found.
-- MD5 Stuff
-    - Create a linkable MD5 end point.
-    - Create a MD5 api endpoint.
 
 ### Alerts Lists Views
-- Look into the default sort order of the details list.
-- Convert to using layouts and ItemView's in the AlertsSearchView.
 - Display the tag text descriptions in the summary and details table.
-- Summary items from SF include items with only suppressed hits.
-- Client search parameters are not working in the back end API's.
+
+### Alerts Search View
+- Make the search view blocked until the sub-views are loaded
+- Convert to using a Marionette layout.
+
+### Alerts Details View
+x - Parse the header data for NX cnc services.
+x - Aggregate alert signatures of the same type instead of displaying multiple tags when the same signature is repeated.
+- Need to have a signature header section and them just dump the rest of the name value pairs to ensure to pick up
+  all of the data.
+- Implement the a OS change report view.
+    - https://uac.vm.mandiant.com/alerts/api/alerts/109991dc-cfe1-45c6-a7ba-b2c33b22a662/full
+- Display the explanation/anomoly field.
+- Make the alerts view linkable.
+- Look into displaying pcap text data.
+- Need to display the selected malware.
+- Add the stype to the header.
+- Move the raw alert to a modal popup rather than a rollup.
+- Format the EX alert details.
+- Make the artifacts downloadable.
+- Add table view controls support.
+- Make the view linkable.
+- Add tagging.
+- Add the ability to add comments.
+- Display comments in the activity feed.
 
 ### FE Alerts Details View
 -

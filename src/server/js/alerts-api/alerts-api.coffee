@@ -58,7 +58,7 @@ get_tags = (callback) ->
 # Return the list of clients.
 #
 get_clients = (attributes, callback) ->
-    request.json_get get_cv_url('/clients/'), undefined, attributes, (err, response, body) ->
+    request.json_get get_cv_url('/api/v1/clients/'), undefined, attributes, (err, response, body) ->
         process_response(err, response, body, callback)
     return
 
@@ -66,10 +66,14 @@ get_clients = (attributes, callback) ->
 # Return the list of alert types.
 #
 get_alert_types = (attributes, callback) ->
-    request.json_get get_cv_url('/alert-types/'), undefined, attributes, (err, response, body) ->
-        if body.response
-            body.response.push ENDPOINT_MATCH
-        process_response(err, response, body, callback)
+    request.json_get get_cv_url('/api/v1/alert-types/'), undefined, attributes, (err, response, body) ->
+        process_response err, response, body, (err, types) ->
+            if err
+                callback err
+            else
+                # Add in an endpoint match type.
+                types.push ENDPOINT_MATCH
+                callback null, types
     return
 
 #
@@ -89,7 +93,7 @@ get_times = ->
 # Retrieve the signature summary rollup list.
 #
 get_signature_summary = (params, attributes, callback) ->
-    request.json_get get_cv_url('/signature-summary/'), params, attributes, (err, response, body) ->
+    request.json_get get_cv_url('/api/v1/signature-summary/'), params, attributes, (err, response, body) ->
         process_response(err, response, body, callback)
     return
 
@@ -143,7 +147,7 @@ get_consolidated_signature_summary = (params, attributes, callback) ->
 get_alerts = (params, attributes, callback) ->
     if params.signature_uuid
         # Retrieve the CV alerts.
-        request.json_get get_cv_url('/alerts/'), params, attributes, (err, response, body) ->
+        request.json_get get_cv_url('/api/v1/alerts/'), params, attributes, (err, response, body) ->
             process_response(err, response, body, callback)
             return
     else if params.iocnamehash
@@ -181,14 +185,23 @@ get_alerts = (params, attributes, callback) ->
 # Retrieve an alert.
 #
 get_alert = (uuid, attributes, callback) ->
-    request.json_get get_cv_url("/alerts/#{uuid}"), {}, attributes, (err, response, body) ->
-        process_response err, response, body, callback
+    request.json_get get_cv_url("/api/v1/alerts/#{uuid}"), {}, attributes, (err, response, body) ->
+        process_response err, response, body, (err, alert) ->
+            if err
+                callback err
+            else
+                # Mixin a download url.
+                cv_url = settings.get 'uac:cv_api_url'
+                alert.artifacts.forEach (artifact) ->
+                    artifact.url = api_utils.combine_urls cv_url, artifact.file
+                callback null, alert
+
 
 #
 # Retrieve an alerts content.
 #
 get_alert_content = (uuid, attributes, callback) ->
-    request.json_get get_cv_url("/alerts/#{uuid}/content"), {}, attributes, (err, response, body) ->
+    request.json_get get_cv_url("/api/v1/alerts/#{uuid}/content"), {}, attributes, (err, response, body) ->
         callback err, body
 
 

@@ -3,6 +3,8 @@ define (require) ->
     vent = require 'uac/common/vent'
     BreadcrumbView = require 'uac/views/BreadcrumbView'
 
+    Events = require 'alerts/common/Events'
+
     ALERTS_FILTERS = 'alerts_filters'
     ALERTS_SELECTION = 'alerts_selection'
     ALERTS_DETAILS = 'alerts_details'
@@ -16,8 +18,8 @@ define (require) ->
 
             @render_alerts_filters()
 
-            vent.on 'alerts:search', @render_alerts_selection
-            vent.on 'alerts:alert_selected', @render_alerts_details
+            vent.on Events.ALERTS_SEARCH, @render_alerts_selection
+            vent.on Events.ALERTS_ALERT_SELECTED, @render_alerts_details
             vent.on "breadcrumb:#{ALERTS_FILTERS}", @render_alerts_filters
             vent.on "breadcrumb:#{ALERTS_SELECTION}", @render_alerts_selection
             vent.on "breadcrumb:#{ALERTS_DETAILS}", @render_alerts_details

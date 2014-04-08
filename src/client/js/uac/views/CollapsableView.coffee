@@ -43,23 +43,34 @@ define (require) ->
 
             @apply_template templates, 'collapsable.ejs', context
 
+            if @collapsed
+                @display_plus_icon()
+            else
+                @display_minus_icon()
+
             # Listen for collapse events.
             @get_collapse().on 'hide.bs.collapse',  =>
-                el = @get_accordion().find('.fa-minus-square')
-                el.removeClass('fa-minus-square')
-                el.addClass('fa-plus-square')
+                @display_plus_icon()
                 @trigger 'collapsed'
                 return
 
             # Listen for expand events.
             @get_collapse().on 'show.bs.collapse', =>
-                el = @get_accordion().find('.fa-plus-square')
-                el.removeClass('fa-plus-square')
-                el.addClass('fa-minus-square')
+                @display_minus_icon()
                 @trigger 'expanded'
                 return
 
             return @
+
+        display_plus_icon: ->
+            el = @get_accordion().find('.collapsable-icon')
+            el.removeClass('fa-minus-square')
+            el.addClass('fa-plus-square')
+
+        display_minus_icon: ->
+            el = @get_accordion().find('.collapsable-icon')
+            el.removeClass('fa-plus-square')
+            el.addClass('fa-minus-square')
 
         #
         # Retrieve the accordion element.

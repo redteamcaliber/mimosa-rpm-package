@@ -1,32 +1,49 @@
 <div class="row">
     <div class="col-sm-12">
+        <div class="header-region"></div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="signatures-region"></div>
+
+                <div class="interface-region"></div>
+
+                <div class="request-region"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
 
         <div class="row">
             <div class="col-sm-12">
-                <div class="col-sm-1">
-                    <div id="table-controls" class="pull-left">
-                        Controls
+                <div class="artifacts-region"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <i class="fa fa-comment-o"></i> Activity
                     </div>
-                </div>
-                <div class="col-sm-11">
-                    <div id="details-header">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <label>Signatures: </label>
-                                <% _.each (alert.signatures, function(signature) { %>
-                                <%=  signature.name %>
-                                <% }) %>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <%= raw_alert() %>
-                            </div>
-                        </div>
+                    <div class="panel-body">
+                        <div class="activity-list"></div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="raw-alert"></div>
+            </div>
+        </div>
+
     </div>
+
 </div>

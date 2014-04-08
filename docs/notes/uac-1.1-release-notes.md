@@ -1,7 +1,10 @@
 Unified Analyst Console (UAC) 1.0 Release Notes
 ===============================================
 
-Mandiant-uac-ws-1.1-3 - February 5th, 2014
+Mandiant-uac-ws-1.2 - April ?th, 2014
+- MD5 link and api.
+
+Mandiant-uac-ws-1.1-3 - March 5th, 2014
 -------------------------------------------
 
 ### Hit Review

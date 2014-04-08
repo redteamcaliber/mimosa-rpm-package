@@ -2,6 +2,7 @@ define (require) ->
 
     Marionette = require 'marionette'
     vent = require 'uac/common/vent'
+    utils = require 'uac/common/utils'
 
     templates = require 'alerts/ejs/templates'
 
@@ -9,7 +10,7 @@ define (require) ->
     vent.on 'all', (event_name) ->
         console.debug "Event: #{event_name}"
 
-
+    Events = require 'alerts/common/Events'
     AlertsBreadcrumbView = require 'alerts/views/AlertsBreadcrumbView'
     AlertsSearchView = require 'alerts/views/AlertsSearchView'
 
@@ -42,13 +43,13 @@ define (require) ->
         # Listen to global events and show and hide regions accordingly.
         #
         initialize: ->
-            vent.on 'alerts:search', =>
+            vent.on Events.ALERTS_SEARCH, =>
                 @show_alerts_summary_list()
 
-            vent.on 'alerts:summary_selected', =>
+            vent.on Events.ALERTS_SUMMARY_SELECTED, =>
                 @show_alerts_details_list()
 
-            vent.on 'alerts:alert_selected', =>
+            vent.on Events.ALERTS_ALERT_SELECTED, =>
                 @show_alerts_details()
 
             vent.on 'breadcrumb:alerts_filters', =>
@@ -89,10 +90,10 @@ define (require) ->
         # Bring the alerts details into focus.
         #
         show_alerts_details: ->
+            $(window.document.body).scrollTop(0)
             $(@filters_region.el).fadeOut(0).hide()
             $(@list_region.el).fadeOut(0).hide()
             $(@details_region.el).fadeIn('slow').show()
-
 
     #
     # Alerts application instance.
@@ -125,7 +126,7 @@ define (require) ->
         @layout.filters_content_region.show @filters_view
 
         # Handle searching for alerts summaries.
-        vent.on 'alerts:search', (params) =>
+        vent.on Events.ALERTS_SEARCH, (params) =>
             unless @summary_list_view
                 # Create the summary list table.
                 @summaries = new AlertSummaryCollection()
@@ -144,10 +145,15 @@ define (require) ->
             @data.begin = moment(params.from).unix() if params.from
             @data.end = moment(params.to).unix() if params.to
 
+            utils.block_element @layout.list_region.el
             @summaries.fetch
                 data: @data
+                success: =>
+                    utils.unblock @layout.list_region.el
+                error: =>
+                    utils.unblock @layout.list_region.el
 
-        vent.on 'alerts:summary_selected', (row_data) =>
+        vent.on Events.ALERTS_SUMMARY_SELECTED, (row_data) =>
             unless @details_list_view
                 # Create the details list view.
                 @alerts = new AlertCollection()
@@ -164,13 +170,16 @@ define (require) ->
                 data = _.clone @data
                 data.signature_uuid = row_data.uuid
 
+            utils.block_element @layout.list_region.el
             @details_list_view.fetch {
                 data: data
+                success: =>
+                    utils.unblock @layout.list_region.el
+                error: =>
+                    utils.unblock @layout.list_region.el
             }
 
-        vent.on 'alerts:alert_selected', (row_data) =>
-            if @details_view
-                @details_view.close()
+        vent.on Events.ALERTS_ALERT_SELECTED, (row_data) =>
             @alert = new AlertFullModel()
             @alert.uuid = row_data.uuid
 
@@ -180,8 +189,16 @@ define (require) ->
             @listenTo @alert, 'sync', ->
                 @layout.details_content_region.show @details_view
 
-            @alert.fetch()
+            # Load the alert.
+            utils.block_element @layout.details_region.el
+            @alert.fetch
+                success: =>
+                    utils.unblock @layout.details_region.el
+                error: =>
+                    utils.unblock @layout.details_region.el
 
+        vent.on Events.ALERTS_RAW_ALERT, (data) =>
+            utils.display_info 'TODO: Display the raw alert!'
 
     # Export the alerts application.
     AlertsApp
