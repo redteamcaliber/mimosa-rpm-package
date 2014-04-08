@@ -37,10 +37,10 @@ define (require) ->
         TODO: Is this being used???
     ###
     block_element_remove = (el, message) ->
-        $(el).block(get_blockui_options('<img src="/static/client/css/img/ajax-loader.gif">'))
+        $(el).block(get_blockui_options('<img src="/static/css/img/ajax-loader.gif">'))
 
     block_element = (el, message) ->
-        $(el).block(get_blockui_options('<img src="/static/client/css/img/ajax-loader.gif">'))
+        $(el).block(get_blockui_options('<img src="/static/css/img/ajax-loader.gif">'))
 
     unblock = (el) ->
         if el
@@ -311,10 +311,10 @@ define (require) ->
         url = undefined
         if not theme || theme == 'default'
             # Use the default.
-            url = "static/client/css/bootstrap/bootstrap.min.css"
+            url = "static/css/bootstrap/bootstrap.min.css"
         else
             # Generate the theme url.
-            url = "/static/client/css/bootswatch/#{theme}/bootstrap.min.css"
+            url = "/static/css/bootswatch/#{theme}/bootstrap.min.css"
 
         # Reload the CSS.
         $("#bootstrap").attr "href", url

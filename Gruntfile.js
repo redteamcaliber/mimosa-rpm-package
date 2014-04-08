@@ -44,9 +44,9 @@ module.exports = function (grunt) {
         uac_release: uac_release,
 
         // Set the build directory.
-        'build_dir': '.',
-        'build_uac_dir': '<%= build_dir %>/uac',
-        'build_rpm_dir': '<%= build_dir %>/rpm',
+//        'build_dir': '.',
+        'build_uac_dir': '<%= projectPath %>dist',
+        'build_rpm_dir': '<%= projectPath %>rpm',
 
         // The UAC RPM file name.
         'uac_rpm_file': '<%= uac_name %>-<%= uac_version %>-<%= uac_release %>.x86_64.rpm',
@@ -63,7 +63,7 @@ module.exports = function (grunt) {
         bower: {
             install: {
                 options: {
-                    targetDir: 'static/client/js/raw/lib',
+                    targetDir: 'dist/client/js/raw/lib',
                     layout: 'byComponent',
                     install: true,
                     verbose: true,
@@ -73,113 +73,6 @@ module.exports = function (grunt) {
                         forceLatest: true
                     }
                 }
-            }
-        },
-
-
-
-
-
-        /**
-         * Combine and uglify Javascript files.
-         */
-        uglify: {
-            default: {
-                files: {
-                    // Async library comes  uncompressed.
-                    '<%= build_uac_dir %>/static/js/async.js': '<%= build_uac_dir %>/static/js/async.js',
-
-                    // Datatables bootstrap.
-                    '<%= build_uac_dir %>/static/datatables/js/dataTables.bootstrap.js': ['<%= build_uac_dir %>/static/datatables/js/dataTables.bootstrap.js'],
-
-                    '<%= build_uac_dir %>/static/uac/js/uac.js': [
-                        '<%= build_uac_dir %>/static/uac/js/common.js',
-                        '<%= build_uac_dir %>/static/uac/js/components.js'
-                    ],
-
-                    // StrikeFinder client sources.
-                    '<%= build_uac_dir %>/static/sf/js/strikefinder.js': [
-                        '<%= build_uac_dir %>/static/sf/js/common.js',
-                        '<%= build_uac_dir %>/static/sf/js/models.js',
-                        '<%= build_uac_dir %>/static/sf/js/hits.js',
-                        '<%= build_uac_dir %>/static/sf/js/acquisitions.js',
-                        '<%= build_uac_dir %>/static/sf/js/hits-by-tag.js',
-                        '<%= build_uac_dir %>/static/sf/js/hosts.js',
-                        '<%= build_uac_dir %>/static/sf/js/shopping.js',
-                        '<%= build_uac_dir %>/static/sf/js/suppressions.js',
-                        '<%= build_uac_dir %>/static/sf/js/tasks.js'
-                    ],
-
-                    // IOC Viewer source.
-                    '<%= build_uac_dir %>/static/js/jquery.iocViewer.js': ['<%= build_uac_dir %>/static/js/jquery.iocViewer.js']
-                }
-            }
-        },
-
-        prompt: {
-            /**
-             * Prompt for a database password.
-             */
-            db_password: {
-                options: {
-                    questions: [
-                        {
-                            config: 'db.password',       // arbitrary name or config for any other grunt task
-                            type: 'password',   // list, checkbox, confirm, input, password
-                            message: 'Database Password: ',
-                            validate: function (value) {
-                                // return true if valid, error message if invalid
-                                return value ? true : false;
-                            }
-                        }
-                    ]
-                }
-            },
-            /**
-             * Confirm deleting the build directory.
-             */
-            'delete-build-dir': {
-                options: {
-                    questions: [
-                        {
-                            config: 'delete_build_dir',
-                            type: 'confirm',
-                            message: 'Delete directory: <%= build_dir%>'
-                        }
-                    ]
-                }
-            },
-            'passphrase': {
-                options: {
-                    questions: [
-                        {
-                            config: 'passphrase',
-                            type: 'password',
-                            message: 'Enter passphrase: ',
-                            validate: function (value) {
-                                // return true if valid, error message if invalid
-                                return value ? true : false;
-                            }
-                        }
-                    ]
-                }
-            }
-        },
-
-        shell: {
-            /**
-             * Install the node libraries.
-             */
-            'install-libs': {
-                options: {
-                    stdout: true,
-                    stderr: true
-                },
-                command: [
-                    'chmod +x <%= build_uac_dir %>/bin/*',
-                    'cd <%= build_uac_dir %>',
-                    'npm install --production'
-                ].join('&&')
             }
         },
 
@@ -196,210 +89,28 @@ module.exports = function (grunt) {
                 vendor: 'Mandiant',
                 url: 'http://www.mandiant.com',
                 tempDir: '<%= build_rpm_dir %>',
-                keepTemp: true,
-                defattrScript: [
-                    {user: 'root', group: 'root'}
-                ],
-                postInstallScript: [
-                    'mkdir -p /opt/web/apps/uac/logs',
-                    'if [ $(pgrep -f "node uac-server.js") ]; then echo "Restarting UAC..."; restart uac; else echo "Starting UAC..."; start uac; fi'
-                ]
+//                keepTemp: true,
+//                defattrScript: [
+//                    {user: 'root', group: 'root'}
+//                ],
+//                postInstallScript: [
+//                    'mkdir -p /opt/web/apps/uac/logs',
+//                    'if [ $(pgrep -f "node uac-server.js") ]; then echo "Restarting UAC..."; restart uac; else echo "Starting UAC..."; start uac; fi'
+//                ]
             },
             release: {
                 files: [
                     {
                         // Include the root files.
                         cwd: '<%= build_uac_dir %>',
-                        src: '*',
-                        dest: '/opt/web/apps/uac'
-                    },
-                    {
-                        // Include the bin scripts, should be executable.
-                        cwd: '<%= build_uac_dir %>/bin',
                         src: '**/*',
-                        dest: '/opt/web/apps/uac/bin',
-                        mode: '755'
-                    },
-                    {
-                        // Include the template conf files.
-                        cwd: '<%= build_uac_dir %>/conf',
-                        src: ['*_env.json', 'settings.json'],
-                        dest: '/opt/web/apps/uac/conf'
-                    },
-                    {
-                        // Include the conf/certs files.
-                        cwd: '<%= build_uac_dir %>/conf/certs',
-                        src: '**/*',
-                        dest: '/opt/web/apps/uac/conf/certs'
-                    },
-                    {
-                        // Include the upstart script.
-                        cwd: '<%= build_uac_dir %>/conf/upstart',
-                        src: 'uac.conf',
-                        dest: '/etc/init'
-                    },
-                    {
-                        // Include the nginx templates.
-                        cwd: '<%= build_uac_dir %>/conf/nginx',
-                        src: '**',
-                        dest: '/etc/nginx/conf.d'
-                    },
-                    {
-                        // Include the uac source files.
-                        cwd: '<%= build_uac_dir %>/lib',
-                        src: '**/*',
-                        dest: '/opt/web/apps/uac/lib'
-                    },
-                    {
-                        // Include the node modules.
-                        cwd: '<%= build_uac_dir %>/node_modules',
-                        src: '**/*',
-                        dest: '/opt/web/apps/uac/node_modules'
-                    },
-                    {
-                        // Include the static files.
-                        cwd: '<%= build_uac_dir %>/static',
-                        src: '**/*',
-                        dest: '/opt/web/apps/uac/static'
-                    },
-                    {
-                        // Include the views.
-                        cwd: '<%= build_uac_dir %>/views',
-                        src: '**/*',
-                        dest: '/opt/web/apps/uac/views'
+                        dest: '/opt/web/apps/uac/dist'
                     }
                 ]
             }
         },
 
-        gitclone: {
-            /**
-             * Clone the UAC repository to the build_uac_dir.
-             */
-            uac: {
-                options: {
-                    repository: '<%= uac_repo %>',
-                    branch: '<%= uac_branch %>',
-                    directory: '<%= build_uac_dir %>'
-                }
-            }
-        },
 
-        scp: {
-            options: {
-                host: 'uac.dev.mandiant.com',
-                username: 'root',
-                password: 'devnet'
-            },
-            /***
-             * scp the UAC RPM package to devnet.
-             */
-            devnet: {
-                files: [{
-                    cwd: '/root/build/rpm/RPMS/x86_64',
-                    src: '<%= uac_rpm_file %>',
-                    dest: '.'
-                }]
-            }
-        },
-
-//        sftp: {
-//            prod: {
-//                files: {
-//                    "/root/build/rpm/RPMS/x86_64": "<%= uac_rpm_file %>"
-//                },
-//                options: {
-//                    path: '/dev_deploy/uac-node',
-//                    host: 'nas1.mplex.us2.mcirt.mandiant.com',
-//                    username: 'mcirtdev',
-//                    privateKey: grunt.file.read("/root/.ssh/id_rsa"),
-//                    passphrase: '<%= passphrase %>',
-//                    showProgress: true
-//                }
-//            }
-//        },
-
-        sshexec: {
-            /**
-             * Install the UAC RPM to devnet.
-             */
-            'install-devnet': {
-                command: 'rpm -i --force <%= uac_rpm_file %>',
-                options: {
-                    host: 'uac.dev.mandiant.com',
-                    username: 'root',
-                    password: 'devnet'
-                }
-            }
-        },
-
-        'run-sql': {
-            /**
-             * Create a UAC database on localhost.
-             */
-            'create-local-db': {
-                src: 'sql/create_database.sql',
-                options: {
-                    connection: {
-                        user: 'postgres',
-                        password: 'devnet',
-                        host: 'localhost',
-                        port: 5432
-                    }
-                }
-            },
-            /**
-             * Create the UAC tables on localhost.
-             */
-            'create-local-tables': {
-                src: 'sql/create_tables.sql',
-                options: {
-                    connection: get_connection()
-                }
-            },
-            /**
-             * Create the UAC data on localhost.
-             */
-            'create-local-data': {
-                src: 'sql/create_data.sql',
-                options: {
-                    connection: get_connection()
-                }
-            },
-            /**
-             * Create a UAC database on devnet.
-             */
-            'create-devnet-db': {
-                src: 'sql/create_database.sql',
-                options: {
-                    connection: {
-                        user: 'postgres',
-                        password: 'devnet',
-                        host: 'uac.dev.mandiant.com',
-                        port: 5432
-                    }
-                }
-            },
-            /**
-             * Create the UAC tables on devnet.
-             */
-            'create-devnet-tables': {
-                src: 'sql/create_tables.sql',
-                options: {
-                    connection: get_connection({host: 'uac.dev.mandiant.com'})
-                }
-            },
-            /**
-             * Create the UAC data on localhost.
-             */
-            'create-devnet-data': {
-                src: 'sql/create_data.sql',
-                options: {
-                    connection: get_connection({host: 'uac.dev.mandiant.com'})
-                }
-            }
-        },
-        //TODO: the output file dir should be a var
         coffee: {
             'uac-server': {
                 options: {
@@ -407,7 +118,7 @@ module.exports = function (grunt) {
                     sourceMap: true
                 },
                 files: {
-                    'uac-server.js': 'uac-server.coffee'
+                    'dist/server/uac-server.js': 'uac-server.coffee'
                 }
             },
             node: {
@@ -417,7 +128,7 @@ module.exports = function (grunt) {
                 expand: true,
                 cwd: 'src/server/js',
                 src: ['**/*.coffee'],
-                dest: 'static/server/js',
+                dest: 'dist/server/js',
                 ext: '.js'
             },
             web: {
@@ -425,9 +136,9 @@ module.exports = function (grunt) {
                     sourceMap: true
                 },
                 expand: true,
-                cwd: 'static/client/js/raw',
+                cwd: 'dist/client/js/raw',
                 src: ['**/*.coffee'],
-                dest: 'static/client/js/raw',
+                dest: 'dist/client/js/raw',
                 ext: '.js'
             }
         },
@@ -443,7 +154,7 @@ module.exports = function (grunt) {
                     amd: true
                 },
                 files: {
-                    'static/client/js/raw/uac/ejs/templates.js': ['src/client/js/uac/ejs/*.ejs']
+                    'dist/client/js/raw/uac/ejs/templates.js': ['src/client/js/uac/ejs/*.ejs']
                 }
             },
             sf: {
@@ -453,7 +164,7 @@ module.exports = function (grunt) {
                     amd: true
                 },
                 files: {
-                    'static/client/js/raw/sf/ejs/templates.js': ['src/client/js/sf/ejs/*.ejs']
+                    'dist/client/js/raw/sf/ejs/templates.js': ['src/client/js/sf/ejs/*.ejs']
                 }
             },
             alerts: {
@@ -463,10 +174,10 @@ module.exports = function (grunt) {
                     amd: true
                 },
                 files: {
-                    'static/client/js/raw/alerts/ejs/templates.js': ['src/client/js/alerts/ejs/*.ejs']
+                    'dist/client/js/raw/alerts/ejs/templates.js': ['src/client/js/alerts/ejs/*.ejs']
                 }
             },
-            //these should copy into static
+            //these should copy into dist
             'uac-dev': {
                 options: {
                     prettify: true,
@@ -474,7 +185,7 @@ module.exports = function (grunt) {
                     amd: true
                 },
                 files: {
-                    'static/client/js/raw/uac/ejs/templates.js': ['src/client/js/uac/ejs/*.ejs']
+                    'dist/client/js/raw/uac/ejs/templates.js': ['src/client/js/uac/ejs/*.ejs']
                 }
             },
             'sf-dev': {
@@ -484,7 +195,7 @@ module.exports = function (grunt) {
                     amd: true
                 },
                 files: {
-                    'static/client/js/raw/sf/ejs/templates.js': ['src/client/js/sf/ejs/*.ejs']
+                    'dist/client/js/raw/sf/ejs/templates.js': ['src/client/js/sf/ejs/*.ejs']
                 }
             },
             'alerts-dev': {
@@ -494,7 +205,7 @@ module.exports = function (grunt) {
                     amd: true
                 },
                 files: {
-                    'static/client/js/raw/alerts/ejs/templates.js': ['src/client/js/alerts/ejs/*.ejs']
+                    'dist/client/js/raw/alerts/ejs/templates.js': ['src/client/js/alerts/ejs/*.ejs']
                 }
             }
         },
@@ -504,7 +215,7 @@ module.exports = function (grunt) {
              */
             templates: {
                 files: ['src/client/js/uac/ejs/*.ejs', 'src/client/js/alerts/ejs/*.ejs', 'src/client/js/sf/ejs/*.ejs'],
-                tasks: ['jst-dev']//should copy directly into static
+                tasks: ['jst-dev']//should copy directly into dist
             },
             'grunt': {
                 files: ['Gruntfile.js'],
@@ -524,41 +235,61 @@ module.exports = function (grunt) {
             }
         },
         clean: {
-            preBuild: ['static'],
-            postBuild: ["static/client/js/.tmp"]
+            preBuild: ['dist'],
+            postBuild: ["dist/client/js/.tmp"]
         },
         copy: {
             preBuild: {
                 files: [
-                    {expand: true, cwd: 'src/client/js', src: ['**/*.js','**/*.coffee'], dest: 'static/client/js/raw', filter: 'isFile'}
+                    {expand: true, cwd: 'src/client/js', src: ['**/*.js','**/*.coffee'], dest: 'dist/client/js/raw', filter: 'isFile'}
                 ]
             },
             cssResources: {
                 files: [
-                    {expand: true, cwd: 'static/client/js/raw/lib/font-awesome/fonts', src: ['**/*'], dest: 'static/client/fonts', filter: 'isFile'},
-                    {expand: true, cwd: 'static/client/js/raw/lib/select2', src: ['*.png'], dest: 'static/client/css', filter: 'isFile'},
-                    {expand: true, cwd: 'static/client/js/raw/lib/bootstrap/css', src: ['bootstrap.min.css'], dest: 'static/client/css/bootstrap', filter: 'isFile'},
-                    {expand: true, cwd: 'static/client/js/raw/lib/bootswatch', src: ['**/*.css'], dest: 'static/client/css/bootswatch', filter: 'isFile'},
-                    {expand: true, cwd: 'src/client/css/img', src: ['**/*'], dest: 'static/client/css/img', filter: 'isFile'},
-                    {expand: true, cwd: 'src/client/css/img', src: ['sort_*.png'], dest: 'static/client/img', filter: 'isFile'}
+                    {expand: true, cwd: 'dist/client/js/raw/lib/font-awesome/fonts', src: ['**/*'], dest: 'dist/client/fonts', filter: 'isFile'},
+                    {expand: true, cwd: 'dist/client/js/raw/lib/select2', src: ['*.png'], dest: 'dist/client/css', filter: 'isFile'},
+                    {expand: true, cwd: 'dist/client/js/raw/lib/bootstrap/css', src: ['bootstrap.min.css'], dest: 'dist/client/css/bootstrap', filter: 'isFile'},
+                    {expand: true, cwd: 'dist/client/js/raw/lib/bootswatch', src: ['**/*.css'], dest: 'dist/client/css/bootswatch', filter: 'isFile'},
+                    {expand: true, cwd: 'src/client/css/img', src: ['**/*'], dest: 'dist/client/css/img', filter: 'isFile'},
+                    {expand: true, cwd: 'src/client/css/img', src: ['sort_*.png'], dest: 'dist/client/img', filter: 'isFile'}
 
                 ]
             },
             unconvertedNode:{
                 files: [
-                    {expand: true, cwd: 'src/server', src: ['**/*.js', '**/*.json', '**/*.html'], dest: 'static/server', filter: 'isFile'}
+                    {expand: true, cwd: 'src/server', src: ['**/*.js', '**/*.json', '**/*.html'], dest: 'dist/server', filter: 'isFile'}
+                ]
+            },
+            nodePackages:{
+                files: [
+                    {expand: true, src: ['package.json'], dest: 'dist/server/', filter: 'isFile'}
+                ]
+            },
+            serverConfig:{
+                files: [
+                    {expand: true, cwd: 'conf', src: ['**/*'], dest: 'dist/server/conf', filter: 'isFile'}
+                ]
+            },
+            binScripts:{
+                files: [
+                    {expand: true, cwd: 'bin', src: ['**/*'], dest: 'dist/server/bin', filter: 'isFile'}
+                ]
+            },
+            serverViews:{
+                files: [
+                    {expand: true, cwd: 'views', src: ['**/*'], dest: 'dist/server/views', filter: 'isFile'}
                 ]
             }
         },
         cssmin: {
             combine:{
                 files: {
-                    "static/client/css/main.css": [
+                    "dist/client/css/main.css": [
                         'src/client/css/base.css',
-                        'static/client/js/raw/lib/font-awesome/css/font-awesome.min.css',
-                        'static/client/js/raw/lib/select2/select2.css',
+                        'dist/client/js/raw/lib/font-awesome/css/font-awesome.min.css',
+                        'dist/client/js/raw/lib/select2/select2.css',
                         'src/client/css/typeahead.js-bootstrap.css',
-                        'static/client/js/raw/lib/datatables/jquery.dataTables.css',
+                        'dist/client/js/raw/lib/datatables/jquery.dataTables.css',
                         'src/client/css/datatables.css',
                         'src/client/css/jquery.iocViewer.css'
                     ]
@@ -569,7 +300,7 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     optimize: 'none',
-                    appDir: "static/client/js/raw",
+                    appDir: "dist/client/js/raw",
                     baseUrl: ".",
                     keepBuildDir: true,
                     allowSourceOverwrites: true,
@@ -625,7 +356,7 @@ module.exports = function (grunt) {
                             exports: '_'
                         }
                     },
-                    dir: "static/client/js/.tmp",
+                    dir: "dist/client/js/.tmp",
                     modules: [
                         {
                             name: "../modules/main",
@@ -652,8 +383,24 @@ module.exports = function (grunt) {
                     ]
                 }
             }
+        },
+        shell: {
+            /**
+             * Install the node libraries.
+             */
+            'install-libs': {
+                options: {
+                    stdout: true,
+                    stderr: true
+                },
+                command: [
+                    'cd dist/server',
+                    'npm install --production'
+                ].join('&&')
+            }
         }
     });
+
     grunt.registerTask('build', [
         'clean:preBuild',
 
@@ -671,115 +418,19 @@ module.exports = function (grunt) {
 
         //build server
         'coffee:node',
-        'copy:unconvertedNode'
+        'copy:unconvertedNode',
+        'copy:nodePackages',
+        'copy:serverConfig',
+        'copy:binScripts',
+        'copy:serverViews',
+        'shell:install-libs'
     ]);
-    /**
-     * Deploy a local database.
-     *
-     * $ grunt deploy-local-db
-     */
-    grunt.registerTask('deploy-local-db', 'Deploy a local database.', function () {
-        grunt.task.run('run-sql:create-local-db', 'run-sql:create-local-tables', 'run-sql:create-local-data');
-    });
 
-    /**
-     * Deploy a devnet database.
-     *
-     * $ grunt deploy-devnet-db
-     */
-    grunt.registerTask('deploy-devnet-db', 'Deploy a devnet database.', function () {
-        grunt.task.run('run-sql:create-devnet-db', 'run-sql:create-devnet-tables', 'run-sql:create-devnet-data');
-    });
-
-    grunt.registerTask('dump-config', 'Dump the configuration to console.', function() {
-        console.dir(grunt.config());
-    });
-
-    /**
-     * Delete the build directory if the user confirmed deletion.
-     */
-    grunt.registerTask('delete-build-dir', 'Delete the build directory.', function() {
-        grunt.config.requires('build_dir');
-        if (grunt.config('delete_build_dir') === true) {
-            grunt.log.writeln('Deleting build directory: ' + grunt.config('build_dir'));
-            grunt.file.delete(grunt.config('build_dir'), {force: true});
-            grunt.log.ok();
-            return true;
-        }
-        else {
-            // Fail.
-            return false;
-        }
-    });
-
-    /**
-     * Create the build directory.
-     */
-    grunt.registerTask('create-build-dir', 'Create the build directory.', function() {
-        grunt.config.requires('build_dir');
-        grunt.config.requires('build_uac_dir');
-
-        grunt.log.writeln('Creating the build directory: ' + grunt.config('build_dir'));
-        grunt.file.mkdir(grunt.config('build_dir'));
-        grunt.log.ok();
-
-        grunt.log.writeln('Creating the UAC build directory: ' + grunt.config('build_uac_dir'));
-        grunt.file.mkdir(grunt.config('build_uac_dir'));
-        grunt.log.ok();
-    });
-
-    /**
-     * Check whether the build directory exists and prompt the user to confirm deletion.
-     */
-    grunt.registerTask('check-build-dir', 'Clean and create the build directory.', function() {
-        grunt.config.requires('build_dir');
-        if (grunt.file.exists(grunt.config('build_dir'))) {
-            grunt.log.writeln('Build directory exists: ' + grunt.config('build_dir'));
-
-            // Remove the existing build directory.
-            grunt.task.run(['prompt:delete-build-dir', 'delete-build-dir']);
-        }
-        grunt.task.run('create-build-dir');
-    });
-
-    /**
-     * Create the UAC RPM package.
-     */
-    grunt.registerTask('build-rpm', 'Build the UAC RPM package.', [
-        'check-build-dir',      // Ensure the build directory exists.
-        'gitclone:uac',         // Pull the UAC baseline.
-        'shell:install-libs',   // Load the dependencies.
-        'uglify',               // Compress the JS files.
-        'jst',                  // Compile the templates.
-        'easy_rpm'          // Create the RPM.
-    ]);
 
     /**
      * Compile the JST templates for development.
      */
     grunt.registerTask('jst-dev', ['jst:uac-dev', 'jst:alerts-dev', 'jst:sf-dev']);
-
-    /**
-     * Compile the JST templates, coffeescript files, and watch for changes.
-     */
-    grunt.registerTask('compile-watch', ['jst-dev', 'coffee', 'watch']);
-
-    /**
-     * Deploy an existing UAC rpm to devnet.
-     */
-    grunt.registerTask('deploy-devnet', ['scp:devnet', 'sshexec:install-devnet']);
-
-    /**
-     * Deploy an existing UAC rpm to the FTP site.
-     */
-    grunt.registerTask('deploy-ftp', function() {
-        grunt.task.run(['prompt:passphrase', 'sftp:prod']);
-    });
-
-    /**
-     * Build the UAC RPM and install it to the devnet environment.
-     */
-    grunt.registerTask('build-deploy-devnet', ['build-rpm', 'deploy-devnet']);
 
 
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -800,6 +451,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-touch');
+    grunt.loadNpmTasks('grunt-rpm');
+
 };
 
 /**

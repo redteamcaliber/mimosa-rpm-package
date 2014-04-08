@@ -1,5 +1,5 @@
 window.require =
-    baseUrl: "/static/client/js/raw",
+    baseUrl: "/static/js/raw",
     paths:
         async: 'lib/async/async'
         backbone: 'lib/backbone/backbone'
