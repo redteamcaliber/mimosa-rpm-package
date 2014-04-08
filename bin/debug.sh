@@ -6,7 +6,7 @@
 
 # Set the development mode configuration.
 export NODE_ENV=dev
-export NODE_PATH=static/server/js
+export NODE_PATH=dist/server/js
 
 # The relevant file extensions.
 EXTENSIONS=js,html,json,sh

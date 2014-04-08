@@ -89,14 +89,12 @@ module.exports = function (grunt) {
                 vendor: 'Mandiant',
                 url: 'http://www.mandiant.com',
                 tempDir: '<%= build_rpm_dir %>',
-//                keepTemp: true,
-//                defattrScript: [
-//                    {user: 'root', group: 'root'}
-//                ],
-//                postInstallScript: [
-//                    'mkdir -p /opt/web/apps/uac/logs',
-//                    'if [ $(pgrep -f "node uac-server.js") ]; then echo "Restarting UAC..."; restart uac; else echo "Starting UAC..."; start uac; fi'
-//                ]
+                defattrScript: [
+                    {user: 'root', group: 'root'}
+                ],
+                postInstallScript: [
+                    'mkdir -p /opt/web/apps/uac/server/logs'
+                ]
             },
             release: {
                 files: [
@@ -104,7 +102,7 @@ module.exports = function (grunt) {
                         // Include the root files.
                         cwd: '<%= build_uac_dir %>',
                         src: '**/*',
-                        dest: '/opt/web/apps/uac/dist'
+                        dest: '/opt/web/apps/uac'
                     }
                 ]
             }
@@ -422,8 +420,13 @@ module.exports = function (grunt) {
         'copy:nodePackages',
         'copy:serverConfig',
         'copy:binScripts',
-        'copy:serverViews',
-        'shell:install-libs'
+        'copy:serverViews'
+    ]);
+
+    grunt.registerTask('rpm', [
+        'build',
+        'shell:install-libs',
+        'easy_rpm'
     ]);
 
 
@@ -451,7 +454,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-touch');
-    grunt.loadNpmTasks('grunt-rpm');
 
 };
 
