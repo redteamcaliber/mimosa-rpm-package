@@ -16,4 +16,4 @@ DIRECTORIES=bin,conf,dist/server
 
 IGNORED=
 
-supervisor -e ${EXTENSIONS} -w ${DIRECTORIES} uac-server.js
+supervisor -e ${EXTENSIONS} -w ${DIRECTORIES} dist/server/uac-server.js
