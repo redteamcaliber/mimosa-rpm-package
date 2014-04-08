@@ -393,7 +393,7 @@ module.exports = function (grunt) {
                 },
                 command: [
                     'cd dist/server',
-                    'npm install --production'
+                    'PATH=$PATH:/opt/node/node-v0.10.15-linux-x64/bin npm install --production'
                 ].join('&&')
             }
         }
