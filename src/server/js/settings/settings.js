@@ -32,6 +32,9 @@ exports.UAC_DB_NAME = 'uac:db_name';
 exports.UAC_SS_API_URL = 'uac:ss_api_url';
 exports.UAC_SF_API_URL = 'uac:sf_api_url';
 
+exports.REDIS_AMHASH_TIMEOUT_SECS = 'redis:amhash_timeout_secs';
+exports.REDIS_AMHASH_CACHED_PROPERTIES = 'redis:amhash_cached_properties';
+
 // SSO Settings.
 exports.SSO_AUTH_USER = 'sso:auth_user';
 exports.SSO_AUTH_PASS = 'sso:auth_pass';

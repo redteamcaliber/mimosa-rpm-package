@@ -345,6 +345,17 @@ app.get('/api/hosts', function (req, res, next) {
         }
     }
 });
+/**
+ * Route for retrieving one or more sets of host informtion from hashes
+ */
+app.get('/api/hostinfo/:hashes', function(req, res, next){
+    if (route_utils.validate_input('hashes', req.params, res)) {
+        hashes = req.params.hashes.split(";");
+        sf_api.get_hostinfo_by_hash_list(hashes, req.attribtues, function(err, result){
+            err ? next(err) : route_utils.send_rest(req, res, next, result);
+        });
+    }
+});
 
 /**
  * Route for retrieving a single host value by hash.
