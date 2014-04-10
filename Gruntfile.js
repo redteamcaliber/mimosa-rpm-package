@@ -230,6 +230,10 @@ module.exports = function (grunt) {
             'web-coffee': {
                 files: ['src/client/js/**/*.coffee', 'src/client/js/**/*.js'],
                 tasks: ['copy:preBuild','coffee:web']
+            },
+            'css': {
+                files: ['src/client/css/**/*.css'],
+                tasks: ['cssmin']
             }
         },
         clean: {
@@ -286,6 +290,7 @@ module.exports = function (grunt) {
                         'src/client/css/base.css',
                         'dist/client/js/raw/lib/font-awesome/css/font-awesome.min.css',
                         'dist/client/js/raw/lib/select2/select2.css',
+                        'dist/client/js/raw/lib/bootstrap-datepicker/datepicker3.css',
                         'src/client/css/typeahead.js-bootstrap.css',
                         'dist/client/js/raw/lib/datatables/jquery.dataTables.css',
                         'src/client/css/datatables.css',
@@ -320,7 +325,8 @@ module.exports = function (grunt) {
                         select2: 'lib/select2/select2',
                         typeahead: 'lib/typeahead.js/typeahead',
                         underscore: 'lib/underscore/underscore',
-                        'underscore.string': 'lib/underscore.string/underscore.string'
+                        'underscore.string': 'lib/underscore.string/underscore.string',
+                        bootstrap_datepicker: 'lib/bootstrap-datepicker/bootstrap-datepicker'
                     },
                     shim: {
                         jquery: {
@@ -333,6 +339,10 @@ module.exports = function (grunt) {
                         bootstrap_growl: {
                             deps: ['jquery'],
                             exports: '$.bootstrapGrowl'
+                        },
+                        bootstrap_datepicker: {
+                            deps: ['jquery'],
+                            exports: '$'
                         },
                         highlighter: {
                             deps: ['jquery'],

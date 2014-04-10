@@ -19,6 +19,7 @@ window.require =
         typeahead: 'lib/typeahead.js/typeahead'
         underscore: 'lib/underscore/underscore'
         'underscore.string': 'lib/underscore.string/underscore.string'
+        bootstrap_datepicker: 'lib/bootstrap-datepicker/bootstrap-datepicker'
     shim: {
         jquery: {
             exports: '$'
@@ -30,6 +31,10 @@ window.require =
         bootstrap_growl: {
             deps: ['jquery']
             exports: '$.bootstrapGrowl'
+        }
+        bootstrap_datepicker: {
+          deps: ['jquery']
+          exports: '$'
         }
         highlighter: {
             deps: ['jquery']
