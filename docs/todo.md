@@ -17,6 +17,11 @@ UAC ToDo
 ### Alerts Details View
 x - Parse the header data for NX cnc services.
 x - Aggregate alert signatures of the same type instead of displaying multiple tags when the same signature is repeated.
+- Format the occurred and updated dates within the header according to how long ago they are.
+- Move the raw alert to a modal popup rather than a rollup.
+- Format the raw alert data.
+- Make the raw alert data searchable.
+- Look into the table controls class to see if it needs to be updated.
 - Need to have a signature header section and them just dump the rest of the name value pairs to ensure to pick up
   all of the data.
 - Implement the a OS change report view.
@@ -24,16 +29,14 @@ x - Aggregate alert signatures of the same type instead of displaying multiple t
 - Display the explanation/anomoly field.
 - Make the alerts view linkable.
 - Look into displaying pcap text data.
-- Need to display the selected malware.
-- Add the stype to the header.
-- Move the raw alert to a modal popup rather than a rollup.
 - Format the EX alert details.
-- Make the artifacts downloadable.
+x - Make the artifacts downloadable.
 - Add table view controls support.
 - Make the view linkable.
 - Add tagging.
 - Add the ability to add comments.
 - Display comments in the activity feed.
+- Parse out signature descriptions from FE web site.
 
 ### FE Alerts Details View
 -

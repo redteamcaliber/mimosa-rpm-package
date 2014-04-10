@@ -1,3 +1,25 @@
-<div style="overflow: auto">
-    <pre style="width: auto; font-size: 80%"><%= raw_alert %></pre>
+<div id="raw-alert-div" class="modal fade" style="overflow: auto" tabindex="-1">
+    <div class="modal-dialog" style="width: 80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4>
+                    <icon class="fa fa-code"></icon>
+                    Raw Alert
+                </h4>
+            </div>
+            <div class="modal-body" style="max-height: 900px;">
+                <div class="container" style="width: 100%">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div style="overflow: auto">
+                                <pre class="uac-pre-custom"
+                                     style="width: auto; height: 800px; font-size: 80%"><%= alert %></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

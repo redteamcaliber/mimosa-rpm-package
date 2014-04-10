@@ -23,7 +23,7 @@
     <orderEntry type="library" name="backbone-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="jquery-DefinitelyTyped" level="application" />
     <orderEntry type="library" name="underscore-DefinitelyTyped" level="application" />
-    <orderEntry type="library" name="marionette-DefinitelyTyped" level="application" />
+    <orderEntry type="library" name="marionette-DefinitelyTyped" level="project" />
   </component>
 </module>
 

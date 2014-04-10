@@ -1,188 +1,145 @@
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <i class="fa fa-exclamation-circle"></i> Alert
-    </div>
-    <div class="panel-body">
+<div class="row">
 
-        <table style="width: 100%">
-            <tr>
-                <td class="uac-theme-border-right" style="width: 5%; padding-right: 0">
-                    Controls
-                </td>
-                <td style="padding-left: 25px;">
-
-                    <!-- Signature name row -->
-                    <div class="row" style="margin-bottom: 15px">
-
-                        <div class="col-sm-12 uac-theme-border-bottom">
-                            <label>
-                                <h4>
-                                    <%= alert.type %>
-                                </h4>
-                            </label>
-                            <span class="pull-right" style="margin-bottom: 10px">
-                                <button type="button" class="btn btn-link">
-                                    <i class="fa fa-link"></i> Link
-                                </button>
-                                <span class="raw-region"></span>
-                                <button type="button" class="btn btn-link">
-                                    <i class="fa fa-comment-o"></i> Add Comment
-                                </button>
-                                <button type="button" class="btn btn-link   ">
-                                    <i class="fa fa-tag"></i> Tag
-                                </button>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="row">
-
-                        <!-- Header: Column1 -->
-                        <div class="col-sm-4 uac-theme-border-right">
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label>Priority / Severity</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <% if (alert.priority == 1) { %>
-                                    <span class="label label-danger">
+    <!-- Header: Column1 -->
+    <div class="col-sm-4 uac-theme-border-right">
+        <div class="row">
+            <div class="col-sm-4">
+                <label>Priority / Severity</label>
+            </div>
+            <div class="col-sm-8">
+                <% if (alert.priority == 1) { %>
+                <span class="label label-danger">
                                         <%= alert.priority %>
                                     </span>
-                                    <% } else if (alert.priority == 2) { %>
-                                    <span class="label label-warning">
+                <% } else if (alert.priority == 2) { %>
+                <span class="label label-warning">
                                         <%= alert.priority %>
                                     </span>
-                                    <% } else if (alert.priority == 3) { %>
-                                    <span class="label label-success">
+                <% } else if (alert.priority == 3) { %>
+                <span class="label label-success">
                                         <%= alert.priority %>
                                     </span>
-                                    <% } else if (alert.priority == 4) { %>
-                                    <span class="label label-primary">
+                <% } else if (alert.priority == 4) { %>
+                <span class="label label-primary">
                                         <%= alert.priority %>
                                     </span>
-                                    <% } else { %>
-                                    <span class="label label-default">
+                <% } else { %>
+                <span class="label label-default">
                                         <%= alert.priority %>
                                     </span>
-                                    <% } %>
+                <% } %>
 
-                                    &nbsp;
+                &nbsp;
 
-                                    <% if (alert.severity == "crit") { %>
-                                    <span class="label label-danger">
+                <% if (alert.severity == "crit") { %>
+                <span class="label label-danger">
                                         High
                                     </span>
-                                    <% } else if (alert.severity == "majr") { %>
-                                    <span class="label label-warning">
+                <% } else if (alert.severity == "majr") { %>
+                <span class="label label-warning">
                                         Medium
                                      </span>
-                                    <% } else if (alert.severity == "minr") { %>
-                                    <span class="label label-default">
+                <% } else if (alert.severity == "minr") { %>
+                <span class="label label-default">
                                         Low
                                      </span>
-                                    <% } else { %>
-                                    <span class="label label-default">
+                <% } else { %>
+                <span class="label label-default">
                                         <%= alert.severity %>
                                      </span>
-                                    <% } %>
-                                </div>
+                <% } %>
+            </div>
 
-                            </div>
+        </div>
 
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label>Occurred</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <%= alert.occurred %>
-                                </div>
-                            </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <label>Occurred</label>
+            </div>
+            <div class="col-sm-8">
+                <%= alert.occurred %>
+            </div>
+        </div>
 
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label>Updated</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <%= alert.updated %>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Header: Column 2 -->
-                        <div class="col-sm-4 uac-theme-border-right">
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label>Source</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <%= alert.src %>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label>Destination</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <%= alert.dst %>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label>Analysis</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <%= alert.analysis %>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- Header: Column 3 -->
-                        <div class="col-sm-4">
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label>Client</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <%= alert.client %>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label>Device</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <%= alert.device %>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-sm-4">
-                                    <label>Device Type</label>
-                                </div>
-                                <div class="col-sm-8">
-                                    <%= alert.device_type %>
-                                    &nbsp;
-                                    <% if (alert.device_type == "NX") { %>
-                                    <i class="fa fa-globe"></i>
-                                    <% } else if (alert.device_type == "EX") { %>
-                                    <i class="fa fa-envelope"></i>
-                                    <% } else if (alert.device_type == "FX") { %>
-                                    <i class="fa fa-file"></i>
-                                    <% } %>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </td>
-            </tr>
-        </table>
+        <div class="row">
+            <div class="col-sm-4">
+                <label>Updated</label>
+            </div>
+            <div class="col-sm-8">
+                <%= alert.updated %>
+            </div>
+        </div>
 
     </div>
+
+    <!-- Header: Column 2 -->
+    <div class="col-sm-4 uac-theme-border-right">
+        <div class="row">
+            <div class="col-sm-4">
+                <label>Source</label>
+            </div>
+            <div class="col-sm-8">
+                <%= alert.src %>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <label>Destination</label>
+            </div>
+            <div class="col-sm-8">
+                <%= alert.dst %>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <label>Analysis</label>
+            </div>
+            <div class="col-sm-8">
+                <%= alert.analysis %>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Header: Column 3 -->
+    <div class="col-sm-4">
+        <div class="row">
+            <div class="col-sm-4">
+                <label>Client</label>
+            </div>
+            <div class="col-sm-8">
+                <%= alert.client %>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <label>Device</label>
+            </div>
+            <div class="col-sm-8">
+                <%= alert.device %>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <label>Device Type</label>
+            </div>
+            <div class="col-sm-8">
+                <%= alert.device_type %>
+                &nbsp;
+                <% if (alert.device_type == "NX") { %>
+                <i class="fa fa-globe"></i>
+                <% } else if (alert.device_type == "EX") { %>
+                <i class="fa fa-envelope"></i>
+                <% } else if (alert.device_type == "FX") { %>
+                <i class="fa fa-file"></i>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
 </div>
+

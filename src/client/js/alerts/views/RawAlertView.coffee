@@ -7,6 +7,11 @@ define (require) ->
         template: templates['raw-alert.ejs']
 
         serializeData: ->
-            raw_alert: JSON.stringify @model.get('content'), null, 4
+            alert: JSON.stringify @model.get('content'), null, 4
+
+        onShow: ->
+            @$('.modal').modal
+                backdrop: false
+            return
 
     RawAlertView

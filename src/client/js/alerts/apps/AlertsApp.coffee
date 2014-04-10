@@ -23,6 +23,7 @@ define (require) ->
     AlertsDetailsView = require 'alerts/views/AlertsDetailsView'
     AlertFullModel = require 'alerts/models/AlertFullModel'
 
+    RawAlertView = require 'alerts/views/RawAlertView'
 
     #
     # Layout for displaying the main alert template.
@@ -31,6 +32,7 @@ define (require) ->
         template: templates['alerts-layout.ejs'],
         regions:
             breadcrumbs_region: '#alerts-breadcrumbs'
+            dialog_region: '.dialog-region'
             filters_region: '#alerts-filters'
             filters_content_region: '#alerts-filters-content'
             list_region: '#alerts-lists'
@@ -180,25 +182,28 @@ define (require) ->
             }
 
         vent.on Events.ALERTS_ALERT_SELECTED, (row_data) =>
-            @alert = new AlertFullModel()
-            @alert.uuid = row_data.uuid
+            alert = new AlertFullModel()
+            alert.uuid = row_data.uuid
 
-            @details_view = new AlertsDetailsView
-                model: @alert
+            details_view = new AlertsDetailsView
+                model: alert
 
-            @listenTo @alert, 'sync', ->
-                @layout.details_content_region.show @details_view
+            @listenToOnce alert, 'sync', ->
+                @layout.details_content_region.show details_view
 
             # Load the alert.
             utils.block_element @layout.details_region.el
-            @alert.fetch
+            alert.fetch
                 success: =>
                     utils.unblock @layout.details_region.el
                 error: =>
                     utils.unblock @layout.details_region.el
 
         vent.on Events.ALERTS_RAW_ALERT, (data) =>
-            utils.display_info 'TODO: Display the raw alert!'
+            view = new RawAlertView
+                model: new Backbone.Model(data)
+            @layout.dialog_region.show view
+
 
     # Export the alerts application.
     AlertsApp

@@ -1,6 +1,57 @@
 <div class="row">
     <div class="col-sm-12">
-        <div class="header-region"></div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-exclamation-circle"></i> Alert
+            </div>
+            <div class="panel-body">
+
+                <table style="width: 100%">
+                    <tr>
+                        <td class="uac-theme-border-right" style="width: 5%; padding-right: 0">
+                            <div class="controls-region"
+                        </td>
+                        <td style="padding-left: 25px;">
+
+                            <!-- Signature name row -->
+                            <div class="row" style="margin-bottom: 15px">
+
+                                <div class="col-sm-12 uac-theme-border-bottom">
+                                    <label>
+                                        <h4>
+                                            <%= alert.type %>
+                                        </h4>
+                                    </label>
+
+                                    <span class="pull-right" style="margin-bottom: 10px">
+                                        <button type="button" class="btn btn-link">
+                                            <i class="fa fa-link"></i> Link
+                                        </button>
+                                        <span class="raw-region"></span>
+                                        <button type="button" class="btn btn-link">
+                                            <i class="fa fa-comment-o"></i> Add Comment
+                                        </button>
+                                        <button type="button" class="btn btn-link   ">
+                                            <i class="fa fa-tag"></i> Tag
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="header-region"></div>
+                                </div>
+
+                            </div>
+
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
     </div>
 </div>
 
@@ -13,6 +64,10 @@
                 <div class="interface-region"></div>
 
                 <div class="request-region"></div>
+
+                <div class="message-region"></div>
+
+                <div class="os-change-region"></div>
             </div>
         </div>
     </div>
@@ -35,12 +90,6 @@
                         <div class="activity-list"></div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-12">
-                <div id="raw-alert"></div>
             </div>
         </div>
 

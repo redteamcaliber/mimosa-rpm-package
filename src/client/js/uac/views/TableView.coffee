@@ -772,12 +772,12 @@ define (require) ->
             @_expanded_rows
 
 
-        ###
-        Expand the contents of a row.
-        @param tr - the row.
-        @param details_callback - function(tr, data) - returns the details HTML.
-        ###
-        expand__collapse_row: (tr, details_callback) ->
+        #
+        # Expand the contents of a row.
+        # @param tr - the row.
+        # @param details_callback - function(tr, data) - returns the details HTML.
+        #
+        expand_collapse_row: (tr, details_callback) ->
             expanded = @expanded_rows()
             index = $.inArray(tr, expanded)
             if index is -1

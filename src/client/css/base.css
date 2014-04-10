@@ -59,6 +59,12 @@ table {
 
 /* UAC Styles */
 
+.uac-pre-custom {
+    background-color: inherit;
+    color: inherit;
+    border: 0
+}
+
 .uac-header {
     font-size: 16px;
     /*color: #006dcc;*/

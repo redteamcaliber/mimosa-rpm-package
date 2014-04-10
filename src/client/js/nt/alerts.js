@@ -66,7 +66,7 @@ NT.AlertsTableView = StrikeFinder.TableView.extend({
         };
 
         view.listenTo(view, 'expand', function(tr) {
-            view.expand__collapse_row(tr, function(data) {
+            view.expand_collapse_row(tr, function(data) {
                 return 'This is a test!';
             });
         });
