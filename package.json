@@ -34,7 +34,10 @@
     "moment": "2.4.x",
     "xml2js": "0.4.x",
     "json2csv": "2.2.1",
-    "socket.io": "0.9.x"
+    "socket.io": "0.9.x",
+    "redis": "0.10.1",
+    "pathval": "0.1.1"
+
   },
   "devDependencies": {
     "grunt": "*",

@@ -15,6 +15,10 @@ xml = require 'xml2js'
 
 uac_api = require 'uac-api'
 
+redis = require("redis")
+redisClient = redis.createClient()
+props = require('pathval')
+
 
 #
 # Retrieve the list of MCIRT services.
@@ -407,6 +411,57 @@ delete_sf = (req, callback) ->
 #
 # Seasick API's
 #
+#
+# Retrieve information for one or more hosts based on  the am_cert_hash's in the list. Will use a redis cache
+# to optimize retrieval time.
+# @param hashList - the list of am_cert_hash criteria.
+# @param attributes - sso attributes.
+# @param callback - function(err, hosts)
+#
+get_hostinfo_by_hash_list = (hashList, attributes, callback) ->
+  unless _.isArray hashList then hashList = [hashList]
+  async.waterfall [
+    (callback)->
+      #retrieve any hashes that we've already cached
+      redisClient.mget hashList, (err, cachedHashes)->
+        #filter out the hashes that weren't found
+        cachedHashes = _.filter cachedHashes, (hash)-> _.isString hash
+
+        #convert the json values back into objects
+        cachedHashes = _.map cachedHashes, (hash)-> JSON.parse(hash)
+
+        #filter out hashes in the hashList that are in the cachedHashes
+        uncachedHashes = _.filter hashList, (hash)-> _.isUndefined(_.findWhere(cachedHashes, {"hash":hash}))
+
+        callback(null, cachedHashes, uncachedHashes)
+
+    (cachedHashes, uncachedHashes, callback)->
+
+      #retrieve the hashes that weren't cached
+      if uncachedHashes.length > 0
+
+        get_hosts_by_hash_list uncachedHashes, attributes, (err, objects) ->
+
+          #prune the records to only contain the properties requested
+          desiredProperties = settings.get(settings.REDIS_AMHASH_CACHED_PROPERTIES)
+          recordTTL = settings.get(settings.REDIS_AMHASH_TIMEOUT_SECS)
+          filteredRecords = pluckMany objects, desiredProperties
+
+          #iterate over the filtered records and add them to redis
+          _.each filteredRecords, (record)-> redisClient.setex record.hash, recordTTL, JSON.stringify(record)
+
+          callback(null, filteredRecords.concat(cachedHashes))
+      else
+        callback(null, cachedHashes)
+  ], (err, results)->
+      callback null, JSON.stringify(results)
+
+pluckMany = (list, propertyNames)->
+  _.map list, (item)->
+    obj = {}
+    _.each propertyNames, (property)->
+      props.set obj, property, props.get(item, property)
+    return obj
 
 #
 # Retrieve the list of hosts for the am_cert_hash's in the list.  This call batches up the list of hashes and retrieves
@@ -703,6 +758,7 @@ exports.get_suppressions = get_suppressions
 # Seasick.
 exports.get_full_hosts_by_ip = get_full_hosts_by_ip
 exports.get_full_hosts_by_name = get_full_hosts_by_name
+exports.get_hostinfo_by_hash_list = get_hostinfo_by_hash_list
 exports.get_hosts_by_hash_list = get_hosts_by_hash_list
 exports.get_host_by_hash = get_host_by_hash
 exports.get_hosts_by_name = get_hosts_by_name
