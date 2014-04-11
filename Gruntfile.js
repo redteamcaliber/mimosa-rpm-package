@@ -249,9 +249,10 @@ module.exports = function (grunt) {
             cssResources: {
                 files: [
                     {expand: true, cwd: 'dist/client/js/raw/lib/font-awesome/fonts', src: ['**/*'], dest: 'dist/client/fonts', filter: 'isFile'},
-                    {expand: true, cwd: 'dist/client/js/raw/lib/select2', src: ['*.png'], dest: 'dist/client/css', filter: 'isFile'},
+                    {expand: true, cwd: 'dist/client/js/raw/lib/select2', src: ['*.png', '*.gif'], dest: 'dist/client/css', filter: 'isFile'},
                     {expand: true, cwd: 'dist/client/js/raw/lib/bootstrap/css', src: ['bootstrap.min.css'], dest: 'dist/client/css/bootstrap', filter: 'isFile'},
                     {expand: true, cwd: 'dist/client/js/raw/lib/bootswatch', src: ['**/*.css'], dest: 'dist/client/css/bootswatch', filter: 'isFile'},
+                    {expand: true, cwd: 'dist/client/js/raw/lib/bootstrap/fonts', src: ['*.*'], dest: 'dist/client/css/bootswatch/fonts', filter: 'isFile'},
                     {expand: true, cwd: 'src/client/css/img', src: ['**/*'], dest: 'dist/client/css/img', filter: 'isFile'},
                     {expand: true, cwd: 'src/client/css/img', src: ['sort_*.png'], dest: 'dist/client/img', filter: 'isFile'}
 
@@ -290,7 +291,7 @@ module.exports = function (grunt) {
                         'src/client/css/base.css',
                         'dist/client/js/raw/lib/font-awesome/css/font-awesome.min.css',
                         'dist/client/js/raw/lib/select2/select2.css',
-                        'dist/client/js/raw/lib/bootstrap-datepicker/datepicker3.css',
+                        'dist/client/js/raw/lib/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min.css',
                         'src/client/css/typeahead.js-bootstrap.css',
                         'dist/client/js/raw/lib/datatables/jquery.dataTables.css',
                         'src/client/css/datatables.css',
@@ -326,7 +327,7 @@ module.exports = function (grunt) {
                         typeahead: 'lib/typeahead.js/typeahead',
                         underscore: 'lib/underscore/underscore',
                         'underscore.string': 'lib/underscore.string/underscore.string',
-                        bootstrap_datepicker: 'lib/bootstrap-datepicker/bootstrap-datepicker'
+                        bootstrap_datepicker: 'lib/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min'
                     },
                     shim: {
                         jquery: {
@@ -362,6 +363,9 @@ module.exports = function (grunt) {
                         },
                         underscore: {
                             exports: '_'
+                        },
+                        datejs: {
+                            exports: ['datejs']
                         }
                     },
                     dir: "dist/client/js/.tmp",
