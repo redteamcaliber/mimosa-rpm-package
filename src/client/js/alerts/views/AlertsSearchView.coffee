@@ -1,7 +1,8 @@
 define (require) ->
     async = require 'async'
-    moment = require('moment')
-    View = require 'uac/views/View'
+    moment = require 'moment'
+    Marionette = require 'marionette'
+    ContainerView = require 'uac/views/ContainerView'
     utils = require 'uac/common/utils'
     vent = require 'uac/common/vent'
     TimeSearchView = require 'uac/views/TimeSearchView'
@@ -19,16 +20,15 @@ define (require) ->
     #
     # View to display tags search criteria.
     #
-    class TagsSearchView extends View
-        initialize: (options) ->
-            unless @collection
-                @collection = new TagCollection()
-            @listenTo @collection, 'sync', @render
+    class TagsSearchView extends Marionette.ItemView
+        template: templates['search-tags.ejs']
 
+        initialize: (options) ->
             if options and options.selected
                 @selected = options.selected
+            return
 
-        render: ->
+        serializeData: ->
             categories = [
                 {id: 'new', title: 'New'}
                 {id: 'open', title: 'Open'}
@@ -39,19 +39,17 @@ define (require) ->
                 if not (tag.category of category_map)
                     category_map[tag.category] = []
                 category_map[tag.category].push tag
-            context = {
+            (
                 categories: categories
                 category_map: category_map
-            }
+            )
 
-            @apply_template(templates, 'search-tags.ejs', context)
-
+        onRender: ->
             # Set the defaults.
             if @selected
                 @set_selected @selected
             else
                 @reset_selected()
-
             return @
 
         #
@@ -78,38 +76,26 @@ define (require) ->
         reset_selected: ->
             @set_selected(['notreviewed', 'investigating', 'escalate', 'reportable'])
 
-        #
-        # Fetch the tag values.
-        #
-        fetch: (params) ->
-            if @collection
-                @collection.fetch(params)
-            return
 
     #
     # View to allow the user to select clients.
     #
-    class ClientsSearchView extends View
-        initialize: (options) ->
-            unless @collection
-                @collection = new ClientCollection()
-            @listenTo(@collection, 'sync', @render)
+    class ClientsSearchView extends Marionette.ItemView
+        template: templates['search-clients.ejs']
 
+        initialize: (options) ->
             if options.selected
                 @selected = options.selected
             return
 
-        render: ->
-            context = {
-                clients: @collection.toJSON()
-            }
-            @apply_template(templates, 'search-clients.ejs', context)
+        serializeData: ->
+            clients: @collection.toJSON()
 
+        onRender: ->
             if @selected
                 @set_selected @selected
             else
                 @reset_selected()
-
             return @
 
         #
@@ -141,32 +127,22 @@ define (require) ->
             @$('option').prop 'selected', false
             return
 
-        #
-        # Retrieve the clients.
-        #
-        fetch: (params) ->
-            if @collection
-                @collection.fetch(params)
-
 
     #
     # View for displaying alert types search criteria.
     #
-    class TypesSearchView extends View
-        initialize: (options) ->
-            unless @collection
-                @collection = new AlertTypeCollection()
-            @listenTo @collection, 'sync', @render
+    class TypesSearchView extends Marionette.ItemView
+        template: templates['search-types.ejs']
 
+        initialize: (options) ->
             if options.selected
                 @selected = options.selected
             return
 
-        render: ->
-            @apply_template templates, 'search-types.ejs', {
-                types: @collection.toJSON()
-            }
+        serializeData: ->
+            types: @collection.toJSON()
 
+        onRender: ->
             if @selected
                 @set_selected @selected
             else
@@ -190,19 +166,22 @@ define (require) ->
             @set_selected([], false)
             return
 
-        fetch: (params) ->
-            if @collection
-                @collection.fetch(params)
-            return
-
     #
     # View for displaying alerts search criteria.  This view emits "search" events when a user clicks the search button.
     # The search criteria is passed along with the event.
     #
-    class AlertsSearchView extends View
+    class AlertsSearchView extends ContainerView
+        template: templates['search-layout.ejs']
+
         events:
             'click #search-button': 'on_search'
             'click #reset-button': 'on_reset'
+
+        regions:
+            tags_region: '.tags-region'
+            clients_region: '.clients-region'
+            time_region: '.time-region'
+            types_region: '.types-region'
 
         initialize: ->
             # Retrieve any previous selections.
@@ -210,20 +189,20 @@ define (require) ->
             if selected
                 console.debug "Found existing alerts search selections: #{JSON.stringify(selected)}"
 
-            # Create the layout.
-            @apply_template templates, 'search-layout.ejs'
-
             # Initialize the sub views.
+            selected_tags = if selected and selected.tags then selected.tags else undefined
+            @tags = new TagCollection()
+            tags_view = new TagsSearchView
+                selected: selected_tags
+                collection: @tags
+            @addChild @tags_region, tags_view
 
-            tags = if selected and selected.tags then selected.tags else undefined
-            @tags_view = new TagsSearchView
-                selected: tags
-                el: @$ '#search-tags'
-
-            clients = if selected and selected.clients then selected.clients else undefined
-            @clients_view = new ClientsSearchView
-                el: @$ '#search-clients'
-                selected: clients
+            selected_clients = if selected and selected.clients then selected.clients else undefined
+            @clients = new ClientCollection()
+            clients_view = new ClientsSearchView
+                selected: selected_clients
+                collection: @clients
+            @addChild @clients_region, clients_view
 
             time = if selected and selected.time then selected.time else undefined
             if time == 'custom'
@@ -231,49 +210,54 @@ define (require) ->
                 from = if selected and selected.from then selected.from else undefined
                 to = if selected and selected.to then selected.to else undefined
             @times = new TimeCollection()
-            @times_view = new TimeSearchView
+            times_view = new TimeSearchView
                 selected: time
                 from: from
                 to: to
                 default: 'days_1'
                 collection: @times
+            @addChild @time_region, times_view
 
-            types = if selected and selected.types then selected.types else undefined
-            @types_view = new TypesSearchView
-                el: @$ '#search-types'
-                selected: types
+            selected_types = if selected and selected.types then selected.types else undefined
+            @types = new AlertTypeCollection()
+            types_view = new TypesSearchView
+                collection: @types
+                selected: selected_types
+            @addChild @types_region, types_view
 
             return
 
         #
         # Render the base template.
         #
-        render: ->
+        onShow: ->
             utils.block()
             async.parallel [
                 (callback) =>
-                    @tags_view.fetch
-                        success: ->
+                    @tags.fetch
+                        success: =>
+                            @tags_region.show @findByRegion(@tags_region)
                             callback()
                         error: ->
                             callback()
                 (callback) =>
-                    @clients_view.fetch
-                        success: ->
+                    @clients.fetch
+                        success: =>
+                            @clients_region.show @findByRegion(@clients_region)
                             callback()
                         error: ->
                             callaback()
                 (callback) =>
                     @times.fetch
                         success: =>
-                            # TODO: Use regions to ensure previous view is closed.
-                            @$('#search-time').append(@times_view.render().el)
+                            @time_region.show @findByRegion(@time_region)
                             callback()
                         error: ->
                             callback()
                 (callback) =>
-                    @types_view.fetch
-                        success: ->
+                    @types.fetch
+                        success: =>
+                            @types_region.show @findByRegion(@types_region)
                             callback()
                         error: ->
                             callback()
@@ -285,45 +269,28 @@ define (require) ->
             return @
 
         #
-        # Clear any listeners and remove the views elements from the DOM.
-        #
-        close: ->
-            # Clean up the child views.
-            @tags_view.remove()
-            @tags_view = null
-
-            @clients_view.remove()
-            @clients_view = null
-
-            @times_view.close()
-            @times_view = null
-
-            @types_view.remove()
-            @types_view = null;
-
-            @remove()
-
-            @trigger 'close'
-            return
-
-        #
         # Handle a search click.
         #
         on_search: ->
             # Check whether the from and to dates are valid.
-            is_from_valid = @times_view.is_from_valid()
-            is_to_valid = @times_view.is_to_valid()
+            tags_view = @findByRegion(@tags_region)
+            times_view = @findByRegion(@time_region)
+            clients_view = @findByRegion(@clients_region)
+            types_view = @findByRegion(@types_region)
+
+            is_from_valid = times_view.is_from_valid()
+            is_to_valid = times_view.is_to_valid()
 
             # Container for the currently selected criteria.
             selected = {}
-            selected.tags = @tags_view.get_selected()
-            selected.clients = @clients_view.get_selected()
-            selected.time = @times_view.get_selected()
+            selected.tags = tags_view.get_selected()
+            selected.clients = clients_view.get_selected()
+            selected.time = times_view.get_selected()
             if is_from_valid
-                selected.from = @times_view.get_from_date()
+                selected.from = times_view.get_from_date()
             if is_to_valid
-                selected.to = @times_view.get_to_date()
-            selected.types = @types_view.get_selected()
+                selected.to = times_view.get_to_date()
+            selected.types = types_view.get_selected()
 
             if not is_from_valid
                 # From date is not valid.
@@ -344,10 +311,9 @@ define (require) ->
         # Handle a reset click.
         #
         on_reset: ->
-            @tags_view.reset_selected()
-            @clients_view.reset_selected()
-            @times_view.reset_selected()
-            @types_view.reset_selected()
+            @container.forEach (child) ->
+                if child.reset_selected
+                    child.reset_selected()
 
             # Clear any current selections.
             utils.storage Events.ALERTS_SEARCH, undefined
