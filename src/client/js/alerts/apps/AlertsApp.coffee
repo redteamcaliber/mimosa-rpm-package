@@ -142,7 +142,7 @@ define (require) ->
             @data = {}
             @data.tag = params.tags if params.tags
             @data.client_uuid = params.clients if params.clients and params.clients.length > 0
-            @data.alert_type = params.selected_types if params.selected_types and params.selected_types.length > 0
+            @data.alert_type = params.types if params.types and params.types.length > 0
             @data.is_endpoint_match = params.is_endpoint_match is true
             @data.begin = moment(params.from).unix() if params.from
             @data.end = moment(params.to).unix() if params.to

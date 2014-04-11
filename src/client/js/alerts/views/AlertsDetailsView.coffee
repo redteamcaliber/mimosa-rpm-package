@@ -185,7 +185,6 @@ define (require) ->
 
                     sections = []
                     for section of report
-                        console.log section
                         sections.push (
                             name: section
                             section_id: "#{section}_#{report_index}"
@@ -209,16 +208,7 @@ define (require) ->
 
     class AlertsDetailsView extends ContainerView
         template: templates['details-layout.ejs']
-        templateHelpers:
-            raw_alert: =>
-                return ''
-            format_date: (date) ->
-                utils.format_date_string date
-            to_json: (o) ->
-                if o
-                    JSON.stringify o, null, 4
-                else
-                    JSON.stringify {}, null, 4
+
         regions:
             artifacts_region: '.artifacts-region'
             header_region: '.header-region'
