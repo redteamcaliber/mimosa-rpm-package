@@ -81,7 +81,6 @@ define (require) ->
         # Set the selected time option.
         #
         set_selected: (selected) ->
-            console.dir selected
             if selected
                 # Grab the selected radio button.
                 selected_el = @$ "input:radio[name=time][value=#{selected}]"
