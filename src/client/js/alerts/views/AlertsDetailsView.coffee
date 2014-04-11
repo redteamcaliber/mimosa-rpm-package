@@ -170,7 +170,7 @@ define (require) ->
             alert:
                 artifacts: @model.get('alert').artifacts
 
-    class OSChangeView extends Marionette.ItemView
+    class OSChangeView extends Marionette.Layout
         template: templates['os-changes.ejs']
 
         serializeData: ->
@@ -184,10 +184,11 @@ define (require) ->
                     report = os_changes[report_index]
 
                     sections = []
-                    for section of report
+                    for section, data of report
                         sections.push (
                             name: section
                             section_id: "#{section}_#{report_index}"
+                            data: data
                         )
                     reports.push (
                         name: "os_changes_#{report_index}"
@@ -196,13 +197,19 @@ define (require) ->
                     )
             else
                 reports = undefined
-            data = (
+
+            @reports = reports
+
+            (
                 alert: (
-                    reports: reports
+                    reports: @reports
                 )
             )
-            console.dir data
-            data
+
+        onRender: ->
+            for report in @reports
+                for section in report.sections
+                    @addRegion
 
 
 
