@@ -62,7 +62,14 @@ table {
 .uac-pre-custom {
     background-color: inherit;
     color: inherit;
-    border: 0
+    border: 0;
+}
+
+.uac-code {
+    padding: 2px 4px;
+    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+    font-size: 90%;
+    white-space: nowrap;
 }
 
 .uac-header {

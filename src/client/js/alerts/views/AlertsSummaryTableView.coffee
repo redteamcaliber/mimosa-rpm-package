@@ -39,13 +39,15 @@ define (require) ->
     #
     class AlertsSummaryTableView extends TableView
         initialize: (options) ->
+            super options
+
             options.aoColumns = [
-                {sTitle: 'Pri', mData: 'highest_priority', sWidth: '5%', sClass: 'priority', sType: 'int-html'}
-                {sTitle: 'Name, Type(s), Device(s)', mData: 'name'}
-                {sTitle: 'New', mData: 'tags.notreviewed', sClass: 'center', sWidth: '12%', sType: 'int-html'}
-                {sTitle: 'In Prog', mData: 'tags.notreviewed', sClass: 'center', sWidth: '12%', sType: 'int-html'}
-                {sTitle: 'First Seen', mData: 'first_seen'}
-                {sTitle: 'Last Seen', mData: 'last_seen'}
+                {sTitle: 'Pri', mData: 'highest_priority', sClass: 'priority', sType: 'int-html'}
+                {sTitle: 'Name, Type(s), Device(s)', mData: 'name', sClass: 'wrap'}
+                {sTitle: 'New', mData: 'tags.notreviewed', sClass: 'center', sType: 'int-html', sWidth: '12%'}
+                {sTitle: 'In Prog', mData: 'tags.notreviewed', sClass: 'center', sType: 'int-html', sWidth: '12%'}
+                {sTitle: 'First Seen', mData: 'first_seen', sClass: 'nowrap'}
+                {sTitle: 'Last Seen', mData: 'last_seen', sClass: 'nowrap'}
             ]
 
             options.aoColumnDefs = [
@@ -56,10 +58,6 @@ define (require) ->
                 renderers.date_time_multiline(4)
                 renderers.date_time_multiline(5)
             ]
-
-            #            @listenTo @, 'row:callback', (row) ->
-            #                $('td:eq(2)', row).addClass('well')
-            #                $('td:eq(3)', row).addClass('well')
 
             options.aaSorting = [
                 [1, "asc"]
@@ -73,8 +71,6 @@ define (require) ->
             options.sDom = 'lftip'
 
             @listenTo(@, 'click', @on_click)
-
-            super options
 
             return
 

@@ -95,7 +95,7 @@ define (require) ->
             $(window.document.body).scrollTop(0)
             $(@filters_region.el).fadeOut(0).hide()
             $(@list_region.el).fadeOut(0).hide()
-            $(@details_region.el).fadeIn('slow').show()
+            $(@details_region.el).fadeIn('slow')
 
     #
     # Alerts application instance.
@@ -182,6 +182,8 @@ define (require) ->
             }
 
         vent.on Events.ALERTS_ALERT_SELECTED, (row_data) =>
+            @layout.details_content_region.reset()
+
             alert = new AlertFullModel()
             alert.uuid = row_data.uuid
 
@@ -192,12 +194,12 @@ define (require) ->
                 @layout.details_content_region.show details_view
 
             # Load the alert.
-            utils.block_element @layout.details_region.el
+            utils.block()
             alert.fetch
                 success: =>
-                    utils.unblock @layout.details_region.el
+                    utils.unblock()
                 error: =>
-                    utils.unblock @layout.details_region.el
+                    utils.unblock()
 
         vent.on Events.ALERTS_RAW_ALERT, (data) =>
             view = new RawAlertView

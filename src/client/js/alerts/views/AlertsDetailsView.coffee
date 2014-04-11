@@ -1,4 +1,3 @@
-
 define (require) ->
     Backbone = require 'backbone'
     Marionette = require 'marionette'
@@ -122,24 +121,28 @@ define (require) ->
                 for service in content.explanation['cnc-services']['cnc-service']
                     alert.services.push @parse_service(service)
 
-            {
-            alert: alert
-            }
+            (
+                alert: alert
+            )
 
+        #
+        # Parse the service data.
+        #
         parse_service: (service) ->
             result = {}
+            # The individual requests within the service.
+            result.requests = []
+            # The request metadata.
             result.server = "#{service.address}:#{service.port}"
             result.location = service.location
             result.protocol = if service.protocol then service.protocol.toUpperCase() else null
 
             if service.channel
-                parts = service.channel.split '::~~'
-                result.request = parts[0]
-                result.headers = []
-                for index in [1..parts.length] when index < parts.length
-                    part = parts[index]
-                    if part and part.trim() != ''
-                        result.headers.push parts[index]
+                # Split the data into individual requests.
+                requests = service.channel.split '::~~::~~'
+                for request in requests
+                    if request.trim() != ''
+                        result.requests.push(request.split '::~~')
             result
 
     #
@@ -166,7 +169,40 @@ define (require) ->
             alert:
                 artifacts: @model.get('alert').artifacts
 
-    class OSChangeView extends TreeView
+    class OSChangeView extends Marionette.ItemView
+        template: templates['os-changes.ejs']
+
+        serializeData: ->
+            os_changes = @model.attributes.content.explanation['os-changes']
+
+            if os_changes and os_changes.length > 0
+
+                reports = []
+
+                for report_index of os_changes
+                    report = os_changes[report_index]
+
+                    sections = []
+                    for section of report
+                        console.log section
+                        sections.push (
+                            name: section
+                            section_id: "#{section}_#{report_index}"
+                        )
+                    reports.push (
+                        name: "os_changes_#{report_index}"
+                        version: report.analysis.version
+                        sections: sections
+                    )
+            else
+                reports = undefined
+            data = (
+                alert: (
+                    reports: reports
+                )
+            )
+            console.dir data
+            data
 
 
     class ContainerView extends Marionette.Layout
@@ -189,6 +225,11 @@ define (require) ->
             return
 
         onShow: ->
+            # Validate regions.
+            for region, el of @regions
+                if $(el).length == 0
+                    console.warn "Warning: Region is not present: {#{region}:#{el}}"
+
             # If there is a view associated with a region then show it.
             for region_name, el of @regions
                 # Retrieve the region object.
@@ -229,21 +270,13 @@ define (require) ->
             header_region: '.header-region'
             interface_region: '.interface-region'
             message_region: '.message-region'
-            os_change_region: '.os-region'
+            os_changes_region: '.os-changes-region'
             request_region: '.request-region'
-            raw_alert_region: '#raw-alert'
             raw_region: '.raw-region'
             signatures_region: '.signatures-region'
             table_controls_region: '#table-controls'
 
         initialize: ->
-            super
-
-            # Validate regions.
-            for region in @regions
-                if $(region).length == 0
-                    throw "Exception, invalid region: #{region}"
-
             @addChild @raw_region, AlertRawMenu
             @addChild @header_region, AlertHeaderView
             @addChild @signatures_region, AlertSignaturesView
@@ -251,7 +284,7 @@ define (require) ->
             @addChild @request_region, AlertRequestView
             @addChild @artifacts_region, AlertsArtifactsView
             @addChild @message_region, AlertMessageView
-            @addChild @os_change_region, OSChangeView
+            @addChild @os_changes_region, OSChangeView
 
 
     return AlertsDetailsView

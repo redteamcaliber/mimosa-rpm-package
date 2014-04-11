@@ -1,0 +1,31 @@
+<% if (alert.reports) { %>
+<% _.each (alert.reports, function(report) { %>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <i class="fa fa-list-alt"></i> OS Change Detail
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-2">
+                <label>Version</label>
+            </div>
+            <div class="col-sm-2">
+                <%= report.version %>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <% _.each(report.sections, function(section) { %>
+                <p>
+                    <label><%= section.name %></label>
+                </p>
+
+                <div class="<%= section.name %>"></div>
+
+                <% }) %>
+            </div>
+        </div>
+    </div>
+</div>
+<% }) %>
+<% } %>

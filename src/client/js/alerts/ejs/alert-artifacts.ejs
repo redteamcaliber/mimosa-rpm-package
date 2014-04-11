@@ -12,9 +12,10 @@
         <tr>
             <td>
                 <a title="<%= artifact.file %>" href="<%= artifact.url %>">
-                    <%= artifact.name %></td>
+                    <%= artifact.name %>
                 </a>
-            <td><%= artifact.size %> bytes</td>
+            </td>
+            <td><%= artifact.size %> B</td>
             <td><%= artifact.type.toUpperCase() %></td>
         </tr>
         <% }) %>

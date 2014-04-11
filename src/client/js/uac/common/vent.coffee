@@ -1,7 +1,8 @@
 define (require) ->
 
     Backbone = require 'backbone'
-    Backbone.Wreqr = require 'backbone.wreqr'
+    Marionette = require 'marionette'
+
 
     # Return an event dispatcher singleton instance.
     return new Backbone.Wreqr.EventAggregator()

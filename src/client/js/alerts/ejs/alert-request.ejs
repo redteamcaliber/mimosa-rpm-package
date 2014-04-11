@@ -34,19 +34,19 @@
                 </div>
                 <% } %>
                 <div class="row">
-                    <div class="col-sm-12" style="overflow: auto">
+                    <div class="col-sm-12 uac-code" style="overflow: auto">
                         <hr/>
-                        <% if (service.request) { %>
-                        <code>
-                            <%= service.request %>
-                        </code><br/>
-                        <% _.each(service.headers, function(header) { %>
-                        <code>
-                            <%= header %>
-                        </code><br/>
-                        <% }) %>
+                        <% if (service.requests && service.requests.length > 0) { %>
+                            <!-- There are requests. -->
+                            <% _.each (service.requests, function(request) { %>
+                                <p>
+                                <% _.each(request, function(line) { %>
+                                    <%= line %><br/>
+                                <% }) %>
+                                </p>
+                            <% }) %>
                         <% } else { %>
-                        <code>Not Available</code>
+                        Not Available
                         <% } %>
                     </div>
                 </div>

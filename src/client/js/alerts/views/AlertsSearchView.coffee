@@ -4,6 +4,7 @@ define (require) ->
     View = require 'uac/views/View'
     utils = require 'uac/common/utils'
     vent = require 'uac/common/vent'
+    TimeSearchView = require 'uac/views/TimeSearchView'
 
     Events = require 'alerts/common/Events'
     TagCollection = require 'alerts/models/TagCollection'
@@ -147,142 +148,6 @@ define (require) ->
             if @collection
                 @collection.fetch(params)
 
-    #
-    # View for displaying time frame search criteria.
-    #
-    class TimeSearchView extends View
-        # The format for the from and to dates.
-        date_format: 'YYYY-MM-DD HH:mm'
-
-        initialize: (options) ->
-            unless @collection
-                @collection = new TimeCollection()
-            @listenTo @collection, 'sync', @render
-
-            # Save the specified options for use in render.
-            if options.selected
-                @selected = options.selected
-            if options.from
-                @from = options.from
-            if options.to
-                @to = options.to
-            return
-
-        render: ->
-            @undelegateEvents
-
-            context = {
-                times: @collection.toJSON()
-            }
-            @apply_template templates, 'search-time.ejs', context
-
-            # Listen for changes to the time entry.
-            @delegateEvents
-                'change input:radio[name=time]': 'on_change'
-
-            if @selected
-                # Display the supplied values.
-                @set_selected @selected
-                if @selected == 'custom'
-                    # Custome is selected, should have from and to date/times.
-                    @set_from_date @from
-                    @set_to_date @to
-            else
-                # Display the defaults.
-                @reset_selected()
-            return @
-
-        #
-        # Set the selected time option.
-        #
-        set_selected: (selected) ->
-            # Grab the selected radio button.
-            selected_el = @$ "input:radio[name=time][value=#{selected}]"
-            # Check the selected radio button and manually fire a change event.
-            selected_el.prop('checked', true)
-            selected_el.trigger 'change'
-            return
-
-        #
-        # Display the default time option.
-        #
-        reset_selected: ->
-            @set_selected 'days_1'
-            return
-
-        #
-        # Fetch the times.
-        #
-        fetch: (params) ->
-            if @collection
-                @collection.fetch(params)
-            return
-
-        #
-        # Retrieve the selected time radio element.
-        get_selected_element: ->
-            return @$('input:radio[name=time]:checked')
-
-        #
-        # Get the selected time value.
-        #
-        get_selected: ->
-            return @get_selected_element().val()
-
-
-        #
-        # Get the from date.  Returns a JS date object or undefined.
-        #
-        get_from_date: ->
-            from = moment(@$('#time-from').val())
-            return if from.isValid() then from.toDate() else undefined
-
-        #
-        # Get the to date.  Returns a JS data object or undefined.
-        #
-        get_to_date: ->
-            to = moment(@$('#time-to').val())
-            return if to.isValid() then to.toDate() else undefined
-
-        #
-        # Set the displayed from date.  Expects a JS date object.
-        #
-        set_from_date: (from) ->
-            @$('#time-from').val moment(from).format(@date_format)
-
-        #
-        # Set the displayed to date.  Expects a JS date object.
-        #
-        set_to_date: (to) ->
-            @$('#time-to').val moment(to).format(@date_format)
-
-        #
-        # Return whether the from date is valid.
-        is_from_valid: ->
-            return moment(@$('#time-from').val()).isValid()
-
-        #
-        # Return whether the to date is valid.
-        #
-        is_to_valid: ->
-            return moment(@$('#time-to').val()).isValid()
-
-        #
-        # Handle the time change event.
-        #
-        on_change: () ->
-            # Determine if the custom time fields should be disabled.
-            disabled = not (@$('input:radio[name=time][value=custom]').prop 'checked')
-            # Set the time fields based on the current selection.
-            selected_el = @get_selected_element()
-            if disabled
-                # If custom is not selected then update the from and to dates.
-                @set_from_date moment().subtract(selected_el.data('unit'), selected_el.data('unit-value')).toDate()
-                @set_to_date new Date()
-            # Enable the time fields.
-            @$('#time-from').attr 'disabled', disabled
-            @$('#time-to').attr 'disabled', disabled
-
 
     #
     # View for displaying alert types search criteria.
@@ -365,11 +230,13 @@ define (require) ->
                 # A custom time was specified, try and get the last save from and to date/times.
                 from = if selected and selected.from then selected.from else undefined
                 to = if selected and selected.to then selected.to else undefined
+            @times = new TimeCollection()
             @times_view = new TimeSearchView
-                el: @$ '#search-time'
                 selected: time
                 from: from
                 to: to
+                default: 'days_1'
+                collection: @times
 
             types = if selected and selected.types then selected.types else undefined
             @types_view = new TypesSearchView
@@ -397,8 +264,10 @@ define (require) ->
                         error: ->
                             callaback()
                 (callback) =>
-                    @times_view.fetch
-                        success: ->
+                    @times.fetch
+                        success: =>
+                            # TODO: Use regions to ensure previous view is closed.
+                            @$('#search-time').append(@times_view.render().el)
                             callback()
                         error: ->
                             callback()
@@ -426,7 +295,7 @@ define (require) ->
             @clients_view.remove()
             @clients_view = null
 
-            @times_view.remove()
+            @times_view.close()
             @times_view = null
 
             @types_view.remove()

@@ -4,14 +4,14 @@
     <% _.each (times, function(t) { %>
     <div class="radio">
         <label>
-            <input type="radio" name="time" value="<%= t.id %>" data-unit="<%= t.unit %>" data-unit-value="<%= t.unit_value %>" checked>
+            <input type="radio" name="time" value="<%= t.id %>" data-unit="<%= t.unit %>" data-unit-value="<%= t.unit_value %>">
             <%= t.title %>
         </label>
     </div>
     <% }) %>
     <div class="radio">
         <label>
-            <input type="radio" name="time" value="custom" checked>
+            <input type="radio" name="time" value="custom">
             Custom
         </label>
     </div>

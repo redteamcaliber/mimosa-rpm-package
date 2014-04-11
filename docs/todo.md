@@ -17,6 +17,7 @@ UAC ToDo
 ### Alerts Details View
 x - Parse the header data for NX cnc services.
 x - Aggregate alert signatures of the same type instead of displaying multiple tags when the same signature is repeated.
+- Add blocking when displaying the raw dialog.
 - Format the occurred and updated dates within the header according to how long ago they are.
 - Move the raw alert to a modal popup rather than a rollup.
 - Format the raw alert data.

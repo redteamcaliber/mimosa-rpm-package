@@ -34,7 +34,7 @@ define (require) ->
             options.aoColumns = [
                 {sTitle: 'Pri', mData: 'priority', sWidth: '5%', sType: 'int-html'}
                 {sTitle: 'Client', mData: 'device.client.name'}
-                {sTitle: 'Device', mData: 'device.type', sWidth: '5%'}
+                {sTitle: 'Device', mData: 'device.type', sWidth: '7%'}
                 {sTitle: 'Date', mData: 'occurred', sClass: 'nowrap'}
                 {sTitle: 'Source', mData: 'src'}
                 {sTitle: 'Dest', mData: 'dst'}

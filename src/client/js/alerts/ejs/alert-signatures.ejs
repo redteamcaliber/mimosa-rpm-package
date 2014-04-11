@@ -1,40 +1,44 @@
-<div style="margin-bottom: 25px">
-    <ul class="nav nav-tabs" style="border-bottom: 0">
-        <% _.each (unique_signatures, function(signature, index) { %>
-        <li class="<%= signature.active %>">
-            <a href="#tab-<%= index %>" data-toggle="tab">
-                <%= signature.name %>
-            </a>
-        </li>
-        <% }) %>
-    </ul>
+<div class="panel panel-default">
 
-    <div class="tab-content">
-        <% _.each (unique_signatures, function(unique_signature, index) { %>
-        <div class="tab-pane <%= unique_signature.active %>"
-             id="tab-<%= index %>">
+    <div class="panel-heading">
+        <i class="fa fa-bug"></i> Signatures
+    </div>
+    <div class="panel-body">
 
-            <div class="panel panel-default">
-                <div class="panel-body">
+        <ul class="nav nav-tabs" style="margin-bottom: 15px">
+            <% _.each (unique_signatures, function(signature, index) { %>
+            <li class="<%= signature.active %>">
+                <a href="#tab-<%= index %>" data-toggle="tab">
+                    <%= signature.name %>
+                </a>
+            </li>
+            <% }) %>
+        </ul>
+
+        <div class="tab-content">
+            <% _.each (unique_signatures, function(unique_signature, index) { %>
+            <div class="tab-pane <%= unique_signature.active %>" id="tab-<%= index %>">
+                <div style="margin: 15px">
+
                     <% var signatures = signature_map[unique_signature.name] %>
                     <% _.each (signatures, function(signature, index) { %>
 
-                        <% _.each(_.keys(signature), function(label) { %>
-                        <% if (label != 'active') { %>
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <label><%= label %></label>
-                            </div>
-                            <div class="col-sm-9">
-                                <%= signature[label] %>
-                            </div>
+                    <% _.each(_.keys(signature), function(label) { %>
+                    <% if (label != 'active') { %>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <label><%= label %></label>
                         </div>
-                        <% } %>
-                        <% }) %>
+                        <div class="col-sm-9">
+                            <%= signature[label] %>
+                        </div>
+                    </div>
+                    <% } %>
+                    <% }) %>
 
-                        <% if (signatures.length > 0 && index < signatures.length - 1) { %>
-                        <hr/>
-                        <% } %>
+                    <% if (signatures.length > 0 && index < signatures.length - 1) { %>
+                    <hr/>
+                    <% } %>
 
                     <% }) %>
 
@@ -45,9 +49,11 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
+            <% }) %>
         </div>
-        <% }) %>
     </div>
+
 </div>

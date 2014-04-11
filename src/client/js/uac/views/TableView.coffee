@@ -3,8 +3,8 @@
 #
 define (require) ->
     $ = require 'jquery'
+    Backbone = require 'backbone'
     Marionette = require 'marionette'
-    ChildViewContainer = require 'backbone.babysitter'
 
     View = require 'uac/views/View'
     utils = require 'uac/common/utils'
@@ -42,7 +42,7 @@ define (require) ->
     #    settings = {...}
     #    my_table = new TableView({settings: settings})
     #
-    class TableView extends View
+    class TableView extends Marionette.ItemView
         #
         # Initialize the table the defaults.
         #
@@ -50,7 +50,7 @@ define (require) ->
             super options
 
             # Create a container for managing child views.  The container will be closed and emptied on destroy.
-            @container = new ChildViewContainer()
+            @container = new Backbone.ChildViewContainer()
 
             if options
                 @options = options
@@ -568,9 +568,9 @@ define (require) ->
         # Clean up and remove the table.
         #
         close: ->
-            alert 'Closing!'
             @destroy()
-            @remove()
+
+            super
 
             # Fire an event after cleaning up.
             @trigger "close"
