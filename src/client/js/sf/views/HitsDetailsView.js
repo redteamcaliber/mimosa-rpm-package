@@ -12,7 +12,7 @@ define(function (require) {
     var MassTagFormView = require('sf/views/MassTagFormView');
     var SuppressionsTableView = require('sf/views/SuppressionsTableView');
     var AcquisitionsTableView = require('sf/views/AcquisitionsTableView');
-    var MD5View = require('sf/views/MD5ModalView');
+    var MD5ModelView = require('sf/views/MD5ModalView');
 
     var AcquisitionCollection = require('sf/models/AcquisitionCollection');
     var IOCCollection = require('sf/models/IOCCollection');
@@ -559,11 +559,14 @@ define(function (require) {
         on_click_md5: function(ev) {
             ev.preventDefault();
 
-            var dlg = new MD5View({
-                el: '#dialog-div',
+            if (this.md5_dialog) {
+                this.md5_dialog.close();
+            }
+            this.md5_dialog = new MD5ModelView({
                 model: new Backbone.Model($(ev.currentTarget).data().md5)
             });
-            dlg.render();
+            $('#dialog-div').append(this.md5_dialog.render().el);
+            this.md5_dialog.modal()
 
             return false;
         },
@@ -879,13 +882,13 @@ define(function (require) {
             if (rowitem_uuid) {
                 this.collection.rowitem_uuid = rowitem_uuid;
             }
-            view.block_element(view.$el);
+            uac_utils.block_element(view.$el);
             this.collection.fetch({
                 success: function() {
-                    view.unblock(view.$el);
+                    uac_utils.unblock(view.$el);
                 },
                 error: function() {
-                    view.unblock(view.$el);
+                    uac_utils.unblock(view.$el);
                 }
             });
         }

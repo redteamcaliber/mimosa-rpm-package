@@ -7,22 +7,64 @@
     <div class="panel-body">
         <div class="row">
             <div class="col-sm-2">
-                <label>Version</label>
+                <label>OS</label>
+            </div>
+            <div class="col-sm-4">
+                <%= report.os_info %>
             </div>
             <div class="col-sm-2">
-                <%= report.version %>
+                <label>OS Version</label>
+            </div>
+            <div class="col-sm-4">
+                <%= report.os_version %>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <label>Analysis Mode</label>
+            </div>
+            <div class="col-sm-4">
+                <%= report.analysis_mode %>
+            </div>
+            <div class="col-sm-2">
+                <label>Analysis Version</label>
+            </div>
+            <div class="col-sm-4">
+                <%= report.analysis_version %>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <% _.each(report.sections, function(section) { %>
-                <p>
-                    <label><%= section.name %></label>
-                </p>
-
-                <div class="<%= section.name %>"></div>
-
-                <% }) %>
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <label>
+                                Malicious Alerts
+                            </label>
+                        </td>
+                        <td style="text-align: right">
+                            <button class="btn btn-link view-timeline-button">View Timeline</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <table class="table table-bordered table-hover table-condensed">
+                    <tr>
+                        <th>Class</th>
+                        <th>Message</th>
+                        <th>Detail</th>
+                    </tr>
+                    <% _.each(report.malicious_alerts, function(item) { %>
+                    <tr>
+                        <td><%= item.classtype %></td>
+                        <td><%= item['display-msg'] %></td>
+                        <td><%= item.msg %></td>
+                    </tr>
+                    <% }) %>
+                </table>
             </div>
         </div>
     </div>

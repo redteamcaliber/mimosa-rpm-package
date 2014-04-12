@@ -31,7 +31,7 @@ define (require) ->
         )
 
     block = (ev) ->
-        $.blockUI get_blockui_options()
+        $.blockUI get_blockui_options('<img src="/static/css/img/ajax-loader.gif">')
 
     ###
         TODO: Is this being used???

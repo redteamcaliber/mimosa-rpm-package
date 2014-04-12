@@ -1,21 +1,19 @@
 define (require)->
+    DialogView = require 'uac/views/DialogView'
+    templates = require 'sf/ejs/templates'
+    MD5ContentView = require 'uac/views/MD5ContentView'
 
-  DialogView = require 'uac/views/DialogView'
-  sfTemplates = require 'sf/ejs/templates'
-  MD5ContentView = require 'uac/views/MD5ContentView'
+    class MD5ModalView extends DialogView
+        template: templates['md5-modal.ejs']
 
-  MD5ModalView = DialogView.extend
+        regions:
+            body_region: '.modal-body'
 
-      render: ->
-        @apply_template sfTemplates, 'md5-modal.ejs', @model.toJSON()
+        onRender: ->
+            md5ContentView = new MD5ContentView
+                model: @model
+            @body_region.show md5ContentView
 
-        md5ContentView = new MD5ContentView
-          el: '#md5-dialog-modal-body'
-          data: @model.toJSON()
 
-        md5ContentView.render()
-
-        @modal()
-
-  return MD5ModalView
+    return MD5ModalView
 

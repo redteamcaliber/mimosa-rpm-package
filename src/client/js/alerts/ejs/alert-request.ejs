@@ -11,31 +11,18 @@
                     <div class="col-sm-2">
                         <label>Server</label>
                     </div>
-                    <div class="col-sm-10">
+                    <div class="col-sm-4">
                         <%= service.server %>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-2">
                         <label>Protocol</label>
                     </div>
-                    <div class="col-sm-10">
+                    <div class="col-sm-4">
                         <%= service.protocol %>
                     </div>
                 </div>
-                <% if (service.location) { %>
-                <div class="row">
-                    <div class="col-sm-2">
-                        <label>Location</label>
-                    </div>
-                    <div class="col-sm-10">
-                        <%= service.location %>
-                    </div>
-                </div>
-                <% } %>
                 <div class="row">
                     <div class="col-sm-12 uac-code" style="overflow: auto">
-                        <hr/>
                         <% if (service.requests && service.requests.length > 0) { %>
                             <!-- There are requests. -->
                             <% _.each (service.requests, function(request) { %>

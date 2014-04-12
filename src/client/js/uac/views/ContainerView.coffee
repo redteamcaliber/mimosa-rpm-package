@@ -6,7 +6,9 @@ define (require) ->
     # Base class for rendering and cleaning up a list of child views.
     #
     class ContainerView extends Marionette.Layout
-        container: new Backbone.ChildViewContainer()
+        constructor: ->
+            @container = new Backbone.ChildViewContainer()
+            super
 
         #
         # Add a child view to be managed.
@@ -62,6 +64,7 @@ define (require) ->
         close: ->
             # Close the child views.
             console.debug 'ContainerView::Closing child views...'
+            console.dir @container
             @container.forEach (child) ->
                 child.close()
             super

@@ -1,17 +1,13 @@
 define (require) ->
-    Marionette = require 'marionette'
+    DialogView = require 'uac/views/DialogView'
 
     templates = require 'alerts/ejs/templates'
 
-    class RawAlertView extends Marionette.ItemView
+    class RawAlertView extends DialogView
         template: templates['raw-alert.ejs']
 
         serializeData: ->
             alert: JSON.stringify @model.get('content'), null, 4
 
-        onShow: ->
-            @$('.modal').modal
-                backdrop: false
-            return
 
     RawAlertView

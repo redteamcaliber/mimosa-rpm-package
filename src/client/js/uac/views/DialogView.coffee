@@ -1,12 +1,16 @@
 define (require) ->
-    View = require 'uac/views/View'
+    Marionette = require 'marionette'
 
-    class DialogView extends View
+    class DialogView extends Marionette.Layout
         modal: ->
-            @.$el.find('.modal').modal({
+            @$('.modal').modal
                 backdrop: false
-            })
+
+        onShow: ->
+            @modal()
+
         hide_modal: ->
-            @$el.find('.modal').modal("hide")
+            @$('.modal').modal("hide")
+
 
     return DialogView

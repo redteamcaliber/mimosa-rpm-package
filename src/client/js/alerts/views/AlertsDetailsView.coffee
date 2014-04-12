@@ -7,19 +7,19 @@ define (require) ->
     PropertyView = require 'uac/views/PropertyView'
     ContainerView = require 'uac/views/ContainerView'
     TreeView = require 'uac/views/TreeView'
+    TableView = require 'uac/views/TableView'
 
     Events = require 'alerts/common/Events'
     templates = require 'alerts/ejs/templates'
 
     class AlertRawMenu extends Marionette.ItemView
         tagName: 'span'
+
+        events:
+            'click button': 'on_click'
+
         template: ->
             return '<button type="button" class="btn btn-link"><i class="fa fa-code"></i> Raw</button>'
-
-        onRender: ->
-            @delegateEvents
-                'click button': 'on_click'
-            return
 
         on_click: =>
             vent.trigger Events.ALERTS_RAW_ALERT, @model.toJSON()
@@ -170,8 +170,14 @@ define (require) ->
             alert:
                 artifacts: @model.get('alert').artifacts
 
-    class OSChangeView extends Marionette.Layout
+    class OSChangeView extends ContainerView
         template: templates['os-changes.ejs']
+
+        events:
+            'click .view-timeline-button': 'on_click'
+
+        regions:
+            malicious_alerts_region: '.malicious-alerts-region'
 
         serializeData: ->
             os_changes = @model.attributes.content.explanation['os-changes']
@@ -183,18 +189,14 @@ define (require) ->
                 for report_index of os_changes
                     report = os_changes[report_index]
 
-                    sections = []
-                    for section, data of report
-                        sections.push (
-                            name: section
-                            section_id: "#{section}_#{report_index}"
-                            data: data
-                        )
-                    reports.push (
-                        name: "os_changes_#{report_index}"
+                    reports.push
+                        analysis_mode: report.analysis.mode
+                        analysis_version: report.analysis.version
+                        malicious_alerts: report['malicious-alert']
+                        os_info: report.osinfo
+                        os_version: report.os.version
                         version: report.analysis.version
-                        sections: sections
-                    )
+
             else
                 reports = undefined
 
@@ -207,11 +209,26 @@ define (require) ->
             )
 
         onRender: ->
-            for report in @reports
-                for section in report.sections
-                    @addRegion
 
+#        onShow: ->
+#            for report in @reports
+#                console.dir report
+#                if report.malicious_alerts
+#                    malicious_alerts = new Backbone.Collection()
+#                    # TODO: Make this generic and add renderers.
+#                    malicious_alerts_table = new TableView
+#                        aoColumns: [
+#                            (sTitle: 'Class', mData: 'classtype')
+#                            (sTitle: 'Message', mData: 'display-msg')
+#                            (sTitle: 'Detail', mData: 'msg')
+#                        ],
+#                        collection: malicious_alerts
+#                    @listenToOnce malicious_alerts, 'reset', =>
+#                        @malicious_alerts_region.show malicious_alerts_table
+#                    malicious_alerts.reset report.malicious_alerts
 
+        on_click: ->
+            alert 'Click!'
 
     class AlertsDetailsView extends ContainerView
         template: templates['details-layout.ejs']
