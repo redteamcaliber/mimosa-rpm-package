@@ -13,6 +13,14 @@ define(function (require) {
     var HitsView = require('sf/views/HitsView');
     var templates = require('sf/ejs/templates');
 
+    var vent = require('uac/common/vent');
+    var reqres = require('uac/common/reqres');
+    vent.on('all', function(event_name) {
+        console.debug("Event: "+event_name);
+    });
+
+
+
 
     //
     // View class to display a textual representation of the IOC expression.
@@ -315,7 +323,9 @@ define(function (require) {
                 // Update the IOC summary view on submit.
                 view.render_summaries({
                     services: params.services,
-                    clusters: params.merged_clusters
+                    clusters: params.merged_clusters,
+                    startDate: params.startDate,
+                    endDate: params.endDate
                 });
             });
             view.listenTo(view.cluster_selection_view, 'clear', function () {
@@ -364,7 +374,9 @@ define(function (require) {
                 var params = {
                     services: view.services.join(','),
                     clusters: view.clusters.join(),
-                    exp_key: exp_key
+                    exp_key: exp_key,
+                    begin: view.startDate,
+                    end: view.endDate
                 };
 
                 view.render_hits(params);
@@ -399,11 +411,27 @@ define(function (require) {
                 view.render_hits([iocname, ioc_uuid]);
             });
 
-            // Attempt to display the summary data based on the current user settings.
-            view.render_summaries({
-                services: view.cluster_selection_view.get_selected_services(),
-                clusters: view.cluster_selection_view.get_clusters()
-            });
+            renderSummaries = function(){
+                console.log("render summaries invoked");
+                if( !_.isUndefined(view.cluster_selection_view.get_selected_services()) &&
+                    !_.isUndefined(view.cluster_selection_view.get_clusters()) &&
+                    !_.isUndefined(view.cluster_selection_view.get_start_date()) &&
+                    !_.isUndefined(view.cluster_selection_view.get_end_date())) {
+                    // Attempt to display the summary data based on the current user settings.
+                    view.render_summaries({
+                        services: view.cluster_selection_view.get_selected_services(),
+                        clusters: view.cluster_selection_view.get_clusters(),
+                        startDate: view.cluster_selection_view.get_start_date(),
+                        endDate: view.cluster_selection_view.get_end_date()
+                    });
+                }else{
+                    var that = this;
+                    setTimeout(function(){renderSummaries.call(that,null)},300);
+                }
+            }
+            console.log("invoking render summaries");
+            renderSummaries.call(this, null);
+
         },
         get_selected_ioc_summary_data: function () {
             return this.ioc_summaries_view.get_selected_data();
@@ -450,6 +478,9 @@ define(function (require) {
             view.services = params.services;
             view.clusters = params.clusters;
 
+            view.startDate = params.startDate;
+            view.endDate = params.endDate;
+
             if (view.services.length > 0 && view.clusters.length > 0) {
                 // Hide the IOC details.
                 view.hide_details();
@@ -459,7 +490,9 @@ define(function (require) {
                 view.ioc_summaries_view.fetch({
                     data: {
                         services: view.services.join(','),
-                        clusters: view.clusters.join(',')
+                        clusters: view.clusters.join(','),
+                        begin: view.startDate,
+                        end: view.endDate
                     }
                 });
 
@@ -476,7 +509,9 @@ define(function (require) {
             view.ioc_details_view.fetch({
                 services: view.services.join(','),
                 clusters: view.clusters.join(','),
-                iocnamehash: iocnamehash
+                iocnamehash: iocnamehash,
+                begin: view.startDate,
+                end: view.endDate
             });
             view.ioc_details_view.show();
         },
