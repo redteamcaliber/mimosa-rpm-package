@@ -4,7 +4,9 @@ node 'uac.vm.mandiant.com' {
     installKeystore      => true,
     installDatabase      => true,
     useDevSshConfig      => true,
-    targetEnvironment    => "development",
+    installHostsEntries  => true,
+    installNodejsGlobals => true,
+    configureSupervisord => false,
     proxyStaticFolder    => "/opt/web/apps/uac/dist/client",
   }
 }
