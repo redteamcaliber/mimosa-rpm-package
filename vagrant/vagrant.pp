@@ -1,12 +1,14 @@
 node 'uac.vm.mandiant.com' {
   class { 'uac':
-    installProxy         => true,
-    installKeystore      => true,
-    installDatabase      => true,
-    useDevSshConfig      => true,
-    installHostsEntries  => true,
-    installNodejsGlobals => true,
-    configureSupervisord => false,
-    proxyStaticFolder    => "/opt/web/apps/uac/dist/client",
+    installProxy                => true,
+    installKeystore             => true,
+    installDatabase             => true,
+    useDevSshConfig             => true,
+    installVagrantHostsEntries  => true,
+    installDevnetHostsEntries   => false,
+    installNodejsGlobals        => true,
+    configureSupervisord        => false,
+    setupDevelopmentEnvironment => true,
+    proxyStaticFolder           => "/opt/web/apps/uac/dist/client",
   }
 }
