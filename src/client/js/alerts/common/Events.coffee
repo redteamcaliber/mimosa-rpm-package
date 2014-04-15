@@ -5,3 +5,4 @@ define (require) ->
     ALERTS_SUMMARY_SELECTED: "#{alerts}:summary_selected"
     ALERTS_ALERT_SELECTED: "#{alerts}:alert_selected"
     ALERTS_RAW_ALERT: "#{alerts}:raw_alert"
+    ALERTS_TIMELINE: "#{alerts}:timeline"

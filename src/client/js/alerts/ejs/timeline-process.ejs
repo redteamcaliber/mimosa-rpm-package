@@ -1,0 +1,24 @@
+<% if (row.source) { %>
+<ul class="list-unstyled">
+    <li>Source</li>
+    <li>
+        <%= processinfo(row.source.processinfo) %>
+    </li>
+    <li>Target</li>
+    <li>
+        <%= processinfo(row.target.processinfo) %>
+    </li>
+</ul>
+<% } else { %>
+<ul class="list-unstyled">
+    <li><%= row.value %></li>
+    <li>
+        <ul>
+            <li>MD5: <%= row.md5sum %></li>
+            <li>SHA1: <%= row.sha1sum %></li>
+            <li>Parent Name: <%= row.parentname %></li>
+            <li>Command Line: <%= row.cmdline %></li>
+        </ul>
+    </li>
+</ul>
+<% } %>

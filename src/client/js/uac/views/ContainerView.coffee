@@ -64,7 +64,6 @@ define (require) ->
         close: ->
             # Close the child views.
             console.debug 'ContainerView::Closing child views...'
-            console.dir @container
             @container.forEach (child) ->
                 child.close()
             super

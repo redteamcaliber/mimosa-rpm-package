@@ -1,10 +1,38 @@
 <% if (alert.reports) { %>
-<% _.each (alert.reports, function(report) { %>
+<% _.each (alert.reports, function(report, index) { %>
 <div class="panel panel-default">
     <div class="panel-heading">
         <i class="fa fa-list-alt"></i> OS Change Detail
     </div>
     <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-2">
+                <label>Analysis Mode</label>
+            </div>
+            <div class="col-sm-4">
+                <%= report.analysis_mode %>
+            </div>
+            <div class="col-sm-2">
+                <label>Analysis File Type</label>
+            </div>
+            <div class="col-sm-4">
+                <%= report.analysis_file_type %>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-2">
+                <label>OS Type</label>
+            </div>
+            <div class="col-sm-4">
+                <%= report.os_name %>
+            </div>
+            <div class="col-sm-2">
+                <label>Analysis Version</label>
+            </div>
+            <div class="col-sm-4">
+                <%= report.analysis_version %>
+            </div>
+        </div>
         <div class="row">
             <div class="col-sm-2">
                 <label>OS</label>
@@ -16,21 +44,7 @@
                 <label>OS Version</label>
             </div>
             <div class="col-sm-4">
-                <%= report.os_version %>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-2">
-                <label>Analysis Mode</label>
-            </div>
-            <div class="col-sm-4">
-                <%= report.analysis_mode %>
-            </div>
-            <div class="col-sm-2">
-                <label>Analysis Version</label>
-            </div>
-            <div class="col-sm-4">
-                <%= report.analysis_version %>
+                <%= report.os_version %> / SP<%= report.os_sp %>
             </div>
         </div>
         <div class="row">
@@ -43,7 +57,7 @@
                             </label>
                         </td>
                         <td style="text-align: right">
-                            <button class="btn btn-link view-timeline-button">View Timeline</button>
+                            <button class="btn btn-link view-timeline-button" data-report="<%= index %>">View Change Timeline</button>
                         </td>
                     </tr>
                 </table>

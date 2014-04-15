@@ -16,37 +16,34 @@ define (require) ->
         (
             message: if message then message else '',
             css: (
-                'margin-top': '50%',
-                width: '100%',
-                border: "0px solid #cccccc",
-                padding: '0px',
-                opacity: .8,
+                top: '50%'
+                centerX: true
+                centerY: true
                 backgroundColor: ''
-            ),
+                border: 'none'
+                padding: '0px'
+            )
             overlayCSS: (
-                backgroundColor: get_styles().body_color,
+                backgroundColor: get_styles().body_color
                 opacity: .5
-            ),
+            )
             baseZ: 5000
         )
 
     block = (ev) ->
         $.blockUI get_blockui_options('<img src="/static/css/img/ajax-loader.gif">')
-
-    ###
-        TODO: Is this being used???
-    ###
-    block_element_remove = (el, message) ->
-        $(el).block(get_blockui_options('<img src="/static/css/img/ajax-loader.gif">'))
+        return
 
     block_element = (el, message) ->
         $(el).block(get_blockui_options('<img src="/static/css/img/ajax-loader.gif">'))
+        return
 
     unblock = (el) ->
         if el
             $(el).unblock()
         else
             $.unblockUI()
+        return
 
     ###
         Generate a random string of the specified length.

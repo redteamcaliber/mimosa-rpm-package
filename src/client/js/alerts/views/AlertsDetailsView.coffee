@@ -8,9 +8,11 @@ define (require) ->
     ContainerView = require 'uac/views/ContainerView'
     TreeView = require 'uac/views/TreeView'
     TableView = require 'uac/views/TableView'
+    TableViewControls = require 'uac/views/TableViewControls'
 
     Events = require 'alerts/common/Events'
     templates = require 'alerts/ejs/templates'
+
 
     class AlertRawMenu extends Marionette.ItemView
         tagName: 'span'
@@ -173,6 +175,15 @@ define (require) ->
     class OSChangeView extends ContainerView
         template: templates['os-changes.ejs']
 
+        skipped_sections:
+            'analysis': ''
+            'end-of-report': ''
+            'id': ''
+            'malicious-alert': ''
+            'os-inactivity-send-keys': ''
+            'osinfo': ''
+            'version': ''
+
         events:
             'click .view-timeline-button': 'on_click'
 
@@ -189,46 +200,49 @@ define (require) ->
                 for report_index of os_changes
                     report = os_changes[report_index]
 
+                    # Make sure that malicious alerts is a list.
+                    malicious_alerts = report['malicious-alert']
+                    if malicious_alerts and not Array.isArray malicious_alerts
+                        malicious_alerts = [malicious_alerts]
                     reports.push
+                        analysis_file_type: report.analysis.ftype
                         analysis_mode: report.analysis.mode
                         analysis_version: report.analysis.version
-                        malicious_alerts: report['malicious-alert']
+                        malicious_alerts: malicious_alerts
+                        os_name: report.os.name
                         os_info: report.osinfo
+                        os_sp: report.os.sp
                         os_version: report.os.version
                         version: report.analysis.version
 
-            else
-                reports = undefined
-
-            @reports = reports
-
             (
                 alert: (
-                    reports: @reports
+                    reports: reports
                 )
             )
 
-        onRender: ->
+        on_click: (ev) =>
+            report_index = $(ev.currentTarget).data('report')
+            os_changes = @model.attributes.content.explanation['os-changes']
+            report = os_changes[report_index]
 
-#        onShow: ->
-#            for report in @reports
-#                console.dir report
-#                if report.malicious_alerts
-#                    malicious_alerts = new Backbone.Collection()
-#                    # TODO: Make this generic and add renderers.
-#                    malicious_alerts_table = new TableView
-#                        aoColumns: [
-#                            (sTitle: 'Class', mData: 'classtype')
-#                            (sTitle: 'Message', mData: 'display-msg')
-#                            (sTitle: 'Detail', mData: 'msg')
-#                        ],
-#                        collection: malicious_alerts
-#                    @listenToOnce malicious_alerts, 'reset', =>
-#                        @malicious_alerts_region.show malicious_alerts_table
-#                    malicious_alerts.reset report.malicious_alerts
+            timeline = []
+            for section, values of report
+                if Array.isArray(values) and (not (section of @skipped_sections))
+                    for change in values
+                        change.type = section
+                        if not change.timestamp
+                            change.timestamp = ''
+                        timeline.push change
+                else if not (section of @skipped_sections)
+                    console.warn "Section: #{section} is not of type Array."
+                    values.type = section
+                    if not values.timestamp
+                        values.timestamp = ''
+                    timeline.push values
 
-        on_click: ->
-            alert 'Click!'
+            vent.trigger Events.ALERTS_TIMELINE, timeline
+
 
     class AlertsDetailsView extends ContainerView
         template: templates['details-layout.ejs']
@@ -242,9 +256,10 @@ define (require) ->
             request_region: '.request-region'
             raw_region: '.raw-region'
             signatures_region: '.signatures-region'
-            table_controls_region: '#table-controls'
+            table_controls_region: '.controls-region'
 
         initialize: ->
+            @addChild @table_controls_region, TableViewControls
             @addChild @raw_region, AlertRawMenu
             @addChild @header_region, AlertHeaderView
             @addChild @signatures_region, AlertSignaturesView
