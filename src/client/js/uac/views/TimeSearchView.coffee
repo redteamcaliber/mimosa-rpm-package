@@ -4,6 +4,14 @@ define (require) ->
 
     templates = require 'uac/ejs/templates'
 
+    DateView = require 'uac/views/DateView'
+
+    utils = require 'uac/common/utils'
+
+    vent = require 'uac/common/vent'
+
+    reqres = require 'uac/common/reqres'
+
     #
     # Generic view for displaying time frame search criteria.
     #     times_view = new TimeSearchView
@@ -46,6 +54,7 @@ define (require) ->
                 # The default time option to display on reset.
                 @default = options.default
 
+            #TODO: put a listener in here to look for calling set on the date field and, if in customr
             return
 
         #
@@ -60,6 +69,28 @@ define (require) ->
         # Post rendering logic.
         #
         onRender: ->
+            usersettings = utils.usersettings()
+
+            @startDateView = new DateView
+                overrides:
+                  defaultDate: if usersettings.startDate == null then new Date() else usersettings.startDate
+                label: "Start Date"
+                instanceName: "startDate"
+                linkedPicker:
+                  instanceName: "endDate"
+                  type: "max"
+            @$(".startDateField").append(@startDateView.render().el)
+
+            @endDateView = new DateView
+                overrides:
+                  defaultDate: if usersettings.endDate == null then new Date() else usersettings.endDate
+                label: "End Date"
+                instanceName: "endDate"
+                linkedPicker:
+                  instanceName: "startDate"
+                  type: "min"
+            @$(".endDateField").append(@endDateView.render().el)
+
             # Listen for changes to the time entry.
             @delegateEvents
                 'change input:radio[name=time]': 'on_change'
@@ -116,39 +147,34 @@ define (require) ->
         #
         # Get the from date.  Returns a JS date object or undefined.
         #
-        get_from_date: ->
-            from = moment(@$('#time-from').val())
-            return if from.isValid() then from.toDate() else undefined
+        get_from_date: -> reqres.request "DateView:startDate:getDate"
 
         #
         # Get the to date.  Returns a JS data object or undefined.
         #
-        get_to_date: ->
-            to = moment(@$('#time-to').val())
-            return if to.isValid() then to.toDate() else undefined
+        get_to_date: -> reqres.request "DateView:endDate:getDate"
+
 
         #
         # Set the displayed from date.  Expects a JS date object.
         #
-        set_from_date: (from) ->
-            @$('#time-from').val moment(from).format(@date_format)
+        set_from_date: (from) -> vent.trigger "DateView:startDate:setDate", from
 
         #
         # Set the displayed to date.  Expects a JS date object.
         #
-        set_to_date: (to) ->
-            @$('#time-to').val moment(to).format(@date_format)
+        set_to_date: (to) -> vent.trigger "DateView:endDate:setDate", to
 
         #
         # Return whether the from date is valid.
-        is_from_valid: ->
-            return moment(@$('#time-from').val()).isValid()
+        is_from_valid: -> true
+#            return moment(@$('#time-from').val()).isValid()
 
         #
         # Return whether the to date is valid.
         #
-        is_to_valid: ->
-            return moment(@$('#time-to').val()).isValid()
+        is_to_valid: -> true
+#            return moment(@$('#time-to').val()).isValid()
 
         #
         # Handle the time change event.
@@ -162,9 +188,10 @@ define (require) ->
                 # If custom is not selected then update the from and to dates.
                 @set_from_date moment().subtract(selected_el.data('unit'), selected_el.data('unit-value')).toDate()
                 @set_to_date new Date()
-            # Enable the time fields.
-            @$('#time-from').attr 'disabled', disabled
-            @$('#time-to').attr 'disabled', disabled
+
+            # Toggle the time fields.
+            vent.trigger "DateView:startDate:toggle", disabled
+            vent.trigger "DateView:endDate:toggle", disabled
 
 
     TimeSearchView

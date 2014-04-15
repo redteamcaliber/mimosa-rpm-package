@@ -176,3 +176,12 @@ td.center {
 .fixed-font {
     font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
 }
+/* styling to make datepicker look like the select2 inputs*/
+.date .dateinput{
+    width: 100%;
+    height: 35px;
+}
+.date .calBtn{
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
