@@ -74,11 +74,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     override.vm.box = "http://puppet-vagrant-boxes.puppetlabs.com/centos-65-x64-virtualbox-puppet.box"
   end
 
-
   # config.vm.synced_folder SRC_LOCAL_PATH, '/opt/web/apps/uac', :nfs => true
   config.vm.synced_folder PUPPET_HIERA_DIR, '/etc/puppet/hieradata'
-
-
 
   ###
   #trick from https://github.com/mitchellh/vagrant/issues/1807

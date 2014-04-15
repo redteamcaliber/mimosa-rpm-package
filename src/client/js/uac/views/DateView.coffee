@@ -5,8 +5,8 @@ define (require) ->
   View = require 'uac/views/View'
   templates = require 'uac/ejs/templates'
   datepicker = require 'bootstrap_datepicker'
-  vent = require 'uac/common/vent'
-  reqres = require 'uac/common/reqres'
+  Evented = require 'uac/common/mixins/Evented'
+  Mixin = require 'uac/common/Mixin'
 
   class DateView extends Marionette.ItemView
 
@@ -47,20 +47,26 @@ define (require) ->
 
       unless _.isString @instanceName then @instanceName = @cid
 
-      unless _.isFunction @topicGenerator then @topicGenerator = (eventType, instanceName=@instanceName)=>
-        "#{@constructor.name}:#{instanceName}:#{eventType}"
 
-      #Setters
-      vent.on @topicGenerator("setDate"), (event)=> @$(".date").data("DateTimePicker").setDate(event)
-      vent.on @topicGenerator("toggle"), (toggle)=>
-        if toggle
-          @$(".date").data("DateTimePicker").disable()
-        else
-          @$(".date").data("DateTimePicker").enable()
+      @registerVent
+        eventName: "setDate"
+        handler: (event)=> @$(".date").data("DateTimePicker").setDate(event)
+
+      @registerVent
+        eventName: "toggle"
+        handler: (toggle)=>
+          if toggle
+            @$(".date").data("DateTimePicker").disable()
+          else
+            @$(".date").data("DateTimePicker").enable()
 
       #Getters
-      reqres.setHandler @topicGenerator("getDate"), => @getDate()
-      reqres.setHandler @topicGenerator("getEpoch"), => @getEpoch()
+      @registerReqRes
+        eventName: "getDate"
+        handler: => @getDate()
+      @registerReqRes
+        eventName: "getEpoch"
+        handler: => @getEpoch()
 
     #you can pass in either a Moment or a Date, so assume its one or the other
     getDate: =>
@@ -80,21 +86,29 @@ define (require) ->
       @$(".date").datetimepicker @overrides
 
       #proxy raw jquery events into BS events and update local handle on date
-      @$(".date").on "dp.change", (event)=>
+      @$(".date").on "dp.change", (payload)=>
         @date = event.date
-        vent.trigger @topicGenerator("change"), event
+        @fireVent
+          eventName: "change"
+          payload: payload
+
+#        vent.trigger @topicGenerator("change"), event
 
       #setup linkedPicker if defined
-      if _.isObject @linkedPicker then vent.on @topicGenerator("change", @linkedPicker.instanceName), (event)=>
 
+      if _.isObject @linkedPicker then @registerReqRes
+        eventName: "change"
+        instanceName: @linkedPicker.instanceName
+        handler: (event)=>
+          if @linkedPicker.type == "min"
+            method= "setMinDate"
+          else if @linkedPicker.type == "max"
+            method = "setMaxDate"
+          else
+            return
 
-        if @linkedPicker.type == "min"
-          method= "setMinDate"
-        else if @linkedPicker.type == "max"
-          method = "setMaxDate"
-        else
-          return
+          @$(".date").data("DateTimePicker")[method](event.date)
 
-        @$(".date").data("DateTimePicker")[method](event.date)
+  Mixin DateView, Evented
 
   DateView

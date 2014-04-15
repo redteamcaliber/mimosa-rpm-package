@@ -318,6 +318,7 @@ module.exports = function (grunt) {
                         bootstrap: 'lib/bootstrap/js/bootstrap',
                         bootstrap_growl: 'lib/bootstrap-growl/jquery.bootstrap-growl',
                         blockui: 'lib/blockui/jquery.blockUI',
+                        cocktail: 'lib/cocktail/Cocktail',
                         datatables: 'lib/datatables/jquery.dataTables',
                         datatables_bootstrap: 'js/datatables',
                         'datatables-fixedheader': 'js/dataTables.fixedHeader',
@@ -349,6 +350,9 @@ module.exports = function (grunt) {
                             deps: ['jquery'],
                             exports: '$'
                         },
+                        cocktail: {
+                            deps: ['backbone']
+                        },
                         highlighter: {
                             deps: ['jquery'],
                             exports: '$.fn.highlighter'
@@ -367,9 +371,6 @@ module.exports = function (grunt) {
                         },
                         underscore: {
                             exports: '_'
-                        },
-                        datejs: {
-                            exports: ['datejs']
                         }
                     },
                     dir: "dist/client/js/.tmp",

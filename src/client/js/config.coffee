@@ -8,6 +8,7 @@ window.require =
         bootstrap: 'lib/bootstrap/js/bootstrap'
         bootstrap_growl: 'lib/bootstrap-growl/jquery.bootstrap-growl'
         blockui: 'lib/blockui/jquery.blockUI'
+        cocktail: 'lib/cocktail/Cocktail'
         datatables: 'lib/datatables/jquery.dataTables'
         datatables_bootstrap: 'js/datatables'
         'datatables-fixedheader': 'js/dataTables.fixedHeader'
@@ -37,6 +38,9 @@ window.require =
         bootstrap_datepicker: {
           deps: ['jquery']
           exports: '$'
+        }
+        cocktail: {
+          deps: ['backbone']
         }
         highlighter: {
             deps: ['jquery']
