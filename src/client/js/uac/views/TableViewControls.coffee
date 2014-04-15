@@ -1,40 +1,42 @@
 define (require) ->
 
-    View = require 'uac/views/View'
+    Marionette = require 'marionette'
+
+    vent = require 'uac/common/vent'
     templates = require 'uac/ejs/templates'
 
 
     #
     # View class to display previous and next controls for a TableView.
     #
-    class TableViewControls extends View
-        initialize: (options) ->
-            @options = options
-            @table = @options.table
-
-            console.warn "\"table\" is undefined."  unless @table
-            @listenTo @table, "click", @render  if @table isnt undefined
-            return
+    class TableViewControls extends Marionette.ItemView
+        template: templates['prev-next.ejs']
 
         events:
             "click a.prev": "on_prev"
             "click a.next": "on_next"
 
-        render: =>
-            @run_once "init_template", =>
+        initialize: (options) ->
+            @options = options
+            if options.table
+                @table = options.table
 
-                # Only write the template once.
-                @apply_template(templates, 'prev-next.ejs')
-                $(document).keyup (ev) =>
-                    if ev.ctrlKey
-                        if ev.keyCode is 68 or ev.keyCode is 40 or ev.keyCode is 78
-                            @on_next()
-                        else @on_prev()  if ev.keyCode is 85 or ev.keyCode is 38 or ev.keyCode is 80
-                    return
+            if @table
+                # Listen to a table directly.
+                @listenTo @table, "click", @render
 
-                return
+            # Register key listeners.
+            $(document).keyup (ev) =>
+                if ev.ctrlKey
+                    if ev.keyCode is 68 or ev.keyCode is 40 or ev.keyCode is 78
+                        @on_next()
+                    else @on_prev()  if ev.keyCode is 85 or ev.keyCode is 38 or ev.keyCode is 80
 
-            if @table isnt undefined
+            super
+            return
+
+        onRender: =>
+            if @table
                 if @table.is_prev() or @table.is_prev_page()
                     @$("a.prev").removeAttr "disabled"
                 else

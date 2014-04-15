@@ -1,5 +1,4 @@
 define (require) ->
-
     Marionette = require 'marionette'
     vent = require 'uac/common/vent'
     utils = require 'uac/common/utils'
@@ -24,6 +23,8 @@ define (require) ->
     AlertFullModel = require 'alerts/models/AlertFullModel'
 
     RawAlertView = require 'alerts/views/RawAlertView'
+    TimelineView = require 'alerts/views/TimelineView'
+    TimelineCollection = require 'alerts/models/TimelineCollection'
 
     #
     # Layout for displaying the main alert template.
@@ -180,6 +181,7 @@ define (require) ->
                 error: =>
                     utils.unblock @layout.list_region.el
             }
+            return
 
         vent.on Events.ALERTS_ALERT_SELECTED, (row_data) =>
             @layout.details_content_region.reset()
@@ -200,11 +202,20 @@ define (require) ->
                     utils.unblock()
                 error: =>
                     utils.unblock()
+            return
 
         vent.on Events.ALERTS_RAW_ALERT, (data) =>
             view = new RawAlertView
                 model: new Backbone.Model(data)
             @layout.dialog_region.show view
+            return
+
+        vent.on Events.ALERTS_TIMELINE, (timeline) =>
+            console.dir timeline
+            view = new TimelineView
+                collection: new TimelineCollection(timeline)
+            @layout.dialog_region.show view
+            return
 
 
     # Export the alerts application.

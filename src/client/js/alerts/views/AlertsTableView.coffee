@@ -44,11 +44,6 @@ define (require) ->
             options.aoColumnDefs = [
                 renderers.priority(0, 'shield-small')
                 renderers.date_time(3)
-#                alert_renderer(1)
-#                count_renderer(2)
-#                count_renderer(3)
-#                CellRenderer.date_time_multiline(4)
-#                CellRenderer.date_time_multiline(5)
             ]
 
             options.aaSorting = [

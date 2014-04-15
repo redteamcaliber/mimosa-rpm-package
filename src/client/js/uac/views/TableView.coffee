@@ -11,6 +11,8 @@ define (require) ->
 
     datatables = require 'datatables'
     datatables_bootstrap = require 'datatables_bootstrap'
+    datatables_scroller = require 'datatables-scroller'
+
 
     $.extend $.fn.dataTableExt.oSort, {
         "int-html-pre": (a) ->
@@ -68,16 +70,16 @@ define (require) ->
                 @listenTo @, "draw", =>
                     if @_page_prev
                         # User has iterated through the table to the previous page.
-                        @trigger "page", view.get_current_page()
+                        @trigger "page", @get_current_page()
 
                         # Select the last record in the current view.
-                        @select_row view.length() - 1
+                        @select_row @length() - 1
 
                         # Clear the flag.
                         @_page_prev = false
                     else if @_page_next
                         # User has iterated to through the table to the next page.
-                        @trigger "page", @.get_current_page()
+                        @trigger "page", @get_current_page()
 
                         # Select the next record in the view.
                         @select_row 0
@@ -89,7 +91,7 @@ define (require) ->
 
                         # During a refresh reload operation a row index to select has been specified.  Attempt to select
                         # the row that corresponds to the index.
-                        @select_row view._row_index
+                        @select_row @_row_index
                         @_row_index = undefined
                     else if @_value_pair
 
@@ -439,6 +441,10 @@ define (require) ->
 
             return
 
+        create_table_el: ->
+            table = $ '<table>'
+            table.addClass('table').addClass('table-hover').addClass('table-condensed').addClass('table-bordered').addClass('table-striped')
+
         #
         # Render the table.  If you are obtaining data from a collection then don't invoke this method, call fetch()
         # instead.  If obtaining data via server side ajax then this method can be called with server side parameters.
@@ -457,10 +463,8 @@ define (require) ->
             @.destroy()
 
             # Create a table element to attach to.
-            @table_el = $ '<table>'
+            @table_el = @create_table_el()
             @$el.append @table_el
-            @table_el.addClass('table').addClass('table-hover').addClass('table-condensed').addClass('table-bordered').addClass('table-striped')
-
 
             # Keep track of the expanded rows.
             @._expanded_rows = []
@@ -503,7 +507,9 @@ define (require) ->
             for label in search_labels
                 $(label).css('margin-top', '5px').css('margin-right', '5px')
 
-            @
+            search_inputs = @$('.dataTables_filter').find('input')
+            for search_input in search_inputs
+                $(search_input).css('margin-bottom', '5px')
 
         on_expand: (ev) ->
             ev.stopPropagation()
@@ -796,6 +802,14 @@ define (require) ->
                 expanded.splice index, 1
                 @table_el.fnClose tr
             return
+
+        #
+        # Update the column widths of the table.  Call this function in conjunction with the scroll plugin after the
+        # table is displayed to the screen.
+        #
+        adjust_column_sizing: ->
+            if @table_el
+                @table_el.fnAdjustColumnSizing()
 
     #
     # Retrieve the default dataTables settings.

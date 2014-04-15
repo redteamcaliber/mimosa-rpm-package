@@ -295,6 +295,8 @@ module.exports = function (grunt) {
                         'src/client/css/typeahead.js-bootstrap.css',
                         'dist/client/js/raw/lib/datatables/jquery.dataTables.css',
                         'src/client/css/datatables.css',
+                        'src/client/css/dataTables.fixedHeader.css',
+                        'src/client/css/datatables-scroller.css',
                         'src/client/css/jquery.iocViewer.css'
                     ]
                 }
@@ -318,6 +320,8 @@ module.exports = function (grunt) {
                         blockui: 'lib/blockui/jquery.blockUI',
                         datatables: 'lib/datatables/jquery.dataTables',
                         datatables_bootstrap: 'js/datatables',
+                        'datatables-fixedheader': 'js/dataTables.fixedHeader',
+                        'datatables-scroller': 'js/dataTables.scroller',
                         highlighter: 'js/jQuery.highlighter',
                         iocviewer: 'js/jquery.iocViewer',
                         jquery: 'js/jquery-1.9.1',

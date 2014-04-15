@@ -1,0 +1,14 @@
+<li>Process Info</li>
+<li>
+    <ul>
+        <% if (processinfo.imagepath) { %>
+        <li>Image Path: <%= processinfo.imagepath %></li>
+        <% } %>
+        <% if (processinfo.md5sum) { %>
+        <li>MD5: <%= processinfo.md5sum %></li>
+        <% } %>
+        <% if (processinfo.pid) { %>
+        <li>PID: <%= processinfo.pid %></li>
+        <% } %>
+    </ul>
+</li>

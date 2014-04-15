@@ -48,6 +48,22 @@ define (require) ->
                 data
         aTargets: [index]
 
+    #
+    # Render an Underscore template.
+    #
+    template_renderer = (index, template) ->
+        mRender: (data, type, row) ->
+            try
+                context =
+                    data: data
+                    type: type
+                    row: row
+                return template(context)
+            catch e
+                return e
+        aTargets: [index]
+
     date_time: date_time_renderer
     date_time_multiline: date_time_multiline_renderer
     priority: priority_renderer
+    template_renderer: template_renderer

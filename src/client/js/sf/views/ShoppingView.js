@@ -85,7 +85,6 @@ define(function (require) {
             options.sDom = 'ftiS';
 
             options.iDisplayLength = 200;
-            options.bScrollInfinite = true;
             options.bScrollCollapse = true;
             options.sScrollY = '600px';
             options.iScrollLoadGap = 200;

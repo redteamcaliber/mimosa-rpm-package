@@ -1,0 +1,27 @@
+<ul class="list-unstyled">
+    <li>API Name: <%= row.apiname %></li>
+    <li>Address: <%= row.address %></li>
+    <li>Repeat: <%= row.repeat %></li>
+    <% if (row.params) { %>
+    <li>
+        Params:
+    </li>
+    <li>
+        <% if (row.params && Array.isArray(row.params)) { %>
+        <ul>
+            <% _.each(row.params.param, function(param) { %>
+            <li>
+                <%= param.param %>
+            </li>
+            <% }) %>
+        </ul>
+        <% } else { %>
+        <li>
+            <%= row.params.param.param %>
+        </li>
+        <% } %>
+    </li>
+    <% } %>
+    <li>DLL Name: <%= row.dllname %></li>
+    <%= processinfo(row.processinfo) %>
+</ul>

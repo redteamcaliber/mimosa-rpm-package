@@ -17,6 +17,12 @@ UAC ToDo
 ### Alerts Details View
 x - Parse the header data for NX cnc services.
 x - Aggregate alert signatures of the same type instead of displaying multiple tags when the same signature is repeated.
+- Update the alerts title as well as the breadcrumbs...
+x- Display the OS change report ftype
+x    - "ftype": "rtf",
+- Look into displaying OS change report Exploitcode sections.
+x - Display single items in the change report.
+x - Malicious items can be a list or a single item.
 - Add blocking when displaying the raw dialog.
 - Format the occurred and updated dates within the header according to how long ago they are.
 - Move the raw alert to a modal popup rather than a rollup.
