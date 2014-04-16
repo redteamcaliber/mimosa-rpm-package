@@ -24,7 +24,8 @@ define(function (require) {
             // Create the cluster selection component.
             view.cluster_selection_view = new ClusterSelectionView({
                 el: '#cluster-selection-div',
-                hide_services: true
+                hide_services: true,
+                hide_timeframe: true
             });
             view.listenTo(view.cluster_selection_view, 'submit', function (params) {
                 view.render_acquisitions({clusters: params.merged_clusters});

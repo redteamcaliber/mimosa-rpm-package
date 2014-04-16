@@ -42,27 +42,28 @@ define (require)->
       @close()
 
       usersettings = utils.usersettings()
-      if usersettings.timeFrame
-        console.debug "Found existing alerts search selections: #{JSON.stringify(usersettings.timeFrame)}"
+      if @options.hide_timeframe != true
+        if usersettings.timeFrame
+          console.debug "Found existing alerts search selections: #{JSON.stringify(usersettings.timeFrame)}"
 
-      time = if usersettings.timeFrame and usersettings.timeFrame.time then usersettings.timeFrame.time else undefined
-      if time == 'custom'
-        # A custom time was specified, try and get the last save from and to date/times.
-        from = if usersettings.timeFrame and usersettings.timeFrame.from then usersettings.timeFrame.from else undefined
-        to = if usersettings.timeFrame and usersettings.timeFrame.to then usersettings.timeFrame.to else undefined
+        time = if usersettings.timeFrame and usersettings.timeFrame.time then usersettings.timeFrame.time else undefined
+        if time == 'custom'
+          # A custom time was specified, try and get the last save from and to date/times.
+          from = if usersettings.timeFrame and usersettings.timeFrame.from then usersettings.timeFrame.from else undefined
+          to = if usersettings.timeFrame and usersettings.timeFrame.to then usersettings.timeFrame.to else undefined
 
-      @times = new TimeCollection()
-      @timeSearchView = new TimeSearchView
-        selected: time
-        from: from
-        to: to
-        default: 'days_1'
-        collection: @times
+        @times = new TimeCollection()
+        @timeSearchView = new TimeSearchView
+          selected: time
+          from: from
+          to: to
+          default: 'days_1'
+          collection: @times
 
-      #TODO: this should be put into a region
-      @times.fetch
-        success: => @$("#searchControls").append(@timeSearchView.render().el)
-        error: => console.log "error retrieving time controls"
+        #TODO: this should be put into a region
+        @times.fetch
+          success: => @$("#searchControls").append(@timeSearchView.render().el)
+          error: => console.log "error retrieving time controls"
 
 
       if @options.hide_services != true
@@ -85,49 +86,47 @@ define (require)->
           #Update the submit button.
           @update_options()
 
-        #Render the clients.
-        @clients = new ClientCollection()
-        @clients_view = new SelectView
-          el: @$('#clients-select')
-          collection: @clients
-          id_field: 'client_uuid'
-          value_field: 'client_name'
-          selected: usersettings.clients
-          width: '100%'
+      #Render the clients.
+      @clients = new ClientCollection()
+      @clients_view = new SelectView
+        el: @$('#clients-select')
+        collection: @clients
+        id_field: 'client_uuid'
+        value_field: 'client_name'
+        selected: usersettings.clients
+        width: '100%'
 
-        @clients.reset(StrikeFinder.clients)
-        @clients_view.on 'change', =>
-          #Reload the clusters based on the selected clients.
-          @load_clusters()
-
-          #Update the submit button.
-          @update_options()
-
-        #Render the clusters.
-        @clusters = new ClustersCollection()
-        @clusters_view = new SelectView
-          el: @$("#clusters-select")
-          collection: @clusters
-          id_field: "cluster_uuid"
-          value_field: "cluster_name"
-          selected: usersettings.clusters
-          width: "100%"
-
-        @clusters_view.on 'change', =>
-          #Update the submit button.
-          @update_options()
-
-        #Load the initial clusters options based on the clients.
+      @clients.reset(StrikeFinder.clients)
+      @clients_view.on 'change', =>
+        #Reload the clusters based on the selected clients.
         @load_clusters()
 
-        #Register event handlers.
-        @delegateEvents
-          'click #submit-button': 'on_submit'
-          'click #clear-button': 'on_clear'
+        #Update the submit button.
+        @update_options()
 
+      #Render the clusters.
+      @clusters = new ClustersCollection()
+      @clusters_view = new SelectView
+        el: @$("#clusters-select")
+        collection: @clusters
+        id_field: "cluster_uuid"
+        value_field: "cluster_name"
+        selected: usersettings.clusters
+        width: "100%"
 
+      @clusters_view.on 'change', =>
+        #Update the submit button.
+        @update_options()
 
-        return @
+      #Load the initial clusters options based on the clients.
+      @load_clusters()
+
+      #Register event handlers.
+      @delegateEvents
+        'click #submit-button': 'on_submit'
+        'click #clear-button': 'on_clear'
+
+      return @
 
     #Clean up after this view.
     close: -> @undelegateEvents()
@@ -191,6 +190,10 @@ define (require)->
       #Get the end date to filter down results
       get_end_date: -> reqres.request "DateView:endDate:getEpoch"
 
+      #Get the time frame
+      get_time_frame: -> if @options.hide_timeframe == true then null else @timeSearchView.get_selected()
+
+
 
       ###
         Call this method to enable or disable the submit button.
@@ -234,7 +237,7 @@ define (require)->
           timeFrame:
             from: new Date(@get_start_date()*1000)
             to: new Date(@get_end_date()*1000)
-            time: @timeSearchView.get_selected()
+            time: @get_time_frame()
 
 
         #Trigger and event with the current services and merged clusters selections.
