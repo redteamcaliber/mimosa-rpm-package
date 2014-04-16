@@ -70,7 +70,7 @@ define(function(require) {
                 console.log('Retrieved ' + terms.length + ' terms...');
                 data.terms = terms.toJSON();
             } else {
-                log.warning('Terms was invalid');
+                console.warn('Terms was invalid');
                 data.terms = [];
             }
 

@@ -155,6 +155,12 @@ define(function(require) {
                 el: '#hits-details',
                 hits_table_view: view.hits_table_view
             });
+            view.listenTo(view.hits_details_view, 'create:acquire', function(row) {
+                // An acquisition has been created, update the row's tag value.
+                view.hits_table_view.update_row('uuid', row.uuid, 'tagname', 'investigating', 1);
+                // Refresh the comments.
+                view.hits_details_view.fetch();
+            });
             view.listenTo(view.hits_details_view, 'create:tag', function(row, tagname) {
                 view.hits_table_view.update_row('uuid', row.uuid, 'tagname', tagname, 0);
                 view.hits_details_view.fetch();
@@ -176,9 +182,6 @@ define(function(require) {
             // Listen to criteria changes and reload the views.
             view.listenTo(view.facets_view, 'refresh', function(attributes) {
                 // Reload the hits.
-
-                console.dir(attributes);
-
                 view.hits_table_view.fetch(attributes);
             });
 

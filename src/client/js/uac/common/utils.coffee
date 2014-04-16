@@ -487,4 +487,5 @@ define (require) ->
         recent: recent
         set_theme: set_theme
         get_styles: get_styles
+        wait_for: wait_for
     )

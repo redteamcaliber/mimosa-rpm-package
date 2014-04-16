@@ -1,6 +1,5 @@
 define(function (require) {
     var Backbone = require('backbone');
-    var utils = require('sf/common/utils');
 
     /**
      * Model for a single acquisisition.
@@ -64,7 +63,8 @@ define(function (require) {
          * @returns {String} - a formatted String.
          */
         toString: function() {
-            return utils.format_acquisition(this.attributes);
+            return _.sprintf('Acquisition (%s) FilePath: %s FileName: %s',
+                this.attributes.uuid, this.attributes.file_path, this.attributes.file_name);
         }
     });
 

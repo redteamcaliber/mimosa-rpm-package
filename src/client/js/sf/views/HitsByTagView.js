@@ -97,6 +97,13 @@ define(function(require) {
                 view.hits_table_view.fetch(attributes);
             });
 
+            view.listenTo(view.hits_details_view, 'create:acquire', function(row) {
+                // An acquisition has been created, update the row's tag value.
+                view.hits_table_view.update_row('uuid', row.uuid, 'tagname', 'investigating', 1);
+                // Refresh the comments.
+                view.hits_details_view.fetch();
+            });
+
             view.listenTo(view.hits_details_view, 'create:suppression', function () {
                 // Reload the facets after a suppression is created.
                 view.facets_view.fetch();

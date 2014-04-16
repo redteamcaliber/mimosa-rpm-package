@@ -30,7 +30,7 @@ define (require) ->
                 # Listen to global events for a table.
                 @table_name = options.table_name
 
-                # Listen to status events.
+                # Listen to status events of the TableView.
                 @listenTo vent, "TableView:#{@table_name}:status", (status) =>
                     console.debug 'TableViewControls::status'
                     console.dir status

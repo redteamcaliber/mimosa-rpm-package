@@ -1,6 +1,8 @@
 define(function(require) {
     var utils = require('uac/common/utils');
     var TagCollection = require('sf/models/TagCollection');
+    var Task = require('sf/models/Task');
+    var Acquisition = require('sf/models/Acquisition');
 
     /**
      * Retrieve the list of StrikeFinder tags.
@@ -79,7 +81,7 @@ define(function(require) {
                 task_id: task_id
             },
             function(params, callback) {
-                var task = new StrikeFinder.Task({
+                var task = new Task({
                     id: task_id
                 });
                 task.fetch({
@@ -111,7 +113,7 @@ define(function(require) {
                 acquisition_uuid: acquisition_uuid
             },
             function(params, callback) {
-                var acquisition = new StrikeFinder.Acquisition();
+                var acquisition = new Acquisition();
                 acquisition.uuid = acquisition_uuid;
                 acquisition.fetch({
                     success: function(model, response) {

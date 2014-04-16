@@ -39,7 +39,7 @@ define(function (require) {
                 }
             });
 
-            $('.tt-dropdown-menu').addClass('dropdown-menu');
+            $('.tt-dropdown-menu').addClass('well');
 
             typeahead.on('typeahead:selected', function (evt, data) {
                 window.location = _.sprintf('/sf/host/%s/', data.hash);
