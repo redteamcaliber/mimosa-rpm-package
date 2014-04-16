@@ -6,6 +6,8 @@ UAC ToDo
     -Re-rendering of a table is currently broken in the IOCSummaryView.
     - Convert the table view to and ItemView, need to override the default close function.
     - When render is called the first time the table displays the message that no records are found.
+- Look into MD5 issue
+    - {"results": [{"response_code": 0, "resource": "6caf13b282678dda2176e1a1d32fc5b6", "verbose_msg": "The requested resource is not among the finished, queued or pending scans"}], "_meta": {"s": 0}}
 
 ### Alerts Lists Views
 - Display the tag text descriptions in the summary and details table.
@@ -15,15 +17,9 @@ UAC ToDo
 - Convert to using a Marionette layout.
 
 ### Alerts Details View
-x - Parse the header data for NX cnc services.
-x - Aggregate alert signatures of the same type instead of displaying multiple tags when the same signature is repeated.
 - Update the alerts title as well as the breadcrumbs...
-x- Display the OS change report ftype
-x    - "ftype": "rtf",
+- Add previously navigated pages to the breadcrumb view.
 - Look into displaying OS change report Exploitcode sections.
-x - Display single items in the change report.
-x - Malicious items can be a list or a single item.
-- Add blocking when displaying the raw dialog.
 - Format the occurred and updated dates within the header according to how long ago they are.
 - Move the raw alert to a modal popup rather than a rollup.
 - Format the raw alert data.

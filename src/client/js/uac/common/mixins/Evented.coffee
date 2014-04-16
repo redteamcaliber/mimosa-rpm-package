@@ -57,7 +57,7 @@ define (require)->
 
     ###
     registerVent: (options={})->
-      if @_validArguments(options) then @_getVent().on @_getTopicGenerator(options), -> options.handler.apply(this,arguments)
+      if @_validArguments(options) then @listenTo @_getVent(), @_getTopicGenerator(options), -> options.handler.apply(this,arguments)
 
     ###
       Fire a vent event. These events are global, so every component

@@ -18,11 +18,11 @@ define (require) ->
 
             @render_alerts_filters()
 
-            vent.on Events.ALERTS_SEARCH, @render_alerts_selection
-            vent.on Events.ALERTS_ALERT_SELECTED, @render_alerts_details
-            vent.on "breadcrumb:#{ALERTS_FILTERS}", @render_alerts_filters
-            vent.on "breadcrumb:#{ALERTS_SELECTION}", @render_alerts_selection
-            vent.on "breadcrumb:#{ALERTS_DETAILS}", @render_alerts_details
+            @.listenTo vent, Events.ALERTS_SEARCH, @render_alerts_selection
+            @.listenTo vent, Events.ALERTS_ALERT_SELECTED, @render_alerts_details
+            @.listenTo vent, "breadcrumb:#{ALERTS_FILTERS}", @render_alerts_filters
+            @.listenTo vent, "breadcrumb:#{ALERTS_SELECTION}", @render_alerts_selection
+            @.listenTo vent, "breadcrumb:#{ALERTS_DETAILS}", @render_alerts_details
             return
 
         push_alerts: ->

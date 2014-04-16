@@ -13,6 +13,7 @@ define (require) ->
     template_map =
         apicall: 'timeline-apicall.ejs'
         file: 'timeline-file.ejs'
+        exploitcode: 'timeline-exploitcode.ejs'
         os: 'timeline-os.ejs'
         os_monitor: 'timeline-os-monitor.ejs'
         monitor: 'timeline-monitor.ejs'
@@ -21,6 +22,14 @@ define (require) ->
         process: 'timeline-process.ejs'
         regkey: 'timeline-regkey.ejs'
 
+
+    #
+    # Params helper.
+    #
+    render_params = (params) ->
+        template = templates['timeline-params.ejs']
+        return template
+            params: params
 
     #
     # Process info helper.
@@ -44,6 +53,7 @@ define (require) ->
                     type: type
                     row: row
                     processinfo: render_process_info
+                    params: render_params
                 return templates[template](context)
             catch e
                 return e

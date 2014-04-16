@@ -259,7 +259,8 @@ define (require) ->
             table_controls_region: '.controls-region'
 
         initialize: ->
-            @addChild @table_controls_region, TableViewControls
+            @addChild @table_controls_region, new TableViewControls
+                table_name: 'alerts_table'
             @addChild @raw_region, AlertRawMenu
             @addChild @header_region, AlertHeaderView
             @addChild @signatures_region, AlertSignaturesView

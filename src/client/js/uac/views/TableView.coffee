@@ -6,7 +6,9 @@ define (require) ->
     Backbone = require 'backbone'
     Marionette = require 'marionette'
 
-    View = require 'uac/views/View'
+    mixin = require 'uac/common/Mixin'
+    Evented = require 'uac/common/mixins/Evented'
+    vent = require 'uac/common/vent'
     utils = require 'uac/common/utils'
 
     datatables = require 'datatables'
@@ -59,62 +61,72 @@ define (require) ->
             else
                 @options = {}
 
-#            unless @options.id
-#                # Ensure there is an id attribute.
-#                @options.id = utils.random_string(10)
+            # Set the instance name.
+            if not @name and options and options.name
+                @name = options.name
+            else if not @name
+                @name = @cid
 
-            if @collection
-                # Listen to draw events to account for the fact that datatables does not fire page change events.  This code
-                # makes up for that shortcoming by manually determining when the user has used the previous next component to
-                # page through the table.
-                @listenTo @, "draw", =>
-                    if @_page_prev
-                        # User has iterated through the table to the previous page.
-                        @trigger "page", @get_current_page()
+            console.debug "Initializing table with name: #{@name}"
 
-                        # Select the last record in the current view.
-                        @select_row @length() - 1
+            # Listen to get status events.
+            @listenTo vent, "TableView:#{@name}:get_status", =>
+                # Send a status event.
+                vent.trigger "TableView:#{@name}:status", @get_status_data()
+            # Listen to prev/next change events.
+            @listenTo vent, "TableView:#{@name}:set_prev", @prev
+            @listenTo vent, "TableView:#{@name}:set_next", @next
 
-                        # Clear the flag.
-                        @_page_prev = false
-                    else if @_page_next
-                        # User has iterated to through the table to the next page.
-                        @trigger "page", @get_current_page()
+            # Listen to draw events to account for the fact that datatables does not fire page change events.  This code
+            # makes up for that shortcoming by manually determining when the user has used the previous next component to
+            # page through the table.
+            @listenTo @, "draw", =>
+                if @_page_prev
+                    # User has iterated through the table to the previous page.
+                    @trigger "page", @get_current_page()
 
-                        # Select the next record in the view.
-                        @select_row 0
+                    # Select the last record in the current view.
+                    @select_row @length() - 1
 
-                        # Clear the flag.
-                        @_page_next = false
+                    # Clear the flag.
+                    @_page_prev = false
+                else if @_page_next
+                    # User has iterated to through the table to the next page.
+                    @trigger "page", @get_current_page()
 
-                    if @_row_index isnt undefined
+                    # Select the next record in the view.
+                    @select_row 0
 
-                        # During a refresh reload operation a row index to select has been specified.  Attempt to select
-                        # the row that corresponds to the index.
-                        @select_row @_row_index
-                        @_row_index = undefined
-                    else if @_value_pair
+                    # Clear the flag.
+                    @_page_next = false
 
-                        # During a refresh/reload operation a value to select has been specified.  Attempt to select the
-                        # row that corresponds to the supplied name value pair.
-                        console.debug "Attempting to reselect table row value: name=#{@_value_pair.name}, value=#{@_value_pair.value}"
+                if @_row_index isnt undefined
+                    # During a refresh reload operation a row index to select has been specified.  Attempt to select
+                    # the row that corresponds to the index.
+                    @select_row @_row_index
+                    @_row_index = undefined
+                else if @_value_pair
 
-                        # Attempt to select the row related to the value pair after a draw event.
-                        found = false
-                        for node in @get_nodes()
-                            data = @get_data node
-                            if @_value_pair.name and @_value_pair.value and data[@_value_pair.name] is @_value_pair.value
-                                # Select the node.
-                                @select_row node
-                                found = true
-                                break
+                    # During a refresh/reload operation a value to select has been specified.  Attempt to select the
+                    # row that corresponds to the supplied name value pair.
+                    console.debug "Attempting to reselect table row value: name=#{@_value_pair.name}, value=#{@_value_pair.value}"
 
-                        # If the matching row was not found it is assumed that it was deleted, select the first
-                        # row instead.
-                        @select_row 0  unless found
+                    # Attempt to select the row related to the value pair after a draw event.
+                    found = false
+                    for node in @get_nodes()
+                        data = @get_data node
+                        if @_value_pair.name and @_value_pair.value and data[@_value_pair.name] is @_value_pair.value
+                            # Select the node.
+                            @select_row node
+                            found = true
+                            break
 
-                        # Clear the value pair.
-                        @_value_pair = undefined
+                    # If the matching row was not found it is assumed that it was deleted, select the first
+                    # row instead.
+                    @select_row 0  unless found
+
+                    # Clear the value pair.
+                    @_value_pair = undefined
 
                 return # End @listenTo @, "draw", =>
 
@@ -248,24 +260,33 @@ define (require) ->
             undefined
 
         #
-        # Navigate to the previous row.
+        # Navigate to the previous row.  If at the first row in a page then attempt to navigate to the previous page.
         #
         prev: ->
-            selected = @get_selected()
-            if selected isnt undefined and selected.length is 1
-                pos = @get_position(selected.get(0))
-                @select_row pos - 1
+            if @is_prev()
+                # There is a previous record.
+                selected = @get_selected()
+                if selected isnt undefined and selected.length is 1
+                    pos = @get_position(selected.get(0))
+                    @select_row pos - 1
+            else if @is_prev_page()
+                # There is a previous page.
+                @prev_page()
             return
 
         #
-        # Navigate to the next row.
+        # Navigate to the next row.  If at the last row in a page then attempt to navigate to the next page.
         #
         next: ->
             if @is_next()
+                # There is a next record.
                 selected = @get_selected()
                 if selected isnt undefined and selected.length is 1
                     pos = @get_position(selected.get(0))
                     @select_row pos + 1
+            else if @is_next_page()
+                # There is a next page.
+                @next_page()
             return
 
         #
@@ -286,7 +307,7 @@ define (require) ->
         prev_page: ->
             if @is_prev_page()
                 # set page takes an index.
-                @set_page(@get_current_page())
+                @set_page(@get_current_page() - 2)
             return
 
         #
@@ -811,6 +832,16 @@ define (require) ->
             if @table_el
                 @table_el.fnAdjustColumnSizing()
 
+        #
+        # Retrieve the table status data.  Used in conjunction with events.
+        #
+        get_status_data: ->
+            position: @get_selected_position()
+            is_prev: @is_prev()
+            is_next: @is_next()
+            is_prev_page: @is_prev_page()
+            is_next_page: @is_next_page()
+
     #
     # Retrieve the default dataTables settings.
     #
@@ -845,8 +876,18 @@ define (require) ->
                     # Select the row.
                     $(row).addClass("active").siblings().removeClass "active"
 
-                    # Trigger a click event.
-                    parent.trigger "click", parent.get_data(ev.currentTarget), ev
+                    click_data = parent.get_data ev.currentTarget
+
+                    # Trigger a local click event.
+                    parent.trigger "click", click_data, ev
+
+                    # Trigger a global click event.
+                    if settings.name
+                        vent.trigger "TableView:#{settings.name}:click", click_data, ev
+                        vent.trigger "TableView:#{settings.name}:change", parent.get_status_data()
+                    else
+                        vent.trigger "TableName:#{parent.cid}:click", click_data, ev
+                        vent.trigger "TableName:#{parent.cid}:change", parent.get_status_data()
                     return
                 return
 
@@ -872,6 +913,9 @@ define (require) ->
             results[k] = v
 
         results
+
+    # Mixin events.
+    mixin TableView, Evented
 
     # Export the table class.
     TableView

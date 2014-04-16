@@ -1,0 +1,18 @@
+<% if (params && params.param) { %>
+<li>
+    Params:
+</li>
+<% if (Array.isArray(params.param)) { %>
+<ul>
+    <% _.each(params.param, function(param) { %>
+    <li>
+        <%= param.param %>
+    </li>
+    <% }) %>
+</ul>
+<% } else { %>
+<ul>
+    <li><%= params.param.param %></li>
+</ul>
+<% } %>
+<% } %>

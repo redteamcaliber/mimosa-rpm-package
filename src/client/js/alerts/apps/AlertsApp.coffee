@@ -5,9 +5,6 @@ define (require) ->
 
     templates = require 'alerts/ejs/templates'
 
-    # Debug
-    vent.on 'all', (event_name) ->
-        console.debug "Event: #{event_name}"
 
     Events = require 'alerts/common/Events'
     AlertsBreadcrumbView = require 'alerts/views/AlertsBreadcrumbView'
@@ -46,22 +43,22 @@ define (require) ->
         # Listen to global events and show and hide regions accordingly.
         #
         initialize: ->
-            vent.on Events.ALERTS_SEARCH, =>
+            @.listenTo vent, Events.ALERTS_SEARCH, =>
                 @show_alerts_summary_list()
 
-            vent.on Events.ALERTS_SUMMARY_SELECTED, =>
+            @.listenTo vent, Events.ALERTS_SUMMARY_SELECTED, =>
                 @show_alerts_details_list()
 
-            vent.on Events.ALERTS_ALERT_SELECTED, =>
+            @.listenTo vent, Events.ALERTS_ALERT_SELECTED, =>
                 @show_alerts_details()
 
-            vent.on 'breadcrumb:alerts_filters', =>
+            @.listenTo vent, 'breadcrumb:alerts_filters', =>
                 @show_alerts_filters()
 
-            vent.on 'breadcrumb:alerts_selection', =>
+            @.listenTo vent, 'breadcrumb:alerts_selection', =>
                 @show_alerts_details_list()
 
-            vent.on 'breadcrumb:alerts_details', =>
+            @.listenTo vent, 'breadcrumb:alerts_details', =>
                 @show_alerts_details()
 
         #
@@ -113,6 +110,10 @@ define (require) ->
     # Initialize the alerts application.
     #
     AlertsApp.addInitializer ->
+        # Debug
+        @.listenTo vent, 'all', (event_name) ->
+            console.debug "Event: #{event_name}"
+
         # Create and display the main page layout.
         @layout = new AlertsLayout()
         @content_region.show @layout
@@ -129,7 +130,7 @@ define (require) ->
         @layout.filters_content_region.show @filters_view
 
         # Handle searching for alerts summaries.
-        vent.on Events.ALERTS_SEARCH, (params) =>
+        @.listenTo vent, Events.ALERTS_SEARCH, (params) =>
             unless @summary_list_view
                 # Create the summary list table.
                 @summaries = new AlertSummaryCollection()
@@ -156,7 +157,7 @@ define (require) ->
                 error: =>
                     utils.unblock @layout.list_region.el
 
-        vent.on Events.ALERTS_SUMMARY_SELECTED, (row_data) =>
+        @.listenTo vent, Events.ALERTS_SUMMARY_SELECTED, (row_data) =>
             unless @details_list_view
                 # Create the details list view.
                 @alerts = new AlertCollection()
@@ -183,7 +184,7 @@ define (require) ->
             }
             return
 
-        vent.on Events.ALERTS_ALERT_SELECTED, (row_data) =>
+        @.listenTo vent, Events.ALERTS_ALERT_SELECTED, (row_data) =>
             @layout.details_content_region.reset()
 
             alert = new AlertFullModel()
@@ -204,13 +205,13 @@ define (require) ->
                     utils.unblock()
             return
 
-        vent.on Events.ALERTS_RAW_ALERT, (data) =>
+        @listenTo vent, Events.ALERTS_RAW_ALERT, (data) =>
             view = new RawAlertView
                 model: new Backbone.Model(data)
             @layout.dialog_region.show view
             return
 
-        vent.on Events.ALERTS_TIMELINE, (timeline) =>
+        @listenTo vent, Events.ALERTS_TIMELINE, (timeline) =>
             console.dir timeline
             view = new TimelineView
                 collection: new TimelineCollection(timeline)
