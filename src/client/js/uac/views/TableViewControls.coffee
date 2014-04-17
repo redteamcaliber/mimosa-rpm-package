@@ -3,6 +3,8 @@ define (require) ->
     Marionette = require 'marionette'
 
     vent = require 'uac/common/vent'
+    Evented = require 'uac/common/mixins/Evented'
+    mixin = require 'uac/common/Mixin'
     templates = require 'uac/ejs/templates'
 
 
@@ -31,6 +33,7 @@ define (require) ->
                 @table_name = options.table_name
 
                 # Listen to status events of the TableView.
+                @reg
                 @listenTo vent, "TableView:#{@table_name}:status", (status) =>
                     console.debug 'TableViewControls::status'
                     console.dir status
@@ -103,5 +106,8 @@ define (require) ->
             @stopListening()
             return
 
+
+    # Mixin events.
+    mixin TableViewControls, Evented
 
     TableViewControls
