@@ -73,6 +73,6 @@ define (require)->
       when proxying getters.
     ###
     fireReqRes: (options={})->
-      if @_validArguments(options) then @_getVent().trigger @_getTopicGenerator(options), options.payload
+      if @_validArguments(options) then @_getReqRes().request @_getTopicGenerator(options), options.payload
 
   }
