@@ -1,0 +1,14 @@
+{% extends "/base.html" %}
+
+{% block title %}Unit Tests - {{ super() }} {% endblock %}
+
+{% block data_main %}test/RunnerMain{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link id="bootstrap" href="/static/css/mocha.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+<div id="mocha"></div>
+{% endblock %}

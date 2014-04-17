@@ -8,6 +8,7 @@ window.require =
         bootstrap: 'lib/bootstrap/js/bootstrap'
         bootstrap_growl: 'lib/bootstrap-growl/jquery.bootstrap-growl'
         blockui: 'lib/blockui/jquery.blockUI'
+        chai: 'lib/chai/chai'
         cocktail: 'lib/cocktail/Cocktail'
         datatables: 'lib/datatables/jquery.dataTables'
         datatables_bootstrap: 'js/datatables'
@@ -17,6 +18,7 @@ window.require =
         iocviewer: 'js/jquery.iocViewer'
         jquery: 'js/jquery-1.9.1'
         marionette: 'lib/marionette/backbone.marionette'
+        mocha: 'lib/mocha/mocha'
         moment: 'lib/moment/moment'
         select2: 'lib/select2/select2'
         typeahead: 'lib/typeahead.js/typeahead'
@@ -49,6 +51,9 @@ window.require =
         iocviewer: {
             deps: ['jquery']
             exports: '$.fn.iocViewer'
+        }
+        mocha: {
+            exports: 'mocha'
         }
         select2: {
             deps: ['jquery'],

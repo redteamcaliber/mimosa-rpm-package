@@ -54,7 +54,7 @@ console.log 'trust proxy enabled: ' + app.get('trust proxy')
 
 app.use express.compress()
 
-app.use express.favicon(__dirname + '/static/img/mandiant.ico')
+app.use express.favicon('/static/css/img/mandiant.ico')
 app.use '/static', express.static('static')
 
 app.use express.cookieParser()

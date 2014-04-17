@@ -10,6 +10,14 @@ var app = module.exports = express();
 
 route_utils.load_views(app);
 
+app.get('/', function(req, res, next) {
+    try {
+        res.render('/test/test.html', route_utils.default_context(req));
+    }
+    catch (e) {
+        next(e);
+    }
+});
 
 /**
  * Process a request.  This route runs code that intentionally blocks.
