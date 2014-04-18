@@ -161,6 +161,7 @@ define (require) ->
                 instanceName: 'endDate'
                 eventName: 'getDate'
 
+
         #
         # Set the displayed from date.  Expects a JS date object.
         #
@@ -206,10 +207,18 @@ define (require) ->
                 @set_to_date new Date()
 
             # Toggle the time fields.
-            vent.trigger "DateView:startDate:toggle", disabled
-            vent.trigger "DateView:endDate:toggle", disabled
+            @fireAsync
+              constructorName: DateView
+              instanceName: "startDate"
+              eventName: "toggle"
+              payload: disabled
+            @fireAsync
+              constructorName: DateView
+              instanceName: "endDate"
+              eventName: "toggle"
+              payload: disabled
+            
+    Mixin TimeSearchView, Evented
 
-
-    mixin TimeSearchView, Evented
 
     TimeSearchView

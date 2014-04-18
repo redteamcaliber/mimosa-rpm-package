@@ -83,6 +83,7 @@ define (require) ->
     onRender: ->
       #render to the screen
       @$(".date").datetimepicker @overrides
+      $(".bootstrap-datetimepicker-widget").addClass("well")
 
       #proxy raw jquery events into BS events and update local handle on date
       @$(".date").on "dp.change", (payload)=>
@@ -107,6 +108,7 @@ define (require) ->
             return
 
           @$(".date").data("DateTimePicker")[method](event.date)
+
 
   Mixin DateView, Evented
 
