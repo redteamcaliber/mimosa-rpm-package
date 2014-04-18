@@ -218,7 +218,7 @@ define (require) ->
               eventName: "toggle"
               payload: disabled
             
-    Mixin TimeSearchView, Evented
+    mixin TimeSearchView, Evented
 
 
     TimeSearchView
