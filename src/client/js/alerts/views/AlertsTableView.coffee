@@ -29,8 +29,6 @@ define (require) ->
     #
     class AlertsTableView extends TableView
         initialize: (options) ->
-            @name = 'alerts_table'
-
             super options
 
             options.aoColumns = [

@@ -260,7 +260,7 @@ define (require) ->
 
         initialize: ->
             @addChild @table_controls_region, new TableViewControls
-                table_name: 'alerts_table'
+                table_name: 'alerts_details_table'
             @addChild @raw_region, AlertRawMenu
             @addChild @header_region, AlertHeaderView
             @addChild @signatures_region, AlertSignaturesView

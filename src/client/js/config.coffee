@@ -9,6 +9,7 @@ window.require =
         bootstrap_growl: 'lib/bootstrap-growl/jquery.bootstrap-growl'
         blockui: 'lib/blockui/jquery.blockUI'
         chai: 'lib/chai/chai'
+        'chai-jquery': 'lib/chai-jquery/chai-jquery'
         cocktail: 'lib/cocktail/Cocktail'
         datatables: 'lib/datatables/jquery.dataTables'
         datatables_bootstrap: 'js/datatables'

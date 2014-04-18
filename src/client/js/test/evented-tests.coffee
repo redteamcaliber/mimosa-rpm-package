@@ -5,9 +5,9 @@ define (require) ->
     should = chai.should()
 
     Marionette = require 'marionette'
+    reqres = require 'uac/common/reqres'
 
     mixin = require 'uac/common/Mixin'
-    reqres = require 'uac/common/reqres'
     Evented = require 'uac/common/mixins/Evented'
 
 
@@ -21,7 +21,7 @@ define (require) ->
 
                 @count = 0
 
-                @registerReqRes
+                @registerSync
                     eventName: 'get_count'
                     handler: =>
                         @get_count()
@@ -49,7 +49,7 @@ define (require) ->
                 return
             it 'should have Evented mixed in', ->
                 # Evented should be mixed in.
-                should.exist get_test_instance().registerReqRes
+                should.exist get_test_instance().registerSync
                 return
             it 'should be named testInstance', ->
                 # The test instance should be named testInstance.

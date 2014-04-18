@@ -2,15 +2,14 @@ define (require) ->
 
     Marionette = require 'marionette'
 
+    utils = require 'uac/common/utils'
+    vent = require 'uac/common/vent'
+    mixin = require 'uac/common/Mixin'
+    Evented = require 'uac/common/mixins/Evented'
+
     templates = require 'uac/ejs/templates'
 
     DateView = require 'uac/views/DateView'
-
-    utils = require 'uac/common/utils'
-
-    vent = require 'uac/common/vent'
-
-    reqres = require 'uac/common/reqres'
 
     #
     # Generic view for displaying time frame search criteria.
@@ -147,34 +146,51 @@ define (require) ->
         #
         # Get the from date.  Returns a JS date object or undefined.
         #
-        get_from_date: -> reqres.request "DateView:startDate:getDate"
+        get_from_date: ->
+            @requestSync
+                constructorName: DateView
+                instanceName: 'startDate'
+                eventName: 'getDate'
 
         #
         # Get the to date.  Returns a JS data object or undefined.
         #
-        get_to_date: -> reqres.request "DateView:endDate:getDate"
-
+        get_to_date: ->
+            @requestSync
+                constructorName: DateView
+                instanceName: 'endDate'
+                eventName: 'getDate'
 
         #
         # Set the displayed from date.  Expects a JS date object.
         #
-        set_from_date: (from) -> vent.trigger "DateView:startDate:setDate", from
+        set_from_date: (from) ->
+            @fireAsync
+                constructorName: DateView
+                instanceName: 'startDate'
+                eventName: 'setDate'
+                payload: from
 
         #
         # Set the displayed to date.  Expects a JS date object.
         #
-        set_to_date: (to) -> vent.trigger "DateView:endDate:setDate", to
+        set_to_date: (to) ->
+            @fireAsync
+                constructorName: DateView
+                instanceName: 'endDate'
+                eventName: 'setDate'
+                payload: to
 
         #
         # Return whether the from date is valid.
-        is_from_valid: -> true
-#            return moment(@$('#time-from').val()).isValid()
+        is_from_valid: ->
+            return moment(@get_from_date()).isValid()
 
         #
         # Return whether the to date is valid.
         #
-        is_to_valid: -> true
-#            return moment(@$('#time-to').val()).isValid()
+        is_to_valid: ->
+            return moment(@get_to_date()).isValid()
 
         #
         # Handle the time change event.
@@ -193,5 +209,7 @@ define (require) ->
             vent.trigger "DateView:startDate:toggle", disabled
             vent.trigger "DateView:endDate:toggle", disabled
 
+
+    mixin TimeSearchView, Evented
 
     TimeSearchView

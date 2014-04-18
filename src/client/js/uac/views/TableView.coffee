@@ -53,6 +53,8 @@ define (require) ->
         initialize: (options) ->
             super options
 
+            @instanceName = @getInstanceName()
+
             # Create a container for managing child views.  The container will be closed and emptied on destroy.
             @container = new Backbone.ChildViewContainer()
 
@@ -61,21 +63,36 @@ define (require) ->
             else
                 @options = {}
 
-            # Set the instance name.
-            if not @name and options and options.name
-                @name = options.name
-            else if not @name
-                @name = @cid
-
-            console.debug "Initializing table with name: #{@name}"
-
             # Listen to get status events.
-            @listenTo vent, "TableView:#{@name}:get_status", =>
-                # Send a status event.
-                vent.trigger "TableView:#{@name}:status", @get_status_data()
+            @registerSync
+                constructorName: TableView
+                instanceName: @instanceName
+                eventName: 'status'
+                handler: => @get_status_data()
+
+            @listenTo @, 'click', =>
+                # Trigger a global click/change event.
+                @fireAsync
+                    constructorName: TableView
+                    eventName: 'change'
+                    payload: @get_status_data()
+                @fireAsync
+                    constructorName: TableView
+                    eventName: 'click'
+                    payload: @get_selected_data()
+                return
+
             # Listen to prev/next change events.
-            @listenTo vent, "TableView:#{@name}:set_prev", @prev
-            @listenTo vent, "TableView:#{@name}:set_next", @next
+            @registerAsync
+                constructorName: TableView
+                instanceName: @instanceName
+                eventName: 'set_prev'
+                handler: => @prev()
+            @registerAsync
+                constructorName: TableView
+                instanceName: @instanceName
+                eventName: 'set_next'
+                handler: => @next()
 
             # Listen to draw events to account for the fact that datatables does not fire page change events.  This code
             # makes up for that shortcoming by manually determining when the user has used the previous next component to
@@ -880,15 +897,6 @@ define (require) ->
 
                     # Trigger a local click event.
                     parent.trigger "click", click_data, ev
-
-                    # Trigger a global click event.
-                    if settings.name
-                        vent.trigger "TableView:#{settings.name}:click", click_data, ev
-                        vent.trigger "TableView:#{settings.name}:change", parent.get_status_data()
-                    else
-                        vent.trigger "TableName:#{parent.cid}:click", click_data, ev
-                        vent.trigger "TableName:#{parent.cid}:change", parent.get_status_data()
-                    return
                 return
 
             fnCreatedRow: (nRow, data, iDataIndex) ->
@@ -919,3 +927,4 @@ define (require) ->
 
     # Export the table class.
     TableView
+

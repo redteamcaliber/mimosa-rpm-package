@@ -162,7 +162,7 @@ define (require) ->
                 # Create the details list view.
                 @alerts = new AlertCollection()
                 @details_list_view = new AlertsTableView
-                    id: 'alerts-details-table'
+                    id: 'alerts_details_table'
                     collection: @alerts
                 @listenTo @alerts, 'sync', ->
                     @layout.details_list_region.show @details_list_view

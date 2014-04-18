@@ -2,6 +2,7 @@ define (require) ->
 
     Marionette = require 'marionette'
 
+    TableView = require 'uac/views/TableView'
     vent = require 'uac/common/vent'
     Evented = require 'uac/common/mixins/Evented'
     mixin = require 'uac/common/Mixin'
@@ -32,18 +33,22 @@ define (require) ->
                 # Listen to global events for a table.
                 @table_name = options.table_name
 
-                # Listen to status events of the TableView.
-                @reg
-                @listenTo vent, "TableView:#{@table_name}:status", (status) =>
-                    console.debug 'TableViewControls::status'
-                    console.dir status
-                    @status = status
-                    @render()
-                @listenTo vent, "TableView:#{@table_name}:change", (changes) =>
-                    @status = changes.status
-                    @render()
-                # Trigger a status event to obtain the current table status.
-                vent.trigger "TableView:#{@table_name}:get_status"
+                @registerAsync
+                    constructorName: TableView
+                    instanceName: @table_name
+                    eventName: 'change'
+                    handler: (changes) =>
+                        @status = changes.status
+                        @render()
+
+                console.debug "Requesting status for: #{TableView.prototype.constructor.name}:#{@table_name}:status"
+                @status = @requestSync
+                    constructorName: TableView.prototype.constructor.name
+                    instanceName: @table_name
+                    eventName: 'status'
+
+                @render()
+
 
             # Register shortcut key listeners.
             $(document).keyup (ev) =>
@@ -91,7 +96,10 @@ define (require) ->
 
             if @status
                 if @status.is_prev is true
-                    vent.trigger "TableView:#{@table_name}:set_prev"
+                    @fireAsync
+                        constructorName: TableView.prototype.constructor.name
+                        instanceName: @table_name
+                        eventName: 'set_prev'
             return
 
         on_next: ->
@@ -99,7 +107,10 @@ define (require) ->
                 @table.next()
 
             if @status
-                vent.trigger "TableView:#{@table_name}:set_next"
+                @fireAsync
+                    constructorName: TableView.prototype.constructor.name
+                    instanceName: @table_name
+                    eventName: 'set_next'
             return
 
         close: ->

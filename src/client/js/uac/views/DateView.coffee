@@ -45,14 +45,13 @@ define (require) ->
 
       {@label, @overrides, @linkedPicker, @instanceName, @topicGenerator} = options
 
-      unless _.isString @instanceName then @instanceName = @cid
+      @instanceName = @getInstanceName()
 
-
-      @registerVent
+      @registerAsync
         eventName: "setDate"
         handler: (event)=> @$(".date").data("DateTimePicker").setDate(event)
 
-      @registerVent
+      @registerAsync
         eventName: "toggle"
         handler: (toggle)=>
           if toggle
@@ -61,10 +60,10 @@ define (require) ->
             @$(".date").data("DateTimePicker").enable()
 
       #Getters
-      @registerReqRes
+      @registerSync
         eventName: "getDate"
         handler: => @getDate()
-      @registerReqRes
+      @registerSync
         eventName: "getEpoch"
         handler: => @getEpoch()
 
@@ -88,7 +87,7 @@ define (require) ->
       #proxy raw jquery events into BS events and update local handle on date
       @$(".date").on "dp.change", (payload)=>
         @date = event.date
-        @fireVent
+        @fireAsync
           eventName: "change"
           payload: payload
 
@@ -96,7 +95,7 @@ define (require) ->
 
       #setup linkedPicker if defined
 
-      if _.isObject @linkedPicker then @registerReqRes
+      if _.isObject @linkedPicker then @registerSync
         eventName: "change"
         instanceName: @linkedPicker.instanceName
         handler: (event)=>
