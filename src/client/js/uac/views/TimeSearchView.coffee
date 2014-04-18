@@ -8,9 +8,10 @@ define (require) ->
 
     utils = require 'uac/common/utils'
 
-    vent = require 'uac/common/vent'
+    Evented = require 'uac/common/mixins/Evented'
 
-    reqres = require 'uac/common/reqres'
+    Mixin = require 'uac/common/Mixin'
+
 
     #
     # Generic view for displaying time frame search criteria.
@@ -147,23 +148,42 @@ define (require) ->
         #
         # Get the from date.  Returns a JS date object or undefined.
         #
-        get_from_date: -> reqres.request "DateView:startDate:getDate"
+        get_from_date: ->
+          @fireReqRes
+            constructorName: DateView.prototype.constructor.name
+            instanceName: "startDate"
+            eventName: "getDate"
 
         #
         # Get the to date.  Returns a JS data object or undefined.
         #
-        get_to_date: -> reqres.request "DateView:endDate:getDate"
-
+        get_to_date: ->
+          @fireReqRes
+            constructorName: DateView.prototype.constructor.name
+            instanceName: "endDate"
+            eventName: "getDate"
 
         #
         # Set the displayed from date.  Expects a JS date object.
         #
-        set_from_date: (from) -> vent.trigger "DateView:startDate:setDate", from
+        set_from_date: (from) ->
+          @fireVent
+            constructorName: DateView.prototype.constructor.name
+            instanceName: "startDate"
+            eventName: "setDate"
+            payload: from
+
 
         #
         # Set the displayed to date.  Expects a JS date object.
         #
-        set_to_date: (to) -> vent.trigger "DateView:endDate:setDate", to
+        set_to_date: (to) ->
+          @fireVent
+            constructorName: DateView.prototype.constructor.name
+            instanceName: "endDate"
+            eventName: "setDate"
+            payload: to
+
 
         #
         # Return whether the from date is valid.
@@ -190,8 +210,18 @@ define (require) ->
                 @set_to_date new Date()
 
             # Toggle the time fields.
-            vent.trigger "DateView:startDate:toggle", disabled
-            vent.trigger "DateView:endDate:toggle", disabled
+            @fireVent
+              constructorName: DateView.prototype.constructor.name
+              instanceName: "startDate"
+              eventName: "toggle"
+              payload: disabled
+            @fireVent
+              constructorName: DateView.prototype.constructor.name
+              instanceName: "endDate"
+              eventName: "toggle"
+              payload: disabled
+            
+    Mixin TimeSearchView, Evented
 
 
     TimeSearchView
