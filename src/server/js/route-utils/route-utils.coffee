@@ -275,15 +275,15 @@ send_csv = (res, next, o, fields) ->
 
 get_dt_request_params = (req) ->
     params = {}
-    if req.query.iDisplayLength isnt undefined
+    if req.query.iDisplayLength
         params.limit = req.query.iDisplayLength
     else if req.query.format == 'csv'
         # When exporting to a CSV file return all rows.
         params.limit = 0
-    else if !req.query.limit isnt undefined
+    else if not req.query.limit
         # If a limit was not supplied then assume all rows are returned.
         params.limit = 0
-    if req.query.iDisplayStart isnt undefined
+    if req.query.iDisplayStart
         params.offset = req.query.iDisplayStart
 
     #
@@ -325,7 +325,7 @@ validate_input = (props, values, res) ->
     if Array.isArray props
         # List of properties.
         props.forEach (prop) ->
-            if !_.has(values, prop)
+            if not _.has(values, prop)
                 ok = false;
                 if missing_props
                     missing_props += ', ' + prop
@@ -344,7 +344,7 @@ validate_input = (props, values, res) ->
   Return whether the request is considered from a browser.
 ###
 is_html_request = (req) ->
-    req.accepted && req.accepted.length > 0 && req.accepts('html') && !req.xhr
+    req.accepted && req.accepted.length > 0 && req.accepts('html') && not req.xhr
 
 ###
   Return whether the parameter is in the format of a UUID.

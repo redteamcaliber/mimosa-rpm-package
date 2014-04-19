@@ -3,12 +3,21 @@ define (require) ->
     Marionette = require 'marionette'
 
     utils = require 'uac/common/utils'
+    Evented = require 'uac/common/mixins/Evented'
     vent = require 'uac/common/vent'
     PropertyView = require 'uac/views/PropertyView'
     ContainerView = require 'uac/views/ContainerView'
     TreeView = require 'uac/views/TreeView'
     TableView = require 'uac/views/TableView'
     TableViewControls = require 'uac/views/TableViewControls'
+
+    AlertModel = require 'alerts/models/AlertModel'
+    RawAlertView = require 'alerts/views/RawAlertView'
+    TimelineView = require 'alerts/views/TimelineView'
+    TimelineCollection = require 'alerts/models/TimelineCollection'
+
+    TagCollection = require 'alerts/models/TagCollection'
+    TagsView = require 'alerts/views/TagsView'
 
     Events = require 'alerts/common/Events'
     templates = require 'alerts/ejs/templates'
@@ -24,7 +33,7 @@ define (require) ->
             return '<button type="button" class="btn btn-link"><i class="fa fa-code"></i> Raw</button>'
 
         on_click: =>
-            vent.trigger Events.ALERTS_RAW_ALERT, @model.toJSON()
+            vent.trigger Events.ALERTS_ALERT_RAW
             false
 
     #
@@ -59,9 +68,9 @@ define (require) ->
             else
                 data.src = alert.src
                 data.dst = alert.dst
-            {
-            alert: data
-            }
+            (
+                alert: data
+            )
 
     #
     # View to display the alerts signatures.
@@ -241,11 +250,38 @@ define (require) ->
                         values.timestamp = ''
                     timeline.push values
 
-            vent.trigger Events.ALERTS_TIMELINE, timeline
+            vent.trigger Events.ALERTS_ALERT_TIMELINE, timeline
 
 
-    class AlertsDetailsView extends ContainerView
+    class AlertsDetailsView extends Marionette.Layout
         template: templates['details-layout.ejs']
+
+        initialize: ->
+            @listenTo vent, Events.ALERTS_ALERT_RAW, =>
+                # Display a raw alert dialog.
+                view = new RawAlertView
+                    model: @model
+                @details_dlg_region.show view
+                return
+
+            @listenTo vent, Events.ALERTS_ALERT_TIMELINE, (timeline) =>
+                # Display the OS change timeline dialog.
+                view = new TimelineView
+                    collection: new TimelineCollection(timeline)
+                @details_dlg_region.show view
+                return
+
+            @listenTo vent, Events.ALERTS_TAG_CHANGED, (data) =>
+                model = new AlertModel @model.get 'alert'
+
+                console.info "Updating alert with id: #{model.get('uuid')}, setting tag to: #{data.value}"
+                model.save
+                    tag: data.value,
+                        patch: true
+                        success: ->
+                            utils.display_success "Successfully updated the alerts tag to: #{data.title}"
+                        error: (model, response) ->
+                            utils.display_response_error "Error while updating tag status for alert: #{model.get('uuid')}", response
 
         regions:
             artifacts_region: '.artifacts-region'
@@ -255,20 +291,40 @@ define (require) ->
             os_changes_region: '.os-changes-region'
             request_region: '.request-region'
             raw_region: '.raw-region'
+            details_dlg_region: '.details-dlg-region'
             signatures_region: '.signatures-region'
             table_controls_region: '.controls-region'
+            tag_region: '.tag-region'
 
-        initialize: ->
-            @addChild @table_controls_region, new TableViewControls
+        onShow: ->
+            @table_controls_region.show new TableViewControls
                 table_name: 'alerts_details_table'
-            @addChild @raw_region, AlertRawMenu
-            @addChild @header_region, AlertHeaderView
-            @addChild @signatures_region, AlertSignaturesView
-            @addChild @interface_region, AlertInterfaceView
-            @addChild @request_region, AlertRequestView
-            @addChild @artifacts_region, AlertsArtifactsView
-            @addChild @message_region, AlertMessageView
-            @addChild @os_changes_region, OSChangeView
+            @raw_region.show new AlertRawMenu
+                model: @model
+            @header_region.show new AlertHeaderView
+                model: @model
+            @signatures_region.show new AlertSignaturesView
+                model: @model
+            @interface_region.show new AlertInterfaceView
+                model: @model
+            @request_region.show new AlertRequestView
+                model: @model
+            @artifacts_region.show new AlertsArtifactsView
+                model: @model
+            @message_region.show new AlertMessageView
+                model: @model
+            @os_changes_region.show new OSChangeView
+                model: @model
+
+            # Initialize the tags view.
+            tags = new TagCollection()
+            tags_view = new TagsView
+                id: 'alerts-tag-view'
+                selected: @model.attributes.alert.tag
+                collection: tags
+            tags.fetch
+                success: =>
+                    @tag_region.show tags_view
 
 
-    return AlertsDetailsView
+    utils.mixin AlertsDetailsView, Evented

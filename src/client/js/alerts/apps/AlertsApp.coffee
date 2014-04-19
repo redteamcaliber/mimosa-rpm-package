@@ -19,10 +19,6 @@ define (require) ->
     AlertsDetailsView = require 'alerts/views/AlertsDetailsView'
     AlertFullModel = require 'alerts/models/AlertFullModel'
 
-    RawAlertView = require 'alerts/views/RawAlertView'
-    TimelineView = require 'alerts/views/TimelineView'
-    TimelineCollection = require 'alerts/models/TimelineCollection'
-
     #
     # Layout for displaying the main alert template.
     #
@@ -30,7 +26,6 @@ define (require) ->
         template: templates['alerts-layout.ejs'],
         regions:
             breadcrumbs_region: '#alerts-breadcrumbs'
-            dialog_region: '.dialog-region'
             filters_region: '#alerts-filters'
             filters_content_region: '#alerts-filters-content'
             list_region: '#alerts-lists'
@@ -203,19 +198,6 @@ define (require) ->
                     utils.unblock()
                 error: =>
                     utils.unblock()
-            return
-
-        @listenTo vent, Events.ALERTS_RAW_ALERT, (data) =>
-            view = new RawAlertView
-                model: new Backbone.Model(data)
-            @layout.dialog_region.show view
-            return
-
-        @listenTo vent, Events.ALERTS_TIMELINE, (timeline) =>
-            console.dir timeline
-            view = new TimelineView
-                collection: new TimelineCollection(timeline)
-            @layout.dialog_region.show view
             return
 
 

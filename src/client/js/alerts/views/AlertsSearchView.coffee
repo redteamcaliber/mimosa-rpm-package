@@ -2,13 +2,12 @@ define (require) ->
     async = require 'async'
     moment = require 'moment'
     Marionette = require 'marionette'
-    ContainerView = require 'uac/views/ContainerView'
     utils = require 'uac/common/utils'
     vent = require 'uac/common/vent'
     TimeSearchView = require 'uac/views/TimeSearchView'
 
     Events = require 'alerts/common/Events'
-    TagCollection = require 'alerts/models/TagCollection'
+    alerts_utils = require 'alerts/common/utils'
     ClientCollection = require 'alerts/models/ClientCollection'
     TimeCollection = require 'alerts/models/TimeCollection'
     AlertTypeModel = require 'alerts/models/AlertTypeModel'
@@ -170,7 +169,7 @@ define (require) ->
     # View for displaying alerts search criteria.  This view emits "search" events when a user clicks the search button.
     # The search criteria is passed along with the event.
     #
-    class AlertsSearchView extends ContainerView
+    class AlertsSearchView extends Marionette.Layout
         template: templates['search-layout.ejs']
 
         events:
@@ -183,7 +182,10 @@ define (require) ->
             time_region: '.time-region'
             types_region: '.types-region'
 
-        initialize: ->
+        #
+        # Render the base template.
+        #
+        onShow: ->
             # Retrieve any previous selections.
             selected = utils.storage Events.ALERTS_SEARCH
             if selected
@@ -191,73 +193,59 @@ define (require) ->
 
             # Initialize the sub views.
             selected_tags = if selected and selected.tags then selected.tags else undefined
-            @tags = new TagCollection()
+            tags = new Backbone.Collection alerts_utils.get_tags()
             tags_view = new TagsSearchView
                 selected: selected_tags
-                collection: @tags
-            @addChild @tags_region, tags_view
+                collection: tags
 
             selected_clients = if selected and selected.clients then selected.clients else undefined
-            @clients = new ClientCollection()
+            clients = new ClientCollection()
             clients_view = new ClientsSearchView
                 selected: selected_clients
-                collection: @clients
-            @addChild @clients_region, clients_view
+                collection: clients
 
             time = if selected and selected.time then selected.time else undefined
             if time == 'custom'
                 # A custom time was specified, try and get the last save from and to date/times.
                 from = if selected and selected.from then selected.from else undefined
                 to = if selected and selected.to then selected.to else undefined
-            @times = new TimeCollection()
+            times = new TimeCollection()
             times_view = new TimeSearchView
                 selected: time
                 from: from
                 to: to
                 default: 'days_1'
-                collection: @times
-            @addChild @time_region, times_view
+                collection: times
 
             selected_types = if selected and selected.types then selected.types else undefined
-            @types = new AlertTypeCollection()
+            types = new AlertTypeCollection()
             types_view = new TypesSearchView
-                collection: @types
+                collection: types
                 selected: selected_types
-            @addChild @types_region, types_view
 
-            return
-
-        #
-        # Render the base template.
-        #
-        onShow: ->
             utils.block()
             async.parallel [
                 (callback) =>
-                    @tags.fetch
-                        success: =>
-                            @tags_region.show @findByRegion(@tags_region)
-                            callback()
-                        error: ->
-                            callback()
+                    @tags_region.show tags_view
+                    callback()
                 (callback) =>
-                    @clients.fetch
+                    clients.fetch
                         success: =>
-                            @clients_region.show @findByRegion(@clients_region)
+                            @clients_region.show clients_view
                             callback()
                         error: ->
                             callaback()
                 (callback) =>
-                    @times.fetch
+                    times.fetch
                         success: =>
-                            @time_region.show @findByRegion(@time_region)
+                            @time_region.show times_view
                             callback()
                         error: ->
                             callback()
                 (callback) =>
-                    @types.fetch
+                    types.fetch
                         success: =>
-                            @types_region.show @findByRegion(@types_region)
+                            @types_region.show types_view
                             callback()
                         error: ->
                             callback()
@@ -273,10 +261,10 @@ define (require) ->
         #
         on_search: ->
             # Check whether the from and to dates are valid.
-            tags_view = @findByRegion(@tags_region)
-            times_view = @findByRegion(@time_region)
-            clients_view = @findByRegion(@clients_region)
-            types_view = @findByRegion(@types_region)
+            tags_view = @tags_region.currentView
+            times_view = @time_region.currentView
+            clients_view = @clients_region.currentView
+            types_view = @types_region.currentView
 
             is_from_valid = times_view.is_from_valid()
             is_to_valid = times_view.is_to_valid()
@@ -311,9 +299,10 @@ define (require) ->
         # Handle a reset click.
         #
         on_reset: ->
-            @container.forEach (child) ->
-                if child.reset_selected
-                    child.reset_selected()
+            @tags_region.currentView.reset_selected()
+            @time_region.currentView.reset_selected()
+            @clients_region.currentView.reset_selected()
+            @types_region.currentView.reset_selected()
 
             # Clear any current selections.
             utils.storage Events.ALERTS_SEARCH, undefined

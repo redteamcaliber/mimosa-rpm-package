@@ -123,3 +123,13 @@ app.get '/api/alerts/:uuid/full', (req, res, next) ->
 
                 return
     return
+
+#
+# Update the tag of an alert.
+#
+app.patch '/api/alerts/:uuid', (req, res, next) ->
+    console.dir req.params
+    if route_utils.validate_input ['uuid'], req.params, res
+        alerts_api.update_alert req.params.uuid, tag: req.body.tag, req.attributes, (err, alert) ->
+            route_utils.send_rest req, res, next,
+                alert

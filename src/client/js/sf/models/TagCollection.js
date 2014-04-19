@@ -22,26 +22,8 @@ define(function (require) {
                 return results;
             }
             else {
-                return response;
+                return response, options;
             }
-        },
-        /**
-         * Override the default fetch to local in sessionStorage before making the remote call.
-         * @param options - the fetch options.
-         * @returns {*}
-         */
-        fetch: function (options) {
-            var tags = utils.session('strikefinder:tags');
-            if (tags) {
-                this.reset(tags);
-            }
-            else {
-
-            }
-            //do specific pre-processing
-
-            //Call Backbone's fetch
-            return Backbone.Collection.prototype.fetch.call(this, options);
         }
     });
 

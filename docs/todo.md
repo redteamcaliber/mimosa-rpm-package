@@ -1,6 +1,21 @@
 UAC ToDo
 ========
 
+### Eventing
+- General vent usage vs the Evented pattern.
+- The Evented pattern couples you to the view/class that fired the event.  Not sure we care.
+- Seems to make sense when building components though not so much when building functionality.
+- For example when an alert is selected, the details view listeners and needs to render.  Does it really care what the
+  constructorName and instanceName is of the class that fired the alert?  This seems overly coupled which is what using
+  the vent class was supposed to help us with.
+- Seems like there is component behaviours for classes like DateView, TableView, etc, where the Evented seems to make
+  sense.  On the other hand there is application behaviours such as an alert was selected, an alert was updated, an
+  alert was deleted that don't really care what component fired the event.  Could even be that multiple components
+  could fire the same event.  Given the Evented pattern the classes they would have different names.  Maybe we just
+  rename constructorName to be eventContext.  I could pass in "alerts" for these types of events.  Not sure that I have
+  an instance name in these cases.
+- I'm generally on the fence with regards to it's widespread usage.
+
 ### StrikeFinder
 - Look into using TableView.render() rather than TableView.fetch() because it's non-standard.
     -Re-rendering of a table is currently broken in the IOCSummaryView.
@@ -17,32 +32,23 @@ UAC ToDo
 - Convert to using a Marionette layout.
 
 ### Alerts Details View
-- Update the alerts title as well as the breadcrumbs...
-- Add previously navigated pages to the breadcrumb view.
-- Look into displaying OS change report Exploitcode sections.
+- Add tagging.
+- Title and breadcrumb updates.
+    - Update the alerts title as well as the breadcrumbs...
+    - Add previously navigated pages to the breadcrumb view.
+    - Add id/context info to the breadcrumbs.
 - Format the occurred and updated dates within the header according to how long ago they are.
-- Move the raw alert to a modal popup rather than a rollup.
-- Format the raw alert data.
-- Make the raw alert data searchable.
-- Look into the table controls class to see if it needs to be updated.
-- Need to have a signature header section and them just dump the rest of the name value pairs to ensure to pick up
-  all of the data.
-- Implement the a OS change report view.
-    - https://uac.vm.mandiant.com/alerts/api/alerts/109991dc-cfe1-45c6-a7ba-b2c33b22a662/full
+    - See hosts code.
+- Raw alert customization
+    - Format the raw alert data.
+    - Make the raw alert data searchable.
+- Update the signature in the header to display according to the FE logic.
+- Update the signature descriptions from the XLS.
 - Display the explanation/anomoly field.
 - Make the alerts view linkable.
 - Look into displaying pcap text data.
-- Format the EX alert details.
-x - Make the artifacts downloadable.
-- Add table view controls support.
-- Make the view linkable.
-- Add tagging.
 - Add the ability to add comments.
 - Display comments in the activity feed.
-- Parse out signature descriptions from FE web site.
-
-### FE Alerts Details View
--
 
 ### Refactoring and Fixes
 - usersettings aren't being updated after a user selects an expression.
@@ -51,11 +57,6 @@ x - Make the artifacts downloadable.
 
 ### Alerting Deployment
 - Update the IOC viewer project and put a dependency on it.
-- Need to recompile the small fonts themes and find a place for them in the static directory.
-- Should we be checking in the library dependencies, if so where?
-- Update scripts to optimize js files.
-    - Make sure source maps are being generated.
-- Update scripts to optimize css files.
 - Update documentation for new URL configuration.
     - Update template json files.
 - Update the docs for clustering and host settings.

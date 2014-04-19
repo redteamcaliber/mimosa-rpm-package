@@ -1,4 +1,5 @@
 define (require) ->
+    Cocktail = require 'cocktail'
     Backbone = require('backbone')
     require 'blockui'
     moment = require('moment')
@@ -385,7 +386,6 @@ define (require) ->
             (if value then JSON.parse(value) else undefined)
         else if arguments.length > 1
             if v
-
                 # Set the object.
                 window.localStorage.setItem k, JSON.stringify(v)
             else
@@ -407,10 +407,12 @@ define (require) ->
             console.warn "sessionStorage not available!"
             {}
         else if arguments.length is 1
-
             # Retrieve the object.
             value = window.sessionStorage.getItem(k)
-            (if value then JSON.parse(value) else undefined)
+            if value
+                return JSON.parse value
+            else
+                return undefined
         else if arguments.length > 1
             if o
                 window.sessionStorage.setItem k, JSON.stringify(o)
@@ -467,6 +469,12 @@ define (require) ->
         # Return the recent values.
         recent
 
+    #
+    # Mixin a list of objects.
+    #
+    mixin = ->
+        Cocktail.mixin.apply(this, arguments)
+
     (
         block: block
         unblock: unblock
@@ -488,4 +496,5 @@ define (require) ->
         set_theme: set_theme
         get_styles: get_styles
         wait_for: wait_for
+        mixin: mixin
     )

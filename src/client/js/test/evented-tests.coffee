@@ -7,7 +7,7 @@ define (require) ->
     Marionette = require 'marionette'
     reqres = require 'uac/common/reqres'
 
-    mixin = require 'uac/common/Mixin'
+    utils = require 'uac/common/utils'
     Evented = require 'uac/common/mixins/Evented'
 
 
@@ -32,7 +32,7 @@ define (require) ->
                 @count = @count + 1
 
         # Mixin Evented into the test class.
-        mixin TestClass, Evented
+        utils.mixin TestClass, Evented
 
         new TestClass
             instanceName: 'testInstance'

@@ -2,16 +2,18 @@ define (require) ->
     Marionette = require 'marionette'
 
     vent = require 'uac/common/vent'
+
     TableView = require 'uac/views/TableView'
     renderers = require 'uac/views/renderers'
 
+    alerts_utils = require 'alerts/common/utils'
     Events = require 'alerts/common/Events'
 
     class SummaryPopoverView extends Marionette.ItemView
         initialize: (options) ->
             @content = options.content
 
-        render: (options) ->
+        render: ->
             content = if @content then @content else ''
             el = @$el.popover(
                 html: true
@@ -23,6 +25,21 @@ define (require) ->
             el.css
                 width: 'auto'
                 'max-width': '600px'
+
+    tag_renderer = (index) ->
+        tag_map = alerts_utils.get_tag_map()
+        (
+            mRender: (data) ->
+                if data
+                    tag = tag_map[data]
+                    if tag
+                        return "<span title='#{tag.description}'>#{tag.title}</span>"
+                    else
+                        return data
+                else
+                    return data
+            aTargets: [index]
+        )
 
     #
     # Table view to display a list of alerts.
@@ -44,6 +61,7 @@ define (require) ->
             options.aoColumnDefs = [
                 renderers.priority(0, 'shield-small')
                 renderers.date_time(3)
+                tag_renderer(6)
             ]
 
             options.aaSorting = [

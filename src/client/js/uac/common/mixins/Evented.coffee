@@ -6,7 +6,7 @@ define (require) ->
     reqres = require 'uac/common/reqres'
 
 
-    (
+    Evented = (
         # Must close over the vent and req/res singletons so new objects aren't created
 
         _getVent: ->

@@ -1,0 +1,5 @@
+<% if (item.selected == item.id) { %>
+<a name="<%= item.id %>" title="<%= item.title %>" style="text-decoration: none"><%= item.title %> &#10004;</a>
+<% } else { %>
+<a name="<%= item.id %>" title="<%= item.title %>" style="text-decoration: none"><%= item.title %></a>
+<% } %>

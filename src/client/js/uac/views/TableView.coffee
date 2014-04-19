@@ -6,7 +6,6 @@ define (require) ->
     Backbone = require 'backbone'
     Marionette = require 'marionette'
 
-    mixin = require 'uac/common/Mixin'
     Evented = require 'uac/common/mixins/Evented'
     vent = require 'uac/common/vent'
     utils = require 'uac/common/utils'
@@ -923,8 +922,5 @@ define (require) ->
         results
 
     # Mixin events.
-    mixin TableView, Evented
-
-    # Export the table class.
-    TableView
+    utils.mixin TableView, Evented
 

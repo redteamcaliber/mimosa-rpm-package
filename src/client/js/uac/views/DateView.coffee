@@ -2,11 +2,10 @@ define (require) ->
 
   Backbone = require 'backbone'
   Marionette = require 'marionette'
-  View = require 'uac/views/View'
+  utils = require 'uac/common/utils'
   templates = require 'uac/ejs/templates'
   datepicker = require 'bootstrap_datepicker'
   Evented = require 'uac/common/mixins/Evented'
-  Mixin = require 'uac/common/Mixin'
 
   class DateView extends Marionette.ItemView
 
@@ -110,6 +109,4 @@ define (require) ->
           @$(".date").data("DateTimePicker")[method](event.date)
 
 
-  Mixin DateView, Evented
-
-  DateView
+  utils.mixin DateView, Evented

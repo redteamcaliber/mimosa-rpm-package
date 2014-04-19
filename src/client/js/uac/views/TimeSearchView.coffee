@@ -4,7 +4,6 @@ define (require) ->
 
     utils = require 'uac/common/utils'
     vent = require 'uac/common/vent'
-    mixin = require 'uac/common/Mixin'
     Evented = require 'uac/common/mixins/Evented'
 
     templates = require 'uac/ejs/templates'
@@ -218,7 +217,4 @@ define (require) ->
               eventName: "toggle"
               payload: disabled
             
-    mixin TimeSearchView, Evented
-
-
-    TimeSearchView
+    utils.mixin TimeSearchView, Evented

@@ -18,23 +18,24 @@ sf_api = require 'sf-api'
 #
 ENDPOINT_MATCH = 'endpoint-match'
 
+
 #
 # Tag descriptions.
 #
 NOTREVIEWED_DESCRIPTION = 'This tag represents a current hit that has been looked at by an analyst. It currently ' +
-'requires more information such as (but not limited to) a File Acquisition, File Listing, or Prefetch ' +
-'information. What the analyst is acquiring should be listed in the comments section.'
+    'requires more information such as (but not limited to) a File Acquisition, File Listing, or Prefetch ' +
+    'information. What the analyst is acquiring should be listed in the comments section.'
 INVESTIGATING_DESCRIPTION = 'This is a hit that can not easily be determined as being malicious and needs additional ' +
-'analysis by a senior analyst.'
+    'analysis by a senior analyst.'
 ESCALATE_DESCRIPTION = 'This is a hit that can not easily be determined as being malicious and needs additional ' +
-'analysis by a senior analyst.'
+    'analysis by a senior analyst.'
 REPORTABLE_DESCRIPTION = 'This is an interim state for when a hit(s) has been identified as malicious and are ' +
-'currently being written up in Portal.'
+    'currently being written up in Portal.'
 REPORTED_DESCRIPTION = 'This state is for after a Portal Compromise has been created. The comments NEED to list the ' +
-'Portal compromise number.'
+    'Portal compromise number.'
 UNREPORTABLE_DESCRIPTION = 'This is used to represent a \'Benign\' hit. Meaning the IOC matched the intended item ' +
-'but it is not considered malicious. Examples include a registry key where the binary for commodity is no longer ' +
-'present or a password dumper located in a specific directory or host of someone working on the security team.'
+    'but it is not considered malicious. Examples include a registry key where the binary for commodity is no longer ' +
+    'present or a password dumper located in a specific directory or host of someone working on the security team.'
 DELETE_DESCRIPTION = 'Everything else.'
 
 
@@ -204,6 +205,12 @@ get_alert_content = (uuid, attributes, callback) ->
     request.json_get get_cv_url("/api/v1/alerts/#{uuid}/content"), {}, attributes, (err, response, body) ->
         callback err, body
 
+#
+# Set the tag on an alert.
+#
+update_alert = (uuid, values, attributes, callback) ->
+    request.form_patch get_cv_url("/api/v1/alerts/#{uuid}"), values, attributes, (err, response, body) ->
+        process_response err, response, body, callback
 
 #
 # Construct a candyvan url from the relative url parameter.
@@ -221,6 +228,8 @@ process_response = (err, response, body, callback) ->
     else if err
         callback(err)
     else if body
+        if _.isString(body)
+            body = JSON.parse(body)
         if body.response
             callback(null, body.response)
         else
@@ -252,3 +261,4 @@ exports.get_consolidated_signature_summary = get_consolidated_signature_summary
 exports.get_alerts = get_alerts
 exports.get_alert = get_alert
 exports.get_alert_content = get_alert_content
+exports.update_alert = update_alert

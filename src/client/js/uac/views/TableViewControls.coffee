@@ -1,11 +1,10 @@
 define (require) ->
 
     Marionette = require 'marionette'
-
+    utils = require 'uac/common/utils'
     TableView = require 'uac/views/TableView'
     vent = require 'uac/common/vent'
     Evented = require 'uac/common/mixins/Evented'
-    mixin = require 'uac/common/Mixin'
     templates = require 'uac/ejs/templates'
 
 
@@ -43,7 +42,7 @@ define (require) ->
 
                 console.debug "Requesting status for: #{TableView.prototype.constructor.name}:#{@table_name}:status"
                 @status = @requestSync
-                    constructorName: TableView.prototype.constructor.name
+                    constructorName: TableView
                     instanceName: @table_name
                     eventName: 'status'
 
@@ -97,7 +96,7 @@ define (require) ->
             if @status
                 if @status.is_prev is true
                     @fireAsync
-                        constructorName: TableView.prototype.constructor.name
+                        constructorName: TableView
                         instanceName: @table_name
                         eventName: 'set_prev'
             return
@@ -108,7 +107,7 @@ define (require) ->
 
             if @status
                 @fireAsync
-                    constructorName: TableView.prototype.constructor.name
+                    constructorName: TableView
                     instanceName: @table_name
                     eventName: 'set_next'
             return
@@ -119,6 +118,4 @@ define (require) ->
 
 
     # Mixin events.
-    mixin TableViewControls, Evented
-
-    TableViewControls
+    utils.mixin TableViewControls, Evented

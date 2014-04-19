@@ -61,9 +61,27 @@ function json_post(url, body, attributes, callback) {
     request(options, attributes, callback);
 }
 
+function json_patch(url, body, attributes, callback) {
+    var options = {
+        method: 'PATCH',
+        url: url,
+        json: body
+    };
+    request(options, attributes, callback);
+}
+
 function form_post(url, form, attributes, callback) {
     var options = {
         method: 'POST',
+        url: url,
+        form: form
+    };
+    request(options, attributes, callback);
+}
+
+function form_patch(url, form, attributes, callback) {
+    var options = {
+        method: 'PATCH',
         url: url,
         form: form
     };
@@ -344,8 +362,10 @@ function is_ticket_valid() {
 exports.request = request;
 exports.get = get;
 exports.json_get = json_get;
+exports.json_patch = json_patch;
 exports.json_post = json_post;
 exports.form_post = form_post;
+exports.form_patch = form_patch;
 exports.json_delete = json_delete;
 exports.post = post;
 exports.put = put;

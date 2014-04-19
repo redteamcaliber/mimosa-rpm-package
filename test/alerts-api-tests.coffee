@@ -187,3 +187,21 @@ describe 'alerts-api-tests', ->
                     done()
                 catch e
                     done e
+
+    describe '#update_alert()', ->
+        it 'should set the tag on an alert', (done) ->
+            uuid = 'c4662926-2cae-45e1-b408-3f22d174724e'
+            tag = 'reported'
+            api.update_alert uuid, {tag: tag}, {}, (err, alert) ->
+                try
+                    should.not.exist err
+
+                    should.exist alert
+                    should.exist alert.uuid
+                    alert.uuid.should.equal uuid
+                    should.exist alert.tag
+                    alert.tag.should.equal tag
+
+                    done()
+                catch e
+                    done e
