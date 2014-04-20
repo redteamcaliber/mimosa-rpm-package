@@ -17,7 +17,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   PUPPET_REPO_URL = 'git@github.mandiant.com:atayman/puppet.git'
 
   # Set this to where we'll pull down our puppet repo
-  PUPPET_REPO_DIR = '/tmp/puppet'
+  PUPPET_REPO_DIR = '~/puppet'
   PUPPET_HIERA_DIR = "#{PUPPET_REPO_DIR}/hieradata"
 
   if ENV['PUPPET_MODULE_DIR']
@@ -93,7 +93,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      puppet.module_path = PUPPET_MODULE_DIR
      puppet.manifests_path = "./"
      puppet.manifest_file  = "vagrant.pp"
-     puppet.hiera_config_path = '/tmp/puppet/hiera.yaml'
+     puppet.hiera_config_path = '~/puppet/hiera.yaml'
    end
 
 end
