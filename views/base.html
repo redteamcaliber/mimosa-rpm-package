@@ -26,7 +26,7 @@
     {% if current_theme == 'default' %}
         <link id="bootstrap" href="/static/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
     {% else %}
-        <link id="bootstrap" href="/static/css/bootswatch/{{ current_theme }}/bootstrap.min.css" rel="stylesheet"/>
+        <link id="bootstrap" href="/static/css/bootswatch/bootstrap.{{ current_theme }}.{{ font_size }}.min.css" rel="stylesheet"/>
     {% endif %}
 
     {# Font Awesome #}
@@ -120,13 +120,11 @@
                                 </a>
                             </li>
                             <li class="divider"></li>
-                            {% for theme in themes %}
-                            <li class="{% if theme.id == current_theme %}disabled{% endif %}">
-                                <a class="uac-theme" data-uac-theme="{{ theme.id }}">
-                                    <i class="fa fa-picture-o"></i> {{ theme.name }} Theme
+                            <li>
+                                <a href="/preferences/" target="_blank">
+                                    <i class="icon-fixed-width fa fa-wrench"></i> Preferences
                                 </a>
                             </li>
-                            {% endfor %}
                             <li class="divider"></li>
                             <li>
                                 <a href="/logout/">

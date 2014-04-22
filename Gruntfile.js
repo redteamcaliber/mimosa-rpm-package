@@ -251,7 +251,7 @@ module.exports = function (grunt) {
                     {expand: true, cwd: 'dist/client/js/raw/lib/font-awesome/fonts', src: ['**/*'], dest: 'dist/client/fonts', filter: 'isFile'},
                     {expand: true, cwd: 'dist/client/js/raw/lib/select2', src: ['*.png', '*.gif'], dest: 'dist/client/css', filter: 'isFile'},
                     {expand: true, cwd: 'dist/client/js/raw/lib/bootstrap/css', src: ['bootstrap.min.css'], dest: 'dist/client/css/bootstrap', filter: 'isFile'},
-                    {expand: true, cwd: 'dist/client/js/raw/lib/bootswatch', src: ['**/*.css'], dest: 'dist/client/css/bootswatch', filter: 'isFile'},
+                    {expand: true, cwd: 'dist/client/js/raw/lib/bootswatch/dist', src: ['**/*.css'], dest: 'dist/client/css/bootswatch', filter: 'isFile'},
                     {expand: true, cwd: 'dist/client/js/raw/lib/bootstrap/fonts', src: ['*.*'], dest: 'dist/client/css/bootswatch/fonts', filter: 'isFile'},
                     {expand: true, cwd: 'src/client/css/img', src: ['**/*'], dest: 'dist/client/css/img', filter: 'isFile'},
                     {expand: true, cwd: 'src/client/css/img', src: ['sort_*.png'], dest: 'dist/client/img', filter: 'isFile'},
@@ -394,6 +394,7 @@ module.exports = function (grunt) {
                                 "sf/views/HostTypeAheadView",
                                 "uac/views/ThemeView",
                                 "uac/main/MD5Main",
+                                "uac/main/PreferencesMain",
 
                                 //addl deps
                                 "bootstrap"

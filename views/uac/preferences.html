@@ -1,0 +1,30 @@
+{% extends "/base.html" %}
+
+{% block title %}Preferences - {{ super() }}{% endblock %}
+
+{% block head %}
+{{ super() }}
+        <script type="text/javascript">
+            UAC = window.UAC || {};
+            UAC.themes = UAC.themes || {};
+            UAC.font_size = "{{font_size}}"
+            UAC.current_theme = "{{current_theme}}"
+            {% for theme in themes %}
+                UAC.themes["{{ theme.name }}"] = {
+                    name: "{{theme.name}}",
+                    id: "{{theme.id}}"
+                };
+            {% endfor %}
+        </script>
+{% endblock %}
+
+{% block data_main %}uac/main/PreferencesMain{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div id="content" class="col-sm-12">
+        </div>
+    </div>
+</div>
+{% endblock %}

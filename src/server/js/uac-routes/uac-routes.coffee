@@ -46,7 +46,6 @@ app.get '/md5/:hash',  (req, res) ->
     context.hash = hash
     res.render '/uac/md5.html', context
 
-
 #
 # MD5 API lookup route.
 #
@@ -63,6 +62,11 @@ app.get '/api/md5/:hash',  (req, res, next) ->
       else
         route_utils.send_rest req, res, next, result
 
+#
+# Set user preferences.
+#
+app.get '/preferences',  (req, res) ->
+    res.render '/uac/preferences.html', route_utils.default_context(req)
 
 #
 # Retrieve the list of IOC terms by type.
