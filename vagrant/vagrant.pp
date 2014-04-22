@@ -1,6 +1,5 @@
 node 'uac.vm.mandiant.com' {
   class { 'uac':
-    uacEnv_uac_mcube_api_url    => "https://mcube.mcirt.mandiant.com",
     installProxy                => true,
     installKeystore             => true,
     installDatabase             => true,
@@ -11,6 +10,12 @@ node 'uac.vm.mandiant.com' {
     configureSupervisord        => false,
     setupDevelopmentEnvironment => true,
     proxyStaticFolder           => "/opt/web/apps/uac/dist/client",
+    uacEnv_uac_db_host          => "localhost",
+    uacEnv_uac_sf_api_url       => "https://proxy.mcirt.mandiant.com/SF/",
+    uacEnv_uac_ss_api_url       => "https://proxy.mcirt.mandiant.com/SEASICK/",
+    uacEnv_uac_cv_api_url       => "http://candyvan.dev.mandiant.com:9001",
+    uacEnv_uac_mcube_api_url    => "https://mcube.mcirt.mandiant.com",
+    uacEnv_sso_auth_cookie      => "m_login_staging",
     uacEnv_sso_auth_url         => "https://loginstage.mandiant.com/api/auth",
     uacEnv_sso_login_url        => "https://loginstage.mandiant.com",
     uacEnv_sso_refresh_url      => "https://loginstage.mandiant.com/refresh",
