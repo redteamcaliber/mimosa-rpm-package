@@ -13,6 +13,7 @@ define (require) ->
 
     AlertModel = require 'alerts/models/AlertModel'
     RawAlertView = require 'alerts/views/RawAlertView'
+    ActivityView = require 'alerts/views/ActivityView'
     TimelineView = require 'alerts/views/TimelineView'
     TimelineCollection = require 'alerts/models/TimelineCollection'
 
@@ -284,6 +285,7 @@ define (require) ->
                             utils.display_response_error "Error while updating tag status for alert: #{model.get('uuid')}", response
 
         regions:
+            activity_region: '.activity-region'
             artifacts_region: '.artifacts-region'
             header_region: '.header-region'
             interface_region: '.interface-region'
@@ -314,6 +316,8 @@ define (require) ->
             @message_region.show new AlertMessageView
                 model: @model
             @os_changes_region.show new OSChangeView
+                model: @model
+            @activity_region.show new ActivityView
                 model: @model
 
             # Initialize the tags view.

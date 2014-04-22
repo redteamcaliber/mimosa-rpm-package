@@ -19,6 +19,7 @@ window.require =
         iocviewer: 'js/jquery.iocViewer'
         jquery: 'js/jquery-1.9.1'
         marionette: 'lib/marionette/backbone.marionette'
+        marked: "lib/marked/marked"
         mocha: 'lib/mocha/mocha'
         moment: 'lib/moment/moment'
         select2: 'lib/select2/select2'

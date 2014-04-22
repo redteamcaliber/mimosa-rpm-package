@@ -1,11 +1,13 @@
-assert = require 'assert'
-should = require 'should'
+async = require 'async'
+chai = require 'chai'
+should = chai.Should()
+
+utils = require './test-utils'
+
 moment = require 'moment'
 
 # Setup underscore.
 _ = require 'underscore'
-_.str = require 'underscore.string'
-_.mixin _.str.exports()
 
 settings = require 'settings'
 uuid = require 'node-uuid'
@@ -27,9 +29,7 @@ DETECTED_MD5 = 'c100bde0c1e0d7e77dcbc6e00bc165f3'
 
 
 describe 'uac-api-tests', ->
-
     describe '#get_ioc_terms()', ->
-
         it 'should return all ioc terms for ArpEntryItem', (done) ->
             api.get_ioc_terms 'ArpEntryItem', (err, terms) ->
                 try
@@ -50,6 +50,123 @@ describe 'uac-api-tests', ->
                 catch e
                     done(e)
 
+    describe '#create_activity()', ->
+        activity_uuid = undefined
+
+        afterEach (done) ->
+            if activity_uuid
+                api.delete_activity activity_uuid, (err) ->
+                    try
+                        should.not.exist err
+                        console.log 'Successfully deleted activity with id: ' + activity_uuid
+                        done()
+                    catch e
+                        done(e)
+            else
+                done()
+
+        it 'should create a new activity record', (done) ->
+            api.create_activity 'tag', {tag: 'escalate'}, (err, activity) ->
+                try
+                    should.not.exist err
+                    should.exist activity
+
+                    attr = activity.attributes
+                    attr.uuid.should.exist
+                    activity_uuid = attr.uuid
+                    should.exist attr.created
+                    attr.activity_type.should.equal 'tag'
+                    attr.data.should.exist
+                    o = JSON.parse attr.data
+                    o.should.exist
+                    o.tag.should.equal 'escalate'
+
+                    done()
+                catch e
+                    done e
+
+    describe '#get_alert_activity()', ->
+        it 'should return the alerts activity', (done) ->
+            # TODO: Need to make this test resilient.
+            api.get_alert_activity '06874854-d403-4659-941e-285e0d3f9313', (err, activity) ->
+                try
+                    should.exist activity
+                    utils.should_be_list activity
+                    done()
+                catch e
+                    done e
+
+    describe '#create_alert_activity_fk()', ->
+        activity_uuid = undefined
+        alert_activity_uuid = undefined
+
+        beforeEach (done) ->
+            api.create_activity 'tag', {tag: 'escalate'}, (err, activity) ->
+                try
+                    should.not.exist err
+                    activity_uuid = activity.get('uuid')
+                    done()
+                catch e
+                    done(e)
+
+        it 'should create a new alert activity foreign key record', (done) ->
+            api.create_alert_activity_fk uuid.v4(), activity_uuid, (err, alert_activity) ->
+                try
+                    should.not.exist err
+                    should.exist alert_activity
+                    attr = alert_activity.attributes
+                    should.exist attr
+                    should.exist attr.uuid
+                    alert_activity_uuid = attr.uuid
+                    done()
+                catch e
+                    done(e)
+
+        afterEach (done) ->
+            if activity_uuid
+                api.delete_activity activity_uuid, (err) ->
+                    try
+                        should.not.exist err
+                        done()
+                    catch e
+                        done(e)
+            else
+                done()
+
+    describe '#create_alert_tag_activity()', ->
+        activity_uuid = undefined
+
+        it 'should create an alert tag activity', (done) ->
+            api.create_alert_tag_activity uuid.v4(), 'escalate', (err, activity, aler_activity) ->
+                try
+                    should.not.exist err
+
+                    should.exist activity
+
+                    attr = activity.attributes
+                    should.exist attr
+                    should.exist attr.uuid
+                    should.exist attr.created
+                    attr.activity_type.should.equal 'tag'
+                    should.exist attr.data
+                    o = JSON.parse(attr.data)
+                    o.tag.should.equal 'escalate'
+
+                    activity_uuid = attr.uuid
+                    done()
+                catch e
+                    done e
+
+        afterEach (done) ->
+            if activity_uuid
+                api.delete_activity activity_uuid, (err) ->
+                    try
+                        should.not.exist err
+                        done()
+                    catch e
+                        done e
+            else
+                done()
 
     describe '#create_identity_acquisition()', ->
         identity_acquisition_uuid = undefined
@@ -63,25 +180,24 @@ describe 'uac-api-tests', ->
                 acquisition_uuid,
                 user_uuid,
                 uid,
-                (err, model) ->
-                    try
-                        done()
+            (err, model) ->
+                try
+                    done()
 
-                        should.not.exist err
-                        should.exist model
+                    should.not.exist err
+                    should.exist model
 
-                        attributes = model.attributes
-                        should.exist(attributes)
-                        should.exist(attributes.uuid)
-                        attributes.acquisition_uuid.should.equal(acquisition_uuid)
-                        attributes.user_uuid.should.equal(user_uuid)
-                        attributes.uid.should.equal(uid)
+                    attributes = model.attributes
+                    should.exist(attributes)
+                    should.exist(attributes.uuid)
+                    attributes.acquisition_uuid.should.equal(acquisition_uuid)
+                    attributes.user_uuid.should.equal(user_uuid)
+                    attributes.uid.should.equal(uid)
 
-                        # Save the uuid in order to delete.
-                        identity_acquisition_uuid = attributes.uuid
-                    catch e
-                        console.dir(model)
-                        done(e)
+                    # Save the uuid in order to delete.
+                    identity_acquisition_uuid = attributes.uuid
+                catch e
+                    done(e)
             )
 
         after (done) ->
@@ -106,28 +222,34 @@ describe 'uac-api-tests', ->
     describe '#get_vt_details()', ->
         this.timeout(mcube_timeout)
         url = undefined
-        before( ->
+        before(->
             url = settings.get('uac:mcube_api_url')
         )
 
         it 'should return null when the MD5 sample does not exist', (done) ->
             api.get_vt_details UNDETECTED_MD5, (err, result) ->
-                should.not.exist(err)
-                should.exist(result)
-                should.exist(result.md5)
-                should.exist(result.found)
-                result.found.should.equal(false)
-                done()
+                try
+                    should.not.exist(err)
+                    should.exist(result)
+                    should.exist(result.md5)
+                    should.exist(result.found)
+                    result.found.should.equal(false)
+                    done()
+                catch e
+                    done(e)
 
 
         it 'should return detected details when the sample', (done) ->
             api.get_vt_details DETECTED_MD5, (err, result) ->
-                should.not.exist(err)
-                should.exist(result)
+                try
+                    should.not.exist(err)
+                    should.exist(result)
 
-                assert_vt_details(result, true)
+                    assert_vt_details(result, true)
 
-                done()
+                    done()
+                catch e
+                    done e
 
 
         it 'should return an err when there is a configuration error', (done) ->
@@ -136,10 +258,13 @@ describe 'uac-api-tests', ->
             should.equal(invalid_url, settings.get('uac:mcube_api_url'))
 
             api.get_vt_details(DETECTED_MD5, (err, result) ->
-                should.exist(err)
-                should.not.exist(result)
+                try
+                    should.exist(err)
+                    should.not.exist(result)
 
-                done()
+                    done()
+                catch e
+                    done e
             )
 
         afterEach ->
@@ -154,39 +279,48 @@ describe 'uac-api-tests', ->
 
         it 'should return found == false when the sample does not exist', (done) ->
             api.get_md5_details UNDETECTED_MD5, (err, result) ->
-                should.not.exist err
-                should.exist result
-                should.exist result.vt
-                should.exist result.vt.found
-                result.vt.found.should.be.false
-                should.exist result.vt.is_detected
-                result.vt.is_detected.should.be.false
-                done()
+                try
+                    should.not.exist err
+                    should.exist result
+                    should.exist result.vt
+                    should.exist result.vt.found
+                    result.vt.found.should.be.false
+                    should.exist result.vt.is_detected
+                    result.vt.is_detected.should.be.false
+                    done()
+                catch e
+                    done e
 
         it 'should return vt detected details for a detected sample', (done) ->
             api.get_md5_details(DETECTED_MD5, (err, result) ->
-                should.not.exist(err)
-                should.exist(result)
+                try
+                    should.not.exist(err)
+                    should.exist(result)
 
-                should.not.exist(result.vt_err)
-                should.exist(result.vt)
-                assert_vt_details(result.vt, true)
+                    should.not.exist(result.vt_err)
+                    should.exist(result.vt)
+                    assert_vt_details(result.vt, true)
 
-                done()
+                    done()
+                catch e
+                    done e
             )
 
         it 'does-what?', (done) ->
             api.get_md5_details '4718d26a8072a7db42c75f588b0ca38f', (err, result) ->
-                should.not.exist err
-                should.exist result
+                try
+                    should.not.exist err
+                    should.exist result
 
-                console.dir result
+                    console.dir result
 
-                should.exist result.vt
-                result.vt.found.should.be.false
-                result.vt.is_detected.should.be.false
+                    should.exist result.vt
+                    result.vt.found.should.be.false
+                    result.vt.is_detected.should.be.false
 
-                done()
+                    done()
+                catch e
+                    done e
 
         afterEach ->
             settings.set('uac:mcube_api_url', url)

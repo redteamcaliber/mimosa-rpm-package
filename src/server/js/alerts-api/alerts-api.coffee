@@ -11,6 +11,7 @@ settings = require 'settings'
 log = require 'winston'
 api_utils = require 'api-utils'
 
+uac_api = require 'uac-api'
 sf_api = require 'sf-api'
 
 #
@@ -209,8 +210,25 @@ get_alert_content = (uuid, attributes, callback) ->
 # Set the tag on an alert.
 #
 update_alert = (uuid, values, attributes, callback) ->
-    request.form_patch get_cv_url("/api/v1/alerts/#{uuid}"), values, attributes, (err, response, body) ->
-        process_response err, response, body, callback
+    async.waterfall(
+        [
+            (callback) ->
+                # Update the alert.
+                log.info "Alert: #{uuid} being updated by user: #{attributes.uid}"
+                request.form_patch get_cv_url("/api/v1/alerts/#{uuid}"), values, attributes, (err, response, body) ->
+                    callback err, response, body
+            (response, body) ->
+                if 'tag' of values
+                    # Write a tag history event.
+                    uac_api.create_alert_tag_activity uuid, values.tag, (err, activity) ->
+                        log.info "Tagging alert: #{uuid} to #{values.tag}"
+                        callback err, response, body
+                else
+                    callback null, response, body
+        ],
+        (err, response, body) ->
+            process_response err, response, body, callback
+    )
 
 #
 # Construct a candyvan url from the relative url parameter.
