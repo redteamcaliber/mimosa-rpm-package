@@ -8,7 +8,7 @@
         "blockui": "https://github.com/malsup/blockui/tarball/35c4a7acf5eff9ddfc631f488741b77d23fff041",
         "bootstrap": "3.1.1",
         "bootstrap-growl": "1.1.x",
-        "bootswatch": "https://github.com/thomaspark/bootswatch/tarball/b4613bbb449f98c8d1363d19e529dd65996b5e25",
+        "bootswatch": "git@github.mandiant.com:MPLEX/bootswatch.git#b941147c1b40a2b2568355d8efd59dfeb18418db",
         "datatables": "1.9.x",
         "font-awesome": "4.0.x",
         "jquery": "1.9.x",
@@ -48,21 +48,7 @@
             "js": "dist/js/*"
         },
         "bootswatch": {
-            "amelia": "amelia",
-            "cerulean": "cerulean",
-            "cosmo": "cosmo",
-            "cupid": "cupid",
-            "cyborg": "cyborg",
-            "darkly": "darkly",
-            "flatly": "flatly",
-            "journal": "journal",
-            "lumen": "lumen",
-            "simplex": "simplex",
-            "slate": "slate",
-            "spacelab": "spacelab",
-            "superhero": "superhero",
-            "united": "united",
-            "yeti": "yeti"
+            "dist": "dist/*"
         },
         "bootstrap-growl": {
             "/": "jquery.bootstrap-growl.js"

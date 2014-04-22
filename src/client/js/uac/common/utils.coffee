@@ -305,20 +305,23 @@ define (require) ->
     Change the current UAC theme.
     @param theme - the theme name.
     ###
-    set_theme = (theme) ->
+    set_theme = (theme, fontSize) ->
         url = undefined
         if not theme || theme == 'default'
             # Use the default.
             url = "static/css/bootstrap/bootstrap.min.css"
         else
             # Generate the theme url.
-            url = "/static/css/bootswatch/#{theme}/bootstrap.min.css"
+            url = "/static/css/bootswatch/bootstrap.#{theme}.#{fontSize}.min.css"
 
         # Reload the CSS.
         $("#bootstrap").attr "href", url
 
         # Update the theme cookie.
         set_cookie(name: "theme", value: theme, http_only: false, expires: moment().add("y", 1).utc())
+
+        # Update the font cookie
+        set_cookie(name: "font_size", value: fontSize, http_only: false, expires: moment().add("y", 1).utc())
 
         setTimeout ( ->
             # Clear the overlay color since the theme has been changed.  This needs to be on a slight delay to allow the

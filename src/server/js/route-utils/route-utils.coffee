@@ -24,79 +24,56 @@ load_views = (app) ->
 ###
   Map of themes.
 ###
+FONT_SIZES =
+    tiny: "tiny"
+    small: "small"
+    normal: "normal"
 THEMES =
     default:
         id: 'default'
         name: 'Default'
-    default12:
-        id: 'default12'
-        name: 'Default12'
     amelia:
         id: 'amelia'
         name: 'Amelia'
-    amelia12:
-        id: 'amelia12'
-        name: 'Amelia12'
     cerulean:
         id: 'cerulean'
         name: 'Cerulean'
-    cerulean12:
-        id: 'cerulean12'
-        name: 'Cerulean12'
     cosmo:
         id: 'cosmo'
         name: 'Cosmo'
-    cosmo13:
-        id: 'cosmo13'
-        name: 'Cosmo13'
     cyborg:
         id: 'cyborg'
         name: 'Cyborg'
-    cyborg12:
-        id: 'cyborg12'
-        name: 'Cyborg12'
     darkly:
         id: 'darkly'
         name: 'Darkly'
     flatly:
         id: 'flatly'
         name: 'Flatly'
-    flatly13:
-        id: 'flatly13'
-        name: 'Flatly13'
     journal:
         id: 'journal'
         name: 'Journal'
-    journal13:
-        id: 'journal13'
-        name: 'Journal13'
     lumen:
         id: 'lumen'
         name: 'Lumen'
+    readable:
+        id: 'readable'
+        name: 'readable'
     simplex:
         id: 'simplex'
         name: 'Simplex'
     slate:
         id: 'slate'
         name: 'Slate'
-    slate12:
-        id: 'slate12'
-        name: 'Slate12'
     spacelab:
         id: 'spacelab'
         name: 'Spacelab'
-    spacelab12:
-        id: 'spacelab12'
-        name: 'Spacelab12'
     superhero:
         id: 'superhero'
         name: 'Superhero'
     united:
         id: 'united'
         name: 'United'
-    united12:
-        id: 'united12'
-        name: 'United12'
     yeti:
         id: 'yeti'
         name: 'Yeti'
@@ -132,6 +109,7 @@ default_context = (req) ->
         node_env: process.env.NODE_ENV
 
     cookie_theme = req.cookies.theme
+    cookie_font_size = req.cookies.font_size
 
     context.themes = _.values(THEMES)
 
@@ -140,6 +118,12 @@ default_context = (req) ->
         context.current_theme = cookie_theme
     else
         context.current_theme = 'flatly'
+
+    if _.keys(FONT_SIZES).indexOf(cookie_font_size) != -1
+      # Font size is valid
+      context.font_size = cookie_font_size
+    else
+      context.font_size = 'normal'
 
     context
 
