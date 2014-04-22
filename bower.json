@@ -13,6 +13,7 @@
         "font-awesome": "4.0.x",
         "jquery": "1.9.x",
         "marionette": "1.7.x",
+        "marked": "0.3.x",
         "moment": "2.4.x",
         "requirejs": "2.1.x",
         "select2": "3.4.x",
@@ -79,6 +80,9 @@
         },
         "marionette": {
             "/": "lib/core/amd/backbone.marionette.js"
+        },
+        "marked": {
+            "/": "lib/*.js"
         },
         "require-cs": {
             "/": "cs.js"

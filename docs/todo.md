@@ -1,6 +1,14 @@
 UAC ToDo
 ========
 
+- UAC testing for the current release.
+- Doing a staging deployment tomorrow for UAC, production the following week.
+- Displaying the alert details for NX, EX, FX, complete.  OS Change report, etc.
+- Added the ability to tag an alert.
+- Working on commenting and activity history now.
+- Going to display the HX details next.
+- Entered a bunch of follow on user stories in TP.
+
 ### Eventing
 - General vent usage vs the Evented pattern.
 - The Evented pattern couples you to the view/class that fired the event.  Not sure we care.
@@ -33,6 +41,7 @@ UAC ToDo
 
 ### Alerts Details View
 - Add tagging.
+- Add tag validation in the alerts api.
 - Title and breadcrumb updates.
     - Update the alerts title as well as the breadcrumbs...
     - Add previously navigated pages to the breadcrumb view.

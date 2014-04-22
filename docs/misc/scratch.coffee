@@ -1,3 +1,17 @@
+
+    type        TEXT        -- The type of actvity event.
+    created     TIMESTAMP   -- When the activity occurred.
+    data        TEXT        -- JSON data.
+
+
+(
+    type: 'comment'
+    data:
+        text: 'This is a test!'
+
+)
+
+
 define (require) ->
 
     Backbone = require 'backbone'

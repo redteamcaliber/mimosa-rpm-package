@@ -11,6 +11,8 @@ _.mixin _.str.exports()
 settings = require 'settings'
 log = require 'log'
 route_utils = require 'route-utils'
+
+uac_api = require 'uac-api'
 alerts_api = require 'alerts-api'
 
 
@@ -124,6 +126,10 @@ app.get '/api/alerts/:uuid/full', (req, res, next) ->
                 return
     return
 
+app.get '/api/alerts/:uuid/activity', (req, res, next) ->
+    if route_utils.validate_input ['uuid'], req.params, res
+        uac_api.get_alert_activity req.params['uuid'], (err, activity) ->
+            route_utils.send_rest req, res, next, activity
 #
 # Update the tag of an alert.
 #
