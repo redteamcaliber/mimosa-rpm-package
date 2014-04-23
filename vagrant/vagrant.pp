@@ -1,4 +1,5 @@
 node 'uac.vm.mandiant.com' {
+  include repos
 
   #simulated production env
 #  class { 'uac':

@@ -18,8 +18,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Set this to where we'll pull down our puppet repo
   PUPPET_REPO_DIR = Pathname(VAGRANTFILE_DIRECTORY).join('puppet')
-  PUPPET_HIERA_DIR = PUPPET_REPO_DIR.join("hieradata")
-  PUPPET_REPO_BRANCH = "uac-node"
+  PUPPET_HIERA_DIR = "#{PUPPET_REPO_DIR}/hieradata"
 
   if ENV['PUPPET_MODULE_DIR']
    puts "Using puppet modules found here #{ENV['PUPPET_REPO_DIR']}"
@@ -28,12 +27,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
    puts "Using DEFAULT puppet module dir"
    if Dir.exists?(PUPPET_REPO_DIR)
   	Dir.chdir(PUPPET_REPO_DIR) do
-  		PUPPET_MODULE_DIR = PUPPET_REPO_DIR.join("modules")
+  		PUPPET_MODULE_DIR = PUPPET_REPO_DIR.join('modules')
   		system("git pull")
   	end
    else
-  	system("git clone -b #{PUPPET_REPO_BRANCH} #{PUPPET_REPO_URL} #{PUPPET_REPO_DIR}")
-  	PUPPET_MODULE_DIR = "#{PUPPET_REPO_DIR}/modules"
+  	system("git clone #{PUPPET_REPO_URL} #{PUPPET_REPO_DIR}")
+  	PUPPET_MODULE_DIR = PUPPET_REPO_DIR.join('modules')
    end
   end
 
@@ -72,8 +71,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provider "virtualbox" do |v, override|
-    override.vm.box = "centos-65-x64-virtualbox-puppet.box"
-    override.vm.box = "http://puppet-vagrant-boxes.puppetlabs.com/centos-65-x64-virtualbox-puppet.box"
+    override.vm.box = "centos6-5"
+    override.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/centos-65-x64-virtualbox-puppet.box"
   end
 
   # config.vm.synced_folder SRC_LOCAL_PATH, '/opt/web/apps/uac', :nfs => true
@@ -94,7 +93,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      puppet.module_path = PUPPET_MODULE_DIR
      puppet.manifests_path = "./"
      puppet.manifest_file  = "vagrant.pp"
-     puppet.hiera_config_path = PUPPET_REPO_DIR.join('hiera.yaml')
+     puppet.hiera_config_path = '~/puppet/hiera.yaml'
    end
 
 end
