@@ -130,6 +130,16 @@ app.get '/api/alerts/:uuid/activity', (req, res, next) ->
     if route_utils.validate_input ['uuid'], req.params, res
         uac_api.get_alert_activity req.params['uuid'], (err, activity) ->
             route_utils.send_rest req, res, next, activity
+
+app.post '/api/alerts/:uuid/activity', (req, res, next) ->
+    if route_utils.validate_input ['uuid'], req.params, res
+        if route_utils.validate_input ['comment'], req.body, res
+            uac_api.create_alert_comment_activity req.params.uuid, req.body.comment, req.attributes, (err, activity) ->
+                if err
+                    next err
+                else
+                    route_utils.send_rest req, res, next, activity
+
 #
 # Update the tag of an alert.
 #

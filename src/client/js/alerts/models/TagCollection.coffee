@@ -1,5 +1,6 @@
 define (require) ->
 
+    #BackboneFetch = require 'backbone-fetch-cache'
     Backbone = require 'backbone'
     utils = require 'uac/common/utils'
     TagModel = require 'alerts/models/TagModel'

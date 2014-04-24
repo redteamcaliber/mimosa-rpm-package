@@ -7,6 +7,7 @@ CREATE TABLE activity (
     uuid                UUID        PRIMARY KEY,            -- Primary key.
     activity_type       TEXT        NOT NULL,               -- The type of activity.
     created             TIMESTAMP   NOT NULL DEFAULT now(), -- When the activity occurred.
+    uid                 TEXT        NOT NULL,
     data                TEXT        NOT NULL                -- The activity data.
 );
 

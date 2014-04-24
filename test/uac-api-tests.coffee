@@ -66,7 +66,7 @@ describe 'uac-api-tests', ->
                 done()
 
         it 'should create a new activity record', (done) ->
-            api.create_activity 'tag', {tag: 'escalate'}, (err, activity) ->
+            api.create_activity 'tag', {tag: 'escalate'}, {uid: 'anthony.milano@mandiant.com'}, (err, activity) ->
                 try
                     should.not.exist err
                     should.exist activity
@@ -101,7 +101,7 @@ describe 'uac-api-tests', ->
         alert_activity_uuid = undefined
 
         beforeEach (done) ->
-            api.create_activity 'tag', {tag: 'escalate'}, (err, activity) ->
+            api.create_activity 'tag', {tag: 'escalate'}, {uid: 'anthony.milano@mandiant.com'}, (err, activity) ->
                 try
                     should.not.exist err
                     activity_uuid = activity.get('uuid')
@@ -137,7 +137,7 @@ describe 'uac-api-tests', ->
         activity_uuid = undefined
 
         it 'should create an alert tag activity', (done) ->
-            api.create_alert_tag_activity uuid.v4(), 'escalate', (err, activity, aler_activity) ->
+            api.create_alert_tag_activity uuid.v4(), 'escalate', {uid: 'anthony.milano@mandiant.com'}, (err, activity, alert_activity) ->
                 try
                     should.not.exist err
 
