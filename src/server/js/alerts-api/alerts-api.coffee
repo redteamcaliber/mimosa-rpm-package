@@ -220,7 +220,7 @@ update_alert = (uuid, values, attributes, callback) ->
             (response, body) ->
                 if 'tag' of values
                     # Write a tag history event.
-                    uac_api.create_alert_tag_activity uuid, values.tag, (err, activity) ->
+                    uac_api.create_alert_tag_activity uuid, values.tag, attributes, (err, activity) ->
                         log.info "Tagging alert: #{uuid} to #{values.tag}"
                         callback err, response, body
                 else

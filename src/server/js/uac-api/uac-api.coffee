@@ -100,9 +100,10 @@ get_ioc_terms = (type, callback) ->
 #
 # Create a new activity record.
 #
-create_activity = (activity_type, data, callback) ->
+create_activity = (activity_type, data, attributes, callback) ->
     api_utils.create ActivityModel,
         activity_type: activity_type
+        uid: attributes.uid
         data: if data then JSON.stringify(data) else undefined
     , callback
     return
@@ -127,7 +128,7 @@ create_alert_activity_fk = (alert_uuid, activity_uuid, callback) ->
 #
 # Create an alert activity record.
 #
-create_alert_activity = (alert_uuid, type, data, callback) ->
+create_alert_activity = (alert_uuid, type, data, attributes, callback) ->
     async.waterfall(
         [
             (callback) ->
@@ -136,7 +137,7 @@ create_alert_activity = (alert_uuid, type, data, callback) ->
                     callback null, t
             (t, callback) ->
                 # Create an activity.
-                create_activity type, data, (err, activity) ->
+                create_activity type, data, attributes, (err, activity) ->
                     callback err, t, activity
             (t, activity, callback) ->
                 # Create an alert activity.
@@ -159,14 +160,14 @@ create_alert_activity = (alert_uuid, type, data, callback) ->
 #
 # Create an alert comment activity.
 #
-create_alert_comment_activity = (alert_uuid, comment, callback) ->
-    create_alert_activity alert_uuid, 'comment', {comment: comment}, callback
+create_alert_comment_activity = (alert_uuid, comment, attributes, callback) ->
+    create_alert_activity alert_uuid, 'comment', {comment: comment}, attributes, callback
 
 #
 # Create an alert tag activity.
 #
-create_alert_tag_activity = (alert_uuid, tag, callback) ->
-    create_alert_activity(alert_uuid, 'tag', {tag: tag}, callback)
+create_alert_tag_activity = (alert_uuid, tag, attributes, callback) ->
+    create_alert_activity alert_uuid, 'tag', {tag: tag}, attributes, callback
 
 #
 # Retrieve the activity for an alert.
@@ -309,6 +310,7 @@ exports.delete_activity = delete_activity
 exports.create_alert_activity_fk = create_alert_activity_fk
 exports.create_alert_activity = create_alert_activity
 exports.create_alert_tag_activity = create_alert_tag_activity
+exports.create_alert_comment_activity = create_alert_comment_activity
 
 exports.create_identity_acquisition = create_identity_acquisition
 exports.delete_identity_acquisition = delete_identity_acquisition

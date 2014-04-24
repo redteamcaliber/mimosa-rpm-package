@@ -1,14 +1,6 @@
 UAC ToDo
 ========
 
-- UAC testing for the current release.
-- Doing a staging deployment tomorrow for UAC, production the following week.
-- Displaying the alert details for NX, EX, FX, complete.  OS Change report, etc.
-- Added the ability to tag an alert.
-- Working on commenting and activity history now.
-- Going to display the HX details next.
-- Entered a bunch of follow on user stories in TP.
-
 ### Eventing
 - General vent usage vs the Evented pattern.
 - The Evented pattern couples you to the view/class that fired the event.  Not sure we care.
@@ -32,15 +24,10 @@ UAC ToDo
 - Look into MD5 issue
     - {"results": [{"response_code": 0, "resource": "6caf13b282678dda2176e1a1d32fc5b6", "verbose_msg": "The requested resource is not among the finished, queued or pending scans"}], "_meta": {"s": 0}}
 
-### Alerts Lists Views
-- Display the tag text descriptions in the summary and details table.
-
-### Alerts Search View
-- Make the search view blocked until the sub-views are loaded
-- Convert to using a Marionette layout.
-
 ### Alerts Details View
-- Add tagging.
+- Refresh the activity after the alert is tagged.
+- Display an initial activity.
+- Display the tag title rather than the tag id in the activity view.
 - Add tag validation in the alerts api.
 - Title and breadcrumb updates.
     - Update the alerts title as well as the breadcrumbs...
@@ -56,8 +43,8 @@ UAC ToDo
 - Display the explanation/anomoly field.
 - Make the alerts view linkable.
 - Look into displaying pcap text data.
-- Add the ability to add comments.
-- Display comments in the activity feed.
+- Look into using the ACE editor for comments
+    - http://ace.c9.io/#nav=embedding
 
 ### Refactoring and Fixes
 - usersettings aren't being updated after a user selects an expression.

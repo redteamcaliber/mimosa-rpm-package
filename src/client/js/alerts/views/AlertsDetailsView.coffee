@@ -317,8 +317,10 @@ define (require) ->
                 model: @model
             @os_changes_region.show new OSChangeView
                 model: @model
+
+            # Display the alert activity.
             @activity_region.show new ActivityView
-                model: @model
+                alert_uuid: @model.attributes.alert.uuid
 
             # Initialize the tags view.
             tags = new TagCollection()
@@ -329,6 +331,8 @@ define (require) ->
             tags.fetch
                 success: =>
                     @tag_region.show tags_view
+                error: (model, response) =>
+                    utils.display_response_error('Error retrieving tags', response)
 
 
     utils.mixin AlertsDetailsView, Evented

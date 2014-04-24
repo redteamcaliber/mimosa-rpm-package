@@ -9,6 +9,10 @@ log.add log.transports.Console,
     colorize: true
 
 utils = require './test-utils'
+uac_api = require 'uac-api'
+
+
+ALERT_UUID = 'c4662926-2cae-45e1-b408-3f22d174724e'
 
 
 describe 'alerts-rest-tests', ->
@@ -72,9 +76,9 @@ describe 'alerts-rest-tests', ->
                 catch e
                     done e
 
-    describe '/alerts/api/alerts/c4662926-2cae-45e1-b408-3f22d174724e', ->
-        it 'should return the alert for c4662926-2cae-45e1-b408-3f22d174724e', (done) ->
-            utils.get '/alerts/api/alerts/c4662926-2cae-45e1-b408-3f22d174724e', {}, (err, response, body) ->
+    describe "/alerts/api/alerts/#{ALERT_UUID}", ->
+        it "should return the alert for #{ALERT_UUID}", (done) ->
+            utils.get "/alerts/api/alerts/#{ALERT_UUID}", {}, (err, response, body) ->
                 try
                     should.not.exist err
                     should.exist body
@@ -82,9 +86,9 @@ describe 'alerts-rest-tests', ->
                 catch e
                     done e
 
-    describe '/alerts/api/alerts/c4662926-2cae-45e1-b408-3f22d174724e/content', ->
-        it 'should return the alert content for c4662926-2cae-45e1-b408-3f22d174724e', (done) ->
-            utils.get '/alerts/api/alerts/c4662926-2cae-45e1-b408-3f22d174724e/content', {}, (err, repsonse, body) ->
+    describe "/alerts/api/alerts/#{ALERT_UUID}/content", ->
+        it "should return the alert content for #{ALERT_UUID}", (done) ->
+            utils.get "/alerts/api/alerts/#{ALERT_UUID}/content", {}, (err, repsonse, body) ->
                 try
                     should.not.exist err
                     should.exist body
@@ -92,12 +96,51 @@ describe 'alerts-rest-tests', ->
                 catch e
                     done e
 
-    describe '/alerts/api/alerts/c4662926-2cae-45e1-b408-3f22d174724e/full', ->
-        it 'should return the full alert and content for c4662926-2cae-45e1-b408-3f22d174724e', (done) ->
-            utils.get '/alerts/api/alerts/c4662926-2cae-45e1-b408-3f22d174724e/full', {}, (err, response, body) ->
+    describe "/alerts/api/alerts/#{ALERT_UUID}/full", ->
+        it "should return the full alert and content for #{ALERT_UUID}", (done) ->
+            utils.get "/alerts/api/alerts/#{ALERT_UUID}/full", {}, (err, response, body) ->
                 try
                     should.not.exist err
                     should.exist body
                     done()
                 catch e
                     done e
+
+    describe "/alerts/api/alerts/#{ALERT_UUID}/activity", ->
+        activity_uuid = undefined
+
+        beforeEach (done) ->
+            # Ensure an activity exists for the alert.
+            uac_api.create_alert_tag_activity ALERT_UUID, 'escalate', {uid: 'anthony.milano@mandiant.com'}, (err, activity, alert_activity) ->
+                try
+                    should.not.exist err
+                    should.exist activity
+                    should.exist alert_activity
+                    should.exist activity.get 'uuid'
+                    activity_uuid = activity.get 'uuid'
+                    done()
+                catch e
+                    done e
+
+        it 'should return the related alerts activity', (done) ->
+            utils.get '/alerts/api/alerts/c4662926-2cae-45e1-b408-3f22d174724e/activity', {}, (err, response, body) ->
+                try
+                    should.not.exist err
+                    utils.should_be_list body
+
+                    console.log "Found #{body.length} activity records for alert: #{ALERT_UUID}"
+                    done()
+                catch e
+                    done e
+
+        afterEach (done) ->
+            if activity_uuid
+                # Delete the test activity.
+                uac_api.delete_activity activity_uuid, (err) ->
+                    try
+                        should.not.exist err
+                        done()
+                    catch e
+                        done e
+            else
+                done()
