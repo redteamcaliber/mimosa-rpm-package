@@ -2,12 +2,13 @@ define (require) ->
     async = require 'async'
     moment = require 'moment'
     Marionette = require 'marionette'
+    resources = require 'uac/common/resources'
     utils = require 'uac/common/utils'
     vent = require 'uac/common/vent'
     TimeSearchView = require 'uac/views/TimeSearchView'
 
     Events = require 'alerts/common/Events'
-    alerts_utils = require 'alerts/common/utils'
+    TagCollection = require 'uac/models/TagCollection'
     ClientCollection = require 'alerts/models/ClientCollection'
     TimeCollection = require 'alerts/models/TimeCollection'
     AlertTypeModel = require 'alerts/models/AlertTypeModel'
@@ -193,7 +194,7 @@ define (require) ->
 
             # Initialize the sub views.
             selected_tags = if selected and selected.tags then selected.tags else undefined
-            tags = new Backbone.Collection alerts_utils.get_tags()
+            tags = new TagCollection resources.tags
             tags_view = new TagsSearchView
                 selected: selected_tags
                 collection: tags

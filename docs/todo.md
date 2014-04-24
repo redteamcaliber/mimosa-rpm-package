@@ -25,6 +25,7 @@ UAC ToDo
     - {"results": [{"response_code": 0, "resource": "6caf13b282678dda2176e1a1d32fc5b6", "verbose_msg": "The requested resource is not among the finished, queued or pending scans"}], "_meta": {"s": 0}}
 
 ### Alerts Details View
+- Look into caching the tag values on the client.
 - Refresh the activity after the alert is tagged.
 - Display an initial activity.
 - Display the tag title rather than the tag id in the activity view.

@@ -6,12 +6,11 @@ define (require) ->
     marked = require 'marked'
 
     utils = require 'uac/common/utils'
+    resources = require 'uac/common/resources'
     templates = require 'alerts/ejs/templates'
 
     ActivityModel = require 'alerts/models/ActivityModel'
     ActivityCollection = require 'alerts/models/ActivityCollection'
-    TagCollection = require 'alerts/models/TagCollection'
-    alerts_utils = require 'alerts/common/utils'
 
 
     class ActivityDetailView extends Marionette.ItemView
@@ -33,6 +32,12 @@ define (require) ->
                         "#{before.format 'YYYY-MM-DD'} (#{days} days ago)"
                 else
                     ''
+            tag: (key) ->
+                v = resources[key]
+                if v
+                    v.title
+                else
+                    key
 
         serializeData: ->
             model = @model.toJSON()
@@ -61,17 +66,9 @@ define (require) ->
         regions:
             activity_list_region: '.activity-list-region'
 
-        initialize: (options) ->
-            super options
-
-            if options and options.alert_uuid
-                @alert_uuid = options.alert_uuid
-            else
-                console.warn '"alert_uuid" option not specified.'
-
         onRender: ->
             @activities = new ActivityCollection()
-            @activities.alert_uuid = @alert_uuid
+            @activities.alert_uuid = @model.get 'uuid'
 
             utils.block_element @$el
 

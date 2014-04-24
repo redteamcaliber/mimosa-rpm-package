@@ -11,7 +11,7 @@ define(function (require) {
         },
         model: TagModel,
         url: '/sf/api/tags',
-        parse: function (response, options) {
+        parse: function (response) {
             if (this.searchable) {
                 var results = [];
                 _.each(response, function (tag) {
@@ -22,7 +22,7 @@ define(function (require) {
                 return results;
             }
             else {
-                return response, options;
+                return response;
             }
         }
     });

@@ -3,6 +3,7 @@ define (require) ->
     Marionette = require 'marionette'
 
     utils = require 'uac/common/utils'
+    resources = require 'uac/common/resources'
     Evented = require 'uac/common/mixins/Evented'
     vent = require 'uac/common/vent'
     PropertyView = require 'uac/views/PropertyView'
@@ -10,6 +11,7 @@ define (require) ->
     TreeView = require 'uac/views/TreeView'
     TableView = require 'uac/views/TableView'
     TableViewControls = require 'uac/views/TableViewControls'
+    TagCollection = require 'uac/models/TagCollection'
 
     AlertModel = require 'alerts/models/AlertModel'
     RawAlertView = require 'alerts/views/RawAlertView'
@@ -17,7 +19,6 @@ define (require) ->
     TimelineView = require 'alerts/views/TimelineView'
     TimelineCollection = require 'alerts/models/TimelineCollection'
 
-    TagCollection = require 'alerts/models/TagCollection'
     TagsView = require 'alerts/views/TagsView'
 
     Events = require 'alerts/common/Events'
@@ -320,19 +321,15 @@ define (require) ->
 
             # Display the alert activity.
             @activity_region.show new ActivityView
-                alert_uuid: @model.attributes.alert.uuid
+                model: @model
 
             # Initialize the tags view.
-            tags = new TagCollection()
+            tags = new TagCollection(resources.tags)
             tags_view = new TagsView
                 id: 'alerts-tag-view'
                 selected: @model.attributes.alert.tag
                 collection: tags
-            tags.fetch
-                success: =>
-                    @tag_region.show tags_view
-                error: (model, response) =>
-                    utils.display_response_error('Error retrieving tags', response)
+            @tag_region.show tags_view
 
 
     utils.mixin AlertsDetailsView, Evented

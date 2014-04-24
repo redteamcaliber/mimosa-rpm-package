@@ -19,21 +19,6 @@ log.add log.transports.Console,
 
 describe 'alerts-api-tests', ->
 
-    describe '#get_tags()', ->
-        it 'should return all tag values', (done) ->
-            api.get_tags (err, tags) ->
-                try
-                    should.not.exist err
-                    should.exist tags
-                    should.exist tags.length
-                    tags.length.should.be.greaterThan 0
-
-                    utils.should_have_keys tags, ['id', 'title', 'description', 'category']
-
-                    done()
-                catch e
-                    done e
-
     describe '#get_clients()', ->
         it 'should return all clients', (done) ->
             api.get_clients {}, (err, clients) ->

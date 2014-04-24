@@ -43,14 +43,6 @@ app.get '/test', (req, res, next) ->
 # API Routes.
 #
 
-app.get '/api/tags', (req, res, next) ->
-    alerts_api.get_tags (err, tags) ->
-        if err
-            next err
-        else
-            route_utils.send_rest req, res, next, tags
-    return
-
 app.get '/api/clients', (req, res, next) ->
     alerts_api.get_clients req.attributes, (err, clients) ->
         if err

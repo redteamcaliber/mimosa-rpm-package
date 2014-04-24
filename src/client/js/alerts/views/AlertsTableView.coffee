@@ -6,7 +6,7 @@ define (require) ->
     TableView = require 'uac/views/TableView'
     renderers = require 'uac/views/renderers'
 
-    alerts_utils = require 'alerts/common/utils'
+    resources = require 'uac/common/resources'
     Events = require 'alerts/common/Events'
 
     class SummaryPopoverView extends Marionette.ItemView
@@ -27,11 +27,10 @@ define (require) ->
                 'max-width': '600px'
 
     tag_renderer = (index) ->
-        tag_map = alerts_utils.get_tag_map()
         (
             mRender: (data) ->
                 if data
-                    tag = tag_map[data]
+                    tag = resources[data]
                     if tag
                         return "<span title='#{tag.description}'>#{tag.title}</span>"
                     else
