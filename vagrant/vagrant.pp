@@ -22,7 +22,9 @@ node 'uac.vm.mandiant.com' {
 #    uacEnv_sso_login_url        => "https://loginstage.mandiant.com",
 #    uacEnv_sso_refresh_url      => "https://loginstage.mandiant.com/refresh",
 #    uacEnv_sso_logout_url       => "https://loginstage.mandiant.com/logout",
-#    uacEnv_sso_unauth_url       => "https://loginstage.mandiant.com/unauth"
+#    uacEnv_sso_unauth_url       => "https://loginstage.mandiant.com/unauth",
+#    uacEnv_sso_pubkey           => "./conf/certs/sso-staging-pubkey-2012-02-10.pem",
+#    uacEnv_server_log_level     => "debug"
 #  }
   #development env
   class { 'uac':
@@ -46,6 +48,8 @@ node 'uac.vm.mandiant.com' {
     uacEnv_sso_login_url        => "https://loginstage.mandiant.com",
     uacEnv_sso_refresh_url      => "https://loginstage.mandiant.com/refresh",
     uacEnv_sso_logout_url       => "https://loginstage.mandiant.com/logout",
-    uacEnv_sso_unauth_url       => "https://loginstage.mandiant.com/unauth"
+    uacEnv_sso_unauth_url       => "https://loginstage.mandiant.com/unauth",
+    uacEnv_sso_pubkey           => "./conf/certs/sso-staging-pubkey-2012-02-10.pem",
+    uacEnv_server_log_level     => "debug"
   }
 }
