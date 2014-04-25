@@ -42,7 +42,7 @@
             "/": "backbone.fetch-cache.js"
         },
         "backbone.wreqr": {
-            "/": "lib/amd/backbone.wreqr.js"
+            "/": "lib/backbone.wreqr.js"
         },
         "blockui": {
             "/": "jquery.blockUI.js"
