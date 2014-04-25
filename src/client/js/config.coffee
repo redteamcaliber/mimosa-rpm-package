@@ -24,7 +24,7 @@ window.require =
         mocha: 'lib/mocha/mocha'
         moment: 'lib/moment/moment'
         select2: 'lib/select2/select2'
-        typeahead: 'lib/typeahead.js/typeahead'
+        typeahead: 'lib/typeahead.js/typeahead.bundle'
         underscore: 'lib/underscore/underscore'
         'underscore.string': 'lib/underscore.string/underscore.string'
         bootstrap_datepicker: 'lib/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min'

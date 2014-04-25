@@ -332,7 +332,7 @@ module.exports = function (grunt) {
                         "marked": "lib/marked/marked",
                         moment: 'lib/moment/moment',
                         select2: 'lib/select2/select2',
-                        typeahead: 'lib/typeahead.js/typeahead',
+                        typeahead: 'lib/typeahead.js/typeahead.bundle',
                         underscore: 'lib/underscore/underscore',
                         'underscore.string': 'lib/underscore.string/underscore.string',
                         bootstrap_datepicker: 'lib/eonasdan-bootstrap-datetimepicker/bootstrap-datetimepicker.min'
@@ -392,7 +392,7 @@ module.exports = function (grunt) {
                                 "sf/main/TasksMain",
 
                                 //uac stuff
-                                "sf/views/HostTypeAheadView",
+                                "uac/views/MixedTypeAheadView",
                                 "uac/views/ThemeView",
                                 "uac/main/MD5Main",
                                 "uac/main/PreferencesMain",
