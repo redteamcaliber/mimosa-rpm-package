@@ -1,4 +1,3 @@
-
 define (require) ->
 
     Marionette = require 'marionette'
@@ -7,6 +6,7 @@ define (require) ->
 
     utils = require 'uac/common/utils'
     resources = require 'uac/common/resources'
+    EditorView = require 'uac/views/EditorView'
     templates = require 'alerts/ejs/templates'
 
     ActivityModel = require 'alerts/models/ActivityModel'
@@ -64,11 +64,20 @@ define (require) ->
             'click .add-comment': 'on_add_comment'
 
         regions:
+            editor_region: '.editor_region'
             activity_list_region: '.activity-list-region'
+
+        initialize: (options) ->
+            super options
+
+            if options and options.alert_uuid
+                @alert_uuid = @options.alert_uuid
+            else
+                console.warn '"alert_uuid" not specified.'
 
         onRender: ->
             @activities = new ActivityCollection()
-            @activities.alert_uuid = @model.get 'uuid'
+            @activities.alert_uuid = @alert_uuid
 
             utils.block_element @$el
 
@@ -81,8 +90,12 @@ define (require) ->
                     utils.unblock @$el
                     utils.display_response_error 'Error while loading activities.', response
 
+        onDomRefresh: ->
+            @editor_region.show new EditorView
+                mode: 'ace/mode/markdown'
+
         on_add_comment: ->
-            comment = @$('textarea.comment').val()
+            comment = @editor_region.currentView.value()
 
             if comment
                 comment = _.trim comment

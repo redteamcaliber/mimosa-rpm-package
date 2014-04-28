@@ -260,7 +260,7 @@ define (require) ->
         #
         # Handle a search click.
         #
-        on_search: ->
+        on_search: =>
             # Check whether the from and to dates are valid.
             tags_view = @tags_region.currentView
             times_view = @time_region.currentView

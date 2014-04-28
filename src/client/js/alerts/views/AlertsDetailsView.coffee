@@ -7,9 +7,9 @@ define (require) ->
     Evented = require 'uac/common/mixins/Evented'
     vent = require 'uac/common/vent'
     PropertyView = require 'uac/views/PropertyView'
-    ContainerView = require 'uac/views/ContainerView'
     TreeView = require 'uac/views/TreeView'
     TableView = require 'uac/views/TableView'
+    EditorView = require 'uac/views/EditorView'
     TableViewControls = require 'uac/views/TableViewControls'
     TagCollection = require 'uac/models/TagCollection'
 
@@ -123,21 +123,11 @@ define (require) ->
             else
                 undefined
 
-    class AlertRequestView extends Marionette.ItemView
+    class AlertRequestDetailView extends Marionette.Layout
         template: templates['alert-request.ejs']
 
-        serializeData: ->
-            alert = {
-                services: []
-            }
-            content = @model.get 'content'
-            if content.explanation['cnc-services']
-                for service in content.explanation['cnc-services']['cnc-service']
-                    alert.services.push @parse_service(service)
-
-            (
-                alert: alert
-            )
+        regions:
+            editor_region: '.editor_region'
 
         #
         # Parse the service data.
@@ -155,9 +145,36 @@ define (require) ->
                 # Split the data into individual requests.
                 requests = service.channel.split '::~~::~~'
                 for request in requests
-                    if request.trim() != ''
+                    if not _.isEmpty(request.trim())
                         result.requests.push(request.split '::~~')
             result
+
+        serializeData: ->
+            (
+                item: @model.toJSON()
+            )
+
+        onShow: ->
+            value = ''
+            service = @parse_service @model.toJSON()
+            for request, request_index in service.requests
+                for line, line_index in request
+                    value += line
+                    if line_index + 1 != request.length
+                        value += '\n'
+                if request_index + 1 != service.requests.length
+                    value += '  \n'
+            @editor_region.show new EditorView
+                mode: 'ace/mode/properties'
+                value: value
+                wrap: true
+                height: 'auto'
+                read_only: true
+                highlight: false
+
+    class AlertRequestView extends Marionette.CollectionView
+        itemView: AlertRequestDetailView
+
 
     #
     # Display the smtp-message field of the alert.
@@ -183,7 +200,7 @@ define (require) ->
             alert:
                 artifacts: @model.get('alert').artifacts
 
-    class OSChangeView extends ContainerView
+    class OSChangeView extends Marionette.Layout
         template: templates['os-changes.ejs']
 
         skipped_sections:
@@ -310,8 +327,13 @@ define (require) ->
                 model: @model
             @interface_region.show new AlertInterfaceView
                 model: @model
-            @request_region.show new AlertRequestView
-                model: @model
+
+            attr = @model.attributes
+            if attr.content.explanation and attr.content.explanation['cnc-services'] and attr.content.explanation['cnc-services']['cnc-service']
+                # Create a request view for the CNC services.
+                @request_region.show new AlertRequestView
+                    collection: new Backbone.Collection(attr.content.explanation['cnc-services']['cnc-service'])
+
             @artifacts_region.show new AlertsArtifactsView
                 model: @model
             @message_region.show new AlertMessageView
@@ -321,7 +343,7 @@ define (require) ->
 
             # Display the alert activity.
             @activity_region.show new ActivityView
-                model: @model
+                alert_uuid: @model.attributes.alert.uuid
 
             # Initialize the tags view.
             tags = new TagCollection(resources.tags)

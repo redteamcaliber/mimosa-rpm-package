@@ -25,10 +25,9 @@ UAC ToDo
     - {"results": [{"response_code": 0, "resource": "6caf13b282678dda2176e1a1d32fc5b6", "verbose_msg": "The requested resource is not among the finished, queued or pending scans"}], "_meta": {"s": 0}}
 
 ### Alerts Details View
-- Look into caching the tag values on the client.
-- Refresh the activity after the alert is tagged.
-- Display an initial activity.
-- Display the tag title rather than the tag id in the activity view.
+- Raw alert customization
+    - Display the alert raw JSON using the ace editor in read only mode.
+    - Make the raw alert data searchable.
 - Add tag validation in the alerts api.
 - Title and breadcrumb updates.
     - Update the alerts title as well as the breadcrumbs...
@@ -36,16 +35,11 @@ UAC ToDo
     - Add id/context info to the breadcrumbs.
 - Format the occurred and updated dates within the header according to how long ago they are.
     - See hosts code.
-- Raw alert customization
-    - Format the raw alert data.
-    - Make the raw alert data searchable.
 - Update the signature in the header to display according to the FE logic.
 - Update the signature descriptions from the XLS.
 - Display the explanation/anomoly field.
 - Make the alerts view linkable.
 - Look into displaying pcap text data.
-- Look into using the ACE editor for comments
-    - http://ace.c9.io/#nav=embedding
 
 ### Refactoring and Fixes
 - usersettings aren't being updated after a user selects an expression.

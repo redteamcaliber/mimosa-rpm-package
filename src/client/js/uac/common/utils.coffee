@@ -295,16 +295,34 @@ define (require) ->
             # Add the classes to the style section.
             style_el.prop("type", "text/css").html(html)
 
+            this._styles.line_height = body_style.getPropertyValue('line-height')
+            this._styles.font_size = body_style.getPropertyValue('font-size')
             this._styles.well_color = well_color
             this._styles.body_color = body_color
             this._styles.primary_color = primary_color
 
         this._styles
 
-    ###
-    Change the current UAC theme.
-    @param theme - the theme name.
-    ###
+    #
+    # Get the current theme.
+    #
+    get_theme = ->
+        cookies = get_cookies()
+        if cookies
+            return cookies.theme
+        else
+            return undefined
+
+    get_font_size = ->
+        cookies = get_cookies()
+        if cookies
+            return cookies.font_size
+        else
+            return undefined
+
+    #
+    # Change the current UAC theme.
+    #
     set_theme = (theme, fontSize) ->
         url = undefined
         if not theme || theme == 'default'
@@ -362,8 +380,8 @@ define (require) ->
         return
 
     get_cookies = ->
-        cookie_string = document.cookie
-        if cookie_string is ""
+        cookie_string = window.document.cookie
+        if not cookie_string or _.isEmpty cookie_string
             return {}
         else
             results = {}
@@ -373,8 +391,7 @@ define (require) ->
                 value = cookie.substring(p + 1)
                 value = decodeURIComponent(value)
                 results[name] = value
-                return
-            results
+            return results
 
     #
     # Utility for storing and retrieving Javascript objects from browser local storage.  This function serializes and
@@ -496,7 +513,9 @@ define (require) ->
         session: session
         storage: storage
         recent: recent
+        get_theme: get_theme
         set_theme: set_theme
+        get_font_size: get_font_size
         get_styles: get_styles
         wait_for: wait_for
         mixin: mixin

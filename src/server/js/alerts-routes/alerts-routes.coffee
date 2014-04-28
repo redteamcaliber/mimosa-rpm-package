@@ -120,8 +120,28 @@ app.get '/api/alerts/:uuid/full', (req, res, next) ->
 
 app.get '/api/alerts/:uuid/activity', (req, res, next) ->
     if route_utils.validate_input ['uuid'], req.params, res
-        uac_api.get_alert_activity req.params['uuid'], (err, activity) ->
-            route_utils.send_rest req, res, next, activity
+        async.parallel([
+                (callback) ->
+                    alerts_api.get_alert req.params.uuid, req.attributes, callback
+                (callback) ->
+                    uac_api.get_alert_activity req.params.uuid, callback
+        ],
+            (err, results) ->
+                if err
+                    next err
+                else
+                    alert = results[0]
+                    activities = results[1].toJSON()
+
+                    # Add an initial activity.
+                    activities.push
+                        activity_type: 'occurred'
+                        created: alert.occurred
+                        data: JSON.stringify
+                            device: alert.device.name
+
+                    route_utils.send_rest req, res, next, activities
+        )
 
 app.post '/api/alerts/:uuid/activity', (req, res, next) ->
     if route_utils.validate_input ['uuid'], req.params, res

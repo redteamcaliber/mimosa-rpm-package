@@ -1,5 +1,17 @@
+########
+#uac-node
+########
+class passwd {
+  $uac_session_secret = "ThisIsASecretKeyValue"
+  $uac_db = "devnet"
+  $uac_encryption_secret = "ThisIsTheSecretKeyForEncryptingData"
+  $uac_sso = "V,zFwCxU2\$3iGan"
+  $uac_mcube_api_key = "8d10cd0e958d5b0866d0fe0240b62002cca5c2d5bd16d87faba0282a9d8217f7"
+}
+
 node 'uac.vm.mandiant.com' {
   include repos
+  include passwd
 
   #simulated production env
 #  class { 'uac':

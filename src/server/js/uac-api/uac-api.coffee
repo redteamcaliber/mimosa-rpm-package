@@ -67,7 +67,7 @@ class IdentityAcquisitionCollection extends Bookshelf.Collection
 class ActivityModel extends Bookshelf.Model
     tableName: 'activity'
     idAttribute: 'uuid'
-    defaults:
+    defaults: ->
         created: new Date()
 
 #

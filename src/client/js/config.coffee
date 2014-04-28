@@ -1,9 +1,9 @@
 window.require =
     baseUrl: "/static/js/raw",
     paths:
+        ace: 'lib/ace'
         async: 'lib/async/async'
         backbone: 'lib/backbone/backbone'
-        'backbone-fetch-cache': 'lib/backbone-fetch-cache/backbone.fetch-cache'
         'backbone.babysitter': 'lib/backbone.babysitter/backbone.babysitter'
         'backbone.wreqr': 'lib/backbone.wreqr/backbone.wreqr'
         bootstrap: 'lib/bootstrap/js/bootstrap'

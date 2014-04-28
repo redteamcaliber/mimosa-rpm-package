@@ -22,6 +22,7 @@ define(function (require) {
     var TagCollection = require('sf/models/TagCollection');
     var SetTagModel = require('sf/models/SetTagModel');
     var CommentsCollection = require('sf/models/CommentsCollection');
+    var CommentsModel = require('sf/models/CommentsModel');
 
     var uac_utils = require('uac/common/utils');
     var sf_utils = require('sf/common/utils');

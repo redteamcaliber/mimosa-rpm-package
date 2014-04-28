@@ -50,14 +50,20 @@ define (require) ->
 
 
             # Register shortcut key listeners.
-            $(document).keyup (ev) =>
-                if ev.ctrlKey
-                    if ev.keyCode is 68 or ev.keyCode is 40 or ev.keyCode is 78
-                        @on_next()
-                    else if ev.keyCode is 85 or ev.keyCode is 38 or ev.keyCode is 80
-                        @on_prev()
+            $(document).keyup @on_keyup
+
             super
             return
+
+        #
+        # Handle key up event.
+        #
+        on_keyup: (ev) =>
+            if ev.ctrlKey
+                if ev.keyCode is 68 or ev.keyCode is 40 or ev.keyCode is 78
+                    @on_next()
+                else if ev.keyCode is 85 or ev.keyCode is 38 or ev.keyCode is 80
+                    @on_prev()
 
         #
         # Update the controls based on the current status.
@@ -112,10 +118,8 @@ define (require) ->
                     eventName: 'set_next'
             return
 
-        close: ->
-            @stopListening()
-            return
-
+        onClose: ->
+            $(document).off('keyup', document, @on_keyup)
 
     # Mixin events.
     utils.mixin TableViewControls, Evented
