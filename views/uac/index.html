@@ -18,7 +18,10 @@
                 <h4>
                     <ul class="list-unstyled" style="margin-top: 15px">
                         <li style="margin-bottom: 15px">
-                            <i class="fa fa-star"></i> Additional Acquisitions Enhancements
+                            <i class="fa fa-star"></i> FireEye Alerts Processing
+                        </li>
+                        <li style="margin-bottom: 15px">
+                            <i class="fa fa-star"></i> Agent Management
                         </li>
                         <li style="margin-bottom: 15px">
                             <i class="fa fa-star"></i> Hit Prioritization
@@ -37,14 +40,50 @@
 <div class="row">
 
     <div class="col-md-4">
-        <h3><i class="fa fa-meh-o"></i> UAC 1.1-4</h3>
+        <h3><i class="fa fa-smile-o"></i> UAC 1.1-5</h3>
+        <dl>
+            <dt>Hit Review</dt>
+            <dd>
+                <ul>
+                    <li>
+                        Added the ability to supply a date range when searching for hits.  The date range is carried
+                        to the hits view.
+                    </li>
+                    <li>
+                        Resolved issue where the IOC term was not being pre-populated on some forms.
+                    </li>
+                </ul>
+            </dd>
+        </dl>
         <dl>
             <dt>MD5 Lookups</dt>
             <dd>
                 <ul>
                     <li>Resolved issue related to auto-suppress not working correctly with MD5's.</li>
-                    <li>Resolved issue where the IOC term was not being pre-populated on some forms.</li>
-                    <li>Changes added related to cutting over to the production M-Cube service.</li>
+                    <li>Added the ability to perform MD5 lookups in the quick search.</li>
+                    <li>
+                        Added the ability to link to an MD5 view.  Example: https://uac.mplex.mandiant.com/md5/e1a483f400a0a9b2da389ad7ab2f5820
+                    </li>
+                    <li>
+                        Added a REST endpoint for the current MD5 data.  Example: https://uac.mplex.mandiant.com/api/md5/e1a483f400a0a9b2da389ad7ab2f5820
+                    </li>
+                </ul>
+            </dd>
+        </dl>
+        <dl>
+            <dt>Other</dt>
+            <dd>
+                <ul>
+                    <li>
+                        StrikeFinder menu has been consolidated to drop down menu in order to prepare for new FireEye
+                        alerts functionality.
+                    </li>
+                    <li>
+                        Theme selection has been moved from the user menu to a separate preferences view.
+                    </li>
+                    <li>
+                        Added the ability to use normal, small, or tiny fonts for all themes.
+                    </li>
                 </ul>
             </dd>
         </dl>
