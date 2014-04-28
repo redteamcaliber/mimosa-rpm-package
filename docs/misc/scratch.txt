@@ -79,7 +79,7 @@ curl https://206.222.190.67/v2/samples/registered_users \
 
 
 
-0700074487A:~ amilano-m$ ping 206.222.190.67
+0700074487A:~ xxxxxxx-m$ ping 206.222.190.67
 PING 206.222.190.67 (206.222.190.67): 56 data bytes
 64 bytes from 206.222.190.67: icmp_seq=0 ttl=53 time=51.808 ms
 64 bytes from 206.222.190.67: icmp_seq=1 ttl=53 time=50.777 ms
@@ -90,12 +90,12 @@ PING 206.222.190.67 (206.222.190.67): 56 data bytes
 4 packets transmitted, 4 packets received, 0.0% packet loss
 round-trip min/avg/max/stddev = 50.777/51.562/52.193/0.520 ms
 
-0700074487A:~ amilano-m$ telnet 206.222.190.67 443
+0700074487A:~ xxxxxxx-m$ telnet 206.222.190.67 443
 Trying 206.222.190.67...
 telnet: connect to address 206.222.190.67: Operation timed out
 telnet: Unable to connect to remote host
 
-0700074487A:~ amilano-m$ curl --insecure https://206.222.190.67/
+0700074487A:~ xxxxxxx-m$ curl --insecure https://206.222.190.67/
 curl: (7) Failed connect to 206.222.190.67:443; Operation timed out
 
 

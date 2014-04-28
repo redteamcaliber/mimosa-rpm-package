@@ -1,0 +1,59 @@
+<div class="panel panel-default">
+
+    <div class="panel-heading">
+        <i class="fa fa-bug"></i> Signatures
+    </div>
+    <div class="panel-body">
+
+        <ul class="nav nav-tabs" style="margin-bottom: 15px">
+            <% _.each (unique_signatures, function(signature, index) { %>
+            <li class="<%= signature.active %>">
+                <a href="#tab-<%= index %>" data-toggle="tab">
+                    <%= signature.name %>
+                </a>
+            </li>
+            <% }) %>
+        </ul>
+
+        <div class="tab-content">
+            <% _.each (unique_signatures, function(unique_signature, index) { %>
+            <div class="tab-pane <%= unique_signature.active %>" id="tab-<%= index %>">
+                <div style="margin: 15px">
+
+                    <% var signatures = signature_map[unique_signature.name] %>
+                    <% _.each (signatures, function(signature, index) { %>
+
+                    <% _.each(_.keys(signature), function(label) { %>
+                    <% if (label != 'active') { %>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <label><%= label %></label>
+                        </div>
+                        <div class="col-sm-10">
+                            <%= signature[label] %>
+                        </div>
+                    </div>
+                    <% } %>
+                    <% }) %>
+
+                    <% if (signatures.length > 0 && index < signatures.length - 1) { %>
+                    <hr/>
+                    <% } %>
+
+                    <% }) %>
+
+                    <div class="row">
+                        <div class="cols-sm-12">
+                            <div class="well" style="margin: 15px 15px 5px 15px">
+                                This is a description of the <%= unique_signature.name %> signature.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <% }) %>
+        </div>
+    </div>
+
+</div>

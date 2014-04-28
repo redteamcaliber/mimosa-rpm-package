@@ -1,0 +1,31 @@
+<div class="row">
+    <div class="col-sm-12">
+        <% if (item.activity_type == 'tag') { %>
+
+        <!-- Display the tag activity header. -->
+        Tag Set to <%= tag(item.data.tag) %> <span class="text-muted">by <%= item.uid %></span>
+        <% } else if (item.activity_type == 'comment') { %>
+
+        <!-- Display the comment activity header. -->
+        Activity
+        <span class="text-muted">by <%= item.uid %></span>
+        <% } else if (item.activity_type == 'occurred') { %>
+
+        <!-- Display the occurred activity header. -->
+        Alert occurred <span class="text-muted"> on device: <%= item.data.device %></span>
+        <% } else { %>
+        Unknown activity type: <%= item.activity_type %>
+        <% } %>
+        <span class="pull-right text-muted"><%= format_date(item.created) %></span>
+    </div>
+</div>
+
+<% if (item.activity_type == "comment") { %>
+<div class="row">
+    <div class="col-sm-12">
+        <p>
+            <%= marked(_.trim(item.data.comment)) %>
+        </p>
+    </div>
+</div>
+<% } %>

@@ -1,0 +1,27 @@
+<div class="form-group">
+    <label for="time">Time Frame</label>
+
+    <% _.each (times, function(t) { %>
+    <div class="radio">
+        <label>
+            <input type="radio" name="time" value="<%= t.id %>" data-unit="<%= t.unit %>" data-unit-value="<%= t.unit_value %>">
+            <%= t.title %>
+        </label>
+    </div>
+    <% }) %>
+    <div class="radio">
+        <label>
+            <input type="radio" name="time" value="custom">
+            Custom
+        </label>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6">
+      <div class="startDateField"></div>
+    </div>
+    <div class="col-lg-6">
+      <div class="endDateField"></div>
+    </div>
+</div>
+

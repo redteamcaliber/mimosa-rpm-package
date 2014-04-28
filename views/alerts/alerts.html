@@ -1,0 +1,44 @@
+{% extends "/base.html" %}
+
+{% block title %}Alerts - {{ super() }}{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style>
+    a.shield {
+        width: 100%;
+        margin: 0;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        cursor: default;
+        border-radius: 0;
+        text-decoration: none;
+    }
+
+    a.shield-small {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        cursor: default;
+        border-radius: 0;
+        text-decoration: none;
+    }
+
+    .timeline-row {
+        height: 150px;
+    }
+</style>
+{% endblock %}
+
+{% block data_main %}alerts/main/AlertsMain{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div id="content" class="col-sm-12">
+
+        </div>
+    </div>
+</div>
+{% endblock %}

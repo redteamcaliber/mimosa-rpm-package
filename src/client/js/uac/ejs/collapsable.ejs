@@ -1,0 +1,19 @@
+<div class="panel-group" id="accordion-<%= name %>">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <a data-toggle="collapse" data-parent="#accordion" href="#collapse-<%= name %>">
+                    <span class="collapsable-title">
+                        <% title ? print(title) : print('&nbsp;') %>
+                    </span>
+                    <i class="fa collapsable-icon fa-lg pull-right"></i>
+                </a>
+            </h4>
+        </div>
+        <div id="collapse-<%= name %>" class="panel-collapse collapse <% collapsed === true ? print('') : print('in') %>">
+            <div class="panel-body">
+                <div class="collapsable-content"></div>
+            </div>
+        </div>
+    </div>
+</div>

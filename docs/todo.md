@@ -1,12 +1,70 @@
 UAC ToDo
 ========
 
-### Update the production mcube timeout to 2000.
+### Eventing
+- General vent usage vs the Evented pattern.
+- The Evented pattern couples you to the view/class that fired the event.  Not sure we care.
+- Seems to make sense when building components though not so much when building functionality.
+- For example when an alert is selected, the details view listeners and needs to render.  Does it really care what the
+  constructorName and instanceName is of the class that fired the alert?  This seems overly coupled which is what using
+  the vent class was supposed to help us with.
+- Seems like there is component behaviours for classes like DateView, TableView, etc, where the Evented seems to make
+  sense.  On the other hand there is application behaviours such as an alert was selected, an alert was updated, an
+  alert was deleted that don't really care what component fired the event.  Could even be that multiple components
+  could fire the same event.  Given the Evented pattern the classes they would have different names.  Maybe we just
+  rename constructorName to be eventContext.  I could pass in "alerts" for these types of events.  Not sure that I have
+  an instance name in these cases.
+- I'm generally on the fence with regards to it's widespread usage.
 
-### Settings Refactoring
+### StrikeFinder
+- Look into using TableView.render() rather than TableView.fetch() because it's non-standard.
+    -Re-rendering of a table is currently broken in the IOCSummaryView.
+    - Convert the table view to and ItemView, need to override the default close function.
+    - When render is called the first time the table displays the message that no records are found.
+- Look into MD5 issue
+    - {"results": [{"response_code": 0, "resource": "6caf13b282678dda2176e1a1d32fc5b6", "verbose_msg": "The requested resource is not among the finished, queued or pending scans"}], "_meta": {"s": 0}}
+
+### Alerts Details View
+- Raw alert customization
+    - Display the alert raw JSON using the ace editor in read only mode.
+    - Make the raw alert data searchable.
+- Add tag validation in the alerts api.
+- Title and breadcrumb updates.
+    - Update the alerts title as well as the breadcrumbs...
+    - Add previously navigated pages to the breadcrumb view.
+    - Add id/context info to the breadcrumbs.
+- Format the occurred and updated dates within the header according to how long ago they are.
+    - See hosts code.
+- Update the signature in the header to display according to the FE logic.
+- Update the signature descriptions from the XLS.
+- Display the explanation/anomoly field.
+- Make the alerts view linkable.
+- Look into displaying pcap text data.
+
+### Refactoring and Fixes
+- usersettings aren't being updated after a user selects an expression.
+- Fix the "this" stuff in the TableView.
+- Suppressions links is to small.
+
+### Alerting Deployment
+- Update the IOC viewer project and put a dependency on it.
+- Update documentation for new URL configuration.
+    - Update template json files.
 - Update the docs for clustering and host settings.
 - Move the database pool settings to the env.json file.
 - Ensure the database pool settings are initialized to a reasonable value.
+
+### Seasick related unit tests are failing.
+
+### Update uac/sf-routes to use send_rest rather than send.
+
+### Update the select2 component to the latest
+
+### Update the typeahead component to the latest.
+
+### Settings Refactoring
+
+### Enter Redwood City user stories into TP.
 
 ### MD5 Lookup service
     - Need a service that can return all known details for an MD5.

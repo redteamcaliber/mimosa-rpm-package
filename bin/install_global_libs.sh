@@ -8,3 +8,6 @@ npm install -g grunt-cli
 npm install -g supervisor
 npm install -g mocha
 npm install -g redis-commander
+npm install -g coffee-script
+npm install -g bower
+npm install -g js2coffee

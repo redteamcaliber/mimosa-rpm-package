@@ -1,43 +1,19 @@
-    {% extends "/sf/base.html" %}
+{% extends "/sf/sf.html" %}
 
-{% block title %}Hit Review - {{ super() }}{% endblock %}
+{% block title %}Idenity: {{ identity }} - {{ super() }}{% endblock %}
+
+{% block data_main %}sf/main/IdentityMain{% endblock %}
 
 {% block head %}
-    {{ super() }}
-
-<style>
-    /* Override the default dialog position so that it is not in front of the file/info view. */
-    /*#suppression-form {*/
-        /*margin-left: 63%;*/
-        /*outline: none;*/
-        /*width: 550px;*/
-    /*}*/
-</style>
+{{ super() }}
 
 <script type="text/javascript">
-
+    StrikeFinder = window.StrikeFinder || {};
     {% if rowitem_uuid %}
         StrikeFinder.rowitem_uuid = "{{ rowitem_uuid }}";
     {% elif identity %}
         StrikeFinder.identity = "{{ identity }}";
     {% endif %}
-
-    $(document).ready(function () {
-        var hits_view = new StrikeFinder.HitsView();
-        if (StrikeFinder.rowitem_uuid) {
-            hits_view.fetch({
-                rowitem_uuid: StrikeFinder.rowitem_uuid
-            });
-        }
-        else if (StrikeFinder.identity) {
-            hits_view.fetch({
-                identity: StrikeFinder.identity
-            })
-        }
-        else {
-            hits_view.fetch();
-        }
-    });
 </script>
 {% endblock %}
 

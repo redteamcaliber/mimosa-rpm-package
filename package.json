@@ -1,59 +1,71 @@
 {
-    "name": "mandiant-uac-ws",
-    "author": "Mandiant",
-    "description": "Unified Analyst Console",
-    "version": "1.1.4",
-    "main": "uac-server.js",
-    "repository" : {
-        "type" : "git",
-        "url" : "https://github.mandiant.com:amilano/uac-node.git"
-    },
-    "contributors": [
-        {
-            "name": "Anthony Milano",
-            "email": "Anthony.Milano@Mandiant.com"
-        }
-    ],
-    "private": true,
-    "scripts": {},
-    "dependencies": {
-        "clone": "0.1.x",
-        "config": "0.4.x",
-        "underscore": "1.5.x",
-        "underscore.string": "2.3.x",
-        "winston": "0.7.x",
-        "pg": "2.11.x",
-        "bookshelf": "0.6.x",
-        "node-uuid": "1.4.x",
-        "nconf": "0.6.x",
-        "async": "0.2.x",
-        "request": "2.25.x",
-        "nunjucks": "1.0.x",
-        "express": "3.4.x",
-        "connect-redis": "1.4.x",
-        "moment": "2.4.x",
-        "xml2js": "0.4.x",
-        "json2csv": "2.2.1",
-        "socket.io": "0.9.x"
-    },
-    "devDependencies": {
-        "grunt": "*",
-        "grunt-contrib-watch": "*",
-        "grunt-contrib-jshint": "*",
-        "grunt-contrib-uglify": "*",
-        "grunt-scp": "*",
-        "grunt-ssh": "*",
-        "grunt-sftp-deploy": "*",
-        "grunt-contrib-jst": "*",
-        "grunt-git": "*",
-        "grunt-template": "*",
-        "grunt-shell": "*",
-        "grunt-pg-utils": "*",
-        "grunt-prompt": "*",
-        "grunt-easy-rpm": "https://github.com/blueshirts/easy-rpm/tarball/2acdde084306c8c0d7c1f79c5bfee55ad0e96ca5",
-        "mocha": "*",
-        "chai": "*",
-        "should": "*"
-    },
-    "license": "Commercial"
+  "name": "mandiant-uac-ws",
+  "author": "Mandiant",
+  "description": "Unified Analyst Console",
+  "version": "1.1.5",
+  "main": "uac-server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.mandiant.com:amilano/uac-node.git"
+  },
+  "contributors": [
+    {
+      "name": "Anthony Milano",
+      "email": "Anthony.Milano@Mandiant.com"
+    }
+  ],
+  "private": true,
+  "scripts": {},
+  "dependencies": {
+    "clone": "0.1.x",
+    "config": "0.4.x",
+    "underscore": "1.5.x",
+    "underscore.string": "2.3.x",
+    "winston": "0.7.x",
+    "pg": "2.11.x",
+    "bookshelf": "0.6.x",
+    "node-uuid": "1.4.x",
+    "nconf": "0.6.x",
+    "async": "0.2.x",
+    "request": "2.25.x",
+    "nunjucks": "1.0.x",
+    "express": "3.4.x",
+    "connect-redis": "1.4.x",
+    "moment": "2.4.x",
+    "xml2js": "0.4.x",
+    "json2csv": "2.2.1",
+    "socket.io": "0.9.x",
+    "redis": "0.10.1",
+    "pathval": "0.1.1"
+
+  },
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-contrib-watch": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-coffee": "*",
+    "grunt-contrib-requirejs": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-cssmin": "*",
+    "grunt-bower-task": "*",
+    "grunt-scp": "*",
+    "grunt-ssh": "*",
+    "grunt-sftp-deploy": "*",
+    "grunt-contrib-jst": "*",
+    "grunt-git": "*",
+    "grunt-template": "*",
+    "grunt-shell": "*",
+    "grunt-pg-utils": "*",
+    "grunt-prompt": "*",
+    "grunt-touch": "*",
+    "grunt-easy-rpm": "https://github.com/blueshirts/easy-rpm/tarball/2acdde084306c8c0d7c1f79c5bfee55ad0e96ca5",
+    "mocha": "*",
+    "chai": "*",
+    "should": "*",
+    "js2coffee": "*",
+    "chokidar": "^0.8.2"
+  },
+  "license": "Commercial"
 }

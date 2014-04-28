@@ -1,0 +1,23 @@
+{% extends "/base.html" %}
+
+{% block title %}{{ hash}} - {{ super() }}{% endblock %}
+
+{% block data_main %}uac/main/MD5Main{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+<script type="text/javascript">
+    UAC = window.UAC || {};
+    {% if hash %}
+        UAC.hash = "{{ hash }}";
+    {% endif %}
+</script>
+{% endblock %}
+
+{% block content %}
+
+    <div id="md5hashes"></div>
+
+{% endblock %}
+

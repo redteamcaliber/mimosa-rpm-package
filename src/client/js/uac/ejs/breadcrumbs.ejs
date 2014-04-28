@@ -1,0 +1,15 @@
+<ol class="breadcrumb">
+    <% _.each (items, function(item, index, list) { %>
+    <% var is_last = index == list.length - 1 %>
+    <% var is_linkable = ((!is_last) && item.value) %>
+    <li <% !is_linkable? print('class=\"active\"') : print('') %>>
+        <% if (is_linkable) { %>
+        <a <%  is_last ? print('class="active"') : print('') %> data-value="<%= item.value %>">
+        <% } %>
+            <%= item.title %>
+        <% if (is_linkable) { %>
+        </a>
+        <% } %>
+    </li>
+    <% }) %>
+</ol>

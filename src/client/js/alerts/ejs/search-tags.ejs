@@ -1,0 +1,19 @@
+
+<label for="tag" class="sr-only">Tags</label>
+<div>
+    <% _.each (categories, function(category) { %>
+    <dl>
+        <dt><%= category.title %></dt>
+        <hr style="margin-top: 5px; margin-bottom: 5px"/>
+        <% _.each(category_map[category.id], function(tag) { %>
+        <dd>
+            <div class="checkbox">
+                <label>
+                    <input id="tag" type="checkbox" value="<%= tag.id %>"/> <%= tag.title %>
+                </label>
+            </div>
+        </dd>
+        <% }) %>
+    </dl>
+    <% }) %>
+</div>

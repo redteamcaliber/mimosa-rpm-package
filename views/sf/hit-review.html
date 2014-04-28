@@ -1,0 +1,35 @@
+{% extends "sf/sf.html" %}
+
+{% block title %}Hit Review - {{ super() }}{% endblock %}
+
+{% block data_main %}sf/main/HitReviewMain{% endblock %}
+
+{% block head %}
+    {{ super() }}
+
+    <script type="text/javascript">
+        StrikeFinder = window.StrikeFinder || {};
+        StrikeFinder.services = {{ services | safe }};
+        StrikeFinder.clients = {{ clients | safe }};
+        StrikeFinder.clusters = {{ clusters | safe }};
+    </script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+    <a id="top"></a>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="shopping-div"></div>
+        </div>
+    </div>
+
+    <!-- Hits Display Area -->
+    <div id="hits-view-div" style="display: none">
+        {% include "sf/hits-template.html" %}
+    </div>
+
+</div><!-- End container -->
+{% endblock %}

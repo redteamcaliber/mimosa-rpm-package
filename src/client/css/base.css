@@ -1,0 +1,187 @@
+/**
+ * Bootstrap Sticky Footer Styles
+ */
+html,
+body {
+    height: 100%;
+    /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto;
+    /* Negative indent footer by its height */
+    margin: 0 auto -60px;
+    /* Pad bottom by footer height */
+    padding: 0 0 60px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+    height: 60px;
+    /*background-color: #f5f5f5;*/
+}
+
+/**
+ * Additional overall page customizations.
+ */
+
+#wrap > .container {
+    width: 100%;
+    padding: 0px 15px 20px 15px;
+}
+
+.container .credit {
+    margin: 20px 0;
+}
+
+#footer > .container {
+    width: 95%;
+}
+
+table {
+    background-color: inherit !important;
+}
+
+.panel {
+    background-color: inherit !important;
+}
+
+/**
+ * DataTables Customizations.
+ */
+
+.datatables-wrapper > select {
+
+}
+
+
+/* UAC Styles */
+
+.uac-pre-custom {
+    background-color: inherit;
+    color: inherit;
+    border: 0;
+}
+
+.uac-code {
+    padding: 2px 4px;
+    font-family: Menlo,Monaco,Consolas,"Courier New",monospace;
+    font-size: 90%;
+    white-space: nowrap;
+}
+
+.uac-header {
+    font-size: 16px;
+    /*color: #006dcc;*/
+    /*color: #000000;*/
+}
+
+.uac-sub-header {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+}
+
+.sf-table-wrapper {
+    width: 100%;
+    overflow: auto;
+}
+
+.small-font {
+    font-size: 90%;
+}
+
+.sf-audit-heading {
+    width: 150px
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.wrap {
+    word-break: break-all;
+    overflow: hidden;
+    min-width: 75px;
+}
+
+.expression-popover {
+    max-width: 1000px !important;
+    width: auto;
+}
+
+.link-popover {
+    width: 400px;
+    max-width: 600px;
+}
+
+.truncate_100 {
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ioc-term {
+    word-break: break-all !important;
+}
+
+td.center {
+    text-align: center;
+}
+
+.uac-opaque {
+    opacity: .3
+}
+
+.uac-tableheader {
+    width: 100%;
+}
+
+.uac-tabledata {
+    font-size: 14px;
+}
+
+/**
+ * Select2 search component styling.
+ */
+.uac-bigdrop.select2-container .select2-results {
+    max-height: 600px;
+}
+
+.uac-bigdrop .select2-results {
+    max-height: 600px;
+}
+
+/*.select2-highlighted {*/
+    /*color: #333333 !important;*/
+    /*background-color: #f0f0f0 !important;*/
+/*}*/
+
+/*.accordion {*/
+/*background-color: #fbfbfb;*/
+/*}*/
+
+.twitter-typeahead {
+    margin-top: 4%;
+}
+
+.mandiant-red {
+    background-color: #822433;
+    color: #b0dadc;
+}
+
+.fixed-font {
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+}
+/* styling to make datepicker look like the select2 inputs*/
+.date .dateinput{
+    width: 100%;
+    height: 35px;
+}
+.date .calBtn{
+    padding-bottom: 5px;
+    padding-top: 5px;
+}

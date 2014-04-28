@@ -1,0 +1,52 @@
+{% extends "/base.html" %}
+
+{% block title %}APT Alerts - {{ super() }}{% endblock %}
+
+{% block head %}
+{{ super() }}
+
+<script type="text/javascript">
+    require(['jquery', 'bootstrap', 'backbone', 'alerts/views/SearchView1'],
+        function ($, bs, Backbone, TagsSearchView) {
+            $(function () {
+                $.expr.cacheLength = 1;
+
+                var TestView = Backbone.View.extend({
+                    render: function() {
+                        this.$el.html('<div class="zombie">This is a potential zombie!</div>');
+                        this.$('.zombie');
+                    }
+                });
+
+                var test_view = new TestView();
+
+
+                $('#render-button').on('click', function() {
+                    test_view.render();
+                    $('#test-div').append(test_view.el);
+                });
+                $('#remove-button').on('click', function() {
+                    test_view.remove();
+                    //test_view = null;
+                });
+            });
+        });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="test-div"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <button id="render-button"class="btn btn-primary">Render</button>
+            <button id="remove-button"class="btn btn-danger">Remove</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

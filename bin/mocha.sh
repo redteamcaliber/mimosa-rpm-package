@@ -6,9 +6,9 @@
 
 # Set the development mode configuration.
 export NODE_ENV=development
-export NODE_PATH=lib
+export NODE_PATH=dist/server/js
 
-mocha --reporter spec --colors --timeout 5000 -u bdd $1 $2 $3 $4 $5
+mocha --reporter spec --colors --require should --compilers coffee:coffee-script/register --timeout 5000 -u bdd $1 $2 $3 $4 $5
 
 echo
 

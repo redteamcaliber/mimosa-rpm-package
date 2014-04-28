@@ -1,20 +1,12 @@
-{% extends "sf/base.html" %}
+{% extends "sf/sf.html" %}
 
 {% block title %}View by Tag - {{ super() }}{% endblock %}
+
+{% block data_main %}sf/main/HitsByTagMain{% endblock %}
 
 {% block head %}
 {{ super() }}
 
-<script type="text/javascript">
-
-    $(document).ready(function () {
-        (function () {
-            new StrikeFinder.HitsByTagView({
-                el: document.body
-            });
-        })();
-    });
-</script>
 {% endblock %}
 
 {% block content %}

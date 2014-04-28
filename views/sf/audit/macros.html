@@ -13,7 +13,7 @@
                     (<i class="fa fa-times-circle"></i> Exception while retrieving MD5 details)
                 </span>
             {% elif details.vt and details.vt.found %}
-                <a href="" class="md5-view" data-md5="{{ stringify(details) }}">
+                <a href="" class="md5-view" style="text-decoration: none" data-md5="{{ stringify(details) }}">
                     <span class="{{ "text-danger" if details.vt.is_detected else "text-default" }}">
                         (<i class="fa fa-bug"></i> {{ details.vt.detected_count }} of {{ details.vt.count }} detected)
                     </span>
