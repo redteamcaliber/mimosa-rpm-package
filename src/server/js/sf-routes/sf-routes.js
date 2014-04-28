@@ -16,6 +16,7 @@ var settings = require('settings');
 var route_utils = require('route-utils');
 var uac_api = require('uac-api');
 var sf_api = require('sf-api');
+var props = require('pathval');
 
 
 // Create an app to export.
@@ -398,6 +399,87 @@ app.post('/api/acquisitions', function (req, res, next) {
             }
         });
     }
+});
+/**
+ * Unified API that bridges legacy acquisition API with new task api
+ */
+app.get('/api/task_result', function(req, res, next){
+
+    async.parallel([
+        function(callback){
+            var params = {limit: 10};
+            sf_api.get_acquisitions(params, req.attributes, function (err, response) {
+                callback(err,response);
+            });
+        },
+        function(callback){
+            var params = {limit: 10};
+            sf_api.get_task_result(params,req.attribtues,function (err, response){
+                callback(err,response);
+            });
+        }
+    ],
+    function(err, results){
+        /*
+        UNIFIED PAYLOAD STRUCT
+         * uuid
+         * state
+         * type
+         * job name
+         * client
+         * cluster name
+         * user*
+         * link
+         * hostname
+         * updated on
+         */
+        var templateRes
+        var mergedResult = {
+            meta: {},
+            objects: []
+        };
+
+        //TODO: in acquisition API 
+
+        var acquisitionsResults = results[0];
+        console.log("Results "+JSON.stringify(results));
+        var taskResults = results[1];
+
+        //munge acquisitionsResults objects
+        if(_.isObject(acquisitionsResults) && _.isArray(acquisitionsResults.objects)) {
+            _.forEach(acquisitionsResults.objects, function (result) {
+                result.type = "Acquisition";
+                result.jobName = "Acquiring "+result.file_path+"\\"+result.file_name
+                mergedResult.objects.push(result);
+            });
+            mergedResult.meta.limit = Number(acquisitionsResults.meta.limit);
+            mergedResult.meta.next = Number(acquisitionsResults.meta.next);
+            mergedResult.meta.offset = Number(acquisitionsResults.meta.offset);
+            mergedResult.meta.previous = Number(acquisitionsResults.meta.previous);
+            mergedResult.meta.total_count = Number(acquisitionsResults.meta.total_count);
+
+        }
+
+        //munge taskResults objects
+        if(_.isObject(taskResults) && _.isArray(taskResults.objects)) {
+            _.forEach(taskResults.objects, function (result) {
+                result.type = "Triage";
+                result.jobName = "Package: foobarfoobar";
+                mergedResult.objects.push(result);
+            });
+            mergedResult.meta.limit += Number(taskResults.meta.limit);
+            mergedResult.meta.next += Number(taskResults.meta.next);
+            mergedResult.meta.offset += Number(taskResults.meta.offset);
+            mergedResult.meta.previous += Number(taskResults.meta.previous);
+            mergedResult.meta.total_count += Number(taskResults.meta.total_count);
+        }
+        console.log("Total # results = "+mergedResult.objects.length);
+        var result = route_utils.get_dt_response_params(mergedResult.objects,
+            mergedResult.meta.total_count, mergedResult.meta.offset, req.query.sEcho);
+        route_utils.send(res, result);
+
+
+    });
 });
 
 /**

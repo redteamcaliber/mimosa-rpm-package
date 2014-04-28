@@ -620,6 +620,25 @@ add_acquisition_link = (acquisition) ->
     if acquisition && acquisition.acquired_file
         acquisition.link = get_ss_url(acquisition.acquired_file)
 
+
+#Retrieve the list of tasks
+get_task_result = (params, attributes, callback)->
+  #TODO: use a real URL here!!!
+  #url = get_ss_url('api/v1/acquisition/')
+  console.lot
+  url = "https://proc1.htap.us1.devnet.mcirt.mandiant.com/api/v1/task_result/"
+#  if not params or !params.order_by
+#    params.order_by = '-create_datetime'
+  request.json_get url, params, attributes, (err, response, body) ->
+    if err
+      # Error
+      callback(err)
+    else
+      # Fill in a link value for each acquisition.
+#      body.objects.forEach(add_acquisition_link)
+      console.log "in callback!"
+      callback(null, body)
+
 #
 # Retrieve the list of acquisitions by a comma separated list of clusters.
 # @param params - todo:
@@ -764,6 +783,7 @@ exports.get_host_by_hash = get_host_by_hash
 exports.get_hosts_by_name = get_hosts_by_name
 exports.get_hosts_by_ip = get_hosts_by_ip
 exports.get_full_host_by_hash = get_full_host_by_hash
+exports.get_task_result = get_task_result
 exports.post_acquisition = post_acquisition
 exports.get_acquisitions = get_acquisitions
 exports.get_acquisition = get_acquisition

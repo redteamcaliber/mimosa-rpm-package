@@ -5,20 +5,20 @@ define(function (require) {
     var AcquisitionAuditModel = require('sf/models/AcquisitionAuditModel');
 
     var ClusterSelectionView = require('sf/views/ClusterSelectionView');
-    var AcquisitionsTableView = require('sf/views/AcquisitionsTableView');
+    var AgentTasksTableView = require('sf/views/AgentTasksTableView');
     var HitsDetailsView = require('sf/views/HitsDetailsView');
 
     var templates = require('sf/ejs/templates');
 
 
-    var AcquisitionsView = View.extend({
+    var AgentTasksView = View.extend({
         initialize: function () {
 
             var view = this;
 
             view.criteria_collapsable = new CollapsableContentView({
                 el: '#collapsable-div',
-                title: '<i class="fa fa-search"></i> Acquisitions Search Criteria'
+                title: '<i class="fa fa-search"></i> Agent Tasks Search Criteria'
             });
 
             // Create the cluster selection component.
@@ -35,7 +35,7 @@ define(function (require) {
             });
             view.cluster_selection_view.render();
 
-            view.acquisitions_table = new AcquisitionsTableView({
+            view.acquisitions_table = new AgentTasksTableView({
                 el: '#acquisitions-table'
             });
 
@@ -57,5 +57,5 @@ define(function (require) {
         }
     });
 
-    return AcquisitionsView;
+    return AgentTasksView;
 });

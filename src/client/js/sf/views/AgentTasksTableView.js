@@ -79,7 +79,7 @@ define(function (require) {
         }
     });
 
-    var AcquisitionsTableView = TableView.extend({
+    var AgentTasksTableView = TableView.extend({
         initialize: function (options) {
             var view = this;
 
@@ -91,7 +91,7 @@ define(function (require) {
             });
 
             if (!view.collection) {
-                options['sAjaxSource'] = '/sf/api/acquisitions';
+                options['sAjaxSource'] = '/sf/api/task_result';
                 options['bServerSide'] = true;
             }
             options.sAjaxDataProp = 'results';
@@ -146,18 +146,24 @@ define(function (require) {
             }
             else {
                 options['aoColumns'] = [
-                    {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
-                    {sTitle: "Cluster", mData: "cluster.name", bSortable: true},
-                    {sTitle: "Host", mData: "agent.hostname", bSortable: true},
-                    {sTitle: "File Path", mData: "file_path", bSortable: true, sClass: 'wrap'},
-                    {sTitle: "File Name", mData: "file_name", bSortable: true, sClass: 'wrap'},
-                    {sTitle: "Created", mData: "create_datetime", bSortable: true, sClass: 'nowrap'},
-                    {sTitle: "Updated", mData: "update_datetime", bSortable: true, sClass: 'nowrap'},
-                    {sTitle: "User", mData: "user", bSortable: true},
-                    {sTitle: "Method", mData: "method", bSortable: true},
                     {sTitle: "State", mData: "state", bSortable: true, sWidth: '75px'},
-                    {sTitle: "Error Message", mData: "error_message", bVisible: false, bSortable: false},
-                    {sTitle: "Link", mData: "acquired_file", bVisible: false, bSortable: false}
+                    {sTitle: "Type", mData: "type", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Job Name", mData: "jobName", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Client", mData: "cluster.engagement.client.name", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Host Name", mData: "machine", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Updated On", mData: "machine", bSortable: true, sWidth: '75px'},
+
+//                    {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
+//                    {sTitle: "Cluster", mData: "cluster.name", bSortable: true},
+//                    {sTitle: "Host", mData: "agent.hostname", bSortable: true},
+//                    {sTitle: "File Path", mData: "file_path", bSortable: true, sClass: 'wrap'},
+//                    {sTitle: "File Name", mData: "file_name", bSortable: true, sClass: 'wrap'},
+//                    {sTitle: "Created", mData: "create_datetime", bSortable: true, sClass: 'nowrap'},
+//                    {sTitle: "Updated", mData: "update_datetime", bSortable: true, sClass: 'nowrap'},
+//                    {sTitle: "User", mData: "user", bSortable: true},
+//                    {sTitle: "Method", mData: "method", bSortable: true},
+//                    {sTitle: "Error Message", mData: "error_message", bVisible: false, bSortable: false},
+//                    {sTitle: "Link", mData: "acquired_file", bVisible: false, bSortable: false}
                 ];
 
                 options.aaSorting = [
@@ -193,16 +199,16 @@ define(function (require) {
                         },
                         aTargets: [5]
                     },
-                    {
-                        mRender: function (data, type, row) {
-                            return uac_utils.format_date_string(data);
-                        },
-                        aTargets: [6]
-                    },
-                    {
-                        mRender: sf_utils.format_acquisition_state,
-                        aTargets: [9]
-                    }
+//                    {
+//                        mRender: function (data, type, row) {
+//                            return uac_utils.format_date_string(data);
+//                        },
+//                        aTargets: [6]
+//                    },
+//                    {
+//                        mRender: sf_utils.format_acquisition_state,
+//                        aTargets: [9]
+//                    }
                 ];
 
                 options.iDisplayLength = 25;
@@ -251,5 +257,5 @@ define(function (require) {
         }
     });
 
-    return AcquisitionsTableView
+    return AgentTasksTableView
 });
