@@ -83,6 +83,7 @@ define (require) ->
       #render to the screen
       @$(".date").datetimepicker @overrides
       $(".bootstrap-datetimepicker-widget").addClass("well")
+      @$(".dateinput").addClass("form-control")
 
       #proxy raw jquery events into BS events and update local handle on date
       @$(".date").on "dp.change", (payload)=>
