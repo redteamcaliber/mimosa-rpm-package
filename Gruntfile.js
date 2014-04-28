@@ -493,17 +493,3 @@ function process_name(filename) {
         return filename.substring(last_index + 1, filename.length);
     }
 }
-
-/**
- * TODO: Replace this.
- */
-function get_connection(options) {
-
-    return {
-        user: options && options.user ? options.user : 'uac_user',
-        password: options && options.password ? options.password : 'devnet',
-        database: options && options.database ? options.database : 'uac',
-        host: options && options.host ? options.host : 'localhost',
-        port: options && options.port ? options.port : 5432
-    }
-}
