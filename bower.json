@@ -18,7 +18,7 @@
         "moment": "2.4.x",
         "requirejs": "2.1.x",
         "select2": "3.4.x",
-        "typeahead.js": "0.9.x",
+        "typeahead.js": "0.10.x",
         "underscore": "1.6.x",
         "underscore.string": "2.3.x",
         "eonasdan-bootstrap-datetimepicker": "3.0.0"
@@ -42,7 +42,7 @@
             "/": "lib/amd/backbone.babysitter.js"
         },
         "backbone.wreqr": {
-            "/": "lib/amd/backbone.wreqr.js"
+            "/": "lib/backbone.wreqr.js"
         },
         "blockui": {
             "/": "jquery.blockUI.js"

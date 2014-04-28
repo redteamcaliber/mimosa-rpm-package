@@ -327,7 +327,7 @@ define (require) ->
         url = undefined
         if not theme || theme == 'default'
             # Use the default.
-            url = "static/css/bootstrap/bootstrap.min.css"
+            url = "/static/css/bootstrap/bootstrap.min.css"
         else
             # Generate the theme url.
             url = "/static/css/bootswatch/bootstrap.#{theme}.#{fontSize}.min.css"

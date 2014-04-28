@@ -3,7 +3,7 @@
 {% block title %}StrikeFinder - {{ super() }}{% endblock %}
 
 {% block form_menu %}
-    <input id="host-typeahead" type="text" placeholder="Search for Host or IP"/>
+    <input id="host-typeahead" type="text" placeholder="Search for Host or MD5"/>
 {% endblock %}
 
 {% block head %}
@@ -12,11 +12,11 @@
     <!--<link href="/static/css/jquery.iocViewer.css" rel="stylesheet"/>-->
 
     <script type="text/javascript">
-        require(['jquery', 'bootstrap', 'backbone', 'sf/views/HostTypeAheadView'],
-                function($, bs, Backbone, HostTypeAheadView) {
+        require(['jquery', 'bootstrap', 'backbone', 'uac/views/MixedTypeAheadView'],
+                function($, bs, Backbone, MixedTypeAheadView) {
             // Load common StrikeFinder views.
             $(function() {
-                new HostTypeAheadView({
+                new MixedTypeAheadView({
                     el: '#host-typeahead'
                 });
             });
