@@ -90,12 +90,13 @@ define (require) ->
             # Set the height.
             if @options and @options.height
                 if @options.height == 'auto'
-                    @$el.css 'height', font_size * @session().getScreenLength()
+                    # Display all of the content.
+                    @editor.setOptions
+                        maxLines: @session().getScreenLength()
                 else
                     @$el.css 'height', @options.height
             else
                 @$el.css 'height', if @options and @options.height then @options.height else '300px'
-
 
         value: ->
             if arguments.length == 0
