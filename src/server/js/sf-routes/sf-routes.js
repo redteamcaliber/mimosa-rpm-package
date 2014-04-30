@@ -409,7 +409,7 @@ app.get('/api/task_result', function(req, res, next){
     async.parallel([
         function(callback){
             var params = {limit: 20};
-            sf_api.get_acquisitions(req.query, req.attributes, function (err, response) {
+            sf_api.get_acquisitions(params, req.attributes, function (err, response) {
                 callback(err,response);
             });
         },

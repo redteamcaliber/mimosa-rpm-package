@@ -10,6 +10,8 @@ define(function(require) {
 
     var templates = require('sf/ejs/templates');
 
+    var AgentTasksTableView = require('sf/views/AgentTasksTableView');
+
     /**
      * Hits table view for display on the host view.
      * @type {*}
@@ -145,6 +147,10 @@ define(function(require) {
             });
             view.hosts_view.render();
 
+            // The tasks view.
+            view.agent_tasks_table_view = new AgentTasksTableView({
+               el: '#agent-tasks-div'
+            });
             // The hits view.
             view.hits_table_view = new HostHitsTableView({
                 el: '#hits-table'

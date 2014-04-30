@@ -58,8 +58,8 @@ define(function (require) {
             if (view.clusters && view.clusters.length > 0) {
                 view.acquisitions_table.fetch({
                     clusters: view.clusters,
-                    last_updated__gte: moment(view.startDate*1000).format("YYYY-MM-DD"),
-                    last_updated__lte: moment(view.endDate*1000).format("YYYY-MM-DD"),
+                    update_datetime__gte: moment(view.startDate*1000).format("YYYY-MM-DD"),
+                    update_datetime__lte: moment(view.endDate*1000).format("YYYY-MM-DD"),
                     //TODO: take this out
                     iDisplayLength: Number.MAX_VALUE-1
                 });

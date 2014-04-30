@@ -651,6 +651,7 @@ get_task_result = (params, attributes, callback)->
 #
 get_acquisitions = (params, attributes, callback) ->
     url = get_ss_url('api/v1/acquisition/')
+    console.log("PARAMS: "+JSON.stringify(params));
     if not params or !params.order_by
         params.order_by = 'create_datetime'
     request.json_get url, params, attributes, (err, response, body) ->

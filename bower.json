@@ -39,7 +39,7 @@
             "/": "backbone.js"
         },
         "backbone.babysitter": {
-            "/": "lib/amd/backbone.babysitter.js"
+            "/": "lib/backbone.babysitter.js"
         },
         "backbone.wreqr": {
             "/": "lib/backbone.wreqr.js"
