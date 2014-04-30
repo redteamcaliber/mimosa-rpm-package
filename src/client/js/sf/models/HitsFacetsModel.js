@@ -2,7 +2,7 @@ define(function(require) {
     var Backbone = require('backbone');
 
     /**
-     * Model to retrieve hits facets.
+     * Model to retrieve hits facets
      */
     var HitsFacetsModel = Backbone.Model.extend({
         initialize: function () {
