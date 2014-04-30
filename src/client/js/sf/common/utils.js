@@ -42,19 +42,19 @@ define(function(require) {
     format_acquisition_state = function(data) {
         if (data) {
             var label_class = '';
-            if (data == 'errored') {
+            if (data == 'errored' || data == 'ERR') {
                 label_class = 'label-danger';
             }
-            else if (data == 'cancelled') {
+            else if (data == 'cancelled' || data == 'K') {
                 label_class = 'label-warning';
             }
-            else if (data == 'created') {
+            else if (data == 'created' || data == 'CR') {
                 label_class = 'label-default';
             }
-            else if (data == 'started' || data == 'created') {
+            else if (data == 'started' || data == 'ARQ' || data == 'ART' || data == 'CP') {
                 label_class = 'label-primary';
             }
-            else if (data == 'completed') {
+            else if (data == 'completed' || data == 'ARP') {
                 label_class = 'label-success';
             }
             else if (data == 'unknown') {

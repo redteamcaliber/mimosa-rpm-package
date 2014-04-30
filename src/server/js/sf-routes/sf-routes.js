@@ -404,16 +404,17 @@ app.post('/api/acquisitions', function (req, res, next) {
  * Unified API that bridges legacy acquisition API with new task api
  */
 app.get('/api/task_result', function(req, res, next){
+    console.log ("!!!!!!!!!!!!!HIT!!!!!!!!!!!!!!!!!"+JSON.stringify(req.query));
 
     async.parallel([
         function(callback){
-            var params = {limit: 10};
-            sf_api.get_acquisitions(params, req.attributes, function (err, response) {
+            var params = {limit: 20};
+            sf_api.get_acquisitions(req.query, req.attributes, function (err, response) {
                 callback(err,response);
             });
         },
         function(callback){
-            var params = {limit: 10};
+            var params = {limit: 20};
             sf_api.get_task_result(params,req.attribtues,function (err, response){
                 callback(err,response);
             });
@@ -433,46 +434,71 @@ app.get('/api/task_result', function(req, res, next){
          * hostname
          * updated on
          */
-        var templateRes
+        var PAYLOAD_TYPES = {
+            ACQUISITION: {
+                getUuid: function(input){ return props.get(input,'uuid');},
+                getState: function(input){ return props.get(input, 'state');},
+                getType: function(){ return "acquisition";},
+                getJobName: function(input){ return props.get(input,'file_name');},
+                getClientName: function(input){ return props.get(input, 'cluster.engagement.client.name');},
+                getClusterName: function(input){return props.get(input, 'cluster.name');},
+                getUser: function(input){return props.get(input,'user');},
+                getLink: function(input){return props.get(input, 'link');},
+                getHostName: function(input){return props.get(input, 'agent.hostname');},
+                getUpdatedDate: function(input){return props.get(input, 'update_datetime');}
+            },
+            TRIAGE: {
+                getUuid: function(input){ return props.get(input, 'uuid');},
+                getState: function(input){ return props.get(input, 'state');},
+                getType: function(){ return "triage";},
+                getJobName: function(input){return props.get(input, 'package_name');},
+                getClientName: function(input){ return props.get(input, 'agent.cluster.engagement.client.name');},
+                getClusterName: function(input){return props.get(input, 'cluster.name');},
+                getUser: function(input){return "!!!PLACEHOLDER!!!";},
+                getLink: function(input){return props.get(input, 'link');},
+                getHostName: function(input){return props.get(input, 'agent.hostname');},
+                getUpdatedDate: function(input){return props.get(input, 'last_updated');}
+            }
+        };
+        var payloadGenerator = function(input, type){
+            return {
+                uuid: type.getUuid(input),
+                state: type.getState(input),
+                type: type.getType(),
+                jobName: type.getJobName(input),
+                clientName: type.getClientName(input),
+                clusterName: type.getClusterName(input),
+                user: type.getUser(input),
+                link: type.getLink(input),
+                hostName: type.getHostName(input),
+                updatedDate: type.getUpdatedDate(input),
+                raw: input
+            }
+        };
+        var processResults = function(mergedResult, queryResults, type){
+            if(_.isObject(queryResults) && _.isArray(queryResults.objects)) {
+                _.forEach(queryResults.objects, function (result) {
+                    mergedResult.objects.push(payloadGenerator(result, type));
+                });
+                mergedResult.meta.limit = Number(queryResults.meta.limit);
+                mergedResult.meta.next = Number(queryResults.meta.next);
+                mergedResult.meta.offset = Number(queryResults.meta.offset);
+                mergedResult.meta.previous = Number(queryResults.meta.previous);
+                mergedResult.meta.total_count = Number(queryResults.meta.total_count);
+
+            }
+        };
         var mergedResult = {
             meta: {},
             objects: []
         };
 
-        //TODO: in acquisition API 
 
-        var acquisitionsResults = results[0];
-        console.log("Results "+JSON.stringify(results));
-        var taskResults = results[1];
 
-        //munge acquisitionsResults objects
-        if(_.isObject(acquisitionsResults) && _.isArray(acquisitionsResults.objects)) {
-            _.forEach(acquisitionsResults.objects, function (result) {
-                result.type = "Acquisition";
-                result.jobName = "Acquiring "+result.file_path+"\\"+result.file_name
-                mergedResult.objects.push(result);
-            });
-            mergedResult.meta.limit = Number(acquisitionsResults.meta.limit);
-            mergedResult.meta.next = Number(acquisitionsResults.meta.next);
-            mergedResult.meta.offset = Number(acquisitionsResults.meta.offset);
-            mergedResult.meta.previous = Number(acquisitionsResults.meta.previous);
-            mergedResult.meta.total_count = Number(acquisitionsResults.meta.total_count);
+        processResults(mergedResult, results[0], PAYLOAD_TYPES.ACQUISITION);
+        processResults(mergedResult, results[1], PAYLOAD_TYPES.TRIAGE);
 
-        }
 
-        //munge taskResults objects
-        if(_.isObject(taskResults) && _.isArray(taskResults.objects)) {
-            _.forEach(taskResults.objects, function (result) {
-                result.type = "Triage";
-                result.jobName = "Package: foobarfoobar";
-                mergedResult.objects.push(result);
-            });
-            mergedResult.meta.limit += Number(taskResults.meta.limit);
-            mergedResult.meta.next += Number(taskResults.meta.next);
-            mergedResult.meta.offset += Number(taskResults.meta.offset);
-            mergedResult.meta.previous += Number(taskResults.meta.previous);
-            mergedResult.meta.total_count += Number(taskResults.meta.total_count);
-        }
         console.log("Total # results = "+mergedResult.objects.length);
         var result = route_utils.get_dt_response_params(mergedResult.objects,
             mergedResult.meta.total_count, mergedResult.meta.offset, req.query.sEcho);

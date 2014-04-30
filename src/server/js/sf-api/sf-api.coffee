@@ -619,14 +619,18 @@ post_acquisition = (params, attributes, callback) ->
 add_acquisition_link = (acquisition) ->
     if acquisition && acquisition.acquired_file
         acquisition.link = get_ss_url(acquisition.acquired_file)
-
+#
+# Add the link field to an triage instance.
+# @param triage - the triage.
+#
+add_package_link = (triage) ->
+  if triage && triage.package
+    triage.link = get_ss_url(triage.package)
 
 #Retrieve the list of tasks
 get_task_result = (params, attributes, callback)->
   #TODO: use a real URL here!!!
-  #url = get_ss_url('api/v1/acquisition/')
-  console.lot
-  url = "https://proc1.htap.us1.devnet.mcirt.mandiant.com/api/v1/task_result/"
+  url = get_ss_url('api/v1/task_result/')
 #  if not params or !params.order_by
 #    params.order_by = '-create_datetime'
   request.json_get url, params, attributes, (err, response, body) ->
@@ -635,7 +639,7 @@ get_task_result = (params, attributes, callback)->
       callback(err)
     else
       # Fill in a link value for each acquisition.
-#      body.objects.forEach(add_acquisition_link)
+      body.objects.forEach(add_package_link)
       console.log "in callback!"
       callback(null, body)
 
@@ -648,7 +652,7 @@ get_task_result = (params, attributes, callback)->
 get_acquisitions = (params, attributes, callback) ->
     url = get_ss_url('api/v1/acquisition/')
     if not params or !params.order_by
-        params.order_by = '-create_datetime'
+        params.order_by = 'create_datetime'
     request.json_get url, params, attributes, (err, response, body) ->
         if err
             # Error

@@ -92,7 +92,8 @@ define(function (require) {
 
             if (!view.collection) {
                 options['sAjaxSource'] = '/sf/api/task_result';
-                options['bServerSide'] = true;
+                options['bProcessing'] = false;
+//                options['bServerSide'] = false;
             }
             options.sAjaxDataProp = 'results';
 
@@ -149,21 +150,10 @@ define(function (require) {
                     {sTitle: "State", mData: "state", bSortable: true, sWidth: '75px'},
                     {sTitle: "Type", mData: "type", bSortable: true, sWidth: '75px'},
                     {sTitle: "Job Name", mData: "jobName", bSortable: true, sWidth: '75px'},
-                    {sTitle: "Client", mData: "cluster.engagement.client.name", bSortable: true, sWidth: '75px'},
-                    {sTitle: "Host Name", mData: "machine", bSortable: true, sWidth: '75px'},
-                    {sTitle: "Updated On", mData: "machine", bSortable: true, sWidth: '75px'},
-
-//                    {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
-//                    {sTitle: "Cluster", mData: "cluster.name", bSortable: true},
-//                    {sTitle: "Host", mData: "agent.hostname", bSortable: true},
-//                    {sTitle: "File Path", mData: "file_path", bSortable: true, sClass: 'wrap'},
-//                    {sTitle: "File Name", mData: "file_name", bSortable: true, sClass: 'wrap'},
-//                    {sTitle: "Created", mData: "create_datetime", bSortable: true, sClass: 'nowrap'},
-//                    {sTitle: "Updated", mData: "update_datetime", bSortable: true, sClass: 'nowrap'},
-//                    {sTitle: "User", mData: "user", bSortable: true},
-//                    {sTitle: "Method", mData: "method", bSortable: true},
-//                    {sTitle: "Error Message", mData: "error_message", bVisible: false, bSortable: false},
-//                    {sTitle: "Link", mData: "acquired_file", bVisible: false, bSortable: false}
+                    {sTitle: "Client", mData: "clientName", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Host Name", mData: "hostName", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Created By", mData: "user", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Updated On", mData: "updatedDate", bSortable: true, sWidth: '75px'},
                 ];
 
                 options.aaSorting = [
@@ -172,47 +162,42 @@ define(function (require) {
 
                 options['aoColumnDefs'] = [
                     {
+                        mRender: sf_utils.format_acquisition_state,
+                        aTargets: [0]
+                    },
+                    {
+
                         mRender: function (data, type, row) {
-                            if (data) {
-                                return _.sprintf('<a href="/sf/host/%s" onclick="event.stopPropagation()">%s</a>', row.agent.hash, data);
+                            if (data && row.type === 'acquisition' || row.type == 'triage') {
+                                return _.sprintf('<a href="/sf/host/%s" onclick="event.stopPropagation()">%s</a>', row.raw.agent.hash, data);
                             }
                             else {
                                 return data;
-                            }
-                        },
-                        aTargets: [2]
-                    },
-                    {
-                        mRender: function (data, type, row) {
-                            if (row.link) {
-                                return _.sprintf('<a href="%s" onclick="event.stopPropagation()" download>%s</a>', row.link, data);
-                            }
-                            else {
-                                return data
                             }
                         },
                         aTargets: [4]
                     },
                     {
                         mRender: function (data, type, row) {
+                            if (row.link) {
+                                return _.sprintf('<a href="%s" onclick="event.stopPropagation()" download>%s</a>', row.link, row.jobName, data);
+                            }
+                            else {
+                                return data
+                            }
+                        },
+                        aTargets: [2]
+                    },
+                    {
+                        mRender: function (data, type, row) {
                             return uac_utils.format_date_string(data);
                         },
-                        aTargets: [5]
-                    },
-//                    {
-//                        mRender: function (data, type, row) {
-//                            return uac_utils.format_date_string(data);
-//                        },
-//                        aTargets: [6]
-//                    },
-//                    {
-//                        mRender: sf_utils.format_acquisition_state,
-//                        aTargets: [9]
-//                    }
+                        aTargets: [6]
+                    }
                 ];
 
                 options.iDisplayLength = 25;
-                options.iPipe = 1; // Disable pipelining.
+//                options.iPipe = 1; // Disable pipelining.
 
                 options['sDom'] = 'ltip';
             }
@@ -243,17 +228,19 @@ define(function (require) {
             }
         },
         on_row_click: function (data) {
-            var view = this;
+            if (data.type === 'acquisition') {
+                var view = this;
 
-            if (view.acquisition_details) {
-                // Clean up the existing view.
-                view.acquisition_details.close();
+                if (view.acquisition_details) {
+                    // Clean up the existing view.
+                    view.acquisition_details.close();
+                }
+                view.acquisition_details = new AcquisitionsDetailsView({
+                    el: '#dialog-div',
+                    model: new Acquisition(data.raw)
+                });
+                view.acquisition_details.render();
             }
-            view.acquisition_details = new AcquisitionsDetailsView({
-                el: '#dialog-div',
-                model: new Acquisition(data)
-            });
-            view.acquisition_details.render();
         }
     });
 

@@ -10,6 +10,9 @@ define(function (require) {
 
     var templates = require('sf/ejs/templates');
 
+    var moment = require('moment');
+
+
 
     var AgentTasksView = View.extend({
         initialize: function () {
@@ -24,11 +27,14 @@ define(function (require) {
             // Create the cluster selection component.
             view.cluster_selection_view = new ClusterSelectionView({
                 el: '#cluster-selection-div',
-                hide_services: true,
-                hide_timeframe: true
+                hide_services: true
             });
             view.listenTo(view.cluster_selection_view, 'submit', function (params) {
-                view.render_acquisitions({clusters: params.merged_clusters});
+                view.render_acquisitions({
+                    clusters: params.merged_clusters,
+                    startDate: params.startDate,
+                    endDate: params.endDate
+                });
             });
             view.listenTo(view.cluster_selection_view, 'clear', function () {
                 $('#results-div').fadeOut().hide();
@@ -47,8 +53,16 @@ define(function (require) {
 
             // Update the model criteria when values change.
             view.clusters = params.clusters;
+            view.startDate = params.startDate;
+            view.endDate = params.endDate;
             if (view.clusters && view.clusters.length > 0) {
-                view.acquisitions_table.fetch({clusters: view.clusters});
+                view.acquisitions_table.fetch({
+                    clusters: view.clusters,
+                    last_updated__gte: moment(view.startDate*1000).format("YYYY-MM-DD"),
+                    last_updated__lte: moment(view.endDate*1000).format("YYYY-MM-DD"),
+                    //TODO: take this out
+                    iDisplayLength: Number.MAX_VALUE-1
+                });
                 $('#results-div').fadeIn().show();
             }
             else {
