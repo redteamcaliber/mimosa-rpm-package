@@ -33,6 +33,12 @@ define(function(require) {
             if (this.params.suppression_id) {
                 result += '&' + $.param({suppression_id: this.params.suppression_id});
             }
+            if (this.params.begin) {
+                result += '&' + $.param({begin: this.params.begin});
+            }
+            if (this.params.end) {
+                result += '&' + $.param({end: this.params.end});
+            }
 
             // Facet filters.
             if (this.params.rowitem_uuid) {
