@@ -28,9 +28,47 @@ define ->
         {id: 'unreported', title: 'Unreported', description: UNREPORTABLE_DESCRIPTION, category: 'closed'}
         {id: 'delete', title: 'Delete', description: DELETE_DESCRIPTION, category: 'closed'}
     ]
-
+    sf_times = [
+      {
+        "id": "days_1",
+        "title": "Last Day",
+        "unit": "days",
+        "unit_value": 1
+      },
+      {
+        "id": "days_15",
+        "title": "Last 15 Days",
+        "unit": "days",
+        "unit_value": 15
+      },
+      {
+        "id": "months_1",
+        "title": "Last Month",
+        "unit": "months",
+        "unit_value": 1
+      },
+      {
+        "id": "months_2",
+        "title": "Last 2 Months",
+        "unit": "months",
+        "unit_value": 2
+      },
+      {
+        "id": "months_3",
+        "title": "Last 3 Months",
+        "unit": "months",
+        "unit_value": 3
+      },
+      {
+        "id": "months_6",
+        "title": "Last 6 Months",
+        "unit": "months",
+        "unit_value": 6
+      }
+    ]
     resources =
         tags: tags
+        sf_times: sf_times
 
     for tag in tags
         resources[tag.id] = tag

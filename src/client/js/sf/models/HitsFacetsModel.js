@@ -2,7 +2,7 @@ define(function(require) {
     var Backbone = require('backbone');
 
     /**
-     * Model to retrieve hits facets.
+     * Model to retrieve hits facets
      */
     var HitsFacetsModel = Backbone.Model.extend({
         initialize: function () {
@@ -32,6 +32,12 @@ define(function(require) {
             }
             if (this.params.suppression_id) {
                 result += '&' + $.param({suppression_id: this.params.suppression_id});
+            }
+            if (this.params.begin) {
+                result += '&' + $.param({begin: this.params.begin});
+            }
+            if (this.params.end) {
+                result += '&' + $.param({end: this.params.end});
             }
 
             // Facet filters.
