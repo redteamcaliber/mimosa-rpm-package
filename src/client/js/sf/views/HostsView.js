@@ -10,7 +10,7 @@ define(function(require) {
 
     var templates = require('sf/ejs/templates');
 
-    var AgentTasksTableView = require('sf/views/AgentTasksTableView');
+    var AgentScriptsTableView = require('sf/views/AgentScriptsTableView');
 
     /**
      * Hits table view for display on the host view.
@@ -134,6 +134,7 @@ define(function(require) {
         }
     });
 
+
     var HostView = View.extend({
         initialize: function(options) {
             var view = this;
@@ -148,9 +149,10 @@ define(function(require) {
             view.hosts_view.render();
 
             // The tasks view.
-            view.agent_tasks_table_view = new AgentTasksTableView({
+            view.agent_tasks_table_view = new AgentScriptsTableView({
                el: '#agent-tasks-div'
             });
+
             // The hits view.
             view.hits_table_view = new HostHitsTableView({
                 el: '#hits-table'
@@ -194,6 +196,10 @@ define(function(require) {
             view.facets_view.fetch({
                 identity_rollup: true,
                 am_cert_hash: view.model.get('hash')
+            });
+
+            view.agent_tasks_table_view.fetch({
+                agent__uuid: StrikeFinder.host.uuid
             });
         }
     });

@@ -771,8 +771,10 @@ define (require) ->
                 # Callback processing
                 $.getJSON(sSource, aoData,(json) ->
                     view.cache.lastJson = jQuery.extend(true, {}, json)
-                    json[ajax_data_prop].splice 0, view.cache.iDisplayStart - view.cache.iCacheLower  unless view.cache.iCacheLower is view.cache.iDisplayStart
-                    json[ajax_data_prop].splice view.cache.iDisplayLength, json[ajax_data_prop].length
+                    if(view.cache.iDisplayLength)
+                      json[ajax_data_prop].splice 0, view.cache.iDisplayStart - view.cache.iCacheLower  unless view.cache.iCacheLower is view.cache.iDisplayStart
+                      json[ajax_data_prop].splice view.cache.iDisplayLength, json[ajax_data_prop].length
+
                     fnCallback json
                     return
                 ).always =>

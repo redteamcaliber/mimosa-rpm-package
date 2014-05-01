@@ -11,7 +11,7 @@ define(function (require) {
     var AcquireFormView = require('sf/views/AcquireFormView');
     var MassTagFormView = require('sf/views/MassTagFormView');
     var SuppressionsTableView = require('sf/views/SuppressionsTableView');
-    var AgentTasksTableView = require('sf/views/AgentTasksTableView');
+    var AgentScriptsTableView = require('sf/views/AgentScriptsTableView');
     var MD5ModelView = require('sf/views/MD5ModalView');
 
     var AcquisitionCollection = require('sf/models/AcquisitionCollection');
@@ -991,7 +991,7 @@ define(function (require) {
             view.options = options;
             view.acquisitions = new AcquisitionCollection();
 
-            view.acqusitions_table = new AgentTasksTableView({
+            view.acqusitions_table = new AgentScriptsTableView({
                 el: view.el,
                 collection: view.acquisitions,
                 condensed: true

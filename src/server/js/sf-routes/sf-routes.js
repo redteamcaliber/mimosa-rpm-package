@@ -160,7 +160,7 @@ app.get('/host/:hash', function (req, res, next) {
     }
 });
 
-app.get('/acquisitions', function (req, res, next) {
+app.get('/scripts', function (req, res, next) {
     sf_api.get_services_clients_clusters(req.attributes, function (err, results) {
         if (err) {
             next(err);
@@ -171,7 +171,7 @@ app.get('/acquisitions', function (req, res, next) {
             context.clients = route_utils.stringify(results.clients);
             context.clusters = route_utils.stringify(results.clusters);
 
-            route_utils.render_template(res, '/sf/acquisitions.html', context, next);
+            route_utils.render_template(res, '/sf/scripts.html', context, next);
         }
     });
 });
@@ -410,19 +410,19 @@ app.post('/api/acquisitions', function (req, res, next) {
  * Unified API that bridges legacy acquisition API with new task api
  */
 app.get('/api/task_result', function(req, res, next){
-    console.log ("!!!!!!!!!!!!!HIT!!!!!!!!!!!!!!!!!"+JSON.stringify(req.query));
+
 
     async.parallel([
         function(callback){
-            var params = {limit: 20};
-            sf_api.get_acquisitions(params, req.attributes, function (err, response) {
-                callback(err,response);
+            delete req.query['update_datetime__gte'];
+            delete req.query['update_datetime__lte'];
+            sf_api.get_acquisitions(req.query, req.attributes, function (err, response) {
+                callback(null,response);
             });
         },
         function(callback){
-            var params = {limit: 20};
-            sf_api.get_task_result(params,req.attribtues,function (err, response){
-                callback(err,response);
+            sf_api.get_task_result(req.query,req.attribtues,function (err, response){
+                callback(null,response);
             });
         }
     ],
@@ -499,13 +499,10 @@ app.get('/api/task_result', function(req, res, next){
             objects: []
         };
 
-
-
         processResults(mergedResult, results[0], PAYLOAD_TYPES.ACQUISITION);
         processResults(mergedResult, results[1], PAYLOAD_TYPES.TRIAGE);
 
 
-        console.log("Total # results = "+mergedResult.objects.length);
         var result = route_utils.get_dt_response_params(mergedResult.objects,
             mergedResult.meta.total_count, mergedResult.meta.offset, req.query.sEcho);
         route_utils.send(res, result);

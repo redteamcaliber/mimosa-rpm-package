@@ -5,7 +5,7 @@ define(function (require) {
     var AcquisitionAuditModel = require('sf/models/AcquisitionAuditModel');
 
     var ClusterSelectionView = require('sf/views/ClusterSelectionView');
-    var AgentTasksTableView = require('sf/views/AgentTasksTableView');
+    var AgentScriptsTableView = require('sf/views/AgentScriptsTableView');
     var HitsDetailsView = require('sf/views/HitsDetailsView');
 
     var templates = require('sf/ejs/templates');
@@ -14,14 +14,14 @@ define(function (require) {
 
 
 
-    var AgentTasksView = View.extend({
+    var AgentScriptsView = View.extend({
         initialize: function () {
 
             var view = this;
 
             view.criteria_collapsable = new CollapsableContentView({
                 el: '#collapsable-div',
-                title: '<i class="fa fa-search"></i> Agent Tasks Search Criteria'
+                title: '<i class="fa fa-search"></i> Agent Scripts Search Criteria'
             });
 
             // Create the cluster selection component.
@@ -30,7 +30,7 @@ define(function (require) {
                 hide_services: true
             });
             view.listenTo(view.cluster_selection_view, 'submit', function (params) {
-                view.render_acquisitions({
+                view.render_scripts({
                     clusters: params.merged_clusters,
                     startDate: params.startDate,
                     endDate: params.endDate
@@ -41,14 +41,14 @@ define(function (require) {
             });
             view.cluster_selection_view.render();
 
-            view.acquisitions_table = new AgentTasksTableView({
+            view.scripts_table = new AgentScriptsTableView({
                 el: '#acquisitions-table'
             });
 
-            // Display the initial selection of acquisitions.
-            view.render_acquisitions({clusters: view.cluster_selection_view.get_clusters()});
+            // Display the initial selection of scripts.
+            view.render_scripts({clusters: view.cluster_selection_view.get_clusters()});
         },
-        render_acquisitions: function (params) {
+        render_scripts: function (params) {
             var view = this;
 
             // Update the model criteria when values change.
@@ -56,12 +56,10 @@ define(function (require) {
             view.startDate = params.startDate;
             view.endDate = params.endDate;
             if (view.clusters && view.clusters.length > 0) {
-                view.acquisitions_table.fetch({
+                view.scripts_table.fetch({
                     clusters: view.clusters,
                     update_datetime__gte: moment(view.startDate*1000).format("YYYY-MM-DD"),
-                    update_datetime__lte: moment(view.endDate*1000).format("YYYY-MM-DD"),
-                    //TODO: take this out
-                    iDisplayLength: Number.MAX_VALUE-1
+                    update_datetime__lte: moment(view.endDate*1000).format("YYYY-MM-DD")
                 });
                 $('#results-div').fadeIn().show();
             }
@@ -71,5 +69,5 @@ define(function (require) {
         }
     });
 
-    return AgentTasksView;
+    return AgentScriptsView;
 });

@@ -79,14 +79,14 @@ define(function (require) {
         }
     });
 
-    var AgentTasksTableView = TableView.extend({
+    var AgentScriptsTableView = TableView.extend({
         initialize: function (options) {
             var view = this;
 
             // Call the super initialize.
             view.constructor.__super__.initialize.apply(this, arguments);
 
-            view.acquisitions_collapsable = new CollapsableContentView({
+            view.scripts_collapsable = new CollapsableContentView({
                 el: view.el
             });
 
@@ -99,7 +99,7 @@ define(function (require) {
 
 
             options.oLanguage = {
-                sEmptyTable: 'No acquisitions were found'
+                sEmptyTable: 'No scripts were found'
             };
 
             if (options.condensed) {
@@ -205,15 +205,15 @@ define(function (require) {
             view.listenTo(view, 'row:created', view.on_create_row);
             view.listenTo(view, 'click', view.on_row_click);
             view.listenTo(view, 'load', function () {
-                var acquisitions_count = view.get_total_rows();
-                view.acquisitions_collapsable.set('title', _.sprintf('<i class="fa fa-cloud-download"></i> Acquisitions (%s)',
-                    acquisitions_count));
-                if (acquisitions_count == 0) {
+                var scripts_count = view.get_total_rows();
+                view.scripts_collapsable.set('title', _.sprintf('<i class="fa fa-cloud-download"></i> Scripts (%s)',
+                    scripts_count));
+                if (scripts_count == 0) {
                     // Collapse the comments if there are none.
-                    view.acquisitions_collapsable.collapse();
+                    view.scripts_collapsable.collapse();
                 }
                 else {
-                    view.acquisitions_collapsable.expand();
+                    view.scripts_collapsable.expand();
                 }
             });
         },
@@ -244,5 +244,5 @@ define(function (require) {
         }
     });
 
-    return AgentTasksTableView
+    return AgentScriptsTableView
 });

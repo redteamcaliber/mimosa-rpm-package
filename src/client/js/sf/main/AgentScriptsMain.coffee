@@ -4,7 +4,7 @@ define (require) ->
     _s = require 'underscore.string'
     _.mixin(_s.exports())
 
-    AgentTasksView = require 'sf/views/AgentTasksView'
-    new AgentTasksView()
+    AgentScriptsView = require 'sf/views/AgentScriptsView'
+    new AgentScriptsView()
 
     return
