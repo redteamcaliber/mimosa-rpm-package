@@ -42,19 +42,19 @@ define(function(require) {
     format_acquisition_state = function(data) {
         if (data) {
             var label_class = '';
-            if (data == 'errored' || data == 'ERR') {
+            if (data == 'errored' || data == 'error') {
                 label_class = 'label-danger';
             }
-            else if (data == 'cancelled' || data == 'K') {
+            else if (data == 'cancelled' || data == 'killed') {
                 label_class = 'label-warning';
             }
-            else if (data == 'created' || data == 'CR') {
+            else if (data == 'created' || data == 'created') {
                 label_class = 'label-default';
             }
-            else if (data == 'started' || data == 'ARQ' || data == 'ART' || data == 'CP') {
+            else if (data == 'started' || data == 'audit-zip-requested' || data == 'audit-zip-retrieved') {
                 label_class = 'label-primary';
             }
-            else if (data == 'completed' || data == 'ARP') {
+            else if (data == 'completed' || data == 'audit-zip-processed') {
                 label_class = 'label-success';
             }
             else if (data == 'unknown') {

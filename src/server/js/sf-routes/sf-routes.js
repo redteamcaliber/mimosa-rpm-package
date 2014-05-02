@@ -414,8 +414,6 @@ app.get('/api/task_result', function(req, res, next){
 
     async.parallel([
         function(callback){
-            delete req.query['update_datetime__gte'];
-            delete req.query['update_datetime__lte'];
             sf_api.get_acquisitions(req.query, req.attributes, function (err, response) {
                 callback(null,response);
             });
@@ -460,10 +458,10 @@ app.get('/api/task_result', function(req, res, next){
                 getJobName: function(input){return props.get(input, 'package_name');},
                 getClientName: function(input){ return props.get(input, 'agent.cluster.engagement.client.name');},
                 getClusterName: function(input){return props.get(input, 'cluster.name');},
-                getUser: function(input){return "!!!PLACEHOLDER!!!";},
+                getUser: function(input){return props.get(input,'service.user.email');},
                 getLink: function(input){return props.get(input, 'link');},
                 getHostName: function(input){return props.get(input, 'agent.hostname');},
-                getUpdatedDate: function(input){return props.get(input, 'last_updated');}
+                getUpdatedDate: function(input){return props.get(input, 'update_datetime');}
             }
         };
         var payloadGenerator = function(input, type){
@@ -528,6 +526,12 @@ app.get('/api/acquisitions/:acquisition_uuid', function (req, res, next) {
 app.get('/api/acquisitions/identity/:identity', function (req, res, next) {
     if (route_utils.validate_input('identity', req.params, res)) {
         sf_api.get_acqusitions_by_identity(req.params.identity, req.attributes, function (err, acquisitions) {
+            //vomit...
+            _.each(acquisitions, function(acquisition){
+                acquisition['type'] = 'acquisition';
+                acquisition['jobName'] = acquisition.file_name;
+                acquisition['updatedDate'] = acquisition.update_datetime;
+            });
             err ? next(err) : route_utils.send(res, acquisitions);
         });
     }

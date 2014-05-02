@@ -10,6 +10,7 @@ define(function (require) {
     var templates = require('sf/ejs/templates');
     var uac_utils = require('uac/common/utils');
     var sf_utils = require('sf/common/utils');
+    var Marionette = require('marionette');
 
     /**
      * Render the details of an acquisition including the file audit and issues.
@@ -79,6 +80,10 @@ define(function (require) {
         }
     });
 
+    var AgentScriptsDatasetChooser = Marionette.ItemView.extend({
+
+    });
+
     var AgentScriptsTableView = TableView.extend({
         initialize: function (options) {
             var view = this;
@@ -102,26 +107,19 @@ define(function (require) {
                 sEmptyTable: 'No scripts were found'
             };
 
+            // Display in condensed mode.
             if (options.condensed) {
-                // Display in condensed mode.
-                options['aoColumns'] = [
-                    {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
-                    {sTitle: "Created", mData: "create_datetime", bSortable: true, sClass: 'nowrap', bVisible: false},
-                    {sTitle: "File Path", mData: "file_path", bSortable: true, sClass: 'wrap', sWidth: '65%'},
-                    {sTitle: "File Name", mData: "file_name", bSortable: true, sClass: 'wrap', sWidth: '30%'},
-                    {sTitle: "State", mData: "state", bSortable: true, sWidth: '5%'}
-                ];
 
                 options.aaSorting = [
                     [ 1, "desc" ]
                 ];
 
                 options['aoColumnDefs'] = [
+
+
                     {
-                        mRender: function (data) {
-                            return uac_utils.format_date_string(data);
-                        },
-                        aTargets: [1]
+                        mRender: sf_utils.format_acquisition_state,
+                        aTargets: [0]
                     },
                     {
                         mRender: function (data, type, row) {
@@ -133,10 +131,12 @@ define(function (require) {
                                 return data;
                             }
                         },
-                        aTargets: [3]
+                        aTargets: [2]
                     },
                     {
-                        mRender: sf_utils.format_acquisition_state,
+                        mRender: function (data) {
+                            return uac_utils.format_date_string(data);
+                        },
                         aTargets: [4]
                     }
                 ];
@@ -144,6 +144,15 @@ define(function (require) {
                 options.iDisplayLength = 10;
 
                 options['sDom'] = 'lftip';
+
+
+                options['aoColumns'] = [
+                    {sTitle: "State", mData: "state", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Type", mData: "type", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Job Name", mData: "jobName", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Created By", mData: "user", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Updated On", mData: "updatedDate", bSortable: true, sWidth: '75px'}
+                ];
             }
             else {
                 options['aoColumns'] = [

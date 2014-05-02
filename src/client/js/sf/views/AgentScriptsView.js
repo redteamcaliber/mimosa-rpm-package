@@ -12,6 +12,11 @@ define(function (require) {
 
     var moment = require('moment');
 
+    var vent = require('uac/common/vent');
+    var reqres = require('uac/common/reqres');
+    vent.on('all', function(event_name) {
+        console.debug("Event: "+event_name);
+    });
 
 
     var AgentScriptsView = View.extend({
@@ -46,7 +51,11 @@ define(function (require) {
             });
 
             // Display the initial selection of scripts.
-            view.render_scripts({clusters: view.cluster_selection_view.get_clusters()});
+            view.render_scripts({
+                clusters: view.cluster_selection_view.get_clusters(),
+                startDate: view.cluster_selection_view.get_start_date(),
+                endDate: view.cluster_selection_view.get_end_date()
+            });
         },
         render_scripts: function (params) {
             var view = this;
@@ -59,7 +68,8 @@ define(function (require) {
                 view.scripts_table.fetch({
                     clusters: view.clusters,
                     update_datetime__gte: moment(view.startDate*1000).format("YYYY-MM-DD"),
-                    update_datetime__lte: moment(view.endDate*1000).format("YYYY-MM-DD")
+                    update_datetime__lte: moment(view.endDate*1000).format("YYYY-MM-DD"),
+                    limit: 2000
                 });
                 $('#results-div').fadeIn().show();
             }
