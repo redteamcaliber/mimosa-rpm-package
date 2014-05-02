@@ -24,17 +24,30 @@
     /* API method to get paging information */
     $.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
     {
-        return {
-            "iStart":         oSettings._iDisplayStart,
-            "iEnd":           oSettings.fnDisplayEnd(),
-            "iLength":        oSettings._iDisplayLength,
-            "iTotal":         oSettings.fnRecordsTotal(),
-            "iFilteredTotal": oSettings.fnRecordsDisplay(),
-            "iPage":          oSettings._iDisplayLength === -1 ?
-                0 : Math.ceil( oSettings._iDisplayStart / oSettings._iDisplayLength ),
-            "iTotalPages":    oSettings._iDisplayLength === -1 ?
-                0 : Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
-        };
+        if (oSettings) {
+            return {
+                "iStart":         oSettings._iDisplayStart,
+                "iEnd":           oSettings.fnDisplayEnd(),
+                "iLength":        oSettings._iDisplayLength,
+                "iTotal":         oSettings.fnRecordsTotal(),
+                "iFilteredTotal": oSettings.fnRecordsDisplay(),
+                "iPage":          oSettings._iDisplayLength === -1 ?
+                    0 : Math.ceil( oSettings._iDisplayStart / oSettings._iDisplayLength ),
+                "iTotalPages":    oSettings._iDisplayLength === -1 ?
+                    0 : Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
+            };
+        }
+        else {
+            return {
+                "iStart":         0,
+                "iEnd":           0,
+                "iLength":        0,
+                "iTotal":         0,
+                "iFilteredTotal": 0,
+                "iPage":          0,
+                "iTotalPages":    0
+            };
+        }
     };
 
     /* Bootstrap style pagination control */

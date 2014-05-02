@@ -33,11 +33,6 @@ module.exports = function (grunt) {
 
     // Project configuration.
     grunt.initConfig({
-        // The Github repository.
-        uac_repo: 'git@github.mandiant.com:amilano/uac-node.git',
-
-        // The Github Branch.
-        uac_branch: '1.1.7',
 
         uac_name: pkg['name'].charAt(0).toUpperCase() + pkg['name'].slice(1),
         uac_version: uac_version,
@@ -91,9 +86,6 @@ module.exports = function (grunt) {
                 tempDir: '<%= build_rpm_dir %>',
                 defattrScript: [
                     {user: 'root', group: 'root'}
-                ],
-                postInstallScript: [
-                    'mkdir -p /opt/web/apps/uac/server/logs'
                 ]
             },
             release: {
@@ -101,7 +93,7 @@ module.exports = function (grunt) {
                     {
                         // Include the root files.
                         cwd: '<%= build_uac_dir %>',
-                        src: '**/*',
+                        src: ['**/*', '!server/conf/env.json'],
                         dest: '/opt/web/apps/uac'
                     }
                 ]

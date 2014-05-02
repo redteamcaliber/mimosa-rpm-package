@@ -125,7 +125,7 @@ define (require)->
       @delegateEvents
         'click #submit-button': 'on_submit'
         'click #clear-button': 'on_clear'
-      @$("#searchControls").append(@timeSearchView.render().el)
+      unless @options.hide_timeframe then @$("#searchControls").append(@timeSearchView.render().el)
 
       return @
 
