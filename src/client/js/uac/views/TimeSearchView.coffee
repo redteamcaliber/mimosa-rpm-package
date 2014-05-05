@@ -103,7 +103,7 @@ define (require) ->
                 # Display the defaults.
                 @reset_selected()
 
-            @on_change()
+            @on_change(true)
             # Listen for changes to the time entry.
             @delegateEvents
               'change input:radio[name=time]': 'on_change'
@@ -199,7 +199,7 @@ define (require) ->
         #
         # Handle the time change event.
         #
-        on_change: () ->
+        on_change: (silent) ->
             # Determine if the custom time fields should be disabled.
             disabled = not (@$('input:radio[name=time][value=custom]').prop 'checked')
             # Set the time fields based on the current selection.
@@ -210,15 +210,16 @@ define (require) ->
                 @set_to_date new Date()
 
             # Toggle the time fields.
-            @fireAsync
-              constructorName: DateView
-              instanceName: "startDate"
-              eventName: "toggle"
-              payload: disabled
-            @fireAsync
-              constructorName: DateView
-              instanceName: "endDate"
-              eventName: "toggle"
-              payload: disabled
+            unless silent
+              @fireAsync
+                constructorName: DateView
+                instanceName: "startDate"
+                eventName: "toggle"
+                payload: disabled
+              @fireAsync
+                constructorName: DateView
+                instanceName: "endDate"
+                eventName: "toggle"
+                payload: disabled
             
     utils.mixin TimeSearchView, Evented

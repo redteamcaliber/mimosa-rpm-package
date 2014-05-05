@@ -629,7 +629,7 @@ add_package_link = (triage) ->
 
 #Retrieve the list of tasks
 get_task_result = (params, attributes, callback)->
-  #TODO: use a real URL here!!!
+
   url = get_ss_url('api/v1/task_result/')
 #  if not params or !params.order_by
 #    params.order_by = '-create_datetime'
@@ -652,7 +652,7 @@ get_acquisitions = (params, attributes, callback) ->
     url = get_ss_url('api/v1/acquisition/')
     console.log("PARAMS: "+JSON.stringify(params));
     if not params or !params.order_by
-        params.order_by = 'create_datetime'
+        params.order_by = '-create_datetime'
     request.json_get url, params, attributes, (err, response, body) ->
         if err
             # Error

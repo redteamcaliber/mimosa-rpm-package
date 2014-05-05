@@ -526,7 +526,7 @@ app.get('/api/acquisitions/:acquisition_uuid', function (req, res, next) {
 app.get('/api/acquisitions/identity/:identity', function (req, res, next) {
     if (route_utils.validate_input('identity', req.params, res)) {
         sf_api.get_acqusitions_by_identity(req.params.identity, req.attributes, function (err, acquisitions) {
-            //vomit...
+            //map the old acquisition payload into the new payload by adding new necessary params
             _.each(acquisitions, function(acquisition){
                 acquisition['type'] = 'acquisition';
                 acquisition['jobName'] = acquisition.file_name;
