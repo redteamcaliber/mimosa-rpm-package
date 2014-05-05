@@ -9,7 +9,7 @@
         "blockui": "https://github.com/malsup/blockui/tarball/35c4a7acf5eff9ddfc631f488741b77d23fff041",
         "bootstrap": "3.1.1",
         "bootstrap-growl": "1.1.x",
-        "bootswatch": "git@github.mandiant.com:MPLEX/bootswatch.git#b941147c1b40a2b2568355d8efd59dfeb18418db",
+        "bootswatch": "https://github.com/dretay/bootswatch.git#b941147c1b40a2b2568355d8efd59dfeb18418db",
         "datatables": "1.9.x",
         "font-awesome": "4.0.x",
         "jquery": "1.9.x",

@@ -2,7 +2,7 @@ define(function(require) {
     var utils = require('uac/common/utils');
     var TagCollection = require('sf/models/TagCollection');
     var Task = require('sf/models/Task');
-    var Acquisition = require('sf/models/Acquisition');
+    var AgentTask = require('sf/models/AgentTask');
 
     /**
      * Retrieve the list of StrikeFinder tags.
@@ -113,7 +113,7 @@ define(function(require) {
                 acquisition_uuid: acquisition_uuid
             },
             function(params, callback) {
-                var acquisition = new Acquisition();
+                var acquisition = new AgentTask();
                 acquisition.uuid = acquisition_uuid;
                 acquisition.fetch({
                     success: function(model, response) {

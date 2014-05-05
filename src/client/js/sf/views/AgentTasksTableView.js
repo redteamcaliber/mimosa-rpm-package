@@ -4,7 +4,7 @@ define(function (require) {
     var TableView = require('uac/views/TableView');
     var CollapsableContentView = require('uac/views/CollapsableContentView');
 
-    var Acquisition = require('sf/models/Acquisition');
+    var AgentTask = require('sf/models/AgentTask');
     var AcquisitionAuditModel = require('sf/models/AcquisitionAuditModel');
 
     var templates = require('sf/ejs/templates');
@@ -80,18 +80,44 @@ define(function (require) {
         }
     });
 
-    var AgentScriptsDatasetChooser = Marionette.ItemView.extend({
 
-    });
+    var AgentTasksTableView = TableView.extend({
+        events: {
+            'click .dropdown-menu > li > a': 'change_dataset'
+        },
+        change_dataset: function(evt){
 
-    var AgentScriptsTableView = TableView.extend({
+            //get the name from the event
+            var newName = $(evt.target).attr('name')
+
+            //mark the item you clicked as selected
+            this.$(".dropdown-menu > li > a").removeClass("selected");
+            $(evt.target).addClass("selected");
+
+            //update the button text
+            this.$(".uac-tableheader >.btn-group button .selected").text(newName);
+
+            this.collection.dataSource = newName;
+            this.fetch();
+        },
+        //Is this necessary?
+        close: function() {
+            this.undelegateEvents();
+        },
+        render: function(params){
+            var view = this;
+            view.constructor.__super__.render.apply(this, arguments);
+            this.delegateEvents();
+        },
         initialize: function (options) {
             var view = this;
+
+
 
             // Call the super initialize.
             view.constructor.__super__.initialize.apply(this, arguments);
 
-            view.scripts_collapsable = new CollapsableContentView({
+            view.tasks_collapsable = new CollapsableContentView({
                 el: view.el
             });
 
@@ -99,12 +125,14 @@ define(function (require) {
                 options['sAjaxSource'] = '/sf/api/task_result';
                 options['bProcessing'] = false;
 //                options['bServerSide'] = false;
+            }else{
+                view.collection.dataSource = "Hit Acquisitions";
             }
             options.sAjaxDataProp = 'results';
 
 
             options.oLanguage = {
-                sEmptyTable: 'No scripts were found'
+                sEmptyTable: 'No tasks were found'
             };
 
             // Display in condensed mode.
@@ -124,11 +152,10 @@ define(function (require) {
                     {
                         mRender: function (data, type, row) {
                             if (row.link) {
-                                return _.sprintf('<a href="%s" onclick="event.stopPropagation()">%s</a>',
-                                    row.link, row.file_name);
+                                return _.sprintf('<a href="%s" onclick="event.stopPropagation()" download>%s</a>', row.link, row.jobName, data);
                             }
                             else {
-                                return data;
+                                return data
                             }
                         },
                         aTargets: [2]
@@ -143,7 +170,8 @@ define(function (require) {
 
                 options.iDisplayLength = 10;
 
-                options['sDom'] = 'lftip';
+
+                options['sDom'] = '<"uac-tableheader"lf>tip';
 
 
                 options['aoColumns'] = [
@@ -214,15 +242,21 @@ define(function (require) {
             view.listenTo(view, 'row:created', view.on_create_row);
             view.listenTo(view, 'click', view.on_row_click);
             view.listenTo(view, 'load', function () {
-                var scripts_count = view.get_total_rows();
-                view.scripts_collapsable.set('title', _.sprintf('<i class="fa fa-cloud-download"></i> Scripts (%s)',
-                    scripts_count));
-                if (scripts_count == 0) {
+
+                if (options.condensed) {
+                    // Add the link the table header.
+                    view.$el.parent().find('.uac-tableheader').append(templates['agenttasks-datasetchooser.ejs'](this));
+                }
+
+                var tasks_count = view.get_total_rows();
+                view.tasks_collapsable.set('title', _.sprintf('<i class="fa fa-cloud-download"></i> Tasks (%s)',
+                    tasks_count));
+                if (tasks_count == 0) {
                     // Collapse the comments if there are none.
-                    view.scripts_collapsable.collapse();
+                    view.tasks_collapsable.collapse();
                 }
                 else {
-                    view.scripts_collapsable.expand();
+                    view.tasks_collapsable.expand();
                 }
             });
         },
@@ -246,12 +280,12 @@ define(function (require) {
                 }
                 view.acquisition_details = new AcquisitionsDetailsView({
                     el: '#dialog-div',
-                    model: new Acquisition(data.raw)
+                    model: new AgentTask(data.raw)
                 });
                 view.acquisition_details.render();
             }
         }
     });
 
-    return AgentScriptsTableView
+    return AgentTasksTableView
 });

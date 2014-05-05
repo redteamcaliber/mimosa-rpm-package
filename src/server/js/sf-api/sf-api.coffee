@@ -640,7 +640,6 @@ get_task_result = (params, attributes, callback)->
     else
       # Fill in a link value for each acquisition.
       body.objects.forEach(add_package_link)
-      console.log "in callback!"
       callback(null, body)
 
 #

@@ -11,10 +11,10 @@ define(function (require) {
     var AcquireFormView = require('sf/views/AcquireFormView');
     var MassTagFormView = require('sf/views/MassTagFormView');
     var SuppressionsTableView = require('sf/views/SuppressionsTableView');
-    var AgentScriptsTableView = require('sf/views/AgentScriptsTableView');
+    var AgentTasksTableView = require('sf/views/AgentTasksTableView');
     var MD5ModelView = require('sf/views/MD5ModalView');
 
-    var AcquisitionCollection = require('sf/models/AcquisitionCollection');
+    var AgentTaskCollection = require('sf/models/AgentTaskCollection');
     var IOCCollection = require('sf/models/IOCCollection');
     var AgentHostModel = require('sf/models/AgentHostModel');
     var AuditModel = require('sf/models/AuditModel');
@@ -989,23 +989,25 @@ define(function (require) {
         initialize: function (options) {
             var view = this;
             view.options = options;
-            view.acquisitions = new AcquisitionCollection();
+            view.acquisitions = new AgentTaskCollection();
 
-            view.acqusitions_table = new AgentScriptsTableView({
+            view.acqusitions_table = new AgentTasksTableView({
                 el: view.el,
                 collection: view.acquisitions,
                 condensed: true
             });
         },
-        fetch: function (identity) {
-            if (!identity) {
+        fetch: function (config) {
+            if (!config) {
                 // Error
-                console.error('Condensed acquisitions view requires an identity!');
+                console.error('Condensed acquisitions view requires either a host or an identity!');
+            }else{
+                var view = this;
+                view.acquisitions.host = config.host;
+                view.acquisitions.identity = config.identity;
+                view.acquisitions.hash = config.hash;
+                view.acqusitions_table.fetch();
             }
-
-            var view = this;
-            view.acquisitions.identity = identity;
-            view.acqusitions_table.fetch();
         }
     });
 
@@ -1401,7 +1403,11 @@ define(function (require) {
                 view.agenthost_view.fetch(view.row.am_cert_hash);
 
                 // Update the acquisitions.
-                view.acquisitions_view.fetch(view.row.identity);
+                view.acquisitions_view.fetch({
+                    identity: view.row.identity,
+                    host: null,
+                    hash: view.row.am_cert_hash
+                });
             }
 
             // Fetch the related audit and update the audit view, tags view, and identity data.

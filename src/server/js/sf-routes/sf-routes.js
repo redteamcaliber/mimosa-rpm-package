@@ -160,7 +160,7 @@ app.get('/host/:hash', function (req, res, next) {
     }
 });
 
-app.get('/scripts', function (req, res, next) {
+app.get('/agenttasks', function (req, res, next) {
     sf_api.get_services_clients_clusters(req.attributes, function (err, results) {
         if (err) {
             next(err);
@@ -171,7 +171,7 @@ app.get('/scripts', function (req, res, next) {
             context.clients = route_utils.stringify(results.clients);
             context.clusters = route_utils.stringify(results.clusters);
 
-            route_utils.render_template(res, '/sf/scripts.html', context, next);
+            route_utils.render_template(res, '/sf/agenttasks.html', context, next);
         }
     });
 });

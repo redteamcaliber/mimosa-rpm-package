@@ -10,7 +10,7 @@ define(function(require) {
 
     var templates = require('sf/ejs/templates');
 
-    var AgentScriptsTableView = require('sf/views/AgentScriptsTableView');
+    var AgentTasksTableView = require('sf/views/AgentTasksTableView');
 
     /**
      * Hits table view for display on the host view.
@@ -149,7 +149,7 @@ define(function(require) {
             view.hosts_view.render();
 
             // The tasks view.
-            view.agent_tasks_table_view = new AgentScriptsTableView({
+            view.agent_tasks_table_view = new AgentTasksTableView({
                el: '#agent-tasks-div'
             });
 

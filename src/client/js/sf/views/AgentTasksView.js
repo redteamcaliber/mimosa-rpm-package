@@ -5,7 +5,7 @@ define(function (require) {
     var AcquisitionAuditModel = require('sf/models/AcquisitionAuditModel');
 
     var ClusterSelectionView = require('sf/views/ClusterSelectionView');
-    var AgentScriptsTableView = require('sf/views/AgentScriptsTableView');
+    var AgentTasksTableView = require('sf/views/AgentTasksTableView');
     var HitsDetailsView = require('sf/views/HitsDetailsView');
 
     var templates = require('sf/ejs/templates');
@@ -19,14 +19,14 @@ define(function (require) {
     });
 
 
-    var AgentScriptsView = View.extend({
+    var AgentTasksView = View.extend({
         initialize: function () {
 
             var view = this;
 
             view.criteria_collapsable = new CollapsableContentView({
                 el: '#collapsable-div',
-                title: '<i class="fa fa-search"></i> Agent Scripts Search Criteria'
+                title: '<i class="fa fa-search"></i> Agent Tasks Search Criteria'
             });
 
             // Create the cluster selection component.
@@ -35,7 +35,7 @@ define(function (require) {
                 hide_services: true
             });
             view.listenTo(view.cluster_selection_view, 'submit', function (params) {
-                view.render_scripts({
+                view.render_tasks({
                     clusters: params.merged_clusters,
                     startDate: params.startDate,
                     endDate: params.endDate
@@ -46,18 +46,18 @@ define(function (require) {
             });
             view.cluster_selection_view.render();
 
-            view.scripts_table = new AgentScriptsTableView({
+            view.tasks_table = new AgentTasksTableView({
                 el: '#acquisitions-table'
             });
 
-            // Display the initial selection of scripts.
-            view.render_scripts({
+            // Display the initial selection of tasks.
+            view.render_tasks({
                 clusters: view.cluster_selection_view.get_clusters(),
                 startDate: view.cluster_selection_view.get_start_date(),
                 endDate: view.cluster_selection_view.get_end_date()
             });
         },
-        render_scripts: function (params) {
+        render_tasks: function (params) {
             var view = this;
 
             // Update the model criteria when values change.
@@ -65,7 +65,7 @@ define(function (require) {
             view.startDate = params.startDate;
             view.endDate = params.endDate;
             if (view.clusters && view.clusters.length > 0) {
-                view.scripts_table.fetch({
+                view.tasks_table.fetch({
                     clusters: view.clusters,
                     update_datetime__gte: moment(view.startDate*1000).format("YYYY-MM-DD"),
                     update_datetime__lte: moment(view.endDate*1000).format("YYYY-MM-DD"),
@@ -79,5 +79,5 @@ define(function (require) {
         }
     });
 
-    return AgentScriptsView;
+    return AgentTasksView;
 });

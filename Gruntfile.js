@@ -383,7 +383,7 @@ module.exports = function (grunt) {
                             create: true,
                             include: [
                                 //strike finder stuff
-                                "sf/main/AgentScriptsMain",
+                                "sf/main/AgentTasksMain",
                                 "sf/main/HitReviewMain",
                                 "sf/main/HitsByTagMain",
                                 "sf/main/HostsMain",
