@@ -7,7 +7,7 @@ define(function(require) {
     var templates = require('sf/ejs/templates');
 
     var ClusterCredentialsModel = require('sf/models/ClusterCredentialsModel');
-    var Acquisition = require('sf/models/Acquisition');
+    var AgentTask = require('sf/models/AgentTask');
 
     /**
      * Acquisition input form.
@@ -80,7 +80,7 @@ define(function(require) {
                     }
 
                     // Create a new model for the acquisition data.
-                    view.model = new Acquisition({
+                    view.model = new AgentTask({
                         am_cert_hash: params.am_cert_hash,
                         cluster_uuid: params.cluster_uuid,
                         cluster_name: params.cluster_name,

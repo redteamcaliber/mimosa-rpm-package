@@ -2,7 +2,7 @@ define(function(require) {
     var utils = require('uac/common/utils');
     var TagCollection = require('sf/models/TagCollection');
     var Task = require('sf/models/Task');
-    var Acquisition = require('sf/models/Acquisition');
+    var AgentTask = require('sf/models/AgentTask');
 
     /**
      * Retrieve the list of StrikeFinder tags.
@@ -42,19 +42,19 @@ define(function(require) {
     format_acquisition_state = function(data) {
         if (data) {
             var label_class = '';
-            if (data == 'errored') {
+            if (data == 'errored' || data == 'error') {
                 label_class = 'label-danger';
             }
-            else if (data == 'cancelled') {
+            else if (data == 'cancelled' || data == 'killed') {
                 label_class = 'label-warning';
             }
-            else if (data == 'created') {
+            else if (data == 'created' || data == 'created') {
                 label_class = 'label-default';
             }
-            else if (data == 'started' || data == 'created') {
+            else if (data == 'started' || data == 'audit-zip-requested' || data == 'audit-zip-retrieved') {
                 label_class = 'label-primary';
             }
-            else if (data == 'completed') {
+            else if (data == 'completed' || data == 'audit-zip-processed') {
                 label_class = 'label-success';
             }
             else if (data == 'unknown') {
@@ -113,7 +113,7 @@ define(function(require) {
                 acquisition_uuid: acquisition_uuid
             },
             function(params, callback) {
-                var acquisition = new Acquisition();
+                var acquisition = new AgentTask();
                 acquisition.uuid = acquisition_uuid;
                 acquisition.fetch({
                     success: function(model, response) {

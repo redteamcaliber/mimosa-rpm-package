@@ -16,6 +16,7 @@ var settings = require('settings');
 var route_utils = require('route-utils');
 var uac_api = require('uac-api');
 var sf_api = require('sf-api');
+var props = require('pathval');
 
 
 // Create an app to export.
@@ -159,7 +160,7 @@ app.get('/host/:hash', function (req, res, next) {
     }
 });
 
-app.get('/acquisitions', function (req, res, next) {
+app.get('/agenttasks', function (req, res, next) {
     sf_api.get_services_clients_clusters(req.attributes, function (err, results) {
         if (err) {
             next(err);
@@ -170,7 +171,7 @@ app.get('/acquisitions', function (req, res, next) {
             context.clients = route_utils.stringify(results.clients);
             context.clusters = route_utils.stringify(results.clusters);
 
-            route_utils.render_template(res, '/sf/acquisitions.html', context, next);
+            route_utils.render_template(res, '/sf/agenttasks.html', context, next);
         }
     });
 });
@@ -258,6 +259,12 @@ function get_hits_params(req) {
     }
     if (req.query.identity_rollup) {
         params.identity_rollup = req.query.identity_rollup;
+    }
+    if (req.query.begin) {
+        params.begin = req.query.begin;
+    }
+    if (req.query.end) {
+        params.end = req.query.end;
     }
 
     return params;
@@ -399,6 +406,108 @@ app.post('/api/acquisitions', function (req, res, next) {
         });
     }
 });
+/**
+ * Unified API that bridges legacy acquisition API with new task api
+ */
+app.get('/api/task_result', function(req, res, next){
+
+
+    async.parallel([
+        function(callback){
+            sf_api.get_acquisitions(req.query, req.attributes, function (err, response) {
+                callback(null,response);
+            });
+        },
+        function(callback){
+            sf_api.get_task_result(req.query,req.attribtues,function (err, response){
+                callback(null,response);
+            });
+        }
+    ],
+    function(err, results){
+        /*
+        UNIFIED PAYLOAD STRUCT
+         * uuid
+         * state
+         * type
+         * job name
+         * client
+         * cluster name
+         * user*
+         * link
+         * hostname
+         * updated on
+         */
+        var PAYLOAD_TYPES = {
+            ACQUISITION: {
+                getUuid: function(input){ return props.get(input,'uuid');},
+                getState: function(input){ return props.get(input, 'state');},
+                getType: function(){ return "acquisition";},
+                getJobName: function(input){ return props.get(input,'file_name');},
+                getClientName: function(input){ return props.get(input, 'cluster.engagement.client.name');},
+                getClusterName: function(input){return props.get(input, 'cluster.name');},
+                getUser: function(input){return props.get(input,'user');},
+                getLink: function(input){return props.get(input, 'link');},
+                getHostName: function(input){return props.get(input, 'agent.hostname');},
+                getUpdatedDate: function(input){return props.get(input, 'update_datetime');}
+            },
+            TRIAGE: {
+                getUuid: function(input){ return props.get(input, 'uuid');},
+                getState: function(input){ return props.get(input, 'state');},
+                getType: function(){ return "triage";},
+                getJobName: function(input){return props.get(input, 'package_name');},
+                getClientName: function(input){ return props.get(input, 'agent.cluster.engagement.client.name');},
+                getClusterName: function(input){return props.get(input, 'cluster.name');},
+                getUser: function(input){return props.get(input,'service.user.email');},
+                getLink: function(input){return props.get(input, 'link');},
+                getHostName: function(input){return props.get(input, 'agent.hostname');},
+                getUpdatedDate: function(input){return props.get(input, 'update_datetime');}
+            }
+        };
+        var payloadGenerator = function(input, type){
+            return {
+                uuid: type.getUuid(input),
+                state: type.getState(input),
+                type: type.getType(),
+                jobName: type.getJobName(input),
+                clientName: type.getClientName(input),
+                clusterName: type.getClusterName(input),
+                user: type.getUser(input),
+                link: type.getLink(input),
+                hostName: type.getHostName(input),
+                updatedDate: type.getUpdatedDate(input),
+                raw: input
+            }
+        };
+        var processResults = function(mergedResult, queryResults, type){
+            if(_.isObject(queryResults) && _.isArray(queryResults.objects)) {
+                _.forEach(queryResults.objects, function (result) {
+                    mergedResult.objects.push(payloadGenerator(result, type));
+                });
+                mergedResult.meta.limit = Number(queryResults.meta.limit);
+                mergedResult.meta.next = Number(queryResults.meta.next);
+                mergedResult.meta.offset = Number(queryResults.meta.offset);
+                mergedResult.meta.previous = Number(queryResults.meta.previous);
+                mergedResult.meta.total_count = Number(queryResults.meta.total_count);
+
+            }
+        };
+        var mergedResult = {
+            meta: {},
+            objects: []
+        };
+
+        processResults(mergedResult, results[0], PAYLOAD_TYPES.ACQUISITION);
+        processResults(mergedResult, results[1], PAYLOAD_TYPES.TRIAGE);
+
+
+        var result = route_utils.get_dt_response_params(mergedResult.objects,
+            mergedResult.meta.total_count, mergedResult.meta.offset, req.query.sEcho);
+        route_utils.send(res, result);
+
+
+    });
+});
 
 /**
  * Retrieve a single acquisition by id.
@@ -417,7 +526,13 @@ app.get('/api/acquisitions/:acquisition_uuid', function (req, res, next) {
 app.get('/api/acquisitions/identity/:identity', function (req, res, next) {
     if (route_utils.validate_input('identity', req.params, res)) {
         sf_api.get_acqusitions_by_identity(req.params.identity, req.attributes, function (err, acquisitions) {
-            err ? next(err) : route_utils.send_rest(req, res, next, acquisitions);
+            //map the old acquisition payload into the new payload by adding new necessary params
+            _.each(acquisitions, function(acquisition){
+                acquisition['type'] = 'acquisition';
+                acquisition['jobName'] = acquisition.file_name;
+                acquisition['updatedDate'] = acquisition.update_datetime;
+            });
+            err ? next(err) : route_utils.send(res, acquisitions);
         });
     }
 });

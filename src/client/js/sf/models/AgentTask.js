@@ -2,9 +2,9 @@ define(function (require) {
     var Backbone = require('backbone');
 
     /**
-     * Model for a single acquisisition.
+     * Model for a single agent task.
      */
-    var Acquisition = Backbone.Model.extend({
+    var AgentTask = Backbone.Model.extend({
         idAttribute: 'uuid',
         defaults: {
             am_cert_hash: '',
@@ -68,5 +68,5 @@ define(function (require) {
         }
     });
 
-    return Acquisition;
+    return AgentTask;
 });

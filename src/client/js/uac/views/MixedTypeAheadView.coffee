@@ -14,6 +14,24 @@ define (require)->
     render: ->
       isAHash = (settings)-> /^[0-9a-fA-F]{32}$/.test(settings.url.split("/").pop())
 
+      ###
+      generic response filter for typeahead bloodhounds takes 3 inputs
+      @param errorMessage: the message to display if no results are detected
+      @param inputTest: the test to determine if the input is applicable to this bloodhound (if you're serching
+                        for hashes you don't care that no hosts were returned)
+      @param responseTest: the test to determine if the server returned data that you want to display to the user
+                            for example your server may always return a Response object, but it may have a 'found'
+                            attribute that can be true or false
+      ###
+      responseFilterProcessor = (errorMessage, inputTest, responseTest)=>
+        _.bind (parsedResponse)->
+          if ((responseTest && !responseTest(parsedResponse)) || !responseTest)
+            if ((inputTest && inputTest.test(@$el.val())) || !inputTest)
+              this.display_info errorMessage
+              return []
+          unless _.isArray parsedResponse then [parsedResponse] else parsedResponse
+        ,_this
+
       hostOrIp = new Bloodhound
         datumTokenizer: Bloodhound.tokenizers.obj.whitespace 'value'
         queryTokenizer: Bloodhound.tokenizers.whitespace
@@ -25,6 +43,7 @@ define (require)->
               #if its a hash abort the query
               if  isAHash settings then jqXhr.abort() else @block()
             complete: (response)-> utils.unblock()
+          filter: responseFilterProcessor "No Host or IPs Found", /^.{0,31}$/, (response)->(_.isArray(response)&&response.length > 0)
 
 
       md5Hashes = new Bloodhound
@@ -38,7 +57,7 @@ define (require)->
               #if its a hash complete the query
               unless isAHash settings then jqXhr.abort() else @block()
             complete: (response)-> utils.unblock()
-          filter: (parsedResponse)-> [parsedResponse]
+          filter: responseFilterProcessor "No MD5 Hashes Found", /^[0-9a-fA-F]{32}$/, (response)->response.vt.found
 
       hostOrIp.initialize()
       md5Hashes.initialize()

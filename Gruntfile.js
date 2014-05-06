@@ -37,7 +37,7 @@ module.exports = function (grunt) {
         uac_repo: 'git@github.mandiant.com:amilano/uac-node.git',
 
         // The Github Branch.
-        uac_branch: '1.1.2',
+        uac_branch: '1.1.7',
 
         uac_name: pkg['name'].charAt(0).toUpperCase() + pkg['name'].slice(1),
         uac_version: uac_version,
@@ -383,7 +383,7 @@ module.exports = function (grunt) {
                             create: true,
                             include: [
                                 //strike finder stuff
-                                "sf/main/AcquisitionsMain",
+                                "sf/main/AgentTasksMain",
                                 "sf/main/HitReviewMain",
                                 "sf/main/HitsByTagMain",
                                 "sf/main/HostsMain",

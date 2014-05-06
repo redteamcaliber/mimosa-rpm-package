@@ -185,3 +185,6 @@ td.center {
     padding-bottom: 5px;
     padding-top: 5px;
 }
+#acquisitions-table .dropdown-menu>li>a.selected:after{
+    content: "\0020✔";
+}
