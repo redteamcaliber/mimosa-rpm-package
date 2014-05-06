@@ -33,9 +33,6 @@ define(function (require) {
         },
         idAttribute: 'hash',
         urlRoot: '/sf/api/hosts/hash'
-//        url: function() {
-//            return '/sf/api/hosts/hash/' + this.id;
-//        }
     });
 
     return AgentHostModel;

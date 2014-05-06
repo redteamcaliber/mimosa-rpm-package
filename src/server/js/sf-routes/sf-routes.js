@@ -280,7 +280,7 @@ app.get('/api/hits', function (req, res, next) {
             }
             else {
                 // Convert the SF parameters to those understood by datatables.
-                route_utils.send(res,
+                route_utils.send_rest(req, res, next,
                     route_utils.get_dt_response_params(body.results, body.count, body.offset, req.query.sEcho));
             }
         }
@@ -297,7 +297,7 @@ app.get('/api/facets', function (req, res, next) {
         }
         else {
             // Convert the SF parameters to those understood by datatables.
-            route_utils.send(res,
+            route_utils.send_rest(req, res, next,
                 route_utils.get_dt_response_params(body.results, body.count, body.offset, req.query.sEcho));
         }
     });
@@ -306,7 +306,7 @@ app.get('/api/facets', function (req, res, next) {
 app.get('/api/hits/:rowitem_uuid/addcomment', function (req, res, next) {
     var rowitem_uuid = req.params.rowitem_uuid;
     sf_api.post_comment(rowitem_uuid, req.body.comment, req.attributes, function (err, body) {
-        err ? next(err) : route_utils.send(res, body);
+        err ? next(err) : route_utils.send_rest(req, res, next, body);
     });
 });
 
@@ -329,7 +329,7 @@ app.get('/api/hosts', function (req, res, next) {
                     next(err);
                 }
                 else {
-                    route_utils.send(res, hosts);
+                    route_utils.send_rest(req, res, next, hosts);
                 }
             });
         }
@@ -339,7 +339,7 @@ app.get('/api/hosts', function (req, res, next) {
                     next(err);
                 }
                 else {
-                    route_utils.send(res, hosts);
+                    route_utils.send_rest(req, res, next, hosts);
                 }
             });
         }
@@ -363,7 +363,7 @@ app.get('/api/hostinfo/:hashes', function(req, res, next){
 app.get('/api/hosts/hash/:hash', function (req, res, next) {
     if (route_utils.validate_input('hash', req.params, res)) {
         sf_api.get_full_host_by_hash(req.params.hash, req.attributes, function (err, host) {
-            err ? next(err) : route_utils.send(res, host);
+            err ? next(err) : route_utils.send_rest(req, res, next, host);
         });
     }
 });
@@ -394,7 +394,7 @@ app.post('/api/acquisitions', function (req, res, next) {
                 next(err);
             }
             else {
-                route_utils.send(res, acquisition_response);
+                route_utils.send_rest(req, res, next, acquisition_response);
             }
         });
     }
@@ -406,7 +406,7 @@ app.post('/api/acquisitions', function (req, res, next) {
 app.get('/api/acquisitions/:acquisition_uuid', function (req, res, next) {
     if (route_utils.validate_input('acquisition_uuid', req.params, res)) {
         sf_api.get_acquisition(req.params.acquisition_uuid, req.attributes, function (err, acquisition) {
-            err ? next(err) : route_utils.send(res, acquisition);
+            err ? next(err) : route_utils.send_rest(req, res, next, acquisition);
         });
     }
 });
@@ -417,7 +417,7 @@ app.get('/api/acquisitions/:acquisition_uuid', function (req, res, next) {
 app.get('/api/acquisitions/identity/:identity', function (req, res, next) {
     if (route_utils.validate_input('identity', req.params, res)) {
         sf_api.get_acqusitions_by_identity(req.params.identity, req.attributes, function (err, acquisitions) {
-            err ? next(err) : route_utils.send(res, acquisitions);
+            err ? next(err) : route_utils.send_rest(req, res, next, acquisitions);
         });
     }
 });
@@ -469,7 +469,7 @@ app.get('/api/acquisitions', function (req, res, next) {
             else {
                 var result = route_utils.get_dt_response_params(body.objects,
                     body.meta.total_count, body.meta.offset, req.query.sEcho);
-                route_utils.send(res, result);
+                route_utils.send_rest(req, res, next, result);
             }
         });
     }
@@ -500,7 +500,7 @@ app.get('/api/acquisitions/:acquisition_uuid/audit', function (req, res, next) {
                 construct_audit_content('fileitem', json, callback);
             },
             function (html) {
-                route_utils.send(res, {
+                route_utils.send_rest(req, res, next, {
                     acquisition_uuid: acquisition_uuid,
                     content: html
                 });
@@ -522,7 +522,7 @@ app.get('/api/credentials/cluster/:cluster_uuid', function (req, res, next) {
     if (route_utils.validate_input(['cluster_uuid'], req.params, res)) {
         var cluster_uuid = req.params['cluster_uuid'];
         var credentials = route_utils.get_acquisition_credentials(req, cluster_uuid);
-        route_utils.send(res, {
+        route_utils.send_rest(req, res, next, {
             cluster_uuid: cluster_uuid,
             found: credentials !== undefined
         });
@@ -770,7 +770,7 @@ app.get('/api/audit/:rowitem_uuid', function (req, res, next) {
                         }
                         else {
                             response.content = content;
-                            route_utils.send(res, response);
+                            route_utils.send_rest(req, res, next, response);
                         }
                     });
                 }
@@ -815,7 +815,7 @@ app.post('/api/audit', function (req, res, next) {
                     }
                     else {
                         body.content = content;
-                        route_utils.send(res, body);
+                        route_utils.send_rest(req, res, next, body);
                     }
 
                 });
@@ -833,7 +833,7 @@ app.get('/api/summary', function(req, res, next) {
             next(err);
         }
         else {
-            route_utils.send(res, list);
+            route_utils.send_rest(req, res, next, list);
         }
     });
 });
@@ -854,7 +854,7 @@ function handle_proxied_response(err, response, body, req, res, next) {
         }
     }
     else {
-        route_utils.send(res, body);
+        route_utils.send_rest(req, res, next, body);
     }
 }
 

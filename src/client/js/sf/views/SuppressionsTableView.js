@@ -21,7 +21,7 @@ define(function(require) {
 
             var link = window.location.protocol + '//' + window.location.hostname +
                 (window.location.port ? ':' + window.location.port : '') + '/sf/suppressions/' + this.model.get('suppression_id');
-            var html = uac_utils.run_template(templates, 'link.ejs', {link: link});
+            var html = uac_utils.run_template(templates, 'link.ejs', {link: link, width: '325px'});
 
             var button = view.$el.find('i.link');
             button.popover({
@@ -31,7 +31,8 @@ define(function(require) {
             })
                 .data('bs.popover')
                 .tip()
-                .addClass('link-popover');
+                .addClass('link-popover')
+                .css({width: 'auto', 'max-width': '800px'});
             button.on('click', function(ev) {
                 button.popover('toggle');
                 $('.link-text').select();
@@ -95,8 +96,6 @@ define(function(require) {
         close: function () {
             console.log('Closing row view...');
             this.$el.find('i.link').popover('destroy');
-            // Manually removing the popover due to -> https://github.com/twbs/bootstrap/issues/10335
-            this.$el.parent().find('.popover').remove();
             this.remove();
         }
     });

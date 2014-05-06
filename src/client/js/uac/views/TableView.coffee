@@ -491,7 +491,7 @@ define (require) ->
         #     table.render({server_params: {suppression_id: suppression_id}});
         #
         render: (params) ->
-            console.debug "TableView.render(#{params})"
+            console.debug "TableView(#{@instanceName}).render()"
 
             # Clear the cache before re-destroying the table.
             @.clear_cache()
@@ -610,10 +610,8 @@ define (require) ->
         #
         # Clean up and remove the table.
         #
-        close: ->
+        onBeforeClose: ->
             @destroy()
-
-            super
 
             # Fire an event after cleaning up.
             @trigger "close"

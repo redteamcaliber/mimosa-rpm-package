@@ -1,6 +1,6 @@
 define (require) ->
 
-    View = require 'uac/views/View'
+    Marionette = require 'marionette'
     utils = require 'uac/common/utils'
     templates = require 'uac/ejs/templates'
 
@@ -18,30 +18,32 @@ define (require) ->
     # Cleanup:
     #     - Call collapsable.remove() to cleanup this view.
     #
-    class CollapsableView extends View
+    class CollapsableView extends Marionette.Layout
+        template: templates['collapsable.ejs']
+
+        regions:
+            collapsable_content_region: '.collapsable-content-region'
+
         initialize: (options) ->
+            super options
             @name = if options and options.name then options.name else utils.random_string(10)
             @accordion_id = "#accordion-#{@name}"
             @collapse_id = "#collapse-#{@name}"
             @title = if options and options.title then options.title else undefined
             @collapsed = if options and options.collapsed then options.collapsed else false
-
             return
+
+        serializeData: ->
+            name: @name
+            title: @title
+            collapsed: @collapsed
 
         #
         # Render the view.
         #
-        render: ->
+        onShow: ->
             # Remove any previous listeners.
             @get_collapse().off()
-
-            # Run the template.
-            context =
-                name: @name
-                title: @title
-                collapsed: @collapsed
-
-            @apply_template templates, 'collapsable.ejs', context
 
             if @collapsed
                 @display_plus_icon()
@@ -87,16 +89,16 @@ define (require) ->
         #
         # Append content to the collapable.
         #
-        append: (el) ->
-            if el
-                @$('.collapsable-content').append(el)
+        show: (view) ->
+            if view
+                @collapsable_content_region.show view
             return
 
         #
         # Empty the collapsable content.
         #
         empty: ->
-            @$('.collapsable-content').empty()
+            @collapsable_content_region.close()
 
         #
         # Update the title of the collapsable.
@@ -115,14 +117,14 @@ define (require) ->
         # Collapse the view.
         #
         collapse: ->
-            @get_collapse().collapse('hide')
+            @get_collapse().removeClass('in')
             return
 
         #
         # Expand the view.
         #
         expand: ->
-            @get_collapse().collapse('show')
+            @get_collapse().addClass('in')
             return
 
         #
@@ -131,9 +133,3 @@ define (require) ->
         toggle: ->
             @get_collapse().collapse('toggle')
             return
-
-        #
-        # Clean up the view.
-        #
-        close: ->
-            @remove()

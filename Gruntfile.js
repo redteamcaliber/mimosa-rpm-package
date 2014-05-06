@@ -225,7 +225,7 @@ module.exports = function (grunt) {
             },
             'node-js': {
                 files: ['src/server/js/**/*.js'],
-                tasks: ['copy:unconvertedNode']
+                tasks: ['copy:unconvertedNode', 'coffee:uac-server']
             },
             'web-coffee': {
                 files: ['src/client/js/**/*.coffee', 'src/client/js/**/*.js'],

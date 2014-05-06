@@ -2,6 +2,7 @@ define(function(require) {
     var async = require('async');
     var View = require('uac/views/View');
 
+    var uac_utils = require('uac/common/utils');
     var utils = require('sf/common/utils');
     var templates = require('sf/ejs/templates');
 
@@ -74,7 +75,7 @@ define(function(require) {
                         }
                     } else {
                         // Error
-                        view.error('Nothing selected.');
+                        uac_utils.display_error('Error creating acquisition, nothing selected.');
                         return;
                     }
 

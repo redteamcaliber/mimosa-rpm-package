@@ -5,6 +5,8 @@ define (require) ->
     moment = require('moment')
     require('bootstrap_growl')
 
+    CollapsableContentView = require 'uac/views/CollapsableContentView'
+
     ###
         Retrieve the default block ui options.
 
@@ -31,7 +33,7 @@ define (require) ->
             baseZ: 5000
         )
 
-    block = (ev) ->
+    block = () ->
         $.blockUI get_blockui_options('<img src="/static/css/img/ajax-loader.gif">')
         return
 
@@ -39,12 +41,75 @@ define (require) ->
         $(el).block(get_blockui_options('<img src="/static/css/img/ajax-loader.gif">'))
         return
 
-    unblock = (el) ->
-        if el
-            $(el).unblock()
+    #
+    # Unblock the
+    #
+    unblock = ->
+        if arguments.length == 1 and arguments[0]
+            $(arguments[0]).unblock()
         else
             $.unblockUI()
         return
+
+    collapse =  (el) ->
+        el = $(el)
+        if el.hasClass 'collapsable-header'
+            new CollapsableContentView
+                el: '#' + el.attr('id'),
+                title: el.attr('collapsable-title')
+
+        for collapsable in el.find('.collapsable-header')
+            new CollapsableContentView
+                el: collapsable
+                title: $(collapsable).attr('collapsable-title')
+        if el.hasClass 'collapsable'
+            new CollapsableContentView
+                el: '#' + el.attr('id')
+                title: el.attr('collapsable-title')
+                display_toggle: false
+        for collapsable in el.find('.collapsable')
+            new CollapsableContentView
+                el: collapsable
+                title: $(collapsable).attr('collapsable-title')
+                display_toggle: false
+
+    #
+    # Fetch a model or collection with blocking support.
+    #
+    fetch = (data, el, params) ->
+        if data
+            local_params = {}
+            for k, v of params
+                if k != 'success' and k != 'error'
+                    local_params[k] = v
+            local_params.success = (model, response, options) =>
+                try
+                    if params.success
+                        # Invoke the callers success function.
+                        params.success model, response, options
+                catch e
+                    console.error e.stack
+                    display_error("Error processing fetched data: #{e}")
+                finally
+                    unblock el
+            local_params.error = (model, response, options) =>
+                try
+                    if params.error
+                        # Invoke the callers error function.
+                        params.error model, response, options
+                    else
+                        display_response_error('Error while fetching data', response);
+                catch e
+                    console.error e.stack
+                    display_error "Error while fetching data: #{e}"
+                finally
+                    unblock el
+            if el
+                block_element el
+            else
+                block()
+            return data.fetch local_params
+
 
     ###
         Generate a random string of the specified length.
@@ -149,10 +214,16 @@ define (require) ->
         return
 
     #
+    # Retrieve the related error from the response.
+    #
+    get_response_error = (response) ->
+        if response && response.responseText then response.responseText else 'Response text not defined.'
+
+    #
     # Display a message with the error from the response.
     #
     display_response_error = (message, response) ->
-        error = if response && response.responseText then response.responseText else 'Response text not defined.'
+        error = get_response_error response
         display_error "#{message} - #{error}"
         return
 
@@ -499,24 +570,27 @@ define (require) ->
         block: block
         unblock: unblock
         block_element: block_element
+        collapse: collapse
         default_view_helpers: default_view_helpers
-        random_string: random_string
+        get_theme: get_theme
         format_date_string: format_date_string
         format_unix_date: format_unix_date
-        run_template: run_template
         display_info: display_info
         display_error: display_error
+        get_response_error: get_response_error
         display_response_error: display_response_error
         display_warn: display_warn
         display_success: display_success
         usersettings: usersettings
         session: session
         storage: storage
+        random_string: random_string
         recent: recent
-        get_theme: get_theme
+        run_template: run_template
         set_theme: set_theme
         get_font_size: get_font_size
         get_styles: get_styles
         wait_for: wait_for
         mixin: mixin
+        fetch: fetch
     )

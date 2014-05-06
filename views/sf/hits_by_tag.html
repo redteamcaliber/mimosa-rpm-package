@@ -8,26 +8,3 @@
 {{ super() }}
 
 {% endblock %}
-
-{% block content %}
-<div class="container">
-    <div class='row' style="margin-bottom: 15px">
-        <div class='col-md-12'>
-            <label>
-                <h4>
-                    <i class="fa fa-filter"></i> Filter By Tag
-                </h4>
-            </label>
-            <select id="tag-select"></select>
-        </div>
-    </div>
-
-    {% include "sf/hits-template.html" %}
-
-    <div class="row">
-        <div class="col-md-12">
-            <br/>
-        </div>
-    </div>
-</div>
-{% endblock %}

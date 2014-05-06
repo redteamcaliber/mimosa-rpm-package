@@ -120,13 +120,19 @@ get_consolidated_signature_summary = (params, attributes, callback) ->
 get_alerts = (params, attributes, callback) ->
     if params.signature_uuid
         # Retrieve the CV alerts.
-        request.json_get get_cv_url('/api/v1/alerts/'), params, attributes, (err, response, body) ->
+        cv_params = _.clone params
+        cv_params.limit = 0
+        if cv_params.alert_type
+            # Remove endpoint match before sending the CV.
+            cv_params.alert_type = _.without cv_params.alert_type, ENDPOINT_MATCH
+
+        request.json_get get_cv_url('/api/v1/alerts/'), cv_params, attributes, (err, response, body) ->
             process_response(err, response, body, callback)
             return
     else if params.iocnamehash
         # Retrieve all StrikeFinder alerts.
-        params.limit = 0
-        sf_params = {}
+        sf_params =
+            limit: 0
         if params.tag then sf_params.tagname = get_list_param(params.tag).join()
         if params.client_uuid then sf_params.clients = get_list_param(params.client_uuid).join()
         if params.iocnamehash then sf_params.iocnamehash = params.iocnamehash
@@ -148,7 +154,12 @@ get_alerts = (params, attributes, callback) ->
                     occurred: hit.created
                     priority: 3
                     type: ENDPOINT_MATCH
-                    uuid: hit.rowitem_uuid
+                    uuid: hit.uuid
+                    identity: hit.identity
+                    am_cert_hash: hit.am_cert_hash
+                    cluster_uuid: hit.cluster_uuid
+                    cluster_name: hit.cluster_name
+                    rowitem_type: hit.rowitem_type
             callback null, alerts
     else
         callback "Error: Required parameters not met: #{JSON.stringify(params)}"

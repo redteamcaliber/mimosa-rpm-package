@@ -1,8 +1,6 @@
 define (require) ->
     $ = require 'jquery'
-    utils = require 'uac/common/utils'
 
-    #
     #
     # Wrap an element with a collapsable view.
     #
@@ -11,7 +9,7 @@ define (require) ->
     class CollapsableContentView extends Backbone.View
         initialize: (options) ->
             if not @name
-                @name = utils.random_string(10)
+                @name = this.cid
 
             @collapsed = options.collapsed || @$el.hasClass('collapsed')
 

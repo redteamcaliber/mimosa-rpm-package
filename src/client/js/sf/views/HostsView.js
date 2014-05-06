@@ -1,3 +1,4 @@
+
 define(function(require) {
     var View = require('uac/views/View');
     var TableView = require('uac/views/TableView');

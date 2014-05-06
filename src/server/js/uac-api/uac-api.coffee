@@ -15,7 +15,7 @@ bookshelf_lib = require 'bookshelf'
 
 # Initialize the bookshelf instance.
 Bookshelf = bookshelf_lib.initialize
-    debug: true
+    #debug: true
     client: 'postgres'
     connection:
         host: settings.get('uac:db_host')

@@ -46,7 +46,7 @@ define (require) ->
                 else if theme_font_size and theme_font_size == 'tiny'
                     font_size = 9
                 else
-                    font_size = 12
+                    font_size = 13
             @font_size(font_size)
 
             # Set the theme.
@@ -63,9 +63,9 @@ define (require) ->
                     else if theme in dark_themes
                         @editor.setTheme 'ace/theme/idle_fingers'
                     else
-                        @editor.setTheme 'ace/theme/chrome'
+                        @editor.setTheme 'ace/theme/textmate'
                 else
-                    @editor.setTheme 'ace/theme/chrome'
+                    @editor.setTheme 'ace/theme/textmate'
 
             if @options and @options.mode
                 # Set the mode.
@@ -87,7 +87,10 @@ define (require) ->
             if @options and @options.highlight isnt undefined
                 @highlight @options.highlight
 
-            # Set the height.
+            #
+            if @options and @options.max_lines
+                @max_lines @options.max_lines
+
             if @options and @options.height
                 if @options.height == 'auto'
                     # Display all of the content.
@@ -107,6 +110,26 @@ define (require) ->
         clear: ->
             @value ''
             @
+
+        height: ->
+            if arguments.length == 0
+                return @$el.css 'height'
+            else
+                if height == 'auto'
+                    @max_lines @session().getScreenLength()
+                else
+                    @$el.css 'height', arguments[0]
+                return @
+
+        max_lines: ->
+            if arguments.length == 0
+                # No way to retrieve this.
+                return undefined
+            else
+                # Display all of the content.
+                @editor.setOptions
+                    maxLines: arguments[0]
+                return @
 
         font_size: (size) ->
             if arguments.length == 0

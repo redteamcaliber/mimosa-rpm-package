@@ -4,7 +4,19 @@ define (require) ->
     _s = require 'underscore.string'
     _.mixin(_s.exports())
 
-    HitsByTagView = require 'sf/views/HitsByTagView'
-    new HitsByTagView()
+    Marionette = require 'marionette'
 
-    return
+    HitsByTagView = require 'sf/views/HitsByTagView'
+
+
+    HitsLayout
+
+    HitsByTagApp = new Marionette.Application()
+
+    HitsByTagApp.addRegions
+        content_region: '#content'
+
+    HitsByTagApp.addInitializer ->
+        @content_region.show new HitsByTagView()
+
+    HitsByTagApp.start()

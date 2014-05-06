@@ -19,6 +19,8 @@ define (require) ->
     AlertsDetailsView = require 'alerts/views/AlertsDetailsView'
     AlertFullModel = require 'alerts/models/AlertFullModel'
 
+    HitsDetailsView = require 'sf/views/HitsDetailsView'
+
     #
     # Layout for displaying the main alert template.
     #
@@ -132,7 +134,7 @@ define (require) ->
                 @summary_list_view = new AlertsSummaryTableView
                     id: 'alerts-summary-table'
                     collection: @summaries
-                @.listenTo @summaries, 'sync', ->
+                @listenToOnce @summaries, 'sync', ->
                     @layout.summary_list_region.show @summary_list_view
 
             # Fetch the summary list data.
@@ -144,13 +146,8 @@ define (require) ->
             @data.begin = moment(params.from).unix() if params.from
             @data.end = moment(params.to).unix() if params.to
 
-            utils.block_element @layout.list_region.el
             @summaries.fetch
                 data: @data
-                success: =>
-                    utils.unblock @layout.list_region.el
-                error: =>
-                    utils.unblock @layout.list_region.el
 
         @.listenTo vent, Events.ALERTS_SUMMARY_SELECTED, (row_data) =>
             unless @details_list_view
@@ -159,7 +156,7 @@ define (require) ->
                 @details_list_view = new AlertsTableView
                     id: 'alerts_details_table'
                     collection: @alerts
-                @listenTo @alerts, 'sync', ->
+                @listenToOnce @alerts, 'sync', ->
                     @layout.details_list_region.show @details_list_view
 
             if 'endpoint-match' in row_data.alert_types
@@ -169,35 +166,45 @@ define (require) ->
                 data = _.clone @data
                 data.signature_uuid = row_data.uuid
 
-            utils.block_element @layout.list_region.el
+            #utils.block_element @layout.list_region.el
             @details_list_view.fetch {
                 data: data
-                success: =>
-                    utils.unblock @layout.list_region.el
-                error: =>
-                    utils.unblock @layout.list_region.el
             }
             return
 
-        @.listenTo vent, Events.ALERTS_ALERT_SELECTED, (row_data) =>
+        # Display the alert details.
+        @listenTo vent, Events.ALERTS_ALERT_SELECTED, (row_data) =>
+            # Clear the region.
             @layout.details_content_region.reset()
 
-            alert = new AlertFullModel()
-            alert.uuid = row_data.uuid
+            if row_data.type != 'endpoint-match'
+                # Display everything but HX alerts.
+                alert = new AlertFullModel()
+                alert.uuid = row_data.uuid
 
-            details_view = new AlertsDetailsView
-                model: alert
+                details_view = new AlertsDetailsView
+                    model: alert
 
-            @listenToOnce alert, 'sync', ->
-                @layout.details_content_region.show details_view
+                @listenToOnce alert, 'sync', ->
+                    @layout.details_content_region.show details_view
 
-            # Load the alert.
-            utils.block()
-            alert.fetch
-                success: =>
-                    utils.unblock()
-                error: =>
-                    utils.unblock()
+                # Load the alert.
+                utils.block()
+                alert.fetch
+                    success: =>
+                        utils.unblock()
+                    error: =>
+                        utils.unblock()
+                        utils.display_response_error "Error while loading alert: #{row_data.uuid}"
+            else
+                # Display HX alert details.
+                hx_details = new HitsDetailsView
+                    data: row_data
+#                    hits_table_name: 'alerts_details_table'
+
+                @layout.details_content_region.show hx_details
+                hx_details.render_details(row_data);
+
             return
 
 
