@@ -74,6 +74,8 @@ define (require)->
         name: 'hashes'
         displayKey: (value)-> if value then value.vt.md5
         source: md5Hashes.ttAdapter()
+        templates:
+          suggestion: templates['md5-condensed.ejs']
         }
 
 
