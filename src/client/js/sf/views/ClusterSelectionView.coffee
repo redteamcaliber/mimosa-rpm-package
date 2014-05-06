@@ -13,7 +13,8 @@ define (require)->
   vent = require 'uac/common/vent'
   reqres = require 'uac/common/reqres'
   async = require 'async'
-
+  resources = require 'uac/common/resources'
+  Backbone = require 'backbone'
 
   class ClusterSelectionView extends Marionette.ItemView
     initialize: (@options = {} )=>
@@ -52,18 +53,17 @@ define (require)->
           from = if usersettings.timeFrame and usersettings.timeFrame.from then usersettings.timeFrame.from else undefined
           to = if usersettings.timeFrame and usersettings.timeFrame.to then usersettings.timeFrame.to else undefined
 
-        @times = new TimeCollection()
+        @times = new Backbone.Collection(resources.sf_times)
         @timeSearchView = new TimeSearchView
           selected: time
           from: from
           to: to
-          default: 'days_1'
+          default: 'months_3'
           collection: @times
 
         #TODO: this should be put into a region
-        @times.fetch
-          success: => @$("#searchControls").append(@timeSearchView.render().el)
-          error: => console.log "error retrieving time controls"
+#        setTimeout (=> @$("#searchControls").append(@timeSearchView.render().el)), 500
+
 
 
       if @options.hide_services != true
@@ -125,6 +125,7 @@ define (require)->
       @delegateEvents
         'click #submit-button': 'on_submit'
         'click #clear-button': 'on_clear'
+      unless @options.hide_timeframe then @$("#searchControls").append(@timeSearchView.render().el)
 
       return @
 

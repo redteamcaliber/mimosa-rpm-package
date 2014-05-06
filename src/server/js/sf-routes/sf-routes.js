@@ -259,6 +259,12 @@ function get_hits_params(req) {
     if (req.query.identity_rollup) {
         params.identity_rollup = req.query.identity_rollup;
     }
+    if (req.query.begin) {
+        params.begin = req.query.begin;
+    }
+    if (req.query.end) {
+        params.end = req.query.end;
+    }
 
     return params;
 }
