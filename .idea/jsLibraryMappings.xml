@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="PROJECT" libraries="{mocha-DefinitelyTyped}" />
+    <file url="file://$PROJECT_DIR$" libraries="{uac-node node_modules}" />
+    <file url="PROJECT" libraries="{Node.js v0.10.15 Core Modules, async-DefinitelyTyped, backbone-DefinitelyTyped, bootstrap-DefinitelyTyped, chai-DefinitelyTyped, gruntjs-DefinitelyTyped, jquery-DefinitelyTyped, mocha-DefinitelyTyped, moment-DefinitelyTyped, requirejs-DefinitelyTyped, should-DefinitelyTyped, uac-node node_modules, underscore-DefinitelyTyped, underscore.string-DefinitelyTyped}" />
     <includedPredefinedLibrary name="Node.js Globals" />
   </component>
 </project>

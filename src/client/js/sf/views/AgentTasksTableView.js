@@ -234,7 +234,7 @@ define(function (require) {
                 ];
 
                 options.iDisplayLength = 25;
-//                options.iPipe = 1; // Disable pipelining.
+                options.iPipe = -1; // Disable pipelining.
 
                 options['sDom'] = 'ltip';
             }
@@ -249,14 +249,13 @@ define(function (require) {
                 }
 
                 var tasks_count = view.get_total_rows();
-                view.tasks_collapsable.set('title', _.sprintf('<i class="fa fa-cloud-download"></i> Tasks (%s)',
+                view.tasks_collapsable.set('title', _.sprintf('<i class="fa fa-tasks"></i> Tasks (%s)',
                     tasks_count));
-                if (tasks_count == 0) {
-                    // Collapse the comments if there are none.
-                    view.tasks_collapsable.collapse();
-                }
-                else {
-                    view.tasks_collapsable.expand();
+                if (options.condensed) {
+                    if (tasks_count == 0) {
+                        // Collapse the comments if there are none.
+                        view.tasks_collapsable.collapse();
+                    }
                 }
             });
         },

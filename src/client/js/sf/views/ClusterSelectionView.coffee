@@ -140,7 +140,6 @@ define (require)->
         #  a client that is currently selected.
         #
         load_clusters: ->
-            console.dir @
             clusters = []
 
             #Create a map of the selected client ids.

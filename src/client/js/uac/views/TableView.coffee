@@ -875,9 +875,6 @@ define (require) ->
             bSortClasses: false
             bProcessing: false
             asStripeClasses: []
-            fnServerData: (sSource, aoData, fnCallback) ->
-                parent.pipeline sSource, aoData, fnCallback
-                return
 
             fnRowCallback: (row, data, display_index, display_index_full) ->
                 parent.trigger 'row:callback', row, data, display_index, display_index_full
@@ -908,6 +905,12 @@ define (require) ->
                 parent.trigger "draw", oSettings
                 parent.trigger "empty"  if parent.length() is 0
                 return
+
+        if settings.iPipe and settings.iPipe > 0
+            defaults.fnServerData = (sSource, aoData, fnCallback) ->
+                parent.pipeline sSource, aoData, fnCallback
+                return
+
 
         results = {}
 

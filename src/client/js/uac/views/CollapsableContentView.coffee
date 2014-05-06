@@ -1,5 +1,6 @@
 define (require) ->
     $ = require 'jquery'
+    Backbone = require 'backbone'
 
     #
     # Wrap an element with a collapsable view.

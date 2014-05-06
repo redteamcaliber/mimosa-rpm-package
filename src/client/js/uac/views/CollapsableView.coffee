@@ -117,14 +117,14 @@ define (require) ->
         # Collapse the view.
         #
         collapse: ->
-            @get_collapse().removeClass('in')
+            @get_collapse().collapse('hide')
             return
 
         #
         # Expand the view.
         #
         expand: ->
-            @get_collapse().addClass('in')
+            @get_collapse().collapse('show')
             return
 
         #

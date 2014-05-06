@@ -19,10 +19,11 @@ define(function (require) {
     var AcquireFormView = require('sf/views/AcquireFormView');
     var MassTagFormView = require('sf/views/MassTagFormView');
     var SuppressionsTableView = require('sf/views/SuppressionsTableView');
-    var AcquisitionsTableView = require('sf/views/AcquisitionsTableView');
+    var AgentTasksTableView = require('sf/views/AgentTasksTableView');
+
     var MD5ModelView = require('sf/views/MD5ModalView');
 
-    var AcquisitionCollection = require('sf/models/AcquisitionCollection');
+    var AgentTaskCollection = require('sf/models/AgentTaskCollection');
     var TagView = require('sf/views/TagView');
     var IOCCollection = require('sf/models/IOCCollection');
     var AgentHostModel = require('sf/models/AgentHostModel');
@@ -763,7 +764,7 @@ define(function (require) {
         template: templates['hits-details.ejs'],
 
         regions: {
-            acquisitions_region: '.acquisitions-region',
+            tasks_region: '#tasks-region',
             audit_type_region: '.audit-type-region',
             comments_region: '.comments-region',
             link_region: '.link-region',
@@ -1150,14 +1151,8 @@ define(function (require) {
 
             view.listenTo(comments_view, 'load', function (comments_count) {
                 collapsable.set_title(_.sprintf('<i class="fa fa-comments"></i> Comments (%s)', comments_count));
-                if (comments_count == 0) {
-                    // Collapse the comments if there are none.
-                    collapsable.collapse();
-                }
-                else {
-                    collapsable.expand();
-                }
             });
+
             collapsable.show(comments_view);
         },
 
@@ -1166,15 +1161,26 @@ define(function (require) {
         //
         render_tasks: function(identity) {
             var view = this;
-            var acquisitions = new AcquisitionCollection();
-            acquisitions.identity = identity;
-            var acquisitions_table = new AcquisitionsTableView({
-                collection: acquisitions,
-                condensed: true
-            });
-            acquisitions.fetch({
+
+            var tasks = new AgentTaskCollection();
+            tasks.identity = identity;
+            tasks.hash = view.row.am_cert_hash;
+
+            tasks.fetch({
                 success: function() {
-                    view.acquisitions_region.show(acquisitions_table);
+                    var collapsable = new CollapsableView();
+                    view.tasks_region.show(collapsable);
+                    var tasks_view = new AgentTasksTableView({
+                        collection: tasks,
+                        condensed: true
+                    });
+                    collapsable.listenTo(tasks_view, 'load', function() {
+                        if (tasks_view.get_total_rows() == 0) {
+                            collapsable.collapse();
+                        }
+                        collapsable.set_title(_.sprintf('<i class="fa fa-tasks"></i> Agent Tasks (%s)', tasks_view.get_total_rows()));
+                    });
+                    collapsable.show(tasks_view);
                 },
                 error: function(collection, response) {
                     uac_utils.display_response_error('Error while retrieving tasks.', response);
