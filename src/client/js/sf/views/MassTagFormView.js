@@ -1,4 +1,6 @@
 define(function(require) {
+    var vent = require('uac/common/vent');
+    var Events = require('sf/common/Events');
     var View = require('uac/views/View');
     var MassTagModel = require('sf/models/MassTagModel');
     var IOCTermsCollection = require('sf/models/IOCTermsCollection');
@@ -154,6 +156,7 @@ define(function(require) {
 
                             // Notify that the mass tag was created.
                             view.trigger('create', view.model);
+                            vent.trigger(Events.SF_MASS_TAG_CREATE, view.model);
 
                             // Hide the form.
                             view.$("#mass-tag-form").modal("hide");

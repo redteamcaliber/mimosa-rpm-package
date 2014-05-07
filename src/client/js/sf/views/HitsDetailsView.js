@@ -120,6 +120,7 @@ define(function (require) {
                 console.log('Selected identity: ' + selected_uuid);
                 // Trigger an event that the row uuid was selected.
                 view.trigger('click', selected_uuid);
+                vent.trigger(Events.SF_IDENTITY_SELECT, selected_uuid);
             }
         }
     });
@@ -298,7 +299,7 @@ define(function (require) {
                 }
             });
         },
-        suppress: function (ev) {
+        suppress: function () {
             this.trigger("suppress", this.selection, this.ioc_term);
             vent.trigger(Events.SF_SUPPRESS_ACTION, {
                 ioc_term: this.ioc_term,
@@ -306,7 +307,7 @@ define(function (require) {
             });
             this.$el.parent().hide();
         },
-        auto_suppress: function (ev) {
+        auto_suppress: function () {
             this.trigger("auto-suppress", this.selection, this.ioc_term);
             vent.trigger(Events.SF_AUTO_SUPPRESS_ACTION, {
                 ioc_term: this.ioc_term,
@@ -314,7 +315,7 @@ define(function (require) {
             });
             this.$el.parent().hide();
         },
-        acquire: function (ev) {
+        acquire: function () {
             console.info('Firing acquire action...');
             this.trigger("acquire", this.selection);
             vent.trigger(Events.SF_ACQUIRE_ACTION, {
@@ -529,6 +530,7 @@ define(function (require) {
 
             console.log('Selected IOC with exp_key: ' + exp_key);
             view.trigger('ioc:selected', exp_key);
+            vent.trigger(Events.SF_IOC_TAB_SELECT, exp_key);
 
             if (!_.has(view.suppressions_table_map, exp_key)) {
                 // Initialize the suppressions table for the expression.
@@ -538,11 +540,6 @@ define(function (require) {
                 var suppressions_table = new SuppressionsTableView({
                     el: $(_.sprintf('#suppressions-list-%s', exp_key)),
                     condensed: true
-                });
-
-                view.listenTo(suppressions_table, 'delete', function () {
-                    // Trigger a higher level event when a suppression has been deleted.
-                    view.trigger('suppression:deleted');
                 });
 
                 view.suppressions_table_map[exp_key] = suppressions_table;
@@ -826,15 +823,9 @@ define(function (require) {
 
             view.listenTo(vent, Events.SF_ACQUIRE_ACTION, function(params) {
                 console.info('Initiating acquisition for selection: ' + params.selection);
-                console.dir(vent);
 
                 var acquire_form_view = new AcquireFormView({
                     el: '#dialog-div'
-                });
-
-                // TODO: Use vent!
-                view.listenToOnce(acquire_form_view, 'create', function (model) {
-                    view.trigger('create:acquire', view.row);
                 });
 
                 var cluster = view.host.attributes.cluster;
@@ -859,11 +850,6 @@ define(function (require) {
                 // Display the mass tag dialog.
                 var mass_tag_form = new MassTagFormView({
                     el: '#dialog-div'
-                });
-
-                // TODO: Use Vent!
-                view.listenToOnce(mass_tag_form, 'create', function (model) {
-                    view.trigger('create:masstag', view.row, model);
                 });
 
                 mass_tag_form.render({
@@ -925,8 +911,7 @@ define(function (require) {
                                     uac_utils.display_success(msg);
 
                                     // Notify that a suppression was created.
-                                    // TODO: Use vent!
-                                    view.trigger('create:suppression', view.row, suppression_model);
+                                    vent.trigger(Events.SF_SUPPRESS_CREATE, view.row, suppression_model);
                                 }
                                 else {
                                     // The task did not complete and is running in the background.
@@ -1023,11 +1008,9 @@ define(function (require) {
             });
             if (tagging_enabled) {
                 // Only listen to create events if tagging is enabled.
-                view.listenTo(tags_view, 'create', function (rowitem_uuid, tagname) {
+                view.listenTo(vent, Events.SF_TAG_CREATE, function(params) {
                     // Reload the details view.
-                    view.render_rowitem(rowitem_uuid);
-                    // We have tagged the Trigger an event when a new tag has been created.
-                    view.trigger('create:tag', rowitem_uuid, tagname);
+                    view.render_rowitem(params.rowitem_uuid);
                 });
             }
             sf_utils.get_tags(function (err, tag_values) {
@@ -1078,20 +1061,12 @@ define(function (require) {
             var ioc_tabs_view = new IOCTabsView({
                 collection: view.iocs
             });
-            view.listenTo(ioc_tabs_view, 'ioc:selected', function (exp_key) {
+            view.listenTo(vent, Events.SF_IOC_TAB_SELECT, function (exp_key) {
                 // Update the hits details view expression key whenever an IOC tab is selected.
                 view.exp_key = exp_key;
                 console.info('Hits details view now associated with exp_key: ' + exp_key);
             });
-            view.listenTo(ioc_tabs_view, 'suppression:deleted', function () {
-                // TODO: Make this more generic!
-                // Reload the hits after a suppression has been deleted.  Attempt to select the same row that we are
-                // current positioned on.
-                view.hits_table_view.refresh({
-                    name: 'uuid',
-                    value: rowitem_uuid
-                });
-            });
+
             uac_utils.fetch(view.iocs, view.ioc_tabs_region.el, {
                 success: function () {
                     // Show the IOC tabs.
@@ -1281,25 +1256,15 @@ define(function (require) {
                 view.suppression_form_view = new SuppressionFormView({
                     el: $("#dialog-div")
                 });
-                view.listenTo(view.suppression_form_view, 'create', function (model) {
-                    view.trigger('create:suppression', view.row, model);
-                });
 
                 // Acquire form.
                 view.acquire_form_view = new AcquireFormView({
                     el: '#dialog-div'
                 });
-                view.listenTo(view.acquire_form_view, 'create', function (model) {
-                    // After an acquisition the row tag should be investigating.
-                    view.trigger('create:acquire', view.row, model);
-                });
 
                 // Mass tag form.
                 view.mass_tag_form = new MassTagFormView({
                     el: '#dialog-div'
-                });
-                view.listenTo(view.mass_tag_form, 'create', function (model) {
-                    view.trigger('create:masstag', view.row, model);
                 });
 
                 // Context menu.
@@ -1310,7 +1275,7 @@ define(function (require) {
                     masstag: view.options.masstag
                 });
 
-                view.listenTo(view.context_menu, 'auto-suppress', function (selection, ioc_term) {
+                view.listenTo(vent, Events.SF_AUTO_SUPPRESS_ACTION, function (selection, ioc_term) {
                     // Auto create a suppression.
                     var suppression_model = new SuppressionModel({
                         itemvalue: selection,
@@ -1357,6 +1322,7 @@ define(function (require) {
 
                                         // Notify that a suppression was created.
                                         view.trigger('create:suppression', view.row, suppression_model);
+                                        vent.trigger(Events.SF_SUPPRESS_CREATE, view.row, suppression_model);
                                     }
                                     else {
                                         // The task did not complete and is running in the background.

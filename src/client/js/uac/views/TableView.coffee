@@ -878,9 +878,6 @@ define (require) ->
             fnRowCallback: (row, data, display_index, display_index_full) ->
                 parent.trigger 'row:callback', row, data, display_index, display_index_full
 
-                # Remove any existing click events for the row.
-                $(row).unbind 'click'
-
                 # Bind a click event to the row.
                 $(row).bind "click", (ev) ->
                     # Select the row.

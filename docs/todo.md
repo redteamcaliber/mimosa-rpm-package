@@ -22,6 +22,9 @@ UAC ToDo
 - Remove the HR on the hits view until the details are rendered.
 - Convert selectView to an itemView.
 - Remove the merge code.
+- Clear the hits and hits detail on reset or clearing of initial parameters.
+- Clear on the hits search should clear the local storage.
+- Add a suppression deleted handler in all of the top level views.
 
 # Host caching
 - Utilize host caching with sf.

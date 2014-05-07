@@ -1,6 +1,7 @@
 define (require) ->
     Marionette = require 'marionette'
 
+    vent = require 'uac/common/vent'
     TableView = require 'uac/views/TableView'
     CollapsableContentView = require 'uac/views/CollapsableContentView'
     utils = require 'uac/common/utils'
@@ -44,22 +45,22 @@ define (require) ->
                         # Use this value when available to select the corresponding IOC tab.
                         @hits_details_view.default_exp_key = @options.exp_key
 
-                    @listenTo @hits_details_view, Events.SF_SUPPRESS_CREATE, =>
+                    @listenTo vent, Events.SF_SUPPRESS_CREATE, =>
                         # Reload the facets after a suppression is created.
                         @facets_view.fetch()
-
-                    @listenTo @hits_details_view, 'create:tag', (rowitem_uuid, tagname) =>
+                    @listenTo vent, Events.SF_SUPPRESS_DELETE, =>
+                        # Reload the facets after a suppression is deleted.
+                        @facets_view.fetch()
+                    @listenTo vent, Events.SF_TAG_CREATE, (params) =>
                         # A new tag has been created, loop through the table nodes and manually update the tagname
                         # for the relevant row.  This is a shortcut rather than re-loading the entire table.
-                        @hits_table_view.update_row('uuid', rowitem_uuid, 'tagname', tagname, 1)
-
-                    @listenTo @hits_details_view, 'create:acquire', (row) =>
+                        @hits_table_view.update_row('uuid', params.rowitem_uuid, 'tagname', params.tagname, 1)
+                    @listenTo vent, Events.SF_ACQUIRE_CREATE, (row) =>
                         # An acquisition has been created, update the row's tag value.
                         @hits_table_view.update_row('uuid', row.uuid, 'tagname', 'investigating', 1)
                         # Refresh the comments.
                         @hits_details_view.fetch() # TODO: This isn't working.
-
-                    @listenTo @hits_details_view, 'create:masstag', =>
+                    @listenTo vent, Events.SF_MASS_TAG_CREATE, =>
                         # Reload the facets after a suppression is created.
                         @facets_view.fetch()
 

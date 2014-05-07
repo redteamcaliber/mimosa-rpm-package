@@ -1,4 +1,6 @@
 define(function(require) {
+    var vent = require('uac/common/vent');
+    var Events = require('sf/common/Events');
     var View = require('uac/views/View');
     var TableView = require('uac/views/TableView');
     var CollapsableContentView = require('uac/views/CollapsableContentView');
@@ -39,7 +41,7 @@ define(function(require) {
                 return false;
             });
         },
-        on_delete: function (ev) {
+        on_delete: function () {
             var view = this;
             var message = _.sprintf('Delete suppression: %s', view.model.as_string());
             if (confirm(message)) {
@@ -70,6 +72,7 @@ define(function(require) {
 
                                 // Notify that the suppression was deleted.
                                 view.trigger('delete', view.model);
+                                vent.trigger(Events.SF_SUPPRESS_DELETE, view.model);
                             }
                             else {
                                 // The task is still running.
@@ -257,11 +260,12 @@ define(function(require) {
                 });
                 suppression_row.listenTo(suppression_row, 'delete', function () {
                     view.trigger('delete');
+                    vent.trigger(Events.SF_SUPPRESS_DELETE);
                 });
                 view.suppression_row_views.push(suppression_row);
             });
         },
-        close: function () {
+        onBeforeClose: function() {
             console.log('Closing suppression table: ' + this.el.id + ' with ' + this.suppression_row_views.length + ' rows.');
 
             // Clean up the suppression row listeners.
@@ -269,12 +273,6 @@ define(function(require) {
                 row.close();
             });
             this.suppression_row_views = [];
-
-            // Destroy the suppressions datatable.
-            this.destroy();
-
-            // Remove any current listeners.
-            this.stopListening();
         }
     });
 
