@@ -91,7 +91,8 @@ define (require) ->
         #
         show: (view) ->
             if view
-                @collapsable_content_region.show view
+                if @collapsable_content_region and @collapsable_content_region.el
+                    @collapsable_content_region.show view
             return
 
         #

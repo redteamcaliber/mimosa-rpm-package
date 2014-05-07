@@ -28,15 +28,14 @@ define (require) ->
                 html: true
                 trigger: 'click'
                 content: html
-                container: window.document.body
             ).data('bs.popover').tip().addClass('link-popover').css
                 width: 'auto'
                 'max-width': '800px'
 
             el.on 'shown.bs.popover', =>
-                @$('.link-text').select()
+                $('.link-text').select()
 
-        onClose: ->
+        onBeforeClose: ->
             @$('a').popover('destroy')
 
     return HitsLinkView

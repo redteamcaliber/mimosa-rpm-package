@@ -1,7 +1,8 @@
 define (require)->
+    resources = require 'uac/common/resources'
+
     SelectView = require 'uac/views/SelectView'
     TimeSearchView = require 'uac/views/TimeSearchView'
-    TimeCollection = require 'alerts/models/TimeCollection'
     moment = require 'moment'
     utils = require 'uac/common/utils'
     templates = require 'sf/ejs/templates'
@@ -18,28 +19,19 @@ define (require)->
     #
     # Generic view for displaying clients, clusters, and date range.
     #
-    class ClusterSelectionView extends Marionette.ItemView
-        initialize: (@options = {}) =>
-            @registerListeners()
+    class ClusterSelectionView extends Marionette.Layout
+        template: templates['cluster-selection.ejs']
+
+        regions:
+            clear_button_region: '#clear-button'
+            clients_select_region: '#clients-select'
+            search_controls_region: '#searchControls'
+            services_select_region: '#services-select'
+            clusters_select_region: '#clusters-select'
+            submit_button_region: '#submit-button'
 
         serializeData: =>
             hide_services: @options.hide_services
-
-        template: templates['cluster-selection.ejs']
-
-        ### TODO:
-            longer term it should not be necessary for us to manually babysit the toggle buttons like this
-            this is here because the other controls on the page still need to have their status polled each
-            time there is an update
-        ###
-        #
-        # Register listeners for the view
-        #
-        registerListeners: =>
-            vent.on "DateView:startDate:change", =>
-                @update_options()
-            vent.on "DateView:endDate:change", =>
-                @update_options()
 
         #
         # Render the selection view.
@@ -56,27 +48,21 @@ define (require)->
                     from = if usersettings.timeFrame and usersettings.timeFrame.from then usersettings.timeFrame.from else undefined
                     to = if usersettings.timeFrame and usersettings.timeFrame.to then usersettings.timeFrame.to else undefined
 
-                @times = new TimeCollection()
+                @times = new Backbone.Collection(resources.sf_times)
                 @timeSearchView = new TimeSearchView
                     selected: time
                     from: from
                     to: to
                     default: 'days_1'
                     collection: @times
-
-                #TODO: this should be put into a region
-                @times.fetch
-                    success: =>
-                        @$("#searchControls").append(@timeSearchView.render().el)
-                    error: =>
-                        console.log "error retrieving time controls"
+                @search_controls_region.show @timeSearchView
 
 
             if @options.hide_services != true
-                #Render the services.
+                # Render the services.
                 @services = new ServicesCollection()
                 @services_view = new SelectView
-                    el: @$("#services-select")
+                    el: @$(@services_select_region.el)
                     collection: @services
                     id_field: "mcirt_service_name"
                     value_field: "description"
@@ -95,7 +81,7 @@ define (require)->
             #Render the clients.
             @clients = new ClientCollection()
             @clients_view = new SelectView
-                el: @$('#clients-select')
+                el: @$(@clients_select_region.el)
                 collection: @clients
                 id_field: 'client_uuid'
                 value_field: 'client_name'
@@ -104,7 +90,7 @@ define (require)->
 
             @clients.reset(StrikeFinder.clients)
             @clients_view.on 'change', =>
-                #Reload the clusters based on the selected clients.
+                # Reload the clusters based on the selected clients.
                 @load_clusters()
 
                 #Update the submit button.
@@ -113,7 +99,7 @@ define (require)->
             #Render the clusters.
             @clusters = new ClustersCollection()
             @clusters_view = new SelectView
-                el: @$("#clusters-select")
+                el: @$(@clusters_select_region.el)
                 collection: @clusters
                 id_field: "cluster_uuid"
                 value_field: "cluster_name"
@@ -132,8 +118,14 @@ define (require)->
                 'click #submit-button': 'on_submit'
                 'click #clear-button': 'on_clear'
 
-            return @
+            vent.on "DateView:startDate:change", =>
+                @update_options()
+            vent.on "DateView:endDate:change", =>
+                @update_options()
 
+            @update_options()
+
+            return @
 
         #
         #  Load the clusters options based on the current clients selection.  Don't load any clusters that correspond to
@@ -218,7 +210,7 @@ define (require)->
         # @param enabled - true or false, defaults to true.
         #
         enable_submit: (enabled)->
-            @$el.find('#submit-button').prop('disabled', enabled == false)
+            @$el.find(@submit_button_region.el).prop('disabled', enabled == false)
 
 
         #
@@ -226,7 +218,7 @@ define (require)->
         #  @param enabled - true or false, defaults to false.
         #
         enable_clear: (enabled)->
-            @$el.find('#clear-button').prop('disabled', enabled == false)
+            @$el.find(@clear_button_region.el).prop('disabled', enabled == false)
 
         #
         # Update the submit button status based on the current form selections.  The button should only be enabled if a

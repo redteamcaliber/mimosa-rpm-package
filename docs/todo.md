@@ -2,6 +2,11 @@ UAC ToDo
 ========
 
 ### Hits Details Changes
+- Fix the collapsable around the hits table.
+- Why is the acqusition call so slow, we are fetching a single record by id or in an in clause?
+- Getting an error when clicking on an acquisition.
+- Need to be able to reload the hits details view on an acquisition.
+- Looks like drew has a limit on the current acquisitions calls.
 - the link view doesn't work.
 - the listeners could be building up when switching rows, need to look into this.
 - Need to test the merge and merge all functions.
@@ -15,6 +20,8 @@ UAC ToDo
 - Create the new audit templates.
 - Update the listeners in the Main's/Views to use vent rather that listening to references.
 - Remove the HR on the hits view until the details are rendered.
+- Convert selectView to an itemView.
+- Remove the merge code.
 
 # Host caching
 - Utilize host caching with sf.

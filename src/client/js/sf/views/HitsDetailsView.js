@@ -602,11 +602,6 @@ define(function (require) {
         initialize: function (options) {
             var view = this;
 
-            if (!view.collection) {
-                view.collection = new CommentsCollection();
-            }
-            view.listenTo(view.collection, 'sync', view.render);
-
             // Call the super initialize.
             view.constructor.__super__.initialize.apply(this, arguments);
 
@@ -653,26 +648,6 @@ define(function (require) {
 
             view.options.iDisplayLength = 10;
             view.options.sDom = 'lftip';
-        },
-        /**
-         * Load the comments based on the row item.
-         * @param rowitem_uuid - the row item.
-         */
-        fetch: function (rowitem_uuid) {
-            var view = this;
-
-            if (rowitem_uuid) {
-                this.collection.rowitem_uuid = rowitem_uuid;
-            }
-            uac_utils.block_element(view.$el);
-            this.collection.fetch({
-                success: function () {
-                    uac_utils.unblock(view.$el);
-                },
-                error: function () {
-                    uac_utils.unblock(view.$el);
-                }
-            });
         }
     });
 
@@ -695,13 +670,19 @@ define(function (require) {
         },
         onShow: function() {
             var view = this;
-            view.comments_table = new CommentsTableView();
-            view.listenTo(view.comments_table, 'load', function() {
-                view.trigger('load', view.comments_table.get_total_rows());
+
+            view.comments_table = new CommentsTableView({
+                collection: view.collection
             });
             view.comments_table_region.show(view.comments_table);
-            // Load the comments.
-            view.comments_table.fetch(view.rowitem_uuid);
+        },
+        length: function() {
+            if (this.comments_table) {
+                return this.comments_table.get_total_rows();
+            }
+            else {
+                return 0;
+            }
         },
         hide: function () {
             this.$el.hide();
@@ -1142,18 +1123,27 @@ define(function (require) {
         render_comments: function(rowitem_uuid) {
             var view = this;
 
-            var collapsable = new CollapsableView();
+            var comments = new CommentsCollection();
+            comments.rowitem_uuid = rowitem_uuid;
+
+            var collapsable = new CollapsableView({
+                collapsed: true,
+                title: '<i class="fa fa-comments"></i> Comments'
+            });
             view.comments_region.show(collapsable);
 
-            var comments_view = new CommentsView({
-                rowitem_uuid: rowitem_uuid
+            uac_utils.fetch (comments, view.comments_region.el, {
+                success: function() {
+                    collapsable.set_title(_.sprintf('<i class="fa fa-comments"></i> Comments (%s)', comments.length));
+                    var comments_view = new CommentsView({
+                        collection: comments
+                    });
+                    collapsable.show(comments_view);
+                    if (comments.length > 0) {
+                        collapsable.expand();
+                    }
+                }
             });
-
-            view.listenTo(comments_view, 'load', function (comments_count) {
-                collapsable.set_title(_.sprintf('<i class="fa fa-comments"></i> Comments (%s)', comments_count));
-            });
-
-            collapsable.show(comments_view);
         },
 
         //
@@ -1166,21 +1156,23 @@ define(function (require) {
             tasks.identity = identity;
             tasks.hash = view.row.am_cert_hash;
 
-            tasks.fetch({
+            var collapsable = new CollapsableView({
+                collapsed: true,
+                title: '<i class="fa fa-tasks"></i> Agent Tasks'
+            });
+            view.tasks_region.show(collapsable);
+
+            uac_utils.fetch(tasks, view.tasks_region.el, {
                 success: function() {
-                    var collapsable = new CollapsableView();
-                    view.tasks_region.show(collapsable);
+                    collapsable.set_title(_.sprintf('<i class="fa fa-tasks"></i> Agent Tasks (%s)', tasks.length));
                     var tasks_view = new AgentTasksTableView({
                         collection: tasks,
                         condensed: true
                     });
-                    collapsable.listenTo(tasks_view, 'load', function() {
-                        if (tasks_view.get_total_rows() == 0) {
-                            collapsable.collapse();
-                        }
-                        collapsable.set_title(_.sprintf('<i class="fa fa-tasks"></i> Agent Tasks (%s)', tasks_view.get_total_rows()));
-                    });
                     collapsable.show(tasks_view);
+                    if (tasks.length > 0) {
+                        collapsable.expand();
+                    }
                 },
                 error: function(collection, response) {
                     uac_utils.display_response_error('Error while retrieving tasks.', response);

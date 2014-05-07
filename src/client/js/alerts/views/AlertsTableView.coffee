@@ -25,6 +25,11 @@ define (require) ->
             el.css
                 width: 'auto'
                 'max-width': '600px'
+            return @
+
+        onBeforeClose: ->
+            @$el.popover('destroy')
+
 
     tag_renderer = (index) ->
         (

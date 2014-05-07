@@ -3,7 +3,7 @@
 #
 define (require) ->
     Marionette = require('marionette')
-    uac_utils = require('uac/common/utils')
+    utils = require('uac/common/utils')
 
     vent = require('uac/common/vent')
     reqres = require('uac/common/reqres')
@@ -15,39 +15,11 @@ define (require) ->
 
     templates = require('sf/ejs/templates')
     Events = require('sf/common/Events')
+    ExpressionView = require 'sf/views/ExpressionView'
     IOCSummaryCollection = require('sf/models/IOCSummaryCollection')
     IOCDetailsCollection = require('sf/models/IOCDetailsCollection')
     ClusterSelectionView = require('sf/views/ClusterSelectionView')
-    HitsView = require('sf/views/HitsView')
 
-
-    #
-    # View class to display a textual representation of the IOC expression.
-    #
-    class ExpressionView extends View
-        render: ->
-            exp_string = @model.get('exp_string')
-            tokens = exp_string.split(/(AND)|(OR)/)
-
-            text = ''
-            _.each tokens, (token) ->
-                if not token
-                    #
-                else if token == 'AND' or token == 'OR'
-                    text += token + '\n'
-                else
-                    text += token
-
-            popover = @$el.popover
-                html: true
-                trigger: 'hover'
-                content: '<pre style="border: 0; margin: 2px; font-size: 85%; overflow: auto">' + text + '</pre>'
-                placement: 'left'
-                container: 'body'
-            popover.data('bs.popover').tip().addClass('expression-popover')
-
-        close: ->
-            @stopListening()
 
     #
     # IOC Summary table view.
@@ -89,9 +61,9 @@ define (require) ->
                 vent.trigger Events.SF_IOCSUMMARY_SELECT, data
 
             # If there is an iocnamehash in the user settings then select it in the summary table.
-            if uac_utils.usersettings().iocnamehash
+            if utils.usersettings().iocnamehash
                 @listenTo @, 'load', =>
-                    iocnamehash = uac_utils.usersettings().iocnamehash
+                    iocnamehash = utils.usersettings().iocnamehash
                     if iocnamehash
                         @select(iocnamehash)
 
@@ -159,7 +131,7 @@ define (require) ->
 
     #
      # IOC details view of the shopping page.
-     #/
+     #
     class IOCDetailsView extends View
         initialize: (options) ->
             @options = options
@@ -245,16 +217,16 @@ define (require) ->
         template: templates['shopping-layout.ejs'],
 
         regions:
-            cluster_selection_region: '.cluster-selection-region'
-            ioc_summary_region: '.ioc-summary-region'
-            ioc_details_region: '.ioc-details-region'
-            hits_region: '.hits-region'
+            cluster_selection_region: '#cluster-selection-region'
+            ioc_summary_region: '#ioc-summary-region'
+            ioc_summary_table_region: '#ioc-summary-table-region'
+            ioc_details_region: '#ioc-details-region'
 
         initialize: ->
 
             @listenTo vent, Events.SF_IOC_SEARCH, (params) =>
                 # Update the services, clients, and clusters user settings on submit.
-                uac_utils.usersettings
+                utils.usersettings
                     services: params.services
                     clients: params.clients
                     clusters: params.clusters
@@ -280,7 +252,7 @@ define (require) ->
 
                 console.log("iocname: " + iocname + " with iocnamehash: " + iocnamehash + " was selected...")
 
-                uac_utils.usersettings({iocnamehash: iocnamehash})
+                utils.usersettings({iocnamehash: iocnamehash})
 
                 @render_details(iocnamehash)
 
@@ -325,56 +297,65 @@ define (require) ->
 
                 vent.trigger vent, Events.SF_HITS_RENDER params
 
-        onShow: ->
+        #
+        # Display the cluster selection view on render.
+        #
+        onRender: ->
             # Create the cluster selection component.
             @cluster_selection_view = new ClusterSelectionView()
-            @cluster_selection_region.show(@cluster_selection_view)
+            @listenTo @cluster_selection_view, 'show', ->
+                services = @cluster_selection_view.get_selected_services()
+                clusters = @cluster_selection_view.get_clusters()
+                if services and services.length > 0 and clusters and clusters.length > 0
 
-            services = @cluster_selection_view.get_selected_services()
-            clusters = @cluster_selection_view.get_clusters()
-            if services and services.length > 0 and clusters and clusters.length > 0
-                # Attempt to display the summary data based on the current user settings.
-                console.log("invoking render summaries")
-                @render_summaries
-                    services: @cluster_selection_view.get_selected_services()
-                    clusters: @cluster_selection_view.get_clusters()
-                    startDate:@cluster_selection_view.get_start_date()
-                    endDate: @cluster_selection_view.get_end_date()
+                    # Attempt to display the summary data based on the current user settings.
+                    console.debug("invoking render summaries")
+                    @render_summaries
+                        services: @cluster_selection_view.get_selected_services()
+                        clusters: @cluster_selection_view.get_clusters()
+                        startDate: @cluster_selection_view.get_start_date()
+                        endDate:  @cluster_selection_view.get_end_date()
+
+            @cluster_selection_region.show(@cluster_selection_view)
 
         get_selected_ioc_summary_data: ->
             return this.ioc_summaries_view.get_selected_data()
 
         #
         # Hide the IOC summary view.
-        #/
+        #
         hide_summaries: ->
-            @$('#ioc-summary-div').fadeOut().hide()
+            @$(@ioc_summary_region.el).fadeOut().hide()
 
         #
         # Show the IOC summary view.
-        #/
+        #
         show_summaries: ->
-            @$('#ioc-summary-div').fadeIn().show()
+            @$(@ioc_summary_region.el).fadeIn().show()
 
         #
         # Hide the IOC details view.
-        #/
+        #
         hide_details: ->
-            if @ioc_details_view
-                @ioc_details_view.hide()
+            @$(@ioc_details_region.el).fadeOut().hide()
+
+        #
+        # Show the IOC details.
+        #
+        show_details: ->
+            $(@ioc_details_region.el).fadeIn().show()
 
         #
         # Retrieve and display the IOC summary data.
-        #/
+        #
         render_summaries: (params) ->
             if not @summaries
                 # Initialize the IOC summary view.
                 @summaries = new IOCSummaryCollection()
                 @ioc_summaries_view = new IOCSummaryTableView
                     collection: @summaries
-
                 @listenToOnce @summaries, 'sync', ->
-                    @ioc_summary_region.show @ioc_summaries_view
+                    @ioc_summary_table_region.show @ioc_summaries_view
 
             @services = params.services
             @clusters = params.clusters
@@ -386,17 +367,17 @@ define (require) ->
                 # Hide the IOC details.
                 @hide_details()
 
-
                 # Fetch the summary data.
-                @ioc_summaries_view.fetch
+                utils.fetch @summaries, null,
                     data:
-                        services:@services.join(',')
-                        clusters:@clusters.join(',')
-                        begin:@startDate
-                        end:@endDate
+                        services: @services.join(',')
+                        clusters: @clusters.join(',')
+                        begin: @startDate
+                        end: @endDate
 
                 # Display the ioc summary.
                 @show_summaries()
+
 
         #
         # Retrieve and display the IOC details data.
@@ -423,10 +404,12 @@ define (require) ->
                     else
                         # Re-render the details view.
                         @ioc_details_view.render()
+
                     # Ensure the details are visible.
-                    $(@ioc_details_region.el).fadeIn().show()
+                    @show_details()
+
                 error: (model, response) =>
-                    uac_utils.display_response_error('Exception while rendering details for ioc: ' + iocnamehash, response)
+                    utils.display_response_error('Exception while rendering details for ioc: ' + iocnamehash, response)
 
 
     return ShoppingView

@@ -509,26 +509,25 @@ define (require) ->
             # Construct the table settings based on the supplied settings.
             settings = get_datatables_settings(@, @.options)
 
-            # Apply any parameters passed to the settings.
-            if params
-                if params.server_params isnt null
-                    server_params = params.server_params
-                    if server_params
-                        console.debug "Setting server params..."
-                        settings.fnServerParams = (aoData) ->
-                            _.each Object.keys(server_params), (key) ->
-                                console.debug "Setting param #{key} and value #{server_params[key]}"
-                                aoData.push
-                                    name: key
-                                    value: server_params[key]
+            if @collection
+                # Loading data using a collection, set aaData to the output.
+                settings.aaData = @collection.toJSON()
+            else if params and params.server_params isnt null
+                # Loading data url call, specify parameters to include in the request.
+                server_params = params.server_params
+            else if @options.server_params
+                # Loading data url call, specify parameters to include in the request.
+                server_params = @options.server_params
 
-                                return
-
-                            return
-                else settings.aaData = params.aaData  if params.aaData isnt null
-
-            # If a collection is defined then use the data from the collection.
-            settings.aaData = @collection.toJSON()  if @collection
+            if server_params
+                # Pass in a fnServerParams function to supply additional request parameters.
+                console.debug "Setting server params..."
+                settings.fnServerParams = (aoData) ->
+                    for key, val of server_params
+                        console.debug "Setting param #{key} and value #{val}"
+                        aoData.push
+                            name: key
+                            value: val
 
             # Create the table.
             @table_el.dataTable(settings)
