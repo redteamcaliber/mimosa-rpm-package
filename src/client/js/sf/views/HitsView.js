@@ -6,6 +6,7 @@ define(function (require) {
 
     var HitsDetailsView = require('sf/views/HitsDetailsView');
     var HitsFacetsView = require('sf/views/HitsFacetsView');
+    var renderers = require('uac/views/renderers');
 
     /**
      * Hits table view.
@@ -14,7 +15,7 @@ define(function (require) {
         initialize: function(options) {
             var view = this;
 
-                // Call the super initialize.
+            // Call the super initialize.
             view.constructor.__super__.initialize.apply(this, arguments);
 
             view.hits_collapsable = new CollapsableContentView({
@@ -76,8 +77,11 @@ define(function (require) {
             ];
 
             view.options.aoColumnDefs = [
-                view.date_formatter(1)
+                view.date_formatter(1),
+                renderers.escape_html([5,6])
+
             ];
+
 
             view.listenTo(view, 'load', function() {
                 // Create the CSV link in the table header.
