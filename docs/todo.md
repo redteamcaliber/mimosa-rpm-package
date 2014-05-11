@@ -9,7 +9,7 @@ UAC ToDo
 - MassTagForm should be an item view.
 - HX suppressions list is not refreshing after creating a suppression.
 - Add a suppression deleted handler in all of the top level views.
-
+- Look into host caching for theget_hosts_by_hash_list call within get_hits
 - The table view controls don't seem to be able to cycle through a page and go back.
 - Task polling always seems to be worst case times.
 - Keyboard shortcuts fire even after the details view is hidden.

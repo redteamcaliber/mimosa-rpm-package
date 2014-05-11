@@ -172,8 +172,8 @@ get_suppression = (suppression_id, attributes, callback) ->
             else if body.length == 1
                 callback(null, body[0])
             else
-                console.dir(body)
                 callback('Unable to process get_suppression response: ' + body)
+                console.dir(body)
 
 get_rowitem_content = (rowitem_uuid, attributes, callback) ->
     url = get_sf_url(_.sprintf('hits/%s/content', rowitem_uuid))
@@ -188,7 +188,9 @@ get_rowitem_content = (rowitem_uuid, attributes, callback) ->
                 if err
                     callback(err)
                 else
-                    console.dir json
+                    # Debug
+                    #console.dir json
+
                     body.content = json
                     callback(null, body)
 
