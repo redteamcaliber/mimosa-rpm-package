@@ -1,0 +1,44 @@
+{% set event = content.imageloadevent %}
+
+<table class="table table-condensed">
+    <tr>
+        <th class="sf-audit-heading">Drive</th>
+        <td><span class="ioc-term" ioc-term="imageLoadEvent/drive">{{ event.drive }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Device Path</th>
+        <td><span class="ioc-term" ioc-term="imageLoadEvent/devicePath">{{ event.devicepath }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Full Path</th>
+        <td><span class="ioc-term" ioc-term="imageLoadEvent/fullPath">{{ event.fullpath }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">File Path</th>
+        <td><span class="ioc-term" ioc-term="imageLoadEvent/filePath">{{ event.filepath }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">File Name</th>
+        <td><span class="ioc-term" ioc-term="imageLoadEvent/fileNam">{{ event.filename }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">File Extension</th>
+        <td><span class="ioc-term" ioc-term="imageLoadEvent/fileExtension">{{ event.fileextension }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">PID</th>
+        <td><span class="ioc-term" ioc-term="imageLoadEvent/pid">{{ event.pid }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Process Name</th>
+        <td><span class="ioc-term" ioc-term="imageLoadEvent/process">{{ event.process }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">User Name</th>
+        <td><span class="ioc-term" ioc-term="imageLoadEvent/username">{{ event.username }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Created</th>
+        <td><span class="ioc-term">{{ event.$.created }}</span></td>
+    </tr>
+</table>
