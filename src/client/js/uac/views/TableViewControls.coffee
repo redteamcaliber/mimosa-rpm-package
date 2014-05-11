@@ -105,7 +105,7 @@ define (require) ->
             if @table
                 @table.prev()
 
-            if @status and @status.is_prev is true
+            if @status
                 @fireAsync
                     constructorName: TableView
                     instanceName: @table_name
@@ -116,7 +116,7 @@ define (require) ->
             if @table
                 @table.next()
 
-            if @status and @status.is_next is true
+            if @status
                 @fireAsync
                     constructorName: TableView
                     instanceName: @table_name

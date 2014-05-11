@@ -1,16 +1,33 @@
 UAC ToDo
 ========
 
-### Hits Details Changes
+### Stuff to Talk About
+- Search works like a db query.  If you select nothing you get everything.
+- FE alerts integration into UAC.
+- endpoint-match is HX hits triggered by a FE alert.
+- Comments support markdown format, eventually will add to StrikeFinder.
+- Raw alert is available, can directly open the corresponding FE page in development.
+- You can trigger data via the sensors in the QA lab.
+- We welcome any feedback and issues in the Skype chat.
 
-- Create the new audit templates.
+### Stuff to Disclose
+- OS change report no exactly has shown on the FE box.
+- Need to integrate signature descriptions.  Short term and long term plan.
+- Facets are coming to the list views.
+- Stories for bulk tagging, etc
+- Cloud shark integration to view PCAPS.
+- IP lookup capability.
+- MD5 integration similar to UAC/StrikeFinder.
+- Linkable views for new FE alert types.
+- There is no suppressions.
+
+### Hits Details Changes
 - Disable tagging, mass tagging, and suppressions on the hits view of the suppressions view.
 - Convert the artifacts table into a drop down.
 - MassTagForm should be an item view.
 - HX suppressions list is not refreshing after creating a suppression.
 - Add a suppression deleted handler in all of the top level views.
 - Look into host caching for theget_hosts_by_hash_list call within get_hits
-- The table view controls don't seem to be able to cycle through a page and go back.
 - Task polling always seems to be worst case times.
 - Keyboard shortcuts fire even after the details view is hidden.
 - There is an issue with Glitter Conditions in the IOC tabs header.
