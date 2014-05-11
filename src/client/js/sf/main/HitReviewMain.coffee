@@ -8,7 +8,7 @@ define (require) ->
     vent = require('uac/common/vent')
     CollapsableView = require 'uac/views/CollapsableView'
 
-    Events = require 'sf/common/Events'
+    StrikeFinderEvents = require 'sf/common/StrikeFinderEvents'
     templates = require 'sf/ejs/templates'
     ShoppingView = require 'sf/views/ShoppingView'
     HitsView = require 'sf/views/HitsView'
@@ -34,26 +34,31 @@ define (require) ->
         )
         @shopping_collapsable.show(@shopping_view)
 
-        @listenTo vent, Events.SF_IOCNAMEHASH_SELECT, (iocname) =>
+        @listenTo vent, StrikeFinderEvents.SF_IOCNAMEHASH_SELECT, (iocname) =>
             # Update the collapsable title
             @set_title [iocname]
 
-        @listenTo vent, Events.SF_IOCUUID_SELECT, (iocname, ioc_uuid) =>
+        @listenTo vent, StrikeFinderEvents.SF_IOCUUID_SELECT, (iocname, ioc_uuid) =>
             # Update the collapsable title
             @set_title [iocname, ioc_uuid]
 
-        @listenTo vent, Events.SF_EXPKEY_SELECT, (iocname, iocuuid, exp_key) =>
+        @listenTo vent, StrikeFinderEvents.SF_EXPKEY_SELECT, (iocname, iocuuid, exp_key) =>
             # Update the collapsable title
             @set_title [iocname, iocuuid, exp_key]
 
-        @listenTo vent, Events.SF_HITS_RENDER, (params) =>
+        @listenTo vent, StrikeFinderEvents.SF_HITS_RENDER, (params) =>
             # Handle the click of an expression key.
-            console.debug('Selected expression key: ' + params.exp_key)
-            hits_view = new HitsView(params)
-            hits_view.listenToOnce hits_view, 'show', =>
-                # Ensure the hits region is visible.
-                $(@hits_region.el).fadeIn().show()
-            @hits_region.show hits_view
+
+            if not @hits_view
+                console.debug('Selected expression key: ' + params.exp_key)
+                @hits_view = new HitsView()
+                @hits_view.listenToOnce @hits_view, 'show', =>
+                    # Ensure the hits region is visible.
+                    $(@hits_region.el).fadeIn().show()
+                @hits_region.show @hits_view
+            params_copy = _.clone(params)
+            params_copy.identity_rollup = true
+            @hits_view.fetch params_copy
 
     #
     # Function for setting the collapsable title.

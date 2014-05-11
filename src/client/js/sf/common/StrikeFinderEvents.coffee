@@ -13,6 +13,7 @@ define ->
     SF_MERGE:                   'sf:merge'                  # Triggered when a hit is merged.
     SF_MERGE_ALL:               'sf:merge_all'              # Triggered when all versions of a hit are merged.
 
+    SF_SUPPRESSION_SELECT:      'sf:suppression:select'     # Triggered when a user has selected a suppression.
     SF_SUPPRESS_ACTION:         'sf:suppress:action'        # Triggered when a user has selected the suppress option.
     SF_SUPPRESS_CREATE:         'sf:suppress:create'        # Triggered when a suppression has been created.
     SF_SUPPRESS_DELETE:         'sf:suppress:delete'        # Triggered when a suppression has been deleted.
@@ -20,6 +21,7 @@ define ->
     SF_AUTO_SUPPRESS_ACTION:    'sf:auto_suppress:action'   # Triggered when a user has selected the auto-suppress option.
 
     SF_TAG_CREATE:              'sf:tag:create'             # Triggered when a user has applied a tag to a hit.
+    SF_TAG_SELECT:              'sf:tag:select'             # Triggered when a user has selected a tag on the hits by tag view.
 
     SF_MASS_TAG_ACTION:         'sf:mass_tag:action'        # Triggered when a user has selected the option to mass tag.
     SF_MASS_TAG_CREATE:         'sf:mass_tag:create'        # Triggered when a user has completed a mass tag operation.

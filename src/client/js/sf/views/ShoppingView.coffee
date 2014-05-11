@@ -8,13 +8,14 @@ define (require) ->
     vent = require('uac/common/vent')
     reqres = require('uac/common/reqres')
     View = require('uac/views/View')
+    FetchController = require 'uac/controllers/FetchController'
     TableView = require('uac/views/TableView')
     
     vent.on 'all', (event_name) ->
         console.debug("Event: " + event_name)
 
     templates = require('sf/ejs/templates')
-    Events = require('sf/common/Events')
+    StrikeFinderEvents = require('sf/common/StrikeFinderEvents')
     ExpressionView = require 'sf/views/ExpressionView'
     IOCSummaryCollection = require('sf/models/IOCSummaryCollection')
     IOCDetailsCollection = require('sf/models/IOCDetailsCollection')
@@ -58,7 +59,7 @@ define (require) ->
 
             @listenTo @, 'click', (data) =>
                 # Trigger a global event when an IOC summary is selected.
-                vent.trigger Events.SF_IOCSUMMARY_SELECT, data
+                vent.trigger StrikeFinderEvents.SF_IOCSUMMARY_SELECT, data
 
             # If there is an iocnamehash in the user settings then select it in the summary table.
             if utils.usersettings().iocnamehash
@@ -176,7 +177,7 @@ define (require) ->
                     @collection.each (iocuuid_item) =>
                         for expression_item in iocuuid_item.get('expressions')
                             if expression_item.exp_key == exp_key
-                                vent.trigger Events.SF_EXPKEY_SELECT, expression_item.iocname, expression_item.iocuuid, exp_key
+                                vent.trigger StrikeFinderEvents.SF_EXPKEY_SELECT, expression_item.iocname, expression_item.iocuuid, exp_key
                     # Remove the selections from any of the other details tables that may already have a previous selection.
                     _.each @table_views, (table) =>
                         selected = table.get_selected_data()
@@ -194,7 +195,7 @@ define (require) ->
             @collection.each (iocuuid_item) =>
                 _.each iocuuid_item.get('expressions'), (expression_item) ->
                     if expression_item.iocnamehash == iocnamehash
-                        vent.trigger Events.SF_IOCNAMEHASH_SELECT, expression_item.iocname, iocnamehash
+                        vent.trigger StrikeFinderEvents.SF_IOCNAMEHASH_SELECT, expression_item.iocname, iocnamehash
 
         on_uuid_click: (ev) ->
             iocuuid = $(ev.currentTarget).attr('data-ioc_uuid')
@@ -202,7 +203,7 @@ define (require) ->
             @collection.each (iocuuid_item) =>
                 _.each iocuuid_item.get('expressions'), (expression_item) ->
                     if expression_item.iocuuid == iocuuid
-                        vent.trigger Events.SF_IOCUUID_SELECT, expression_item.iocname, iocuuid
+                        vent.trigger StrikeFinderEvents.SF_IOCUUID_SELECT, expression_item.iocname, iocuuid
 
         close: ->
             if @table_views
@@ -224,7 +225,7 @@ define (require) ->
 
         initialize: ->
 
-            @listenTo vent, Events.SF_IOC_SEARCH, (params) =>
+            @listenTo vent, StrikeFinderEvents.SF_IOC_SEARCH, (params) =>
                 # Update the services, clients, and clusters user settings on submit.
                 utils.usersettings
                     services: params.services
@@ -241,11 +242,11 @@ define (require) ->
                     startDate: params.startDate
                     endDate: params.endDate
 
-            @listenTo vent, Events.SF_IOC_RESET, =>
+            @listenTo vent, StrikeFinderEvents.SF_IOC_RESET, =>
                 @hide_summaries()
                 @hide_details()
 
-            @listenTo vent, Events.SF_IOCSUMMARY_SELECT, (data) =>
+            @listenTo vent, StrikeFinderEvents.SF_IOCSUMMARY_SELECT, (data) =>
                 # Handle the click of a row on the IOC summary view.  Load the related IOC details.
                 iocname = data["iocname"]
                 iocnamehash = data["iocnamehash"]
@@ -256,7 +257,7 @@ define (require) ->
 
                 @render_details(iocnamehash)
 
-            @listenTo vent, Events.SF_EXPKEY_SELECT, (iocname, iocuuid, exp_key) =>
+            @listenTo vent, StrikeFinderEvents.SF_EXPKEY_SELECT, (iocname, iocuuid, exp_key) =>
                 # Handle the click of an expression key.
                 console.log('Selected expression key: ' + exp_key)
 
@@ -268,10 +269,10 @@ define (require) ->
                     end: @endDate
                 }
 
-                vent.trigger Events.SF_HITS_RENDER, params
+                vent.trigger StrikeFinderEvents.SF_HITS_RENDER, params
 
 
-            @listenTo vent, Events.SF_IOCUUID_SELECT, (iocname, ioc_uuid) =>
+            @listenTo vent, StrikeFinderEvents.SF_IOCUUID_SELECT, (iocname, ioc_uuid) =>
                 # Handle the select of an IOC uuid.
                 console.log('Selected ioc_uuid: ' + ioc_uuid)
 
@@ -282,9 +283,9 @@ define (require) ->
                     begin: @startDate
                     end: @endDate
 
-                vent.trigger Events.SF_HITS_RENDER, params
+                vent.trigger StrikeFinderEvents.SF_HITS_RENDER, params
 
-            @listenTo vent, Events.SF_IOCNAMEHASH_SELECT, (iocname, iocnamehash) =>
+            @listenTo vent, StrikeFinderEvents.SF_IOCNAMEHASH_SELECT, (iocname, iocnamehash) =>
                 # Handle the select of an IOC name hash.
                 console.log('Selected iocnamehash: ' + iocnamehash)
 
@@ -295,7 +296,7 @@ define (require) ->
                     begin: @startDate
                     end: @endDate
 
-                vent.trigger vent, Events.SF_HITS_RENDER params
+                vent.trigger vent, StrikeFinderEvents.SF_HITS_RENDER params
 
         #
         # Display the cluster selection view on render.
@@ -349,6 +350,8 @@ define (require) ->
         # Retrieve and display the IOC summary data.
         #
         render_summaries: (params) ->
+            console.info "Rendering IOC summary data with params: #{JSON.stringify(params)}"
+
             if not @summaries
                 # Initialize the IOC summary view.
                 @summaries = new IOCSummaryCollection()
@@ -368,15 +371,16 @@ define (require) ->
                 @hide_details()
 
                 # Fetch the summary data.
-                utils.fetch @summaries, null,
+                controller = new FetchController
+                    collection: @summaries
+                controller.fetch
                     data:
                         services: @services.join(',')
                         clusters: @clusters.join(',')
                         begin: @startDate
                         end: @endDate
-
-                # Display the ioc summary.
-                @show_summaries()
+                    success: =>
+                        @show_summaries()
 
 
         #

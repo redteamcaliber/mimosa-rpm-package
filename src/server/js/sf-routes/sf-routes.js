@@ -130,7 +130,11 @@ app.get('/suppressions/:suppression_id', function (req, res, next) {
                 else {
                     // Display the template.
                     var context = route_utils.default_context(req);
-                    context.suppressions = route_utils.stringify([suppression] || []);
+                    var suppressions = [];
+                    if (suppression) {
+                        suppressions.push(suppression);
+                    }
+                    context.suppressions = route_utils.stringify(suppressions);
                     context.single_entity = true;
                     route_utils.render_template(res, '/sf/suppressions.html', context, next);
                 }

@@ -6,7 +6,7 @@ define (require) ->
     vent = require 'uac/common/vent'
 
     templates = require 'sf/ejs/templates'
-    Events = require 'sf/common/Events'
+    StrikeFinderEvents = require 'sf/common/StrikeFinderEvents'
 
 
     #
@@ -54,7 +54,7 @@ define (require) ->
 
                         # Notify that a merge has taken place.
                         @trigger('merge', uuid, response.uuid)
-                        vent.trigger Events.SF_MERGE, uuid, response.uuid
+                        vent.trigger StrikeFinderEvents.SF_MERGE, uuid, response.uuid
                     finally
                        utils.unblock()
                 error: (model, response) ->

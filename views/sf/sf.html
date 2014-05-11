@@ -3,13 +3,11 @@
 {% block title %}StrikeFinder - {{ super() }}{% endblock %}
 
 {% block form_menu %}
-    <input id="host-typeahead" type="text" placeholder="Search for Host or MD5"/>
+    <input id="host-typeahead" type="text" placeholder="Search for Host or MD5" size="30"/>
 {% endblock %}
 
 {% block head %}
     {{ super() }}
-
-    <!--<link href="/static/css/jquery.iocViewer.css" rel="stylesheet"/>-->
 
     <script type="text/javascript">
         require(['jquery', 'bootstrap', 'backbone', 'uac/views/MixedTypeAheadView'],

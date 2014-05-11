@@ -2,7 +2,7 @@ define (require) ->
     Marionette = require 'marionette'
 
     vent = require 'uac/common/vent'
-    Events = require 'sf/common/Events'
+    StrikeFinderEvents = require 'sf/common/StrikeFinderEvents'
     uac_utils = require 'uac/common/utils'
 
     SetTagModel = require 'sf/models/SetTagModel'
@@ -70,7 +70,7 @@ define (require) ->
                     success: =>
                         try
                             @trigger('create', uuid, tagname)
-                            vent.trigger(Events.SF_TAG_CREATE, {
+                            vent.trigger(StrikeFinderEvents.SF_TAG_CREATE, {
                                 rowitem_uuid: uuid,
                                 tagname: tagname
                             });

@@ -38,7 +38,8 @@ define (require) ->
         return
 
     block_element = (el, message) ->
-        $(el).block(get_blockui_options('<img src="/static/css/img/ajax-loader.gif">'))
+        #$(el).block(get_blockui_options('<img src="/static/css/img/ajax-loader.gif">'))
+        $(el).block(get_blockui_options())
         return
 
     #
@@ -183,7 +184,7 @@ define (require) ->
 
     display_info = (message) ->
         message = (if message then message += "&nbsp;" else message)
-        $.bootstrapGrowl message,
+        $.otstrapGrowl message,
             type: 'info'
             width: "auto"
             delay: 10000
@@ -565,6 +566,7 @@ define (require) ->
     #
     mixin = ->
         Cocktail.mixin.apply(this, arguments)
+        arguments[0]
 
     (
         block: block

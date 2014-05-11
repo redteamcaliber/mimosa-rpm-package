@@ -2,6 +2,7 @@ define (require) ->
     Marionette = require 'marionette'
     vent = require 'uac/common/vent'
     utils = require 'uac/common/utils'
+    FetchController = require 'uac/controllers/FetchController'
 
     templates = require 'alerts/ejs/templates'
 
@@ -127,15 +128,17 @@ define (require) ->
         @layout.filters_content_region.show @filters_view
 
         # Handle searching for alerts summaries.
-        @.listenTo vent, Events.ALERTS_SEARCH, (params) =>
-            unless @summary_list_view
-                # Create the summary list table.
-                @summaries = new AlertSummaryCollection()
-                @summary_list_view = new AlertsSummaryTableView
-                    id: 'alerts-summary-table'
-                    collection: @summaries
-                @listenToOnce @summaries, 'sync', ->
-                    @layout.summary_list_region.show @summary_list_view
+        @listenTo vent, Events.ALERTS_SEARCH, (params) =>
+            # Create the summary list table.
+            summaries = new AlertSummaryCollection()
+            summary_list_view = new AlertsSummaryTableView
+                id: 'alerts-summary-table'
+                collection: summaries
+
+            controller = new FetchController
+                collection: summaries
+                view: summary_list_view
+                region: @layout.summary_list_region
 
             # Fetch the summary list data.
             @data = {}
@@ -146,10 +149,10 @@ define (require) ->
             @data.begin = moment(params.from).unix() if params.from
             @data.end = moment(params.to).unix() if params.to
 
-            @summaries.fetch
+            controller.fetch
                 data: @data
 
-        @.listenTo vent, Events.ALERTS_SUMMARY_SELECTED, (row_data) =>
+        @listenTo vent, Events.ALERTS_SUMMARY_SELECTED, (row_data) =>
             unless @details_list_view
                 # Create the details list view.
                 @alerts = new AlertCollection()
@@ -185,22 +188,16 @@ define (require) ->
                 details_view = new AlertsDetailsView
                     model: alert
 
-                @listenToOnce alert, 'sync', ->
-                    @layout.details_content_region.show details_view
-
-                # Load the alert.
-                utils.block()
-                alert.fetch
-                    success: =>
-                        utils.unblock()
-                    error: =>
-                        utils.unblock()
-                        utils.display_response_error "Error while loading alert: #{row_data.uuid}"
+                controller = new FetchController
+                    model: alert
+                    view: details_view
+                    region: @layout.details_content_region
+                controller.fetch()
             else
                 # Display HX alert details.
                 hx_details = new HitsDetailsView
                     data: row_data
-#                    hits_table_name: 'alerts_details_table'
+                    hits_table_name: 'alerts_details_table'
 
                 @layout.details_content_region.show hx_details
                 hx_details.render_details(row_data);

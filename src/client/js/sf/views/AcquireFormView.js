@@ -2,7 +2,7 @@ define(function(require) {
     var async = require('async');
 
     var vent = require('uac/common/vent');
-    var Events = require('sf/common/Events');
+    var StrikeFinderEvents = require('sf/common/StrikeFinderEvents');
     var View = require('uac/views/View');
 
     var uac_utils = require('uac/common/utils');
@@ -184,7 +184,7 @@ define(function(require) {
                             } else if (is_complete) {
                                 view.display_success('The acquisition request has successfully been submitted.');
                                 // Notify that a suppression was created.
-                                vent.trigger(Events.SF_ACQUIRE_ACTION, view.model);
+                                vent.trigger(StrikeFinderEvents.SF_ACQUIRE_ACTION, view.model);
                                 view.trigger('create', view.model);
                                 // Hide the dialog.
                                 view.$(acquire_form).modal('hide');
@@ -195,7 +195,7 @@ define(function(require) {
                                 // Notify that a suppression was created.  It has not completed yet though this event should
                                 // be fired to ensure the relevant fields in the UI are updated.
                                 view.trigger('create', view.model);
-                                vent.trigger(Events.SF_ACQUIRE_CREATE, view.model);
+                                vent.trigger(StrikeFinderEvents.SF_ACQUIRE_CREATE, view.model);
                                 // Hide the dialog.
                                 view.$(acquire_form).modal('hide');
                             }

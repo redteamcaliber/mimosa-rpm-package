@@ -5,7 +5,7 @@ define(function (require) {
     var utils = require('uac/common/utils');
     var vent = require('uac/common/vent');
 
-    var Events = require('sf/common/Events');
+    var StrikeFinderEvents = require('sf/common/StrikeFinderEvents');
     var sf_utils = require('sf/common/utils');
     var templates = require('sf/ejs/templates');
     var SuppressionModel = require('sf/models/SuppressionModel');
@@ -162,7 +162,7 @@ define(function (require) {
 
                             // Notify that a suppression was created.
                             view.trigger('create', view.model);
-                            vent.trigger(Events.SF_SUPPRESS_CREATE, view.model);
+                            vent.trigger(StrikeFinderEvents.SF_SUPPRESS_CREATE, view.model);
 
                             // Hide the form.
                             view.$("#suppression-form").modal("hide");

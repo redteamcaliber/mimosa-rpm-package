@@ -1,6 +1,6 @@
 define(function(require) {
     var vent = require('uac/common/vent');
-    var Events = require('sf/common/Events');
+    var StrikeFinderEvents = require('sf/common/StrikeFinderEvents');
     var View = require('uac/views/View');
     var TableView = require('uac/views/TableView');
     var CollapsableContentView = require('uac/views/CollapsableContentView');
@@ -72,7 +72,7 @@ define(function(require) {
 
                                 // Notify that the suppression was deleted.
                                 view.trigger('delete', view.model);
-                                vent.trigger(Events.SF_SUPPRESS_DELETE, view.model);
+                                vent.trigger(StrikeFinderEvents.SF_SUPPRESS_DELETE, view.model);
                             }
                             else {
                                 // The task is still running.
@@ -95,6 +95,7 @@ define(function(require) {
                     }
                 });
             }
+            return false;
         },
         close: function () {
             console.log('Closing row view...');
@@ -126,8 +127,6 @@ define(function(require) {
                 var title_template = '<i class="fa fa-level-down"></i> Suppressions (%d)';
                 view.suppressions_collapsable.set('title', _.sprintf(title_template, view.collection.length));
             };
-            view.collection.listenTo(view.collection, 'sync', update_title);
-            view.collection.listenTo(view.collection, 'reset', update_title);
 
             view.listenTo(view, 'load', function () {
                 // Select the first row on load.
@@ -248,6 +247,13 @@ define(function(require) {
 
                 options.iDisplayLength = 10;
                 options.sDom = 'lf<""t>ip';
+
+                view.listenTo(view, 'click', function(data) {
+                    // Trigger a global event when a suppressions is selected.  This should only be done when this view
+                    // is not in condensed mode.  If displayed in both modes it will generate duplicate events because
+                    // of the suppressions tables on the IOC tabs.
+                    vent.trigger(StrikeFinderEvents.SF_SUPPRESSION_SELECT, data);
+                });
             }
 
             // Keep track of the row views.
@@ -260,7 +266,7 @@ define(function(require) {
                 });
                 suppression_row.listenTo(suppression_row, 'delete', function () {
                     view.trigger('delete');
-                    vent.trigger(Events.SF_SUPPRESS_DELETE);
+                    vent.trigger(StrikeFinderEvents.SF_SUPPRESS_DELETE);
                 });
                 view.suppression_row_views.push(suppression_row);
             });

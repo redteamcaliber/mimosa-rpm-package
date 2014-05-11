@@ -2,36 +2,23 @@ UAC ToDo
 ========
 
 ### Hits Details Changes
-- Fix the collapsable around the hits table.
-- Why is the acqusition call so slow, we are fetching a single record by id or in an in clause?
-- Getting an error when clicking on an acquisition.
-- Need to be able to reload the hits details view on an acquisition.
-- Looks like drew has a limit on the current acquisitions calls.
-- the link view doesn't work.
-- the listeners could be building up when switching rows, need to look into this.
-- Need to test the merge and merge all functions.
-- Refresh the lists after a suppression or mass tag operation.
-- Fix sort on created in the hits view.  Doesn't seem to be functioning.
-- HX suppressions list is not refreshing after creating a suppression.
-- Convert the mass tag, acquire form views into item views.  Use the local dialog-region.
-- Upgrade to the new tasks table.
-- Look into using item view collapsables in utils.collapse.
-- Fix the TableViewControls on the HX details view.
+
 - Create the new audit templates.
-- Update the listeners in the Main's/Views to use vent rather that listening to references.
-- Remove the HR on the hits view until the details are rendered.
-- Convert selectView to an itemView.
-- Remove the merge code.
+- Keyboard shortcuts are firing the next event twice on the alerts details view.
+- Disable tagging, mass tagging, and suppressions on the hits view of the suppressions view.
+- Convert the artifacts table into a drop down.
+- Convert FacetsView to an itemView.
+- The table view controls don't seem to be able to cycle through a page and go back.
+- Convert IOCDetailsView to an item view or collection view.
+- Properly disable the time boxes on the cluster selection view.
+- the listeners could be building up when switching rows, need to look into this.
+- Need to test the merge and merge all functions (or remove??)
+- HX suppressions list is not refreshing after creating a suppression.
+- Look into using item view collapsables in utils.collapse.
 - Clear the hits and hits detail on reset or clearing of initial parameters.
 - Clear on the hits search should clear the local storage.
 - Add a suppression deleted handler in all of the top level views.
-
-# Host caching
-- Utilize host caching with sf.
-
-### Alerts Details View
-- Raw alert customization
-    - Make the raw alert data searchable.
+- Create a FetchController that supports a collapsable???
 - Add tag validation in the alerts api.
 - Title and breadcrumb updates.
     - Update the alerts title as well as the breadcrumbs...
@@ -39,24 +26,28 @@ UAC ToDo
     - Add id/context info to the breadcrumbs.
 - Format the occurred and updated dates within the header according to how long ago they are.
     - See hosts code.
-- Update the signature in the header to display according to the FE logic.
-- Update the signature descriptions from the XLS.
-- Display the explanation/anomoly field.
-- Make the alerts view linkable.
-- Look into displaying pcap text data.
 
-### Refactoring and Fixes
-- usersettings aren't being updated after a user selects an expression.
-- Fix the "this" stuff in the TableView.
-- Suppressions links is to small.
+### Agent Tasks
+- Put a block up when displaying the details dialog, it's taking forever.
+- May need to put up a block while loading the main agent tasks list, again it's taking forever to load.
+- Agent tasks query take forever, partially because they are returning too much data.  Need a summary API.  Is there a
+  query being made by Django for each of the relationships?
+- Looks like drew has a limit on the current acquisitions calls.
+
+# Host caching
+- Utilize host caching with sf.
+
+### Alerts Descriptions
+- Update the signature descriptions from the XLS.
+- Update the signature in the header to display according to the FE logic.
+- Display the explanation/anomoly field.
+
+### Linkable Alerts
+- Make the alerts view linkable.
 
 ### Alerting Deployment
-- Update the IOC viewer project and put a dependency on it.
 - Update documentation for new URL configuration.
     - Update template json files.
-- Update the docs for clustering and host settings.
-- Move the database pool settings to the env.json file.
-- Ensure the database pool settings are initialized to a reasonable value.
 
 ### Seasick related unit tests are failing.
 

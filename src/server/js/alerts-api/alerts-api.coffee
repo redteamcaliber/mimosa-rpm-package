@@ -88,6 +88,8 @@ get_consolidated_signature_summary = (params, attributes, callback) ->
                     # Retrieve the endpoint related summary data.
                     p = _.clone(params)
                     delete p.alert_type
+                    # Only retrieve FireEye data.
+                    p.service = 'FireEye'
                     sf_api.get_ioc_summary_v2 p, attributes, callback
                 else
                     callback null, []
@@ -133,6 +135,7 @@ get_alerts = (params, attributes, callback) ->
         # Retrieve all StrikeFinder alerts.
         sf_params =
             limit: 0
+            services: 'FireEye'
         if params.tag then sf_params.tagname = get_list_param(params.tag).join()
         if params.client_uuid then sf_params.clients = get_list_param(params.client_uuid).join()
         if params.iocnamehash then sf_params.iocnamehash = params.iocnamehash

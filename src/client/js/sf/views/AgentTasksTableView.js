@@ -2,7 +2,6 @@ define(function (require) {
     var async = require('async');
     var View = require('uac/views/View');
     var TableView = require('uac/views/TableView');
-    var CollapsableContentView = require('uac/views/CollapsableContentView');
 
     var AgentTask = require('sf/models/AgentTask');
     var AcquisitionAuditModel = require('sf/models/AcquisitionAuditModel');
@@ -100,10 +99,6 @@ define(function (require) {
             this.collection.dataSource = newName;
             this.fetch();
         },
-        //Is this necessary?
-        close: function() {
-            this.undelegateEvents();
-        },
         render: function(params){
             var view = this;
             view.constructor.__super__.render.apply(this, arguments);
@@ -116,10 +111,6 @@ define(function (require) {
 
             // Call the super initialize.
             view.constructor.__super__.initialize.apply(this, arguments);
-
-            view.tasks_collapsable = new CollapsableContentView({
-                el: view.el
-            });
 
             if (!view.collection) {
                 options['sAjaxSource'] = '/sf/api/task_result';
@@ -246,16 +237,6 @@ define(function (require) {
                 if (options.condensed) {
                     // Add the link the table header.
                     view.$el.parent().find('.uac-tableheader').append(templates['agenttasks-datasetchooser.ejs'](this));
-                }
-
-                var tasks_count = view.get_total_rows();
-                view.tasks_collapsable.set('title', _.sprintf('<i class="fa fa-tasks"></i> Tasks (%s)',
-                    tasks_count));
-                if (options.condensed) {
-                    if (tasks_count == 0) {
-                        // Collapse the comments if there are none.
-                        view.tasks_collapsable.collapse();
-                    }
                 }
             });
         },

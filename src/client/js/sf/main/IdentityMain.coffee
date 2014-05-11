@@ -21,7 +21,8 @@ define (require) ->
         else
             throw '"rowitem" or "identity" is required.'
 
-        hits_view = new HitsView(options)
+        hits_view = new HitsView()
         @content_region.show hits_view
+        hits_view.fetch(options)
 
     IdentityApp.start()

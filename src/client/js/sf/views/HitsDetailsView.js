@@ -5,6 +5,7 @@ define(function (require) {
 
     var iocviewer = require('iocviewer');
     var uac_utils = require('uac/common/utils');
+    var FetchController = require('uac/controllers/FetchController');
     var Evented = require('uac/common/mixins/Evented');
     var vent = require('uac/common/vent');
     var TableView = require('uac/views/TableView');
@@ -12,7 +13,7 @@ define(function (require) {
     var CollapsableContentView = require('uac/views/CollapsableContentView');
     var TableViewControls = require('uac/views/TableViewControls');
 
-    var Events = require('sf/common/Events');
+    var StrikeFinderEvents = require('sf/common/StrikeFinderEvents');
     var HitsLinkView = require('sf/views/HitsLinkView');
     var MergeView = require('sf/views/MergeView');
     var SuppressionFormView = require('sf/views/SuppressionFormView');
@@ -31,6 +32,7 @@ define(function (require) {
     var SuppressionModel = require('sf/models/SuppressionModel');
     var TagCollection = require('sf/models/TagCollection');
     var SetTagModel = require('sf/models/SetTagModel');
+    var SuppressionListItemCollection = require('sf/models/SuppressionListItemCollection');
     var CommentsCollection = require('sf/models/CommentsCollection');
     var CommentsModel = require('sf/models/CommentsModel');
 
@@ -120,7 +122,7 @@ define(function (require) {
                 console.log('Selected identity: ' + selected_uuid);
                 // Trigger an event that the row uuid was selected.
                 view.trigger('click', selected_uuid);
-                vent.trigger(Events.SF_IDENTITY_SELECT, selected_uuid);
+                vent.trigger(StrikeFinderEvents.SF_IDENTITY_SELECT, selected_uuid);
             }
         }
     });
@@ -178,7 +180,7 @@ define(function (require) {
 
                         // Notify that a merge has taken place.
                         view.trigger('mergeall', uuid, response.uuid);
-                        vent.trigger(Events.SF_MERGE_ALL, response.uuid);
+                        vent.trigger(StrikeFinderEvents.SF_MERGE_ALL, response.uuid);
                     }
                     finally {
                         uac_utils.unblock();
@@ -223,7 +225,7 @@ define(function (require) {
     var AuditContextMenuView = Marionette.ItemView.extend({
         template: templates['audit-context-menu.ejs'],
 
-        initialize: function(options) {
+        initialize: function (options) {
             this.source = options.source;
 
             this.is_suppress = true;
@@ -246,7 +248,7 @@ define(function (require) {
             "click #tag-item": "tag",
             'click #close-item': 'cancel'
         },
-        serializeData: function() {
+        serializeData: function () {
             return {
                 is_suppress: this.is_suppress,
                 is_acquire: this.is_acquire,
@@ -301,7 +303,7 @@ define(function (require) {
         },
         suppress: function () {
             this.trigger("suppress", this.selection, this.ioc_term);
-            vent.trigger(Events.SF_SUPPRESS_ACTION, {
+            vent.trigger(StrikeFinderEvents.SF_SUPPRESS_ACTION, {
                 ioc_term: this.ioc_term,
                 selection: this.selection
             });
@@ -309,7 +311,7 @@ define(function (require) {
         },
         auto_suppress: function () {
             this.trigger("auto-suppress", this.selection, this.ioc_term);
-            vent.trigger(Events.SF_AUTO_SUPPRESS_ACTION, {
+            vent.trigger(StrikeFinderEvents.SF_AUTO_SUPPRESS_ACTION, {
                 ioc_term: this.ioc_term,
                 selection: this.selection
             });
@@ -318,14 +320,14 @@ define(function (require) {
         acquire: function () {
             console.info('Firing acquire action...');
             this.trigger("acquire", this.selection);
-            vent.trigger(Events.SF_ACQUIRE_ACTION, {
+            vent.trigger(StrikeFinderEvents.SF_ACQUIRE_ACTION, {
                 selection: this.selection
             });
             this.$el.parent().hide();
         },
         tag: function (ev) {
             this.trigger('tag', this.selection, this.ioc_term);
-            vent.trigger(Events.SF_MASS_TAG_ACTION, {
+            vent.trigger(StrikeFinderEvents.SF_MASS_TAG_ACTION, {
                 ioc_term: this.ioc_term,
                 selection: this.selection
             });
@@ -334,7 +336,7 @@ define(function (require) {
         cancel: function () {
             this.$el.parent().hide();
         },
-        onBeforeClose: function() {
+        onBeforeClose: function () {
             $(this.source).highlighter('destroy');
         }
     });
@@ -375,7 +377,7 @@ define(function (require) {
     /**
      * Tabbed view of IOC's.
      */
-    var IOCTabsView = Marionette.ItemView.extend({
+    var IOCTabsView = Marionette.Layout.extend({
         template: templates['ioc-tabs.ejs'],
 
         initialize: function (options) {
@@ -520,6 +522,9 @@ define(function (require) {
                 //ioc_definition_list.find('*').removeClass('uac-opaque').removeClass('highlighted');
             });
         },
+        get_region_name: function (exp_key) {
+            return 'suppressions-list-' + exp_key + '-region';
+        },
         /**
          * Handler for an IOC tab being selected.
          * @param ev - the related event.
@@ -530,22 +535,43 @@ define(function (require) {
 
             console.log('Selected IOC with exp_key: ' + exp_key);
             view.trigger('ioc:selected', exp_key);
-            vent.trigger(Events.SF_IOC_TAB_SELECT, exp_key);
+            vent.trigger(StrikeFinderEvents.SF_IOC_TAB_SELECT, exp_key);
 
             if (!_.has(view.suppressions_table_map, exp_key)) {
                 // Initialize the suppressions table for the expression.
-
                 console.log('Initializing suppressions table for exp_key: ' + exp_key);
 
-                var suppressions_table = new SuppressionsTableView({
-                    el: $(_.sprintf('#suppressions-list-%s', exp_key)),
-                    condensed: true
+                // Create a region to ensure the view is cleanup.
+                var region_name = view.get_region_name(exp_key);
+                var region = view.addRegion(region_name, '#' + region_name);
+
+                var suppressions = new SuppressionListItemCollection();
+                suppressions.exp_key = exp_key;
+
+                collapsable = new CollapsableView({
+                    title: '<i class="fa fa-level-down"></i> Suppressions',
+                    collapsed: true
                 });
+                region.show(collapsable);
 
-                view.suppressions_table_map[exp_key] = suppressions_table;
-
-                suppressions_table.collection.exp_key = exp_key;
-                suppressions_table.fetch();
+                new FetchController({
+                    collection: suppressions,
+                    region: region.el
+                })
+                    .fetch({
+                        success: function() {
+                            // Create a suppressions table view to render to the view.
+                            var suppressions_table = new SuppressionsTableView({
+                                condensed: true,
+                                collection: suppressions
+                            });
+                            collapsable.listenToOnce(suppressions_table, 'load', function () {
+                                // Update the collapsable title.
+                                collapsable.set_title(_.sprintf('<i class="fa fa-level-down"></i> Suppressions (%d)', suppressions.length));
+                            });
+                            collapsable.show(suppressions_table);
+                        }
+                    });
             }
         },
         on_click: function () {
@@ -578,20 +604,6 @@ define(function (require) {
             // Debug, print the path.
             //console.log('Path: ' + path);
             return results;
-        },
-        onClose: function () {
-            var view = this;
-
-            // Clean up any of the existing tables and rows.
-            if (view.suppressions_table_map) {
-                console.log('Closing ' + Object.keys(view.suppressions_table_map).length + ' suppression tables...');
-                _.each(_.values(view.suppressions_table_map), function (table) {
-                    console.log('Cleaning up table: ' + table.el.id);
-                    view.stopListening(table);
-                    table.close();
-                });
-            }
-            view.suppressions_table_map = {};
         }
     });
 
@@ -665,7 +677,7 @@ define(function (require) {
                 this.rowitem_uuid = options.rowitem_uuid;
             }
         },
-        onShow: function() {
+        onShow: function () {
             var view = this;
 
             view.comments_table = new CommentsTableView({
@@ -673,7 +685,7 @@ define(function (require) {
             });
             view.comments_table_region.show(view.comments_table);
         },
-        length: function() {
+        length: function () {
             if (this.comments_table) {
                 return this.comments_table.get_total_rows();
             }
@@ -742,34 +754,42 @@ define(function (require) {
         template: templates['hits-details.ejs'],
 
         regions: {
-            tasks_region: '#tasks-region',
-            audit_type_region: '.audit-type-region',
-            comments_region: '.comments-region',
-            link_region: '.link-region',
-            tags_region: '.tags-region',
+            agent_host_region: '#agent-host-region',
+            audit_content_region: '#audit-content-region',
+            audit_region: '#audit-region',
+            audit_type_region: '#audit-type-region',
+            comments_region: '#comments-region',
+            link_region: '#link-region',
             hits_dialog_region: '#hits-dialog-region',
-            identities_region: '.identities-region',
-            merge_all_region: '.merge-all-region',
-            merge_region: '.merge-region',
+            identities_region: '#identities-region',
+            ioc_tabs_region: '#ioc-tabs-region',
+            merge_all_region: '#merge-all-region',
+            merge_region: '#merge-region',
             prev_next_region: '#prev-next-div',
-            agent_host_region: '.agent-host-region',
-            audit_region: '.audit-region',
-            audit_content_region: '.audit-content-region',
-            ioc_tabs_region: '.ioc-tabs-region'
+            tags_region: '#tags-region',
+            tasks_region: '#tasks-region'
         },
 
         initialize: function (options) {
-//            if (!options.hits_table_view && !options.hits_table_name) {
-//                // Error, table parameter is required.
-//                throw new Error('"hits_table_view" or "hits_table_name" parameter is required.');
-//            }
+            if (!options.hits_table_view && !options.hits_table_name) {
+                // Error, table parameter is required.
+                throw new Error('"hits_table_view" or "hits_table_name" parameter is required.');
+            }
 
             var view = this;
             view.options = options;
-            view.hits_table_view = view.options.hits_table_view;
-//            view.hits_table_name = view.options.hits_table_name;
 
-            if (view.hits_table_view) {
+            view.hits_table_view = view.options.hits_table_view;
+            view.hits_table_name = view.options.hits_table_name;
+
+            if (options && options.auto_render) {
+                view.auto_render = options.auto_render;
+            }
+            else {
+                view.auto_render = true;
+            }
+
+            if (view.auto_render && view.hits_table_view) {
                 // Listen for changes to a table view instance.
                 view.listenTo(view.hits_table_view, 'click', view.render_details);
 
@@ -779,27 +799,34 @@ define(function (require) {
                     $('.sf-details-view').fadeOut().hide();
                 });
             }
-//            if (view.hits_table_name) {
-//                // Listen globally to table view.
-//                view.registerAsync({
-//                    constructorName: 'TableView',
-//                    instanceName: view.hits_table_name,
-//                    eventName: 'change',
-//                    handler: view.render_details
-//                });
-//
-//                // TODO: Need to listen to empty events.
-//            }
+            if (view.auto_render && view.hits_table_name) {
+                // Listen globally to table view.
+                view.registerAsync({
+                    constructorName: 'TableView',
+                    instanceName: view.hits_table_name,
+                    eventName: 'click',
+                    handler: view.render_details
+                });
+                view.registerAsync({
+                    constructorName: 'TableView',
+                    instanceName: view.hits_table_name,
+                    eventName: 'empty',
+                    handler: function () {
+                        // Hide all components with the details view class.
+                        $('.sf-details-view').fadeOut().hide();
+                    }
+                });
+            }
 
-            view.listenTo(vent, Events.SF_MERGE, function (source_uuid, dest_uuid) {
+            view.listenTo(vent, StrikeFinderEvents.SF_MERGE, function (source_uuid, dest_uuid) {
                 view.handle_merge(dest_uuid);
             });
 
-            view.listenTo(vent, Events.SF_MERGE_ALL, function (uuid) {
+            view.listenTo(vent, StrikeFinderEvents.SF_MERGE_ALL, function (uuid) {
                 view.handle_merge(uuid);
             });
 
-            view.listenTo(vent, Events.SF_SUPPRESS_ACTION, function(params) {
+            view.listenTo(vent, StrikeFinderEvents.SF_SUPPRESS_ACTION, function (params) {
                 console.log(_.sprintf('Creating suppression for text: %s, rowitem_type: %s, and term: %s',
                     params.selection, view.row.rowitem_type, params.ioc_term));
 
@@ -821,7 +848,7 @@ define(function (require) {
                 view.hits_dialog_region.show(suppression_form_view);
             });
 
-            view.listenTo(vent, Events.SF_ACQUIRE_ACTION, function(params) {
+            view.listenTo(vent, StrikeFinderEvents.SF_ACQUIRE_ACTION, function (params) {
                 console.info('Initiating acquisition for selection: ' + params.selection);
 
                 var acquire_form_view = new AcquireFormView({
@@ -846,7 +873,7 @@ define(function (require) {
                 });
             });
 
-            view.listenTo(vent, Events.SF_MASS_TAG_ACTION, function(params) {
+            view.listenTo(vent, StrikeFinderEvents.SF_MASS_TAG_ACTION, function (params) {
                 // Display the mass tag dialog.
                 var mass_tag_form = new MassTagFormView({
                     el: '#dialog-div'
@@ -864,7 +891,7 @@ define(function (require) {
                 });
             });
 
-            view.listenTo(vent, Events.SF_AUTO_SUPPRESS_ACTION, function(params) {
+            view.listenTo(vent, StrikeFinderEvents.SF_AUTO_SUPPRESS_ACTION, function (params) {
                 // Auto create a suppression.
                 var suppression_model = new SuppressionModel({
                     itemvalue: params.selection,
@@ -911,7 +938,7 @@ define(function (require) {
                                     uac_utils.display_success(msg);
 
                                     // Notify that a suppression was created.
-                                    vent.trigger(Events.SF_SUPPRESS_CREATE, view.row, suppression_model);
+                                    vent.trigger(StrikeFinderEvents.SF_SUPPRESS_CREATE, view.row, suppression_model);
                                 }
                                 else {
                                     // The task did not complete and is running in the background.
@@ -953,27 +980,30 @@ define(function (require) {
             var agenthost_view = new AgentHostView({
                 model: view.host
             });
-            uac_utils.fetch(view.host, view.agent_host_region.el, {
-                success: function () {
-                    view.agent_host_region.show(agenthost_view);
-                },
-                error: function (model, response) {
-                    if (response.status == 200) {
-                        // Indicate that the host was not found.
-                        var missing_view = new AgentHostMissingView({
-                            model: view.host
-                        });
-                        view.agent_host_region.show(missing_view);
+
+            new FetchController({
+                model: view.host,
+                view: agenthost_view,
+                region: view.agent_host_region
+            })
+                .fetch({
+                    error: function (model, response) {
+                        if (response.status == 200) {
+                            // Indicate that the host was not found.
+                            var missing_view = new AgentHostMissingView({
+                                model: view.host
+                            });
+                            view.agent_host_region.show(missing_view);
+                        }
+                        else {
+                            // Display an error, could not retrieve the host data.
+                            var error_view = new AgentHostErrorView({
+                                model: view.host
+                            });
+                            view.agent_host_region.show(error_view);
+                        }
                     }
-                    else {
-                        // Display an error, could not retrieve the host data.
-                        var error_view = new AgentHostErrorView({
-                            model: view.host
-                        });
-                        view.agent_host_region.show(error_view);
-                    }
-                }
-            });
+                });
         },
 
         render_audit_details: function (rowitem_uuid) {
@@ -1008,7 +1038,7 @@ define(function (require) {
             });
             if (tagging_enabled) {
                 // Only listen to create events if tagging is enabled.
-                view.listenTo(vent, Events.SF_TAG_CREATE, function(params) {
+                view.listenTo(vent, StrikeFinderEvents.SF_TAG_CREATE, function (params) {
                     // Reload the details view.
                     view.render_rowitem(params.rowitem_uuid);
                 });
@@ -1034,56 +1064,58 @@ define(function (require) {
             });
 
             // Fetch the audit and display the related views.
-            uac_utils.fetch(audit, $(view.audit_content_region.el), {
-                success: function () {
-                    view.audit_region.show(audit_view);
-                    view.tags_region.show(tags_view);
-                    view.merge_all_region.show(merge_all_view);
-                    view.merge_region.show(merge_view);
-                    view.identities_region.show(identities_view);
+            new FetchController({
+                model: audit,
+                region: view.audit_content_region
+            })
+                .fetch({
+                    success: function() {
+                        view.audit_region.show(audit_view);
+                        view.tags_region.show(tags_view);
+                        view.merge_all_region.show(merge_all_view);
+                        view.merge_region.show(merge_view);
+                        view.identities_region.show(identities_view);
 
-                    // Update the audit type.
-                    view.$(view.audit_type_region.el).html(audit.get('rowitem_type'));
-                },
-                error: function(model, response) {
-                    uac_utils.display_response_error(response);
-                }
-            });
+                        // Update the audit type.
+                        view.$(view.audit_type_region.el).html(audit.get('rowitem_type'));
+                    }
+                });
         },
 
         //
         // Display the IOC tabs.
         //
         render_ioc_details: function (rowitem_uuid) {
+            console.trace();
+
             var view = this;
             view.iocs = new IOCCollection();
             view.iocs.rowitem_uuid = rowitem_uuid;
             var ioc_tabs_view = new IOCTabsView({
                 collection: view.iocs
             });
-            view.listenTo(vent, Events.SF_IOC_TAB_SELECT, function (exp_key) {
+            ioc_tabs_view.listenTo(vent, StrikeFinderEvents.SF_IOC_TAB_SELECT, function (exp_key) {
                 // Update the hits details view expression key whenever an IOC tab is selected.
                 view.exp_key = exp_key;
                 console.info('Hits details view now associated with exp_key: ' + exp_key);
             });
 
-            uac_utils.fetch(view.iocs, view.ioc_tabs_region.el, {
-                success: function () {
-                    // Show the IOC tabs.
-                    view.ioc_tabs_region.show(ioc_tabs_view);
-                    // Ensure a tab is selected.
-                    ioc_tabs_view.select_tab(view.default_exp_key);
-                },
-                error: function(collection, response) {
-                    uac_utils.display_response_error(response);
-                }
-            });
+            new FetchController({
+                model: view.iocs,
+                view: ioc_tabs_view,
+                region: view.ioc_tabs_region
+            })
+                .fetch({
+                    success: function() {
+                        ioc_tabs_view.select_tab(view.default_exp_key);
+                    }
+                });
         },
 
         //
         // Create the context menu component.
         //
-        render_context_menu: function() {
+        render_context_menu: function () {
             var view = this;
             view.context_menu = new AuditContextMenuView({
                 source: view.audit_region.el,
@@ -1095,7 +1127,7 @@ define(function (require) {
             $('.highlighter-container').append(view.context_menu.render().el);
         },
 
-        render_comments: function(rowitem_uuid) {
+        render_comments: function (rowitem_uuid) {
             var view = this;
 
             var comments = new CommentsCollection();
@@ -1107,24 +1139,28 @@ define(function (require) {
             });
             view.comments_region.show(collapsable);
 
-            uac_utils.fetch (comments, view.comments_region.el, {
-                success: function() {
-                    collapsable.set_title(_.sprintf('<i class="fa fa-comments"></i> Comments (%s)', comments.length));
-                    var comments_view = new CommentsView({
-                        collection: comments
-                    });
-                    collapsable.show(comments_view);
-                    if (comments.length > 0) {
-                        collapsable.expand();
+            new FetchController({
+                collection: comments,
+                region: view.comments_region
+            })
+                .fetch({
+                    success: function() {
+                        collapsable.set_title(_.sprintf('<i class="fa fa-comments"></i> Comments (%s)', comments.length));
+                        var comments_view = new CommentsView({
+                            collection: comments
+                        });
+                        collapsable.show(comments_view);
+                        if (comments.length > 0) {
+                            collapsable.expand();
+                        }
                     }
-                }
-            });
+                });
         },
 
         //
         // Display the tasks for the current identity.
         //
-        render_tasks: function(identity) {
+        render_tasks: function (identity) {
             var view = this;
 
             var tasks = new AgentTaskCollection();
@@ -1137,22 +1173,23 @@ define(function (require) {
             });
             view.tasks_region.show(collapsable);
 
-            uac_utils.fetch(tasks, view.tasks_region.el, {
-                success: function() {
-                    collapsable.set_title(_.sprintf('<i class="fa fa-tasks"></i> Agent Tasks (%s)', tasks.length));
-                    var tasks_view = new AgentTasksTableView({
-                        collection: tasks,
-                        condensed: true
-                    });
-                    collapsable.show(tasks_view);
-                    if (tasks.length > 0) {
-                        collapsable.expand();
+            new FetchController({
+                collection: tasks,
+                region: view.tasks_region
+            })
+                .fetch({
+                    success: function() {
+                        collapsable.set_title(_.sprintf('<i class="fa fa-tasks"></i> Agent Tasks (%s)', tasks.length));
+                        var tasks_view = new AgentTasksTableView({
+                            collection: tasks,
+                            condensed: true
+                        });
+                        collapsable.show(tasks_view);
+                        if (tasks.length > 0) {
+                            collapsable.expand();
+                        }
                     }
-                },
-                error: function(collection, response) {
-                    uac_utils.display_response_error('Error while retrieving tasks.', response);
-                }
-            });
+                });
         },
 
         //
@@ -1179,8 +1216,6 @@ define(function (require) {
             view.render_comments(data.uuid);
             view.render_tasks(data.identity);
             view.render_context_menu();
-
-            //view.$('.sf-details-view').fadeIn().show();
         },
 
         onShow: function () {
@@ -1188,7 +1223,7 @@ define(function (require) {
 
             // Display the table controls view, is only rendered once.
             view.prev_next_view = new TableViewControls({
-                table: view.hits_table_view
+                table_name: view.hits_table_name
             });
             view.prev_next_region.show(view.prev_next_view);
         },
@@ -1236,125 +1271,7 @@ define(function (require) {
             }
         },
 
-        /**
-         * The user has selected a hit, render the details of that hit.
-         * @param data - the hit data.
-         */
-        render_details_old: function (data) {
-            var view = this;
-            // Capture the current row on the view instance.
-            view.row = data;
-
-            console.log('Hits row selected: ' + JSON.stringify(data));
-
-            if (!view.initialized) {
-                //
-                // Initialize the details components.
-
-
-                // Suppression form.
-                view.suppression_form_view = new SuppressionFormView({
-                    el: $("#dialog-div")
-                });
-
-                // Acquire form.
-                view.acquire_form_view = new AcquireFormView({
-                    el: '#dialog-div'
-                });
-
-                // Mass tag form.
-                view.mass_tag_form = new MassTagFormView({
-                    el: '#dialog-div'
-                });
-
-                // Context menu.
-                view.context_menu = new AuditContextMenuView({
-                    source: "#audit-div",
-                    suppress: view.options.suppress,
-                    acquire: view.options.acquire,
-                    masstag: view.options.masstag
-                });
-
-                view.listenTo(vent, Events.SF_AUTO_SUPPRESS_ACTION, function (selection, ioc_term) {
-                    // Auto create a suppression.
-                    var suppression_model = new SuppressionModel({
-                        itemvalue: selection,
-                        rowitem_type: view.row.rowitem_type,
-                        exp_key: view.exp_key,
-                        cluster_uuid: view.row.cluster_uuid,
-                        comment: selection,
-                        condition: 'is',
-                        itemkey: ioc_term,
-                        preservecase: false
-                    });
-                    // Validate the model before saving.
-                    if (!suppression_model.isValid()) {
-                        // Error
-                        errors = view.model.validationError;
-                        _.each(errors, function (error) {
-                            uac_utils.display_error(error);
-                        });
-                    }
-                    else {
-                        // Ok.
-                        view.block();
-
-                        suppression_model.save({}, {
-                            success: function (model, response) {
-                                // The task has been submitted for the suppression.
-                                var submit_message = _.sprintf('Submitted task for suppression: %s',
-                                    suppression_model.as_string());
-                                uac_utils.display_success(submit_message);
-
-                                // Try and wait for the task result.
-                                sf_utils.wait_for_task(response.task_id, function (err, completed, response) {
-                                    view.unblock();
-
-                                    if (err) {
-                                        // Error checking the task result.
-                                        uac_utils.display_error(err);
-                                    }
-                                    else if (completed) {
-                                        // The task was completed successfully.
-                                        var msg = _.sprintf('Successfully suppressed %s hits for %s',
-                                            response.result.summary, suppression_model.as_string());
-                                        uac_utils.display_success(msg);
-
-                                        // Notify that a suppression was created.
-                                        view.trigger('create:suppression', view.row, suppression_model);
-                                        vent.trigger(Events.SF_SUPPRESS_CREATE, view.row, suppression_model);
-                                    }
-                                    else {
-                                        // The task did not complete and is running in the background.
-                                        var task_message = _.sprintf('The task for suppression: %s is still running and ' +
-                                                'its results can be viewed on the <a href="/sf/tasks">Task List</a>.',
-                                            suppression_model.as_string());
-                                        uac_utils.display_info(task_message);
-                                    }
-                                });
-                            },
-                            error: function (model, xhr) {
-                                try {
-                                    var message = xhr && xhr.responseText ? xhr.responseText : 'Response text not defined.';
-                                    uac_utils.display_error('Error while submitting auto suppression task - ' + message);
-                                }
-                                finally {
-                                    view.unblock();
-                                }
-                            }
-                        });
-                    }
-                });
-
-
-
-                view.initialized = true;
-            }
-
-            view.fetch();
-        },
-
-        onClose: function() {
+        onClose: function () {
             if (this.context_menu) {
                 // Clean up the context menu since it attaches to an global region.
                 this.context_menu.close();

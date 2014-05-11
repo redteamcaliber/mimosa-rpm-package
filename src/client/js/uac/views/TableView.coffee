@@ -81,6 +81,20 @@ define (require) ->
                     payload: @get_selected_data()
                 return
 
+            @listenTo @, 'load', =>
+                # Trigger a global load event.
+                @fireAsync
+                    constructorName: TableView
+                    instanceName: @instanceName
+                    eventName: 'load'
+                    payload: @get_status_data()
+
+            @listenTo @, 'empty', =>
+                @fireAsync
+                    constructorName: TableView
+                    instanceName: @instanceName
+                    eventName: 'empty'
+
             # Listen to prev/next change events.
             @registerAsync
                 constructorName: TableView

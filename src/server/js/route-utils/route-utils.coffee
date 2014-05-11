@@ -100,7 +100,6 @@ get_uid = (req) ->
 ###
 default_context = (req) ->
     assert(req)
-    assert(req.session)
 
     context =
         uid: get_uid(req)

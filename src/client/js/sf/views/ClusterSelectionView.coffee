@@ -6,7 +6,7 @@ define (require)->
     moment = require 'moment'
     utils = require 'uac/common/utils'
     templates = require 'sf/ejs/templates'
-    Events = require 'sf/common/Events'
+    StrikeFinderEvents = require 'sf/common/StrikeFinderEvents'
     ServicesCollection = require 'sf/models/ServicesCollection'
     ClientCollection = require 'sf/models/ClientCollection'
     ClustersCollection = require 'sf/models/ClustersCollection'
@@ -24,10 +24,10 @@ define (require)->
 
         regions:
             clear_button_region: '#clear-button'
-            clients_select_region: '#clients-select'
+            clients_select_region: '#clients-select-region'
             search_controls_region: '#searchControls'
-            services_select_region: '#services-select'
-            clusters_select_region: '#clusters-select'
+            services_select_region: '#services-select-region'
+            clusters_select_region: '#clusters-select-region'
             submit_button_region: '#submit-button'
 
         serializeData: =>
@@ -37,6 +37,8 @@ define (require)->
         # Render the selection view.
         #
         onRender: ->
+            display_services = @options.hide_services isnt true
+
             usersettings = utils.usersettings()
             if @options.hide_timeframe != true
                 if usersettings.timeFrame
@@ -58,60 +60,48 @@ define (require)->
                 @search_controls_region.show @timeSearchView
 
 
-            if @options.hide_services != true
+            if display_services
                 # Render the services.
                 @services = new ServicesCollection()
                 @services_view = new SelectView
-                    el: @$(@services_select_region.el)
                     collection: @services
                     id_field: "mcirt_service_name"
                     value_field: "description"
                     selected: usersettings.services
-                    width: "100%"
+                    multiple: true
+                    select_options:
+                        width: "100%"
+                @services.reset StrikeFinder.services
+                @services_select_region.show @services_view
 
-                try
-                    @services.reset StrikeFinder.services
-                catch error
-                    console.dir e.stack
-
-                @services_view.on 'change', =>
-                    #Update the submit button.
-                    @update_options()
-
-            #Render the clients.
+            # Render the clients.
             @clients = new ClientCollection()
             @clients_view = new SelectView
-                el: @$(@clients_select_region.el)
                 collection: @clients
                 id_field: 'client_uuid'
                 value_field: 'client_name'
                 selected: usersettings.clients
-                width: '100%'
-
+                select_options:
+                    width: '100%'
+                multiple: true
+                placeholder: 'Select Clients'
             @clients.reset(StrikeFinder.clients)
-            @clients_view.on 'change', =>
-                # Reload the clusters based on the selected clients.
-                @load_clusters()
 
-                #Update the submit button.
-                @update_options()
+            @clients_select_region.show @clients_view
 
-            #Render the clusters.
+            # Render the clusters.
             @clusters = new ClustersCollection()
             @clusters_view = new SelectView
-                el: @$(@clusters_select_region.el)
                 collection: @clusters
                 id_field: "cluster_uuid"
                 value_field: "cluster_name"
                 selected: usersettings.clusters
-                width: "100%"
-
-            @clusters_view.on 'change', =>
-                #Update the submit button.
-                @update_options()
-
-            #Load the initial clusters options based on the clients.
+                multiple: true
+                select_options:
+                    width: "100%"
+            # Load the initial clusters options based on the clients.
             @load_clusters()
+            @clusters_select_region.show @clusters_view
 
             #Register event handlers.
             @delegateEvents
@@ -124,6 +114,21 @@ define (require)->
                 @update_options()
 
             @update_options()
+
+            # Update the buttons when items are changed.
+            if display_services
+                @services_view.on 'change', =>
+                    # Update the submit button.
+                    @update_options()
+            @clients_view.on 'change', =>
+                # Reload the clusters based on the selected clients.
+                @load_clusters()
+
+                #Update the submit button.
+                @update_options()
+            @clusters_view.on 'change', =>
+                #Update the submit button.
+                @update_options()
 
             return @
 
@@ -152,7 +157,6 @@ define (require)->
         # Retrieve the set of clusters based on both the clients and clusters selections.
         #
         get_clusters: ->
-            services = @get_selected_services()
             clients = @get_selected_clients()
             clusters = @get_selected_clusters()
 
@@ -262,7 +266,7 @@ define (require)->
                 startDate: @get_start_date()
                 endDate: @get_end_date()
             @trigger 'submit', event
-            vent.trigger Events.SF_IOC_SEARCH, event
+            vent.trigger StrikeFinderEvents.SF_IOC_SEARCH, event
 
 
 
@@ -276,7 +280,7 @@ define (require)->
             @clusters_view.clear()
             @timeSearchView.reset_selected()
             @trigger('clear')
-            vent.trigger Events.SF_IOC_RESET
+            vent.trigger StrikeFinderEvents.SF_IOC_RESET
 
 
     return ClusterSelectionView
