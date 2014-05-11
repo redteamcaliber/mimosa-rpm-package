@@ -141,7 +141,9 @@ define(function(require) {
                     }
                 });
             },
-            callback
+            callback, {
+                max_intervals: 3
+            }
         );
     };
 

@@ -296,7 +296,7 @@ define (require) ->
                     begin: @startDate
                     end: @endDate
 
-                vent.trigger vent, StrikeFinderEvents.SF_HITS_RENDER params
+                vent.trigger StrikeFinderEvents.SF_HITS_RENDER, params
 
         #
         # Display the cluster selection view on render.

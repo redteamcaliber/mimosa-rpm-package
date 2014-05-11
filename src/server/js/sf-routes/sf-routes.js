@@ -660,6 +660,7 @@ var AUDIT_TEMPLATE_MAP = {
     fileitem: '/sf/audit/file-item.html',
     formhistoryitem: '/sf/audit/form-history-item.html',
     hookitem: '/sf/audit/hook-item.html',
+    ipv4networkevent: '/sf/audit/ipv4networkevent.html',
     persistenceitem: '/sf/audit/persistence-item.html',
     portitem: '/sf/audit/port-item.html',
     prefetchitem: '/sf/audit/prefetch-item.html',
@@ -921,8 +922,6 @@ app.post('/api/audit', function (req, res, next) {
                 next(err);
             }
             else {
-                //console.dir(result);
-
                 var input = {
                     rowitem_type: rowitem_type,
                     content: result

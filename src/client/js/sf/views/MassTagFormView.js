@@ -94,7 +94,7 @@ define(function(require) {
 
             try {
                 // Immediately block to prevent multiple submissions.
-                view.block_element(form, 'Processing...');
+                view.block_element(form, true);
 
                 // Update the model with the form data.
                 view.model.set('exp_key', view.$("#exp_key").children(":selected").attr("id"));
@@ -134,7 +134,7 @@ define(function(require) {
                 view.unblock(form);
             }
 
-            view.block_element(form, 'Processing...');
+            view.block_element(form, true);
             view.model.save({}, {
                 success: function(model, response, options) {
                     var task_id = response.task_id;

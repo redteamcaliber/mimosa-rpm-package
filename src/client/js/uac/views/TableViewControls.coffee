@@ -124,7 +124,7 @@ define (require) ->
             return
 
         onClose: ->
-            $(document).off('keyup', document, @on_keyup)
+            $(document).off('keyup', @on_keyup)
 
     # Mixin events.
     utils.mixin TableViewControls, Evented

@@ -107,7 +107,7 @@ define(function (require) {
             var view = this;
             var form = $('#suppression-form');
             try {
-                utils.block_element(form, 'Processing...');
+                utils.block_element(form, true);
 
                 // Update the model.
                 view.model.set('exp_key', view.$("#exp_key").children(":selected").attr("id"));
@@ -138,7 +138,7 @@ define(function (require) {
                 utils.unblock(form);
             }
 
-            utils.block_element(form, 'Processing...');
+            utils.block_element(form, true);
             view.model.save({}, {
                 success: function (model, response) {
                     var submit_message = _.sprintf('Submitted task for suppression: %s',

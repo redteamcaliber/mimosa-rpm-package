@@ -47,10 +47,9 @@ define (require) ->
             @set_title [iocname, iocuuid, exp_key]
 
         @listenTo vent, StrikeFinderEvents.SF_HITS_RENDER, (params) =>
-            # Handle the click of an expression key.
+            console.info('Rendering hits for params: ' + JSON.stringify(params));
 
             if not @hits_view
-                console.debug('Selected expression key: ' + params.exp_key)
                 @hits_view = new HitsView()
                 @hits_view.listenToOnce @hits_view, 'show', =>
                     # Ensure the hits region is visible.

@@ -779,17 +779,16 @@ define(function (require) {
             var view = this;
             view.options = options;
 
-            view.hits_table_view = view.options.hits_table_view;
-            view.hits_table_name = view.options.hits_table_name;
-
-            if (options && options.auto_render) {
-                view.auto_render = options.auto_render;
+            if (options) {
+                view.hits_table_view = view.options.hits_table_view;
+                view.hits_table_name = view.options.hits_table_name;
+                view.auto_render = view.options.auto_render !== false;
             }
             else {
                 view.auto_render = true;
             }
 
-            if (view.auto_render && view.hits_table_view) {
+            if (view.auto_render === true && view.hits_table_view) {
                 // Listen for changes to a table view instance.
                 view.listenTo(view.hits_table_view, 'click', view.render_details);
 
@@ -799,7 +798,7 @@ define(function (require) {
                     $('.sf-details-view').fadeOut().hide();
                 });
             }
-            if (view.auto_render && view.hits_table_name) {
+            if (view.auto_render === true && view.hits_table_name) {
                 // Listen globally to table view.
                 view.registerAsync({
                     constructorName: 'TableView',
@@ -851,10 +850,6 @@ define(function (require) {
             view.listenTo(vent, StrikeFinderEvents.SF_ACQUIRE_ACTION, function (params) {
                 console.info('Initiating acquisition for selection: ' + params.selection);
 
-                var acquire_form_view = new AcquireFormView({
-                    el: '#dialog-div'
-                });
-
                 var cluster = view.host.attributes.cluster;
                 var cluster_uuid = undefined;
                 if (cluster && cluster.uuid) {
@@ -863,14 +858,16 @@ define(function (require) {
                 else {
                     cluster_uuid = view.row.cluster_uuid;
                 }
-                acquire_form_view.render({
+                var options = {
                     identity: view.row.identity,
                     selection: params.selection,
                     am_cert_hash: view.row.am_cert_hash,
                     cluster_uuid: cluster_uuid,
                     cluster_name: view.row.cluster_name,
                     rowitem_uuid: view.row.uuid
-                });
+                };
+                var acquire_form_view = new AcquireFormView(options);
+                view.hits_dialog_region.show(acquire_form_view);
             });
 
             view.listenTo(vent, StrikeFinderEvents.SF_MASS_TAG_ACTION, function (params) {
@@ -960,6 +957,14 @@ define(function (require) {
                     });
                 }
             });
+        },
+
+        render_table_controls: function() {
+            var view = this;
+            prev_next_view = new TableViewControls({
+                table_name: view.hits_table_name
+            });
+            view.prev_next_region.show(prev_next_view);
         },
 
         render_link_details: function (identity) {
@@ -1086,8 +1091,6 @@ define(function (require) {
         // Display the IOC tabs.
         //
         render_ioc_details: function (rowitem_uuid) {
-            console.trace();
-
             var view = this;
             view.iocs = new IOCCollection();
             view.iocs.rowitem_uuid = rowitem_uuid;
@@ -1157,6 +1160,10 @@ define(function (require) {
                 });
         },
 
+        reload_comments: function() {
+            this.render_comments(this.row.uuid);
+        },
+
         //
         // Display the tasks for the current identity.
         //
@@ -1192,6 +1199,10 @@ define(function (require) {
                 });
         },
 
+        reload_tasks: function() {
+            this.render_tasks(this.row.identity);
+        },
+
         //
         // Update the view for a specific row item.  Assumes the identity has not changed.
         //
@@ -1209,6 +1220,7 @@ define(function (require) {
             var view = this;
             view.row = data;
 
+            view.render_table_controls();
             view.render_link_details(data.identity);
             view.render_host_details(data.am_cert_hash);
             view.render_audit_details(data.uuid);
@@ -1216,16 +1228,8 @@ define(function (require) {
             view.render_comments(data.uuid);
             view.render_tasks(data.identity);
             view.render_context_menu();
-        },
 
-        onShow: function () {
-            var view = this;
-
-            // Display the table controls view, is only rendered once.
-            view.prev_next_view = new TableViewControls({
-                table_name: view.hits_table_name
-            });
-            view.prev_next_region.show(view.prev_next_view);
+            $('.sf-details-view').fadeIn().show();
         },
 
         handle_merge: function (uuid) {

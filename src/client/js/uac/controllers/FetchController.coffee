@@ -21,6 +21,8 @@ define (require) ->
                     @block_region = options.block_region
                 if options.view
                     @view = options.view
+                if options.loading
+                    @loading = options.loading
 
         #
         # Fetch the collection and show the view while adding blocking support and error handling.
@@ -48,7 +50,7 @@ define (require) ->
                         if params.error
                             params.error model, response, options
                         else
-                            @_display_error 'Error while fetching data'. e
+                            @_display_error 'Error while fetching data', e
                         if params.done
                             params.done model, response, options
                 finally
@@ -77,9 +79,9 @@ define (require) ->
                 @close()
         _block: ->
             if @block_region
-                utils.block_element @block_region.el
+                utils.block_element @block_region.el, @loading
             else if @region
-                utils.block_element @region.el
+                utils.block_element @region.el, @loading
             else
                 utils.block()
 

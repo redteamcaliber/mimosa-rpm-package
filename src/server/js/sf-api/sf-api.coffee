@@ -188,6 +188,7 @@ get_rowitem_content = (rowitem_uuid, attributes, callback) ->
                 if err
                     callback(err)
                 else
+                    console.dir json
                     body.content = json
                     callback(null, body)
 

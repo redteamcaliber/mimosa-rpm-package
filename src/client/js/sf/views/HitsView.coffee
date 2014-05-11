@@ -72,12 +72,14 @@ define (require) ->
             # Manually update the tagname of the relevant row when a new tag is created.
             @listenTo vent, StrikeFinderEvents.SF_TAG_CREATE, (params) =>
                 @hits_table_view.update_row('uuid', params.rowitem_uuid, 'tagname', params.tagname, 1)
+                @hits_details_view.reload_comments();
 
             # Update the tagname of the row's view after an acquisition is created.
             @listenTo vent, StrikeFinderEvents.SF_ACQUIRE_CREATE, (row) =>
                 @hits_table_view.update_row('uuid', row.uuid, 'tagname', 'investigating', 1)
                 # Refresh the comments.
-                @hits_details_view.fetch() # TODO: This isn't working.
+                @hits_details_view.reload_comments();
+                @hits_details_view.reload_tasks();
 
             # Reload the facets after a suppression is created.
             @listenTo vent, StrikeFinderEvents.SF_MASS_TAG_CREATE, =>

@@ -37,9 +37,12 @@ define (require) ->
         $.blockUI get_blockui_options('<img src="/static/css/img/ajax-loader.gif">')
         return
 
-    block_element = (el, message) ->
-        #$(el).block(get_blockui_options('<img src="/static/css/img/ajax-loader.gif">'))
-        $(el).block(get_blockui_options())
+    block_element = (el, loading) ->
+        if loading
+            options = get_blockui_options('<img src="/static/css/img/ajax-loader.gif">')
+        else
+            options = get_blockui_options()
+        $(el).block(options)
         return
 
     #
@@ -146,12 +149,16 @@ define (require) ->
 
         # Override defaults.
         if options
-            delay = options.delay if options.delay
-            max_intervals = options.max_intervals  if options.max_intervals
+            if options.delay
+                delay = options.delay
+            if options.max_intervals
+                max_intervals = options.max_intervals
+
+        console.debug "Polling for #{max_intervals} intervals of #{delay}ms."
 
         # Set up the polling loop.
-        interval_count = 0
-        timer_id = setInterval(->
+        interval_count = 1
+        timer_id = setInterval( ->
             try
             # Check for an exit condition.
                 if interval_count >= max_intervals

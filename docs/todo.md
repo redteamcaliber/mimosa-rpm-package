@@ -4,21 +4,23 @@ UAC ToDo
 ### Hits Details Changes
 
 - Create the new audit templates.
-- Keyboard shortcuts are firing the next event twice on the alerts details view.
 - Disable tagging, mass tagging, and suppressions on the hits view of the suppressions view.
 - Convert the artifacts table into a drop down.
-- Convert FacetsView to an itemView.
+- MassTagForm should be an item view.
+- HX suppressions list is not refreshing after creating a suppression.
+- Add a suppression deleted handler in all of the top level views.
+
 - The table view controls don't seem to be able to cycle through a page and go back.
+- Task polling always seems to be worst case times.
+- Keyboard shortcuts fire even after the details view is hidden.
+- There is an issue with Glitter Conditions in the IOC tabs header.
+- Convert FacetsView to an itemView.
 - Convert IOCDetailsView to an item view or collection view.
 - Properly disable the time boxes on the cluster selection view.
-- the listeners could be building up when switching rows, need to look into this.
 - Need to test the merge and merge all functions (or remove??)
-- HX suppressions list is not refreshing after creating a suppression.
 - Look into using item view collapsables in utils.collapse.
 - Clear the hits and hits detail on reset or clearing of initial parameters.
 - Clear on the hits search should clear the local storage.
-- Add a suppression deleted handler in all of the top level views.
-- Create a FetchController that supports a collapsable???
 - Add tag validation in the alerts api.
 - Title and breadcrumb updates.
     - Update the alerts title as well as the breadcrumbs...

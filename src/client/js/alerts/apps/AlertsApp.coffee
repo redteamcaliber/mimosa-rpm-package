@@ -139,6 +139,7 @@ define (require) ->
                 collection: summaries
                 view: summary_list_view
                 region: @layout.summary_list_region
+                loading: true
 
             # Fetch the summary list data.
             @data = {}
@@ -153,14 +154,15 @@ define (require) ->
                 data: @data
 
         @listenTo vent, Events.ALERTS_SUMMARY_SELECTED, (row_data) =>
-            unless @details_list_view
-                # Create the details list view.
-                @alerts = new AlertCollection()
-                @details_list_view = new AlertsTableView
-                    id: 'alerts_details_table'
-                    collection: @alerts
-                @listenToOnce @alerts, 'sync', ->
-                    @layout.details_list_region.show @details_list_view
+            alerts = new AlertCollection()
+            details_list_view = new AlertsTableView
+                id: 'alerts_details_table'
+                collection: alerts
+            controller = new FetchController
+                collection: alerts
+                view: details_list_view
+                region: @layout.details_list_region
+                loading: true
 
             if 'endpoint-match' in row_data.alert_types
                 data = _.clone @data
@@ -169,10 +171,8 @@ define (require) ->
                 data = _.clone @data
                 data.signature_uuid = row_data.uuid
 
-            #utils.block_element @layout.list_region.el
-            @details_list_view.fetch {
+            controller.fetch
                 data: data
-            }
             return
 
         # Display the alert details.
@@ -192,12 +192,14 @@ define (require) ->
                     model: alert
                     view: details_view
                     region: @layout.details_content_region
+                    loading: true
                 controller.fetch()
             else
                 # Display HX alert details.
                 hx_details = new HitsDetailsView
                     data: row_data
                     hits_table_name: 'alerts_details_table'
+                    auto_render: false
 
                 @layout.details_content_region.show hx_details
                 hx_details.render_details(row_data);
