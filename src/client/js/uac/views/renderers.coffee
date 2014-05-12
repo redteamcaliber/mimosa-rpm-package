@@ -43,7 +43,7 @@ define (require) ->
             if data == 1
                 classes = 'btn btn-danger'
             else if data == 2
-                classes = 'btn-btn-warning'
+                classes = 'btn btn-warning'
             else if data == 3
                 classes = 'btn btn-success'
             else if data == 4

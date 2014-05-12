@@ -389,9 +389,7 @@ define(function (require) {
                 var params = {
                     services: view.services.join(','),
                     clusters: view.clusters.join(','),
-                    iocnamehash: iocnamehash,
-                    begin: view.startDate,
-                    end: view.endDate
+                    iocnamehash: iocnamehash
                 };
 
                 // Check out is not enabled.
@@ -406,13 +404,10 @@ define(function (require) {
                 var params = {
                     services: view.services.join(','),
                     clusters: view.clusters.join(','),
-                    ioc_uuid: ioc_uuid,
-                    begin: view.startDate,
-                    end: view.endDate
+                    ioc_uuid: ioc_uuid
                 };
 
-                view.render_hits(params);
-                view.trigger('render:hits', [iocname, ioc_uuid]);
+                view.render_hits([iocname, ioc_uuid]);
             });
 
             renderSummaries = function(){

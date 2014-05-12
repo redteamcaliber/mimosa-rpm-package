@@ -217,7 +217,7 @@ module.exports = function (grunt) {
             },
             'node-js': {
                 files: ['src/server/js/**/*.js'],
-                tasks: ['copy:unconvertedNode']
+                tasks: ['copy:unconvertedNode', 'coffee:uac-server']
             },
             'web-coffee': {
                 files: ['src/client/js/**/*.coffee', 'src/client/js/**/*.js'],
@@ -375,7 +375,7 @@ module.exports = function (grunt) {
                             create: true,
                             include: [
                                 //strike finder stuff
-                                "sf/main/AcquisitionsMain",
+                                "sf/main/AgentTasksMain",
                                 "sf/main/HitReviewMain",
                                 "sf/main/HitsByTagMain",
                                 "sf/main/HostsMain",

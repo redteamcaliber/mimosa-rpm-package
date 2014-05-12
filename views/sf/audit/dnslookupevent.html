@@ -1,0 +1,20 @@
+{% set event = content.dnslookupevent %}
+
+<table class="table table-condensed">
+    <tr>
+        <th class="sf-audit-heading">PID</th>
+        <td><span class="ioc-term" ioc-term="dnsLookupEvent/pid">{{ event.pid }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Process Name</th>
+        <td><span class="ioc-term" ioc-term="dnsLookupEvent/process">{{ event.process }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Host Name</th>
+        <td><span class="ioc-term" ioc-term="dnsLookupEvent/hostname">{{ event.hostname }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Created</th>
+        <td><span class="ioc-term" >{{ event.$.created }}</span></td>
+    </tr>
+</table>

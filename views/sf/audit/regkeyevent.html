@@ -1,0 +1,40 @@
+{% set event = content.regkeyevent %}
+
+<table class="table table-condensed">
+    <tr>
+        <th class="sf-audit-heading">Hive</th>
+        <td><span class="ioc-term" ioc-term="regKeyEvent/hive">{{ event.hive }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Path</th>
+        <td><span class="ioc-term" ioc-term="regKeyEvent/path">{{ event.path }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Text</th>
+        <td><span class="ioc-term" ioc-term="regKeyEvent/text">{{ event.text }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Key Path</th>
+        <td><span class="ioc-term" ioc-term="regKeyEvent/keyPath">{{ event.keypath }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Value Name</th>
+        <td><span class="ioc-term" ioc-term="regKeyEvent/valueName">{{ event.valuename }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Value</th>
+        <td><span class="ioc-term" ioc-term="regKeyEvent/value">{{ event.value }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Value Type</th>
+        <td><span class="ioc-term" ioc-term="regKeyEvent/valueType">{{ event.valuetype }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Event Type</th>
+        <td><span class="ioc-term" ioc-term="regKeyEvent/eventtype">{{ event.eventtype }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Created</th>
+        <td><span class="ioc-term" >{{ event.$.created }}</span></td>
+    </tr>
+</table>

@@ -81,6 +81,20 @@ define (require) ->
                     payload: @get_selected_data()
                 return
 
+            @listenTo @, 'load', =>
+                # Trigger a global load event.
+                @fireAsync
+                    constructorName: TableView
+                    instanceName: @instanceName
+                    eventName: 'load'
+                    payload: @get_status_data()
+
+            @listenTo @, 'empty', =>
+                @fireAsync
+                    constructorName: TableView
+                    instanceName: @instanceName
+                    eventName: 'empty'
+
             # Listen to prev/next change events.
             @registerAsync
                 constructorName: TableView
@@ -491,7 +505,7 @@ define (require) ->
         #     table.render({server_params: {suppression_id: suppression_id}});
         #
         render: (params) ->
-            console.debug "TableView.render(#{params})"
+            console.debug "TableView(#{@instanceName}).render()"
 
             # Clear the cache before re-destroying the table.
             @.clear_cache()
@@ -509,26 +523,25 @@ define (require) ->
             # Construct the table settings based on the supplied settings.
             settings = get_datatables_settings(@, @.options)
 
-            # Apply any parameters passed to the settings.
-            if params
-                if params.server_params isnt null
-                    server_params = params.server_params
-                    if server_params
-                        console.debug "Setting server params..."
-                        settings.fnServerParams = (aoData) ->
-                            _.each Object.keys(server_params), (key) ->
-                                console.debug "Setting param #{key} and value #{server_params[key]}"
-                                aoData.push
-                                    name: key
-                                    value: server_params[key]
+            if @collection
+                # Loading data using a collection, set aaData to the output.
+                settings.aaData = @collection.toJSON()
+            else if params and params.server_params isnt null
+                # Loading data url call, specify parameters to include in the request.
+                server_params = params.server_params
+            else if @options.server_params
+                # Loading data url call, specify parameters to include in the request.
+                server_params = @options.server_params
 
-                                return
-
-                            return
-                else settings.aaData = params.aaData  if params.aaData isnt null
-
-            # If a collection is defined then use the data from the collection.
-            settings.aaData = @collection.toJSON()  if @collection
+            if server_params
+                # Pass in a fnServerParams function to supply additional request parameters.
+                console.debug "Setting server params..."
+                settings.fnServerParams = (aoData) ->
+                    for key, val of server_params
+                        console.debug "Setting param #{key} and value #{val}"
+                        aoData.push
+                            name: key
+                            value: val
 
             # Create the table.
             @table_el.dataTable(settings)
@@ -610,10 +623,8 @@ define (require) ->
         #
         # Clean up and remove the table.
         #
-        close: ->
+        onBeforeClose: ->
             @destroy()
-
-            super
 
             # Fire an event after cleaning up.
             @trigger "close"
@@ -877,9 +888,6 @@ define (require) ->
             bSortClasses: false
             bProcessing: false
             asStripeClasses: []
-            fnServerData: (sSource, aoData, fnCallback) ->
-                parent.pipeline sSource, aoData, fnCallback
-                return
 
             fnRowCallback: (row, data, display_index, display_index_full) ->
                 parent.trigger 'row:callback', row, data, display_index, display_index_full
@@ -907,6 +915,12 @@ define (require) ->
                 parent.trigger "draw", oSettings
                 parent.trigger "empty"  if parent.length() is 0
                 return
+
+        if settings.iPipe and settings.iPipe > 0
+            defaults.fnServerData = (sSource, aoData, fnCallback) ->
+                parent.pipeline sSource, aoData, fnCallback
+                return
+
 
         results = {}
 

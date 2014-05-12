@@ -172,8 +172,8 @@ get_suppression = (suppression_id, attributes, callback) ->
             else if body.length == 1
                 callback(null, body[0])
             else
-                console.dir(body)
                 callback('Unable to process get_suppression response: ' + body)
+                console.dir(body)
 
 get_rowitem_content = (rowitem_uuid, attributes, callback) ->
     url = get_sf_url(_.sprintf('hits/%s/content', rowitem_uuid))
@@ -188,6 +188,9 @@ get_rowitem_content = (rowitem_uuid, attributes, callback) ->
                 if err
                     callback(err)
                 else
+                    # Debug
+                    #console.dir json
+
                     body.content = json
                     callback(null, body)
 
@@ -619,6 +622,28 @@ post_acquisition = (params, attributes, callback) ->
 add_acquisition_link = (acquisition) ->
     if acquisition && acquisition.acquired_file
         acquisition.link = get_ss_url(acquisition.acquired_file)
+#
+# Add the link field to an triage instance.
+# @param triage - the triage.
+#
+add_package_link = (triage) ->
+  if triage && triage.package
+    triage.link = get_ss_url(triage.package)
+
+#Retrieve the list of tasks
+get_task_result = (params, attributes, callback)->
+
+  url = get_ss_url('api/v1/task_result/')
+#  if not params or !params.order_by
+#    params.order_by = '-create_datetime'
+  request.json_get url, params, attributes, (err, response, body) ->
+    if err
+      # Error
+      callback(err)
+    else
+      # Fill in a link value for each acquisition.
+      body.objects.forEach(add_package_link)
+      callback(null, body)
 
 #
 # Retrieve the list of acquisitions by a comma separated list of clusters.
@@ -628,6 +653,7 @@ add_acquisition_link = (acquisition) ->
 #
 get_acquisitions = (params, attributes, callback) ->
     url = get_ss_url('api/v1/acquisition/')
+    console.log("PARAMS: "+JSON.stringify(params));
     if not params or !params.order_by
         params.order_by = '-create_datetime'
     request.json_get url, params, attributes, (err, response, body) ->
@@ -764,6 +790,7 @@ exports.get_host_by_hash = get_host_by_hash
 exports.get_hosts_by_name = get_hosts_by_name
 exports.get_hosts_by_ip = get_hosts_by_ip
 exports.get_full_host_by_hash = get_full_host_by_hash
+exports.get_task_result = get_task_result
 exports.post_acquisition = post_acquisition
 exports.get_acquisitions = get_acquisitions
 exports.get_acquisition = get_acquisition

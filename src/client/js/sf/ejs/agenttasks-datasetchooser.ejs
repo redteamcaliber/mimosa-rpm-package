@@ -1,0 +1,13 @@
+<div class="btn-group">
+  <button class="btn btn-link dropdown-toggle" data-toggle="dropdown" style="padding-top: 4px">
+    <i class="fa fa-hdd-o"></i> Source: <span class="selected"><%= collection.dataSource %></span> <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="<% if(collection.dataSource == 'All Tasks'){ %>, <%= 'selected' %> <% } %>"
+           name="All Tasks"
+           title="allscripts">All Scripts</a></li>
+    <li><a class="<% if(collection.dataSource == 'Hit Acquisitions'){ %>, <%= 'selected' %> <% } %>"
+           name="Hit Acquisitions"
+           title="hitacquisitions">Hit Acquisitions</a></li>
+  </ul>
+</div>
