@@ -86,6 +86,9 @@ module.exports = function (grunt) {
                 tempDir: '<%= build_rpm_dir %>',
                 defattrScript: [
                     {user: 'root', group: 'root'}
+                ],
+                postInstallScript: [
+                    'mkdir -p /opt/web/apps/uac/server/logs'
                 ]
             },
             release: {
