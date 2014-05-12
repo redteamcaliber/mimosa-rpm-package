@@ -68,11 +68,15 @@ define(function(require) {
 
             if (StrikeFinder.single_entity) {
                 view.suppressions = new SuppressionListItemCollection();
+                view.suppressions_table = new SuppressionsTableView({
+                    el: '#suppressions-table',
+                    collection: view.suppressions
+                });
+            }else {
+                view.suppressions_table = new SuppressionsTableView({
+                    el: '#suppressions-table'
+                });
             }
-            view.suppressions_table = new SuppressionsTableView({
-                el: '#suppressions-table',
-                collection: view.suppressions
-            });
             view.listenTo(view.suppressions_table, 'click', view.render_hits);
             view.listenTo(view.suppressions_table, 'delete', function() {
                 if (StrikeFinder.single_entity) {
