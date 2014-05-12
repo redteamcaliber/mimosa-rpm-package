@@ -88,15 +88,14 @@
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="/alerts"><i class="fa fa-exclamation-circle"></i> Alerts</a></li>
-                    <li><a href="/nt/"><i class="fa fa-cloud"></i> Network</a></li>
+                    <!--<li><a href="/nt/"><i class="fa fa-cloud"></i> Network</a></li>-->
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bolt"></i> StrikeFinder <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li><a href="/sf/hits/"><i class="fa fa-list"></i> IOC Hits</a></li>
                             <li><a href="/sf/suppressions/"><i class="fa fa-level-down"></i> Suppressions</a></li>
                             <li><a href="/sf/hits_by_tag/"><i class="fa fa-tags"></i> Hits by Tag</a></li>
-                            <li><a href="/sf/acquisitions/"><i class="fa fa-cloud-download"></i> Acquisitions</a></li>
-                            <li><a href="/sf/tasks/"><i class="fa fa-tasks"></i> Tasks</a></li>
+                            <li><a href="/sf/agenttasks/"><i class="fa fa-tasks"></i> Agent Tasks</a></li>
                         </ul>
                     </li>
                     {% block nav_menu %}
@@ -120,13 +119,17 @@
                                     <i class="icon-fixed-width fa fa-cogs"></i> SSO Settings
                                 </a>
                             </li>
-                            <li class="divider"></li>
+
                             <li>
                                 <a href="/preferences/" target="_blank">
                                     <i class="icon-fixed-width fa fa-wrench"></i> Preferences
                                 </a>
                             </li>
-                            <li class="divider"></li>
+
+                            <li>
+                                <a href="/sf/tasks/"><i class="fa fa-tasks"></i> Background Tasks</a>
+                            </li>
+
                             <li>
                                 <a href="/logout/">
                                     <i class="fa fa-sign-out"></i> Sign Out
@@ -143,11 +146,18 @@
     {% endblock %}
 
     {% block content %}
+    <div class="container">
+        <div class="row">
+            <div id="content" class="col-sm-12">
 
+            </div>
+        </div>
+    </div>
     {% endblock %}
 
     {% block tail %}
-
+    <div id="context-menu-region" class="highlighter-container" style="display: none;"></div>
+    <div id="dialog-div"></div>
     {% endblock %}
 </div>
 

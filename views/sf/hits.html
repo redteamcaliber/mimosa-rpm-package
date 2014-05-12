@@ -1,6 +1,6 @@
 {% extends "/sf/sf.html" %}
 
-{% block title %}Idenity: {{ identity }} - {{ super() }}{% endblock %}
+{% block title %}Identity: {{ identity }} - {{ super() }}{% endblock %}
 
 {% block data_main %}sf/main/IdentityMain{% endblock %}
 
@@ -15,10 +15,4 @@
         StrikeFinder.identity = "{{ identity }}";
     {% endif %}
 </script>
-{% endblock %}
-
-{% block content %}
-<div class="container">
-    {% include "sf/hits-template.html" %}
-</div>
 {% endblock %}

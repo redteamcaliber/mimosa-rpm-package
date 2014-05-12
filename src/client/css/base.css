@@ -94,7 +94,7 @@ table {
 }
 
 .sf-audit-heading {
-    width: 150px
+    width: 30%
 }
 
 .nowrap {
@@ -184,4 +184,7 @@ td.center {
 .date .calBtn{
     padding-bottom: 5px;
     padding-top: 5px;
+}
+#acquisitions-table .dropdown-menu>li>a.selected:after{
+    content: "\0020✔";
 }

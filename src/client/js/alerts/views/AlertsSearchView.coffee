@@ -235,7 +235,7 @@ define (require) ->
                             @clients_region.show clients_view
                             callback()
                         error: ->
-                            callaback()
+                            callback()
                 (callback) =>
                     times.fetch
                         success: =>

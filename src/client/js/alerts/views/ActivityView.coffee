@@ -93,6 +93,7 @@ define (require) ->
         onDomRefresh: ->
             @editor_region.show new EditorView
                 mode: 'ace/mode/markdown'
+                height: '200px'
 
         on_add_comment: ->
             comment = @editor_region.currentView.value()

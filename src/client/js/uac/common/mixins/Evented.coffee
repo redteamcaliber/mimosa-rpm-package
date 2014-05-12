@@ -66,14 +66,6 @@ define (require) ->
             else if _.isFunction options.topicGenerator then options.topicGenerator(options)
             else @_topicGenerator(options)
 
-        registerSync: (options = {}) ->
-            ###
-            Register a new request / response listener. These events are point-to-point, meaning that only the component
-            that fired the event will get a response. They will immediately return a value when called so they are most
-            useful when proxying getters.
-            ###
-            if @_validArguments(options) then @_getReqRes().setHandler @_getTopicGenerator(options), ->
-                options.handler.apply(this, arguments)
 
         registerAsync: (options = {})->
             ###
@@ -84,6 +76,9 @@ define (require) ->
             if @_validArguments(options) then @listenTo @_getVent(), @_getTopicGenerator(options), ->
                 options.handler.apply(this, arguments)
 
+        listenToTopic: (options) ->
+            @registerAsync(options)
+
         fireAsync: (options = {})->
             ###
             Fire a vent event. These events are global, so every component registered as a listener will receive the
@@ -91,6 +86,22 @@ define (require) ->
             component.
             ###
             if @_validArguments(options) then @_getVent().trigger @_getTopicGenerator(options), options.payload
+
+        triggerTopic: (options) ->
+            @fireAsync(options)
+
+
+        registerSync: (options = {}) ->
+            ###
+            Register a new request / response listener. These events are point-to-point, meaning that only the component
+            that fired the event will get a response. They will immediately return a value when called so they are most
+            useful when proxying getters.
+            ###
+            if @_validArguments(options) then @_getReqRes().setHandler @_getTopicGenerator(options), ->
+                options.handler.apply(this, arguments)
+
+        handleTopicRequest: (options) ->
+            @registerSync(options)
 
         requestSync: (options = {}) ->
             ###
@@ -100,4 +111,6 @@ define (require) ->
             ###
             if @_validArguments(options) then @_getReqRes().request @_getTopicGenerator(options), options.payload
 
+        requestTopic: (options) ->
+            @requestSync(options)
     )

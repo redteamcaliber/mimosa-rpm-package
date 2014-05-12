@@ -1,0 +1,68 @@
+{% set event = content.filewriteevent %}
+
+<table class="table table-condensed">
+    <tr>
+        <th class="sf-audit-heading">File Extension</th>
+        <td><span class="ioc-term" ioc-term="fileWriteEvent/fileExtension">{{ event.fileextension }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">File Name</th>
+        <td><span class="ioc-term" ioc-term="fileWriteEvent/fileName">{{ event.filename }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">File Path</th>
+        <td><span class="ioc-term" ioc-term="fileWriteEvent/filePath">{{ event.filepath }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Drive</th>
+        <td><span class="ioc-term" ioc-term="fileWriteEvent/drive">{{ event.drive }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Device Path</th>
+        <td><span class="ioc-term" ioc-term="fileWriteEvent/devicePath">{{ event.devicepath }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Full Path</th>
+        <td><span class="ioc-term" ioc-term="fileWriteEvent/fullPath">{{ event.fullpath }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">MD5</th>
+        <td><span class="ioc-term" ioc-term="fileWriteEvent/md5">{{ event.md5 }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Size</th>
+        <td><span class="ioc-term" ioc-term="fileWriteEvent/size">{{ event.size }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">PID</th>
+        <td><span class="ioc-term" ioc-term="fileWriteEvent/process">{{ event.process }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Writes</th>
+        <td><span class="ioc-term" ioc-term="fileWriteEvent/writes">{{ event.writes}}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Number of Bytes Written</th>
+        <td><span class="ioc-term" ioc-term="fileWriteEvent/numBytesSeenWritten">{{ event.numbytesseenwritten }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Lowest File Offset</th>
+        <td><span class="ioc-term" ioc-term="fileWriteEvent/lowestFileOffsetSeen">{{ event.lowestfileoffsetseen }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Data at Lowest Offset</th>
+        <td><span class="ioc-term" ioc-term="fileWriteEvent/dataAtLowestOffset">{{ event.dataatlowestoffset }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Text at Lowest Offset</th>
+        <td><span class="ioc-term" ioc-term="fileWriteEvent/textAtLowestOffset">{{ event.textatlowestoffset }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Closed</th>
+        <td><span class="ioc-term" ioc-term="fileWriteEvent/closed">{{ event.closed }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Created</th>
+        <td><span class="ioc-term" >{{ event.$.created }}</span></td>
+    </tr>
+</table>

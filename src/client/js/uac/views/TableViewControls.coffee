@@ -32,22 +32,28 @@ define (require) ->
                 # Listen to global events for a table.
                 @table_name = options.table_name
 
+                # Update the controls whenever the source table changes.
                 @registerAsync
                     constructorName: TableView
                     instanceName: @table_name
                     eventName: 'change'
-                    handler: (changes) =>
-                        @status = changes.status
+                    handler: (status) =>
+                        console.debug "Received status from table: #{TableView.prototype.constructor.name}:#{@table_name}"
+                        console.debug JSON.stringify status
+                        @status = status
                         @render()
 
-                console.debug "Requesting status for: #{TableView.prototype.constructor.name}:#{@table_name}:status"
+                # Attempt to retrieve the current status of the table and render.  This will only work if the table has
+                # already been created.
                 @status = @requestSync
                     constructorName: TableView
                     instanceName: @table_name
                     eventName: 'status'
 
-                @render()
-
+                if @status
+                    console.debug "Retrieved status from table: #{TableView.prototype.constructor.name}:#{@table_name}"
+                    console.debug JSON.stringify @status
+                    @render()
 
             # Register shortcut key listeners.
             $(document).keyup @on_keyup
@@ -100,11 +106,10 @@ define (require) ->
                 @table.prev()
 
             if @status
-                if @status.is_prev is true
-                    @fireAsync
-                        constructorName: TableView
-                        instanceName: @table_name
-                        eventName: 'set_prev'
+                @fireAsync
+                    constructorName: TableView
+                    instanceName: @table_name
+                    eventName: 'set_prev'
             return
 
         on_next: ->
@@ -119,7 +124,7 @@ define (require) ->
             return
 
         onClose: ->
-            $(document).off('keyup', document, @on_keyup)
+            $(document).off('keyup', @on_keyup)
 
     # Mixin events.
     utils.mixin TableViewControls, Evented

@@ -2,14 +2,14 @@ define(function (require) {
     var async = require('async');
     var View = require('uac/views/View');
     var TableView = require('uac/views/TableView');
-    var CollapsableContentView = require('uac/views/CollapsableContentView');
 
-    var Acquisition = require('sf/models/Acquisition');
+    var AgentTask = require('sf/models/AgentTask');
     var AcquisitionAuditModel = require('sf/models/AcquisitionAuditModel');
 
     var templates = require('sf/ejs/templates');
     var uac_utils = require('uac/common/utils');
     var sf_utils = require('sf/common/utils');
+    var Marionette = require('marionette');
 
     /**
      * Render the details of an acquisition including the file audit and issues.
@@ -79,85 +79,109 @@ define(function (require) {
         }
     });
 
-    var AcquisitionsTableView = TableView.extend({
+
+    var AgentTasksTableView = TableView.extend({
+        events: {
+            'click .dropdown-menu > li > a': 'change_dataset'
+        },
+        change_dataset: function(evt){
+
+            //get the name from the event
+            var newName = $(evt.target).attr('name')
+
+            //mark the item you clicked as selected
+            this.$(".dropdown-menu > li > a").removeClass("selected");
+            $(evt.target).addClass("selected");
+
+            //update the button text
+            this.$(".uac-tableheader >.btn-group button .selected").text(newName);
+
+            this.collection.dataSource = newName;
+            this.fetch();
+        },
+        render: function(params){
+            var view = this;
+            view.constructor.__super__.render.apply(this, arguments);
+            this.delegateEvents();
+        },
         initialize: function (options) {
             var view = this;
+
+
 
             // Call the super initialize.
             view.constructor.__super__.initialize.apply(this, arguments);
 
-            view.acquisitions_collapsable = new CollapsableContentView({
-                el: view.el
-            });
-
             if (!view.collection) {
-                options['sAjaxSource'] = '/sf/api/acquisitions';
-                options['bServerSide'] = true;
+                options['sAjaxSource'] = '/sf/api/task_result';
+                options['bProcessing'] = false;
+//                options['bServerSide'] = false;
+            }else{
+                view.collection.dataSource = "Hit Acquisitions";
             }
             options.sAjaxDataProp = 'results';
 
 
             options.oLanguage = {
-                sEmptyTable: 'No acquisitions were found'
+                sEmptyTable: 'No tasks were found'
             };
 
+            // Display in condensed mode.
             if (options.condensed) {
-                // Display in condensed mode.
-                options['aoColumns'] = [
-                    {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
-                    {sTitle: "Created", mData: "create_datetime", bSortable: true, sClass: 'nowrap', bVisible: false},
-                    {sTitle: "File Path", mData: "file_path", bSortable: true, sClass: 'wrap', sWidth: '65%'},
-                    {sTitle: "File Name", mData: "file_name", bSortable: true, sClass: 'wrap', sWidth: '30%'},
-                    {sTitle: "State", mData: "state", bSortable: true, sWidth: '5%'}
-                ];
 
                 options.aaSorting = [
                     [ 1, "desc" ]
                 ];
 
                 options['aoColumnDefs'] = [
+
+
                     {
-                        mRender: function (data) {
-                            return uac_utils.format_date_string(data);
-                        },
-                        aTargets: [1]
+                        mRender: sf_utils.format_acquisition_state,
+                        aTargets: [0]
                     },
                     {
                         mRender: function (data, type, row) {
                             if (row.link) {
-                                return _.sprintf('<a href="%s" onclick="event.stopPropagation()">%s</a>',
-                                    row.link, row.file_name);
+                                return _.sprintf('<a href="%s" onclick="event.stopPropagation()" download>%s</a>', row.link, row.jobName, data);
                             }
                             else {
-                                return data;
+                                return data
                             }
                         },
-                        aTargets: [3]
+                        aTargets: [2]
                     },
                     {
-                        mRender: sf_utils.format_acquisition_state,
+                        mRender: function (data) {
+                            return uac_utils.format_date_string(data);
+                        },
                         aTargets: [4]
                     }
                 ];
 
                 options.iDisplayLength = 10;
 
-                options['sDom'] = 'lftip';
+
+                options['sDom'] = '<"uac-tableheader"lf>tip';
+
+
+                options['aoColumns'] = [
+                    {sTitle: "State", mData: "state", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Type", mData: "type", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Job Name", mData: "jobName", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Created By", mData: "user", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Updated On", mData: "updatedDate", bSortable: true, sWidth: '75px'}
+                ];
             }
             else {
                 options['aoColumns'] = [
-                    {sTitle: "uuid", mData: "uuid", bVisible: false, bSortable: true},
-                    {sTitle: "Cluster", mData: "cluster.name", bSortable: true},
-                    {sTitle: "Host", mData: "agent.hostname", bSortable: true},
-                    {sTitle: "File Path", mData: "file_path", bSortable: true, sClass: 'wrap'},
-                    {sTitle: "File Name", mData: "file_name", bSortable: true, sClass: 'wrap'},
-                    {sTitle: "Created", mData: "create_datetime", bSortable: true, sClass: 'nowrap'},
-                    {sTitle: "Updated", mData: "update_datetime", bSortable: true, sClass: 'nowrap'},
-                    {sTitle: "User", mData: "user", bSortable: true},
-                    {sTitle: "Method", mData: "method", bSortable: true},
                     {sTitle: "State", mData: "state", bSortable: true, sWidth: '75px'},
-                    {sTitle: "Error Message", mData: "error_message", bVisible: false, bSortable: false},
-                    {sTitle: "Link", mData: "acquired_file", bVisible: false, bSortable: false}
+                    {sTitle: "Type", mData: "type", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Job Name", mData: "jobName", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Client", mData: "clientName", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Host Name", mData: "hostName", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Created By", mData: "user", bSortable: true, sWidth: '75px'},
+                    {sTitle: "Updated On", mData: "updatedDate", bSortable: true, sWidth: '75px'},
                 ];
 
                 options.aaSorting = [
@@ -166,47 +190,42 @@ define(function (require) {
 
                 options['aoColumnDefs'] = [
                     {
+                        mRender: sf_utils.format_acquisition_state,
+                        aTargets: [0]
+                    },
+                    {
+
                         mRender: function (data, type, row) {
-                            if (data) {
-                                return _.sprintf('<a href="/sf/host/%s" onclick="event.stopPropagation()">%s</a>', row.agent.hash, data);
+                            if (data && row.type === 'acquisition' || row.type == 'triage') {
+                                return _.sprintf('<a href="/sf/host/%s" onclick="event.stopPropagation()">%s</a>', row.raw.agent.hash, data);
                             }
                             else {
                                 return data;
-                            }
-                        },
-                        aTargets: [2]
-                    },
-                    {
-                        mRender: function (data, type, row) {
-                            if (row.link) {
-                                return _.sprintf('<a href="%s" onclick="event.stopPropagation()" download>%s</a>', row.link, data);
-                            }
-                            else {
-                                return data
                             }
                         },
                         aTargets: [4]
                     },
                     {
                         mRender: function (data, type, row) {
-                            return uac_utils.format_date_string(data);
+                            if (row.link) {
+                                return _.sprintf('<a href="%s" onclick="event.stopPropagation()" download>%s</a>', row.link, row.jobName, data);
+                            }
+                            else {
+                                return data
+                            }
                         },
-                        aTargets: [5]
+                        aTargets: [2]
                     },
                     {
                         mRender: function (data, type, row) {
                             return uac_utils.format_date_string(data);
                         },
                         aTargets: [6]
-                    },
-                    {
-                        mRender: sf_utils.format_acquisition_state,
-                        aTargets: [9]
                     }
                 ];
 
                 options.iDisplayLength = 25;
-                options.iPipe = 1; // Disable pipelining.
+                options.iPipe = -1; // Disable pipelining.
 
                 options['sDom'] = 'ltip';
             }
@@ -214,15 +233,10 @@ define(function (require) {
             view.listenTo(view, 'row:created', view.on_create_row);
             view.listenTo(view, 'click', view.on_row_click);
             view.listenTo(view, 'load', function () {
-                var acquisitions_count = view.get_total_rows();
-                view.acquisitions_collapsable.set('title', _.sprintf('<i class="fa fa-cloud-download"></i> Acquisitions (%s)',
-                    acquisitions_count));
-                if (acquisitions_count == 0) {
-                    // Collapse the comments if there are none.
-                    view.acquisitions_collapsable.collapse();
-                }
-                else {
-                    view.acquisitions_collapsable.expand();
+
+                if (options.condensed) {
+                    // Add the link the table header.
+                    view.$el.parent().find('.uac-tableheader').append(templates['agenttasks-datasetchooser.ejs'](this));
                 }
             });
         },
@@ -237,19 +251,21 @@ define(function (require) {
             }
         },
         on_row_click: function (data) {
-            var view = this;
+            if (data.type === 'acquisition') {
+                var view = this;
 
-            if (view.acquisition_details) {
-                // Clean up the existing view.
-                view.acquisition_details.close();
+                if (view.acquisition_details) {
+                    // Clean up the existing view.
+                    view.acquisition_details.close();
+                }
+                view.acquisition_details = new AcquisitionsDetailsView({
+                    el: '#dialog-div',
+                    model: new AgentTask(data.raw)
+                });
+                view.acquisition_details.render();
             }
-            view.acquisition_details = new AcquisitionsDetailsView({
-                el: '#dialog-div',
-                model: new Acquisition(data)
-            });
-            view.acquisition_details.render();
         }
     });
 
-    return AcquisitionsTableView
+    return AgentTasksTableView
 });
