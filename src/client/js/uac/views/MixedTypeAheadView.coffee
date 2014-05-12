@@ -82,20 +82,6 @@ define (require)->
                     source: md5Hashes.ttAdapter()
                 }
 
-      typeahead = @$el.typeahead { minLength: 3 },
-        {
-          name: 'hosts'
-          displayKey: 'hostname',
-          source: hostOrIp.ttAdapter()
-          templates:
-            suggestion: templates['host-condensed.ejs']
-        },
-        {
-        name: 'hashes'
-        displayKey: (value)-> if value then value.vt.md5
-        source: md5Hashes.ttAdapter()
-        }
-
             typeahead.on 'typeahead:cursorchanged', ->
                 $('.tt-cursor').addClass('uac-theme-primary-background').siblings().removeClass('uac-theme-primary-background')
 
