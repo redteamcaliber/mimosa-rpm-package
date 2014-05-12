@@ -3,6 +3,7 @@ define(function(require) {
     var TableView = require('uac/views/TableView');
     var CollapsableContentView = require('uac/views/CollapsableContentView');
     var SuppressionListItemCollection = require('sf/models/SuppressionListItemCollection');
+    var SuppressionListItem = require('sf/models/SuppressionListItem');
 
     var uac_utils = require('uac/common/utils');
     var sf_utils = require('sf/common/utils');
@@ -106,7 +107,9 @@ define(function(require) {
             var view = this;
 
             if (!view.collection) {
-                view.collection = new SuppressionListItemCollection();
+                options['sAjaxSource'] = '/sf/api/suppressions-paged';
+                options['bServerSide'] = true;
+                options.sAjaxDataProp = 'results';
             }
 
             // Call the super initialize.
@@ -122,10 +125,22 @@ define(function(require) {
             var update_title = function () {
                 // Update the suppressions collapsable count whenever the data has changed.
                 var title_template = '<i class="fa fa-level-down"></i> Suppressions (%d)';
-                view.suppressions_collapsable.set('title', _.sprintf(title_template, view.collection.length));
+                var length = 0;
+                if(view.collection){
+                    length = view.collection.length;
+                }else{
+                    length = view.get_total_rows();
+                }
+                view.suppressions_collapsable.set('title', _.sprintf(title_template, length));
             };
-            view.collection.listenTo(view.collection, 'sync', update_title);
-            view.collection.listenTo(view.collection, 'reset', update_title);
+
+            //TODO: TEMPORARY HACK - register the appropriate listener depending on whether we're using a collection or not
+            if(view.collection){
+                view.collection.listenTo(view.collection, 'sync', update_title);
+                view.collection.listenTo(view.collection, 'reset', update_title);
+            }else{
+                view.listenTo(view, 'draw', function () {update_title();});
+            }
 
             view.listenTo(view, 'load', function () {
                 // Select the first row on load.
@@ -254,7 +269,7 @@ define(function(require) {
             view.listenTo(view, 'row:created', function (row, data, index) {
                 var suppression_row = new SuppressionRowView({
                     el: $(row),
-                    model: view.collection.at(index)
+                    model: new SuppressionListItem(data)
                 });
                 suppression_row.listenTo(suppression_row, 'delete', function () {
                     view.trigger('delete');

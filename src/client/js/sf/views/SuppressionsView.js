@@ -66,7 +66,6 @@ define(function(require) {
             var view = this;
             view.options = options;
 
-            view.suppressions = new SuppressionListItemCollection();
             view.suppressions_table = new SuppressionsTableView({
                 el: '#suppressions-table',
                 collection: view.suppressions
@@ -74,19 +73,31 @@ define(function(require) {
             view.listenTo(view.suppressions_table, 'click', view.render_hits);
             view.listenTo(view.suppressions_table, 'delete', function() {
                 if (StrikeFinder.single_entity) {
-                    view.suppressions.reset([]);
+                    if(view.suppressions){
+                        view.suppressions.reset([]);
+                    }else{
+                        view.suppressions_table.table_el.fnReloadAjax();
+                    }
                 }
                 else {
                     view.block()
-                    view.suppressions.fetch({
-                        success: function() {
+                    if(view.suppressions) {
+                        view.suppressions.fetch({
+                            success: function () {
+                                view.suppressions_table.select_row(0);
+                                view.unblock();
+                            },
+                            failure: function () {
+                                view.unblock();
+                            }
+                        });
+                    }else{
+                        view.listenToOnce(view.suppressions_table, 'draw', function(){
                             view.suppressions_table.select_row(0);
                             view.unblock();
-                        },
-                        failure: function() {
-                            view.unblock();
-                        }
-                    });
+                        });
+                        view.suppressions_table.refresh();
+                    }
                 }
             });
             view.listenTo(view.suppressions_table, 'empty', function () {
@@ -96,7 +107,9 @@ define(function(require) {
 
             try {
                 view.block();
-                view.suppressions.reset(StrikeFinder.suppressions);
+                if(view.suppressions) {
+                    view.suppressions.reset(StrikeFinder.suppressions);
+                }
                 view.suppressions_table.render();
             }
             finally {

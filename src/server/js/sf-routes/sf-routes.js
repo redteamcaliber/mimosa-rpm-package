@@ -268,6 +268,14 @@ function get_hits_params(req) {
 
     return params;
 }
+app.get('/api/suppressions-paged', function (req, res, next) {
+    var params = route_utils.get_dt_request_params(req);
+    sf_api.get_suppressions_paged(params, req.attributes, function (err, body) {
+        // Convert the SF parameters to those understood by datatables.
+        route_utils.send(res,
+            route_utils.get_dt_response_params(body.results, body.count, body.offset, req.query.sEcho));
+    });
+});
 
 app.get('/api/hits', function (req, res, next) {
     var params = get_hits_params(req);

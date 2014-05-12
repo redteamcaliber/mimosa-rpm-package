@@ -269,6 +269,8 @@ get_dt_request_params = (req) ->
         params.limit = 0
     if req.query.iDisplayStart
         params.offset = req.query.iDisplayStart
+    if req.query.sSearch
+        params.search = req.query.sSearch
 
     #
     # Sorting
@@ -283,7 +285,7 @@ get_dt_request_params = (req) ->
 
                 if req.query['sSortDir_0']
                     # Add the order to the params.
-                    params.order = req.query['sSortDir_0']
+                    params.order = req.query['sSortDir_0'].toUpperCase()
     params
 
 

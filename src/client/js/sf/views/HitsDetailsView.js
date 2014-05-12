@@ -7,6 +7,7 @@ define(function (require) {
     var CollapsableContentView = require('uac/views/CollapsableContentView');
     var TableViewControls = require('uac/views/TableViewControls');
 
+    var SuppressionListItemCollection = require('sf/models/SuppressionListItemCollection');
     var SuppressionFormView = require('sf/views/SuppressionFormView');
     var AcquireFormView = require('sf/views/AcquireFormView');
     var MassTagFormView = require('sf/views/MassTagFormView');
@@ -744,7 +745,8 @@ define(function (require) {
 
                 var suppressions_table = new SuppressionsTableView({
                     el: $(_.sprintf('#suppressions-list-%s', exp_key)),
-                    condensed: true
+                    condensed: true,
+                    collection: new SuppressionListItemCollection()
                 });
 
                 view.listenTo(suppressions_table, 'delete', function() {
