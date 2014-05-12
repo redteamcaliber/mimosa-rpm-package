@@ -9,20 +9,8 @@ define (require) ->
     # Controller for fetching data and displaying a view on success while adding support for blocking and error handling.
     #
     class FetchController extends Marionette.Controller
-        initialize: (options) ->
-            if options
-                if options.collection
-                    @collection = options.collection
-                if options.model
-                    @model = options.model
-                if options.region
-                    @region = options.region
-                if options.block_region
-                    @block_region = options.block_region
-                if options.view
-                    @view = options.view
-                if options.loading
-                    @loading = options.loading
+        initialize: (options={}) ->
+            {@collection, @model, @region, @block_region, @view, @loading} = options
 
         #
         # Fetch the collection and show the view while adding blocking support and error handling.

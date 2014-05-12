@@ -82,6 +82,8 @@ define (require)->
                     source: md5Hashes.ttAdapter()
                 }
 
+            $('.tt-dropdown-menu').addClass('well');
+
             typeahead.on 'typeahead:cursorchanged', ->
                 $('.tt-cursor').addClass('uac-theme-primary-background').siblings().removeClass('uac-theme-primary-background')
 
