@@ -66,6 +66,9 @@ define(function(require) {
             var view = this;
             view.options = options;
 
+            if (StrikeFinder.single_entity) {
+                view.suppressions = new SuppressionListItemCollection();
+            }
             view.suppressions_table = new SuppressionsTableView({
                 el: '#suppressions-table',
                 collection: view.suppressions
@@ -76,7 +79,7 @@ define(function(require) {
                     if(view.suppressions){
                         view.suppressions.reset([]);
                     }else{
-                        view.suppressions_table.table_el.fnReloadAjax();
+                        view.suppressions_table.refresh();
                     }
                 }
                 else {
