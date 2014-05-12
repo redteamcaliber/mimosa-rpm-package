@@ -66,17 +66,24 @@ define(function(require) {
             var view = this;
             view.options = options;
 
-            view.suppressions_table = new SuppressionsTableView({
-                el: '#suppressions-table',
-                collection: view.suppressions
-            });
+            if (StrikeFinder.single_entity) {
+                view.suppressions = new SuppressionListItemCollection();
+                view.suppressions_table = new SuppressionsTableView({
+                    el: '#suppressions-table',
+                    collection: view.suppressions
+                });
+            }else {
+                view.suppressions_table = new SuppressionsTableView({
+                    el: '#suppressions-table'
+                });
+            }
             view.listenTo(view.suppressions_table, 'click', view.render_hits);
             view.listenTo(view.suppressions_table, 'delete', function() {
                 if (StrikeFinder.single_entity) {
                     if(view.suppressions){
                         view.suppressions.reset([]);
                     }else{
-                        view.suppressions_table.table_el.fnReloadAjax();
+                        view.suppressions_table.refresh();
                     }
                 }
                 else {

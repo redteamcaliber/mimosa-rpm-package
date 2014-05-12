@@ -95,19 +95,10 @@ app.get('/hits/iocnamehash/:iocnamehash', function (req, res, next) {
  * Display the suppressions list.
  */
 app.get('/suppressions', function (req, res, next) {
-    sf_api.get_suppressions(req.attributes, function (err, suppressions) {
-        if (err) {
-            // Error
-            next(err);
-        }
-        else {
-            // Display the template.
-            var context = route_utils.default_context(req);
-            context.suppressions = route_utils.stringify(suppressions);
-            context.single_entity = false;
-            route_utils.render_template(res, '/sf/suppressions.html', context, next);
-        }
-    });
+    var context = route_utils.default_context(req);
+    context.suppressions = route_utils.stringify({});
+    context.single_entity = false;
+    route_utils.render_template(res, '/sf/suppressions.html', context, next);
 });
 
 /**
