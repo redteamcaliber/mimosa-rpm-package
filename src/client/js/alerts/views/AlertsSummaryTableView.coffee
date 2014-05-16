@@ -4,7 +4,7 @@ define (require) ->
     TableView = require 'uac/views/TableView'
     renderers = require 'uac/views/renderers'
 
-    Events = require 'alerts/common/Events'
+    AlertsEvents = require 'alerts/common/AlertsEvents'
 
 
     alert_renderer = (index) ->
@@ -73,4 +73,4 @@ define (require) ->
         # Handle a row click.
         #
         on_click: (data) ->
-            vent.trigger Events.ALERTS_SUMMARY_SELECTED, data
+            vent.trigger AlertsEvents.ALERTS_SUMMARY_SELECTED, data

@@ -5,4 +5,6 @@ define (require) ->
     ALERTS_ALERT_SELECTED: "alerts:alert:selected"
     ALERTS_ALERT_RAW: "alerts:alert:raw"
     ALERTS_ALERT_TIMELINE: "alerts:alert:timeline"
-    ALERTS_TAG_CHANGED: "alerts:tag:changed"
+
+    ALERTS_TAG_CHANGED: 'alerts:tag:changed'
+    ALERTS_TAG_CREATED: 'alerts:tag:created'

@@ -129,8 +129,12 @@ get_alerts = (params, attributes, callback) ->
             cv_params.alert_type = _.without cv_params.alert_type, ENDPOINT_MATCH
 
         request.json_get get_cv_url('/api/v1/alerts/'), cv_params, attributes, (err, response, body) ->
-            process_response(err, response, body, callback)
-            return
+            if err
+                callback err
+            else if body.response
+                callback null, _.sortBy body.response, (item) -> return item.priority
+            else
+                callback null, []
     else if params.iocnamehash
         # Retrieve all StrikeFinder alerts.
         sf_params =
@@ -180,7 +184,7 @@ get_alert = (uuid, attributes, callback) ->
                 # Mixin a download url.
                 cv_url = settings.get 'uac:cv_api_url'
                 alert.artifacts.forEach (artifact) ->
-                    artifact.url = api_utils.combine_urls cv_url, artifact.file
+                    artifact.url = api_utils.combine_urls cv_url, artifact.file_url
                 callback null, alert
 
 
@@ -202,7 +206,7 @@ update_alert = (uuid, values, attributes, callback) ->
                 log.info "Alert: #{uuid} being updated by user: #{attributes.uid}"
                 request.form_patch get_cv_url("/api/v1/alerts/#{uuid}"), values, attributes, (err, response, body) ->
                     callback err, response, body
-            (response, body) ->
+            (response, body, callback) ->
                 if 'tag' of values
                     # Write a tag history event.
                     uac_api.create_alert_tag_activity uuid, values.tag, attributes, (err, activity) ->

@@ -1150,6 +1150,7 @@ define(function (require) {
                     success: function() {
                         collapsable.set_title(_.sprintf('<i class="fa fa-comments"></i> Comments (%s)', comments.length));
                         var comments_view = new CommentsView({
+                            rowitem_uuid: rowitem_uuid,
                             collection: comments
                         });
                         collapsable.show(comments_view);

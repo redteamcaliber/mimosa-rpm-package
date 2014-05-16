@@ -2,6 +2,10 @@ UAC ToDo
 ========
 
 ### Hits Details Changes
+- Alerts Tagging
+    - There needs to be a growl after an item is tagged.
+    - The comments need to be updated after an item is tagged.
+- Artifacts links are broken in devnet.
 - Need to merge the NX and HX rollups.
 - Add new IOC terms to the UAC database.
 - Disable tagging, mass tagging, and suppressions on the hits view of the suppressions view.

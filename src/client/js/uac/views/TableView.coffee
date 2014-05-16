@@ -135,6 +135,7 @@ define (require) ->
                     # the row that corresponds to the index.
                     @select_row @_row_index
                     @_row_index = undefined
+
                 else if @_value_pair
 
                     # During a refresh/reload operation a value to select has been specified.  Attempt to select the
@@ -142,18 +143,12 @@ define (require) ->
                     console.debug "Attempting to reselect table row value: name=#{@_value_pair.name}, value=#{@_value_pair.value}"
 
                     # Attempt to select the row related to the value pair after a draw event.
-                    found = false
-                    for node in @get_nodes()
-                        data = @get_data node
-                        if @_value_pair.name and @_value_pair.value and data[@_value_pair.name] is @_value_pair.value
-                            # Select the node.
-                            @select_row node
-                            found = true
-                            break
+                    matching_row = @select_row_for_value(@_value_pair.name, @_value_pair.value)
 
-                    # If the matching row was not found it is assumed that it was deleted, select the first
-                    # row instead.
-                    @select_row 0  unless found
+                    if not matching_row
+                        # If the matching row was not found it is assumed that it was deleted, select the first
+                        # row instead.
+                        @select_row 0
 
                     # Clear the value pair.
                     @_value_pair = undefined
@@ -201,6 +196,36 @@ define (require) ->
             return
 
         #
+        # Attempt to select the row for the name and value.
+        #
+        select_row_for_value: (name, value) ->
+            nodes = @get_nodes()
+            if nodes
+                for node in @get_nodes()
+                    data = @get_data node
+                    if name and value and data[name] == value
+                        # Select the node.
+                        @select_row node
+                        return node
+            else
+                return null
+
+        #
+        # Attempt to highlight the row for the name and value.
+        #
+        highlight_row_for_value: (name, value) ->
+            nodes = @get_nodes()
+            if nodes
+                for node in @get_nodes()
+                    data = @get_data node
+                    if name and value and data[name] == value
+                        # Select the node.
+                        @highlight_row node
+                        return node
+            else
+                return null
+
+        #
         # Retrieve the selected table row.
         #
         get_selected: ->
@@ -211,7 +236,8 @@ define (require) ->
         #
         get_selected_position: ->
             selected = @get_selected()
-            if selected isnt undefined and selected.length is 1
+
+            if selected and selected.length is 1
                 @get_position selected.get(0)
             else
                 -1
@@ -632,12 +658,22 @@ define (require) ->
 
         #
         # Update a client row instance.
+        # Params:
+        #   row_search_key - the name of the row column.
+        #   row_search_value - the value to match for the row column.
+        #   row_update_key - the name of the row column to update.
+        #   row_update_value - the updated column value.
+        #   row_column_index - the visible column to updated.  Hidden columns are not applicable.
         #
         update_row: (row_search_key, row_search_value, row_update_key, row_update_value, row_column_index) ->
             view = this
+
+            console.debug "Updating table row for for #{row_search_key}=#{row_search_value} to #{row_update_key}=#{row_update_value} having index: #{row_column_index}"
+
             nodes = view.get_nodes()
             i = 0
 
+            updated = false
             for node, i in nodes
                 data = view.get_data(i)
                 if row_search_value is data[row_search_key]
@@ -647,9 +683,13 @@ define (require) ->
                     cols = $(node).children("td")
 
                     # Update the tagname cell.
+                    $(cols[row_column_index]).empty()
                     $(cols[row_column_index]).html row_update_value
+
+                    updated = true
                     break # **EXIT**
                 i++
+            console.debug "Row updated?: #{updated}"
             return
 
 
@@ -863,11 +903,17 @@ define (require) ->
         # Retrieve the table status data.  Used in conjunction with events.
         #
         get_status_data: ->
+            settings = @get_settings()
+            display_length = settings.iDisplayLength
+
             position: @get_selected_position()
             is_prev: @is_prev()
             is_next: @is_next()
             is_prev_page: @is_prev_page()
             is_next_page: @is_next_page()
+            display_length: display_length
+            rows: if @table_el then @table_el.find('tbody > tr').length else null
+            length: @length()
 
     #
     # Retrieve the default dataTables settings.
