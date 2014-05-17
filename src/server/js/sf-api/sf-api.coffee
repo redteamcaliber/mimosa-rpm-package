@@ -153,7 +153,15 @@ get_suppressions = (attributes, callback) ->
     url = get_sf_url('suppressions')
     request.json_get url, {limit: 0}, attributes, (err, response, body) ->
         callback(err, body)
-
+#
+# Find all suppressions... with paging! This call does DOES page results.
+# @param attributes - sso attributes.
+# @param callback - function(err, suppressions)
+#
+get_suppressions_paged = (params, attributes, callback) ->
+  url = get_sf_url('suppressions-paged')
+  request.json_get url, params, attributes, (err, response, body) ->
+    callback(err, body)
 #
 # Retrieve a suppression by id.
 # @param suppression_id - the suppression id.
@@ -780,6 +788,7 @@ exports.get_tasks = get_tasks
 # Suppressions.
 exports.get_suppression = get_suppression
 exports.get_suppressions = get_suppressions
+exports.get_suppressions_paged = get_suppressions_paged
 
 # Seasick.
 exports.get_full_hosts_by_ip = get_full_hosts_by_ip

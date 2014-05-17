@@ -96,19 +96,10 @@ app.get('/hits/iocnamehash/:iocnamehash', function (req, res, next) {
  * Display the suppressions list.
  */
 app.get('/suppressions', function (req, res, next) {
-    sf_api.get_suppressions(req.attributes, function (err, suppressions) {
-        if (err) {
-            // Error
-            next(err);
-        }
-        else {
-            // Display the template.
-            var context = route_utils.default_context(req);
-            context.suppressions = route_utils.stringify(suppressions);
-            context.single_entity = false;
-            route_utils.render_template(res, '/sf/suppressions.html', context, next);
-        }
-    });
+    var context = route_utils.default_context(req);
+    context.suppressions = route_utils.stringify({});
+    context.single_entity = false;
+    route_utils.render_template(res, '/sf/suppressions.html', context, next);
 });
 
 /**
@@ -273,6 +264,14 @@ function get_hits_params(req) {
 
     return params;
 }
+app.get('/api/suppressions-paged', function (req, res, next) {
+    var params = route_utils.get_dt_request_params(req);
+    sf_api.get_suppressions_paged(params, req.attributes, function (err, body) {
+        // Convert the SF parameters to those understood by datatables.
+        route_utils.send(res,
+            route_utils.get_dt_response_params(body.results, body.count, body.offset, req.query.sEcho));
+    });
+});
 
 app.get('/api/hits', function (req, res, next) {
     var params = get_hits_params(req);
