@@ -243,8 +243,8 @@ module.exports = function (grunt) {
                     {expand: true, cwd: 'dist/client/js/raw/lib/font-awesome/fonts', src: ['**/*'], dest: 'dist/client/fonts', filter: 'isFile'},
                     {expand: true, cwd: 'dist/client/js/raw/lib/select2', src: ['*.png', '*.gif'], dest: 'dist/client/css', filter: 'isFile'},
                     {expand: true, cwd: 'dist/client/js/raw/lib/bootstrap/css', src: ['bootstrap.min.css'], dest: 'dist/client/css/bootstrap', filter: 'isFile'},
+                    {expand: true, cwd: 'dist/client/js/raw/lib/bootstrap/fonts', src: ['*.*'], dest: 'dist/client/css/fonts', filter: 'isFile'},
                     {expand: true, cwd: 'dist/client/js/raw/lib/bootswatch/dist', src: ['**/*.css'], dest: 'dist/client/css/bootswatch', filter: 'isFile'},
-                    {expand: true, cwd: 'dist/client/js/raw/lib/bootstrap/fonts', src: ['*.*'], dest: 'dist/client/css/bootswatch/fonts', filter: 'isFile'},
                     {expand: true, cwd: 'src/client/css/img', src: ['**/*'], dest: 'dist/client/css/img', filter: 'isFile'},
                     {expand: true, cwd: 'src/client/css/img', src: ['sort_*.png'], dest: 'dist/client/img', filter: 'isFile'},
                     {expand: true, cwd: 'src/client/css', src: ['mocha.css'], dest: 'dist/client/css', filter: 'isFile'}
