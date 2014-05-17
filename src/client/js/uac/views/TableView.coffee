@@ -112,20 +112,45 @@ define (require) ->
             # page through the table.
             @listenTo @, "draw", =>
                 if @_page_prev
+                    console.debug 'Handling page prev operation...'
+
+                    display_length = @get_settings()._iDisplayLength
+                    nodes = @get_nodes()
+                    if nodes.length == @get_total_rows()
+                        # Collection based backing.
+                        prev_index = (@get_current_page() * display_length) - 1
+                        last_index = @get_total_rows() - 1
+                        if  last_index < prev_index
+                            prev_index = last_index
+                        @select_row prev_index
+                    else
+                        # Server side based backing.
+                        @select_row @length() - 1
+
                     # User has iterated through the table to the previous page.
                     @trigger "page", @get_current_page()
 
-                    # Select the last record in the current view.
-                    @select_row @length() - 1
-
                     # Clear the flag.
                     @_page_prev = false
+
                 else if @_page_next
+                    console.debug 'Handling page next operation...'
+
+                    display_length = @get_settings()._iDisplayLength
+                    nodes = @get_nodes()
+                    if nodes.length == @get_total_rows()
+                        # Probably using collections, there are more nodes than the display length.  Select the first
+                        # row of this page.
+                        current_page = @get_current_page()
+                        current_row = (current_page * display_length) - display_length
+                        @select_row current_row
+                    else
+                        # Probably using server side processing, the number of rows is equal to the display length,
+                        # select the first row.
+                        @select_row 0
+
                     # User has iterated to through the table to the next page.
                     @trigger "page", @get_current_page()
-
-                    # Select the next record in the view.
-                    @select_row 0
 
                     # Clear the flag.
                     @_page_next = false
@@ -135,6 +160,7 @@ define (require) ->
                     # the row that corresponds to the index.
                     @select_row @_row_index
                     @_row_index = undefined
+
                 else if @_value_pair
 
                     # During a refresh/reload operation a value to select has been specified.  Attempt to select the
@@ -142,18 +168,12 @@ define (require) ->
                     console.debug "Attempting to reselect table row value: name=#{@_value_pair.name}, value=#{@_value_pair.value}"
 
                     # Attempt to select the row related to the value pair after a draw event.
-                    found = false
-                    for node in @get_nodes()
-                        data = @get_data node
-                        if @_value_pair.name and @_value_pair.value and data[@_value_pair.name] is @_value_pair.value
-                            # Select the node.
-                            @select_row node
-                            found = true
-                            break
+                    matching_row = @select_row_for_value(@_value_pair.name, @_value_pair.value)
 
-                    # If the matching row was not found it is assumed that it was deleted, select the first
-                    # row instead.
-                    @select_row 0  unless found
+                    if not matching_row
+                        # If the matching row was not found it is assumed that it was deleted, select the first
+                        # row instead.
+                        @select_row 0
 
                     # Clear the value pair.
                     @_value_pair = undefined
@@ -163,8 +183,13 @@ define (require) ->
         #
         # Visually highlight the row.
         #
-        highlight_row: (nRow) ->
-            $(nRow).addClass("active").siblings().removeClass "active"
+        highlight_row: (row) ->
+            # Make all visible rows inactive.
+            all_rows = @get_nodes()
+            $(all_rows).removeClass "active"
+            if row
+                # Select the row.
+                $(row).addClass("active")
             return
 
         #
@@ -173,32 +198,65 @@ define (require) ->
         # @returns the row node or undefined.
         #
         select_row: (index_or_node) ->
-            if typeof index_or_node is "number"
+            console.info "Selecting row #{index_or_node} for table #{@instanceName}"
+
+            if not index_or_node?
+                # Un-select all rows.
+                @highlight_row null
+            else if typeof index_or_node is "number"
+                # A node index has been supplied.
                 length = @length()
-                if @length() <= 0
-                    undefined
-                else if index_or_node + 1 > length
-                    undefined
+                if @length() <= 0 or index_or_node + 1 > length
+                    console.debug "Requesting to select index: #{index_or_node} that is not valid."
+                    return undefined
                 else
                     pos = @get_selected_position()
-                    unless pos is index_or_node
-
+                    if pos != index_or_node
                         # Only select if we are not already on the row.
                         node = @get_nodes(index_or_node)
-                        $(node).click()  if node
-                        node
+                        if node
+                            $(node).click()
+                        return node
                     else
                         undefined
             else if index_or_node
+                # An actual node has been supplied.
                 $(index_or_node).click()
-                index_or_node
-            else if index_or_node is null or index_or_node is undefined
-
-                # Unselect all rows.
-                @$("tr.active").removeClass "active"
+                return index_or_node
             else
-                undefined
-            return
+                # ???
+                return undefined
+
+        #
+        # Attempt to select the row for the name and value.
+        #
+        select_row_for_value: (name, value) ->
+            nodes = @get_nodes()
+            if nodes
+                for node in @get_nodes()
+                    data = @get_data node
+                    if name and value and data[name] == value
+                        # Select the node.
+                        @select_row node
+                        return node
+            else
+                return null
+
+        #
+        # Attempt to highlight the row for the name and value.
+        #
+        highlight_row_for_value: (name, value) ->
+            nodes = @get_nodes()
+
+            if nodes
+                for node in @get_nodes()
+                    data = @get_data node
+                    if name and value and data[name] == value
+                        # Select the node.
+                        @highlight_row node
+                        return node
+            else
+                return null
 
         #
         # Retrieve the selected table row.
@@ -211,7 +269,8 @@ define (require) ->
         #
         get_selected_position: ->
             selected = @get_selected()
-            if selected isnt undefined and selected.length is 1
+
+            if selected and selected.length is 1
                 @get_position selected.get(0)
             else
                 -1
@@ -255,14 +314,18 @@ define (require) ->
         #
         is_prev: ->
             pos = @get_selected_position()
-            pos > 0
+            is_prev = pos > 0 or @get_current_page() > 1
+            console.debug "#{@instanceName}:is_prev: #{is_prev}"
+            return is_prev
 
         #
         # Return whether there is a next record to navigate to.
         #
         is_next: ->
             pos = @get_selected_position()
-            pos + 1 < @length()
+            is_next = pos + 1 < @get_total_rows()
+            console.debug "#{@instanceName}:is_next: #{is_next}"
+            return is_next
 
         #
         # Return the previous rows data or undefined.
@@ -293,30 +356,111 @@ define (require) ->
         # Navigate to the previous row.  If at the first row in a page then attempt to navigate to the previous page.
         #
         prev: ->
-            if @is_prev()
-                # There is a previous record.
-                selected = @get_selected()
-                if selected isnt undefined and selected.length is 1
+            selected = @get_selected()
+            if selected?
+                # There is a currently selected row.
+
+                if selected.length > 1
+                    # Error, only support singular row selection.
+                    console.error 'More than one row selected!'
+                    console.dir selected
+
+                if @is_prev()
+                    # There is a previous record.
+
                     pos = @get_position(selected.get(0))
-                    @select_row pos - 1
-            else if @is_prev_page()
-                # There is a previous page.
-                @prev_page()
+                    display_length = @get_settings()._iDisplayLength
+                    nodes = @get_nodes()
+                    total_rows = @get_total_rows()
+                    first_index_in_page = display_length * (@get_current_page() - 1)
+
+                    #                    console.debug 'Attempting to select the next record...'
+                    #                    console.debug "Total rows: #{total_rows}"
+                    #                    console.debug "Position: #{pos}"
+                    #                    console.debug "Display Length: #{display_length}"
+                    #                    console.dir nodes
+                    #                    console.debug "Last index in page: #{last_index_in_page}"
+
+                    if total_rows == nodes.length
+                        # Using collections based backing.
+                        if pos == first_index_in_page
+                            if @is_prev_page()
+                                # On the first row of the page.
+                                @prev_page()
+                        else
+                            # Not on the last row, increment the row.
+                            @select_row pos - 1
+                    else
+                        # Using server side backing.
+                        if pos == 0
+                            if @is_prev_page()
+                                # On the last row of the page.
+                                @prev_page()
+                        else
+                            # Not on the last row, increment the row.
+                            @select_row pos - 1
+                else
+                    # There is not a previous row to navigate to.
+                    console.debug 'No previous record to navigate to.'
+            else
+                # There is not current selected record, skip.
+                console.debug 'No currently selected record, skipping prev...'
             return
 
         #
         # Navigate to the next row.  If at the last row in a page then attempt to navigate to the next page.
         #
         next: ->
-            if @is_next()
-                # There is a next record.
-                selected = @get_selected()
-                if selected isnt undefined and selected.length is 1
+            selected = @get_selected()
+            if selected?
+                # There is a currently selected row.
+
+                if selected.length > 1
+                    # Error, only support singular row selection.
+                    console.error 'More than one row selected!'
+                    console.dir selected
+
+                if @is_next()
+                    # There is a next record.
+
                     pos = @get_position(selected.get(0))
-                    @select_row pos + 1
-            else if @is_next_page()
-                # There is a next page.
-                @next_page()
+                    display_length = @get_settings()._iDisplayLength
+                    nodes = @get_nodes()
+                    total_rows = @get_total_rows()
+                    last_index_in_page = (display_length * @get_current_page()) - 1
+
+#                    console.debug 'Attempting to select the next record...'
+#                    console.debug "Total rows: #{total_rows}"
+#                    console.debug "Position: #{pos}"
+#                    console.debug "Display Length: #{display_length}"
+#                    console.dir nodes
+#                    console.debug "Last index in page: #{last_index_in_page}"
+
+                    if total_rows == nodes.length
+                        # Using collections based backing.
+                        if pos == last_index_in_page
+                            if @is_next_page()
+                                # On the last row of the page.
+                                @next_page()
+                        else
+                            # Not on the last row, increment the row.
+                            @select_row pos + 1
+                    else
+                        # Using server side backing.
+                        if pos == display_length - 1
+                            # On the last row of the page.
+                            if @is_next_page()
+                                @next_page()
+                        else
+                            # Not on the last row, increment the row.
+                            @select_row pos + 1
+
+                else
+                    # There is not a next row.
+                    console.debug "No next row to navigate to."
+            else
+                # There is not current selected record, skip.
+                console.debug 'No currently selected record, skipping next...'
             return
 
         #
@@ -366,6 +510,15 @@ define (require) ->
         #
         length: ->
             @table_el.fnGetData().length
+
+        #
+        #
+        #
+        get_all_rows: ->
+            if @table_el
+                return @table_el.find('tbody > tr')
+            else
+                return []
 
         #
         # Retrieve the original HTML DOM table element.
@@ -632,12 +785,22 @@ define (require) ->
 
         #
         # Update a client row instance.
+        # Params:
+        #   row_search_key - the name of the row column.
+        #   row_search_value - the value to match for the row column.
+        #   row_update_key - the name of the row column to update.
+        #   row_update_value - the updated column value.
+        #   row_column_index - the visible column to updated.  Hidden columns are not applicable.
         #
         update_row: (row_search_key, row_search_value, row_update_key, row_update_value, row_column_index) ->
             view = this
+
+            console.debug "Updating table row for for #{row_search_key}=#{row_search_value} to #{row_update_key}=#{row_update_value} having index: #{row_column_index}"
+
             nodes = view.get_nodes()
             i = 0
 
+            updated = false
             for node, i in nodes
                 data = view.get_data(i)
                 if row_search_value is data[row_search_key]
@@ -647,9 +810,13 @@ define (require) ->
                     cols = $(node).children("td")
 
                     # Update the tagname cell.
+                    $(cols[row_column_index]).empty()
                     $(cols[row_column_index]).html row_update_value
+
+                    updated = true
                     break # **EXIT**
                 i++
+            console.debug "Row updated?: #{updated}"
             return
 
 
@@ -863,11 +1030,34 @@ define (require) ->
         # Retrieve the table status data.  Used in conjunction with events.
         #
         get_status_data: ->
+            settings = @get_settings()
+            display_length = settings.iDisplayLength
+
             position: @get_selected_position()
             is_prev: @is_prev()
             is_next: @is_next()
             is_prev_page: @is_prev_page()
             is_next_page: @is_next_page()
+            display_length: display_length
+            length: @length()
+
+        #
+        # Handle the clicking of a row.
+        #
+        on_row_click: (ev) =>
+            console.debug 'Handling click of table row...'
+
+            row = ev.currentTarget
+
+            # Select the row.
+            @highlight_row(row)
+
+            click_data = @get_data ev.currentTarget
+
+            # Trigger a local click event.
+            @trigger "click", click_data, ev
+
+            return
 
     #
     # Retrieve the default dataTables settings.
@@ -892,16 +1082,11 @@ define (require) ->
             fnRowCallback: (row, data, display_index, display_index_full) ->
                 parent.trigger 'row:callback', row, data, display_index, display_index_full
 
+                # Unbind any existing click handlers.
+                $(row).unbind 'click', parent.on_row_click
+
                 # Bind a click event to the row.
-                $(row).bind "click", (ev) ->
-                    # Select the row.
-                    $(row).addClass("active").siblings().removeClass "active"
-
-                    click_data = parent.get_data ev.currentTarget
-
-                    # Trigger a local click event.
-                    parent.trigger "click", click_data, ev
-                return
+                $(row).bind "click", parent.on_row_click
 
             fnCreatedRow: (nRow, data, iDataIndex) ->
                 parent.trigger "row:created", nRow, data, iDataIndex

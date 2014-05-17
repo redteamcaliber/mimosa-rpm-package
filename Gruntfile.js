@@ -374,6 +374,8 @@ module.exports = function (grunt) {
                             name: "../modules/main",
                             create: true,
                             include: [
+                                // Alerts Stuff
+                                "alerts/main/AlertsMain",
                                 //strike finder stuff
                                 "sf/main/AgentTasksMain",
                                 "sf/main/HitReviewMain",

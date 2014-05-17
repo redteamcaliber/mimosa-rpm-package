@@ -5,7 +5,7 @@ define (require) ->
 
 
     templates = require 'alerts/ejs/templates'
-    Events = require 'alerts/common/Events'
+    AlertsEvents = require 'alerts/common/AlertsEvents'
 
     #
     # Tag item class.
@@ -77,7 +77,7 @@ define (require) ->
                 title: @title
 
             # Fire an async event.
-            vent.trigger Events.ALERTS_TAG_CHANGED, data
+            vent.trigger AlertsEvents.ALERTS_TAG_CHANGED, data
 
             # Fire a local event.
             @trigger 'change', data

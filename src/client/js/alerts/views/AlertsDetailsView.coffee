@@ -21,7 +21,7 @@ define (require) ->
 
     TagsView = require 'alerts/views/TagsView'
 
-    Events = require 'alerts/common/Events'
+    AlertsEvents = require 'alerts/common/AlertsEvents'
     templates = require 'alerts/ejs/templates'
 
 
@@ -35,7 +35,7 @@ define (require) ->
             return '<button type="button" class="btn btn-link"><i class="fa fa-code"></i> Raw</button>'
 
         on_click: =>
-            vent.trigger Events.ALERTS_ALERT_RAW
+            vent.trigger AlertsEvents.ALERTS_ALERT_RAW
             false
 
     #
@@ -269,36 +269,45 @@ define (require) ->
                         values.timestamp = ''
                     timeline.push values
 
-            vent.trigger Events.ALERTS_ALERT_TIMELINE, timeline
+            vent.trigger AlertsEvents.ALERTS_ALERT_TIMELINE, timeline
 
 
     class AlertsDetailsView extends Marionette.Layout
         template: templates['details-layout.ejs']
 
         initialize: ->
-            @listenTo vent, Events.ALERTS_ALERT_RAW, =>
+            @listenTo vent, AlertsEvents.ALERTS_ALERT_RAW, =>
                 # Display a raw alert dialog.
                 view = new RawAlertView
                     model: @model
                 @details_dlg_region.show view
                 return
 
-            @listenTo vent, Events.ALERTS_ALERT_TIMELINE, (timeline) =>
+            @listenTo vent, AlertsEvents.ALERTS_ALERT_TIMELINE, (timeline) =>
                 # Display the OS change timeline dialog.
                 view = new TimelineView
                     collection: new TimelineCollection(timeline)
                 @details_dlg_region.show view
                 return
 
-            @listenTo vent, Events.ALERTS_TAG_CHANGED, (data) =>
+            @listenTo vent, AlertsEvents.ALERTS_TAG_CHANGED, (data) =>
                 model = new AlertModel @model.get 'alert'
 
                 console.info "Updating alert with id: #{model.get('uuid')}, setting tag to: #{data.value}"
                 model.save
                     tag: data.value,
                         patch: true
-                        success: ->
+                        success: =>
                             utils.display_success "Successfully updated the alerts tag to: #{data.title}"
+
+                            # Notify that a new tag has been created.
+                            created_data = _.clone data
+                            created_data.uuid = model.get('uuid')
+                            vent.trigger AlertsEvents.ALERTS_TAG_CREATED, created_data
+
+                            # Reload the comments.
+                            @activity_region.currentView.render()
+
                         error: (model, response) ->
                             utils.display_response_error "Error while updating tag status for alert: #{model.get('uuid')}", response
 
