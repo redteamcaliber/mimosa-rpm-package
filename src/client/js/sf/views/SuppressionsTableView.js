@@ -1,4 +1,6 @@
 define(function(require) {
+    var vent = require('uac/common/vent');
+    var StrikeFinderEvents = require('sf/common/StrikeFinderEvents');
     var View = require('uac/views/View');
     var TableView = require('uac/views/TableView');
     var CollapsableContentView = require('uac/views/CollapsableContentView');
@@ -21,7 +23,7 @@ define(function(require) {
 
             var link = window.location.protocol + '//' + window.location.hostname +
                 (window.location.port ? ':' + window.location.port : '') + '/sf/suppressions/' + this.model.get('suppression_id');
-            var html = uac_utils.run_template(templates, 'link.ejs', {link: link});
+            var html = uac_utils.run_template(templates, 'link.ejs', {link: link, width: '325px'});
 
             var button = view.$el.find('i.link');
             button.popover({
@@ -31,14 +33,15 @@ define(function(require) {
             })
                 .data('bs.popover')
                 .tip()
-                .addClass('link-popover');
+                .addClass('link-popover')
+                .css({width: 'auto', 'max-width': '800px'});
             button.on('click', function(ev) {
                 button.popover('toggle');
                 $('.link-text').select();
                 return false;
             });
         },
-        on_delete: function (ev) {
+        on_delete: function () {
             var view = this;
             var message = _.sprintf('Delete suppression: %s', view.model.as_string());
             if (confirm(message)) {
@@ -69,6 +72,7 @@ define(function(require) {
 
                                 // Notify that the suppression was deleted.
                                 view.trigger('delete', view.model);
+                                vent.trigger(StrikeFinderEvents.SF_SUPPRESS_DELETE, view.model);
                             }
                             else {
                                 // The task is still running.
@@ -91,12 +95,11 @@ define(function(require) {
                     }
                 });
             }
+            return false;
         },
         close: function () {
             console.log('Closing row view...');
             this.$el.find('i.link').popover('destroy');
-            // Manually removing the popover due to -> https://github.com/twbs/bootstrap/issues/10335
-            this.$el.parent().find('.popover').remove();
             this.remove();
         }
     });
@@ -124,8 +127,6 @@ define(function(require) {
                 var title_template = '<i class="fa fa-level-down"></i> Suppressions (%d)';
                 view.suppressions_collapsable.set('title', _.sprintf(title_template, view.collection.length));
             };
-            view.collection.listenTo(view.collection, 'sync', update_title);
-            view.collection.listenTo(view.collection, 'reset', update_title);
 
             view.listenTo(view, 'load', function () {
                 // Select the first row on load.
@@ -246,6 +247,13 @@ define(function(require) {
 
                 options.iDisplayLength = 10;
                 options.sDom = 'lf<""t>ip';
+
+                view.listenTo(view, 'click', function(data) {
+                    // Trigger a global event when a suppressions is selected.  This should only be done when this view
+                    // is not in condensed mode.  If displayed in both modes it will generate duplicate events because
+                    // of the suppressions tables on the IOC tabs.
+                    vent.trigger(StrikeFinderEvents.SF_SUPPRESSION_SELECT, data);
+                });
             }
 
             // Keep track of the row views.
@@ -258,11 +266,12 @@ define(function(require) {
                 });
                 suppression_row.listenTo(suppression_row, 'delete', function () {
                     view.trigger('delete');
+                    vent.trigger(StrikeFinderEvents.SF_SUPPRESS_DELETE);
                 });
                 view.suppression_row_views.push(suppression_row);
             });
         },
-        close: function () {
+        onBeforeClose: function() {
             console.log('Closing suppression table: ' + this.el.id + ' with ' + this.suppression_row_views.length + ' rows.');
 
             // Clean up the suppression row listeners.
@@ -270,12 +279,6 @@ define(function(require) {
                 row.close();
             });
             this.suppression_row_views = [];
-
-            // Destroy the suppressions datatable.
-            this.destroy();
-
-            // Remove any current listeners.
-            this.stopListening();
         }
     });
 

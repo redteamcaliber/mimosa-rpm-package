@@ -16,6 +16,7 @@ var settings = require('settings');
 var route_utils = require('route-utils');
 var uac_api = require('uac-api');
 var sf_api = require('sf-api');
+var props = require('pathval');
 
 
 // Create an app to export.
@@ -129,7 +130,11 @@ app.get('/suppressions/:suppression_id', function (req, res, next) {
                 else {
                     // Display the template.
                     var context = route_utils.default_context(req);
-                    context.suppressions = route_utils.stringify([suppression] || []);
+                    var suppressions = [];
+                    if (suppression) {
+                        suppressions.push(suppression);
+                    }
+                    context.suppressions = route_utils.stringify(suppressions);
                     context.single_entity = true;
                     route_utils.render_template(res, '/sf/suppressions.html', context, next);
                 }
@@ -159,7 +164,7 @@ app.get('/host/:hash', function (req, res, next) {
     }
 });
 
-app.get('/acquisitions', function (req, res, next) {
+app.get('/agenttasks', function (req, res, next) {
     sf_api.get_services_clients_clusters(req.attributes, function (err, results) {
         if (err) {
             next(err);
@@ -170,7 +175,7 @@ app.get('/acquisitions', function (req, res, next) {
             context.clients = route_utils.stringify(results.clients);
             context.clusters = route_utils.stringify(results.clusters);
 
-            route_utils.render_template(res, '/sf/acquisitions.html', context, next);
+            route_utils.render_template(res, '/sf/agenttasks.html', context, next);
         }
     });
 });
@@ -259,6 +264,12 @@ function get_hits_params(req) {
     if (req.query.identity_rollup) {
         params.identity_rollup = req.query.identity_rollup;
     }
+    if (req.query.begin) {
+        params.begin = req.query.begin;
+    }
+    if (req.query.end) {
+        params.end = req.query.end;
+    }
 
     return params;
 }
@@ -280,7 +291,7 @@ app.get('/api/hits', function (req, res, next) {
             }
             else {
                 // Convert the SF parameters to those understood by datatables.
-                route_utils.send(res,
+                route_utils.send_rest(req, res, next,
                     route_utils.get_dt_response_params(body.results, body.count, body.offset, req.query.sEcho));
             }
         }
@@ -297,7 +308,7 @@ app.get('/api/facets', function (req, res, next) {
         }
         else {
             // Convert the SF parameters to those understood by datatables.
-            route_utils.send(res,
+            route_utils.send_rest(req, res, next,
                 route_utils.get_dt_response_params(body.results, body.count, body.offset, req.query.sEcho));
         }
     });
@@ -306,7 +317,7 @@ app.get('/api/facets', function (req, res, next) {
 app.get('/api/hits/:rowitem_uuid/addcomment', function (req, res, next) {
     var rowitem_uuid = req.params.rowitem_uuid;
     sf_api.post_comment(rowitem_uuid, req.body.comment, req.attributes, function (err, body) {
-        err ? next(err) : route_utils.send(res, body);
+        err ? next(err) : route_utils.send_rest(req, res, next, body);
     });
 });
 
@@ -329,7 +340,7 @@ app.get('/api/hosts', function (req, res, next) {
                     next(err);
                 }
                 else {
-                    route_utils.send(res, hosts);
+                    route_utils.send_rest(req, res, next, hosts);
                 }
             });
         }
@@ -339,7 +350,7 @@ app.get('/api/hosts', function (req, res, next) {
                     next(err);
                 }
                 else {
-                    route_utils.send(res, hosts);
+                    route_utils.send_rest(req, res, next, hosts);
                 }
             });
         }
@@ -363,7 +374,7 @@ app.get('/api/hostinfo/:hashes', function(req, res, next){
 app.get('/api/hosts/hash/:hash', function (req, res, next) {
     if (route_utils.validate_input('hash', req.params, res)) {
         sf_api.get_full_host_by_hash(req.params.hash, req.attributes, function (err, host) {
-            err ? next(err) : route_utils.send(res, host);
+            err ? next(err) : route_utils.send_rest(req, res, next, host);
         });
     }
 });
@@ -394,10 +405,112 @@ app.post('/api/acquisitions', function (req, res, next) {
                 next(err);
             }
             else {
-                route_utils.send(res, acquisition_response);
+                route_utils.send_rest(req, res, next, acquisition_response);
             }
         });
     }
+});
+/**
+ * Unified API that bridges legacy acquisition API with new task api
+ */
+app.get('/api/task_result', function(req, res, next){
+
+
+    async.parallel([
+        function(callback){
+            sf_api.get_acquisitions(req.query, req.attributes, function (err, response) {
+                callback(null,response);
+            });
+        },
+        function(callback){
+            sf_api.get_task_result(req.query,req.attribtues,function (err, response){
+                callback(null,response);
+            });
+        }
+    ],
+    function(err, results){
+        /*
+        UNIFIED PAYLOAD STRUCT
+         * uuid
+         * state
+         * type
+         * job name
+         * client
+         * cluster name
+         * user*
+         * link
+         * hostname
+         * updated on
+         */
+        var PAYLOAD_TYPES = {
+            ACQUISITION: {
+                getUuid: function(input){ return props.get(input,'uuid');},
+                getState: function(input){ return props.get(input, 'state');},
+                getType: function(){ return "acquisition";},
+                getJobName: function(input){ return props.get(input,'file_name');},
+                getClientName: function(input){ return props.get(input, 'cluster.engagement.client.name');},
+                getClusterName: function(input){return props.get(input, 'cluster.name');},
+                getUser: function(input){return props.get(input,'user');},
+                getLink: function(input){return props.get(input, 'link');},
+                getHostName: function(input){return props.get(input, 'agent.hostname');},
+                getUpdatedDate: function(input){return props.get(input, 'update_datetime');}
+            },
+            TRIAGE: {
+                getUuid: function(input){ return props.get(input, 'uuid');},
+                getState: function(input){ return props.get(input, 'state');},
+                getType: function(){ return "triage";},
+                getJobName: function(input){return props.get(input, 'package_name');},
+                getClientName: function(input){ return props.get(input, 'agent.cluster.engagement.client.name');},
+                getClusterName: function(input){return props.get(input, 'cluster.name');},
+                getUser: function(input){return props.get(input,'service.user.email');},
+                getLink: function(input){return props.get(input, 'link');},
+                getHostName: function(input){return props.get(input, 'agent.hostname');},
+                getUpdatedDate: function(input){return props.get(input, 'update_datetime');}
+            }
+        };
+        var payloadGenerator = function(input, type){
+            return {
+                uuid: type.getUuid(input),
+                state: type.getState(input),
+                type: type.getType(),
+                jobName: type.getJobName(input),
+                clientName: type.getClientName(input),
+                clusterName: type.getClusterName(input),
+                user: type.getUser(input),
+                link: type.getLink(input),
+                hostName: type.getHostName(input),
+                updatedDate: type.getUpdatedDate(input),
+                raw: input
+            }
+        };
+        var processResults = function(mergedResult, queryResults, type){
+            if(_.isObject(queryResults) && _.isArray(queryResults.objects)) {
+                _.forEach(queryResults.objects, function (result) {
+                    mergedResult.objects.push(payloadGenerator(result, type));
+                });
+                mergedResult.meta.limit = Number(queryResults.meta.limit);
+                mergedResult.meta.next = Number(queryResults.meta.next);
+                mergedResult.meta.offset = Number(queryResults.meta.offset);
+                mergedResult.meta.previous = Number(queryResults.meta.previous);
+                mergedResult.meta.total_count = Number(queryResults.meta.total_count);
+
+            }
+        };
+        var mergedResult = {
+            meta: {},
+            objects: []
+        };
+
+        processResults(mergedResult, results[0], PAYLOAD_TYPES.ACQUISITION);
+        processResults(mergedResult, results[1], PAYLOAD_TYPES.TRIAGE);
+
+
+        var result = route_utils.get_dt_response_params(mergedResult.objects,
+            mergedResult.meta.total_count, mergedResult.meta.offset, req.query.sEcho);
+        route_utils.send(res, result);
+
+
+    });
 });
 
 /**
@@ -406,7 +519,7 @@ app.post('/api/acquisitions', function (req, res, next) {
 app.get('/api/acquisitions/:acquisition_uuid', function (req, res, next) {
     if (route_utils.validate_input('acquisition_uuid', req.params, res)) {
         sf_api.get_acquisition(req.params.acquisition_uuid, req.attributes, function (err, acquisition) {
-            err ? next(err) : route_utils.send(res, acquisition);
+            err ? next(err) : route_utils.send_rest(req, res, next, acquisition);
         });
     }
 });
@@ -417,6 +530,12 @@ app.get('/api/acquisitions/:acquisition_uuid', function (req, res, next) {
 app.get('/api/acquisitions/identity/:identity', function (req, res, next) {
     if (route_utils.validate_input('identity', req.params, res)) {
         sf_api.get_acqusitions_by_identity(req.params.identity, req.attributes, function (err, acquisitions) {
+            //map the old acquisition payload into the new payload by adding new necessary params
+            _.each(acquisitions, function(acquisition){
+                acquisition['type'] = 'acquisition';
+                acquisition['jobName'] = acquisition.file_name;
+                acquisition['updatedDate'] = acquisition.update_datetime;
+            });
             err ? next(err) : route_utils.send(res, acquisitions);
         });
     }
@@ -469,7 +588,7 @@ app.get('/api/acquisitions', function (req, res, next) {
             else {
                 var result = route_utils.get_dt_response_params(body.objects,
                     body.meta.total_count, body.meta.offset, req.query.sEcho);
-                route_utils.send(res, result);
+                route_utils.send_rest(req, res, next, result);
             }
         });
     }
@@ -500,7 +619,7 @@ app.get('/api/acquisitions/:acquisition_uuid/audit', function (req, res, next) {
                 construct_audit_content('fileitem', json, callback);
             },
             function (html) {
-                route_utils.send(res, {
+                route_utils.send_rest(req, res, next, {
                     acquisition_uuid: acquisition_uuid,
                     content: html
                 });
@@ -522,7 +641,7 @@ app.get('/api/credentials/cluster/:cluster_uuid', function (req, res, next) {
     if (route_utils.validate_input(['cluster_uuid'], req.params, res)) {
         var cluster_uuid = req.params['cluster_uuid'];
         var credentials = route_utils.get_acquisition_credentials(req, cluster_uuid);
-        route_utils.send(res, {
+        route_utils.send_rest(req, res, next, {
             cluster_uuid: cluster_uuid,
             found: credentials !== undefined
         });
@@ -535,17 +654,22 @@ var AUDIT_TEMPLATE_MAP = {
     cookiehistoryitem: '/sf/audit/cookie-history-item.html',
     diskitem: '/sf/audit/disk-item.html',
     dnsentryitem: '/sf/audit/dns-entry-item.html',
+    dnslookupevent: '/sf/audit/dnslookupevent.html',
     driveritem: '/sf/audit/driver-item.html',
     eventlogitem: '/sf/audit/event-log-item.html',
     filedownloadhistoryitem: '/sf/audit/file-download-history-item.html',
     fileitem: '/sf/audit/file-item.html',
+    filewriteevent: '/sf/audit/filewriteevent.html',
     formhistoryitem: '/sf/audit/form-history-item.html',
     hookitem: '/sf/audit/hook-item.html',
+    imageloadevent: '/sf/audit/imageloadevent.html',
+    ipv4networkevent: '/sf/audit/ipv4networkevent.html',
     persistenceitem: '/sf/audit/persistence-item.html',
     portitem: '/sf/audit/port-item.html',
     prefetchitem: '/sf/audit/prefetch-item.html',
     processitem: '/sf/audit/process-item.html',
     registryitem: '/sf/audit/registry-item.html',
+    regkeyevent: '/sf/audit/regkeyevent.html',
     routeentryitem: '/sf/audit/route-entry-item.html',
     serviceitem: '/sf/audit/service-item.html',
     systeminfoitem: '/sf/audit/system-info-item.html',
@@ -770,7 +894,7 @@ app.get('/api/audit/:rowitem_uuid', function (req, res, next) {
                         }
                         else {
                             response.content = content;
-                            route_utils.send(res, response);
+                            route_utils.send_rest(req, res, next, response);
                         }
                     });
                 }
@@ -802,8 +926,6 @@ app.post('/api/audit', function (req, res, next) {
                 next(err);
             }
             else {
-                //console.dir(result);
-
                 var input = {
                     rowitem_type: rowitem_type,
                     content: result
@@ -815,7 +937,7 @@ app.post('/api/audit', function (req, res, next) {
                     }
                     else {
                         body.content = content;
-                        route_utils.send(res, body);
+                        route_utils.send_rest(req, res, next, body);
                     }
 
                 });
@@ -833,7 +955,7 @@ app.get('/api/summary', function(req, res, next) {
             next(err);
         }
         else {
-            route_utils.send(res, list);
+            route_utils.send_rest(req, res, next, list);
         }
     });
 });
@@ -854,7 +976,7 @@ function handle_proxied_response(err, response, body, req, res, next) {
         }
     }
     else {
-        route_utils.send(res, body);
+        route_utils.send_rest(req, res, next, body);
     }
 }
 

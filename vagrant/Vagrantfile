@@ -64,7 +64,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.host_name = "uac.vm.mandiant.com"
-  config.vm.network "private_network", ip: "191.168.33.100"
+  config.vm.network "private_network", ip: "192.168.33.100"
 
   config.vm.provider "vmware_fusion" do |v, override|
     override.vm.box = "centos-64-x64-fusion503.box"

@@ -6,8 +6,9 @@ define(function(require) {
      */
     var AuditModel = Backbone.Model.extend({
         defaults: {
-            html: ""
+            html: ''
         },
+        idAttribute: 'uuid',
         urlRoot: '/sf/api/audit'
     });
 

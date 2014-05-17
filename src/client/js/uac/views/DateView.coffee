@@ -87,7 +87,7 @@ define (require) ->
 
       #proxy raw jquery events into BS events and update local handle on date
       @$(".date").on "dp.change", (payload)=>
-        @date = event.date
+        @date = payload.date
         @fireAsync
           eventName: "change"
           payload: payload

@@ -1,33 +1,29 @@
 UAC ToDo
 ========
 
-### Eventing
-- General vent usage vs the Evented pattern.
-- The Evented pattern couples you to the view/class that fired the event.  Not sure we care.
-- Seems to make sense when building components though not so much when building functionality.
-- For example when an alert is selected, the details view listeners and needs to render.  Does it really care what the
-  constructorName and instanceName is of the class that fired the alert?  This seems overly coupled which is what using
-  the vent class was supposed to help us with.
-- Seems like there is component behaviours for classes like DateView, TableView, etc, where the Evented seems to make
-  sense.  On the other hand there is application behaviours such as an alert was selected, an alert was updated, an
-  alert was deleted that don't really care what component fired the event.  Could even be that multiple components
-  could fire the same event.  Given the Evented pattern the classes they would have different names.  Maybe we just
-  rename constructorName to be eventContext.  I could pass in "alerts" for these types of events.  Not sure that I have
-  an instance name in these cases.
-- I'm generally on the fence with regards to it's widespread usage.
-
-### StrikeFinder
-- Look into using TableView.render() rather than TableView.fetch() because it's non-standard.
-    -Re-rendering of a table is currently broken in the IOCSummaryView.
-    - Convert the table view to and ItemView, need to override the default close function.
-    - When render is called the first time the table displays the message that no records are found.
-- Look into MD5 issue
-    - {"results": [{"response_code": 0, "resource": "6caf13b282678dda2176e1a1d32fc5b6", "verbose_msg": "The requested resource is not among the finished, queued or pending scans"}], "_meta": {"s": 0}}
-
-### Alerts Details View
-- Raw alert customization
-    - Display the alert raw JSON using the ace editor in read only mode.
-    - Make the raw alert data searchable.
+### Hits Details Changes
+- Alerts Tagging
+    - There needs to be a growl after an item is tagged.
+    - The comments need to be updated after an item is tagged.
+- Artifacts links are broken in devnet.
+- Need to merge the NX and HX rollups.
+- Add new IOC terms to the UAC database.
+- Disable tagging, mass tagging, and suppressions on the hits view of the suppressions view.
+- Convert the artifacts table into a drop down.
+- MassTagForm should be an item view.
+- HX suppressions list is not refreshing after creating a suppression.
+- Add a suppression deleted handler in all of the top level views.
+- Look into host caching for theget_hosts_by_hash_list call within get_hits
+- Task polling always seems to be worst case times.
+- Keyboard shortcuts fire even after the details view is hidden.
+- There is an issue with Glitter Conditions in the IOC tabs header.
+- Convert FacetsView to an itemView.
+- Convert IOCDetailsView to an item view or collection view.
+- Properly disable the time boxes on the cluster selection view.
+- Need to test the merge and merge all functions (or remove??)
+- Look into using item view collapsables in utils.collapse.
+- Clear the hits and hits detail on reset or clearing of initial parameters.
+- Clear on the hits search should clear the local storage.
 - Add tag validation in the alerts api.
 - Title and breadcrumb updates.
     - Update the alerts title as well as the breadcrumbs...
@@ -35,24 +31,28 @@ UAC ToDo
     - Add id/context info to the breadcrumbs.
 - Format the occurred and updated dates within the header according to how long ago they are.
     - See hosts code.
-- Update the signature in the header to display according to the FE logic.
-- Update the signature descriptions from the XLS.
-- Display the explanation/anomoly field.
-- Make the alerts view linkable.
-- Look into displaying pcap text data.
 
-### Refactoring and Fixes
-- usersettings aren't being updated after a user selects an expression.
-- Fix the "this" stuff in the TableView.
-- Suppressions links is to small.
+### Agent Tasks
+- Put a block up when displaying the details dialog, it's taking forever.
+- May need to put up a block while loading the main agent tasks list, again it's taking forever to load.
+- Agent tasks query take forever, partially because they are returning too much data.  Need a summary API.  Is there a
+  query being made by Django for each of the relationships?
+- Looks like drew has a limit on the current acquisitions calls.
+
+# Host caching
+- Utilize host caching with sf.
+
+### Alerts Descriptions
+- Update the signature descriptions from the XLS.
+- Update the signature in the header to display according to the FE logic.
+- Display the explanation/anomoly field.
+
+### Linkable Alerts
+- Make the alerts view linkable.
 
 ### Alerting Deployment
-- Update the IOC viewer project and put a dependency on it.
 - Update documentation for new URL configuration.
     - Update template json files.
-- Update the docs for clustering and host settings.
-- Move the database pool settings to the env.json file.
-- Ensure the database pool settings are initialized to a reasonable value.
 
 ### Seasick related unit tests are failing.
 

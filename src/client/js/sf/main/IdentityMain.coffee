@@ -1,17 +1,28 @@
 define (require) ->
-
     _  = require 'underscore'
     _s = require 'underscore.string'
     _.mixin(_s.exports())
 
+    Marionette = require 'marionette'
     HitsView = require 'sf/views/HitsView'
-    hits_view = new HitsView()
 
-    if StrikeFinder.rowitem_uuid
-        hits_view.fetch(rowitem_uuid: StrikeFinder.rowitem_uuid)
-    else if StrikeFinder.identity
-        hits_view.fetch(identity: StrikeFinder.identity)
-    else
-        hits_view.fetch()
 
-    return
+    IdentityApp = new Marionette.Application()
+
+    IdentityApp.addRegions
+        content_region: '#content'
+
+    IdentityApp.addInitializer ->
+        options = {}
+        if window.StrikeFinder.rowitem_uuid
+            options.rowitem_uuid = window.StrikeFinder.rowitem_uuid
+        else if window.StrikeFinder.identity
+            options.identity = window.StrikeFinder.identity
+        else
+            throw '"rowitem" or "identity" is required.'
+
+        hits_view = new HitsView()
+        @content_region.show hits_view
+        hits_view.fetch(options)
+
+    IdentityApp.start()

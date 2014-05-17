@@ -2,6 +2,7 @@ define (require) ->
     Marionette = require 'marionette'
     vent = require 'uac/common/vent'
     utils = require 'uac/common/utils'
+    FetchController = require 'uac/controllers/FetchController'
 
     templates = require 'alerts/ejs/templates'
 
@@ -19,76 +20,8 @@ define (require) ->
     AlertsDetailsView = require 'alerts/views/AlertsDetailsView'
     AlertFullModel = require 'alerts/models/AlertFullModel'
 
-    #
-    # Layout for displaying the main alert template.
-    #
-    class AlertsLayout extends Marionette.Layout
-        template: templates['alerts-layout.ejs'],
-        regions:
-            breadcrumbs_region: '#alerts-breadcrumbs'
-            filters_region: '#alerts-filters'
-            filters_content_region: '#alerts-filters-content'
-            list_region: '#alerts-lists'
-            summary_list_region: '#alerts-summary-list'
-            details_list_region: '#alerts-details-list'
-            details_region: '#alert-details'
-            details_content_region: '#alert-details-content'
+    HitsDetailsView = require 'sf/views/HitsDetailsView'
 
-        #
-        # Listen to global events and show and hide regions accordingly.
-        #
-        initialize: ->
-            @.listenTo vent, Events.ALERTS_SEARCH, =>
-                @show_alerts_summary_list()
-
-            @.listenTo vent, Events.ALERTS_SUMMARY_SELECTED, =>
-                @show_alerts_details_list()
-
-            @.listenTo vent, Events.ALERTS_ALERT_SELECTED, =>
-                @show_alerts_details()
-
-            @.listenTo vent, 'breadcrumb:alerts_filters', =>
-                @show_alerts_filters()
-
-            @.listenTo vent, 'breadcrumb:alerts_selection', =>
-                @show_alerts_details_list()
-
-            @.listenTo vent, 'breadcrumb:alerts_details', =>
-                @show_alerts_details()
-
-        #
-        # Bring the alerts filters to focus.
-        #
-        show_alerts_filters: ->
-            $(@list_region.el).fadeOut(0).hide()
-            $(@details_region.el).fadeOut(0).hide()
-            $(@filters_region.el).fadeIn('slow').show()
-
-        #
-        # Bring the alerts selection view into focus with the alerts details list hidden.
-        #
-        show_alerts_summary_list: ->
-            $(@filters_region.el).fadeOut(0).hide()
-            $(@details_region.el).fadeOut(0).hide()
-            $(@details_list_region.el).fadeOut(0).hide()
-            $(@list_region.el).fadeIn('slow').show()
-
-        show_alerts_details_list: ->
-            $(@filters_region.el).fadeOut(0).hide()
-            $(@details_region.el).fadeOut(0).hide()
-            $(@details_list_region.el).show()
-            $(@list_region.el).fadeIn('slow').show()
-            $('html,body').animate
-                scrollTop: $(@details_list_region.el).offset().top
-
-        #
-        # Bring the alerts details into focus.
-        #
-        show_alerts_details: ->
-            $(window.document.body).scrollTop(0)
-            $(@filters_region.el).fadeOut(0).hide()
-            $(@list_region.el).fadeOut(0).hide()
-            $(@details_region.el).fadeIn('slow')
 
     #
     # Alerts application instance.
@@ -125,15 +58,18 @@ define (require) ->
         @layout.filters_content_region.show @filters_view
 
         # Handle searching for alerts summaries.
-        @.listenTo vent, Events.ALERTS_SEARCH, (params) =>
-            unless @summary_list_view
-                # Create the summary list table.
-                @summaries = new AlertSummaryCollection()
-                @summary_list_view = new AlertsSummaryTableView
-                    id: 'alerts-summary-table'
-                    collection: @summaries
-                @.listenTo @summaries, 'sync', ->
-                    @layout.summary_list_region.show @summary_list_view
+        @listenTo vent, Events.ALERTS_SEARCH, (params) =>
+            # Create the summary list table.
+            summaries = new AlertSummaryCollection()
+            summary_list_view = new AlertsSummaryTableView
+                id: 'alerts-summary-table'
+                collection: summaries
+
+            controller = new FetchController
+                collection: summaries
+                view: summary_list_view
+                region: @layout.summary_list_region
+                loading: true
 
             # Fetch the summary list data.
             @data = {}
@@ -144,23 +80,19 @@ define (require) ->
             @data.begin = moment(params.from).unix() if params.from
             @data.end = moment(params.to).unix() if params.to
 
-            utils.block_element @layout.list_region.el
-            @summaries.fetch
+            controller.fetch
                 data: @data
-                success: =>
-                    utils.unblock @layout.list_region.el
-                error: =>
-                    utils.unblock @layout.list_region.el
 
-        @.listenTo vent, Events.ALERTS_SUMMARY_SELECTED, (row_data) =>
-            unless @details_list_view
-                # Create the details list view.
-                @alerts = new AlertCollection()
-                @details_list_view = new AlertsTableView
-                    id: 'alerts_details_table'
-                    collection: @alerts
-                @listenTo @alerts, 'sync', ->
-                    @layout.details_list_region.show @details_list_view
+        @listenTo vent, Events.ALERTS_SUMMARY_SELECTED, (row_data) =>
+            alerts = new AlertCollection()
+            details_list_view = new AlertsTableView
+                id: 'alerts_details_table'
+                collection: alerts
+            controller = new FetchController
+                collection: alerts
+                view: details_list_view
+                region: @layout.details_list_region
+                loading: true
 
             if 'endpoint-match' in row_data.alert_types
                 data = _.clone @data
@@ -169,35 +101,39 @@ define (require) ->
                 data = _.clone @data
                 data.signature_uuid = row_data.uuid
 
-            utils.block_element @layout.list_region.el
-            @details_list_view.fetch {
+            controller.fetch
                 data: data
-                success: =>
-                    utils.unblock @layout.list_region.el
-                error: =>
-                    utils.unblock @layout.list_region.el
-            }
             return
 
-        @.listenTo vent, Events.ALERTS_ALERT_SELECTED, (row_data) =>
+        # Display the alert details.
+        @listenTo vent, Events.ALERTS_ALERT_SELECTED, (row_data) =>
+            # Clear the region.
             @layout.details_content_region.reset()
 
-            alert = new AlertFullModel()
-            alert.uuid = row_data.uuid
+            if row_data.type != 'endpoint-match'
+                # Display everything but HX alerts.
+                alert = new AlertFullModel()
+                alert.uuid = row_data.uuid
 
-            details_view = new AlertsDetailsView
-                model: alert
+                details_view = new AlertsDetailsView
+                    model: alert
 
-            @listenToOnce alert, 'sync', ->
-                @layout.details_content_region.show details_view
+                controller = new FetchController
+                    model: alert
+                    view: details_view
+                    region: @layout.details_content_region
+                    loading: true
+                controller.fetch()
+            else
+                # Display HX alert details.
+                hx_details = new HitsDetailsView
+                    data: row_data
+                    hits_table_name: 'alerts_details_table'
+                    auto_render: false
 
-            # Load the alert.
-            utils.block()
-            alert.fetch
-                success: =>
-                    utils.unblock()
-                error: =>
-                    utils.unblock()
+                @layout.details_content_region.show hx_details
+                hx_details.render_details(row_data);
+
             return
 
 

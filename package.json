@@ -2,7 +2,7 @@
   "name": "mandiant-uac-ws",
   "author": "Mandiant",
   "description": "Unified Analyst Console",
-  "version": "1.1.5",
+  "version": "1.1.10",
   "main": "uac-server.js",
   "repository": {
     "type": "git",

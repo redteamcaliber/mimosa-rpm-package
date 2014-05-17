@@ -12,7 +12,7 @@ export NODE_PATH=dist/server/js
 EXTENSIONS=js,html,json,sh
 
 # The directories to scan.
-DIRECTORIES=bin,conf,dist/server
+DIRECTORIES=bin,conf,dist/server/uac-server.js
 
 IGNORED=
 

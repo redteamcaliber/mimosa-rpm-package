@@ -7,7 +7,7 @@ define (require) ->
     vent = require 'uac/common/vent'
     TimeSearchView = require 'uac/views/TimeSearchView'
 
-    Events = require 'alerts/common/Events'
+    AlertsEvents = require 'alerts/common/AlertsEvents'
     TagCollection = require 'uac/models/TagCollection'
     ClientCollection = require 'alerts/models/ClientCollection'
     TimeCollection = require 'alerts/models/TimeCollection'
@@ -188,7 +188,7 @@ define (require) ->
         #
         onShow: ->
             # Retrieve any previous selections.
-            selected = utils.storage Events.ALERTS_SEARCH
+            selected = utils.storage AlertsEvents.ALERTS_SEARCH
             if selected
                 console.debug "Found existing alerts search selections: #{JSON.stringify(selected)}"
 
@@ -235,7 +235,7 @@ define (require) ->
                             @clients_region.show clients_view
                             callback()
                         error: ->
-                            callaback()
+                            callback()
                 (callback) =>
                     times.fetch
                         success: =>
@@ -289,11 +289,11 @@ define (require) ->
                 @display_error '"To" is not valid: #{selected.to}'
             if is_from_valid and is_to_valid
                 # Save the current search selections to local storage.
-                utils.storage(Events.ALERTS_SEARCH, selected)
+                utils.storage(AlertsEvents.ALERTS_SEARCH, selected)
                 # Trigger the search.
                 console.debug "Searching for alerts using filters: #{JSON.stringify(selected)}"
-                @trigger Events.ALERTS_SEARCH, selected
-                vent.trigger Events.ALERTS_SEARCH, selected
+                @trigger AlertsEvents.ALERTS_SEARCH, selected
+                vent.trigger AlertsEvents.ALERTS_SEARCH, selected
             return
 
         #
@@ -306,7 +306,7 @@ define (require) ->
             @types_region.currentView.reset_selected()
 
             # Clear any current selections.
-            utils.storage Events.ALERTS_SEARCH, undefined
+            utils.storage AlertsEvents.ALERTS_SEARCH, undefined
 
             # Clear the current search selections in local storage.
             @trigger 'reset'

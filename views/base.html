@@ -1,5 +1,5 @@
 {#
-    Base UAC Bootstrap HTML template.
+Base UAC Bootstrap HTML template.
 #}
 <!DOCTYPE html>
 <html lang="en">
@@ -24,9 +24,9 @@
 
     {# Include the appropriate bootstrap theme. #}
     {% if current_theme == 'default' %}
-        <link id="bootstrap" href="/static/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
+    <link id="bootstrap" href="/static/css/bootstrap/bootstrap.min.css" rel="stylesheet"/>
     {% else %}
-        <link id="bootstrap" href="/static/css/bootswatch/bootstrap.{{ current_theme }}.{{ font_size }}.min.css" rel="stylesheet"/>
+    <link id="bootstrap" href="/static/css/bootswatch/bootstrap.{{ current_theme }}.{{ font_size }}.min.css" rel="stylesheet"/>
     {% endif %}
 
     {# Font Awesome #}
@@ -43,24 +43,24 @@
     <!--<link href="/static/css/datatables.css" rel="stylesheet"/>-->
 
     {% if node_env == 'prod' %}
-        <script src="/static/js/raw/lib/requirejs/require.js"></script>
-        <script src="/static/js/modules/main.js"></script>
-        <script type="text/javascript">
-            require(["{% block data_main %}{% endblock %}"], function(){});
-        </script>
+    <script src="/static/js/raw/lib/requirejs/require.js"></script>
+    <script src="/static/js/modules/main.js"></script>
+    <script type="text/javascript">
+        require(["{% block data_main %}{% endblock %}"], function(){});
+    </script>
     {% else %}
-        <!-- Include require.js support. -->
-        <script src="/static/js/raw/lib/requirejs/require.js" data-main="{% block data_main %}{% endblock %}"></script>
+    <!-- Include require.js support. -->
+    <script src="/static/js/raw/lib/requirejs/require.js" data-main="{% block data_main %}{% endblock %}"></script>
     {% endif %}
 
     <script type="text/javascript">
         require(['jquery', 'bootstrap', 'backbone', 'uac/views/ThemeView'],
                 function($, bs, Backbone, ThemeView) {
-            $(function() {
-                // Load common UAC views.
-                new ThemeView({ el: '#uac-user-nav' });
-            });
-        });
+                    $(function() {
+                        // Load common UAC views.
+                        new ThemeView({ el: '#uac-user-nav' });
+                    });
+                });
     </script>
 
     {% block head %}{% endblock %}
@@ -87,7 +87,7 @@
             </div>
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <!--<li><a href="/alerts"><i class="fa fa-exclamation-circle"></i> Alerts</a></li>-->
+                    <li><a href="/alerts"><i class="fa fa-exclamation-circle"></i> Alerts</a></li>
                     <!--<li><a href="/nt/"><i class="fa fa-cloud"></i> Network</a></li>-->
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bolt"></i> StrikeFinder <b class="caret"></b></a>
@@ -95,8 +95,7 @@
                             <li><a href="/sf/hits/"><i class="fa fa-list"></i> IOC Hits</a></li>
                             <li><a href="/sf/suppressions/"><i class="fa fa-level-down"></i> Suppressions</a></li>
                             <li><a href="/sf/hits_by_tag/"><i class="fa fa-tags"></i> Hits by Tag</a></li>
-                            <li><a href="/sf/acquisitions/"><i class="fa fa-cloud-download"></i> Acquisitions</a></li>
-                            <li><a href="/sf/tasks/"><i class="fa fa-tasks"></i> Tasks</a></li>
+                            <li><a href="/sf/agenttasks/"><i class="fa fa-tasks"></i> Agent Tasks</a></li>
                         </ul>
                     </li>
                     {% block nav_menu %}
@@ -120,11 +119,13 @@
                                     <i class="icon-fixed-width fa fa-cogs"></i> SSO Settings
                                 </a>
                             </li>
-                            <li class="divider"></li>
                             <li>
                                 <a href="/preferences/" target="_blank">
                                     <i class="icon-fixed-width fa fa-wrench"></i> Preferences
                                 </a>
+                            </li>
+                            <li>
+                                <a href="/sf/tasks/"><i class="fa fa-tasks"></i> Background Tasks</a>
                             </li>
                             <li class="divider"></li>
                             <li>
@@ -143,11 +144,18 @@
     {% endblock %}
 
     {% block content %}
+    <div class="container">
+        <div class="row">
+            <div id="content" class="col-sm-12">
 
+            </div>
+        </div>
+    </div>
     {% endblock %}
 
     {% block tail %}
-
+    <div id="context-menu-region" class="highlighter-container" style="display: none;"></div>
+    <div id="dialog-div"></div>
     {% endblock %}
 </div>
 

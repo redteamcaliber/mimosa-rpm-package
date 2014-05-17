@@ -1,0 +1,36 @@
+{% set event = content.ipv4networkevent %}
+
+<table class="table table-condensed">
+    <tr>
+        <th class="sf-audit-heading">PID</th>
+        <td><span class="ioc-term" ioc-term="ipv4NetworkEvent/pid">{{ event.pid }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Process Name</th>
+        <td><span class="ioc-term" ioc-term="ipv4NetworkEvent/process">{{ event.process }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Protocol</th>
+        <td><span class="ioc-term" ioc-term="ipv4NetworkEvent/protocol">{{ event.protocol }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Local IP</th>
+        <td><span class="ioc-term" ioc-term="ipv4NetworkEvent/localIP">{{ event.localip }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Local Port</th>
+        <td><span class="ioc-term" ioc-term="ipv4NetworkEvent/localPort">{{ event.localport }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Remote IP</th>
+        <td><span class="ioc-term" ioc-term="ipv4NetworkEvent/remoteIP">{{ event.remoteip }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Remote Port</th>
+        <td><span class="ioc-term" ioc-term="ipv4NetworkEvent/remotePort">{{ event.remoteport }}</span></td>
+    </tr>
+    <tr>
+        <th class="sf-audit-heading">Timestamp</th>
+        <td><span class="ioc-term">{{ event.timestamp }}</span></td>
+    </tr>
+</table>

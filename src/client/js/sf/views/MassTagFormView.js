@@ -1,4 +1,6 @@
 define(function(require) {
+    var vent = require('uac/common/vent');
+    var StrikeFinderEvents = require('sf/common/StrikeFinderEvents');
     var View = require('uac/views/View');
     var MassTagModel = require('sf/models/MassTagModel');
     var IOCTermsCollection = require('sf/models/IOCTermsCollection');
@@ -92,7 +94,7 @@ define(function(require) {
 
             try {
                 // Immediately block to prevent multiple submissions.
-                view.block_element(form, 'Processing...');
+                view.block_element(form, true);
 
                 // Update the model with the form data.
                 view.model.set('exp_key', view.$("#exp_key").children(":selected").attr("id"));
@@ -132,7 +134,7 @@ define(function(require) {
                 view.unblock(form);
             }
 
-            view.block_element(form, 'Processing...');
+            view.block_element(form, true);
             view.model.save({}, {
                 success: function(model, response, options) {
                     var task_id = response.task_id;
@@ -154,6 +156,7 @@ define(function(require) {
 
                             // Notify that the mass tag was created.
                             view.trigger('create', view.model);
+                            vent.trigger(StrikeFinderEvents.SF_MASS_TAG_CREATE, view.model);
 
                             // Hide the form.
                             view.$("#mass-tag-form").modal("hide");

@@ -4,17 +4,13 @@
     </div>
     <div class="panel-body">
         <div class="row">
-            <div class="col-sm-1">
-                <label>Server</label>
-            </div>
-            <div class="col-sm-5">
-                <%= item.server %>
-            </div>
-            <div class="col-sm-1">
-                <label>Protocol</label>
-            </div>
-            <div class="col-sm-5">
-                <%= item.protocol %>
+            <div class="col-sm-12">
+                <div class="well" style="padding: 0; font-size: 85%; font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;">
+                    <% if (item.protocol) { %>
+                    <%= item.protocol.toUpperCase() %>
+                    <% } %>
+                    <%= item.address %>:<%= item.port %>
+                </div>
             </div>
         </div>
         <div class="row">

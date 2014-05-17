@@ -1,98 +1,113 @@
-define(function(require) {
-    var View = require('uac/views/View');
-    var utils = require('sf/common/utils');
-    var SuppressionModel = require('sf/models/SuppressionModel');
-    var IOCTermsCollection = require('sf/models/IOCTermsCollection');
+define(function (require) {
+    var async = require('async');
+    var Marionette = require('marionette');
+
+    var utils = require('uac/common/utils');
+    var vent = require('uac/common/vent');
+
+    var StrikeFinderEvents = require('sf/common/StrikeFinderEvents');
+    var sf_utils = require('sf/common/utils');
     var templates = require('sf/ejs/templates');
+    var SuppressionModel = require('sf/models/SuppressionModel');
+    var IOCCollection = require('sf/models/IOCCollection');
+    var IOCTermsCollection = require('sf/models/IOCTermsCollection');
 
 
     /**
      * Form view for creating a suppression.
      */
-    var SuppressionFormView = View.extend({
+    var SuppressionFormView = Marionette.ItemView.extend({
+        template: templates['suppression-form.ejs'],
+        initialize: function (options) {
+            if (options) {
+                this.itemvalue = options.itemvalue;
+                this.itemkey = options.itemkey;
+                this.rowitem_type = options.rowitem_type;
+                this.exp_key = options.exp_key;
+                this.cluster_uuid = options.cluster_uuid;
+                this.iocs = options.iocs;
+            }
+
+            console.debug('Creating suppression for exp_key: ' + this.exp_key);
+
+            if (!options) {
+                // Error, params are required.
+                throw new Error('"options" is undefined.');
+            }
+            else if (!this.exp_key) {
+                // Error, exp_key is required.
+                throw new Error('"exp_key" is undefined.');
+            }
+            else if (!this.itemvalue) {
+                // Error, itemvalue is required.
+                throw new Error('"itemvalue" is undefined.');
+            }
+            else if (!this.rowitem_type) {
+                // Error, item_type is required.
+                throw new Error('"rowitem_type" is undefined.');
+            }
+            else if (!this.cluster_uuid) {
+                // Error, cluster_uuid is required.
+                throw new Error('"cluster_uuid" is undefined.');
+            }
+        },
         events: {
             "click #suppress": "suppress",
             "click #cancel": "cancel"
         },
-        render: function(params) {
+        serializeData: function () {
             var view = this;
-
-            var itemvalue = params.itemvalue;
-            var rowitem_type = params.rowitem_type;
-            var exp_key = params.exp_key;
-            var cluster_uuid = params.cluster_uuid;
-
-            console.log('Creating suppression for exp_key: ' + exp_key);
-            if (!params) {
-                // Error, params are required.
-                throw new Error('"params" is undefined.');
-            } else if (!params.exp_key) {
-                // Error, exp_key is required.
-                throw new Error('"exp_key" is undefined.');
-            } else if (!params.itemvalue) {
-                // Error, itemvalue is required.
-                throw new Error('"itemvalue" is undefined.');
-            } else if (!params.rowitem_type) {
-                // Error, item_type is required.
-                throw new Error('"rowitem_type" is undefined.');
-            } else if (!params.cluster_uuid) {
-                // Error, cluster_uuid is required.
-                throw new Error('"cluster_uuid" is undefined.');
-            }
-
-            console.log('Rendering suppression form view...');
 
             // Create a new suppression model and associated it with the form.
             view.model = new SuppressionModel({
-                itemvalue: itemvalue,
-                rowitem_type: rowitem_type,
-                exp_key: exp_key,
-                cluster_uuid: cluster_uuid
+                itemvalue: view.itemvalue,
+                rowitem_type: view.rowitem_type,
+                exp_key: view.exp_key,
+                cluster_uuid: view.cluster_uuid
             });
 
-            if (params.itemkey) {
-                view.model.set('itemkey', params.itemkey);
+            if (view.itemkey) {
+                view.model.set('itemkey', view.itemkey);
             }
 
             console.log('Loading suppression form using params: ' + JSON.stringify(view.model.attributes));
 
-            // Deep copy the model values.
-            var data = view.model.toJSON();
-
+            // Retrieve the IOC terms.
             var terms = new IOCTermsCollection([], {
-                rowitem_type: this.model.get("rowitem_type")
+                rowitem_type: view.model.get("rowitem_type")
             });
             terms.fetch({
-                async: false
+                async: false,
+                error: function (collection, response) {
+                    utils.display_response_error('Error looking up IOC terms.', response);
+                }
             });
 
+            var data = view.model.toJSON();
             if (terms) {
-                console.log('Retrieved ' + terms.length + ' terms...');
                 data.terms = terms.toJSON();
-            } else {
+                console.log('Retrieved ' + terms.length + ' terms...');
+            }
+            else {
                 console.warn('Terms was invalid');
                 data.terms = [];
             }
 
-            // Add the ioc's.
-            if (params.iocs) {
-                data.iocs = params.iocs.toJSON();
-            } else {
-                data.iocs = [];
-            }
+            data.iocs = view.iocs;
 
-            // Retrieve the related IOC terms.
-            view.apply_template(templates, 'suppression-form.ejs', data);
-
+            return data;
+        },
+        onRender: function (params) {
+            var view = this;
             view.$("#suppression-form").modal({
                 backdrop: false
             });
         },
-        suppress: function() {
+        suppress: function () {
             var view = this;
             var form = $('#suppression-form');
             try {
-                view.block_element(form, 'Processing...');
+                utils.block_element(form, true);
 
                 // Update the model.
                 view.model.set('exp_key', view.$("#exp_key").children(":selected").attr("id"));
@@ -113,44 +128,48 @@ define(function(require) {
                 // Validate the model before saving.
                 if (!view.model.isValid()) {
                     errors = view.model.validationError;
-                    _.each(errors, function(error) {
-                        view.display_error(error);
+                    _.each(errors, function (error) {
+                        utils.display_error(error);
                     });
                     return; // **EXIT**
                 }
-            } finally {
-                view.unblock(form);
+            }
+            finally {
+                utils.unblock(form);
             }
 
-            view.block_element(form, 'Processing...');
+            utils.block_element(form, true);
             view.model.save({}, {
-                success: function(model, response) {
+                success: function (model, response) {
                     var submit_message = _.sprintf('Submitted task for suppression: %s',
                         view.model.as_string());
 
-                    view.display_success(submit_message);
+                    utils.display_success(submit_message);
 
-                    utils.wait_for_task(response.task_id, function(err, completed, response) {
+                    sf_utils.wait_for_task(response.task_id, function (err, completed, response) {
                         // Unblock the UI.
-                        view.unblock(form);
+                        utils.unblock(form);
 
                         if (err) {
                             // Error
-                            view.display_error(err);
-                        } else if (completed) {
+                            utils.display_error(err);
+                        }
+                        else if (completed) {
                             // The task was completed successfully.
                             var success_message = 'Successfully suppressed %s hit(s) with suppression: %s';
-                            view.display_success(_.sprintf(success_message,
+                            utils.display_success(_.sprintf(success_message,
                                 response.result.summary, view.model.as_string()));
 
                             // Notify that a suppression was created.
                             view.trigger('create', view.model);
+                            vent.trigger(StrikeFinderEvents.SF_SUPPRESS_CREATE, view.model);
 
                             // Hide the form.
                             view.$("#suppression-form").modal("hide");
-                        } else {
+                        }
+                        else {
                             var task_message = _.sprintf('The task for suppression: %s is still running and ' +
-                                'its results can be viewed on the <a href="/sf/tasks">Task List</a>.',
+                                    'its results can be viewed on the <a href="/sf/tasks">Task List</a>.',
                                 view.model.as_string());
                             view.display_info(task_message);
 
@@ -159,17 +178,17 @@ define(function(require) {
                         }
                     });
                 },
-                error: function(model, xhr) {
+                error: function (model, response) {
                     try {
-                        var message = xhr && xhr.responseText ? xhr.responseText : 'Response text not defined.';
-                        view.display_error('Error while submitting suppression task - ' + message);
-                    } finally {
-                        view.unblock(form);
+                        utils.display_response_error('Error while submitting suppression task.', response);
+                    }
+                    finally {
+                        utils.unblock(form);
                     }
                 }
             });
         },
-        cancel: function() {
+        cancel: function () {
             this.$("#suppression-form").modal("hide");
             // Notify that the dialog was canceled.
             this.trigger('cancel');

@@ -1,6 +1,15 @@
 define (require) ->
     moment = require 'moment'
+    _ = require 'underscore'
 
+
+    #
+    # Escapes a string for insertion into HTML, replacing &, <, >, ", and ' characters.
+    #
+    escape_html = (index)->
+      mRender: (data)->
+        _.escape data
+      aTargets: if _.isArray index then index else [index]
 
     #
     # Format a date with an optional mask.  Default format is YYYY-MM-DD HH:mm:ss.
@@ -34,7 +43,7 @@ define (require) ->
             if data == 1
                 classes = 'btn btn-danger'
             else if data == 2
-                classes = 'btn-btn-warning'
+                classes = 'btn btn-warning'
             else if data == 3
                 classes = 'btn btn-success'
             else if data == 4
@@ -63,6 +72,7 @@ define (require) ->
                 return e
         aTargets: [index]
 
+    escape_html: escape_html
     date_time: date_time_renderer
     date_time_multiline: date_time_multiline_renderer
     priority: priority_renderer

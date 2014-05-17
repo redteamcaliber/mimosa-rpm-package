@@ -33,11 +33,6 @@ module.exports = function (grunt) {
 
     // Project configuration.
     grunt.initConfig({
-        // The Github repository.
-        uac_repo: 'git@github.mandiant.com:amilano/uac-node.git',
-
-        // The Github Branch.
-        uac_branch: '1.1.2',
 
         uac_name: pkg['name'].charAt(0).toUpperCase() + pkg['name'].slice(1),
         uac_version: uac_version,
@@ -91,9 +86,6 @@ module.exports = function (grunt) {
                 tempDir: '<%= build_rpm_dir %>',
                 defattrScript: [
                     {user: 'root', group: 'root'}
-                ],
-                postInstallScript: [
-                    'mkdir -p /opt/web/apps/uac/server/logs'
                 ]
             },
             release: {
@@ -101,7 +93,7 @@ module.exports = function (grunt) {
                     {
                         // Include the root files.
                         cwd: '<%= build_uac_dir %>',
-                        src: '**/*',
+                        src: ['**/*', '!server/conf/env.json'],
                         dest: '/opt/web/apps/uac'
                     }
                 ]
@@ -225,7 +217,7 @@ module.exports = function (grunt) {
             },
             'node-js': {
                 files: ['src/server/js/**/*.js'],
-                tasks: ['copy:unconvertedNode']
+                tasks: ['copy:unconvertedNode', 'coffee:uac-server']
             },
             'web-coffee': {
                 files: ['src/client/js/**/*.coffee', 'src/client/js/**/*.js'],
@@ -251,8 +243,8 @@ module.exports = function (grunt) {
                     {expand: true, cwd: 'dist/client/js/raw/lib/font-awesome/fonts', src: ['**/*'], dest: 'dist/client/fonts', filter: 'isFile'},
                     {expand: true, cwd: 'dist/client/js/raw/lib/select2', src: ['*.png', '*.gif'], dest: 'dist/client/css', filter: 'isFile'},
                     {expand: true, cwd: 'dist/client/js/raw/lib/bootstrap/css', src: ['bootstrap.min.css'], dest: 'dist/client/css/bootstrap', filter: 'isFile'},
+                    {expand: true, cwd: 'dist/client/js/raw/lib/bootstrap/fonts', src: ['*.*'], dest: 'dist/client/css/fonts', filter: 'isFile'},
                     {expand: true, cwd: 'dist/client/js/raw/lib/bootswatch/dist', src: ['**/*.css'], dest: 'dist/client/css/bootswatch', filter: 'isFile'},
-                    {expand: true, cwd: 'dist/client/js/raw/lib/bootstrap/fonts', src: ['*.*'], dest: 'dist/client/css/bootswatch/fonts', filter: 'isFile'},
                     {expand: true, cwd: 'src/client/css/img', src: ['**/*'], dest: 'dist/client/css/img', filter: 'isFile'},
                     {expand: true, cwd: 'src/client/css/img', src: ['sort_*.png'], dest: 'dist/client/img', filter: 'isFile'},
                     {expand: true, cwd: 'src/client/css', src: ['mocha.css'], dest: 'dist/client/css', filter: 'isFile'}
@@ -382,8 +374,10 @@ module.exports = function (grunt) {
                             name: "../modules/main",
                             create: true,
                             include: [
+                                // Alerts Stuff
+                                "alerts/main/AlertsMain",
                                 //strike finder stuff
-                                "sf/main/AcquisitionsMain",
+                                "sf/main/AgentTasksMain",
                                 "sf/main/HitReviewMain",
                                 "sf/main/HitsByTagMain",
                                 "sf/main/HostsMain",
@@ -491,19 +485,5 @@ function process_name(filename) {
     }
     else {
         return filename.substring(last_index + 1, filename.length);
-    }
-}
-
-/**
- * TODO: Replace this.
- */
-function get_connection(options) {
-
-    return {
-        user: options && options.user ? options.user : 'uac_user',
-        password: options && options.password ? options.password : 'devnet',
-        database: options && options.database ? options.database : 'uac',
-        host: options && options.host ? options.host : 'localhost',
-        port: options && options.port ? options.port : 5432
     }
 }

@@ -4,7 +4,7 @@ define (require) ->
     TableView = require 'uac/views/TableView'
     renderers = require 'uac/views/renderers'
 
-    Events = require 'alerts/common/Events'
+    AlertsEvents = require 'alerts/common/AlertsEvents'
 
 
     alert_renderer = (index) ->
@@ -24,11 +24,6 @@ define (require) ->
 
     in_progress_renderer = (index) ->
         mRender: (data, type, row) ->
-            "<a class='btn btn-default shield'> #{row.investigating + row.escalate + row.reportable} </a>"
-        aTargets: [index]
-
-    in_progress_renderer = (index) ->
-        mRender: (data, type, row) ->
             count = row.tags.investigating + row.tags.escalate + row.tags.reportable
             "<a class='btn btn-default shield'> #{count} </a>"
         aTargets: [index]
@@ -39,8 +34,6 @@ define (require) ->
     #
     class AlertsSummaryTableView extends TableView
         initialize: (options) ->
-            super options
-
             options.aoColumns = [
                 {sTitle: 'Pri', mData: 'highest_priority', sClass: 'priority', sType: 'int-html'}
                 {sTitle: 'Name, Type(s), Device(s)', mData: 'name', sClass: 'wrap'}
@@ -72,10 +65,12 @@ define (require) ->
 
             @listenTo(@, 'click', @on_click)
 
+            super options
+
             return
 
         #
         # Handle a row click.
         #
         on_click: (data) ->
-            vent.trigger Events.ALERTS_SUMMARY_SELECTED, data
+            vent.trigger AlertsEvents.ALERTS_SUMMARY_SELECTED, data

@@ -1,6 +1,6 @@
 define(function (require) {
     var View = require('uac/views/View');
-
+    var uac_utils = require('uac/common/utils');
     var templates = require('sf/ejs/templates');
 
     var HitsFacetsModel = require('sf/models/HitsFacetsModel');
@@ -172,21 +172,30 @@ define(function (require) {
         /**
          * Load the hits facets based on the views criteria.
          */
-        load_facets: function () {
+        load_facets: function (callback) {
             var view = this;
             view.model.params = view.criteria.attributes;
             view.block_element(view.$el);
             view.model.fetch({
-                error: function (model, response, options) {
+                success: function() {
+                    if (callback) {
+                        callback()
+                    }
+                },
+                error: function (model, response) {
                     if (response.statusCode == 404) {
                         view.display_error('Not hits found for criteria: ' + JSON.stringify(view.criteria.attributes));
                     }
+                    else {
+                        uac_utils.display_response_error('Error while retrieving facets.', response);
+                    }
+                    callack()
                 }
             });
 
             view.trigger('refresh', view.criteria.attributes);
         },
-        fetch: function (params) {
+        fetch: function (params, callback) {
             console.log('Reloading the hits facets view...');
 
             if (params) {
@@ -194,7 +203,7 @@ define(function (require) {
                 this.criteria.set_initial(params);
             }
 
-            this.load_facets();
+            this.load_facets(callback);
         }
     });
 
