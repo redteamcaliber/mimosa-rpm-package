@@ -376,6 +376,7 @@ module.exports = function (grunt) {
                             include: [
                                 // Alerts Stuff
                                 "alerts/main/AlertsMain",
+
                                 //strike finder stuff
                                 "sf/main/AgentTasksMain",
                                 "sf/main/HitReviewMain",

@@ -7,7 +7,7 @@ define (require) ->
     vent = require 'uac/common/vent'
     Evented = require 'uac/common/mixins/Evented'
 
-    templates = require 'sf/ejs/templates'
+    templates = require 'uac/ejs/templates'
 
 
     class SelectItemView extends Marionette.ItemView
