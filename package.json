@@ -1,22 +1,22 @@
 {
-  "name": "mimosa-web-package",
-  "version": "2.0.0",
-  "homepage": "https://github.com/dbashford/mimosa-web-package",
-  "author": "David Bashford",
-  "description": "Web App Packaging Module for Mimosa",
+  "name": "mimosa-rpm-package",
+  "version": "1.0.0",
+  "homepage": "https://github.com/dretay/mimosa-rpm-package",
+  "author": "Drew Tayman",
+  "description": "RPM Packaging Module for Mimosa",
   "contributors": [
     {
-      "name": "David Bashford",
-      "email": "dbashford@hotmail.com"
+      "name": "Drew Tayman",
+      "email": "dretay@hotmail.com"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/dbashford/mimosa-web-package"
+    "url": "https://github.com/dretay/mimosa-rpm-package"
   },
   "keywords": [
     "mimosa",
-    "mmodule",
+    "module",
     "express",
     "package",
     "packaging"

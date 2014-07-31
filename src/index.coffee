@@ -5,7 +5,6 @@ fs = require 'fs'
 {exec, spawn} = require 'child_process'
 
 _ = require 'lodash'
-easyRpm = require('./easyRpm')
 mkdirp = require('mkdirp')
 
 moduleConfig = require './config'
@@ -28,53 +27,88 @@ registration = (config, register) ->
       exec 'uname', (error, stdout, stderr) =>
         if not error then isReallyWindows = false
 
-__tarball = (config, done) ->
-  tarballName = config.webPackage.archiveName
-  # if didn't change default, look for package.json name
-  if tarballName is moduleConfig.defaults().webPackage.archiveName
-    try
-      pack = require(path.join config.root, 'package.json')
-      tarballName = pack.name if pack.name?
-    catch err
-      logger.debug "No package.json"
+_writeSpecFile = (config, logger, buildRoot)->
+  fs = require 'fs'
+  wrench = require('wrench')
+  path = require 'path'
+  _ = require 'underscore'
 
-  unless /\.tar/.test(tarballName)
-    tarballName = "#{tarballName}.tar.gz"
+  pkgName = config.rpmPackage.name + "-" + config.rpmPackage.version + "-" + config.rpmPackage.buildArch
+  specFilepath = path.join(config.rpmPackage.rootOutPath, "SPECS", pkgName + ".spec")
+  buffer = []
+  files = _.filter (wrench.readdirSyncRecursive buildRoot), (file)->
+    file = buildRoot+"/"+file
+    unless fs.lstatSync(file).isDirectory() then return true
+    logger.debug "Excluding #{file} from RPM because its a directory"
+    return false
 
-  outputTarFile = path.join config.root, tarballName
-  tarCommand = "tar -czf #{outputTarFile} ."
 
-  if process.platform is "win32" and not isReallyWindows
-    # Probably running in Git Bash. Paths must be /c/path/to/file instead of c:\path\to\file.
-    altOutputTarFile = outputTarFile.replace(/(.+):/, "/$1")
-    altOutputTarFile = require('slash')(altOutputTarFile)
-    tarCommand = "tar -czf #{altOutputTarFile} ."
 
-  logger.debug "tar command: #{tarCommand}"
-  exec tarCommand, (err, sout, serr) =>
-    if err
-      logger.info "Failed to 'tar' file using command [[ #{tarCommand} ]]"
+  buffer.push("%define   _topdir " + config.rpmPackage.rootOutPath)
+  buffer.push("");
+  buffer.push("Name: "+config.rpmPackage.name)
+  buffer.push("Version: "+config.rpmPackage.version)
+  buffer.push("Release: "+config.rpmPackage.release)
+  buffer.push("Group: "+config.rpmPackage.group)
+  buffer.push("Summary: "+config.rpmPackage.summary)
+  buffer.push("Group: "+config.rpmPackage.group)
+  buffer.push("License: "+config.rpmPackage.license)
+  buffer.push("BuildArch: "+config.rpmPackage.buildArch)
+  if typeof config.rpmPackage.autoReqProv != "undefined" then buffer.push("AutoReqProv: "+config.rpmPackage.autoReqProv)
+
+  if config.rpmPackage.dependencies.length > 0 then buffer.push("Requires: " + config.rpmPackage.dependencies.join(","))
+
+  buffer.push("")
+  buffer.push("%description")
+  buffer.push(config.rpmPackage.description)
+  buffer.push("")
+  buffer.push("%files")
+  if _.isArray config.rpmPackage.defattrScript
+    for defattr in config.rpmPackage.defattrScript
+      buffer.push("%defattr(-, #{defattr.user}, #{defattr.group}, -)")
+  for file in files
+    if file.indexOf('%') == 0
+      buffer.push(file)
     else
-      fs.renameSync outputTarFile, path.join config.webPackage.outPath, tarballName
+      buffer.push("\"/"+file+"\"")
 
-    done()
+  buffer.push("")
+  buffer.push("%pre")
+  buffer.push(preInstallScript) for preInstallScript in config.rpmPackage.preInstallScript
+
+
+  buffer.push("")
+  buffer.push("%post")
+  buffer.push(postInstallScript) for postInstallScript in config.rpmPackage.postInstallScript
+
+
+  buffer.push("")
+  buffer.push("%preun")
+  buffer.push(preUninstallScript) for preUninstallScript in config.rpmPackage.preUninstallScript
+
+
+  buffer.push("")
+  buffer.push("%postun")
+  buffer.push(postUninstallScript) for postUninstallScript in config.rpmPackage.postUninstallScript
+
+  specFileContent = buffer.join("\n")
+  fs.writeFileSync specFilepath, specFileContent
+  return specFilepath
 
 __rpm = (config, done) ->
   wrench = require('wrench')
   rimraf = require 'rimraf'
 
-  buildRootIndex = config.webPackage.outPath.indexOf("BUILDROOT")
-  tmpDir = path.resolve(config.webPackage.outPath.substr(0,buildRootIndex));
-  logger.debug "Inferred root of rpm to be #{tmpDir}"
+
   rpmStructure = ["BUILD","RPMS","SOURCES","SPECS","SRPMS"]
 
   #Create RPM build folder structure
-  fs.mkdirSync tmpDir+"/"+folder for folder in rpmStructure
+  fs.mkdirSync config.rpmPackage.rootOutPath+"/"+folder for folder in rpmStructure
 
   #generate spec file
-  buildRoot = tmpDir+"/BUILDROOT"
+  buildRoot = config.rpmPackage.rootOutPath+"/BUILDROOT"
   logger.info "Generating RPM spec file from #{buildRoot}"
-  specFilepath = easyRpm.writeSpecFile(config, logger, tmpDir, buildRoot)
+  specFilepath = _writeSpecFile(config, logger, buildRoot)
 
   #build rpm
   logger.info "Building RPM package"
@@ -99,57 +133,31 @@ __rpm = (config, done) ->
       logger.error('rpmbuild process exited with code ' + code);
 
       #clean out temp folders
-      rimraf.sync tmpDir+"/"+folder for folder in rpmStructure
+      rimraf.sync config.rpmPackage.rootOutPath+"/"+folder for folder in rpmStructure
 
     else
-      outputFilename = "#{config.webPackage.easyRpm.name}-#{config.webPackage.easyRpm.version}-#{config.webPackage.easyRpm.release}.#{config.webPackage.easyRpm.buildArch}.rpm"
-      outputFilepath = path.join tmpDir, "RPMS", config.webPackage.easyRpm.buildArch, outputFilename
+      outputFilename = "#{config.rpmPackage.name}-#{config.rpmPackage.version}-#{config.rpmPackage.release}.#{config.rpmPackage.buildArch}.rpm"
+      outputFilepath = path.join config.rpmPackage.rootOutPath, "RPMS", config.rpmPackage.buildArch, outputFilename
       logger.debug "Copy output RPM package to the current directory: #{outputFilepath}"
-      fs.renameSync outputFilepath, path.join tmpDir, outputFilename
+      fs.renameSync outputFilepath, path.join config.rpmPackage.rootOutPath, outputFilename
 
       #clean out temp folders
-      rimraf.sync tmpDir+"/"+folder for folder in rpmStructure
+      rimraf.sync config.rpmPackage.rootOutPath+"/"+folder for folder in rpmStructure
     done()
 
 
-__zip = (config, done) ->
-  JSZip = require('jszip')
-  wrench = require('wrench')
-
-  zip = new JSZip()
-
-  wrench.readdirSyncRecursive(config.webPackage.outPath).map (p) ->
-    origPath: p
-    fullPath: path.join config.webPackage.outPath, p
-  .forEach (p) ->
-    stats = fs.statSync p.fullPath, p.origPath
-    if stats.isFile()
-      # path separator should be / for the zip to work on both Windows and Linux
-      zip.file p.origPath.replace(/\\/g, '\/'), fs.readFileSync(p.fullPath)
-
-  zipName = config.webPackage.archiveName
-  outputZipFile = path.join config.webPackage.outPath, zipName
-  content = zip.generate { type: 'nodebuffer', compression: 'DEFLATE' }
-  fs.writeFileSync outputZipFile, content
-
-  done()
-
 _package = (config, options, next) ->
-  logger.info "Beginning web-package"
+  logger.info "Beginning rpm-package"
 
-  tmpDir = config.webPackage.outPath
-  if /\.rpm$/.test(config.webPackage.archiveName)
-    buildRootIndex = config.webPackage.outPath.indexOf("BUILDROOT")
-    tmpDir = path.resolve(config.webPackage.outPath.substr(0,buildRootIndex));
   # delete directory if it exists
-  if fs.existsSync tmpDir
+  if fs.existsSync config.rpmPackage.rootOutPath
     rimraf = require 'rimraf'
-    logger.debug "Deleting #{tmpDir} ]]"
-    rimraf.sync tmpDir
+    logger.debug "Deleting #{config.rpmPackage.rootOutPath}"
+    rimraf.sync config.rpmPackage.rootOutPath
 
   # copy over all assets
-  logger.debug "Copying [[ #{config.root} ]] to [[ #{config.webPackage.outPath} ]]"
-  copyDirSyncRecursive config.root, config.webPackage.outPath, config.webPackage.exclude
+  logger.debug "Copying [[ #{config.root} ]] to [[ #{config.rpmPackage.outPath} ]]"
+  copyDirSyncRecursive config.root, config.rpmPackage.outPath, config.rpmPackage.exclude
 
   # write config to output after modifying the config
   __writeConfig(config)
@@ -160,15 +168,15 @@ _package = (config, options, next) ->
     next()
   else
     # write app.js to output, run npm inside target directory
-    if config.webPackage.appjs
+    if config.rpmPackage.appjs
       __writeApplicationStarter config
     __runNPMInstall config, next
 
 __runNPMInstall = (config, next) ->
   # run npm in dist folder to generate node modules pre-package
   currentDir = process.cwd()
-  process.chdir config.webPackage.outPath
-  logger.debug "Running NPM inside [[ #{config.webPackage.outPath} ]]"
+  process.chdir config.rpmPackage.outPath
+  logger.debug "Running NPM inside [[ #{config.rpmPackage.outPath} ]]"
   exec "npm install --production", (err, sout, serr) =>
     logger.debug "NPM INSTALL standard out\n#{sout}"
     logger.debug "NPM INSTALL standard err\n#{serr}"
@@ -182,22 +190,14 @@ __runNPMInstall = (config, next) ->
       logger.error "Error running NPM Install: #{err}"
       done()
     else
-      logger.debug "Zip contents of [[ #{config.webPackage.outPath} ]]"
+      logger.debug "Zip contents of [[ #{config.rpmPackage.outPath} ]]"
 
-      if config.webPackage.archiveName
-        archive = __tarball
-        if /\.zip$/.test(config.webPackage.archiveName)
-          archive = __zip
-        else if /\.rpm$/.test(config.webPackage.archiveName)
-          archive = __rpm
-        archive config, done
-      else
-        done()
+      __rpm config, done
 
 __writeConfig = (config) ->
   configClone = _.clone(config, true)
 
-  if config.webPackage.useEntireConfig
+  if config.rpmPackage.useEntireConfig
     writeConfig = configClone
     if writeConfig.liveReload
       writeConfig.liveReload.enabled = false
@@ -222,7 +222,7 @@ __writeConfig = (config) ->
   writeConfig.watch.compiledDir = path.relative(config.root, writeConfig.watch.compiledDir).split(path.sep)
   writeConfig.watch.javascriptDir = path.relative(config.root, writeConfig.watch.javascriptDir).split(path.sep)
   writeConfig.watch.compiledJavascriptDir = path.relative(config.root, writeConfig.watch.compiledJavascriptDir).split(path.sep)
-  configOutPath = path.join config.webPackage.outPath, "#{config.webPackage.configName}.js"
+  configOutPath = path.join config.rpmPackage.outPath, "#{config.rpmPackage.configName}.js"
   logger.debug "Writing mimosa-config to [[ #{configOutPath} ]]"
   configText = __generateConfigText(writeConfig)
   fs.writeFileSync configOutPath, configText, 'ascii'
@@ -275,19 +275,19 @@ __writeApplicationStarter = (config) ->
   rootPathFromAppjs = ''
   serverRelPath = config.server.path.split(config.root)[1].substr(1)
 
-  if path.dirname(config.webPackage.appjs) isnt '.'
-    for level in path.dirname(config.webPackage.appjs).split(path.sep)
+  if path.dirname(config.rpmPackage.appjs) isnt '.'
+    for level in path.dirname(config.rpmPackage.appjs).split(path.sep)
       do ->
         rootPathFromAppjs += '..' + path.sep
 
   if rootPathFromAppjs == ''
-    appJsText = appJsText.replace "CONFIG_PATH", "./#{config.webPackage.configName}"
+    appJsText = appJsText.replace "CONFIG_PATH", "./#{config.rpmPackage.configName}"
     appJsText = appJsText.replace "SERVER_PATH", "./#{serverRelPath}"
   else
-    appJsText = appJsText.replace "CONFIG_PATH", path.join(rootPathFromAppjs, config.webPackage.configName)
+    appJsText = appJsText.replace "CONFIG_PATH", path.join(rootPathFromAppjs, config.rpmPackage.configName)
     appJsText = appJsText.replace "SERVER_PATH", path.join(rootPathFromAppjs, serverRelPath)
 
-  appJsOutPath = path.join config.webPackage.outPath, config.webPackage.appjs
+  appJsOutPath = path.join config.rpmPackage.outPath, config.rpmPackage.appjs
   logger.debug "Writing app.js to [[ #{appJsOutPath} ]]"
   fs.writeFileSync appJsOutPath, appJsText, 'ascii'
 
