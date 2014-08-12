@@ -11,6 +11,7 @@ exports.defaults = ->
     description: "No Description",
     version: "0.1.0",
     release: "1",
+    epoch: new Date().getTime(),
     license: "MIT",
     vendor: "Vendor",
     group: "Development/Tools",
@@ -44,6 +45,11 @@ exports.placeholder = ->
       description: "None"         # A string value that is used to set as the description of your RPM package
       version: "0.1.0"            # A string value that is used to set as the version of your RPM package.
       release: "1"                # A string value that is used to set as the release of your RPM package.
+      epoch: <current epoch>      # A string value used to represent the RPM epoch - In RPM version
+                                  # comparison, the hidden Epoch value is most-significant. Epoch
+                                  # comparison overrides the result of
+                                  # ordinary version-release comparison. Highest Epoch wins, and any non
+                                  # -zero Epoch wins over a missing Epoch.
       license: "MIT"              # A string value that is used to specify the license type of your RPM package.
       vendor: "Vendor"            # A string value that is used to set as the Vendor property of your RPM package.
       group: "Development/Tools"  # A string value that is used to specify the group of your RPM package.

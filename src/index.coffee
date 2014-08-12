@@ -49,6 +49,7 @@ _writeSpecFile = (config, logger, buildRoot)->
   buffer.push("Name: "+config.rpmPackage.name)
   buffer.push("Version: "+config.rpmPackage.version)
   buffer.push("Release: "+config.rpmPackage.release)
+  buffer.push("Epoch: "+config.rpmPackage.epoch)
   buffer.push("Group: "+config.rpmPackage.group)
   buffer.push("Summary: "+config.rpmPackage.summary)
   buffer.push("Group: "+config.rpmPackage.group)
