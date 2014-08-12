@@ -11,7 +11,7 @@ exports.defaults = ->
     description: "No Description",
     version: "0.1.0",
     release: "1",
-    epoch: new Date().getTime(),
+    epoch: Math.ceil(new Date().getTime()/1000),
     license: "MIT",
     vendor: "Vendor",
     group: "Development/Tools",
