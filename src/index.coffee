@@ -316,6 +316,9 @@ copyDirSyncRecursive = (sourceDir, newDirLocation, excludes) ->
           _.keys(packageJson.dependencies).forEach (key) ->
             if key.indexOf('mimosa-') is 0
               delete packageJson.dependencies[key]
+          #coerce package.json to match what's defined in the rpm config
+          if config.rpmPackage.version and config.rpmPackage.release
+            packageJson.version = "#{config.rpmPackage.version}.#{config.rpmPackage.release}"
           contents = JSON.stringify packageJson, null, 2
         catch err
           logger.error "Error parsing package.json: #{err}"
