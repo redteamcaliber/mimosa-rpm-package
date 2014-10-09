@@ -158,7 +158,7 @@ _package = (config, options, next) ->
 
   # copy over all assets
   logger.debug "Copying [[ #{config.root} ]] to [[ #{config.rpmPackage.outPath} ]]"
-  copyDirSyncRecursive config.root, config.rpmPackage.outPath, config.rpmPackage.exclude
+  copyDirSyncRecursive config.root, config.rpmPackage.outPath, config.rpmPackage.exclude, config
 
   # write config to output after modifying the config
   __writeConfig(config)
@@ -292,7 +292,7 @@ __writeApplicationStarter = (config) ->
   logger.debug "Writing app.js to [[ #{appJsOutPath} ]]"
   fs.writeFileSync appJsOutPath, appJsText, 'ascii'
 
-copyDirSyncRecursive = (sourceDir, newDirLocation, excludes) ->
+copyDirSyncRecursive = (sourceDir, newDirLocation, excludes, config) ->
   checkDir = fs.statSync(sourceDir);
   mkdirp.sync(newDirLocation, checkDir.mode)
   files = fs.readdirSync(sourceDir);
@@ -304,7 +304,7 @@ copyDirSyncRecursive = (sourceDir, newDirLocation, excludes) ->
     newFilePath = path.join newDirLocation, f
     currFile = fs.lstatSync filePath
     if currFile.isDirectory()
-      copyDirSyncRecursive filePath, newFilePath, excludes
+      copyDirSyncRecursive filePath, newFilePath, excludes, config
     else if currFile.isSymbolicLink()
       symlinkFull = fs.readlinkSync filePath
       fs.symlinkSync symlinkFull, newFilePath
