@@ -1,6 +1,6 @@
 {
   "name": "mimosa-rpm-package",
-  "version": "1.5.1",
+  "version": "1.5.3",
   "homepage": "https://github.com/fireeye/mimosa-rpm-package",
   "author": "Drew Tayman",
   "description": "RPM Packaging Module for Mimosa",
