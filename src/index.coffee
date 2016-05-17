@@ -318,6 +318,8 @@ copyDirSyncRecursive = (sourceDir, newDirLocation, excludes, config) ->
           #coerce package.json to match what's defined in the rpm config
           if config.rpmPackage.version and config.rpmPackage.release
             packageJson.version = "#{config.rpmPackage.version}.#{config.rpmPackage.release}"
+          if config.rpmPackage.description
+   	    packageJson.description = config.rpmPackage.description
           contents = JSON.stringify packageJson, null, 2
         catch err
           logger.error "Error parsing package.json: #{err}"
