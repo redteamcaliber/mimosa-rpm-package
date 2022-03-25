@@ -24,7 +24,7 @@
   "dependencies": {
     "underscore": "1.6.0",
     "mkdirp": "1.0.4",
-    "rimraf": "2.2.8",
+    "rimraf": "3.0.2",
     "lodash": "4.17.20",
     "hogan.js": "2.0.0",
     "slash": "0.1.3",
