@@ -29,7 +29,7 @@
     "hogan.js": "3.0.2",
     "slash": "4.0.0",
     "jszip": "3.7.1",
-    "wrench": "1.5.8"
+    "wrench": "1.5.9"
   },
   "license": "MIT",
   "engines": {
